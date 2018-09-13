@@ -4,9 +4,6 @@
       "scopes": {
         "https://www.googleapis.com/auth/cloud-platform": {
           "description": "View and manage your data across Google Cloud Platform services"
-        },
-        "https://www.googleapis.com/auth/service.management": {
-          "description": "Manage your Google API service configuration"
         }
       }
     }
@@ -63,11 +60,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -87,12 +79,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -145,8 +131,7 @@
             "$ref": "Empty"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/cloud-platform",
-            "https://www.googleapis.com/auth/service.management"
+            "https://www.googleapis.com/auth/cloud-platform"
           ]
         },
         "delete": {
@@ -171,8 +156,7 @@
             "$ref": "Empty"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/cloud-platform",
-            "https://www.googleapis.com/auth/service.management"
+            "https://www.googleapis.com/auth/cloud-platform"
           ]
         },
         "get": {
@@ -197,8 +181,7 @@
             "$ref": "Operation"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/cloud-platform",
-            "https://www.googleapis.com/auth/service.management"
+            "https://www.googleapis.com/auth/cloud-platform"
           ]
         },
         "list": {
@@ -239,8 +222,7 @@
             "$ref": "ListOperationsResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/cloud-platform",
-            "https://www.googleapis.com/auth/service.management"
+            "https://www.googleapis.com/auth/cloud-platform"
           ]
         }
       }
@@ -447,7 +429,7 @@
       }
     }
   },
-  "revision": "20180322",
+  "revision": "20180820",
   "rootUrl": "https://serviceconsumermanagement.googleapis.com/",
   "schemas": {
     "AddTenantProjectRequest": {
@@ -585,12 +567,8 @@
       "id": "AuthenticationRule",
       "properties": {
         "allowWithoutCredential": {
-          "description": "Whether to allow requests without a credential. The credential can be\nan OAuth token, Google cookies (first-party auth) or EndUserCreds.\n\nFor requests without credentials, if the service control environment is\nspecified, each incoming request **must** be associated with a service\nconsumer. This can be done by passing an API key that belongs to a consumer\nproject.",
+          "description": "If true, the service accepts API keys without any other credential.",
           "type": "boolean"
-        },
-        "customAuth": {
-          "$ref": "CustomAuthRequirements",
-          "description": "Configuration for custom authentication."
         },
         "oauth": {
           "$ref": "OAuthRequirements",
@@ -794,17 +772,6 @@
       "properties": {
         "tenancyUnitId": {
           "description": "Optional producer provided identifier of the tenancy unit.\nMust be no longer than 40 characters and preferably URI friendly.\nIf it is not provided, a UID for the tenancy unit will be auto generated.\nIt must be unique across a service.\nIf the tenancy unit already exists for the service and consumer pair,\n`CreateTenancyUnit` will return the existing tenancy unit if the provided\nidentifier is identical or empty, otherwise the call will fail.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "CustomAuthRequirements": {
-      "description": "Configuration for a custom authentication provider.",
-      "id": "CustomAuthRequirements",
-      "properties": {
-        "provider": {
-          "description": "A configuration string containing connection information for the\nauthentication provider, typically formatted as a SmartService string\n(go/smartservice).",
           "type": "string"
         }
       },
@@ -1205,6 +1172,10 @@
           "description": "Used for updating a resource.",
           "type": "string"
         },
+        "responseBody": {
+          "description": "Optional. The name of the response field whose value is mapped to the HTTP\nbody of response. Other response fields are ignored. When\nnot set, the response message will be used as HTTP body of response.",
+          "type": "string"
+        },
         "restCollection": {
           "description": "DO NOT USE. This is an experimental field.\n\nOptional. The REST collection name is by default derived from the URL\npattern. If specified, this field overrides the default collection name.\nExample:\n\n    rpc AddressesAggregatedList(AddressesAggregatedListRequest)\n        returns (AddressesAggregatedListResponse) {\n      option (google.api.http) = {\n        get: \"/v1/projects/{project_id}/aggregated/addresses\"\n        rest_collection: \"projects.addresses\"\n      };\n    }\n\nThis method has the automatically derived collection name\n\"projects.aggregated\". Because, semantically, this rpc is actually an\noperation on the \"projects.addresses\" collection, the `rest_collection`\nfield is configured to override the derived collection name.",
           "type": "string"
@@ -1490,6 +1461,10 @@
           },
           "type": "array"
         },
+        "metadata": {
+          "$ref": "MetricDescriptorMetadata",
+          "description": "Optional. Metadata which can be used to guide usage of the metric."
+        },
         "metricKind": {
           "description": "Whether the metric records instantaneous values, changes to a value, etc.\nSome combinations of `metric_kind` and `value_type` might not be supported.",
           "enum": [
@@ -1511,7 +1486,7 @@
           "type": "string"
         },
         "type": {
-          "description": "The metric type, including its DNS name prefix. The type is not\nURL-encoded.  All user-defined custom metric types have the DNS name\n`custom.googleapis.com`.  Metric types should use a natural hierarchical\ngrouping. For example:\n\n    \"custom.googleapis.com/invoice/paid/amount\"\n    \"appengine.googleapis.com/http/server/response_latencies\"",
+          "description": "The metric type, including its DNS name prefix. The type is not\nURL-encoded.  All user-defined metric types have the DNS name\n`custom.googleapis.com` or `external.googleapis.com`.  Metric types should\nuse a natural hierarchical grouping. For example:\n\n    \"custom.googleapis.com/invoice/paid/amount\"\n    \"external.googleapis.com/prometheus/up\"\n    \"appengine.googleapis.com/http/server/response_latencies\"",
           "type": "string"
         },
         "unit": {
@@ -1538,6 +1513,43 @@
             "The value is a `Distribution`.",
             "The value is money."
           ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "MetricDescriptorMetadata": {
+      "description": "Additional annotations that can be used to guide the usage of a metric.",
+      "id": "MetricDescriptorMetadata",
+      "properties": {
+        "ingestDelay": {
+          "description": "The delay of data points caused by ingestion. Data points older than this\nage are guaranteed to be ingested and available to be read, excluding\ndata loss due to errors.",
+          "format": "google-duration",
+          "type": "string"
+        },
+        "launchStage": {
+          "description": "The launch stage of the metric definition.",
+          "enum": [
+            "LAUNCH_STAGE_UNSPECIFIED",
+            "EARLY_ACCESS",
+            "ALPHA",
+            "BETA",
+            "GA",
+            "DEPRECATED"
+          ],
+          "enumDescriptions": [
+            "Do not use this default value.",
+            "Early Access features are limited to a closed group of testers. To use\nthese features, you must sign up in advance and sign a Trusted Tester\nagreement (which includes confidentiality provisions). These features may\nbe unstable, changed in backward-incompatible ways, and are not\nguaranteed to be released.",
+            "Alpha is a limited availability test for releases before they are cleared\nfor widespread use. By Alpha, all significant design issues are resolved\nand we are in the process of verifying functionality. Alpha customers\nneed to apply for access, agree to applicable terms, and have their\nprojects whitelisted. Alpha releases don’t have to be feature complete,\nno SLAs are provided, and there are no technical support obligations, but\nthey will be far enough along that customers can actually use them in\ntest environments or for limited-use tests -- just like they would in\nnormal production cases.",
+            "Beta is the point at which we are ready to open a release for any\ncustomer to use. There are no SLA or technical support obligations in a\nBeta release. Products will be complete from a feature perspective, but\nmay have some open outstanding issues. Beta releases are suitable for\nlimited production use cases.",
+            "GA features are open to all developers and are considered stable and\nfully qualified for production use.",
+            "Deprecated features are scheduled to be shut down and removed. For more\ninformation, see the “Deprecation Policy” section of our [Terms of\nService](https://cloud.google.com/terms/)\nand the [Google Cloud Platform Subject to the Deprecation\nPolicy](https://cloud.google.com/terms/deprecation) documentation."
+          ],
+          "type": "string"
+        },
+        "samplePeriod": {
+          "description": "The sampling period of metric data points. For metrics which are written\nperiodically, consecutive data points are stored at this time interval,\nexcluding data loss due to errors. Metrics with a higher granularity have\na smaller sampling period.",
+          "format": "google-duration",
           "type": "string"
         }
       },
@@ -1922,7 +1934,7 @@
           "description": "HTTP configuration."
         },
         "id": {
-          "description": "A unique ID for a specific instance of this message, typically assigned\nby the client for tracking purpose. If empty, the server may choose to\ngenerate one instead.",
+          "description": "A unique ID for a specific instance of this message, typically assigned\nby the client for tracking purpose. If empty, the server may choose to\ngenerate one instead. Must be no longer than 60 characters.",
           "type": "string"
         },
         "logging": {
@@ -2004,7 +2016,7 @@
       "id": "ServiceAccountConfig",
       "properties": {
         "accountId": {
-          "description": "ID of the IAM service account to be created in tenant project.\nThe email format of the service account will be\n\"\u003caccount-id\u003e@\u003ctenant-project-id\u003e.iam.gserviceaccount.com\".\nThis account id has to be unique within tenant project and producers\nhave to guarantee it.",
+          "description": "ID of the IAM service account to be created in tenant project.\nThe email format of the service account will be\n\"\u003caccount-id\u003e@\u003ctenant-project-id\u003e.iam.gserviceaccount.com\".\nThis account id has to be unique within tenant project and producers\nhave to guarantee it. And it must be 6-30 characters long, and matches the\nregular expression `[a-z]([-a-z0-9]*[a-z0-9])`.",
           "type": "string"
         },
         "tenantProjectRoles": {
@@ -2161,7 +2173,7 @@
       "properties": {
         "billingConfig": {
           "$ref": "BillingConfig",
-          "description": "Billing account properties.\nIt might be specified explicitly, or created from the specified group\nduring provisioning"
+          "description": "Billing account properties.  Billing account must be specified."
         },
         "folder": {
           "description": "Folder where project in this tenancy unit must be located\nThis folder must have been previously created with proper\npermissions for the caller to create and configure a project in it.\nValid folder resource names have the format `folders/{folder_number}`\n(for example, `folders/123456`).",

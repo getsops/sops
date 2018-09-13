@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Google Inc. All Rights Reserved.
+Copyright 2017 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -200,9 +200,9 @@ func (m *MockCloudSpannerClient) ExecuteStreamingSql(c context.Context, r *sppb.
 		},
 		Sql: "mockquery",
 		Params: &proto3.Struct{
-			Fields: map[string]*proto3.Value{"var1": &proto3.Value{Kind: &proto3.Value_StringValue{StringValue: "abc"}}},
+			Fields: map[string]*proto3.Value{"var1": {Kind: &proto3.Value_StringValue{StringValue: "abc"}}},
 		},
-		ParamTypes: map[string]*sppb.Type{"var1": &sppb.Type{Code: sppb.TypeCode_STRING}},
+		ParamTypes: map[string]*sppb.Type{"var1": {Code: sppb.TypeCode_STRING}},
 	}
 	if !proto.Equal(r, wantReq) {
 		return nil, fmt.Errorf("got query request: %v, want: %v", r, wantReq)
@@ -242,9 +242,9 @@ func (m *MockCloudSpannerClient) StreamingRead(c context.Context, r *sppb.ReadRe
 		Columns: []string{"col1", "col2"},
 		KeySet: &sppb.KeySet{
 			Keys: []*proto3.ListValue{
-				&proto3.ListValue{
+				{
 					Values: []*proto3.Value{
-						&proto3.Value{Kind: &proto3.Value_StringValue{StringValue: "foo"}},
+						{Kind: &proto3.Value_StringValue{StringValue: "foo"}},
 					},
 				},
 			},

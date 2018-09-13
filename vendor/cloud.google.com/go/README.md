@@ -8,7 +8,7 @@ Go packages for [Google Cloud Platform](https://cloud.google.com) services.
 import "cloud.google.com/go"
 ```
 
-To install the packages on your system,
+To install the packages on your system, *do not clone the repo*. Instead use
 
 ```
 $ go get -u cloud.google.com/go/...
@@ -26,165 +26,58 @@ make backwards-incompatible changes.
   * [Cloud Datastore](#cloud-datastore-)
   * [Cloud Storage](#cloud-storage-)
   * [Cloud Pub/Sub](#cloud-pub-sub-)
-  * [Cloud BigQuery](#cloud-bigquery-)
+  * [BigQuery](#cloud-bigquery-)
   * [Stackdriver Logging](#stackdriver-logging-)
   * [Cloud Spanner](#cloud-spanner-)
 
 
 ## News
 
-_March 22, 2018_
+_7 August 2018_
 
-*v0.20.*
-
-- bigquery: Support SchemaUpdateOptions for load jobs.
-
-- bigtable:
-  - Add SampleRowKeys.
-  - cbt: Support union, intersection GCPolicy.
-  - Retry admin RPCS.
-  - Add trace spans to retries.
-  
-- datastore: Add OpenCensus tracing.
-
-- firestore:
-  - Fix queries involving Null and NaN.
-  - Allow Timestamp protobuffers for time values.
-
-- logging: Add a WriteTimeout option.
-
-- spanner: Support Batch API.
-
-- storage: Add OpenCensus tracing.
-  
-
-_February 26, 2018_
-
-*v0.19.0*
-
-- bigquery:
-  - Support customer-managed encryption keys.
-
-- bigtable:
-  - Improved emulator support.
-  - Support GetCluster.
-
-- datastore:
-  - Add general mutations.
-  - Support pointer struct fields.
-  - Support transaction options.
-
-- firestore:
-  - Add Transaction.GetAll.
-  - Support document cursors.
-
-- logging:
-  - Support concurrent RPCs to the service.
-  - Support per-entry resources.
-
-- profiler:
-  - Add config options to disable heap and thread profiling.
-  - Read the project ID from $GOOGLE_CLOUD_PROJECT when it's set.
-
-- pubsub:
-  - BEHAVIOR CHANGE: Release flow control after ack/nack (instead of after the
-    callback returns).
-  - Add SubscriptionInProject.
-  - Add OpenCensus instrumentation for streaming pull.
-
-- storage:
-  - Support CORS.
+As of November 1, the code in the repo will no longer support Go versions 1.8
+and earlier. No one other than AppEngine users should be on those old versions,
+and AppEngine
+[Standard](https://groups.google.com/forum/#!topic/google-appengine-go/e7oPNomd7ak)
+and
+[Flex](https://groups.google.com/forum/#!topic/google-appengine-go/wHsYtxvEbXI)
+will stop supporting new deployments with those versions on that date.
 
 
-_January 18, 2018_
+Changes have been moved to [CHANGES](https://github.com/GoogleCloudPlatform/google-cloud-go/blob/master/CHANGES.md).
 
-*v0.18.0*
-
-- bigquery:
-  - Marked stable.
-  - Schema inference of nullable fields supported.
-  - Added TimePartitioning to QueryConfig.
-
-- firestore: Data provided to DocumentRef.Set with a Merge option can contain
-  Delete sentinels.
-
-- logging: Clients can accept parent resources other than projects.
-
-- pubsub:
-  - pubsub/pstest: A lighweight fake for pubsub. Experimental; feedback welcome.
-  - Support updating more subscription metadata: AckDeadline,
-    RetainAckedMessages and RetentionDuration.
-
-- oslogin/apiv1beta: New client for the Cloud OS Login API.
-
-- rpcreplay: A package for recording and replaying gRPC traffic.
-
-- spanner:
-  - Add a ReadWithOptions that supports a row limit, as well as an index.
-  - Support query plan and execution statistics.
-  - Added [OpenCensus](http://opencensus.io) support.
-
-- storage: Clarify checksum validation for gzipped files (it is not validated
-  when the file is served uncompressed).
-
-
-_December 11, 2017_
-
-*v0.17.0*
-
-- firestore BREAKING CHANGES:
-  - Remove UpdateMap and UpdateStruct; rename UpdatePaths to Update.
-    Change
-        `docref.UpdateMap(ctx, map[string]interface{}{"a.b", 1})`
-    to
-        `docref.Update(ctx, []firestore.Update{{Path: "a.b", Value: 1}})`
-
-    Change
-        `docref.UpdateStruct(ctx, []string{"Field"}, aStruct)`
-    to
-        `docref.Update(ctx, []firestore.Update{{Path: "Field", Value: aStruct.Field}})`
-  - Rename MergePaths to Merge; require args to be FieldPaths
-  - A value stored as an integer can be read into a floating-point field, and vice versa.
-- bigtable/cmd/cbt:
-  - Support deleting a column.
-  - Add regex option for row read.
-- spanner: Mark stable.
-- storage:
-  - Add Reader.ContentEncoding method.
-  - Fix handling of SignedURL headers.
-- bigquery:
-  - If Uploader.Put is called with no rows, it returns nil without making a
-    call.
-  - Schema inference supports the "nullable" option in struct tags for
-    non-required fields.
-  - TimePartitioning supports "Field".
-
-
-[Older news](https://github.com/GoogleCloudPlatform/google-cloud-go/blob/master/old-news.md)
 
 ## Supported APIs
 
-Google API                       | Status       | Package
----------------------------------|--------------|-----------------------------------------------------------
-[BigQuery][cloud-bigquery]       | stable       | [`cloud.google.com/go/bigquery`][cloud-bigquery-ref]
-[Bigtable][cloud-bigtable]       | stable       | [`cloud.google.com/go/bigtable`][cloud-bigtable-ref]
-[Container][cloud-container]     | alpha        | [`cloud.google.com/go/container/apiv1`][cloud-container-ref]
-[Data Loss Prevention][cloud-dlp]| alpha        | [`cloud.google.com/go/dlp/apiv2beta1`][cloud-dlp-ref]
-[Datastore][cloud-datastore]     | stable       | [`cloud.google.com/go/datastore`][cloud-datastore-ref]
-[Debugger][cloud-debugger]       | alpha        | [`cloud.google.com/go/debugger/apiv2`][cloud-debugger-ref]
-[ErrorReporting][cloud-errors]   | alpha        | [`cloud.google.com/go/errorreporting`][cloud-errors-ref]
-[Firestore][cloud-firestore]     | beta         | [`cloud.google.com/go/firestore`][cloud-firestore-ref]
-[Language][cloud-language]       | stable       | [`cloud.google.com/go/language/apiv1`][cloud-language-ref]
-[Logging][cloud-logging]         | stable       | [`cloud.google.com/go/logging`][cloud-logging-ref]
-[Monitoring][cloud-monitoring]   | beta         | [`cloud.google.com/go/monitoring/apiv3`][cloud-monitoring-ref]
-[OS Login][cloud-oslogin]        | alpha        | [`cloud.google.com/compute/docs/oslogin/rest`][cloud-oslogin-ref]
-[Pub/Sub][cloud-pubsub]          | beta         | [`cloud.google.com/go/pubsub`][cloud-pubsub-ref]
-[Spanner][cloud-spanner]         | stable       | [`cloud.google.com/go/spanner`][cloud-spanner-ref]
-[Speech][cloud-speech]           | stable       | [`cloud.google.com/go/speech/apiv1`][cloud-speech-ref]
-[Storage][cloud-storage]         | stable       | [`cloud.google.com/go/storage`][cloud-storage-ref]
-[Translation][cloud-translation] | stable       | [`cloud.google.com/go/translate`][cloud-translation-ref]
-[Video Intelligence][cloud-video]| beta         | [`cloud.google.com/go/videointelligence/apiv1beta1`][cloud-video-ref]
-[Vision][cloud-vision]           | stable       | [`cloud.google.com/go/vision/apiv1`][cloud-vision-ref]
+Google API                                   | Status       | Package
+---------------------------------------------|--------------|-----------------------------------------------------------
+[BigQuery][cloud-bigquery]                   | stable       | [`godoc.org/cloud.google.com/go/bigquery`][cloud-bigquery-ref]
+[Bigtable][cloud-bigtable]                   | stable       | [`godoc.org/cloud.google.com/go/bigtable`][cloud-bigtable-ref]
+[Container][cloud-container]                 | stable       | [`godoc.org/cloud.google.com/go/container/apiv1`][cloud-container-ref]
+[ContainerAnalysis][cloud-containeranalysis] | beta         | [`godoc.org/cloud.google.com/go/containeranalysis/apiv1beta1`][cloud-containeranalysis-ref]
+[Dataproc][cloud-dataproc]                   | stable       | [`godoc.org/cloud.google.com/go/dataproc/apiv1`][cloud-dataproc-ref]
+[Datastore][cloud-datastore]                 | stable       | [`godoc.org/cloud.google.com/go/datastore`][cloud-datastore-ref]
+[Debugger][cloud-debugger]                   | alpha        | [`godoc.org/cloud.google.com/go/debugger/apiv2`][cloud-debugger-ref]
+[Dialogflow][cloud-dialogflow]               | alpha        | [`godoc.org/cloud.google.com/go/dialogflow/apiv2`][cloud-dialogflow-ref]
+[Data Loss Prevention][cloud-dlp]            | alpha        | [`godoc.org/cloud.google.com/go/dlp/apiv2`][cloud-dlp-ref]
+[ErrorReporting][cloud-errors]               | alpha        | [`godoc.org/cloud.google.com/go/errorreporting`][cloud-errors-ref]
+[Firestore][cloud-firestore]                 | beta         | [`godoc.org/cloud.google.com/go/firestore`][cloud-firestore-ref]
+[IAM][cloud-iam]                             | stable       | [`godoc.org/cloud.google.com/go/iam`][cloud-iam-ref]
+[KMS][cloud-kms]                             | stable       | [`godoc.org/cloud.google.com/go/kms`][cloud-kms-ref]
+[Natural Language][cloud-natural-language]   | stable       | [`godoc.org/cloud.google.com/go/language/apiv1`][cloud-natural-language-ref]
+[Logging][cloud-logging]                     | stable       | [`godoc.org/cloud.google.com/go/logging`][cloud-logging-ref]
+[Monitoring][cloud-monitoring]               | alpha        | [`godoc.org/cloud.google.com/go/monitoring/apiv3`][cloud-monitoring-ref]
+[OS Login][cloud-oslogin]                    | alpha        | [`cloud.google.com/compute/docs/oslogin/rest`][cloud-oslogin-ref]
+[Pub/Sub][cloud-pubsub]                      | stable       | [`godoc.org/cloud.google.com/go/pubsub`][cloud-pubsub-ref]
+[Memorystore][cloud-memorystore]             | alpha        | [`godoc.org/cloud.google.com/go/redis/apiv1beta1`][cloud-memorystore-ref]
+[Spanner][cloud-spanner]                     | stable       | [`godoc.org/cloud.google.com/go/spanner`][cloud-spanner-ref]
+[Speech][cloud-speech]                       | stable       | [`godoc.org/cloud.google.com/go/speech/apiv1`][cloud-speech-ref]
+[Storage][cloud-storage]                     | stable       | [`godoc.org/cloud.google.com/go/storage`][cloud-storage-ref]
+[Text To Speech][cloud-texttospeech]         | alpha        | [`godoc.org/cloud.google.com/go/texttospeech/apiv1`][cloud-storage-ref]
+[Trace][cloud-trace]                         | alpha        | [`godoc.org/cloud.google.com/go/trace/apiv2`][cloud-translation-ref]
+[Translation][cloud-translation]             | stable       | [`godoc.org/cloud.google.com/go/translate`][cloud-translation-ref]
+[Video Intelligence][cloud-video]            | alpha        | [`godoc.org/cloud.google.com/go/videointelligence/apiv1beta1`][cloud-video-ref]
+[Vision][cloud-vision]                       | stable       | [`godoc.org/cloud.google.com/go/vision/apiv1`][cloud-vision-ref]
 
 
 > **Alpha status**: the API is still being actively developed. As a
@@ -226,12 +119,12 @@ client, err := storage.NewClient(ctx)
 To authorize using a
 [JSON key file](https://cloud.google.com/iam/docs/managing-service-account-keys),
 pass
-[`option.WithServiceAccountFile`](https://godoc.org/google.golang.org/api/option#WithServiceAccountFile)
+[`option.WithCredentialsFile`](https://godoc.org/google.golang.org/api/option#WithCredentialsFile)
 to the `NewClient` function of the desired package. For example:
 
 [snip]:# (auth-JSON)
 ```go
-client, err := storage.NewClient(ctx, option.WithServiceAccountFile("path/to/keyfile.json"))
+client, err := storage.NewClient(ctx, option.WithCredentialsFile("path/to/keyfile.json"))
 ```
 
 You can exert more control over authorization by using the
@@ -367,9 +260,9 @@ if err != nil {
 }
 ```
 
-## Cloud BigQuery [![GoDoc](https://godoc.org/cloud.google.com/go/bigquery?status.svg)](https://godoc.org/cloud.google.com/go/bigquery)
+## BigQuery [![GoDoc](https://godoc.org/cloud.google.com/go/bigquery?status.svg)](https://godoc.org/cloud.google.com/go/bigquery)
 
-- [About Cloud BigQuery][cloud-bigquery]
+- [About BigQuery][cloud-bigquery]
 - [API documentation][cloud-bigquery-docs]
 - [Go client documentation][cloud-bigquery-ref]
 - [Complete sample programs](https://github.com/GoogleCloudPlatform/golang-samples/tree/master/bigquery)
@@ -568,3 +461,39 @@ for more information.
 [cloud-dlp-ref]: https://godoc.org/cloud.google.com/go/dlp/apiv2beta1
 
 [default-creds]: https://developers.google.com/identity/protocols/application-default-credentials
+
+[cloud-dataproc]: https://cloud.google.com/dataproc/
+[cloud-dataproc-docs]: https://cloud.google.com/dataproc/docs
+[cloud-dataproc-ref]: https://godoc.org/cloud.google.com/go/dataproc/apiv1
+
+[cloud-iam]: https://cloud.google.com/iam/
+[cloud-iam-docs]: https://cloud.google.com/iam/docs
+[cloud-iam-ref]: https://godoc.org/cloud.google.com/go/iam
+
+[cloud-kms]: https://cloud.google.com/kms/
+[cloud-kms-docs]: https://cloud.google.com/kms/docs
+[cloud-kms-ref]: https://godoc.org/cloud.google.com/go/kms/apiv1
+
+[cloud-natural-language]: https://cloud.google.com/natural-language/
+[cloud-natural-language-docs]: https://cloud.google.com/natural-language/docs
+[cloud-natural-language-ref]: https://godoc.org/cloud.google.com/go/language/apiv1
+
+[cloud-memorystore]: https://cloud.google.com/memorystore/
+[cloud-memorystore-docs]: https://cloud.google.com/memorystore/docs
+[cloud-memorystore-ref]: https://godoc.org/cloud.google.com/go/redis/apiv1beta1
+
+[cloud-texttospeech]: https://cloud.google.com/texttospeech/
+[cloud-texttospeech-docs]: https://cloud.google.com/texttospeech/docs
+[cloud-texttospeech-ref]: https://godoc.org/cloud.google.com/go/texttospeech/apiv1
+
+[cloud-trace]: https://cloud.google.com/trace/
+[cloud-trace-docs]: https://cloud.google.com/trace/docs
+[cloud-trace-ref]: https://godoc.org/cloud.google.com/go/trace/apiv1
+
+[cloud-dialogflow]: https://cloud.google.com/dialogflow-enterprise/
+[cloud-dialogflow-docs]: https://cloud.google.com/dialogflow-enterprise/docs/
+[cloud-dialogflow-ref]: https://godoc.org/cloud.google.com/go/dialogflow/apiv2
+
+[cloud-containeranalysis]: https://cloud.google.com/container-registry/docs/container-analysis
+[cloud-containeranalysis-docs]: https://cloud.google.com/container-analysis/api/reference/rest/
+[cloud-containeranalysis-ref]: https://godoc.org/cloud.google.com/go/devtools/containeranalysis/apiv1beta1

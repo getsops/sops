@@ -225,7 +225,7 @@ func (s *scanner) acceptMinSize(min int) (end int) {
 // ValueError. The Tag returned in this case is just stripped of the unknown
 // value. All other values are preserved. It accepts tags in the BCP 47 format
 // and extensions to this standard defined in
-// http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers.
+// https://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers.
 func Parse(s string) (t Tag, err error) {
 	// TODO: consider supporting old-style locale key-value pairs.
 	if s == "" {

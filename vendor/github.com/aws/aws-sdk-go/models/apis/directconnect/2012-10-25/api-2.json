@@ -691,7 +691,11 @@
         "connectionId":{"shape":"ConnectionId"}
       }
     },
-    "AwsDevice":{"type":"string"},
+    "AwsDevice":{
+      "type":"string",
+      "deprecated":true
+    },
+    "AwsDeviceV2":{"type":"string"},
     "BGPAuthKey":{"type":"string"},
     "BGPPeer":{
       "type":"structure",
@@ -702,7 +706,8 @@
         "amazonAddress":{"shape":"AmazonAddress"},
         "customerAddress":{"shape":"CustomerAddress"},
         "bgpPeerState":{"shape":"BGPPeerState"},
-        "bgpStatus":{"shape":"BGPStatus"}
+        "bgpStatus":{"shape":"BGPStatus"},
+        "awsDeviceV2":{"shape":"AwsDeviceV2"}
       }
     },
     "BGPPeerList":{
@@ -784,7 +789,8 @@
         "partnerName":{"shape":"PartnerName"},
         "loaIssueTime":{"shape":"LoaIssueTime"},
         "lagId":{"shape":"LagId"},
-        "awsDevice":{"shape":"AwsDevice"}
+        "awsDevice":{"shape":"AwsDevice"},
+        "awsDeviceV2":{"shape":"AwsDeviceV2"}
       }
     },
     "ConnectionId":{"type":"string"},
@@ -1263,7 +1269,8 @@
         "bandwidth":{"shape":"Bandwidth"},
         "loaIssueTime":{"shape":"LoaIssueTime"},
         "lagId":{"shape":"LagId"},
-        "awsDevice":{"shape":"AwsDevice"}
+        "awsDevice":{"shape":"AwsDevice"},
+        "awsDeviceV2":{"shape":"AwsDeviceV2"}
       }
     },
     "InterconnectId":{"type":"string"},
@@ -1302,6 +1309,7 @@
         "region":{"shape":"Region"},
         "minimumLinks":{"shape":"Count"},
         "awsDevice":{"shape":"AwsDevice"},
+        "awsDeviceV2":{"shape":"AwsDeviceV2"},
         "connections":{"shape":"ConnectionList"},
         "allowsHostedConnections":{"shape":"BooleanFlag"}
       }
@@ -1346,7 +1354,8 @@
       "type":"structure",
       "members":{
         "locationCode":{"shape":"LocationCode"},
-        "locationName":{"shape":"LocationName"}
+        "locationName":{"shape":"LocationName"},
+        "region":{"shape":"Region"}
       }
     },
     "LocationCode":{"type":"string"},
@@ -1599,7 +1608,9 @@
         "virtualGatewayId":{"shape":"VirtualGatewayId"},
         "directConnectGatewayId":{"shape":"DirectConnectGatewayId"},
         "routeFilterPrefixes":{"shape":"RouteFilterPrefixList"},
-        "bgpPeers":{"shape":"BGPPeerList"}
+        "bgpPeers":{"shape":"BGPPeerList"},
+        "region":{"shape":"Region"},
+        "awsDeviceV2":{"shape":"AwsDeviceV2"}
       }
     },
     "VirtualInterfaceId":{"type":"string"},

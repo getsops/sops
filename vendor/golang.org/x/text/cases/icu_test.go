@@ -110,7 +110,7 @@ func exclude(cm, tag, s string) bool {
 		// implementation (at version 57) and thus are not marked as TODO.
 
 		// ICU does not handle leading apostrophe for Dutch and
-		// Afrikaans correctly. See http://unicode.org/cldr/trac/ticket/7078.
+		// Afrikaans correctly. See https://unicode.org/cldr/trac/ticket/7078.
 		{"title", "af nl", "'n"},
 		{"title", "af nl", "'N"},
 

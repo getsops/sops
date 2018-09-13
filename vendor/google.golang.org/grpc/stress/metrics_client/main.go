@@ -55,14 +55,14 @@ func printMetrics(client metricspb.MetricsServiceClient, totalOnly bool) {
 		}
 		v := gaugeResponse.GetLongValue()
 		if !totalOnly {
-			grpclog.Printf("%s: %d", gaugeResponse.Name, v)
+			grpclog.Infof("%s: %d", gaugeResponse.Name, v)
 		}
 		overallQPS += v
 	}
 	if rpcStatus != io.EOF {
 		grpclog.Fatalf("failed to finish server streaming: %v", rpcStatus)
 	}
-	grpclog.Printf("overall qps: %d", overallQPS)
+	grpclog.Infof("overall qps: %d", overallQPS)
 }
 
 func main() {

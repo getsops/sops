@@ -29,7 +29,9 @@ import (
 	"regexp"
 	"runtime"
 	"strings"
-	"time"
+
+	"golang.org/x/net/context"
+	"google.golang.org/grpc/peer"
 )
 
 const (
@@ -38,7 +40,6 @@ const (
 	windowsCheckCommandArgs  = "Get-WmiObject -Class Win32_BIOS"
 	powershellOutputFilter   = "Manufacturer"
 	windowsManufacturerRegex = ":(.*)"
-	windowsCheckTimeout      = 30 * time.Second
 )
 
 type platformError string
@@ -114,4 +115,27 @@ func readManufacturer() ([]byte, error) {
 		return nil, fmt.Errorf("failed reading %v: %v", linuxProductNameFile, err)
 	}
 	return manufacturer, nil
+}
+
+// AuthInfoFromContext extracts the alts.AuthInfo object from the given context,
+// if it exists. This API should be used by gRPC server RPC handlers to get
+// information about the communicating peer. For client-side, use grpc.Peer()
+// CallOption.
+func AuthInfoFromContext(ctx context.Context) (AuthInfo, error) {
+	p, ok := peer.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("no Peer found in Context")
+	}
+	return AuthInfoFromPeer(p)
+}
+
+// AuthInfoFromPeer extracts the alts.AuthInfo object from the given peer, if it
+// exists. This API should be used by gRPC clients after obtaining a peer object
+// using the grpc.Peer() CallOption.
+func AuthInfoFromPeer(p *peer.Peer) (AuthInfo, error) {
+	altsAuthInfo, ok := p.AuthInfo.(AuthInfo)
+	if !ok {
+		return nil, errors.New("no alts.AuthInfo found in Peer")
+	}
+	return altsAuthInfo, nil
 }

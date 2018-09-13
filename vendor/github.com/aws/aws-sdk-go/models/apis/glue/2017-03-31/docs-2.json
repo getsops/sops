@@ -5,29 +5,31 @@
     "BatchCreatePartition": "<p>Creates one or more partitions in a batch operation.</p>",
     "BatchDeleteConnection": "<p>Deletes a list of connection definitions from the Data Catalog.</p>",
     "BatchDeletePartition": "<p>Deletes one or more partitions in a batch operation.</p>",
-    "BatchDeleteTable": "<p>Deletes multiple tables at once.</p>",
+    "BatchDeleteTable": "<p>Deletes multiple tables at once.</p> <note> <p>After completing this operation, you will no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these \"orphaned\" resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>BatchDeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note>",
     "BatchDeleteTableVersion": "<p>Deletes a specified batch of versions of a table.</p>",
     "BatchGetPartition": "<p>Retrieves partitions in a batch request.</p>",
-    "BatchStopJobRun": "<p>Stops one or more job runs for a specified Job.</p>",
+    "BatchStopJobRun": "<p>Stops one or more job runs for a specified job definition.</p>",
     "CreateClassifier": "<p>Creates a classifier in the user's account. This may be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, or abbrev <code>JsonClassifier</code>, depending on which field of the request is present.</p>",
     "CreateConnection": "<p>Creates a connection definition in the Data Catalog.</p>",
-    "CreateCrawler": "<p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in either the <i>s3Targets</i> or the <i>jdbcTargets</i> field.</p>",
+    "CreateCrawler": "<p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in the <i>s3Targets</i> field, the <i>jdbcTargets</i> field, or the <i>DynamoDBTargets</i> field.</p>",
     "CreateDatabase": "<p>Creates a new database in a Data Catalog.</p>",
     "CreateDevEndpoint": "<p>Creates a new DevEndpoint.</p>",
-    "CreateJob": "<p>Creates a new job.</p>",
+    "CreateJob": "<p>Creates a new job definition.</p>",
     "CreatePartition": "<p>Creates a new partition.</p>",
     "CreateScript": "<p>Transforms a directed acyclic graph (DAG) into code.</p>",
+    "CreateSecurityConfiguration": "<p>Creates a new security configuration.</p>",
     "CreateTable": "<p>Creates a new table definition in the Data Catalog.</p>",
     "CreateTrigger": "<p>Creates a new trigger.</p>",
     "CreateUserDefinedFunction": "<p>Creates a new function definition in the Data Catalog.</p>",
     "DeleteClassifier": "<p>Removes a classifier from the Data Catalog.</p>",
     "DeleteConnection": "<p>Deletes a connection from the Data Catalog.</p>",
     "DeleteCrawler": "<p>Removes a specified crawler from the Data Catalog, unless the crawler state is <code>RUNNING</code>.</p>",
-    "DeleteDatabase": "<p>Removes a specified Database from a Data Catalog.</p>",
+    "DeleteDatabase": "<p>Removes a specified Database from a Data Catalog.</p> <note> <p>After completing this operation, you will no longer have access to the tables (and all table versions and partitions that might belong to the tables) and the user-defined functions in the deleted database. AWS Glue deletes these \"orphaned\" resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>DeleteDatabase</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, <code>DeletePartition</code> or <code>BatchDeletePartition</code>, <code>DeleteUserDefinedFunction</code>, and <code>DeleteTable</code> or <code>BatchDeleteTable</code>, to delete any resources that belong to the database.</p> </note>",
     "DeleteDevEndpoint": "<p>Deletes a specified DevEndpoint.</p>",
-    "DeleteJob": "<p>Deletes a specified job. If the job is not found, no exception is thrown.</p>",
+    "DeleteJob": "<p>Deletes a specified job definition. If the job definition is not found, no exception is thrown.</p>",
     "DeletePartition": "<p>Deletes a specified partition.</p>",
-    "DeleteTable": "<p>Removes a table definition from the Data Catalog.</p>",
+    "DeleteSecurityConfiguration": "<p>Deletes a specified security configuration.</p>",
+    "DeleteTable": "<p>Removes a table definition from the Data Catalog.</p> <note> <p>After completing this operation, you will no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these \"orphaned\" resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>DeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note>",
     "DeleteTableVersion": "<p>Deletes a specified version of a table.</p>",
     "DeleteTrigger": "<p>Deletes a specified trigger. If the trigger is not found, no exception is thrown.</p>",
     "DeleteUserDefinedFunction": "<p>Deletes an existing function definition from the Data Catalog.</p>",
@@ -46,12 +48,14 @@
     "GetDevEndpoints": "<p>Retrieves all the DevEndpoints in this AWS account.</p>",
     "GetJob": "<p>Retrieves an existing job definition.</p>",
     "GetJobRun": "<p>Retrieves the metadata for a given job run.</p>",
-    "GetJobRuns": "<p>Retrieves metadata for all runs of a given job.</p>",
-    "GetJobs": "<p>Retrieves all current jobs.</p>",
+    "GetJobRuns": "<p>Retrieves metadata for all runs of a given job definition.</p>",
+    "GetJobs": "<p>Retrieves all current job definitions.</p>",
     "GetMapping": "<p>Creates mappings.</p>",
     "GetPartition": "<p>Retrieves information about a specified partition.</p>",
     "GetPartitions": "<p>Retrieves information about the partitions in a table.</p>",
     "GetPlan": "<p>Gets code to perform a specified mapping.</p>",
+    "GetSecurityConfiguration": "<p>Retrieves a specified security configuration.</p>",
+    "GetSecurityConfigurations": "<p>Retrieves a list of all security configurations.</p>",
     "GetTable": "<p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>",
     "GetTableVersion": "<p>Retrieves a specified version of a table.</p>",
     "GetTableVersions": "<p>Retrieves a list of strings that identify available versions of a specified table.</p>",
@@ -61,10 +65,11 @@
     "GetUserDefinedFunction": "<p>Retrieves a specified function definition from the Data Catalog.</p>",
     "GetUserDefinedFunctions": "<p>Retrieves a multiple function definitions from the Data Catalog.</p>",
     "ImportCatalogToGlue": "<p>Imports an existing Athena Data Catalog to AWS Glue</p>",
+    "PutDataCatalogEncryptionSettings": "<p>Sets the security configuration for a specified catalog. Once the configuration has been set, the specified encryption is applied to every catalog write thereafter.</p>",
     "ResetJobBookmark": "<p>Resets a bookmark entry.</p>",
-    "StartCrawler": "<p>Starts a crawl using the specified crawler, regardless of what is scheduled. If the crawler is already running, does nothing.</p>",
+    "StartCrawler": "<p>Starts a crawl using the specified crawler, regardless of what is scheduled. If the crawler is already running, returns a <a href=\"https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-exceptions.html#aws-glue-api-exceptions-CrawlerRunningException\">CrawlerRunningException</a>.</p>",
     "StartCrawlerSchedule": "<p>Changes the schedule state of the specified crawler to <code>SCHEDULED</code>, unless the crawler is already running or the schedule state is already <code>SCHEDULED</code>.</p>",
-    "StartJobRun": "<p>Runs a job.</p>",
+    "StartJobRun": "<p>Starts a job run using a job definition.</p>",
     "StartTrigger": "<p>Starts an existing trigger. See <a href=\"http://docs.aws.amazon.com/glue/latest/dg/trigger-job.html\">Triggering Jobs</a> for information about how different types of trigger are started.</p>",
     "StopCrawler": "<p>If the specified crawler is running, stops the crawl.</p>",
     "StopCrawlerSchedule": "<p>Sets the schedule state of the specified crawler to <code>NOT_SCHEDULED</code>, but does not stop the crawler if it is already running.</p>",
@@ -198,7 +203,7 @@
       }
     },
     "BatchStopJobRunError": {
-      "base": "<p>Records an error that occurred when attempting to stop a specified JobRun.</p>",
+      "base": "<p>Records an error that occurred when attempting to stop a specified job run.</p>",
       "refs": {
         "BatchStopJobRunErrorList$member": null
       }
@@ -212,7 +217,7 @@
     "BatchStopJobRunJobRunIdList": {
       "base": null,
       "refs": {
-        "BatchStopJobRunRequest$JobRunIds": "<p>A list of the JobRunIds that should be stopped for that Job.</p>"
+        "BatchStopJobRunRequest$JobRunIds": "<p>A list of the JobRunIds that should be stopped for that job definition.</p>"
       }
     },
     "BatchStopJobRunRequest": {
@@ -256,6 +261,7 @@
     "BooleanValue": {
       "base": null,
       "refs": {
+        "CreateTriggerRequest$StartOnCreation": "<p>Set to true to start SCHEDULED and CONDITIONAL triggers when created. True not supported for ON_DEMAND triggers.</p>",
         "GetJobRunRequest$PredecessorsIncluded": "<p>True if a list of predecessor runs should be returned.</p>",
         "UpdateDevEndpointRequest$UpdateEtlLibraries": "<p>True if the list of custom libraries to be loaded in the development endpoint needs to be updated, or False otherwise.</p>"
       }
@@ -264,6 +270,12 @@
       "base": null,
       "refs": {
         "UpdatePartitionRequest$PartitionValueList": "<p>A list of the values defining the partition.</p>"
+      }
+    },
+    "CatalogEncryptionMode": {
+      "base": null,
+      "refs": {
+        "EncryptionAtRest$CatalogEncryptionMode": "<p>The encryption-at-rest mode for encrypting Data Catalog data.</p>"
       }
     },
     "CatalogEntries": {
@@ -315,6 +327,7 @@
         "GetUserDefinedFunctionRequest$CatalogId": "<p>The ID of the Data Catalog where the function to be retrieved is located. If none is supplied, the AWS account ID is used by default.</p>",
         "GetUserDefinedFunctionsRequest$CatalogId": "<p>The ID of the Data Catalog where the functions to be retrieved are located. If none is supplied, the AWS account ID is used by default.</p>",
         "ImportCatalogToGlueRequest$CatalogId": "<p>The ID of the catalog to import. Currently, this should be the AWS account ID.</p>",
+        "PutDataCatalogEncryptionSettingsRequest$CatalogId": "<p>The ID of the Data Catalog for which to set the security configuration. If none is supplied, the AWS account ID is used by default.</p>",
         "UpdateConnectionRequest$CatalogId": "<p>The ID of the Data Catalog in which the connection resides. If none is supplied, the AWS account ID is used by default.</p>",
         "UpdateDatabaseRequest$CatalogId": "<p>The ID of the Data Catalog in which the metadata database resides. If none is supplied, the AWS account ID is used by default.</p>",
         "UpdatePartitionRequest$CatalogId": "<p>The ID of the Data Catalog where the partition to be updated resides. If none is supplied, the AWS account ID is used by default.</p>",
@@ -340,7 +353,7 @@
       }
     },
     "Classifier": {
-      "base": "<p>Classifiers are written in Python and triggered during a crawl task. You can write your own classifiers to best categorize your data sources and specify the appropriate schemas to use for them. A classifier checks whether a given file is in a format it can handle, and if it is, the classifier creates a schema in the form of a <code>StructType</code> object that matches that data format.</p> <p>A classifier can be a <code>grok</code> classifier, an XML classifier, or a JSON classifier, asspecified in one of the fields in the <code>Classifier</code> object.</p>",
+      "base": "<p>Classifiers are triggered during a crawl task. A classifier checks whether a given file is in a format it can handle, and if it is, the classifier creates a schema in the form of a <code>StructType</code> object that matches that data format.</p> <p>You can use the standard classifiers that AWS Glue supplies, or you can write your own classifiers to best categorize your data sources and specify the appropriate schemas to use for them. A classifier can be a <code>grok</code> classifier, an <code>XML</code> classifier, or a <code>JSON</code> classifier, as specified in one of the fields in the <code>Classifier</code> object.</p>",
       "refs": {
         "ClassifierList$member": null,
         "GetClassifierResponse$Classifier": "<p>The requested classifier.</p>"
@@ -356,8 +369,20 @@
       "base": null,
       "refs": {
         "Crawler$Classifiers": "<p>A list of custom classifiers associated with the crawler.</p>",
-        "CreateCrawlerRequest$Classifiers": "<p>A list of custom classifiers that the user has registered. By default, all AWS classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>",
-        "UpdateCrawlerRequest$Classifiers": "<p>A list of custom classifiers that the user has registered. By default, all classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>"
+        "CreateCrawlerRequest$Classifiers": "<p>A list of custom classifiers that the user has registered. By default, all built-in classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>",
+        "UpdateCrawlerRequest$Classifiers": "<p>A list of custom classifiers that the user has registered. By default, all built-in classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>"
+      }
+    },
+    "CloudWatchEncryption": {
+      "base": "<p>Specifies how CloudWatch data should be encrypted.</p>",
+      "refs": {
+        "EncryptionConfiguration$CloudWatchEncryption": "<p>The encryption configuration for CloudWatch.</p>"
+      }
+    },
+    "CloudWatchEncryptionMode": {
+      "base": null,
+      "refs": {
+        "CloudWatchEncryption$CloudWatchEncryptionMode": "<p>The encryption mode to use for CloudWatch data.</p>"
       }
     },
     "CodeGenArgName": {
@@ -404,7 +429,8 @@
       "refs": {
         "CodeGenNode$Args": "<p>Properties of the node, in the form of name-value pairs.</p>",
         "Location$Jdbc": "<p>A JDBC location.</p>",
-        "Location$S3": "<p>An Amazon S3 location.</p>"
+        "Location$S3": "<p>An Amazon S3 location.</p>",
+        "Location$DynamoDB": "<p>A DynamoDB Table location.</p>"
       }
     },
     "CodeGenNodeType": {
@@ -504,8 +530,8 @@
     "ConnectionProperties": {
       "base": null,
       "refs": {
-        "Connection$ConnectionProperties": "<p>A list of key-value pairs used as parameters for this connection.</p>",
-        "ConnectionInput$ConnectionProperties": "<p>A list of key-value pairs used as parameters for this connection.</p>"
+        "Connection$ConnectionProperties": "<p>These key-value pairs define parameters for the connection:</p> <ul> <li> <p> <code>HOST</code> - The host URI: either the fully qualified domain name (FQDN) or the IPv4 address of the database host.</p> </li> <li> <p> <code>PORT</code> - The port number, between 1024 and 65535, of the port on which the database host is listening for database connections.</p> </li> <li> <p> <code>USER_NAME</code> - The name under which to log in to the database.</p> </li> <li> <p> <code>PASSWORD</code> - A password, if one is used, for the user name.</p> </li> <li> <p> <code>JDBC_DRIVER_JAR_URI</code> - The S3 path of the a jar file that contains the JDBC driver to use.</p> </li> <li> <p> <code>JDBC_DRIVER_CLASS_NAME</code> - The class name of the JDBC driver to use.</p> </li> <li> <p> <code>JDBC_ENGINE</code> - The name of the JDBC engine to use.</p> </li> <li> <p> <code>JDBC_ENGINE_VERSION</code> - The version of the JDBC engine to use.</p> </li> <li> <p> <code>CONFIG_FILES</code> - (Reserved for future use).</p> </li> <li> <p> <code>INSTANCE_ID</code> - The instance ID to use.</p> </li> <li> <p> <code>JDBC_CONNECTION_URL</code> - The URL for the JDBC connection.</p> </li> <li> <p> <code>JDBC_ENFORCE_SSL</code> - A Boolean string (true, false) specifying whether SSL with hostname matching will be enforced for the JDBC connection on the client. The default is false.</p> </li> </ul>",
+        "ConnectionInput$ConnectionProperties": "<p>These key-value pairs define parameters for the connection.</p>"
       }
     },
     "ConnectionPropertyKey": {
@@ -577,6 +603,14 @@
     "CrawlerRunningException": {
       "base": "<p>The operation cannot be performed because the crawler is already running.</p>",
       "refs": {
+      }
+    },
+    "CrawlerSecurityConfiguration": {
+      "base": null,
+      "refs": {
+        "Crawler$CrawlerSecurityConfiguration": "<p>The name of the SecurityConfiguration structure to be used by this Crawler.</p>",
+        "CreateCrawlerRequest$CrawlerSecurityConfiguration": "<p>The name of the SecurityConfiguration structure to be used by this Crawler.</p>",
+        "UpdateCrawlerRequest$CrawlerSecurityConfiguration": "<p>The name of the SecurityConfiguration structure to be used by this Crawler.</p>"
       }
     },
     "CrawlerState": {
@@ -690,6 +724,16 @@
       "refs": {
       }
     },
+    "CreateSecurityConfigurationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateSecurityConfigurationResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "CreateTableRequest": {
       "base": null,
       "refs": {
@@ -755,6 +799,12 @@
       "refs": {
         "CreateScriptRequest$DagNodes": "<p>A list of the nodes in the DAG.</p>",
         "GetDataflowGraphResponse$DagNodes": "<p>A list of the nodes in the resulting DAG.</p>"
+      }
+    },
+    "DataCatalogEncryptionSettings": {
+      "base": "<p>Contains configuration information for maintaining Data Catalog security.</p>",
+      "refs": {
+        "PutDataCatalogEncryptionSettingsRequest$DataCatalogEncryptionSettings": "<p>The security configuration to set.</p>"
       }
     },
     "Database": {
@@ -867,6 +917,16 @@
       "refs": {
       }
     },
+    "DeleteSecurityConfigurationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteSecurityConfigurationResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DeleteTableRequest": {
       "base": null,
       "refs": {
@@ -914,13 +974,13 @@
         "ConnectionInput$Description": "<p>Description of the connection.</p>",
         "Crawler$Description": "<p>A description of the crawler.</p>",
         "CreateCrawlerRequest$Description": "<p>A description of the new crawler.</p>",
-        "CreateJobRequest$Description": "<p>Description of the job.</p>",
+        "CreateJobRequest$Description": "<p>Description of the job being defined.</p>",
         "CreateTriggerRequest$Description": "<p>A description of the new trigger.</p>",
         "Database$Description": "<p>Description of the database.</p>",
         "DatabaseInput$Description": "<p>Description of the database</p>",
         "ErrorDetail$ErrorMessage": "<p>A message describing the error.</p>",
-        "Job$Description": "<p>Description of this job.</p>",
-        "JobUpdate$Description": "<p>Description of the job.</p>",
+        "Job$Description": "<p>Description of the job being defined.</p>",
+        "JobUpdate$Description": "<p>Description of the job being defined.</p>",
         "LastCrawlInfo$ErrorMessage": "<p>If an error occurred, the error information about the last crawl.</p>",
         "Table$Description": "<p>Description of the table.</p>",
         "TableInput$Description": "<p>Description of the table.</p>",
@@ -951,6 +1011,31 @@
       "base": null,
       "refs": {
         "GetDevEndpointsResponse$DevEndpoints": "<p>A list of DevEndpoint definitions.</p>"
+      }
+    },
+    "DynamoDBTarget": {
+      "base": "<p>Specifies a DynamoDB table to crawl.</p>",
+      "refs": {
+        "DynamoDBTargetList$member": null
+      }
+    },
+    "DynamoDBTargetList": {
+      "base": null,
+      "refs": {
+        "CrawlerTargets$DynamoDBTargets": "<p>Specifies DynamoDB targets.</p>"
+      }
+    },
+    "EncryptionAtRest": {
+      "base": "<p>Specifies encryption-at-rest configuration for the Data Catalog.</p>",
+      "refs": {
+        "DataCatalogEncryptionSettings$EncryptionAtRest": "<p>Specifies encryption-at-rest configuration for the Data Catalog.</p>"
+      }
+    },
+    "EncryptionConfiguration": {
+      "base": "<p>Specifies an encryption configuration.</p>",
+      "refs": {
+        "CreateSecurityConfigurationRequest$EncryptionConfiguration": "<p>The encryption configuration for the new security configuration.</p>",
+        "SecurityConfiguration$EncryptionConfiguration": "<p>The encryption configuration associated with this security configuration.</p>"
       }
     },
     "EntityNotFoundException": {
@@ -988,6 +1073,12 @@
         "JobUpdate$ExecutionProperty": "<p>An ExecutionProperty specifying the maximum number of concurrent runs allowed for this job.</p>"
       }
     },
+    "ExecutionTime": {
+      "base": null,
+      "refs": {
+        "JobRun$ExecutionTime": "<p>The amount of time (in seconds) that the job run consumed resources.</p>"
+      }
+    },
     "FieldType": {
       "base": null,
       "refs": {
@@ -1011,12 +1102,12 @@
     "GenericMap": {
       "base": null,
       "refs": {
-        "Action$Arguments": "<p>Arguments to be passed to the job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html\">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html\">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>",
-        "CreateJobRequest$DefaultArguments": "<p>The default arguments for this job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html\">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html\">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>",
-        "Job$DefaultArguments": "<p>The default arguments for this job, specified as name-value pairs.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html\">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html\">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>",
-        "JobRun$Arguments": "<p>The job arguments associated with this run. These override equivalent default arguments set for the job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own job arguments, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html\">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html\">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>",
-        "JobUpdate$DefaultArguments": "<p>The default arguments for this job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html\">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html\">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>",
-        "StartJobRunRequest$Arguments": "<p>The job arguments specifically for this run. They override the equivalent default arguments set for the job itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html\">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html\">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>"
+        "Action$Arguments": "<p>Arguments to be passed to the job run.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html\">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html\">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>",
+        "CreateJobRequest$DefaultArguments": "<p>The default arguments for this job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html\">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html\">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>",
+        "Job$DefaultArguments": "<p>The default arguments for this job, specified as name-value pairs.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html\">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html\">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>",
+        "JobRun$Arguments": "<p>The job arguments associated with this run. These override equivalent default arguments set for the job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own job arguments, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html\">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html\">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>",
+        "JobUpdate$DefaultArguments": "<p>The default arguments for this job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html\">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html\">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>",
+        "StartJobRunRequest$Arguments": "<p>The job arguments specifically for this run. They override the equivalent default arguments set for in the job definition itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html\">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href=\"http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html\">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>"
       }
     },
     "GenericString": {
@@ -1024,7 +1115,7 @@
       "refs": {
         "CreateDevEndpointRequest$EndpointName": "<p>The name to be assigned to the new DevEndpoint.</p>",
         "CreateDevEndpointRequest$SubnetId": "<p>The subnet ID for the new DevEndpoint to use.</p>",
-        "CreateDevEndpointRequest$PublicKey": "<p>The public key to use for authentication.</p>",
+        "CreateDevEndpointRequest$PublicKey": "<p>The public key to be used by this DevEndpoint for authentication. This attribute is provided for backward compatibility, as the recommended attribute to use is public keys.</p>",
         "CreateDevEndpointRequest$ExtraPythonLibsS3Path": "<p>Path(s) to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint. Multiple values must be complete paths separated by a comma.</p> <p>Please note that only pure Python libraries can currently be used on a DevEndpoint. Libraries that rely on C extensions, such as the <a href=\"http://pandas.pydata.org/\">pandas</a> Python data analysis library, are not yet supported.</p>",
         "CreateDevEndpointRequest$ExtraJarsS3Path": "<p>Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.</p>",
         "CreateDevEndpointResponse$EndpointName": "<p>The name assigned to the new DevEndpoint.</p>",
@@ -1041,7 +1132,7 @@
         "DevEndpoint$EndpointName": "<p>The name of the DevEndpoint.</p>",
         "DevEndpoint$SubnetId": "<p>The subnet ID for this DevEndpoint.</p>",
         "DevEndpoint$YarnEndpointAddress": "<p>The YARN endpoint address used by this DevEndpoint.</p>",
-        "DevEndpoint$PrivateAddress": "<p>The private address used by this DevEndpoint.</p>",
+        "DevEndpoint$PrivateAddress": "<p>A private DNS to access the DevEndpoint within a VPC, if the DevEndpoint is created within one.</p>",
         "DevEndpoint$PublicAddress": "<p>The public VPC address used by this DevEndpoint.</p>",
         "DevEndpoint$Status": "<p>The current status of this DevEndpoint.</p>",
         "DevEndpoint$AvailabilityZone": "<p>The AWS availability zone where this DevEndpoint is located.</p>",
@@ -1050,7 +1141,7 @@
         "DevEndpoint$ExtraJarsS3Path": "<p>Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.</p> <p>Please note that only pure Java/Scala libraries can currently be used on a DevEndpoint.</p>",
         "DevEndpoint$FailureReason": "<p>The reason for a current failure in this DevEndpoint.</p>",
         "DevEndpoint$LastUpdateStatus": "<p>The status of the last update.</p>",
-        "DevEndpoint$PublicKey": "<p>The public key to be used by this DevEndpoint for authentication.</p>",
+        "DevEndpoint$PublicKey": "<p>The public key to be used by this DevEndpoint for authentication. This attribute is provided for backward compatibility, as the recommended attribute to use is public keys.</p>",
         "DevEndpointCustomLibraries$ExtraPythonLibsS3Path": "<p>Path(s) to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint. Multiple values must be complete paths separated by a comma.</p> <p>Please note that only pure Python libraries can currently be used on a DevEndpoint. Libraries that rely on C extensions, such as the <a href=\"http://pandas.pydata.org/\">pandas</a> Python data analysis library, are not yet supported.</p>",
         "DevEndpointCustomLibraries$ExtraJarsS3Path": "<p>Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.</p> <p>Please note that only pure Java/Scala libraries can currently be used on a DevEndpoint.</p>",
         "GenericMap$key": null,
@@ -1061,10 +1152,14 @@
         "GetJobRunsRequest$NextToken": "<p>A continuation token, if this is a continuation call.</p>",
         "GetJobRunsResponse$NextToken": "<p>A continuation token, if not all reequested job runs have been returned.</p>",
         "GetJobsRequest$NextToken": "<p>A continuation token, if this is a continuation call.</p>",
-        "GetJobsResponse$NextToken": "<p>A continuation token, if not all jobs have yet been returned.</p>",
+        "GetJobsResponse$NextToken": "<p>A continuation token, if not all job definitions have yet been returned.</p>",
+        "GetSecurityConfigurationsRequest$NextToken": "<p>A continuation token, if this is a continuation call.</p>",
+        "GetSecurityConfigurationsResponse$NextToken": "<p>A continuation token, if there are more security configurations to return.</p>",
         "GetTriggersRequest$NextToken": "<p>A continuation token, if this is a continuation call.</p>",
         "GetTriggersResponse$NextToken": "<p>A continuation token, if not all the requested triggers have yet been returned.</p>",
         "JobCommand$Name": "<p>The name of the job command: this must be <code>glueetl</code>.</p>",
+        "JobRun$LogGroupName": "<p>The name of the log group for secure logging, that can be server-side encrypted in CloudWatch using KMS. This name can be <code>/aws-glue/jobs/</code>, in which case the default encryption is <code>NONE</code>. If you add a role name and SecurityConfiguration name (in other words, <code>/aws-glue/jobs-yourRoleName-yourSecurityConfigurationName/</code>), then that security configuration will be used to encrypt the log group.</p>",
+        "PublicKeysList$member": null,
         "StringList$member": null,
         "Trigger$Schedule": "<p>A <code>cron</code> expression used to specify the schedule (see <a href=\"http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html\">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>",
         "TriggerUpdate$Schedule": "<p>A <code>cron</code> expression used to specify the schedule (see <a href=\"http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html\">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>",
@@ -1288,6 +1383,26 @@
       "refs": {
       }
     },
+    "GetSecurityConfigurationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetSecurityConfigurationResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetSecurityConfigurationsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetSecurityConfigurationsResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "GetTableRequest": {
       "base": null,
       "refs": {
@@ -1374,6 +1489,11 @@
       "refs": {
       }
     },
+    "GlueEncryptionException": {
+      "base": "<p>An encryption operation failed.</p>",
+      "refs": {
+      }
+    },
     "GrokClassifier": {
       "base": "<p>A classifier that uses <code>grok</code> patterns.</p>",
       "refs": {
@@ -1391,9 +1511,9 @@
     "IdString": {
       "base": null,
       "refs": {
-        "BatchStopJobRunError$JobRunId": "<p>The JobRunId of the JobRun in question.</p>",
+        "BatchStopJobRunError$JobRunId": "<p>The JobRunId of the job run in question.</p>",
         "BatchStopJobRunJobRunIdList$member": null,
-        "BatchStopJobRunSuccessfulSubmission$JobRunId": "<p>The JobRunId of the JobRun in question.</p>",
+        "BatchStopJobRunSuccessfulSubmission$JobRunId": "<p>The JobRunId of the job run that was stopped.</p>",
         "GetJobRunRequest$RunId": "<p>The ID of the job run.</p>",
         "JobRun$Id": "<p>The ID of this job run.</p>",
         "JobRun$PreviousRunId": "<p>The ID of the previous run of this job. For example, the JobRunId specified in the StartJobRun action.</p>",
@@ -1440,7 +1560,7 @@
         "CreateJobRequest$AllocatedCapacity": "<p>The number of AWS Glue data processing units (DPUs) to allocate to this Job. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href=\"https://aws.amazon.com/glue/pricing/\">AWS Glue pricing page</a>.</p>",
         "DevEndpoint$ZeppelinRemoteSparkInterpreterPort": "<p>The Apache Zeppelin port for the remote Apache Spark interpreter.</p>",
         "DevEndpoint$NumberOfNodes": "<p>The number of AWS Glue Data Processing Units (DPUs) allocated to this DevEndpoint.</p>",
-        "Job$AllocatedCapacity": "<p>The number of AWS Glue data processing units (DPUs) allocated to this Job. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href=\"https://aws.amazon.com/glue/pricing/\">AWS Glue pricing page</a>.</p>",
+        "Job$AllocatedCapacity": "<p>The number of AWS Glue data processing units (DPUs) allocated to runs of this job. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href=\"https://aws.amazon.com/glue/pricing/\">AWS Glue pricing page</a>.</p>",
         "JobBookmarkEntry$Version": "<p>Version of the job.</p>",
         "JobBookmarkEntry$Run": "<p>The run ID number.</p>",
         "JobBookmarkEntry$Attempt": "<p>The attempt ID number.</p>",
@@ -1472,7 +1592,7 @@
       }
     },
     "Job": {
-      "base": "<p>Specifies a job.</p>",
+      "base": "<p>Specifies a job definition.</p>",
       "refs": {
         "GetJobResponse$Job": "<p>The requested job definition.</p>",
         "JobList$member": null
@@ -1484,8 +1604,20 @@
         "ResetJobBookmarkResponse$JobBookmarkEntry": "<p>The reset bookmark entry.</p>"
       }
     },
+    "JobBookmarksEncryption": {
+      "base": "<p>Specifies how Job bookmark data should be encrypted.</p>",
+      "refs": {
+        "EncryptionConfiguration$JobBookmarksEncryption": "<p>The encryption configuration for Job Bookmarks.</p>"
+      }
+    },
+    "JobBookmarksEncryptionMode": {
+      "base": null,
+      "refs": {
+        "JobBookmarksEncryption$JobBookmarksEncryptionMode": "<p>The encryption mode to use for Job bookmarks data.</p>"
+      }
+    },
     "JobCommand": {
-      "base": "<p>Specifies code that executes a job.</p>",
+      "base": "<p>Specifies code executed when a job is run.</p>",
       "refs": {
         "CreateJobRequest$Command": "<p>The JobCommand that executes this job.</p>",
         "Job$Command": "<p>The JobCommand that executes this job.</p>",
@@ -1495,7 +1627,7 @@
     "JobList": {
       "base": null,
       "refs": {
-        "GetJobsResponse$Jobs": "<p>A list of jobs.</p>"
+        "GetJobsResponse$Jobs": "<p>A list of job definitions.</p>"
       }
     },
     "JobName": {
@@ -1521,14 +1653,14 @@
     "JobRunState": {
       "base": null,
       "refs": {
-        "Condition$State": "<p>The condition state. Currently, the values supported are SUCCEEDED, STOPPED and FAILED.</p>",
+        "Condition$State": "<p>The condition state. Currently, the values supported are SUCCEEDED, STOPPED, TIMEOUT and FAILED.</p>",
         "JobRun$JobRunState": "<p>The current state of the job run.</p>"
       }
     },
     "JobUpdate": {
-      "base": "<p>Specifies information used to update an existing job. Note that the previous job definition will be completely overwritten by this information.</p>",
+      "base": "<p>Specifies information used to update an existing job definition. Note that the previous job definition will be completely overwritten by this information.</p>",
       "refs": {
-        "UpdateJobRequest$JobUpdate": "<p>Specifies the values with which to update the job.</p>"
+        "UpdateJobRequest$JobUpdate": "<p>Specifies the values with which to update the job definition.</p>"
       }
     },
     "JsonClassifier": {
@@ -1555,6 +1687,14 @@
       "base": null,
       "refs": {
         "ParametersMap$key": null
+      }
+    },
+    "KmsKeyArn": {
+      "base": null,
+      "refs": {
+        "CloudWatchEncryption$KmsKeyArn": "<p>The AWS ARN of the KMS key to be used to encrypt the data.</p>",
+        "JobBookmarksEncryption$KmsKeyArn": "<p>The AWS ARN of the KMS key to be used to encrypt the data.</p>",
+        "S3Encryption$KmsKeyArn": "<p>The AWS ARN of the KMS key to be used to encrypt the data.</p>"
       }
     },
     "Language": {
@@ -1610,7 +1750,7 @@
     "Logical": {
       "base": null,
       "refs": {
-        "Predicate$Logical": "<p>Currently \"OR\" is not supported.</p>"
+        "Predicate$Logical": "<p>Optional field if only one condition is listed. If multiple conditions are listed, then this field is required.</p>"
       }
     },
     "LogicalOperator": {
@@ -1643,14 +1783,14 @@
     "MaxConcurrentRuns": {
       "base": null,
       "refs": {
-        "ExecutionProperty$MaxConcurrentRuns": "<p>The maximum number of concurrent runs allowed for a job. The default is 1. An error is returned when this threshold is reached. The maximum value you can specify is controlled by a service limit.</p>"
+        "ExecutionProperty$MaxConcurrentRuns": "<p>The maximum number of concurrent runs allowed for the job. The default is 1. An error is returned when this threshold is reached. The maximum value you can specify is controlled by a service limit.</p>"
       }
     },
     "MaxRetries": {
       "base": null,
       "refs": {
         "CreateJobRequest$MaxRetries": "<p>The maximum number of times to retry this job if it fails.</p>",
-        "Job$MaxRetries": "<p>The maximum number of times to retry this job if it fails.</p>",
+        "Job$MaxRetries": "<p>The maximum number of times to retry this job after a JobRun fails.</p>",
         "JobUpdate$MaxRetries": "<p>The maximum number of times to retry this job if it fails.</p>"
       }
     },
@@ -1671,6 +1811,7 @@
         "CrawlerRunningException$Message": "<p>A message describing the problem.</p>",
         "CrawlerStoppingException$Message": "<p>A message describing the problem.</p>",
         "EntityNotFoundException$Message": "<p>A message describing the problem.</p>",
+        "GlueEncryptionException$Message": "<p>A message describing the problem.</p>",
         "IdempotentParameterMismatchException$Message": "<p>A message describing the problem.</p>",
         "InternalServiceException$Message": "<p>A message describing the problem.</p>",
         "InvalidInputException$Message": "<p>A message describing the problem.</p>",
@@ -1694,6 +1835,7 @@
       "base": null,
       "refs": {
         "Action$JobName": "<p>The name of a job to be executed.</p>",
+        "Action$SecurityConfiguration": "<p>The name of the SecurityConfiguration structure to be used with this action.</p>",
         "BatchCreatePartitionRequest$DatabaseName": "<p>The name of the metadata database in which the partition is to be created.</p>",
         "BatchCreatePartitionRequest$TableName": "<p>The name of the metadata table in which the partition is to be created.</p>",
         "BatchDeletePartitionRequest$DatabaseName": "<p>The name of the catalog database in which the table in question resides.</p>",
@@ -1704,9 +1846,9 @@
         "BatchDeleteTableVersionRequest$TableName": "<p>The name of the table. For Hive compatibility, this name is entirely lowercase.</p>",
         "BatchGetPartitionRequest$DatabaseName": "<p>The name of the catalog database where the partitions reside.</p>",
         "BatchGetPartitionRequest$TableName": "<p>The name of the partitions' table.</p>",
-        "BatchStopJobRunError$JobName": "<p>The name of the Job in question.</p>",
-        "BatchStopJobRunRequest$JobName": "<p>The name of the Job in question.</p>",
-        "BatchStopJobRunSuccessfulSubmission$JobName": "<p>The Name of the Job in question.</p>",
+        "BatchStopJobRunError$JobName": "<p>The name of the job definition used in the job run in question.</p>",
+        "BatchStopJobRunRequest$JobName": "<p>The name of the job definition for which to stop job runs.</p>",
+        "BatchStopJobRunSuccessfulSubmission$JobName": "<p>The name of the job definition used in the job run that was stopped.</p>",
         "CatalogEntry$DatabaseName": "<p>The database in which the table metadata resides.</p>",
         "CatalogEntry$TableName": "<p>The name of the table in question.</p>",
         "CatalogImportStatus$ImportedBy": "<p>The name of the person who initiated the migration.</p>",
@@ -1720,12 +1862,17 @@
         "CrawlerMetrics$CrawlerName": "<p>The name of the crawler.</p>",
         "CrawlerNameList$member": null,
         "CreateCrawlerRequest$Name": "<p>Name of the new crawler.</p>",
+        "CreateDevEndpointRequest$SecurityConfiguration": "<p>The name of the SecurityConfiguration structure to be used with this DevEndpoint.</p>",
+        "CreateDevEndpointResponse$SecurityConfiguration": "<p>The name of the SecurityConfiguration structure being used with this DevEndpoint.</p>",
         "CreateGrokClassifierRequest$Name": "<p>The name of the new classifier.</p>",
-        "CreateJobRequest$Name": "<p>The name you assign to this job. It must be unique in your account.</p>",
-        "CreateJobResponse$Name": "<p>The unique name that was provided.</p>",
+        "CreateJobRequest$Name": "<p>The name you assign to this job definition. It must be unique in your account.</p>",
+        "CreateJobRequest$SecurityConfiguration": "<p>The name of the SecurityConfiguration structure to be used with this job.</p>",
+        "CreateJobResponse$Name": "<p>The unique name that was provided for this job definition.</p>",
         "CreateJsonClassifierRequest$Name": "<p>The name of the classifier.</p>",
         "CreatePartitionRequest$DatabaseName": "<p>The name of the metadata database in which the partition is to be created.</p>",
         "CreatePartitionRequest$TableName": "<p>The name of the metadata table in which the partition is to be created.</p>",
+        "CreateSecurityConfigurationRequest$Name": "<p>The name for the new security configuration.</p>",
+        "CreateSecurityConfigurationResponse$Name": "<p>The name assigned to the new security configuration.</p>",
         "CreateTableRequest$DatabaseName": "<p>The catalog database in which to create the new table. For Hive compatibility, this name is entirely lowercase.</p>",
         "CreateTriggerRequest$Name": "<p>The name of the trigger.</p>",
         "CreateTriggerResponse$Name": "<p>The name of the trigger.</p>",
@@ -1738,10 +1885,11 @@
         "DeleteConnectionRequest$ConnectionName": "<p>The name of the connection to delete.</p>",
         "DeleteCrawlerRequest$Name": "<p>Name of the crawler to remove.</p>",
         "DeleteDatabaseRequest$Name": "<p>The name of the Database to delete. For Hive compatibility, this must be all lowercase.</p>",
-        "DeleteJobRequest$JobName": "<p>The name of the job to delete.</p>",
-        "DeleteJobResponse$JobName": "<p>The name of the job that was deleted.</p>",
+        "DeleteJobRequest$JobName": "<p>The name of the job definition to delete.</p>",
+        "DeleteJobResponse$JobName": "<p>The name of the job definition that was deleted.</p>",
         "DeletePartitionRequest$DatabaseName": "<p>The name of the catalog database in which the table in question resides.</p>",
         "DeletePartitionRequest$TableName": "<p>The name of the table where the partition to be deleted is located.</p>",
+        "DeleteSecurityConfigurationRequest$Name": "<p>The name of the security configuration to delete.</p>",
         "DeleteTableRequest$DatabaseName": "<p>The name of the catalog database in which the table resides. For Hive compatibility, this name is entirely lowercase.</p>",
         "DeleteTableRequest$Name": "<p>The name of the table to be deleted. For Hive compatibility, this name is entirely lowercase.</p>",
         "DeleteTableVersionRequest$DatabaseName": "<p>The database in the catalog in which the table resides. For Hive compatibility, this name is entirely lowercase.</p>",
@@ -1750,19 +1898,22 @@
         "DeleteTriggerResponse$Name": "<p>The name of the trigger that was deleted.</p>",
         "DeleteUserDefinedFunctionRequest$DatabaseName": "<p>The name of the catalog database where the function is located.</p>",
         "DeleteUserDefinedFunctionRequest$FunctionName": "<p>The name of the function definition to be deleted.</p>",
+        "DevEndpoint$SecurityConfiguration": "<p>The name of the SecurityConfiguration structure to be used with this DevEndpoint.</p>",
+        "EncryptionAtRest$SseAwsKmsKeyId": "<p>The ID of the AWS KMS key to use for encryption at rest.</p>",
         "ErrorByName$key": null,
         "ErrorDetail$ErrorCode": "<p>The code associated with this error.</p>",
         "GetClassifierRequest$Name": "<p>Name of the classifier to retrieve.</p>",
         "GetConnectionRequest$Name": "<p>The name of the connection definition to retrieve.</p>",
         "GetCrawlerRequest$Name": "<p>Name of the crawler to retrieve metadata for.</p>",
         "GetDatabaseRequest$Name": "<p>The name of the database to retrieve. For Hive compatibility, this should be all lowercase.</p>",
-        "GetJobRequest$JobName": "<p>The name of the job to retrieve.</p>",
-        "GetJobRunRequest$JobName": "<p>Name of the job being run.</p>",
-        "GetJobRunsRequest$JobName": "<p>The name of the job for which to retrieve all job runs.</p>",
+        "GetJobRequest$JobName": "<p>The name of the job definition to retrieve.</p>",
+        "GetJobRunRequest$JobName": "<p>Name of the job definition being run.</p>",
+        "GetJobRunsRequest$JobName": "<p>The name of the job definition for which to retrieve all job runs.</p>",
         "GetPartitionRequest$DatabaseName": "<p>The name of the catalog database where the partition resides.</p>",
         "GetPartitionRequest$TableName": "<p>The name of the partition's table.</p>",
         "GetPartitionsRequest$DatabaseName": "<p>The name of the catalog database where the partitions reside.</p>",
         "GetPartitionsRequest$TableName": "<p>The name of the partitions' table.</p>",
+        "GetSecurityConfigurationRequest$Name": "<p>The name of the security configuration to retrieve.</p>",
         "GetTableRequest$DatabaseName": "<p>The name of the database in the catalog in which the table resides. For Hive compatibility, this name is entirely lowercase.</p>",
         "GetTableRequest$Name": "<p>The name of the table for which to retrieve the definition. For Hive compatibility, this name is entirely lowercase.</p>",
         "GetTableVersionRequest$DatabaseName": "<p>The database in the catalog in which the table resides. For Hive compatibility, this name is entirely lowercase.</p>",
@@ -1777,9 +1928,12 @@
         "GetUserDefinedFunctionsRequest$DatabaseName": "<p>The name of the catalog database where the functions are located.</p>",
         "GetUserDefinedFunctionsRequest$Pattern": "<p>An optional function-name pattern string that filters the function definitions returned.</p>",
         "GrokClassifier$Name": "<p>The name of the classifier.</p>",
-        "Job$Name": "<p>The name you assign to this job.</p>",
+        "Job$Name": "<p>The name you assign to this job definition.</p>",
+        "Job$SecurityConfiguration": "<p>The name of the SecurityConfiguration structure to be used with this job.</p>",
         "JobRun$TriggerName": "<p>The name of the trigger that started this job run.</p>",
-        "JobRun$JobName": "<p>The name of the job being run.</p>",
+        "JobRun$JobName": "<p>The name of the job definition being used in this run.</p>",
+        "JobRun$SecurityConfiguration": "<p>The name of the SecurityConfiguration structure to be used with this job run.</p>",
+        "JobUpdate$SecurityConfiguration": "<p>The name of the SecurityConfiguration structure to be used with this job.</p>",
         "JsonClassifier$Name": "<p>The name of the classifier.</p>",
         "MatchCriteria$member": null,
         "NameStringList$member": null,
@@ -1787,14 +1941,16 @@
         "Partition$DatabaseName": "<p>The name of the catalog database where the table in question is located.</p>",
         "Partition$TableName": "<p>The name of the table in question.</p>",
         "PhysicalConnectionRequirements$SubnetId": "<p>The subnet ID used by the connection.</p>",
-        "PhysicalConnectionRequirements$AvailabilityZone": "<p>The connection's availability zone. This field is deprecated and has no effect.</p>",
-        "Predecessor$JobName": "<p>The name of the predecessor job.</p>",
+        "PhysicalConnectionRequirements$AvailabilityZone": "<p>The connection's availability zone. This field is redundant, since the specified subnet implies the availability zone to be used. The field must be populated now, but will be deprecated in the future.</p>",
+        "Predecessor$JobName": "<p>The name of the job definition used by the predecessor job run.</p>",
+        "SecurityConfiguration$Name": "<p>The name of the security configuration.</p>",
         "SecurityGroupIdList$member": null,
         "SerDeInfo$Name": "<p>Name of the SerDe.</p>",
         "SerDeInfo$SerializationLibrary": "<p>Usually the class that implements the SerDe. An example is: <code>org.apache.hadoop.hive.serde2.columnar.ColumnarSerDe</code>.</p>",
         "StartCrawlerRequest$Name": "<p>Name of the crawler to start.</p>",
         "StartCrawlerScheduleRequest$CrawlerName": "<p>Name of the crawler to schedule.</p>",
-        "StartJobRunRequest$JobName": "<p>The name of the job to start.</p>",
+        "StartJobRunRequest$JobName": "<p>The name of the job definition to use.</p>",
+        "StartJobRunRequest$SecurityConfiguration": "<p>The name of the SecurityConfiguration structure to be used with this job run.</p>",
         "StartTriggerRequest$Name": "<p>The name of the trigger to start.</p>",
         "StartTriggerResponse$Name": "<p>The name of the trigger that was started.</p>",
         "StopCrawlerRequest$Name": "<p>Name of the crawler to stop.</p>",
@@ -1817,7 +1973,7 @@
         "UpdateDatabaseRequest$Name": "<p>The name of the database to update in the catalog. For Hive compatibility, this is folded to lowercase.</p>",
         "UpdateGrokClassifierRequest$Name": "<p>The name of the <code>GrokClassifier</code>.</p>",
         "UpdateJobRequest$JobName": "<p>Name of the job definition to update.</p>",
-        "UpdateJobResponse$JobName": "<p>Returns the name of the updated job.</p>",
+        "UpdateJobResponse$JobName": "<p>Returns the name of the updated job definition.</p>",
         "UpdateJsonClassifierRequest$Name": "<p>The name of the classifier.</p>",
         "UpdatePartitionRequest$DatabaseName": "<p>The name of the catalog database in which the table in question resides.</p>",
         "UpdatePartitionRequest$TableName": "<p>The name of the table where the partition to be updated is located.</p>",
@@ -1867,6 +2023,23 @@
         "TableInput$Retention": "<p>Retention time for this table.</p>"
       }
     },
+    "NotificationProperty": {
+      "base": "<p>Specifies configuration properties of a notification.</p>",
+      "refs": {
+        "Action$NotificationProperty": "<p>Specifies configuration properties of a job run notification.</p>",
+        "CreateJobRequest$NotificationProperty": "<p>Specifies configuration properties of a job notification.</p>",
+        "Job$NotificationProperty": "<p>Specifies configuration properties of a job notification.</p>",
+        "JobRun$NotificationProperty": "<p>Specifies configuration properties of a job run notification.</p>",
+        "JobUpdate$NotificationProperty": "<p>Specifies configuration properties of a job notification.</p>",
+        "StartJobRunRequest$NotificationProperty": "<p>Specifies configuration properties of a job run notification.</p>"
+      }
+    },
+    "NotifyDelayAfter": {
+      "base": null,
+      "refs": {
+        "NotificationProperty$NotifyDelayAfter": "<p>After a job run starts, the number of minutes to wait before sending a job run delay notification.</p>"
+      }
+    },
     "OperationTimeoutException": {
       "base": "<p>The operation timed out.</p>",
       "refs": {
@@ -1896,6 +2069,7 @@
         "GetJobRunsRequest$MaxResults": "<p>The maximum size of the response.</p>",
         "GetJobsRequest$MaxResults": "<p>The maximum size of the response.</p>",
         "GetPartitionsRequest$MaxResults": "<p>The maximum number of partitions to return in a single response.</p>",
+        "GetSecurityConfigurationsRequest$MaxResults": "<p>The maximum number of results to return.</p>",
         "GetTableVersionsRequest$MaxResults": "<p>The maximum number of table versions to return in one response.</p>",
         "GetTablesRequest$MaxResults": "<p>The maximum number of tables to return in a single response.</p>",
         "GetTriggersRequest$MaxResults": "<p>The maximum size of the response.</p>",
@@ -1905,14 +2079,14 @@
     "ParametersMap": {
       "base": null,
       "refs": {
-        "Database$Parameters": "<p>A list of key-value pairs that define parameters and properties of the database.</p>",
-        "DatabaseInput$Parameters": "<p>A list of key-value pairs that define parameters and properties of the database.</p>",
-        "Partition$Parameters": "<p>Partition parameters, in the form of a list of key-value pairs.</p>",
-        "PartitionInput$Parameters": "<p>Partition parameters, in the form of a list of key-value pairs.</p>",
-        "SerDeInfo$Parameters": "<p>A list of initialization parameters for the SerDe, in key-value form.</p>",
+        "Database$Parameters": "<p>These key-value pairs define parameters and properties of the database.</p>",
+        "DatabaseInput$Parameters": "<p>Thes key-value pairs define parameters and properties of the database.</p>",
+        "Partition$Parameters": "<p>These key-value pairs define partition parameters.</p>",
+        "PartitionInput$Parameters": "<p>These key-value pairs define partition parameters.</p>",
+        "SerDeInfo$Parameters": "<p>These key-value pairs define initialization parameters for the SerDe.</p>",
         "StorageDescriptor$Parameters": "<p>User-supplied properties in key-value form.</p>",
-        "Table$Parameters": "<p>Properties associated with this table, as a list of key-value pairs.</p>",
-        "TableInput$Parameters": "<p>Properties associated with this table, as a list of key-value pairs.</p>"
+        "Table$Parameters": "<p>These key-value pairs define properties associated with the table.</p>",
+        "TableInput$Parameters": "<p>These key-value pairs define properties associated with the table.</p>"
       }
     },
     "ParametersMapValue": {
@@ -1972,6 +2146,7 @@
     "Path": {
       "base": null,
       "refs": {
+        "DynamoDBTarget$Path": "<p>The name of the DynamoDB table to crawl.</p>",
         "JdbcTarget$Path": "<p>The path of the JDBC target.</p>",
         "PathList$member": null,
         "S3Target$Path": "<p>The path to the Amazon S3 target.</p>"
@@ -2022,6 +2197,25 @@
       "refs": {
         "UserDefinedFunction$OwnerType": "<p>The owner type.</p>",
         "UserDefinedFunctionInput$OwnerType": "<p>The owner type.</p>"
+      }
+    },
+    "PublicKeysList": {
+      "base": null,
+      "refs": {
+        "CreateDevEndpointRequest$PublicKeys": "<p>A list of public keys to be used by the DevEndpoints for authentication. The use of this attribute is preferred over a single public key because the public keys allow you to have a different private key per client.</p> <note> <p>If you previously created an endpoint with a public key, you must remove that key to be able to set a list of public keys: call the <code>UpdateDevEndpoint</code> API with the public key content in the <code>deletePublicKeys</code> attribute, and the list of new keys in the <code>addPublicKeys</code> attribute.</p> </note>",
+        "DevEndpoint$PublicKeys": "<p>A list of public keys to be used by the DevEndpoints for authentication. The use of this attribute is preferred over a single public key because the public keys allow you to have a different private key per client.</p> <note> <p>If you previously created an endpoint with a public key, you must remove that key to be able to set a list of public keys: call the <code>UpdateDevEndpoint</code> API with the public key content in the <code>deletePublicKeys</code> attribute, and the list of new keys in the <code>addPublicKeys</code> attribute.</p> </note>",
+        "UpdateDevEndpointRequest$AddPublicKeys": "<p>The list of public keys for the DevEndpoint to use.</p>",
+        "UpdateDevEndpointRequest$DeletePublicKeys": "<p>The list of public keys to be deleted from the DevEndpoint.</p>"
+      }
+    },
+    "PutDataCatalogEncryptionSettingsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "PutDataCatalogEncryptionSettingsResponse": {
+      "base": null,
+      "refs": {
       }
     },
     "PythonScript": {
@@ -2085,9 +2279,9 @@
     "RoleString": {
       "base": null,
       "refs": {
-        "CreateJobRequest$Role": "<p>The name of the IAM role associated with this job.</p>",
-        "Job$Role": "<p>The name of the IAM role associated with this job.</p>",
-        "JobUpdate$Role": "<p>The name of the IAM role associated with this job (required).</p>"
+        "CreateJobRequest$Role": "<p>The name or ARN of the IAM role associated with this job.</p>",
+        "Job$Role": "<p>The name or ARN of the IAM role associated with this job.</p>",
+        "JobUpdate$Role": "<p>The name or ARN of the IAM role associated with this job (required).</p>"
       }
     },
     "RowTag": {
@@ -2096,6 +2290,24 @@
         "CreateXMLClassifierRequest$RowTag": "<p>The XML tag designating the element that contains each record in an XML document being parsed. Note that this cannot identify a self-closing element (closed by <code>/&gt;</code>). An empty row element that contains only attributes can be parsed as long as it ends with a closing tag (for example, <code>&lt;row item_a=\"A\" item_b=\"B\"&gt;&lt;/row&gt;</code> is okay, but <code>&lt;row item_a=\"A\" item_b=\"B\" /&gt;</code> is not).</p>",
         "UpdateXMLClassifierRequest$RowTag": "<p>The XML tag designating the element that contains each record in an XML document being parsed. Note that this cannot identify a self-closing element (closed by <code>/&gt;</code>). An empty row element that contains only attributes can be parsed as long as it ends with a closing tag (for example, <code>&lt;row item_a=\"A\" item_b=\"B\"&gt;&lt;/row&gt;</code> is okay, but <code>&lt;row item_a=\"A\" item_b=\"B\" /&gt;</code> is not).</p>",
         "XMLClassifier$RowTag": "<p>The XML tag designating the element that contains each record in an XML document being parsed. Note that this cannot identify a self-closing element (closed by <code>/&gt;</code>). An empty row element that contains only attributes can be parsed as long as it ends with a closing tag (for example, <code>&lt;row item_a=\"A\" item_b=\"B\"&gt;&lt;/row&gt;</code> is okay, but <code>&lt;row item_a=\"A\" item_b=\"B\" /&gt;</code> is not).</p>"
+      }
+    },
+    "S3Encryption": {
+      "base": "<p>Specifies how S3 data should be encrypted.</p>",
+      "refs": {
+        "S3EncryptionList$member": null
+      }
+    },
+    "S3EncryptionList": {
+      "base": null,
+      "refs": {
+        "EncryptionConfiguration$S3Encryption": "<p>The encryption configuration for S3 data.</p>"
+      }
+    },
+    "S3EncryptionMode": {
+      "base": null,
+      "refs": {
+        "S3Encryption$S3EncryptionMode": "<p>The encryption mode to use for S3 data.</p>"
       }
     },
     "S3Target": {
@@ -2163,6 +2375,19 @@
       "base": null,
       "refs": {
         "JobCommand$ScriptLocation": "<p>Specifies the S3 path to a script that executes a job (required).</p>"
+      }
+    },
+    "SecurityConfiguration": {
+      "base": "<p>Specifies a security configuration.</p>",
+      "refs": {
+        "GetSecurityConfigurationResponse$SecurityConfiguration": "<p>The requested security configuration</p>",
+        "SecurityConfigurationList$member": null
+      }
+    },
+    "SecurityConfigurationList": {
+      "base": null,
+      "refs": {
+        "GetSecurityConfigurationsResponse$SecurityConfigurations": "<p>A list of security configurations.</p>"
       }
     },
     "SecurityGroupIdList": {
@@ -2351,6 +2576,17 @@
         "BatchDeleteTableVersionResponse$Errors": "<p>A list of errors encountered while trying to delete the specified table versions.</p>"
       }
     },
+    "Timeout": {
+      "base": null,
+      "refs": {
+        "Action$Timeout": "<p>The JobRun timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours). This overrides the timeout value set in the parent job.</p>",
+        "CreateJobRequest$Timeout": "<p>The job timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours).</p>",
+        "Job$Timeout": "<p>The job timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours).</p>",
+        "JobRun$Timeout": "<p>The JobRun timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours). This overrides the timeout value set in the parent job.</p>",
+        "JobUpdate$Timeout": "<p>The job timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours).</p>",
+        "StartJobRunRequest$Timeout": "<p>The JobRun timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours). This overrides the timeout value set in the parent job.</p>"
+      }
+    },
     "Timestamp": {
       "base": null,
       "refs": {
@@ -2385,13 +2621,15 @@
       "base": null,
       "refs": {
         "CreateDevEndpointResponse$CreatedTimestamp": "<p>The point in time at which this DevEndpoint was created.</p>",
+        "CreateSecurityConfigurationResponse$CreatedTimestamp": "<p>The time at which the new security configuration was created.</p>",
         "DevEndpoint$CreatedTimestamp": "<p>The point in time at which this DevEndpoint was created.</p>",
         "DevEndpoint$LastModifiedTimestamp": "<p>The point in time at which this DevEndpoint was last modified.</p>",
-        "Job$CreatedOn": "<p>The time and date that this job specification was created.</p>",
-        "Job$LastModifiedOn": "<p>The last point in time when this job specification was modified.</p>",
+        "Job$CreatedOn": "<p>The time and date that this job definition was created.</p>",
+        "Job$LastModifiedOn": "<p>The last point in time when this job definition was modified.</p>",
         "JobRun$StartedOn": "<p>The date and time at which this job run was started.</p>",
         "JobRun$LastModifiedOn": "<p>The last time this job run was modified.</p>",
-        "JobRun$CompletedOn": "<p>The date and time this job run completed.</p>"
+        "JobRun$CompletedOn": "<p>The date and time this job run completed.</p>",
+        "SecurityConfiguration$CreatedTimeStamp": "<p>The time at which this security configuration was created.</p>"
       }
     },
     "Token": {

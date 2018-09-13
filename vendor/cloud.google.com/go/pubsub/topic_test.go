@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@ package pubsub
 
 import (
 	"fmt"
-	"net"
 	"testing"
 	"time"
 
@@ -101,14 +100,12 @@ func TestStopPublishOrder(t *testing.T) {
 
 func TestPublishTimeout(t *testing.T) {
 	ctx := context.Background()
-	serv := grpc.NewServer()
-	pubsubpb.RegisterPublisherServer(serv, &alwaysFailPublish{})
-	lis, err := net.Listen("tcp", "localhost:0")
+	serv, err := testutil.NewServer()
 	if err != nil {
 		t.Fatal(err)
 	}
-	go serv.Serve(lis)
-	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithInsecure())
+	pubsubpb.RegisterPublisherServer(serv.Gsrv, &alwaysFailPublish{})
+	conn, err := grpc.Dial(serv.Addr, grpc.WithInsecure())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -128,6 +125,47 @@ func TestPublishTimeout(t *testing.T) {
 		}
 	case <-time.After(2 * topic.PublishSettings.Timeout):
 		t.Fatal("timed out")
+	}
+}
+
+func TestUpdateTopic(t *testing.T) {
+	ctx := context.Background()
+	client, _ := newFake(t)
+	defer client.Close()
+
+	topic := mustCreateTopic(t, client, "T")
+	config, err := topic.Config(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := TopicConfig{}
+	if !testutil.Equal(config, want) {
+		t.Errorf("got %+v, want %+v", config, want)
+	}
+
+	// replace labels
+	labels := map[string]string{"label": "value"}
+	config2, err := topic.Update(ctx, TopicConfigToUpdate{Labels: labels})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want = TopicConfig{
+		Labels:               labels,
+		MessageStoragePolicy: MessageStoragePolicy{[]string{"US"}},
+	}
+	if !testutil.Equal(config2, want) {
+		t.Errorf("got %+v, want %+v", config2, want)
+	}
+
+	// delete all labels
+	labels = map[string]string{}
+	config3, err := topic.Update(ctx, TopicConfigToUpdate{Labels: labels})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want.Labels = nil
+	if !testutil.Equal(config3, want) {
+		t.Errorf("got %+v, want %+v", config3, want)
 	}
 }
 

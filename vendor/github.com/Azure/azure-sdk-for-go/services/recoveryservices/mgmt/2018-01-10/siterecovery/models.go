@@ -1204,6 +1204,8 @@ type A2AEnableProtectionInput struct {
 	MultiVMGroupName *string `json:"multiVmGroupName,omitempty"`
 	// RecoveryBootDiagStorageAccountID - The boot diagnostic storage account.
 	RecoveryBootDiagStorageAccountID *string `json:"recoveryBootDiagStorageAccountId,omitempty"`
+	// DiskEncryptionInfo - The recovery disk encryption information.
+	DiskEncryptionInfo *DiskEncryptionInfo `json:"diskEncryptionInfo,omitempty"`
 	// InstanceType - Possible values include: 'InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeEnableProtectionProviderSpecificInput', 'InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeA2A', 'InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeHyperVReplicaAzure', 'InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeInMageAzureV2', 'InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeInMage', 'InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeSan'
 	InstanceType InstanceTypeBasicEnableProtectionProviderSpecificInput `json:"instanceType,omitempty"`
 }
@@ -1238,6 +1240,9 @@ func (aepi A2AEnableProtectionInput) MarshalJSON() ([]byte, error) {
 	}
 	if aepi.RecoveryBootDiagStorageAccountID != nil {
 		objectMap["recoveryBootDiagStorageAccountId"] = aepi.RecoveryBootDiagStorageAccountID
+	}
+	if aepi.DiskEncryptionInfo != nil {
+		objectMap["diskEncryptionInfo"] = aepi.DiskEncryptionInfo
 	}
 	if aepi.InstanceType != "" {
 		objectMap["instanceType"] = aepi.InstanceType
@@ -1637,6 +1642,18 @@ type A2AProtectedDiskDetails struct {
 	DataPendingInStagingStorageAccountInMB *float64 `json:"dataPendingInStagingStorageAccountInMB,omitempty"`
 	// DataPendingAtSourceAgentInMB - The data pending at source virtual machine in MB.
 	DataPendingAtSourceAgentInMB *float64 `json:"dataPendingAtSourceAgentInMB,omitempty"`
+	// IsDiskEncrypted - A value indicating whether vm has encrypted os disk or not.
+	IsDiskEncrypted *bool `json:"isDiskEncrypted,omitempty"`
+	// SecretIdentifier - The secret URL / identifier (BEK).
+	SecretIdentifier *string `json:"secretIdentifier,omitempty"`
+	// DekKeyVaultArmID - The KeyVault resource id for secret (BEK).
+	DekKeyVaultArmID *string `json:"dekKeyVaultArmId,omitempty"`
+	// IsDiskKeyEncrypted - A value indicating whether disk key got encrypted or not.
+	IsDiskKeyEncrypted *bool `json:"isDiskKeyEncrypted,omitempty"`
+	// KeyIdentifier - The key URL / identifier (KEK).
+	KeyIdentifier *string `json:"keyIdentifier,omitempty"`
+	// KekKeyVaultArmID - The KeyVault resource id for key (KEK).
+	KekKeyVaultArmID *string `json:"kekKeyVaultArmId,omitempty"`
 }
 
 // A2AProtectedManagedDiskDetails a2A protected managed disk details.
@@ -1671,6 +1688,18 @@ type A2AProtectedManagedDiskDetails struct {
 	DataPendingInStagingStorageAccountInMB *float64 `json:"dataPendingInStagingStorageAccountInMB,omitempty"`
 	// DataPendingAtSourceAgentInMB - The data pending at source virtual machine in MB.
 	DataPendingAtSourceAgentInMB *float64 `json:"dataPendingAtSourceAgentInMB,omitempty"`
+	// IsDiskEncrypted - A value indicating whether vm has encrypted os disk or not.
+	IsDiskEncrypted *bool `json:"isDiskEncrypted,omitempty"`
+	// SecretIdentifier - The secret URL / identifier (BEK).
+	SecretIdentifier *string `json:"secretIdentifier,omitempty"`
+	// DekKeyVaultArmID - The KeyVault resource id for secret (BEK).
+	DekKeyVaultArmID *string `json:"dekKeyVaultArmId,omitempty"`
+	// IsDiskKeyEncrypted - A value indicating whether disk key got encrypted or not.
+	IsDiskKeyEncrypted *bool `json:"isDiskKeyEncrypted,omitempty"`
+	// KeyIdentifier - The key URL / identifier (KEK).
+	KeyIdentifier *string `json:"keyIdentifier,omitempty"`
+	// KekKeyVaultArmID - The KeyVault resource id for key (KEK).
+	KekKeyVaultArmID *string `json:"kekKeyVaultArmId,omitempty"`
 }
 
 // A2AProtectionContainerMappingDetails a2A provider specific settings.
@@ -2075,6 +2104,8 @@ type A2ASwitchProtectionInput struct {
 	PolicyID *string `json:"policyId,omitempty"`
 	// RecoveryBootDiagStorageAccountID - The boot diagnostic storage account.
 	RecoveryBootDiagStorageAccountID *string `json:"recoveryBootDiagStorageAccountId,omitempty"`
+	// DiskEncryptionInfo - The recovery disk encryption information.
+	DiskEncryptionInfo *DiskEncryptionInfo `json:"diskEncryptionInfo,omitempty"`
 	// InstanceType - Possible values include: 'InstanceTypeBasicSwitchProtectionProviderSpecificInputInstanceTypeSwitchProtectionProviderSpecificInput', 'InstanceTypeBasicSwitchProtectionProviderSpecificInputInstanceTypeA2A'
 	InstanceType InstanceTypeBasicSwitchProtectionProviderSpecificInput `json:"instanceType,omitempty"`
 }
@@ -2106,6 +2137,9 @@ func (aspi A2ASwitchProtectionInput) MarshalJSON() ([]byte, error) {
 	}
 	if aspi.RecoveryBootDiagStorageAccountID != nil {
 		objectMap["recoveryBootDiagStorageAccountId"] = aspi.RecoveryBootDiagStorageAccountID
+	}
+	if aspi.DiskEncryptionInfo != nil {
+		objectMap["diskEncryptionInfo"] = aspi.DiskEncryptionInfo
 	}
 	if aspi.InstanceType != "" {
 		objectMap["instanceType"] = aspi.InstanceType
@@ -2179,6 +2213,8 @@ type A2AUpdateReplicationProtectedItemInput struct {
 	ManagedDiskUpdateDetails *[]A2AVMManagedDiskUpdateDetails `json:"managedDiskUpdateDetails,omitempty"`
 	// RecoveryBootDiagStorageAccountID - The boot diagnostic storage account.
 	RecoveryBootDiagStorageAccountID *string `json:"recoveryBootDiagStorageAccountId,omitempty"`
+	// DiskEncryptionInfo - The recovery os disk encryption information.
+	DiskEncryptionInfo *DiskEncryptionInfo `json:"diskEncryptionInfo,omitempty"`
 	// InstanceType - Possible values include: 'InstanceTypeBasicUpdateReplicationProtectedItemProviderInputInstanceTypeUpdateReplicationProtectedItemProviderInput', 'InstanceTypeBasicUpdateReplicationProtectedItemProviderInputInstanceTypeA2A', 'InstanceTypeBasicUpdateReplicationProtectedItemProviderInputInstanceTypeHyperVReplicaAzure', 'InstanceTypeBasicUpdateReplicationProtectedItemProviderInputInstanceTypeInMageAzureV2'
 	InstanceType InstanceTypeBasicUpdateReplicationProtectedItemProviderInput `json:"instanceType,omitempty"`
 }
@@ -2198,6 +2234,9 @@ func (aurpii A2AUpdateReplicationProtectedItemInput) MarshalJSON() ([]byte, erro
 	}
 	if aurpii.RecoveryBootDiagStorageAccountID != nil {
 		objectMap["recoveryBootDiagStorageAccountId"] = aurpii.RecoveryBootDiagStorageAccountID
+	}
+	if aurpii.DiskEncryptionInfo != nil {
+		objectMap["diskEncryptionInfo"] = aurpii.DiskEncryptionInfo
 	}
 	if aurpii.InstanceType != "" {
 		objectMap["instanceType"] = aurpii.InstanceType
@@ -3728,6 +3767,22 @@ type DiskDetails struct {
 	VhdID *string `json:"vhdId,omitempty"`
 	// VhdName - The VHD name.
 	VhdName *string `json:"vhdName,omitempty"`
+}
+
+// DiskEncryptionInfo recovery disk encryption info (BEK and KEK).
+type DiskEncryptionInfo struct {
+	// DiskEncryptionKeyInfo - The recovery KeyVault reference for secret.
+	DiskEncryptionKeyInfo *DiskEncryptionKeyInfo `json:"diskEncryptionKeyInfo,omitempty"`
+	// KeyEncryptionKeyInfo - The recovery KeyVault reference for key.
+	KeyEncryptionKeyInfo *KeyEncryptionKeyInfo `json:"keyEncryptionKeyInfo,omitempty"`
+}
+
+// DiskEncryptionKeyInfo disk Encryption Key Information (BitLocker Encryption Key (BEK) on Windows).
+type DiskEncryptionKeyInfo struct {
+	// SecretIdentifier - The secret url / identifier.
+	SecretIdentifier *string `json:"secretIdentifier,omitempty"`
+	// KeyVaultResourceArmID - The KeyVault resource ARM id for secret.
+	KeyVaultResourceArmID *string `json:"keyVaultResourceArmId,omitempty"`
 }
 
 // DiskVolumeDetails volume details.
@@ -10221,6 +10276,14 @@ func (jtd JobTaskDetails) AsTaskTypeDetails() (*TaskTypeDetails, bool) {
 // AsBasicTaskTypeDetails is the BasicTaskTypeDetails implementation for JobTaskDetails.
 func (jtd JobTaskDetails) AsBasicTaskTypeDetails() (BasicTaskTypeDetails, bool) {
 	return &jtd, true
+}
+
+// KeyEncryptionKeyInfo key Encryption Key (KEK) information.
+type KeyEncryptionKeyInfo struct {
+	// KeyIdentifier - The key url / identifier.
+	KeyIdentifier *string `json:"keyIdentifier,omitempty"`
+	// KeyVaultResourceArmID - The KeyVault resource ARM id for key.
+	KeyVaultResourceArmID *string `json:"keyVaultResourceArmId,omitempty"`
 }
 
 // LogicalNetwork logical network data model.
@@ -19003,6 +19066,8 @@ type VMNicDetails struct {
 	SelectionType *string `json:"selectionType,omitempty"`
 	// RecoveryNicIPAddressType - IP allocation type for recovery VM.
 	RecoveryNicIPAddressType *string `json:"recoveryNicIpAddressType,omitempty"`
+	// EnableAcceleratedNetworkingOnRecovery - A value indicating whether the NIC has accerated networking enabled.
+	EnableAcceleratedNetworkingOnRecovery *bool `json:"enableAcceleratedNetworkingOnRecovery,omitempty"`
 }
 
 // VMNicInputDetails hyper V VM network input details.
@@ -19015,6 +19080,8 @@ type VMNicInputDetails struct {
 	ReplicaNicStaticIPAddress *string `json:"replicaNicStaticIPAddress,omitempty"`
 	// SelectionType - Selection type for failover.
 	SelectionType *string `json:"selectionType,omitempty"`
+	// EnableAcceleratedNetworkingOnRecovery - Whether the NIC has accerated networking enabled.
+	EnableAcceleratedNetworkingOnRecovery *bool `json:"enableAcceleratedNetworkingOnRecovery,omitempty"`
 }
 
 // VMNicUpdatesTaskDetails this class represents the vm NicUpdates task details.

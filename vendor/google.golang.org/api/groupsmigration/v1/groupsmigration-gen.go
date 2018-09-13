@@ -209,6 +209,7 @@ func (c *ArchiveInsertCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "{groupId}/archive")
 	if c.mediaInfo_ != nil {
 		urls = strings.Replace(urls, "https://www.googleapis.com/", "https://www.googleapis.com/upload/", 1)
@@ -292,7 +293,7 @@ func (c *ArchiveInsertCall) Do(opts ...googleapi.CallOption) (*Groups, error) {
 	//     "accept": [
 	//       "message/rfc822"
 	//     ],
-	//     "maxSize": "16MB",
+	//     "maxSize": "25MB",
 	//     "protocols": {
 	//       "resumable": {
 	//         "multipart": true,

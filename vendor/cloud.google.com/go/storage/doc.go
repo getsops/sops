@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,9 +19,14 @@ Google Cloud Storage stores data in named objects, which are grouped into bucket
 More information about Google Cloud Storage is available at
 https://cloud.google.com/storage/docs.
 
-All of the methods of this package use exponential backoff to retry calls
-that fail with certain errors, as described in
-https://cloud.google.com/storage/docs/exponential-backoff.
+See https://godoc.org/cloud.google.com/go for authentication, timeouts,
+connection pooling and similar aspects of this package.
+
+All of the methods of this package use exponential backoff to retry calls that fail
+with certain errors, as described in
+https://cloud.google.com/storage/docs/exponential-backoff. Retrying continues
+indefinitely unless the controlling context is canceled or the client is closed. See
+context.WithTimeout and context.WithCancel.
 
 
 Creating a Client
@@ -61,7 +66,7 @@ global across all projects.
 
 Each bucket has associated metadata, represented in this package by
 BucketAttrs. The third argument to BucketHandle.Create allows you to set
-the intial BucketAttrs of a bucket. To retrieve a bucket's attributes, use
+the initial BucketAttrs of a bucket. To retrieve a bucket's attributes, use
 Attrs:
 
     attrs, err := bkt.Attrs(ctx)
@@ -159,9 +164,13 @@ SignedURL for details.
     }
     fmt.Println(url)
 
-Authentication
+Errors
 
-See examples of authorization and authentication at
-https://godoc.org/cloud.google.com/go#pkg-examples.
+Errors returned by this client are often of the type [`googleapi.Error`](https://godoc.org/google.golang.org/api/googleapi#Error).
+These errors can be introspected for more information by type asserting to the richer `googleapi.Error` type. For example:
+
+	if e, ok := err.(*googleapi.Error); ok {
+		  if e.Code = 409 { ... }
+	}
 */
 package storage // import "cloud.google.com/go/storage"

@@ -14,7 +14,7 @@ const opAssociateNode = "AssociateNode"
 
 // AssociateNodeRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateNode operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -120,7 +120,7 @@ const opCreateBackup = "CreateBackup"
 
 // CreateBackupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateBackup operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -222,7 +222,7 @@ const opCreateServer = "CreateServer"
 
 // CreateServerRequest generates a "aws/request.Request" representing the
 // client's request for the CreateServer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -336,7 +336,7 @@ const opDeleteBackup = "DeleteBackup"
 
 // DeleteBackupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteBackup operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -427,7 +427,7 @@ const opDeleteServer = "DeleteServer"
 
 // DeleteServerRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteServer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -523,7 +523,7 @@ const opDescribeAccountAttributes = "DescribeAccountAttributes"
 
 // DescribeAccountAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeAccountAttributes operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -600,7 +600,7 @@ const opDescribeBackups = "DescribeBackups"
 
 // DescribeBackupsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeBackups operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -691,7 +691,7 @@ const opDescribeEvents = "DescribeEvents"
 
 // DescribeEventsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEvents operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -782,7 +782,7 @@ const opDescribeNodeAssociationStatus = "DescribeNodeAssociationStatus"
 
 // DescribeNodeAssociationStatusRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeNodeAssociationStatus operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -868,7 +868,7 @@ const opDescribeServers = "DescribeServers"
 
 // DescribeServersRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeServers operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -960,7 +960,7 @@ const opDisassociateNode = "DisassociateNode"
 
 // DisassociateNodeRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateNode operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1054,7 +1054,7 @@ const opRestoreServer = "RestoreServer"
 
 // RestoreServerRequest generates a "aws/request.Request" representing the
 // client's request for the RestoreServer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1150,7 +1150,7 @@ const opStartMaintenance = "StartMaintenance"
 
 // StartMaintenanceRequest generates a "aws/request.Request" representing the
 // client's request for the StartMaintenance operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1244,7 +1244,7 @@ const opUpdateServer = "UpdateServer"
 
 // UpdateServerRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateServer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1332,7 +1332,7 @@ const opUpdateServerEngineAttributes = "UpdateServerEngineAttributes"
 
 // UpdateServerEngineAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateServerEngineAttributes operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1595,7 +1595,7 @@ type Backup struct {
 	BackupType *string `type:"string" enum:"BackupType"`
 
 	// The time stamp when the backup was created in the database. Example: 2016-07-29T13:38:47.520Z
-	CreatedAt *time.Time `type:"timestamp" timestampFormat:"unix"`
+	CreatedAt *time.Time `type:"timestamp"`
 
 	// A user-provided description for a manual backup. This field is empty for
 	// automated backups.
@@ -1630,9 +1630,13 @@ type Backup struct {
 	PreferredMaintenanceWindow *string `type:"string"`
 
 	// This field is deprecated and is no longer used.
+	//
+	// Deprecated: S3DataSize has been deprecated
 	S3DataSize *int64 `deprecated:"true" type:"integer"`
 
 	// This field is deprecated and is no longer used.
+	//
+	// Deprecated: S3DataUrl has been deprecated
 	S3DataUrl *string `deprecated:"true" type:"string"`
 
 	// The Amazon S3 URL of the backup's log file.
@@ -2352,21 +2356,10 @@ type DescribeBackupsInput struct {
 	// Describes a single backup.
 	BackupId *string `type:"string"`
 
-	// To receive a paginated response, use this parameter to specify the maximum
-	// number of results to be returned with a single call. If the number of available
-	// results exceeds this maximum, the response includes a NextToken value that
-	// you can assign to the NextToken request parameter to get the next set of
-	// results.
+	// This is not currently implemented for DescribeBackups requests.
 	MaxResults *int64 `min:"1" type:"integer"`
 
-	// NextToken is a string that is returned in some command responses. It indicates
-	// that not all entries have been returned, and that you must run at least one
-	// more request to get remaining items. To get remaining results, call DescribeBackups
-	// again, and assign the token from the previous results as the value of the
-	// nextToken parameter. If there are no more results, the response object's
-	// nextToken parameter value is null. Setting a nextToken value that was not
-	// returned in your previous results causes an InvalidNextTokenException to
-	// occur.
+	// This is not currently implemented for DescribeBackups requests.
 	NextToken *string `type:"string"`
 
 	// Returns backups for the server with the specified ServerName.
@@ -2429,14 +2422,7 @@ type DescribeBackupsOutput struct {
 	// Contains the response to a DescribeBackups request.
 	Backups []*Backup `type:"list"`
 
-	// NextToken is a string that is returned in some command responses. It indicates
-	// that not all entries have been returned, and that you must run at least one
-	// more request to get remaining items. To get remaining results, call DescribeBackups
-	// again, and assign the token from the previous results as the value of the
-	// nextToken parameter. If there are no more results, the response object's
-	// nextToken parameter value is null. Setting a nextToken value that was not
-	// returned in your previous results causes an InvalidNextTokenException to
-	// occur.
+	// This is not currently implemented for DescribeBackups requests.
 	NextToken *string `type:"string"`
 }
 
@@ -2673,21 +2659,10 @@ func (s *DescribeNodeAssociationStatusOutput) SetNodeAssociationStatus(v string)
 type DescribeServersInput struct {
 	_ struct{} `type:"structure"`
 
-	// To receive a paginated response, use this parameter to specify the maximum
-	// number of results to be returned with a single call. If the number of available
-	// results exceeds this maximum, the response includes a NextToken value that
-	// you can assign to the NextToken request parameter to get the next set of
-	// results.
+	// This is not currently implemented for DescribeServers requests.
 	MaxResults *int64 `min:"1" type:"integer"`
 
-	// NextToken is a string that is returned in some command responses. It indicates
-	// that not all entries have been returned, and that you must run at least one
-	// more request to get remaining items. To get remaining results, call DescribeServers
-	// again, and assign the token from the previous results as the value of the
-	// nextToken parameter. If there are no more results, the response object's
-	// nextToken parameter value is null. Setting a nextToken value that was not
-	// returned in your previous results causes an InvalidNextTokenException to
-	// occur.
+	// This is not currently implemented for DescribeServers requests.
 	NextToken *string `type:"string"`
 
 	// Describes the server with the specified ServerName.
@@ -2741,14 +2716,7 @@ func (s *DescribeServersInput) SetServerName(v string) *DescribeServersInput {
 type DescribeServersOutput struct {
 	_ struct{} `type:"structure"`
 
-	// NextToken is a string that is returned in some command responses. It indicates
-	// that not all entries have been returned, and that you must run at least one
-	// more request to get remaining items. To get remaining results, call DescribeServers
-	// again, and assign the token from the previous results as the value of the
-	// nextToken parameter. If there are no more results, the response object's
-	// nextToken parameter value is null. Setting a nextToken value that was not
-	// returned in your previous results causes an InvalidNextTokenException to
-	// occur.
+	// This is not currently implemented for DescribeServers requests.
 	NextToken *string `type:"string"`
 
 	// Contains the response to a DescribeServers request.
@@ -3014,7 +2982,7 @@ type Server struct {
 	CloudFormationStackArn *string `type:"string"`
 
 	// Time stamp of server creation. Example 2016-07-29T13:38:47.520Z
-	CreatedAt *time.Time `type:"timestamp" timestampFormat:"unix"`
+	CreatedAt *time.Time `type:"timestamp"`
 
 	// Disables automated backups. The number of stored backups is dependent on
 	// the value of PreferredBackupCount.
@@ -3263,7 +3231,7 @@ type ServerEvent struct {
 	_ struct{} `type:"structure"`
 
 	// The time when the event occurred.
-	CreatedAt *time.Time `type:"timestamp" timestampFormat:"unix"`
+	CreatedAt *time.Time `type:"timestamp"`
 
 	// The Amazon S3 URL of the event's log file.
 	LogUrl *string `type:"string"`

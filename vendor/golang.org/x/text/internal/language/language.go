@@ -301,7 +301,7 @@ func (t Tag) Extensions() []string {
 
 // TypeForKey returns the type associated with the given key, where key and type
 // are of the allowed values defined for the Unicode locale extension ('u') in
-// http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers.
+// https://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers.
 // TypeForKey will traverse the inheritance chain to get the correct value.
 func (t Tag) TypeForKey(key string) string {
 	if start, end, _ := t.findTypeForKey(key); end != start {
@@ -317,7 +317,7 @@ var (
 
 // SetTypeForKey returns a new Tag with the key set to type, where key and type
 // are of the allowed values defined for the Unicode locale extension ('u') in
-// http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers.
+// https://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers.
 // An empty value removes an existing pair with the same key.
 func (t Tag) SetTypeForKey(key, value string) (Tag, error) {
 	if t.IsPrivateUse() {

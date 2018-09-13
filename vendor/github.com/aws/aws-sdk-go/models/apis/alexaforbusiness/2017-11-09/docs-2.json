@@ -1,10 +1,10 @@
 {
   "version": "2.0",
-  "service": "<p>Alexa for Business makes it easy for you to use Alexa in your organization. Alexa for Business gives you the tools you need to manage Alexa devices, enroll your users, and assign skills, at scale. You can build your own context-aware voice skills using the Alexa Skills Kit, and the Alexa for Business APIs, and you can make these available as private skills for your organization. Alexa for Business also makes it easy to voice-enable your products and services, providing context-aware voice experiences for your customers.</p>",
+  "service": "<p>Alexa for Business makes it easy for you to use Alexa in your organization. Alexa for Business gives you the tools you need for managing Alexa devices, enroll your users, and assign skills, at scale. You can build your own context-aware voice skills using the Alexa Skills Kit and the Alexa for Business API operations. You can make also these available as private skills for your organization. Alexa for Business makes it easy to voice-enable your products and services, providing context-aware voice experiences for your customers.</p>",
   "operations": {
-    "AssociateContactWithAddressBook": "<p>Associates a contact to a given address book.</p>",
-    "AssociateDeviceWithRoom": "<p>Associates a device to a given room. This applies all the settings from the room profile to the device, and all the skills in any skill groups added to that room. This operation requires the device to be online, or a manual sync is required. </p>",
-    "AssociateSkillGroupWithRoom": "<p>Associates a skill group to a given room. This enables all skills in the associated skill group on all devices in the room.</p>",
+    "AssociateContactWithAddressBook": "<p>Associates a contact with a given address book.</p>",
+    "AssociateDeviceWithRoom": "<p>Associates a device with a given room. This applies all the settings from the room profile to the device, and all the skills in any skill groups added to that room. This operation requires the device to be online, or else a manual sync is required. </p>",
+    "AssociateSkillGroupWithRoom": "<p>Associates a skill group with a given room. This enables all skills in the associated skill group on all devices in the room.</p>",
     "CreateAddressBook": "<p>Creates an address book with the specified details.</p>",
     "CreateContact": "<p>Creates a contact with the specified details.</p>",
     "CreateProfile": "<p>Creates a new room profile with the specified details.</p>",
@@ -28,8 +28,9 @@
     "GetRoom": "<p>Gets room details by room ARN.</p>",
     "GetRoomSkillParameter": "<p>Gets room skill parameter details by room, skill, and parameter key ARN.</p>",
     "GetSkillGroup": "<p>Gets skill group details by skill group ARN.</p>",
+    "ListDeviceEvents": "<p>Lists the device event history, including device connection status, for up to 30 days.</p>",
     "ListSkills": "<p>Lists all enabled skills in a specific skill group.</p>",
-    "ListTags": "<p>Lists all tags for a specific resource.</p>",
+    "ListTags": "<p>Lists all tags for the specified resource.</p>",
     "PutRoomSkillParameter": "<p>Updates room skill parameter details by room, skill, and parameter key ID. Not all skills have a room skill parameter.</p>",
     "ResolveRoom": "<p>Determines the details for the room from which a skill request was invoked. This operation is used by skill developers.</p>",
     "RevokeInvitation": "<p>Revokes an invitation and invalidates the enrollment URL.</p>",
@@ -41,7 +42,7 @@
     "SearchSkillGroups": "<p>Searches skill groups and lists the ones that meet a set of filter and sort criteria.</p>",
     "SearchUsers": "<p>Searches users and lists the ones that meet a set of filter and sort criteria.</p>",
     "SendInvitation": "<p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 72 hours or until you call this operation again, whichever comes first. </p>",
-    "StartDeviceSync": "<p>Resets a device and its account to the known default settings by clearing all information and settings set by previous users.</p>",
+    "StartDeviceSync": "<p>Resets a device and its account to the known default settings, by clearing all information and settings set by previous users.</p>",
     "TagResource": "<p>Adds metadata tags to a specified resource.</p>",
     "UntagResource": "<p>Removes metadata tags from a specified resource.</p>",
     "UpdateAddressBook": "<p>Updates address book details by the address book ARN.</p>",
@@ -145,8 +146,9 @@
         "GetRoomRequest$RoomArn": "<p>The ARN of the room for which to request details. Required.</p>",
         "GetRoomSkillParameterRequest$RoomArn": "<p>The ARN of the room from which to get the room skill parameter details. </p>",
         "GetSkillGroupRequest$SkillGroupArn": "<p>The ARN of the skill group for which to get details. Required.</p>",
+        "ListDeviceEventsRequest$DeviceArn": "<p>The ARN of a device.</p>",
         "ListSkillsRequest$SkillGroupArn": "<p>The ARN of the skill group for which to list enabled skills. Required.</p>",
-        "ListTagsRequest$Arn": "<p>The ARN of the specific resource for which to list tags. Required.</p>",
+        "ListTagsRequest$Arn": "<p>The ARN of the specified resource for which to list tags.</p>",
         "Profile$ProfileArn": "<p>The ARN of a room profile.</p>",
         "ProfileData$ProfileArn": "<p>The ARN of a room profile.</p>",
         "PutRoomSkillParameterRequest$RoomArn": "<p>The ARN of the room associated with the room skill parameter. Required.</p>",
@@ -226,6 +228,12 @@
         "ResourceInUseException$ClientRequestToken": null
       }
     },
+    "ConnectionStatus": {
+      "base": null,
+      "refs": {
+        "DeviceStatusInfo$ConnectionStatus": "<p>The latest available information about the connection status of a device. </p>"
+      }
+    },
     "Contact": {
       "base": "<p>A contact with attributes.</p>",
       "refs": {
@@ -247,13 +255,13 @@
     "ContactName": {
       "base": null,
       "refs": {
-        "Contact$DisplayName": "<p>The name of the contact to display on the AWS management console.</p>",
-        "Contact$FirstName": "<p>The first name of the contact that is used to call the contact on the device.</p>",
-        "Contact$LastName": "<p>The last name of the contact that is used to call the contact on the device.</p>",
-        "ContactData$DisplayName": "<p>The name of the contact to display on the AWS management console.</p>",
-        "ContactData$FirstName": "<p>The first name of the contact that is used to call the contact on the device.</p>",
-        "ContactData$LastName": "<p>The last name of the contact that is used to call the contact on the device.</p>",
-        "CreateContactRequest$DisplayName": "<p>The name of the contact to display on the AWS management console.</p>",
+        "Contact$DisplayName": "<p>The name of the contact to display on the console.</p>",
+        "Contact$FirstName": "<p>The first name of the contact, used to call the contact on the device.</p>",
+        "Contact$LastName": "<p>The last name of the contact, used to call the contact on the device.</p>",
+        "ContactData$DisplayName": "<p>The name of the contact to display on the console.</p>",
+        "ContactData$FirstName": "<p>The first name of the contact, used to call the contact on the device.</p>",
+        "ContactData$LastName": "<p>The last name of the contact, used to call the contact on the device.</p>",
+        "CreateContactRequest$DisplayName": "<p>The name of the contact to display on the console.</p>",
         "CreateContactRequest$FirstName": "<p>The first name of the contact that is used to call the contact on the device.</p>",
         "CreateContactRequest$LastName": "<p>The last name of the contact that is used to call the contact on the device.</p>",
         "UpdateContactRequest$DisplayName": "<p>The updated display name of the contact.</p>",
@@ -409,12 +417,42 @@
         "SearchDevicesResponse$Devices": "<p>The devices that meet the specified set of filter criteria, in sort order.</p>"
       }
     },
+    "DeviceEvent": {
+      "base": "<p>The list of device events.</p>",
+      "refs": {
+        "DeviceEventList$member": null
+      }
+    },
+    "DeviceEventList": {
+      "base": null,
+      "refs": {
+        "ListDeviceEventsResponse$DeviceEvents": "<p>The device events requested for the device ARN.</p>"
+      }
+    },
+    "DeviceEventType": {
+      "base": null,
+      "refs": {
+        "DeviceEvent$Type": "<p>The type of device event.</p>",
+        "ListDeviceEventsRequest$EventType": "<p>The event type to filter device events. If EventType isn't specified, this returns a list of all device events in reverse chronological order. If EventType is specified, this returns a list of device events for that EventType in reverse chronological order. </p>"
+      }
+    },
+    "DeviceEventValue": {
+      "base": null,
+      "refs": {
+        "DeviceEvent$Value": "<p>The value of the event.</p>"
+      }
+    },
     "DeviceName": {
       "base": null,
       "refs": {
         "Device$DeviceName": "<p>The name of a device.</p>",
         "DeviceData$DeviceName": "<p>The name of a device.</p>",
         "UpdateDeviceRequest$DeviceName": "<p>The updated device name. Required.</p>"
+      }
+    },
+    "DeviceNotRegisteredException": {
+      "base": "<p>The request failed because this device is no longer registered and therefore no longer managed by this account.</p>",
+      "refs": {
       }
     },
     "DeviceSerialNumber": {
@@ -427,7 +465,7 @@
     "DeviceStatus": {
       "base": null,
       "refs": {
-        "Device$DeviceStatus": "<p>The status of a device. If the status is not READY, check the DeviceStatusInfo for details.</p>",
+        "Device$DeviceStatus": "<p>The status of a device. If the status is not READY, check the DeviceStatusInfo value for details.</p>",
         "DeviceData$DeviceStatus": "<p>The status of a device.</p>"
       }
     },
@@ -507,7 +545,7 @@
       "refs": {
         "Contact$PhoneNumber": "<p>The phone number of the contact.</p>",
         "ContactData$PhoneNumber": "<p>The phone number of the contact.</p>",
-        "CreateContactRequest$PhoneNumber": "<p>The phone number of the contact in E164 format.</p>",
+        "CreateContactRequest$PhoneNumber": "<p>The phone number of the contact in E.164 format.</p>",
         "UpdateContactRequest$PhoneNumber": "<p>The updated phone number of the contact.</p>"
       }
     },
@@ -536,6 +574,7 @@
       "base": null,
       "refs": {
         "AlreadyExistsException$Message": null,
+        "DeviceNotRegisteredException$Message": null,
         "InvalidUserStatusException$Message": null,
         "LimitExceededException$Message": null,
         "NameInUseException$Message": null,
@@ -572,7 +611,7 @@
       "refs": {
         "SearchAddressBooksRequest$Filters": "<p>The filters to use to list a specified set of address books. The supported filter key is AddressBookName.</p>",
         "SearchContactsRequest$Filters": "<p>The filters to use to list a specified set of address books. The supported filter keys are DisplayName, FirstName, LastName, and AddressBookArns.</p>",
-        "SearchDevicesRequest$Filters": "<p>The filters to use to list a specified set of devices. Supported filter keys are DeviceName, DeviceStatus, DeviceStatusDetailCode, RoomName, DeviceType, DeviceSerialNumber, and UnassociatedOnly.</p>",
+        "SearchDevicesRequest$Filters": "<p>The filters to use to list a specified set of devices. Supported filter keys are DeviceName, DeviceStatus, DeviceStatusDetailCode, RoomName, DeviceType, DeviceSerialNumber, UnassociatedOnly, and ConnectionStatus (ONLINE and OFFLINE).</p>",
         "SearchProfilesRequest$Filters": "<p>The filters to use to list a specified set of room profiles. Supported filter keys are ProfileName and Address. Required. </p>",
         "SearchRoomsRequest$Filters": "<p>The filters to use to list a specified set of rooms. The supported filter keys are RoomName and ProfileName.</p>",
         "SearchSkillGroupsRequest$Filters": "<p>The filters to use to list a specified set of skill groups. The supported filter key is SkillGroupName. </p>",
@@ -671,6 +710,16 @@
       "refs": {
       }
     },
+    "ListDeviceEventsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListDeviceEventsResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "ListSkillsRequest": {
       "base": null,
       "refs": {
@@ -701,6 +750,7 @@
     "MaxResults": {
       "base": null,
       "refs": {
+        "ListDeviceEventsRequest$MaxResults": "<p>The maximum number of results to include in the response. The default value is 50. If more results exist than the specified MaxResults value, a token is included in the response so that the remaining results can be retrieved. </p>",
         "ListTagsRequest$MaxResults": "<p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p>",
         "SearchAddressBooksRequest$MaxResults": "<p>The maximum number of results to include in the response. If more results exist than the specified MaxResults value, a token is included in the response so that the remaining results can be retrieved.</p>",
         "SearchContactsRequest$MaxResults": "<p>The maximum number of results to include in the response. If more results exist than the specified MaxResults value, a token is included in the response so that the remaining results can be retrieved.</p>",
@@ -727,6 +777,8 @@
     "NextToken": {
       "base": null,
       "refs": {
+        "ListDeviceEventsRequest$NextToken": "<p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response only includes results beyond the token, up to the value specified by MaxResults. When the end of results is reached, the response has a value of null.</p>",
+        "ListDeviceEventsResponse$NextToken": "<p>The token returned to indicate that there is more data available.</p>",
         "ListSkillsRequest$NextToken": "<p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>. Required.</p>",
         "ListSkillsResponse$NextToken": "<p>The token returned to indicate that there is more data available.</p>",
         "ListTagsRequest$NextToken": "<p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>. </p>",
@@ -1064,7 +1116,7 @@
       "refs": {
         "SearchAddressBooksRequest$SortCriteria": "<p>The sort order to use in listing the specified set of address books. The supported sort key is AddressBookName.</p>",
         "SearchContactsRequest$SortCriteria": "<p>The sort order to use in listing the specified set of contacts. The supported sort keys are DisplayName, FirstName, and LastName.</p>",
-        "SearchDevicesRequest$SortCriteria": "<p>The sort order to use in listing the specified set of devices. Supported sort keys are DeviceName, DeviceStatus, RoomName, DeviceType, and DeviceSerialNumber.</p>",
+        "SearchDevicesRequest$SortCriteria": "<p>The sort order to use in listing the specified set of devices. Supported sort keys are DeviceName, DeviceStatus, RoomName, DeviceType, DeviceSerialNumber, and ConnectionStatus.</p>",
         "SearchProfilesRequest$SortCriteria": "<p>The sort order to use in listing the specified set of room profiles. Supported sort keys are ProfileName and Address.</p>",
         "SearchRoomsRequest$SortCriteria": "<p>The sort order to use in listing the specified set of rooms. The supported sort keys are RoomName and ProfileName.</p>",
         "SearchSkillGroupsRequest$SortCriteria": "<p>The sort order to use in listing the specified set of skill groups. The supported sort key is SkillGroupName. </p>",
@@ -1111,7 +1163,7 @@
       "refs": {
         "CreateRoomRequest$Tags": "<p>The tags for the room.</p>",
         "CreateUserRequest$Tags": "<p>The tags for the user.</p>",
-        "ListTagsResponse$Tags": "<p>The list of tags requested for the specific resource.</p>",
+        "ListTagsResponse$Tags": "<p>The tags requested for the specified resource.</p>",
         "TagResourceRequest$Tags": "<p>The tags to be added to the specified resource. Do not provide system tags. Required. </p>"
       }
     },
@@ -1138,6 +1190,12 @@
         "Profile$TemperatureUnit": "<p>The temperature unit of a room profile.</p>",
         "ProfileData$TemperatureUnit": "<p>The temperature unit of a room profile.</p>",
         "UpdateProfileRequest$TemperatureUnit": "<p>The updated temperature unit for the room profile.</p>"
+      }
+    },
+    "Timestamp": {
+      "base": null,
+      "refs": {
+        "DeviceEvent$Timestamp": "<p>The time (in epoch) when the event occurred. </p>"
       }
     },
     "Timezone": {

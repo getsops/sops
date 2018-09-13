@@ -246,7 +246,8 @@ func (client AvailabilitySetsClient) GetResponder(resp *http.Response) (result A
 // List lists all availability sets in a resource group.
 // Parameters:
 // resourceGroupName - the name of the resource group.
-func (client AvailabilitySetsClient) List(ctx context.Context, resourceGroupName string) (result AvailabilitySetListResult, err error) {
+func (client AvailabilitySetsClient) List(ctx context.Context, resourceGroupName string) (result AvailabilitySetListResultPage, err error) {
+	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "compute.AvailabilitySetsClient", "List", nil, "Failure preparing request")
@@ -255,12 +256,12 @@ func (client AvailabilitySetsClient) List(ctx context.Context, resourceGroupName
 
 	resp, err := client.ListSender(req)
 	if err != nil {
-		result.Response = autorest.Response{Response: resp}
+		result.aslr.Response = autorest.Response{Response: resp}
 		err = autorest.NewErrorWithError(err, "compute.AvailabilitySetsClient", "List", resp, "Failure sending request")
 		return
 	}
 
-	result, err = client.ListResponder(resp)
+	result.aslr, err = client.ListResponder(resp)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "compute.AvailabilitySetsClient", "List", resp, "Failure responding to request")
 	}
@@ -305,6 +306,33 @@ func (client AvailabilitySetsClient) ListResponder(resp *http.Response) (result 
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// listNextResults retrieves the next set of results, if any.
+func (client AvailabilitySetsClient) listNextResults(lastResults AvailabilitySetListResult) (result AvailabilitySetListResult, err error) {
+	req, err := lastResults.availabilitySetListResultPreparer()
+	if err != nil {
+		return result, autorest.NewErrorWithError(err, "compute.AvailabilitySetsClient", "listNextResults", nil, "Failure preparing next results request")
+	}
+	if req == nil {
+		return
+	}
+	resp, err := client.ListSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		return result, autorest.NewErrorWithError(err, "compute.AvailabilitySetsClient", "listNextResults", resp, "Failure sending next results request")
+	}
+	result, err = client.ListResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "compute.AvailabilitySetsClient", "listNextResults", resp, "Failure responding to next results request")
+	}
+	return
+}
+
+// ListComplete enumerates all values, automatically crossing page boundaries as required.
+func (client AvailabilitySetsClient) ListComplete(ctx context.Context, resourceGroupName string) (result AvailabilitySetListResultIterator, err error) {
+	result.page, err = client.List(ctx, resourceGroupName)
 	return
 }
 

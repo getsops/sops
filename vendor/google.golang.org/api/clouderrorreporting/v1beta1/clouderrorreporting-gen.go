@@ -860,6 +860,7 @@ func (c *ProjectsDeleteEventsCall) doRequest(alt string) (*http.Response, error)
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+projectName}/events")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -1065,6 +1066,7 @@ func (c *ProjectsEventsListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+projectName}/events")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1218,16 +1220,15 @@ type ProjectsEventsReportCall struct {
 
 // Report: Report an individual error event.
 //
-// This endpoint accepts <strong>either</strong> an OAuth
-// token,
-// <strong>or</strong> an
-// <a href="https://support.google.com/cloud/answer/6158862">API
-// key</a>
+// This endpoint accepts **either** an OAuth token,
+// **or** an [API
+// key](https://support.google.com/cloud/answer/6158862)
 // for authentication. To use an API key, append it to the URL as the
 // value of
 // a `key` parameter. For example:
-// <pre>POST
-// https://clouderrorreporting.googleapis.com/v1beta1/projects/example-project/events:report?key=123ABC456</pre>
+//
+// `POST
+// https://clouderrorreporting.googleapis.com/v1beta1/projects/example-project/events:report?key=123ABC456`
 func (r *ProjectsEventsService) Report(projectName string, reportederrorevent *ReportedErrorEvent) *ProjectsEventsReportCall {
 	c := &ProjectsEventsReportCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectName = projectName
@@ -1273,6 +1274,7 @@ func (c *ProjectsEventsReportCall) doRequest(alt string) (*http.Response, error)
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+projectName}/events:report")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1321,7 +1323,7 @@ func (c *ProjectsEventsReportCall) Do(opts ...googleapi.CallOption) (*ReportErro
 	}
 	return ret, nil
 	// {
-	//   "description": "Report an individual error event.\n\nThis endpoint accepts \u003cstrong\u003eeither\u003c/strong\u003e an OAuth token,\n\u003cstrong\u003eor\u003c/strong\u003e an\n\u003ca href=\"https://support.google.com/cloud/answer/6158862\"\u003eAPI key\u003c/a\u003e\nfor authentication. To use an API key, append it to the URL as the value of\na `key` parameter. For example:\n\u003cpre\u003ePOST https://clouderrorreporting.googleapis.com/v1beta1/projects/example-project/events:report?key=123ABC456\u003c/pre\u003e",
+	//   "description": "Report an individual error event.\n\nThis endpoint accepts **either** an OAuth token,\n**or** an [API key](https://support.google.com/cloud/answer/6158862)\nfor authentication. To use an API key, append it to the URL as the value of\na `key` parameter. For example:\n\n`POST https://clouderrorreporting.googleapis.com/v1beta1/projects/example-project/events:report?key=123ABC456`",
 	//   "flatPath": "v1beta1/projects/{projectsId}/events:report",
 	//   "httpMethod": "POST",
 	//   "id": "clouderrorreporting.projects.events.report",
@@ -1530,6 +1532,7 @@ func (c *ProjectsGroupStatsListCall) doRequest(alt string) (*http.Response, erro
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+projectName}/groupStats")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1769,6 +1772,7 @@ func (c *ProjectsGroupsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+groupName}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1902,6 +1906,7 @@ func (c *ProjectsGroupsUpdateCall) doRequest(alt string) (*http.Response, error)
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)

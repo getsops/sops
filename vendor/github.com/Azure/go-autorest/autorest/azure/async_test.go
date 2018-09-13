@@ -527,8 +527,8 @@ func TestAsyncPollingReturnsWrappedError(t *testing.T) {
 	sender := mocks.NewSender()
 	sender.AppendResponse(newOperationResourceErrorResponse("Failed"))
 	err = pt.pollForStatus(sender)
-	if err != nil {
-		t.Fatalf("failed to poll for status: %v", err)
+	if err == nil {
+		t.Fatal("unexpected nil polling error")
 	}
 	err = pt.pollingError()
 	if err == nil {
@@ -552,8 +552,8 @@ func TestLocationPollingReturnsWrappedError(t *testing.T) {
 	sender := mocks.NewSender()
 	sender.AppendResponse(newProvisioningStatusErrorResponse("Failed"))
 	err = pt.pollForStatus(sender)
-	if err != nil {
-		t.Fatalf("failed to poll for status: %v", err)
+	if err == nil {
+		t.Fatal("unexpected nil polling error")
 	}
 	err = pt.pollingError()
 	if err == nil {
@@ -577,8 +577,8 @@ func TestLocationPollingReturnsUnwrappedError(t *testing.T) {
 	sender := mocks.NewSender()
 	sender.AppendResponse(newProvisioningStatusUnwrappedErrorResponse("Failed"))
 	err = pt.pollForStatus(sender)
-	if err != nil {
-		t.Fatalf("failed to poll for status: %v", err)
+	if err == nil {
+		t.Fatal("unexpected nil polling error")
 	}
 	err = pt.pollingError()
 	if err == nil {
@@ -744,9 +744,28 @@ func TestFuture_MarshallingSuccess(t *testing.T) {
 }
 
 func TestFuture_MarshallingWithError(t *testing.T) {
-	future, err := NewFutureFromResponse(newAsyncResponseWithError(http.MethodPut))
+	r2 := newOperationResourceResponse("busy")
+	r3 := newOperationResourceErrorResponse(operationFailed)
+
+	sender := mocks.NewSender()
+	sender.AppendAndRepeatResponse(r2, 2)
+	sender.AppendResponse(r3)
+	client := autorest.Client{
+		PollingDelay:    1 * time.Second,
+		PollingDuration: autorest.DefaultPollingDuration,
+		RetryAttempts:   autorest.DefaultRetryAttempts,
+		RetryDuration:   1 * time.Second,
+		Sender:          sender,
+	}
+
+	future, err := NewFutureFromResponse(newSimpleAsyncResp())
 	if err != nil {
 		t.Fatalf("failed to create future: %v", err)
+	}
+
+	err = future.WaitForCompletion(context.Background(), client)
+	if err == nil {
+		t.Fatal("expected non-nil error")
 	}
 
 	data, err := json.Marshal(future)
@@ -773,16 +792,9 @@ func TestFuture_MarshallingWithError(t *testing.T) {
 }
 
 func TestFuture_CreateFromFailedOperation(t *testing.T) {
-	future, err := NewFutureFromResponse(newAsyncResponseWithError(http.MethodPut))
-	if err != nil {
-		t.Fatalf("failed to create future: %v", err)
-	}
-	done, err := future.Done(mocks.NewSender())
+	_, err := NewFutureFromResponse(newAsyncResponseWithError(http.MethodPut))
 	if err == nil {
-		t.Fatalf("Done should have returned an error")
-	}
-	if !done {
-		t.Fatalf("should be done")
+		t.Fatal("expected non-nil error")
 	}
 }
 
@@ -934,6 +946,47 @@ func TestFuture_WaitForCompletionCancelled(t *testing.T) {
 	}
 }
 
+func TestFuture_GetResultFromNonAsyncOperation(t *testing.T) {
+	resp := newAsyncResp(newAsyncReq(http.MethodPost, nil), http.StatusOK, mocks.NewBody(someResource))
+	future, err := NewFutureFromResponse(resp)
+	if err != nil {
+		t.Fatalf("failed to create tracker: %v", err)
+	}
+	if pm := future.PollingMethod(); pm != PollingUnknown {
+		t.Fatalf("wrong polling method: %s", pm)
+	}
+	done, err := future.Done(nil)
+	if err != nil {
+		t.Fatalf("failed to check status: %v", err)
+	}
+	if !done {
+		t.Fatal("operation should be done")
+	}
+	res, err := future.GetResult(nil)
+	if err != nil {
+		t.Fatalf("failed to get result: %v", err)
+	}
+	if res != resp {
+		t.Fatal("result and response don't match")
+	}
+}
+
+func TestFuture_GetResultNonTerminal(t *testing.T) {
+	resp := newAsyncResp(newAsyncReq(http.MethodDelete, nil), http.StatusAccepted, mocks.NewBody(fmt.Sprintf(operationResourceFormat, operationInProgress)))
+	mocks.SetResponseHeader(resp, headerAsyncOperation, mocks.TestAzureAsyncURL)
+	future, err := NewFutureFromResponse(resp)
+	if err != nil {
+		t.Fatalf("failed to create future: %v", err)
+	}
+	res, err := future.GetResult(nil)
+	if err == nil {
+		t.Fatal("expected non-nil error")
+	}
+	if res != nil {
+		t.Fatal("expected nil result")
+	}
+}
+
 const (
 	operationResourceIllegal = `
 	This is not JSON and should fail...badly.
@@ -1009,6 +1062,17 @@ const (
 			"code" : "BadArgument",
 			"message" : "The provided database 'foo' has an invalid username."
 		}
+	}
+	`
+
+	// returned from an operation marked as LRO but really isn't
+	someResource = `
+	{
+		"id": "/subscriptions/guid/resourceGroups/rg/providers/something/else/thing",
+		"name": "thing",
+		"type": "Imaginary.type",
+		"location": "Central US",
+		"properties": {}
 	}
 	`
 )

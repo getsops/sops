@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import (
 )
 
 func TestFieldPathValidate(t *testing.T) {
-	for _, in := range [][]string{nil, []string{}, []string{"a", "", "b"}} {
+	for _, in := range [][]string{nil, {}, {"a", "", "b"}} {
 		if err := FieldPath(in).validate(); err == nil {
 			t.Errorf("%v: want error, got nil", in)
 		}
@@ -161,18 +161,18 @@ func TestGetAtPath(t *testing.T) {
 			want: fail,
 		},
 		{
-			val:  map[string]S{"a": S{X: 1, Y: 2}},
+			val:  map[string]S{"a": {X: 1, Y: 2}},
 			fp:   []string{"a", "y"},
 			want: 2,
 		},
 		{
-			val:  map[string]S{"a": S{X: 1, Y: 2}},
+			val:  map[string]S{"a": {X: 1, Y: 2}},
 			fp:   []string{"a", "z"},
 			want: fail,
 		},
 		{
 			val: map[string]*S{
-				"a": &S{
+				"a": {
 					M: map[string]interface{}{
 						"b": S{
 							Next: &S{

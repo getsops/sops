@@ -1,5 +1,5 @@
 /*
-Copyright 2015 Google Inc. All Rights Reserved.
+Copyright 2015 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ limitations under the License.
 package bigtable
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"regexp"
@@ -25,6 +26,8 @@ import (
 
 	"cloud.google.com/go/bigtable/internal/gax"
 	btopt "cloud.google.com/go/bigtable/internal/option"
+	"cloud.google.com/go/iam"
+	"cloud.google.com/go/internal/optional"
 	"cloud.google.com/go/longrunning"
 	lroauto "cloud.google.com/go/longrunning/autogen"
 	"github.com/golang/protobuf/ptypes"
@@ -35,6 +38,7 @@ import (
 	"google.golang.org/api/option"
 	gtransport "google.golang.org/api/transport/grpc"
 	btapb "google.golang.org/genproto/googleapis/bigtable/admin/v2"
+	"google.golang.org/genproto/protobuf/field_mask"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -342,14 +346,14 @@ func (ac *AdminClient) SnapshotTable(ctx context.Context, table, cluster, snapsh
 	return longrunning.InternalNewOperation(ac.lroClient, op).Wait(ctx, &resp)
 }
 
-// Returns a SnapshotIterator for iterating over the snapshots in a cluster.
+// Snapshots returns a SnapshotIterator for iterating over the snapshots in a cluster.
 // To list snapshots across all of the clusters in the instance specify "-" as the cluster.
 //
-// This is a private alpha release of Cloud Bigtable snapshots. This feature
-// is not currently available to most Cloud Bigtable customers. This feature
-// might be changed in backward-incompatible ways and is not recommended for
-// production use. It is not subject to any SLA or deprecation policy.
-func (ac *AdminClient) ListSnapshots(ctx context.Context, cluster string) *SnapshotIterator {
+// This is a private alpha release of Cloud Bigtable snapshots. This feature is not
+// currently available to most Cloud Bigtable customers. This feature might be
+// changed in backward-incompatible ways and is not recommended for production use.
+// It is not subject to any SLA or deprecation policy.
+func (ac *AdminClient) Snapshots(ctx context.Context, cluster string) *SnapshotIterator {
 	ctx = mergeOutgoingMetadata(ctx, ac.md)
 	prefix := ac.instancePrefix()
 	clusterPath := prefix + "/clusters/" + cluster
@@ -392,7 +396,7 @@ func newSnapshotInfo(snapshot *btapb.Snapshot) (*SnapshotInfo, error) {
 	nameParts := strings.Split(snapshot.Name, "/")
 	name := nameParts[len(nameParts)-1]
 	tablePathParts := strings.Split(snapshot.SourceTable.Name, "/")
-	tableId := tablePathParts[len(tablePathParts)-1]
+	tableID := tablePathParts[len(tablePathParts)-1]
 
 	createTime, err := ptypes.Timestamp(snapshot.CreateTime)
 	if err != nil {
@@ -406,7 +410,7 @@ func newSnapshotInfo(snapshot *btapb.Snapshot) (*SnapshotInfo, error) {
 
 	return &SnapshotInfo{
 		Name:        name,
-		SourceTable: tableId,
+		SourceTable: tableID,
 		DataSize:    snapshot.DataSizeBytes,
 		CreateTime:  createTime,
 		DeleteTime:  deleteTime,
@@ -526,11 +530,6 @@ func (ac *AdminClient) isConsistent(ctx context.Context, tableName, token string
 }
 
 // WaitForReplication waits until all the writes committed before the call started have been propagated to all the clusters in the instance via replication.
-//
-// This is a private alpha release of Cloud Bigtable replication. This feature
-// is not currently available to most Cloud Bigtable customers. This feature
-// might be changed in backward-incompatible ways and is not recommended for
-// production use. It is not subject to any SLA or deprecation policy.
 func (ac *AdminClient) WaitForReplication(ctx context.Context, table string) error {
 	// Get the token.
 	prefix := ac.instancePrefix()
@@ -682,11 +681,6 @@ func (iac *InstanceAdminClient) CreateInstance(ctx context.Context, conf *Instan
 
 // CreateInstance creates a new instance with configured clusters in the project.
 // This method will return when the instance has been created or when an error occurs.
-//
-// Instances with multiple clusters are part of a private alpha release of Cloud Bigtable replication.
-// This feature is not currently available to most Cloud Bigtable customers. This feature
-// might be changed in backward-incompatible ways and is not recommended for
-// production use. It is not subject to any SLA or deprecation policy.
 func (iac *InstanceAdminClient) CreateInstanceWithClusters(ctx context.Context, conf *InstanceWithClustersConfig) error {
 	ctx = mergeOutgoingMetadata(ctx, iac.md)
 	clusters := make(map[string]*btapb.Cluster)
@@ -710,9 +704,9 @@ func (iac *InstanceAdminClient) CreateInstanceWithClusters(ctx context.Context, 
 }
 
 // DeleteInstance deletes an instance from the project.
-func (iac *InstanceAdminClient) DeleteInstance(ctx context.Context, instanceId string) error {
+func (iac *InstanceAdminClient) DeleteInstance(ctx context.Context, instanceID string) error {
 	ctx = mergeOutgoingMetadata(ctx, iac.md)
-	req := &btapb.DeleteInstanceRequest{Name: "projects/" + iac.project + "/instances/" + instanceId}
+	req := &btapb.DeleteInstanceRequest{Name: "projects/" + iac.project + "/instances/" + instanceID}
 	_, err := iac.iClient.DeleteInstance(ctx, req)
 	return err
 }
@@ -748,10 +742,10 @@ func (iac *InstanceAdminClient) Instances(ctx context.Context) ([]*InstanceInfo,
 }
 
 // InstanceInfo returns information about an instance.
-func (iac *InstanceAdminClient) InstanceInfo(ctx context.Context, instanceId string) (*InstanceInfo, error) {
+func (iac *InstanceAdminClient) InstanceInfo(ctx context.Context, instanceID string) (*InstanceInfo, error) {
 	ctx = mergeOutgoingMetadata(ctx, iac.md)
 	req := &btapb.GetInstanceRequest{
-		Name: "projects/" + iac.project + "/instances/" + instanceId,
+		Name: "projects/" + iac.project + "/instances/" + instanceID,
 	}
 	res, err := iac.iClient.GetInstance(ctx, req)
 	if err != nil {
@@ -793,11 +787,6 @@ type ClusterInfo struct {
 
 // CreateCluster creates a new cluster in an instance.
 // This method will return when the cluster has been created or when an error occurs.
-//
-// This is a private alpha release of Cloud Bigtable replication. This feature
-// is not currently available to most Cloud Bigtable customers. This feature
-// might be changed in backward-incompatible ways and is not recommended for
-// production use. It is not subject to any SLA or deprecation policy.
 func (iac *InstanceAdminClient) CreateCluster(ctx context.Context, conf *ClusterConfig) error {
 	ctx = mergeOutgoingMetadata(ctx, iac.md)
 
@@ -816,23 +805,18 @@ func (iac *InstanceAdminClient) CreateCluster(ctx context.Context, conf *Cluster
 }
 
 // DeleteCluster deletes a cluster from an instance.
-//
-// This is a private alpha release of Cloud Bigtable replication. This feature
-// is not currently available to most Cloud Bigtable customers. This feature
-// might be changed in backward-incompatible ways and is not recommended for
-// production use. It is not subject to any SLA or deprecation policy.
-func (iac *InstanceAdminClient) DeleteCluster(ctx context.Context, instanceId, clusterId string) error {
+func (iac *InstanceAdminClient) DeleteCluster(ctx context.Context, instanceID, clusterID string) error {
 	ctx = mergeOutgoingMetadata(ctx, iac.md)
-	req := &btapb.DeleteClusterRequest{Name: "projects/" + iac.project + "/instances/" + instanceId + "/clusters/" + clusterId}
+	req := &btapb.DeleteClusterRequest{Name: "projects/" + iac.project + "/instances/" + instanceID + "/clusters/" + clusterID}
 	_, err := iac.iClient.DeleteCluster(ctx, req)
 	return err
 }
 
 // UpdateCluster updates attributes of a cluster
-func (iac *InstanceAdminClient) UpdateCluster(ctx context.Context, instanceId, clusterId string, serveNodes int32) error {
+func (iac *InstanceAdminClient) UpdateCluster(ctx context.Context, instanceID, clusterID string, serveNodes int32) error {
 	ctx = mergeOutgoingMetadata(ctx, iac.md)
 	cluster := &btapb.Cluster{
-		Name:       "projects/" + iac.project + "/instances/" + instanceId + "/clusters/" + clusterId,
+		Name:       "projects/" + iac.project + "/instances/" + instanceID + "/clusters/" + clusterID,
 		ServeNodes: serveNodes}
 	lro, err := iac.iClient.UpdateCluster(ctx, cluster)
 	if err != nil {
@@ -842,9 +826,9 @@ func (iac *InstanceAdminClient) UpdateCluster(ctx context.Context, instanceId, c
 }
 
 // Clusters lists the clusters in an instance.
-func (iac *InstanceAdminClient) Clusters(ctx context.Context, instanceId string) ([]*ClusterInfo, error) {
+func (iac *InstanceAdminClient) Clusters(ctx context.Context, instanceID string) ([]*ClusterInfo, error) {
 	ctx = mergeOutgoingMetadata(ctx, iac.md)
-	req := &btapb.ListClustersRequest{Parent: "projects/" + iac.project + "/instances/" + instanceId}
+	req := &btapb.ListClustersRequest{Parent: "projects/" + iac.project + "/instances/" + instanceID}
 	res, err := iac.iClient.ListClusters(ctx, req)
 	if err != nil {
 		return nil, err
@@ -867,7 +851,7 @@ func (iac *InstanceAdminClient) Clusters(ctx context.Context, instanceId string)
 // GetCluster fetches a cluster in an instance
 func (iac *InstanceAdminClient) GetCluster(ctx context.Context, instanceID, clusterID string) (*ClusterInfo, error) {
 	ctx = mergeOutgoingMetadata(ctx, iac.md)
-	req := &btapb.GetClusterRequest{Name: "projects/" + iac.project + "/instances/" + instanceID + "/clusters" + clusterID}
+	req := &btapb.GetClusterRequest{Name: "projects/" + iac.project + "/instances/" + instanceID + "/clusters/" + clusterID}
 	c, err := iac.iClient.GetCluster(ctx, req)
 	if err != nil {
 		return nil, err
@@ -882,4 +866,213 @@ func (iac *InstanceAdminClient) GetCluster(ctx context.Context, instanceID, clus
 		State:      c.State.String(),
 	}
 	return cis, nil
+}
+
+func (iac *InstanceAdminClient) InstanceIAM(instanceID string) *iam.Handle {
+	return iam.InternalNewHandleGRPCClient(iac.iClient, "projects/"+iac.project+"/instances/"+instanceID)
+
+}
+
+// Routing policies.
+const (
+	MultiClusterRouting  = "multi_cluster_routing_use_any"
+	SingleClusterRouting = "single_cluster_routing"
+)
+
+// ProfileConf contains the information necessary to create an profile
+type ProfileConf struct {
+	Name                     string
+	ProfileID                string
+	InstanceID               string
+	Etag                     string
+	Description              string
+	RoutingPolicy            string
+	ClusterID                string
+	AllowTransactionalWrites bool
+
+	// If true, warnings are ignored
+	IgnoreWarnings bool
+}
+
+type ProfileIterator struct {
+	items    []*btapb.AppProfile
+	pageInfo *iterator.PageInfo
+	nextFunc func() error
+}
+
+//set this to patch app profile. If unset, no fields will be replaced.
+type ProfileAttrsToUpdate struct {
+	// If set, updates the description.
+	Description optional.String
+
+	//If set, updates the routing policy.
+	RoutingPolicy optional.String
+
+	//If RoutingPolicy is updated to SingleClusterRouting, set these fields as well.
+	ClusterID                string
+	AllowTransactionalWrites bool
+
+	// If true, warnings are ignored
+	IgnoreWarnings bool
+}
+
+func (p *ProfileAttrsToUpdate) GetFieldMaskPath() []string {
+	path := make([]string, 0)
+	if p.Description != nil {
+		path = append(path, "description")
+	}
+
+	if p.RoutingPolicy != nil {
+		path = append(path, optional.ToString(p.RoutingPolicy))
+	}
+	return path
+}
+
+// PageInfo supports pagination. See https://godoc.org/google.golang.org/api/iterator package for details.
+func (it *ProfileIterator) PageInfo() *iterator.PageInfo {
+	return it.pageInfo
+}
+
+// Next returns the next result. Its second return value is iterator.Done
+// (https://godoc.org/google.golang.org/api/iterator) if there are no more
+// results. Once Next returns Done, all subsequent calls will return Done.
+func (it *ProfileIterator) Next() (*btapb.AppProfile, error) {
+	if err := it.nextFunc(); err != nil {
+		return nil, err
+	}
+	item := it.items[0]
+	it.items = it.items[1:]
+	return item, nil
+}
+
+// CreateAppProfile creates an app profile within an instance.
+func (iac *InstanceAdminClient) CreateAppProfile(ctx context.Context, profile ProfileConf) (*btapb.AppProfile, error) {
+	ctx = mergeOutgoingMetadata(ctx, iac.md)
+	parent := "projects/" + iac.project + "/instances/" + profile.InstanceID
+	appProfile := &btapb.AppProfile{
+		Etag:        profile.Etag,
+		Description: profile.Description,
+	}
+
+	if profile.RoutingPolicy == "" {
+		return nil, errors.New("invalid routing policy")
+	}
+
+	switch profile.RoutingPolicy {
+	case MultiClusterRouting:
+		appProfile.RoutingPolicy = &btapb.AppProfile_MultiClusterRoutingUseAny_{
+			MultiClusterRoutingUseAny: &btapb.AppProfile_MultiClusterRoutingUseAny{},
+		}
+	case SingleClusterRouting:
+		appProfile.RoutingPolicy = &btapb.AppProfile_SingleClusterRouting_{
+			SingleClusterRouting: &btapb.AppProfile_SingleClusterRouting{
+				ClusterId:                profile.ClusterID,
+				AllowTransactionalWrites: profile.AllowTransactionalWrites,
+			},
+		}
+	default:
+		return nil, errors.New("invalid routing policy")
+	}
+
+	return iac.iClient.CreateAppProfile(ctx, &btapb.CreateAppProfileRequest{
+		Parent:         parent,
+		AppProfile:     appProfile,
+		AppProfileId:   profile.ProfileID,
+		IgnoreWarnings: profile.IgnoreWarnings,
+	})
+}
+
+// GetAppProfile gets information about an app profile.
+func (iac *InstanceAdminClient) GetAppProfile(ctx context.Context, instanceID, name string) (*btapb.AppProfile, error) {
+	ctx = mergeOutgoingMetadata(ctx, iac.md)
+	profileRequest := &btapb.GetAppProfileRequest{
+		Name: "projects/" + iac.project + "/instances/" + instanceID + "/appProfiles/" + name,
+	}
+	return iac.iClient.GetAppProfile(ctx, profileRequest)
+
+}
+
+// ListAppProfiles lists information about app profiles in an instance.
+func (iac *InstanceAdminClient) ListAppProfiles(ctx context.Context, instanceID string) *ProfileIterator {
+	ctx = mergeOutgoingMetadata(ctx, iac.md)
+	listRequest := &btapb.ListAppProfilesRequest{
+		Parent: "projects/" + iac.project + "/instances/" + instanceID,
+	}
+
+	pit := &ProfileIterator{}
+	fetch := func(pageSize int, pageToken string) (string, error) {
+		listRequest.PageToken = pageToken
+		profileRes, err := iac.iClient.ListAppProfiles(ctx, listRequest)
+		if err != nil {
+			return "", err
+		}
+
+		for _, a := range profileRes.AppProfiles {
+			pit.items = append(pit.items, a)
+		}
+		return profileRes.NextPageToken, nil
+	}
+
+	bufLen := func() int { return len(pit.items) }
+	takeBuf := func() interface{} { b := pit.items; pit.items = nil; return b }
+	pit.pageInfo, pit.nextFunc = iterator.NewPageInfo(fetch, bufLen, takeBuf)
+	return pit
+
+}
+
+// UpdateAppProfile updates an app profile within an instance.
+// updateAttrs should be set. If unset, all fields will be replaced.
+func (iac *InstanceAdminClient) UpdateAppProfile(ctx context.Context, instanceID, profileID string, updateAttrs ProfileAttrsToUpdate) error {
+	ctx = mergeOutgoingMetadata(ctx, iac.md)
+
+	profile := &btapb.AppProfile{
+		Name: "projects/" + iac.project + "/instances/" + instanceID + "/appProfiles/" + profileID,
+	}
+
+	if updateAttrs.Description != nil {
+		profile.Description = optional.ToString(updateAttrs.Description)
+	}
+	if updateAttrs.RoutingPolicy != nil {
+		switch optional.ToString(updateAttrs.RoutingPolicy) {
+		case MultiClusterRouting:
+			profile.RoutingPolicy = &btapb.AppProfile_MultiClusterRoutingUseAny_{
+				MultiClusterRoutingUseAny: &btapb.AppProfile_MultiClusterRoutingUseAny{},
+			}
+		case SingleClusterRouting:
+			profile.RoutingPolicy = &btapb.AppProfile_SingleClusterRouting_{
+				SingleClusterRouting: &btapb.AppProfile_SingleClusterRouting{
+					ClusterId:                updateAttrs.ClusterID,
+					AllowTransactionalWrites: updateAttrs.AllowTransactionalWrites,
+				},
+			}
+		default:
+			return errors.New("invalid routing policy")
+		}
+	}
+	patchRequest := &btapb.UpdateAppProfileRequest{
+		AppProfile: profile,
+		UpdateMask: &field_mask.FieldMask{
+			Paths: updateAttrs.GetFieldMaskPath(),
+		},
+		IgnoreWarnings: updateAttrs.IgnoreWarnings,
+	}
+	updateRequest, err := iac.iClient.UpdateAppProfile(ctx, patchRequest)
+	if err != nil {
+		return err
+	}
+
+	return longrunning.InternalNewOperation(iac.lroClient, updateRequest).Wait(ctx, nil)
+
+}
+
+// DeleteAppProfile deletes an app profile from an instance.
+func (iac *InstanceAdminClient) DeleteAppProfile(ctx context.Context, instanceID, name string) error {
+	ctx = mergeOutgoingMetadata(ctx, iac.md)
+	deleteProfileRequest := &btapb.DeleteAppProfileRequest{
+		Name:           "projects/" + iac.project + "/instances/" + instanceID + "/appProfiles/" + name,
+		IgnoreWarnings: true,
+	}
+	_, err := iac.iClient.DeleteAppProfile(ctx, deleteProfileRequest)
+	return err
+
 }

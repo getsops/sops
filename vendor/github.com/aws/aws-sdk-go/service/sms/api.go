@@ -14,7 +14,7 @@ const opCreateReplicationJob = "CreateReplicationJob"
 
 // CreateReplicationJobRequest generates a "aws/request.Request" representing the
 // client's request for the CreateReplicationJob operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -122,7 +122,7 @@ const opDeleteReplicationJob = "DeleteReplicationJob"
 
 // DeleteReplicationJobRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteReplicationJob operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -220,7 +220,7 @@ const opDeleteServerCatalog = "DeleteServerCatalog"
 
 // DeleteServerCatalogRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteServerCatalog operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -314,7 +314,7 @@ const opDisassociateConnector = "DisassociateConnector"
 
 // DisassociateConnectorRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateConnector operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -407,7 +407,7 @@ const opGetConnectors = "GetConnectors"
 
 // GetConnectorsRequest generates a "aws/request.Request" representing the
 // client's request for the GetConnectors operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -543,7 +543,7 @@ const opGetReplicationJobs = "GetReplicationJobs"
 
 // GetReplicationJobsRequest generates a "aws/request.Request" representing the
 // client's request for the GetReplicationJobs operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -688,7 +688,7 @@ const opGetReplicationRuns = "GetReplicationRuns"
 
 // GetReplicationRunsRequest generates a "aws/request.Request" representing the
 // client's request for the GetReplicationRuns operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -833,7 +833,7 @@ const opGetServers = "GetServers"
 
 // GetServersRequest generates a "aws/request.Request" representing the
 // client's request for the GetServers operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -969,7 +969,7 @@ const opImportServerCatalog = "ImportServerCatalog"
 
 // ImportServerCatalogRequest generates a "aws/request.Request" representing the
 // client's request for the ImportServerCatalog operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1068,7 +1068,7 @@ const opStartOnDemandReplicationRun = "StartOnDemandReplicationRun"
 
 // StartOnDemandReplicationRunRequest generates a "aws/request.Request" representing the
 // client's request for the StartOnDemandReplicationRun operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1167,7 +1167,7 @@ const opUpdateReplicationJob = "UpdateReplicationJob"
 
 // UpdateReplicationJobRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateReplicationJob operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1271,7 +1271,7 @@ type Connector struct {
 	_ struct{} `type:"structure"`
 
 	// Timestamp of an operation
-	AssociatedOn *time.Time `locationName:"associatedOn" type:"timestamp" timestampFormat:"unix"`
+	AssociatedOn *time.Time `locationName:"associatedOn" type:"timestamp"`
 
 	// List of Connector Capabilities
 	CapabilityList []*string `locationName:"capabilityList" locationNameList:"item" type:"list"`
@@ -1393,7 +1393,7 @@ type CreateReplicationJobInput struct {
 	// Timestamp of an operation
 	//
 	// SeedReplicationTime is a required field
-	SeedReplicationTime *time.Time `locationName:"seedReplicationTime" type:"timestamp" timestampFormat:"unix" required:"true"`
+	SeedReplicationTime *time.Time `locationName:"seedReplicationTime" type:"timestamp" required:"true"`
 
 	// Unique Identifier for a server
 	//
@@ -1895,7 +1895,7 @@ type GetServersOutput struct {
 	_ struct{} `type:"structure"`
 
 	// Timestamp of an operation
-	LastModifiedOn *time.Time `locationName:"lastModifiedOn" type:"timestamp" timestampFormat:"unix"`
+	LastModifiedOn *time.Time `locationName:"lastModifiedOn" type:"timestamp"`
 
 	// Pagination token to pass as input to API call
 	NextToken *string `locationName:"nextToken" type:"string"`
@@ -1988,7 +1988,7 @@ type ReplicationJob struct {
 	LicenseType *string `locationName:"licenseType" type:"string" enum:"LicenseType"`
 
 	// Timestamp of an operation
-	NextReplicationRunStartTime *time.Time `locationName:"nextReplicationRunStartTime" type:"timestamp" timestampFormat:"unix"`
+	NextReplicationRunStartTime *time.Time `locationName:"nextReplicationRunStartTime" type:"timestamp"`
 
 	// The unique identifier for a Replication Job.
 	ReplicationJobId *string `locationName:"replicationJobId" type:"string"`
@@ -2000,7 +2000,7 @@ type ReplicationJob struct {
 	RoleName *string `locationName:"roleName" type:"string"`
 
 	// Timestamp of an operation
-	SeedReplicationTime *time.Time `locationName:"seedReplicationTime" type:"timestamp" timestampFormat:"unix"`
+	SeedReplicationTime *time.Time `locationName:"seedReplicationTime" type:"timestamp"`
 
 	// Unique Identifier for a server
 	ServerId *string `locationName:"serverId" type:"string"`
@@ -2120,7 +2120,7 @@ type ReplicationRun struct {
 	AmiId *string `locationName:"amiId" type:"string"`
 
 	// Timestamp of an operation
-	CompletedTime *time.Time `locationName:"completedTime" type:"timestamp" timestampFormat:"unix"`
+	CompletedTime *time.Time `locationName:"completedTime" type:"timestamp"`
 
 	// The description for a Replication Job/Run.
 	Description *string `locationName:"description" type:"string"`
@@ -2129,7 +2129,7 @@ type ReplicationRun struct {
 	ReplicationRunId *string `locationName:"replicationRunId" type:"string"`
 
 	// Timestamp of an operation
-	ScheduledStartTime *time.Time `locationName:"scheduledStartTime" type:"timestamp" timestampFormat:"unix"`
+	ScheduledStartTime *time.Time `locationName:"scheduledStartTime" type:"timestamp"`
 
 	// Current state of Replication Run
 	State *string `locationName:"state" type:"string" enum:"ReplicationRunState"`
@@ -2344,7 +2344,7 @@ type UpdateReplicationJobInput struct {
 	LicenseType *string `locationName:"licenseType" type:"string" enum:"LicenseType"`
 
 	// Timestamp of an operation
-	NextReplicationRunStartTime *time.Time `locationName:"nextReplicationRunStartTime" type:"timestamp" timestampFormat:"unix"`
+	NextReplicationRunStartTime *time.Time `locationName:"nextReplicationRunStartTime" type:"timestamp"`
 
 	// The unique identifier for a Replication Job.
 	//

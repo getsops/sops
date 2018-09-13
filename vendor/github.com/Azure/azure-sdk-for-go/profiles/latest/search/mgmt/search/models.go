@@ -83,6 +83,7 @@ type CheckNameAvailabilityInput = original.CheckNameAvailabilityInput
 type CheckNameAvailabilityOutput = original.CheckNameAvailabilityOutput
 type CloudError = original.CloudError
 type CloudErrorBody = original.CloudErrorBody
+type Identity = original.Identity
 type ListQueryKeysResult = original.ListQueryKeysResult
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay

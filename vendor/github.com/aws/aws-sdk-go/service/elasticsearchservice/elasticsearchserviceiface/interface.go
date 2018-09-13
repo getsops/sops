@@ -92,6 +92,35 @@ type ElasticsearchServiceAPI interface {
 	DescribeElasticsearchInstanceTypeLimitsWithContext(aws.Context, *elasticsearchservice.DescribeElasticsearchInstanceTypeLimitsInput, ...request.Option) (*elasticsearchservice.DescribeElasticsearchInstanceTypeLimitsOutput, error)
 	DescribeElasticsearchInstanceTypeLimitsRequest(*elasticsearchservice.DescribeElasticsearchInstanceTypeLimitsInput) (*request.Request, *elasticsearchservice.DescribeElasticsearchInstanceTypeLimitsOutput)
 
+	DescribeReservedElasticsearchInstanceOfferings(*elasticsearchservice.DescribeReservedElasticsearchInstanceOfferingsInput) (*elasticsearchservice.DescribeReservedElasticsearchInstanceOfferingsOutput, error)
+	DescribeReservedElasticsearchInstanceOfferingsWithContext(aws.Context, *elasticsearchservice.DescribeReservedElasticsearchInstanceOfferingsInput, ...request.Option) (*elasticsearchservice.DescribeReservedElasticsearchInstanceOfferingsOutput, error)
+	DescribeReservedElasticsearchInstanceOfferingsRequest(*elasticsearchservice.DescribeReservedElasticsearchInstanceOfferingsInput) (*request.Request, *elasticsearchservice.DescribeReservedElasticsearchInstanceOfferingsOutput)
+
+	DescribeReservedElasticsearchInstanceOfferingsPages(*elasticsearchservice.DescribeReservedElasticsearchInstanceOfferingsInput, func(*elasticsearchservice.DescribeReservedElasticsearchInstanceOfferingsOutput, bool) bool) error
+	DescribeReservedElasticsearchInstanceOfferingsPagesWithContext(aws.Context, *elasticsearchservice.DescribeReservedElasticsearchInstanceOfferingsInput, func(*elasticsearchservice.DescribeReservedElasticsearchInstanceOfferingsOutput, bool) bool, ...request.Option) error
+
+	DescribeReservedElasticsearchInstances(*elasticsearchservice.DescribeReservedElasticsearchInstancesInput) (*elasticsearchservice.DescribeReservedElasticsearchInstancesOutput, error)
+	DescribeReservedElasticsearchInstancesWithContext(aws.Context, *elasticsearchservice.DescribeReservedElasticsearchInstancesInput, ...request.Option) (*elasticsearchservice.DescribeReservedElasticsearchInstancesOutput, error)
+	DescribeReservedElasticsearchInstancesRequest(*elasticsearchservice.DescribeReservedElasticsearchInstancesInput) (*request.Request, *elasticsearchservice.DescribeReservedElasticsearchInstancesOutput)
+
+	DescribeReservedElasticsearchInstancesPages(*elasticsearchservice.DescribeReservedElasticsearchInstancesInput, func(*elasticsearchservice.DescribeReservedElasticsearchInstancesOutput, bool) bool) error
+	DescribeReservedElasticsearchInstancesPagesWithContext(aws.Context, *elasticsearchservice.DescribeReservedElasticsearchInstancesInput, func(*elasticsearchservice.DescribeReservedElasticsearchInstancesOutput, bool) bool, ...request.Option) error
+
+	GetCompatibleElasticsearchVersions(*elasticsearchservice.GetCompatibleElasticsearchVersionsInput) (*elasticsearchservice.GetCompatibleElasticsearchVersionsOutput, error)
+	GetCompatibleElasticsearchVersionsWithContext(aws.Context, *elasticsearchservice.GetCompatibleElasticsearchVersionsInput, ...request.Option) (*elasticsearchservice.GetCompatibleElasticsearchVersionsOutput, error)
+	GetCompatibleElasticsearchVersionsRequest(*elasticsearchservice.GetCompatibleElasticsearchVersionsInput) (*request.Request, *elasticsearchservice.GetCompatibleElasticsearchVersionsOutput)
+
+	GetUpgradeHistory(*elasticsearchservice.GetUpgradeHistoryInput) (*elasticsearchservice.GetUpgradeHistoryOutput, error)
+	GetUpgradeHistoryWithContext(aws.Context, *elasticsearchservice.GetUpgradeHistoryInput, ...request.Option) (*elasticsearchservice.GetUpgradeHistoryOutput, error)
+	GetUpgradeHistoryRequest(*elasticsearchservice.GetUpgradeHistoryInput) (*request.Request, *elasticsearchservice.GetUpgradeHistoryOutput)
+
+	GetUpgradeHistoryPages(*elasticsearchservice.GetUpgradeHistoryInput, func(*elasticsearchservice.GetUpgradeHistoryOutput, bool) bool) error
+	GetUpgradeHistoryPagesWithContext(aws.Context, *elasticsearchservice.GetUpgradeHistoryInput, func(*elasticsearchservice.GetUpgradeHistoryOutput, bool) bool, ...request.Option) error
+
+	GetUpgradeStatus(*elasticsearchservice.GetUpgradeStatusInput) (*elasticsearchservice.GetUpgradeStatusOutput, error)
+	GetUpgradeStatusWithContext(aws.Context, *elasticsearchservice.GetUpgradeStatusInput, ...request.Option) (*elasticsearchservice.GetUpgradeStatusOutput, error)
+	GetUpgradeStatusRequest(*elasticsearchservice.GetUpgradeStatusInput) (*request.Request, *elasticsearchservice.GetUpgradeStatusOutput)
+
 	ListDomainNames(*elasticsearchservice.ListDomainNamesInput) (*elasticsearchservice.ListDomainNamesOutput, error)
 	ListDomainNamesWithContext(aws.Context, *elasticsearchservice.ListDomainNamesInput, ...request.Option) (*elasticsearchservice.ListDomainNamesOutput, error)
 	ListDomainNamesRequest(*elasticsearchservice.ListDomainNamesInput) (*request.Request, *elasticsearchservice.ListDomainNamesOutput)
@@ -114,6 +143,10 @@ type ElasticsearchServiceAPI interface {
 	ListTagsWithContext(aws.Context, *elasticsearchservice.ListTagsInput, ...request.Option) (*elasticsearchservice.ListTagsOutput, error)
 	ListTagsRequest(*elasticsearchservice.ListTagsInput) (*request.Request, *elasticsearchservice.ListTagsOutput)
 
+	PurchaseReservedElasticsearchInstanceOffering(*elasticsearchservice.PurchaseReservedElasticsearchInstanceOfferingInput) (*elasticsearchservice.PurchaseReservedElasticsearchInstanceOfferingOutput, error)
+	PurchaseReservedElasticsearchInstanceOfferingWithContext(aws.Context, *elasticsearchservice.PurchaseReservedElasticsearchInstanceOfferingInput, ...request.Option) (*elasticsearchservice.PurchaseReservedElasticsearchInstanceOfferingOutput, error)
+	PurchaseReservedElasticsearchInstanceOfferingRequest(*elasticsearchservice.PurchaseReservedElasticsearchInstanceOfferingInput) (*request.Request, *elasticsearchservice.PurchaseReservedElasticsearchInstanceOfferingOutput)
+
 	RemoveTags(*elasticsearchservice.RemoveTagsInput) (*elasticsearchservice.RemoveTagsOutput, error)
 	RemoveTagsWithContext(aws.Context, *elasticsearchservice.RemoveTagsInput, ...request.Option) (*elasticsearchservice.RemoveTagsOutput, error)
 	RemoveTagsRequest(*elasticsearchservice.RemoveTagsInput) (*request.Request, *elasticsearchservice.RemoveTagsOutput)
@@ -121,6 +154,10 @@ type ElasticsearchServiceAPI interface {
 	UpdateElasticsearchDomainConfig(*elasticsearchservice.UpdateElasticsearchDomainConfigInput) (*elasticsearchservice.UpdateElasticsearchDomainConfigOutput, error)
 	UpdateElasticsearchDomainConfigWithContext(aws.Context, *elasticsearchservice.UpdateElasticsearchDomainConfigInput, ...request.Option) (*elasticsearchservice.UpdateElasticsearchDomainConfigOutput, error)
 	UpdateElasticsearchDomainConfigRequest(*elasticsearchservice.UpdateElasticsearchDomainConfigInput) (*request.Request, *elasticsearchservice.UpdateElasticsearchDomainConfigOutput)
+
+	UpgradeElasticsearchDomain(*elasticsearchservice.UpgradeElasticsearchDomainInput) (*elasticsearchservice.UpgradeElasticsearchDomainOutput, error)
+	UpgradeElasticsearchDomainWithContext(aws.Context, *elasticsearchservice.UpgradeElasticsearchDomainInput, ...request.Option) (*elasticsearchservice.UpgradeElasticsearchDomainOutput, error)
+	UpgradeElasticsearchDomainRequest(*elasticsearchservice.UpgradeElasticsearchDomainInput) (*request.Request, *elasticsearchservice.UpgradeElasticsearchDomainOutput)
 }
 
 var _ ElasticsearchServiceAPI = (*elasticsearchservice.ElasticsearchService)(nil)

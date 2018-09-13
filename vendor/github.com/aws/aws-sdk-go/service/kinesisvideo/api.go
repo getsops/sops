@@ -14,7 +14,7 @@ const opCreateStream = "CreateStream"
 
 // CreateStreamRequest generates a "aws/request.Request" representing the
 // client's request for the CreateStream operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -119,7 +119,7 @@ const opDeleteStream = "DeleteStream"
 
 // DeleteStreamRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteStream operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -219,7 +219,7 @@ const opDescribeStream = "DescribeStream"
 
 // DescribeStreamRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeStream operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -309,7 +309,7 @@ const opGetDataEndpoint = "GetDataEndpoint"
 
 // GetDataEndpointRequest generates a "aws/request.Request" representing the
 // client's request for the GetDataEndpoint operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -406,7 +406,7 @@ const opListStreams = "ListStreams"
 
 // ListStreamsRequest generates a "aws/request.Request" representing the
 // client's request for the ListStreams operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -491,7 +491,7 @@ const opListTagsForStream = "ListTagsForStream"
 
 // ListTagsForStreamRequest generates a "aws/request.Request" representing the
 // client's request for the ListTagsForStream operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -585,7 +585,7 @@ const opTagStream = "TagStream"
 
 // TagStreamRequest generates a "aws/request.Request" representing the
 // client's request for the TagStream operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -692,7 +692,7 @@ const opUntagStream = "UntagStream"
 
 // UntagStreamRequest generates a "aws/request.Request" representing the
 // client's request for the UntagStream operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -788,7 +788,7 @@ const opUpdateDataRetention = "UpdateDataRetention"
 
 // UpdateDataRetentionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDataRetention operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -876,7 +876,7 @@ func (c *KinesisVideo) UpdateDataRetentionRequest(input *UpdateDataRetentionInpu
 //
 //   * ErrCodeVersionMismatchException "VersionMismatchException"
 //   The stream version that you specified is not the latest version. To get the
-//   latest version, use the DescribeStream (http://docs.aws.amazon.com/kinesisvideo/latest/dg/API_DescribeStream.html)
+//   latest version, use the DescribeStream (http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html)
 //   API.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisvideo-2017-09-30/UpdateDataRetention
@@ -905,7 +905,7 @@ const opUpdateStream = "UpdateStream"
 
 // UpdateStreamRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateStream operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -984,7 +984,7 @@ func (c *KinesisVideo) UpdateStreamRequest(input *UpdateStreamInput) (req *reque
 //
 //   * ErrCodeVersionMismatchException "VersionMismatchException"
 //   The stream version that you specified is not the latest version. To get the
-//   latest version, use the DescribeStream (http://docs.aws.amazon.com/kinesisvideo/latest/dg/API_DescribeStream.html)
+//   latest version, use the DescribeStream (http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html)
 //   API.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisvideo-2017-09-30/UpdateStream
@@ -1017,6 +1017,11 @@ type CreateStreamInput struct {
 	// stream.
 	//
 	// The default value is 0, indicating that the stream does not persist data.
+	//
+	// When the DataRetentionInHours value is 0, consumers can still consume the
+	// fragments that remain in the service host buffer, which has a retention time
+	// limit of 5 minutes and a retention memory limit of 200 MB. Fragments are
+	// removed from the buffer when either limit is reached.
 	DataRetentionInHours *int64 `type:"integer"`
 
 	// The name of the device that is writing to the stream.
@@ -1566,7 +1571,7 @@ type StreamInfo struct {
 	_ struct{} `type:"structure"`
 
 	// A time stamp that indicates when the stream was created.
-	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	CreationTime *time.Time `type:"timestamp"`
 
 	// How long the stream retains data, in hours.
 	DataRetentionInHours *int64 `type:"integer"`
@@ -1998,7 +2003,7 @@ type UpdateStreamInput struct {
 	// The stream's media type. Use MediaType to specify the type of content that
 	// the stream contains to the consumers of the stream. For more information
 	// about media types, see Media Types (http://www.iana.org/assignments/media-types/media-types.xhtml).
-	// If you choose to specify the MediaType, see Naming Requirements (https://tools.sietf.org/html/rfc6838#section-4.2).
+	// If you choose to specify the MediaType, see Naming Requirements (https://tools.ietf.org/html/rfc6838#section-4.2).
 	//
 	// To play video on the console, you must specify the correct video type. For
 	// example, if the video in the stream is H.264, specify video/h264 as the MediaType.
@@ -2108,6 +2113,9 @@ const (
 
 	// APINameGetMediaForFragmentList is a APIName enum value
 	APINameGetMediaForFragmentList = "GET_MEDIA_FOR_FRAGMENT_LIST"
+
+	// APINameGetHlsStreamingSessionUrl is a APIName enum value
+	APINameGetHlsStreamingSessionUrl = "GET_HLS_STREAMING_SESSION_URL"
 )
 
 const (

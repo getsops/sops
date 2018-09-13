@@ -7,7 +7,7 @@
 // Package runenames provides rune names from the Unicode Character Database.
 // For example, the name for '\u0100' is "LATIN CAPITAL LETTER A WITH MACRON".
 //
-// See http://www.unicode.org/Public/UCD/latest/ucd/UnicodeData.txt
+// See https://www.unicode.org/Public/UCD/latest/ucd/UnicodeData.txt
 package runenames
 
 import (

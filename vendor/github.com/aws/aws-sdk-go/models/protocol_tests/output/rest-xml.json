@@ -718,7 +718,7 @@
     ]
   },
   {
-    "description": "Enum",
+    "description": "Timestamp members",
     "metadata": {
       "protocol": "rest-xml"
     },
@@ -726,31 +726,54 @@
       "OutputShape": {
         "type": "structure",
         "members": {
-          "HeaderEnum": {
-            "shape": "RESTJSONEnumType",
+          "TimeArg": {
+            "shape": "TimestampType"
+          },
+          "TimeArgInHeader": {
+            "shape": "TimestampType",
             "location": "header",
-            "locationName": "x-amz-enum"
+            "locationName": "x-amz-timearg"
           },
-          "FooEnum": {
-            "shape": "RESTJSONEnumType"
+          "TimeCustom": {
+            "timestampFormat": "rfc822",
+            "shape": "TimestampType"
           },
-          "ListEnums": {
-            "shape": "EnumList"
+          "TimeCustomInHeader": {
+            "timestampFormat": "unixTimestamp",
+            "shape": "TimestampType",
+            "location": "header",
+            "locationName": "x-amz-timecustom"
+          },
+          "TimeFormat": {
+            "shape": "TimestampFormatType"
+          },
+          "TimeFormatInHeader": {
+            "shape": "TimestampFormatType",
+            "location": "header",
+            "locationName": "x-amz-timeformat"
+          },
+          "StructMember": {
+            "shape": "TimeContainer"
           }
         }
       },
-      "RESTJSONEnumType":{
-        "type":"string",
-        "enum":[
-          "foo",
-          "bar",
-          "0",
-          "1"
-        ]
+      "TimeContainer": {
+        "type": "structure",
+        "members": {
+          "foo": {
+            "shape": "TimestampType"
+          },
+          "bar": {
+            "shape": "TimestampFormatType"
+          }
+        }
       },
-      "EnumList":{
-        "type":"list",
-        "member": {"shape": "RESTJSONEnumType"}
+      "TimestampFormatType": {
+        "timestampFormat": "unixTimestamp",
+        "type": "timestamp"
+      },
+      "TimestampType": {
+        "type": "timestamp"
       }
     },
     "cases": [
@@ -759,121 +782,28 @@
           "output": {
             "shape": "OutputShape"
           },
-          "http": {
-            "method": "POST",
-            "requestUri": "/path"
-          },
           "name": "OperationName"
         },
         "result": {
-          "HeaderEnum": "baz",
-          "FooEnum": "foo",
-          "ListEnums": ["0", "1"]
-        },
-        "response": {
-          "status_code": 200,
-          "headers": {"x-amz-enum": "baz"},
-          "body": "<OperationNameResponse><FooEnum>foo</FooEnum><ListEnums><member>0</member><member>1</member></ListEnums></OperationNameResponse>"
-        }
-      },
-      {
-        "given": {
-          "input": {
-            "shape": "OutputShape"
-          },
-          "http": {
-            "method": "POST",
-            "requestUri": "/path"
-          },
-          "name": "OperationName"
-        },
-        "result": {
-        },
-        "response": {
-          "status_code": 200,
-          "headers": {}
-        }
-      }
-    ]
-  },
-  {
-    "description": "XML Attributes",
-    "metadata": {
-      "protocol": "rest-xml"
-    },
-    "shapes": {
-      "OutputShape":{
-        "type":"structure",
-        "members":{
-          "ListItems":{
-            "shape":"ListItemsShape",
-            "locationName":"ItemsList"
-          }
-        }
-      },
-      "ListItemsShape":{
-        "type":"list",
-        "member":{
-          "shape":"ItemShape",
-          "locationName":"Item"
-        }
-      },
-      "ItemShape":{
-        "type":"structure",
-        "members":{
-          "ItemDetail":{"shape":"ItemDetailShape"}
-        }
-      },
-      "ItemDetailShape":{
-        "type":"structure",
-        "required":["Type"],
-        "members":{
-          "ID":{"shape":"StringShape"},
-          "Type":{
-            "shape":"ItemType",
-            "locationName":"xsi:type",
-            "xmlAttribute":true
+          "TimeArg": 1398796238,
+          "TimeArgInHeader": 1398796238,
+          "TimeCustom": 1398796238,
+          "TimeCustomInHeader": 1398796238,
+          "TimeFormat": 1398796238,
+          "TimeFormatInHeader": 1398796238,
+          "StructMember": {
+            "foo": 1398796238,
+            "bar": 1398796238
           }
         },
-        "xmlNamespace":{
-          "prefix":"xsi",
-          "uri":"http://www.w3.org/2001/XMLSchema-instance"
-        }
-      },
-      "StringShape":{
-        "type":"string"
-      },
-      "ItemType":{
-        "type":"string",
-        "enum":[
-          "Type1",
-          "Type2",
-          "Type3"
-        ]
-      }
-    },
-    "cases": [
-      {
-        "given": {
-          "output": {
-            "shape": "OutputShape"
-          },
-          "http": {
-            "method": "GET",
-            "requestUri": "/path"
-          },
-          "name": "OperationName"
-        },
-        "result": {
-          "ListItems": [
-              {"ItemDetail": {"ID": "id1", "Type": "Type1"}},
-              {"ItemDetail": {"ID": "id2", "Type": "Type2"}},
-              {"ItemDetail": {"ID": "id3", "Type": "Type3"}}
-          ]
-        },
         "response": {
           "status_code": 200,
-          "body": "<SomeOutputDoc xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\"><ItemsList><Item><ItemDetail xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"Type1\"><ID>id1</ID></ItemDetail></Item><Item><ItemDetail xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"Type2\"><ID>id2</ID></ItemDetail></Item><Item><ItemDetail xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"Type3\"><ID>id3</ID></ItemDetail></Item></ItemsList></SomeOutputDoc>"
+          "headers": {
+            "x-amz-timearg": "Tue, 29 Apr 2014 18:30:38 GMT",
+            "x-amz-timecustom": "1398796238",
+            "x-amz-timeformat": "1398796238"
+          },
+          "body": "<OperationNameResponse><StructMember><foo>2014-04-29T18:30:38Z</foo><bar>1398796238</bar></StructMember><TimeArg>2014-04-29T18:30:38Z</TimeArg><TimeCustom>Tue, 29 Apr 2014 18:30:38 GMT</TimeCustom><TimeFormat>1398796238</TimeFormat><RequestId>requestid</RequestId></OperationNameResponse>"
         }
       }
     ]

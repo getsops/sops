@@ -1,5 +1,5 @@
 /*
-Copyright 2015 Google Inc. All Rights Reserved.
+Copyright 2015 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -45,6 +45,7 @@ type Config struct {
 	AdminEndpoint     string                           // optional
 	DataEndpoint      string                           // optional
 	CertFile          string                           // optional
+	UserAgent         string                           // optional
 	TokenSource       oauth2.TokenSource               // derived
 	TLSCreds          credentials.TransportCredentials // derived
 }
@@ -67,6 +68,7 @@ func (c *Config) RegisterFlags() {
 	flag.StringVar(&c.AdminEndpoint, "admin-endpoint", c.AdminEndpoint, "Override the admin api endpoint")
 	flag.StringVar(&c.DataEndpoint, "data-endpoint", c.DataEndpoint, "Override the data api endpoint")
 	flag.StringVar(&c.CertFile, "cert-file", c.CertFile, "Override the TLS certificates file")
+	flag.StringVar(&c.UserAgent, "user-agent", c.UserAgent, "Override the user agent string")
 }
 
 // CheckFlags checks that the required config values are set.
@@ -140,6 +142,10 @@ func Load() (*Config, error) {
 			c.AdminEndpoint = val
 		case "data-endpoint":
 			c.DataEndpoint = val
+		case "cert-file":
+			c.CertFile = val
+		case "user-agent":
+			c.UserAgent = val
 		}
 
 	}

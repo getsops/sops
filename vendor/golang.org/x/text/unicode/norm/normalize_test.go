@@ -119,7 +119,7 @@ var decomposeSegmentTests = []PositionTest{
 	{grave(31), 60, grave(30) + cgj},
 	{"a" + grave(31), 61, "a" + grave(30) + cgj},
 
-	// Stability tests: see http://www.unicode.org/review/pr-29.html.
+	// Stability tests: see https://www.unicode.org/review/pr-29.html.
 	// U+0300 COMBINING GRAVE ACCENT;Mn;230;NSM;;;;;N;NON-SPACING GRAVE;;;;
 	// U+0B47 ORIYA VOWEL SIGN E;Mc;0;L;;;;;N;;;;;
 	// U+0B3E ORIYA VOWEL SIGN AA;Mc;0;L;;;;;N;;;;;
@@ -674,7 +674,7 @@ var appendTestsNFC = []AppendTest{
 		"\u1161\u11a8",
 	},
 
-	// Stability tests: see http://www.unicode.org/review/pr-29.html.
+	// Stability tests: see https://www.unicode.org/review/pr-29.html.
 	{"", "\u0b47\u0300\u0b3e", "\u0b47\u0300\u0b3e"},
 	{"", "\u1100\u0300\u1161", "\u1100\u0300\u1161"},
 	{"", "\u0b47\u0b3e", "\u0b4b"},
@@ -1182,7 +1182,7 @@ func BenchmarkOverflow(b *testing.B) {
 var overflow = string(bytes.Repeat([]byte("\u035D"), 4096)) + "\u035B"
 
 // Tests sampled from the Canonical ordering tests (Part 2) of
-// http://unicode.org/Public/UNIDATA/NormalizationTest.txt
+// https://unicode.org/Public/UNIDATA/NormalizationTest.txt
 const txt_canon = `\u0061\u0315\u0300\u05AE\u0300\u0062 \u0061\u0300\u0315\u0300\u05AE\u0062
 \u0061\u0302\u0315\u0300\u05AE\u0062 \u0061\u0307\u0315\u0300\u05AE\u0062
 \u0061\u0315\u0300\u05AE\u030A\u0062 \u0061\u059A\u0316\u302A\u031C\u0062

@@ -80,9 +80,17 @@ type IoTAPI interface {
 	AttachPrincipalPolicyWithContext(aws.Context, *iot.AttachPrincipalPolicyInput, ...request.Option) (*iot.AttachPrincipalPolicyOutput, error)
 	AttachPrincipalPolicyRequest(*iot.AttachPrincipalPolicyInput) (*request.Request, *iot.AttachPrincipalPolicyOutput)
 
+	AttachSecurityProfile(*iot.AttachSecurityProfileInput) (*iot.AttachSecurityProfileOutput, error)
+	AttachSecurityProfileWithContext(aws.Context, *iot.AttachSecurityProfileInput, ...request.Option) (*iot.AttachSecurityProfileOutput, error)
+	AttachSecurityProfileRequest(*iot.AttachSecurityProfileInput) (*request.Request, *iot.AttachSecurityProfileOutput)
+
 	AttachThingPrincipal(*iot.AttachThingPrincipalInput) (*iot.AttachThingPrincipalOutput, error)
 	AttachThingPrincipalWithContext(aws.Context, *iot.AttachThingPrincipalInput, ...request.Option) (*iot.AttachThingPrincipalOutput, error)
 	AttachThingPrincipalRequest(*iot.AttachThingPrincipalInput) (*request.Request, *iot.AttachThingPrincipalOutput)
+
+	CancelAuditTask(*iot.CancelAuditTaskInput) (*iot.CancelAuditTaskOutput, error)
+	CancelAuditTaskWithContext(aws.Context, *iot.CancelAuditTaskInput, ...request.Option) (*iot.CancelAuditTaskOutput, error)
+	CancelAuditTaskRequest(*iot.CancelAuditTaskInput) (*request.Request, *iot.CancelAuditTaskOutput)
 
 	CancelCertificateTransfer(*iot.CancelCertificateTransferInput) (*iot.CancelCertificateTransferOutput, error)
 	CancelCertificateTransferWithContext(aws.Context, *iot.CancelCertificateTransferInput, ...request.Option) (*iot.CancelCertificateTransferOutput, error)
@@ -91,6 +99,10 @@ type IoTAPI interface {
 	CancelJob(*iot.CancelJobInput) (*iot.CancelJobOutput, error)
 	CancelJobWithContext(aws.Context, *iot.CancelJobInput, ...request.Option) (*iot.CancelJobOutput, error)
 	CancelJobRequest(*iot.CancelJobInput) (*request.Request, *iot.CancelJobOutput)
+
+	CancelJobExecution(*iot.CancelJobExecutionInput) (*iot.CancelJobExecutionOutput, error)
+	CancelJobExecutionWithContext(aws.Context, *iot.CancelJobExecutionInput, ...request.Option) (*iot.CancelJobExecutionOutput, error)
+	CancelJobExecutionRequest(*iot.CancelJobExecutionInput) (*request.Request, *iot.CancelJobExecutionOutput)
 
 	ClearDefaultAuthorizer(*iot.ClearDefaultAuthorizerInput) (*iot.ClearDefaultAuthorizerOutput, error)
 	ClearDefaultAuthorizerWithContext(aws.Context, *iot.ClearDefaultAuthorizerInput, ...request.Option) (*iot.ClearDefaultAuthorizerOutput, error)
@@ -128,6 +140,14 @@ type IoTAPI interface {
 	CreateRoleAliasWithContext(aws.Context, *iot.CreateRoleAliasInput, ...request.Option) (*iot.CreateRoleAliasOutput, error)
 	CreateRoleAliasRequest(*iot.CreateRoleAliasInput) (*request.Request, *iot.CreateRoleAliasOutput)
 
+	CreateScheduledAudit(*iot.CreateScheduledAuditInput) (*iot.CreateScheduledAuditOutput, error)
+	CreateScheduledAuditWithContext(aws.Context, *iot.CreateScheduledAuditInput, ...request.Option) (*iot.CreateScheduledAuditOutput, error)
+	CreateScheduledAuditRequest(*iot.CreateScheduledAuditInput) (*request.Request, *iot.CreateScheduledAuditOutput)
+
+	CreateSecurityProfile(*iot.CreateSecurityProfileInput) (*iot.CreateSecurityProfileOutput, error)
+	CreateSecurityProfileWithContext(aws.Context, *iot.CreateSecurityProfileInput, ...request.Option) (*iot.CreateSecurityProfileOutput, error)
+	CreateSecurityProfileRequest(*iot.CreateSecurityProfileInput) (*request.Request, *iot.CreateSecurityProfileOutput)
+
 	CreateStream(*iot.CreateStreamInput) (*iot.CreateStreamOutput, error)
 	CreateStreamWithContext(aws.Context, *iot.CreateStreamInput, ...request.Option) (*iot.CreateStreamOutput, error)
 	CreateStreamRequest(*iot.CreateStreamInput) (*request.Request, *iot.CreateStreamOutput)
@@ -148,6 +168,10 @@ type IoTAPI interface {
 	CreateTopicRuleWithContext(aws.Context, *iot.CreateTopicRuleInput, ...request.Option) (*iot.CreateTopicRuleOutput, error)
 	CreateTopicRuleRequest(*iot.CreateTopicRuleInput) (*request.Request, *iot.CreateTopicRuleOutput)
 
+	DeleteAccountAuditConfiguration(*iot.DeleteAccountAuditConfigurationInput) (*iot.DeleteAccountAuditConfigurationOutput, error)
+	DeleteAccountAuditConfigurationWithContext(aws.Context, *iot.DeleteAccountAuditConfigurationInput, ...request.Option) (*iot.DeleteAccountAuditConfigurationOutput, error)
+	DeleteAccountAuditConfigurationRequest(*iot.DeleteAccountAuditConfigurationInput) (*request.Request, *iot.DeleteAccountAuditConfigurationOutput)
+
 	DeleteAuthorizer(*iot.DeleteAuthorizerInput) (*iot.DeleteAuthorizerOutput, error)
 	DeleteAuthorizerWithContext(aws.Context, *iot.DeleteAuthorizerInput, ...request.Option) (*iot.DeleteAuthorizerOutput, error)
 	DeleteAuthorizerRequest(*iot.DeleteAuthorizerInput) (*request.Request, *iot.DeleteAuthorizerOutput)
@@ -159,6 +183,14 @@ type IoTAPI interface {
 	DeleteCertificate(*iot.DeleteCertificateInput) (*iot.DeleteCertificateOutput, error)
 	DeleteCertificateWithContext(aws.Context, *iot.DeleteCertificateInput, ...request.Option) (*iot.DeleteCertificateOutput, error)
 	DeleteCertificateRequest(*iot.DeleteCertificateInput) (*request.Request, *iot.DeleteCertificateOutput)
+
+	DeleteJob(*iot.DeleteJobInput) (*iot.DeleteJobOutput, error)
+	DeleteJobWithContext(aws.Context, *iot.DeleteJobInput, ...request.Option) (*iot.DeleteJobOutput, error)
+	DeleteJobRequest(*iot.DeleteJobInput) (*request.Request, *iot.DeleteJobOutput)
+
+	DeleteJobExecution(*iot.DeleteJobExecutionInput) (*iot.DeleteJobExecutionOutput, error)
+	DeleteJobExecutionWithContext(aws.Context, *iot.DeleteJobExecutionInput, ...request.Option) (*iot.DeleteJobExecutionOutput, error)
+	DeleteJobExecutionRequest(*iot.DeleteJobExecutionInput) (*request.Request, *iot.DeleteJobExecutionOutput)
 
 	DeleteOTAUpdate(*iot.DeleteOTAUpdateInput) (*iot.DeleteOTAUpdateOutput, error)
 	DeleteOTAUpdateWithContext(aws.Context, *iot.DeleteOTAUpdateInput, ...request.Option) (*iot.DeleteOTAUpdateOutput, error)
@@ -179,6 +211,14 @@ type IoTAPI interface {
 	DeleteRoleAlias(*iot.DeleteRoleAliasInput) (*iot.DeleteRoleAliasOutput, error)
 	DeleteRoleAliasWithContext(aws.Context, *iot.DeleteRoleAliasInput, ...request.Option) (*iot.DeleteRoleAliasOutput, error)
 	DeleteRoleAliasRequest(*iot.DeleteRoleAliasInput) (*request.Request, *iot.DeleteRoleAliasOutput)
+
+	DeleteScheduledAudit(*iot.DeleteScheduledAuditInput) (*iot.DeleteScheduledAuditOutput, error)
+	DeleteScheduledAuditWithContext(aws.Context, *iot.DeleteScheduledAuditInput, ...request.Option) (*iot.DeleteScheduledAuditOutput, error)
+	DeleteScheduledAuditRequest(*iot.DeleteScheduledAuditInput) (*request.Request, *iot.DeleteScheduledAuditOutput)
+
+	DeleteSecurityProfile(*iot.DeleteSecurityProfileInput) (*iot.DeleteSecurityProfileOutput, error)
+	DeleteSecurityProfileWithContext(aws.Context, *iot.DeleteSecurityProfileInput, ...request.Option) (*iot.DeleteSecurityProfileOutput, error)
+	DeleteSecurityProfileRequest(*iot.DeleteSecurityProfileInput) (*request.Request, *iot.DeleteSecurityProfileOutput)
 
 	DeleteStream(*iot.DeleteStreamInput) (*iot.DeleteStreamOutput, error)
 	DeleteStreamWithContext(aws.Context, *iot.DeleteStreamInput, ...request.Option) (*iot.DeleteStreamOutput, error)
@@ -207,6 +247,14 @@ type IoTAPI interface {
 	DeprecateThingType(*iot.DeprecateThingTypeInput) (*iot.DeprecateThingTypeOutput, error)
 	DeprecateThingTypeWithContext(aws.Context, *iot.DeprecateThingTypeInput, ...request.Option) (*iot.DeprecateThingTypeOutput, error)
 	DeprecateThingTypeRequest(*iot.DeprecateThingTypeInput) (*request.Request, *iot.DeprecateThingTypeOutput)
+
+	DescribeAccountAuditConfiguration(*iot.DescribeAccountAuditConfigurationInput) (*iot.DescribeAccountAuditConfigurationOutput, error)
+	DescribeAccountAuditConfigurationWithContext(aws.Context, *iot.DescribeAccountAuditConfigurationInput, ...request.Option) (*iot.DescribeAccountAuditConfigurationOutput, error)
+	DescribeAccountAuditConfigurationRequest(*iot.DescribeAccountAuditConfigurationInput) (*request.Request, *iot.DescribeAccountAuditConfigurationOutput)
+
+	DescribeAuditTask(*iot.DescribeAuditTaskInput) (*iot.DescribeAuditTaskOutput, error)
+	DescribeAuditTaskWithContext(aws.Context, *iot.DescribeAuditTaskInput, ...request.Option) (*iot.DescribeAuditTaskOutput, error)
+	DescribeAuditTaskRequest(*iot.DescribeAuditTaskInput) (*request.Request, *iot.DescribeAuditTaskOutput)
 
 	DescribeAuthorizer(*iot.DescribeAuthorizerInput) (*iot.DescribeAuthorizerOutput, error)
 	DescribeAuthorizerWithContext(aws.Context, *iot.DescribeAuthorizerInput, ...request.Option) (*iot.DescribeAuthorizerOutput, error)
@@ -248,6 +296,14 @@ type IoTAPI interface {
 	DescribeRoleAliasWithContext(aws.Context, *iot.DescribeRoleAliasInput, ...request.Option) (*iot.DescribeRoleAliasOutput, error)
 	DescribeRoleAliasRequest(*iot.DescribeRoleAliasInput) (*request.Request, *iot.DescribeRoleAliasOutput)
 
+	DescribeScheduledAudit(*iot.DescribeScheduledAuditInput) (*iot.DescribeScheduledAuditOutput, error)
+	DescribeScheduledAuditWithContext(aws.Context, *iot.DescribeScheduledAuditInput, ...request.Option) (*iot.DescribeScheduledAuditOutput, error)
+	DescribeScheduledAuditRequest(*iot.DescribeScheduledAuditInput) (*request.Request, *iot.DescribeScheduledAuditOutput)
+
+	DescribeSecurityProfile(*iot.DescribeSecurityProfileInput) (*iot.DescribeSecurityProfileOutput, error)
+	DescribeSecurityProfileWithContext(aws.Context, *iot.DescribeSecurityProfileInput, ...request.Option) (*iot.DescribeSecurityProfileOutput, error)
+	DescribeSecurityProfileRequest(*iot.DescribeSecurityProfileInput) (*request.Request, *iot.DescribeSecurityProfileOutput)
+
 	DescribeStream(*iot.DescribeStreamInput) (*iot.DescribeStreamOutput, error)
 	DescribeStreamWithContext(aws.Context, *iot.DescribeStreamInput, ...request.Option) (*iot.DescribeStreamOutput, error)
 	DescribeStreamRequest(*iot.DescribeStreamInput) (*request.Request, *iot.DescribeStreamOutput)
@@ -275,6 +331,10 @@ type IoTAPI interface {
 	DetachPrincipalPolicy(*iot.DetachPrincipalPolicyInput) (*iot.DetachPrincipalPolicyOutput, error)
 	DetachPrincipalPolicyWithContext(aws.Context, *iot.DetachPrincipalPolicyInput, ...request.Option) (*iot.DetachPrincipalPolicyOutput, error)
 	DetachPrincipalPolicyRequest(*iot.DetachPrincipalPolicyInput) (*request.Request, *iot.DetachPrincipalPolicyOutput)
+
+	DetachSecurityProfile(*iot.DetachSecurityProfileInput) (*iot.DetachSecurityProfileOutput, error)
+	DetachSecurityProfileWithContext(aws.Context, *iot.DetachSecurityProfileInput, ...request.Option) (*iot.DetachSecurityProfileOutput, error)
+	DetachSecurityProfileRequest(*iot.DetachSecurityProfileInput) (*request.Request, *iot.DetachSecurityProfileOutput)
 
 	DetachThingPrincipal(*iot.DetachThingPrincipalInput) (*iot.DetachThingPrincipalOutput, error)
 	DetachThingPrincipalWithContext(aws.Context, *iot.DetachThingPrincipalInput, ...request.Option) (*iot.DetachThingPrincipalOutput, error)
@@ -328,9 +388,21 @@ type IoTAPI interface {
 	GetV2LoggingOptionsWithContext(aws.Context, *iot.GetV2LoggingOptionsInput, ...request.Option) (*iot.GetV2LoggingOptionsOutput, error)
 	GetV2LoggingOptionsRequest(*iot.GetV2LoggingOptionsInput) (*request.Request, *iot.GetV2LoggingOptionsOutput)
 
+	ListActiveViolations(*iot.ListActiveViolationsInput) (*iot.ListActiveViolationsOutput, error)
+	ListActiveViolationsWithContext(aws.Context, *iot.ListActiveViolationsInput, ...request.Option) (*iot.ListActiveViolationsOutput, error)
+	ListActiveViolationsRequest(*iot.ListActiveViolationsInput) (*request.Request, *iot.ListActiveViolationsOutput)
+
 	ListAttachedPolicies(*iot.ListAttachedPoliciesInput) (*iot.ListAttachedPoliciesOutput, error)
 	ListAttachedPoliciesWithContext(aws.Context, *iot.ListAttachedPoliciesInput, ...request.Option) (*iot.ListAttachedPoliciesOutput, error)
 	ListAttachedPoliciesRequest(*iot.ListAttachedPoliciesInput) (*request.Request, *iot.ListAttachedPoliciesOutput)
+
+	ListAuditFindings(*iot.ListAuditFindingsInput) (*iot.ListAuditFindingsOutput, error)
+	ListAuditFindingsWithContext(aws.Context, *iot.ListAuditFindingsInput, ...request.Option) (*iot.ListAuditFindingsOutput, error)
+	ListAuditFindingsRequest(*iot.ListAuditFindingsInput) (*request.Request, *iot.ListAuditFindingsOutput)
+
+	ListAuditTasks(*iot.ListAuditTasksInput) (*iot.ListAuditTasksOutput, error)
+	ListAuditTasksWithContext(aws.Context, *iot.ListAuditTasksInput, ...request.Option) (*iot.ListAuditTasksOutput, error)
+	ListAuditTasksRequest(*iot.ListAuditTasksInput) (*request.Request, *iot.ListAuditTasksOutput)
 
 	ListAuthorizers(*iot.ListAuthorizersInput) (*iot.ListAuthorizersOutput, error)
 	ListAuthorizersWithContext(aws.Context, *iot.ListAuthorizersInput, ...request.Option) (*iot.ListAuthorizersOutput, error)
@@ -396,6 +468,18 @@ type IoTAPI interface {
 	ListRoleAliasesWithContext(aws.Context, *iot.ListRoleAliasesInput, ...request.Option) (*iot.ListRoleAliasesOutput, error)
 	ListRoleAliasesRequest(*iot.ListRoleAliasesInput) (*request.Request, *iot.ListRoleAliasesOutput)
 
+	ListScheduledAudits(*iot.ListScheduledAuditsInput) (*iot.ListScheduledAuditsOutput, error)
+	ListScheduledAuditsWithContext(aws.Context, *iot.ListScheduledAuditsInput, ...request.Option) (*iot.ListScheduledAuditsOutput, error)
+	ListScheduledAuditsRequest(*iot.ListScheduledAuditsInput) (*request.Request, *iot.ListScheduledAuditsOutput)
+
+	ListSecurityProfiles(*iot.ListSecurityProfilesInput) (*iot.ListSecurityProfilesOutput, error)
+	ListSecurityProfilesWithContext(aws.Context, *iot.ListSecurityProfilesInput, ...request.Option) (*iot.ListSecurityProfilesOutput, error)
+	ListSecurityProfilesRequest(*iot.ListSecurityProfilesInput) (*request.Request, *iot.ListSecurityProfilesOutput)
+
+	ListSecurityProfilesForTarget(*iot.ListSecurityProfilesForTargetInput) (*iot.ListSecurityProfilesForTargetOutput, error)
+	ListSecurityProfilesForTargetWithContext(aws.Context, *iot.ListSecurityProfilesForTargetInput, ...request.Option) (*iot.ListSecurityProfilesForTargetOutput, error)
+	ListSecurityProfilesForTargetRequest(*iot.ListSecurityProfilesForTargetInput) (*request.Request, *iot.ListSecurityProfilesForTargetOutput)
+
 	ListStreams(*iot.ListStreamsInput) (*iot.ListStreamsOutput, error)
 	ListStreamsWithContext(aws.Context, *iot.ListStreamsInput, ...request.Option) (*iot.ListStreamsOutput, error)
 	ListStreamsRequest(*iot.ListStreamsInput) (*request.Request, *iot.ListStreamsOutput)
@@ -403,6 +487,10 @@ type IoTAPI interface {
 	ListTargetsForPolicy(*iot.ListTargetsForPolicyInput) (*iot.ListTargetsForPolicyOutput, error)
 	ListTargetsForPolicyWithContext(aws.Context, *iot.ListTargetsForPolicyInput, ...request.Option) (*iot.ListTargetsForPolicyOutput, error)
 	ListTargetsForPolicyRequest(*iot.ListTargetsForPolicyInput) (*request.Request, *iot.ListTargetsForPolicyOutput)
+
+	ListTargetsForSecurityProfile(*iot.ListTargetsForSecurityProfileInput) (*iot.ListTargetsForSecurityProfileOutput, error)
+	ListTargetsForSecurityProfileWithContext(aws.Context, *iot.ListTargetsForSecurityProfileInput, ...request.Option) (*iot.ListTargetsForSecurityProfileOutput, error)
+	ListTargetsForSecurityProfileRequest(*iot.ListTargetsForSecurityProfileInput) (*request.Request, *iot.ListTargetsForSecurityProfileOutput)
 
 	ListThingGroups(*iot.ListThingGroupsInput) (*iot.ListThingGroupsOutput, error)
 	ListThingGroupsWithContext(aws.Context, *iot.ListThingGroupsInput, ...request.Option) (*iot.ListThingGroupsOutput, error)
@@ -443,6 +531,10 @@ type IoTAPI interface {
 	ListV2LoggingLevels(*iot.ListV2LoggingLevelsInput) (*iot.ListV2LoggingLevelsOutput, error)
 	ListV2LoggingLevelsWithContext(aws.Context, *iot.ListV2LoggingLevelsInput, ...request.Option) (*iot.ListV2LoggingLevelsOutput, error)
 	ListV2LoggingLevelsRequest(*iot.ListV2LoggingLevelsInput) (*request.Request, *iot.ListV2LoggingLevelsOutput)
+
+	ListViolationEvents(*iot.ListViolationEventsInput) (*iot.ListViolationEventsOutput, error)
+	ListViolationEventsWithContext(aws.Context, *iot.ListViolationEventsInput, ...request.Option) (*iot.ListViolationEventsOutput, error)
+	ListViolationEventsRequest(*iot.ListViolationEventsInput) (*request.Request, *iot.ListViolationEventsOutput)
 
 	RegisterCACertificate(*iot.RegisterCACertificateInput) (*iot.RegisterCACertificateOutput, error)
 	RegisterCACertificateWithContext(aws.Context, *iot.RegisterCACertificateInput, ...request.Option) (*iot.RegisterCACertificateOutput, error)
@@ -492,6 +584,10 @@ type IoTAPI interface {
 	SetV2LoggingOptionsWithContext(aws.Context, *iot.SetV2LoggingOptionsInput, ...request.Option) (*iot.SetV2LoggingOptionsOutput, error)
 	SetV2LoggingOptionsRequest(*iot.SetV2LoggingOptionsInput) (*request.Request, *iot.SetV2LoggingOptionsOutput)
 
+	StartOnDemandAuditTask(*iot.StartOnDemandAuditTaskInput) (*iot.StartOnDemandAuditTaskOutput, error)
+	StartOnDemandAuditTaskWithContext(aws.Context, *iot.StartOnDemandAuditTaskInput, ...request.Option) (*iot.StartOnDemandAuditTaskOutput, error)
+	StartOnDemandAuditTaskRequest(*iot.StartOnDemandAuditTaskInput) (*request.Request, *iot.StartOnDemandAuditTaskOutput)
+
 	StartThingRegistrationTask(*iot.StartThingRegistrationTaskInput) (*iot.StartThingRegistrationTaskOutput, error)
 	StartThingRegistrationTaskWithContext(aws.Context, *iot.StartThingRegistrationTaskInput, ...request.Option) (*iot.StartThingRegistrationTaskOutput, error)
 	StartThingRegistrationTaskRequest(*iot.StartThingRegistrationTaskInput) (*request.Request, *iot.StartThingRegistrationTaskOutput)
@@ -511,6 +607,10 @@ type IoTAPI interface {
 	TransferCertificate(*iot.TransferCertificateInput) (*iot.TransferCertificateOutput, error)
 	TransferCertificateWithContext(aws.Context, *iot.TransferCertificateInput, ...request.Option) (*iot.TransferCertificateOutput, error)
 	TransferCertificateRequest(*iot.TransferCertificateInput) (*request.Request, *iot.TransferCertificateOutput)
+
+	UpdateAccountAuditConfiguration(*iot.UpdateAccountAuditConfigurationInput) (*iot.UpdateAccountAuditConfigurationOutput, error)
+	UpdateAccountAuditConfigurationWithContext(aws.Context, *iot.UpdateAccountAuditConfigurationInput, ...request.Option) (*iot.UpdateAccountAuditConfigurationOutput, error)
+	UpdateAccountAuditConfigurationRequest(*iot.UpdateAccountAuditConfigurationInput) (*request.Request, *iot.UpdateAccountAuditConfigurationOutput)
 
 	UpdateAuthorizer(*iot.UpdateAuthorizerInput) (*iot.UpdateAuthorizerOutput, error)
 	UpdateAuthorizerWithContext(aws.Context, *iot.UpdateAuthorizerInput, ...request.Option) (*iot.UpdateAuthorizerOutput, error)
@@ -536,6 +636,14 @@ type IoTAPI interface {
 	UpdateRoleAliasWithContext(aws.Context, *iot.UpdateRoleAliasInput, ...request.Option) (*iot.UpdateRoleAliasOutput, error)
 	UpdateRoleAliasRequest(*iot.UpdateRoleAliasInput) (*request.Request, *iot.UpdateRoleAliasOutput)
 
+	UpdateScheduledAudit(*iot.UpdateScheduledAuditInput) (*iot.UpdateScheduledAuditOutput, error)
+	UpdateScheduledAuditWithContext(aws.Context, *iot.UpdateScheduledAuditInput, ...request.Option) (*iot.UpdateScheduledAuditOutput, error)
+	UpdateScheduledAuditRequest(*iot.UpdateScheduledAuditInput) (*request.Request, *iot.UpdateScheduledAuditOutput)
+
+	UpdateSecurityProfile(*iot.UpdateSecurityProfileInput) (*iot.UpdateSecurityProfileOutput, error)
+	UpdateSecurityProfileWithContext(aws.Context, *iot.UpdateSecurityProfileInput, ...request.Option) (*iot.UpdateSecurityProfileOutput, error)
+	UpdateSecurityProfileRequest(*iot.UpdateSecurityProfileInput) (*request.Request, *iot.UpdateSecurityProfileOutput)
+
 	UpdateStream(*iot.UpdateStreamInput) (*iot.UpdateStreamOutput, error)
 	UpdateStreamWithContext(aws.Context, *iot.UpdateStreamInput, ...request.Option) (*iot.UpdateStreamOutput, error)
 	UpdateStreamRequest(*iot.UpdateStreamInput) (*request.Request, *iot.UpdateStreamOutput)
@@ -551,6 +659,10 @@ type IoTAPI interface {
 	UpdateThingGroupsForThing(*iot.UpdateThingGroupsForThingInput) (*iot.UpdateThingGroupsForThingOutput, error)
 	UpdateThingGroupsForThingWithContext(aws.Context, *iot.UpdateThingGroupsForThingInput, ...request.Option) (*iot.UpdateThingGroupsForThingOutput, error)
 	UpdateThingGroupsForThingRequest(*iot.UpdateThingGroupsForThingInput) (*request.Request, *iot.UpdateThingGroupsForThingOutput)
+
+	ValidateSecurityProfileBehaviors(*iot.ValidateSecurityProfileBehaviorsInput) (*iot.ValidateSecurityProfileBehaviorsOutput, error)
+	ValidateSecurityProfileBehaviorsWithContext(aws.Context, *iot.ValidateSecurityProfileBehaviorsInput, ...request.Option) (*iot.ValidateSecurityProfileBehaviorsOutput, error)
+	ValidateSecurityProfileBehaviorsRequest(*iot.ValidateSecurityProfileBehaviorsInput) (*request.Request, *iot.ValidateSecurityProfileBehaviorsOutput)
 }
 
 var _ IoTAPI = (*iot.IoT)(nil)

@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ func auth() {
 
 func auth2() {
 	//[ auth-JSON
-	client, err := storage.NewClient(ctx, option.WithServiceAccountFile("path/to/keyfile.json"))
+	client, err := storage.NewClient(ctx, option.WithCredentialsFile("path/to/keyfile.json"))
 	//]
 	_ = client
 	_ = err

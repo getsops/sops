@@ -28,7 +28,7 @@ import (
 	crm "google.golang.org/api/cloudresourcemanager/v1"
 )
 
-//go:generate -command api go run gen.go docurls.go -install -api
+//go:generate -command api go run gen.go docurls.go replacements.go -install -api
 //go:generate api cloudresourcemanager:v1
 
 // A handler that mimics paging behavior.

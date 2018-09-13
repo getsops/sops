@@ -170,7 +170,7 @@ The commands are:
 {{range .}}{{if .Runnable}}
 	{{.Name | printf "%-11s"}} {{.Short}}{{end}}{{end}}
 
-Use "go help [command]" for more information about a command.
+Use "gotext help [command]" for more information about a command.
 
 Additional help topics:
 {{range .}}{{if not .Runnable}}
@@ -180,7 +180,7 @@ Use "gotext help [topic]" for more information about that topic.
 
 `
 
-var helpTemplate = `{{if .Runnable}}usage: go {{.UsageLine}}
+var helpTemplate = `{{if .Runnable}}usage: gotext {{.UsageLine}}
 
 {{end}}{{.Long | trim}}
 `
@@ -189,7 +189,7 @@ var documentationTemplate = `{{range .}}{{if .Short}}{{.Short | capitalize}}
 
 {{end}}{{if .Runnable}}Usage:
 
-	go {{.UsageLine}}
+	gotext {{.UsageLine}}
 
 {{end}}{{.Long | trim}}
 
@@ -327,7 +327,7 @@ func help(args []string) {
 		}
 	}
 
-	fmt.Fprintf(os.Stderr, "Unknown help topic %#q.  Run 'go help'.\n", arg)
+	fmt.Fprintf(os.Stderr, "Unknown help topic %#q.  Run 'gotext help'.\n", arg)
 	os.Exit(2) // failed at 'go help cmd'
 }
 

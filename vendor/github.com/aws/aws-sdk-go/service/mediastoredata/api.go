@@ -16,7 +16,7 @@ const opDeleteObject = "DeleteObject"
 
 // DeleteObjectRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteObject operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -101,7 +101,7 @@ const opDescribeObject = "DescribeObject"
 
 // DescribeObjectRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeObject operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -186,7 +186,7 @@ const opGetObject = "GetObject"
 
 // GetObjectRequest generates a "aws/request.Request" representing the
 // client's request for the GetObject operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -274,7 +274,7 @@ const opListItems = "ListItems"
 
 // ListItemsRequest generates a "aws/request.Request" representing the
 // client's request for the ListItems operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -357,7 +357,7 @@ const opPutObject = "PutObject"
 
 // PutObjectRequest generates a "aws/request.Request" representing the
 // client's request for the PutObject operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -556,7 +556,7 @@ type DescribeObjectOutput struct {
 	ETag *string `location:"header" locationName:"ETag" min:"1" type:"string"`
 
 	// The date and time that the object was last modified.
-	LastModified *time.Time `location:"header" locationName:"Last-Modified" type:"timestamp" timestampFormat:"rfc822"`
+	LastModified *time.Time `location:"header" locationName:"Last-Modified" type:"timestamp"`
 }
 
 // String returns the string representation
@@ -699,7 +699,7 @@ type GetObjectOutput struct {
 	ETag *string `location:"header" locationName:"ETag" min:"1" type:"string"`
 
 	// The date and time that the object was last modified.
-	LastModified *time.Time `location:"header" locationName:"Last-Modified" type:"timestamp" timestampFormat:"rfc822"`
+	LastModified *time.Time `location:"header" locationName:"Last-Modified" type:"timestamp"`
 
 	// The HTML status code of the request. Status codes ranging from 200 to 299
 	// indicate success. All other status codes indicate the type of error that
@@ -781,7 +781,7 @@ type Item struct {
 	ETag *string `min:"1" type:"string"`
 
 	// The date and time that the item was last modified.
-	LastModified *time.Time `type:"timestamp" timestampFormat:"unix"`
+	LastModified *time.Time `type:"timestamp"`
 
 	// The name of the item.
 	Name *string `type:"string"`

@@ -8,14 +8,6 @@
 // Text can be at most 1024 characters long.
 // If the content passed to the text API or the image API exceeds the size limits, the API will return an error code
 // that informs about the issue.
-//
-// This API is currently available in:
-//
-// * West US - westus.api.cognitive.microsoft.com
-// * East US 2 - eastus2.api.cognitive.microsoft.com
-// * West Central US - westcentralus.api.cognitive.microsoft.com
-// * West Europe - westeurope.api.cognitive.microsoft.com
-// * Southeast Asia - southeastasia.api.cognitive.microsoft.com .
 package contentmoderator
 
 // Copyright (c) Microsoft and contributors.  All rights reserved.
@@ -42,18 +34,18 @@ import (
 // BaseClient is the base client for Contentmoderator.
 type BaseClient struct {
 	autorest.Client
-	BaseURL AzureRegionBaseURL
+	Endpoint string
 }
 
 // New creates an instance of the BaseClient client.
-func New(baseURL AzureRegionBaseURL) BaseClient {
-	return NewWithoutDefaults(baseURL)
+func New(endpoint string) BaseClient {
+	return NewWithoutDefaults(endpoint)
 }
 
 // NewWithoutDefaults creates an instance of the BaseClient client.
-func NewWithoutDefaults(baseURL AzureRegionBaseURL) BaseClient {
+func NewWithoutDefaults(endpoint string) BaseClient {
 	return BaseClient{
-		Client:  autorest.NewClientWithUserAgent(UserAgent()),
-		BaseURL: baseURL,
+		Client:   autorest.NewClientWithUserAgent(UserAgent()),
+		Endpoint: endpoint,
 	}
 }

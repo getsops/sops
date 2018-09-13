@@ -67,7 +67,7 @@ func TestAddLikelySubtags(t *testing.T) {
 		//     xx -> xx-Scrp-AA       implies xx-AA -> xx-Scrp-AA
 		//
 		// The algorithm specified in
-		//   http://unicode.org/reports/tr35/tr35-9.html#Supplemental_Data,
+		//   https://unicode.org/reports/tr35/tr35-9.html#Supplemental_Data,
 		// Section C.10, does not handle the first case. For example,
 		// the CLDR data contains an entry und-BJ -> fr-Latn-BJ, but not
 		// there is no rule for und-Latn-BJ.  According to spec, und-Latn-BJ

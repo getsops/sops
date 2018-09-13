@@ -6,8 +6,11 @@ package clearsign
 
 import (
 	"bytes"
-	"golang.org/x/crypto/openpgp"
+	"fmt"
 	"testing"
+
+	"golang.org/x/crypto/openpgp"
+	"golang.org/x/crypto/openpgp/packet"
 )
 
 func testParse(t *testing.T, input []byte, expected, expectedPlaintext string) {
@@ -121,6 +124,71 @@ func TestSigning(t *testing.T) {
 
 		if _, err := openpgp.CheckDetachedSignature(keyring, bytes.NewBuffer(b.Bytes), b.ArmoredSignature.Body); err != nil {
 			t.Errorf("#%d: failed to check signature: %s", i, err)
+		}
+	}
+}
+
+// We use this to make test keys, so that they aren't all the same.
+type quickRand byte
+
+func (qr *quickRand) Read(p []byte) (int, error) {
+	for i := range p {
+		p[i] = byte(*qr)
+	}
+	*qr++
+	return len(p), nil
+}
+
+func TestMultiSign(t *testing.T) {
+	zero := quickRand(0)
+	config := packet.Config{Rand: &zero}
+
+	for nKeys := 0; nKeys < 4; nKeys++ {
+	nextTest:
+		for nExtra := 0; nExtra < 4; nExtra++ {
+			var signKeys []*packet.PrivateKey
+			var verifyKeys openpgp.EntityList
+
+			desc := fmt.Sprintf("%d keys; %d of which will be used to verify", nKeys+nExtra, nKeys)
+			for i := 0; i < nKeys+nExtra; i++ {
+				e, err := openpgp.NewEntity("name", "comment", "email", &config)
+				if err != nil {
+					t.Errorf("cannot create key: %v", err)
+					continue nextTest
+				}
+				if i < nKeys {
+					verifyKeys = append(verifyKeys, e)
+				}
+				signKeys = append(signKeys, e.PrivateKey)
+			}
+
+			input := []byte("this is random text\r\n4 17")
+			var output bytes.Buffer
+			w, err := EncodeMulti(&output, signKeys, nil)
+			if err != nil {
+				t.Errorf("EncodeMulti (%s) failed: %v", desc, err)
+			}
+			if _, err := w.Write(input); err != nil {
+				t.Errorf("Write(%q) to signer (%s) failed: %v", string(input), desc, err)
+			}
+			if err := w.Close(); err != nil {
+				t.Errorf("Close() of signer (%s) failed: %v", desc, err)
+			}
+
+			block, _ := Decode(output.Bytes())
+			if string(block.Bytes) != string(input) {
+				t.Errorf("Inline data didn't match original; got %q want %q", string(block.Bytes), string(input))
+			}
+			_, err = openpgp.CheckDetachedSignature(verifyKeys, bytes.NewReader(block.Bytes), block.ArmoredSignature.Body)
+			if nKeys == 0 {
+				if err == nil {
+					t.Errorf("verifying inline (%s) succeeded; want failure", desc)
+				}
+			} else {
+				if err != nil {
+					t.Errorf("verifying inline (%s) failed (%v); want success", desc, err)
+				}
+			}
 		}
 	}
 }

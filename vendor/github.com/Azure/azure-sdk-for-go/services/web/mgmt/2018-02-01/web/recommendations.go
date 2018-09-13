@@ -345,9 +345,9 @@ func (client RecommendationsClient) GetRuleDetailsByWebAppResponder(resp *http.R
 // Parameters:
 // featured - specify <code>true</code> to return only the most critical recommendations. The default is
 // <code>false</code>, which returns all recommendations.
-// filter - filter is specified by using OData syntax. Example: $filter=channels eq 'Api' or channel eq
-// 'Notification' and startTime eq '2014-01-01T00:00:00Z' and endTime eq '2014-12-31T23:59:59Z' and timeGrain
-// eq duration'[PT1H|PT1M|P1D]
+// filter - filter is specified by using OData syntax. Example: $filter=channel eq 'Api' or channel eq
+// 'Notification' and startTime eq 2014-01-01T00:00:00Z and endTime eq 2014-12-31T23:59:59Z and timeGrain eq
+// duration'[PT1H|PT1M|P1D]
 func (client RecommendationsClient) List(ctx context.Context, featured *bool, filter string) (result RecommendationCollectionPage, err error) {
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, featured, filter)
@@ -449,9 +449,9 @@ func (client RecommendationsClient) ListComplete(ctx context.Context, featured *
 // siteName - name of the app.
 // expiredOnly - specify <code>false</code> to return all recommendations. The default is <code>true</code>,
 // which returns only expired recommendations.
-// filter - filter is specified by using OData syntax. Example: $filter=channels eq 'Api' or channel eq
-// 'Notification' and startTime eq '2014-01-01T00:00:00Z' and endTime eq '2014-12-31T23:59:59Z' and timeGrain
-// eq duration'[PT1H|PT1M|P1D]
+// filter - filter is specified by using OData syntax. Example: $filter=channel eq 'Api' or channel eq
+// 'Notification' and startTime eq 2014-01-01T00:00:00Z and endTime eq 2014-12-31T23:59:59Z and timeGrain eq
+// duration'[PT1H|PT1M|P1D]
 func (client RecommendationsClient) ListHistoryForWebApp(ctx context.Context, resourceGroupName string, siteName string, expiredOnly *bool, filter string) (result RecommendationCollectionPage, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
@@ -564,7 +564,7 @@ func (client RecommendationsClient) ListHistoryForWebAppComplete(ctx context.Con
 // featured - specify <code>true</code> to return only the most critical recommendations. The default is
 // <code>false</code>, which returns all recommendations.
 // filter - return only channels specified in the filter. Filter is specified by using OData syntax. Example:
-// $filter=channels eq 'Api' or channel eq 'Notification'
+// $filter=channel eq 'Api' or channel eq 'Notification'
 func (client RecommendationsClient) ListRecommendedRulesForWebApp(ctx context.Context, resourceGroupName string, siteName string, featured *bool, filter string) (result RecommendationCollectionPage, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,

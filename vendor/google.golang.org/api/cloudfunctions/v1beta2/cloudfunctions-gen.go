@@ -1,4 +1,4 @@
-// Package cloudfunctions provides access to the Google Cloud Functions API.
+// Package cloudfunctions provides access to the Cloud Functions API.
 //
 // See https://cloud.google.com/functions
 //
@@ -213,6 +213,12 @@ type CloudFunction struct {
 	// in `source_location`.
 	EntryPoint string `json:"entryPoint,omitempty"`
 
+	// EnvironmentVariables: **Beta Feature**
+	//
+	// Environment variables that shall be available during function
+	// execution.
+	EnvironmentVariables map[string]string `json:"environmentVariables,omitempty"`
+
 	// EventTrigger: A source that fires events in response to a condition
 	// in another service.
 	EventTrigger *EventTrigger `json:"eventTrigger,omitempty"`
@@ -231,10 +237,46 @@ type CloudFunction struct {
 	// active operation.
 	LatestOperation string `json:"latestOperation,omitempty"`
 
+	// MaxInstances: The limit on the maximum number of function instances
+	// that may coexist at a
+	// given time. This feature is currently in alpha, available only
+	// for
+	// whitelisted users.
+	MaxInstances int64 `json:"maxInstances,omitempty"`
+
 	// Name: A user-defined name of the function. Function names must be
 	// unique
 	// globally and match pattern `projects/*/locations/*/functions/*`
 	Name string `json:"name,omitempty"`
+
+	// Network: The VPC Network that this cloud function can connect to. It
+	// can be
+	// either the fully-qualified URI, or the short name of the network
+	// resource.
+	// If the short network name is used, the network must belong to the
+	// same
+	// project. Otherwise, it must belong to a project within the
+	// same
+	// organization. The format of this field is
+	// either
+	// `projects/{project}/global/networks/{network}` or `{network}`,
+	// where
+	// {project} is a project id where the network is defined, and {network}
+	// is
+	// the short name of the network.
+	//
+	// See [the VPC
+	// documentation](https://cloud.google.com/compute/docs/vpc) for
+	// more information on connecting Cloud projects.
+	//
+	// This feature is currently in alpha, available only for whitelisted
+	// users.
+	Network string `json:"network,omitempty"`
+
+	// Runtime: The runtime in which the function is going to run. If empty,
+	// defaults to
+	// Node.js 6.
+	Runtime string `json:"runtime,omitempty"`
 
 	// ServiceAccount: Output only. The service account of the function.
 	ServiceAccount string `json:"serviceAccount,omitempty"`
@@ -681,6 +723,11 @@ func (s *ListOperationsResponse) MarshalJSON() ([]byte, error) {
 
 // Location: A resource that represents Google Cloud Platform location.
 type Location struct {
+	// DisplayName: The friendly name for this location, typically a nearby
+	// city name.
+	// For example, "Tokyo".
+	DisplayName string `json:"displayName,omitempty"`
+
 	// Labels: Cross-service attributes for the location. For example
 	//
 	//     {"cloud.googleapis.com/region": "us-east1"}
@@ -700,7 +747,7 @@ type Location struct {
 	// For example: "projects/example-project/locations/us-east1"
 	Name string `json:"name,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "Labels") to
+	// ForceSendFields is a list of field names (e.g. "DisplayName") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -708,10 +755,10 @@ type Location struct {
 	// used to include empty fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "Labels") to include in API
-	// requests with the JSON null value. By default, fields with empty
-	// values are omitted from API requests. However, any field with an
-	// empty value appearing in NullFields will be sent to the server as
+	// NullFields is a list of field names (e.g. "DisplayName") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
 	// null. It is an error if a field in this list has a non-empty value.
 	// This may be used to include null fields in Patch requests.
 	NullFields []string `json:"-"`
@@ -1162,6 +1209,7 @@ func (c *OperationsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1343,6 +1391,7 @@ func (c *OperationsListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/operations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1534,6 +1583,7 @@ func (c *ProjectsLocationsListCall) doRequest(alt string) (*http.Response, error
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}/locations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1705,6 +1755,7 @@ func (c *ProjectsLocationsFunctionsCallCall) doRequest(alt string) (*http.Respon
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}:call")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1844,6 +1895,7 @@ func (c *ProjectsLocationsFunctionsCreateCall) doRequest(alt string) (*http.Resp
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+location}/functions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1976,6 +2028,7 @@ func (c *ProjectsLocationsFunctionsDeleteCall) doRequest(alt string) (*http.Resp
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -2115,6 +2168,7 @@ func (c *ProjectsLocationsFunctionsGenerateDownloadUrlCall) doRequest(alt string
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}:generateDownloadUrl")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2225,7 +2279,7 @@ type ProjectsLocationsFunctionsGenerateUploadUrlCall struct {
 // specified:
 //
 // * `content-type: application/zip`
-// * `x-google-content-length-range: 0,104857600`
+// * `x-goog-content-length-range: 0,104857600`
 func (r *ProjectsLocationsFunctionsService) GenerateUploadUrl(parent string, generateuploadurlrequest *GenerateUploadUrlRequest) *ProjectsLocationsFunctionsGenerateUploadUrlCall {
 	c := &ProjectsLocationsFunctionsGenerateUploadUrlCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.parent = parent
@@ -2271,6 +2325,7 @@ func (c *ProjectsLocationsFunctionsGenerateUploadUrlCall) doRequest(alt string) 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+parent}/functions:generateUploadUrl")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2319,7 +2374,7 @@ func (c *ProjectsLocationsFunctionsGenerateUploadUrlCall) Do(opts ...googleapi.C
 	}
 	return ret, nil
 	// {
-	//   "description": "Returns a signed URL for uploading a function source code.\nFor more information about the signed URL usage see:\nhttps://cloud.google.com/storage/docs/access-control/signed-urls\nOnce the function source code upload is complete, the used signed\nURL should be provided in CreateFunction or UpdateFunction request\nas a reference to the function source code.\n\nWhen uploading source code to the generated signed URL, please follow\nthese restrictions:\n\n* Source file type should be a zip file.\n* Source file size should not exceed 100MB limit.\n\nWhen making a HTTP PUT request, these two headers need to be specified:\n\n* `content-type: application/zip`\n* `x-google-content-length-range: 0,104857600`",
+	//   "description": "Returns a signed URL for uploading a function source code.\nFor more information about the signed URL usage see:\nhttps://cloud.google.com/storage/docs/access-control/signed-urls\nOnce the function source code upload is complete, the used signed\nURL should be provided in CreateFunction or UpdateFunction request\nas a reference to the function source code.\n\nWhen uploading source code to the generated signed URL, please follow\nthese restrictions:\n\n* Source file type should be a zip file.\n* Source file size should not exceed 100MB limit.\n\nWhen making a HTTP PUT request, these two headers need to be specified:\n\n* `content-type: application/zip`\n* `x-goog-content-length-range: 0,104857600`",
 	//   "flatPath": "v1beta2/projects/{projectsId}/locations/{locationsId}/functions:generateUploadUrl",
 	//   "httpMethod": "POST",
 	//   "id": "cloudfunctions.projects.locations.functions.generateUploadUrl",
@@ -2414,6 +2469,7 @@ func (c *ProjectsLocationsFunctionsGetCall) doRequest(alt string) (*http.Respons
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2572,6 +2628,7 @@ func (c *ProjectsLocationsFunctionsListCall) doRequest(alt string) (*http.Respon
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+location}/functions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2736,6 +2793,7 @@ func (c *ProjectsLocationsFunctionsUpdateCall) doRequest(alt string) (*http.Resp
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)

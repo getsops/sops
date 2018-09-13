@@ -270,7 +270,7 @@ func (client OutputsClient) GetResponder(resp *http.Response) (result Output, er
 // from the Azure Resource Manager API or the portal.
 // jobName - the name of the streaming job.
 // selectParameter - the $select OData query parameter. This is a comma-separated list of structural properties
-// to include in the response, or “*” to include all properties. By default, all properties are returned except
+// to include in the response, or "*" to include all properties. By default, all properties are returned except
 // diagnostics. Currently only accepts '*' as a valid value.
 func (client OutputsClient) ListByStreamingJob(ctx context.Context, resourceGroupName string, jobName string, selectParameter string) (result OutputListResultPage, err error) {
 	result.fn = client.listByStreamingJobNextResults

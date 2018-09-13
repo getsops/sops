@@ -796,6 +796,8 @@ type AccountProperties struct {
 	EnableHTTPSTrafficOnly *bool `json:"supportsHttpsTrafficOnly,omitempty"`
 	// NetworkRuleSet - Network rule set
 	NetworkRuleSet *NetworkRuleSet `json:"networkAcls,omitempty"`
+	// IsHnsEnabled - Account HierarchicalNamespace enabled if sets to true.
+	IsHnsEnabled *bool `json:"isHnsEnabled,omitempty"`
 }
 
 // AccountPropertiesCreateParameters the parameters used to create the storage account.
@@ -810,6 +812,8 @@ type AccountPropertiesCreateParameters struct {
 	AccessTier AccessTier `json:"accessTier,omitempty"`
 	// EnableHTTPSTrafficOnly - Allows https traffic only to storage service if sets to true.
 	EnableHTTPSTrafficOnly *bool `json:"supportsHttpsTrafficOnly,omitempty"`
+	// IsHnsEnabled - Account HierarchicalNamespace enabled if sets to true.
+	IsHnsEnabled *bool `json:"isHnsEnabled,omitempty"`
 }
 
 // AccountPropertiesUpdateParameters the parameters used when updating a storage account.
@@ -1200,7 +1204,7 @@ type EncryptionServices struct {
 	Queue *EncryptionService `json:"queue,omitempty"`
 }
 
-// Endpoints the URIs that are used to perform a retrieval of a public blob, queue, or table object.
+// Endpoints the URIs that are used to perform a retrieval of a public blob, queue, table, web or dfs object.
 type Endpoints struct {
 	// Blob - Gets the blob endpoint.
 	Blob *string `json:"blob,omitempty"`
@@ -1210,6 +1214,10 @@ type Endpoints struct {
 	Table *string `json:"table,omitempty"`
 	// File - Gets the file endpoint.
 	File *string `json:"file,omitempty"`
+	// Web - Gets the web endpoint.
+	Web *string `json:"web,omitempty"`
+	// Dfs - Gets the dfs endpoint.
+	Dfs *string `json:"dfs,omitempty"`
 }
 
 // Identity identity for the resource.
@@ -1668,6 +1676,8 @@ type OperationDisplay struct {
 	Resource *string `json:"resource,omitempty"`
 	// Operation - Type of operation: get, read, delete, etc.
 	Operation *string `json:"operation,omitempty"`
+	// Description - Description of the operation.
+	Description *string `json:"description,omitempty"`
 }
 
 // OperationListResult result of the request to list Storage operations. It contains a list of operations and a URL
@@ -1711,7 +1721,7 @@ type Restriction struct {
 	Type *string `json:"type,omitempty"`
 	// Values - The value of restrictions. If the restriction type is set to location. This would be different locations where the SKU is restricted.
 	Values *[]string `json:"values,omitempty"`
-	// ReasonCode - The reason for the restriction. As of now this can be “QuotaId” or “NotAvailableForSubscription”. Quota Id is set when the SKU has requiredQuotas parameter as the subscription does not belong to that quota. The “NotAvailableForSubscription” is related to capacity at DC. Possible values include: 'QuotaID', 'NotAvailableForSubscription'
+	// ReasonCode - The reason for the restriction. As of now this can be "QuotaId" or "NotAvailableForSubscription". Quota Id is set when the SKU has requiredQuotas parameter as the subscription does not belong to that quota. The "NotAvailableForSubscription" is related to capacity at DC. Possible values include: 'QuotaID', 'NotAvailableForSubscription'
 	ReasonCode ReasonCode `json:"reasonCode,omitempty"`
 }
 

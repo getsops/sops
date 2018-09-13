@@ -1,6 +1,8 @@
 // Package speech provides access to the Cloud Speech API.
 //
-// See https://cloud.google.com/speech/
+// This package is DEPRECATED. Use package cloud.google.com/go/speech/apiv1 instead.
+//
+// See https://cloud.google.com/speech-to-text/docs/quickstart-protocol
 //
 // Usage example:
 //
@@ -528,6 +530,9 @@ type SpeechRecognitionAlternative struct {
 
 	// Words: Output only. A list of word-specific information for each
 	// recognized word.
+	// Note: When enable_speaker_diarization is true, you will see all the
+	// words
+	// from the beginning of the audio.
 	Words []*WordInfo `json:"words,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Confidence") to
@@ -732,6 +737,17 @@ type WordInfo struct {
 	// vary.
 	EndTime string `json:"endTime,omitempty"`
 
+	// SpeakerTag: Output only. A distinct integer value is assigned for
+	// every speaker within
+	// the audio. This field specifies which one of those speakers was
+	// detected to
+	// have spoken this word. Value ranges from '1' to
+	// diarization_speaker_count.
+	// speaker_tag is set if enable_speaker_diarization = 'true' and only in
+	// the
+	// top alternative.
+	SpeakerTag int64 `json:"speakerTag,omitempty"`
+
 	// StartTime: Output only. Time offset relative to the beginning of the
 	// audio,
 	// and corresponding to the start of the spoken word.
@@ -836,6 +852,7 @@ func (c *OperationsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/operations/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -971,6 +988,7 @@ func (c *SpeechLongrunningrecognizeCall) doRequest(alt string) (*http.Response, 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/speech:longrunningrecognize")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1093,6 +1111,7 @@ func (c *SpeechRecognizeCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/speech:recognize")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)

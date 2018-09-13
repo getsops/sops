@@ -152,6 +152,25 @@ type ContainerRegistryImagePushedEventData struct {
 	Source *ContainerRegistryEventSource `json:"source,omitempty"`
 }
 
+// DeviceConnectionStateEventInfo information about the device connection state event.
+type DeviceConnectionStateEventInfo struct {
+	// SequenceNumber - Sequence number is string representation of a hexadecimal number. string compare can be used to identify the larger number because both in ASCII and HEX numbers come after alphabets. If you are converting the string to hex, then the number is a 256 bit number.
+	SequenceNumber *string `json:"sequenceNumber,omitempty"`
+}
+
+// DeviceConnectionStateEventProperties schema of the Data property of an EventGridEvent for a device connection
+// state event (DeviceConnected, DeviceDisconnected).
+type DeviceConnectionStateEventProperties struct {
+	// DeviceID - The unique identifier of the device. This case-sensitive string can be up to 128 characters long, and supports ASCII 7-bit alphanumeric characters plus the following special characters: - : . + % _ &#35; * ? ! ( ) , = @ ; $ '.
+	DeviceID *string `json:"deviceId,omitempty"`
+	// ModuleID - The unique identifier of the module. This case-sensitive string can be up to 128 characters long, and supports ASCII 7-bit alphanumeric characters plus the following special characters: - : . + % _ &#35; * ? ! ( ) , = @ ; $ '.
+	ModuleID *string `json:"moduleId,omitempty"`
+	// HubName - Name of the IoT Hub where the device was created or deleted.
+	HubName *string `json:"hubName,omitempty"`
+	// DeviceConnectionStateEventInfo - Information about the device connection state event.
+	DeviceConnectionStateEventInfo *DeviceConnectionStateEventInfo `json:"deviceConnectionStateEventInfo,omitempty"`
+}
+
 // DeviceLifeCycleEventProperties schema of the Data property of an EventGridEvent for a device life cycle event
 // (DeviceCreated, DeviceDeleted).
 type DeviceLifeCycleEventProperties struct {
@@ -159,15 +178,11 @@ type DeviceLifeCycleEventProperties struct {
 	DeviceID *string `json:"deviceId,omitempty"`
 	// HubName - Name of the IoT Hub where the device was created or deleted.
 	HubName *string `json:"hubName,omitempty"`
-	// OpType - The event type specified for this operation by the IoT Hub.
-	OpType *string `json:"opType,omitempty"`
-	// OperationTimestamp - The ISO8601 timestamp of the operation.
-	OperationTimestamp *string `json:"operationTimestamp,omitempty"`
-	// Twin - Information about the device twin, which is the cloud represenation of application device metadata.
+	// Twin - Information about the device twin, which is the cloud representation of application device metadata.
 	Twin *DeviceTwinInfo `json:"twin,omitempty"`
 }
 
-// DeviceTwinInfo information about the device twin, which is the cloud represenation of application device
+// DeviceTwinInfo information about the device twin, which is the cloud representation of application device
 // metadata.
 type DeviceTwinInfo struct {
 	// AuthenticationType - Authentication type used for this device: either SAS, SelfSigned, or CertificateAuthority.
@@ -270,17 +285,25 @@ type EventHubCaptureFileCreatedEventData struct {
 	LastEnqueueTime *date.Time `json:"lastEnqueueTime,omitempty"`
 }
 
+// IotHubDeviceConnectedEventData event data for Microsoft.Devices.DeviceConnected event.
+type IotHubDeviceConnectedEventData struct {
+	// DeviceID - The unique identifier of the device. This case-sensitive string can be up to 128 characters long, and supports ASCII 7-bit alphanumeric characters plus the following special characters: - : . + % _ &#35; * ? ! ( ) , = @ ; $ '.
+	DeviceID *string `json:"deviceId,omitempty"`
+	// ModuleID - The unique identifier of the module. This case-sensitive string can be up to 128 characters long, and supports ASCII 7-bit alphanumeric characters plus the following special characters: - : . + % _ &#35; * ? ! ( ) , = @ ; $ '.
+	ModuleID *string `json:"moduleId,omitempty"`
+	// HubName - Name of the IoT Hub where the device was created or deleted.
+	HubName *string `json:"hubName,omitempty"`
+	// DeviceConnectionStateEventInfo - Information about the device connection state event.
+	DeviceConnectionStateEventInfo *DeviceConnectionStateEventInfo `json:"deviceConnectionStateEventInfo,omitempty"`
+}
+
 // IotHubDeviceCreatedEventData event data for Microsoft.Devices.DeviceCreated event.
 type IotHubDeviceCreatedEventData struct {
 	// DeviceID - The unique identifier of the device. This case-sensitive string can be up to 128 characters long, and supports ASCII 7-bit alphanumeric characters plus the following special characters: - : . + % _ &#35; * ? ! ( ) , = @ ; $ '.
 	DeviceID *string `json:"deviceId,omitempty"`
 	// HubName - Name of the IoT Hub where the device was created or deleted.
 	HubName *string `json:"hubName,omitempty"`
-	// OpType - The event type specified for this operation by the IoT Hub.
-	OpType *string `json:"opType,omitempty"`
-	// OperationTimestamp - The ISO8601 timestamp of the operation.
-	OperationTimestamp *string `json:"operationTimestamp,omitempty"`
-	// Twin - Information about the device twin, which is the cloud represenation of application device metadata.
+	// Twin - Information about the device twin, which is the cloud representation of application device metadata.
 	Twin *DeviceTwinInfo `json:"twin,omitempty"`
 }
 
@@ -290,12 +313,20 @@ type IotHubDeviceDeletedEventData struct {
 	DeviceID *string `json:"deviceId,omitempty"`
 	// HubName - Name of the IoT Hub where the device was created or deleted.
 	HubName *string `json:"hubName,omitempty"`
-	// OpType - The event type specified for this operation by the IoT Hub.
-	OpType *string `json:"opType,omitempty"`
-	// OperationTimestamp - The ISO8601 timestamp of the operation.
-	OperationTimestamp *string `json:"operationTimestamp,omitempty"`
-	// Twin - Information about the device twin, which is the cloud represenation of application device metadata.
+	// Twin - Information about the device twin, which is the cloud representation of application device metadata.
 	Twin *DeviceTwinInfo `json:"twin,omitempty"`
+}
+
+// IotHubDeviceDisconnectedEventData event data for Microsoft.Devices.DeviceDisconnected event.
+type IotHubDeviceDisconnectedEventData struct {
+	// DeviceID - The unique identifier of the device. This case-sensitive string can be up to 128 characters long, and supports ASCII 7-bit alphanumeric characters plus the following special characters: - : . + % _ &#35; * ? ! ( ) , = @ ; $ '.
+	DeviceID *string `json:"deviceId,omitempty"`
+	// ModuleID - The unique identifier of the module. This case-sensitive string can be up to 128 characters long, and supports ASCII 7-bit alphanumeric characters plus the following special characters: - : . + % _ &#35; * ? ! ( ) , = @ ; $ '.
+	ModuleID *string `json:"moduleId,omitempty"`
+	// HubName - Name of the IoT Hub where the device was created or deleted.
+	HubName *string `json:"hubName,omitempty"`
+	// DeviceConnectionStateEventInfo - Information about the device connection state event.
+	DeviceConnectionStateEventInfo *DeviceConnectionStateEventInfo `json:"deviceConnectionStateEventInfo,omitempty"`
 }
 
 // MediaJobStateChangeEventData schema of the Data property of an EventGridEvent for a
@@ -305,6 +336,87 @@ type MediaJobStateChangeEventData struct {
 	PreviousState JobState `json:"previousState,omitempty"`
 	// State - The new state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
 	State JobState `json:"state,omitempty"`
+}
+
+// ResourceActionCancelData schema of the Data property of an EventGridEvent for an
+// Microsoft.Resources.ResourceActionCancel event. This is raised when a resource action operation is canceled.
+type ResourceActionCancelData struct {
+	// TenantID - The tenant ID of the resource.
+	TenantID *string `json:"tenantId,omitempty"`
+	// SubscriptionID - The subscription ID of the resource.
+	SubscriptionID *string `json:"subscriptionId,omitempty"`
+	// ResourceGroup - The resource group of the resource.
+	ResourceGroup *string `json:"resourceGroup,omitempty"`
+	// ResourceProvider - The resource provider performing the operation.
+	ResourceProvider *string `json:"resourceProvider,omitempty"`
+	// ResourceURI - The URI of the resource in the operation.
+	ResourceURI *string `json:"resourceUri,omitempty"`
+	// OperationName - The operation that was performed.
+	OperationName *string `json:"operationName,omitempty"`
+	// Status - The status of the operation.
+	Status *string `json:"status,omitempty"`
+	// Authorization - The requested authorization for the operation.
+	Authorization *string `json:"authorization,omitempty"`
+	// Claims - The properties of the claims.
+	Claims *string `json:"claims,omitempty"`
+	// CorrelationID - An operation ID used for troubleshooting.
+	CorrelationID *string `json:"correlationId,omitempty"`
+	// HTTPRequest - The details of the operation.
+	HTTPRequest *string `json:"httpRequest,omitempty"`
+}
+
+// ResourceActionFailureData schema of the Data property of an EventGridEvent for a
+// Microsoft.Resources.ResourceActionFailure event. This is raised when a resource action operation fails.
+type ResourceActionFailureData struct {
+	// TenantID - The tenant ID of the resource.
+	TenantID *string `json:"tenantId,omitempty"`
+	// SubscriptionID - The subscription ID of the resource.
+	SubscriptionID *string `json:"subscriptionId,omitempty"`
+	// ResourceGroup - The resource group of the resource.
+	ResourceGroup *string `json:"resourceGroup,omitempty"`
+	// ResourceProvider - The resource provider performing the operation.
+	ResourceProvider *string `json:"resourceProvider,omitempty"`
+	// ResourceURI - The URI of the resource in the operation.
+	ResourceURI *string `json:"resourceUri,omitempty"`
+	// OperationName - The operation that was performed.
+	OperationName *string `json:"operationName,omitempty"`
+	// Status - The status of the operation.
+	Status *string `json:"status,omitempty"`
+	// Authorization - The requested authorization for the operation.
+	Authorization *string `json:"authorization,omitempty"`
+	// Claims - The properties of the claims.
+	Claims *string `json:"claims,omitempty"`
+	// CorrelationID - An operation ID used for troubleshooting.
+	CorrelationID *string `json:"correlationId,omitempty"`
+	// HTTPRequest - The details of the operation.
+	HTTPRequest *string `json:"httpRequest,omitempty"`
+}
+
+// ResourceActionSuccessData schema of the Data property of an EventGridEvent for a
+// Microsoft.Resources.ResourceActionSuccess event. This is raised when a resource action operation succeeds.
+type ResourceActionSuccessData struct {
+	// TenantID - The tenant ID of the resource.
+	TenantID *string `json:"tenantId,omitempty"`
+	// SubscriptionID - The subscription ID of the resource.
+	SubscriptionID *string `json:"subscriptionId,omitempty"`
+	// ResourceGroup - The resource group of the resource.
+	ResourceGroup *string `json:"resourceGroup,omitempty"`
+	// ResourceProvider - The resource provider performing the operation.
+	ResourceProvider *string `json:"resourceProvider,omitempty"`
+	// ResourceURI - The URI of the resource in the operation.
+	ResourceURI *string `json:"resourceUri,omitempty"`
+	// OperationName - The operation that was performed.
+	OperationName *string `json:"operationName,omitempty"`
+	// Status - The status of the operation.
+	Status *string `json:"status,omitempty"`
+	// Authorization - The requested authorization for the operation.
+	Authorization *string `json:"authorization,omitempty"`
+	// Claims - The properties of the claims.
+	Claims *string `json:"claims,omitempty"`
+	// CorrelationID - An operation ID used for troubleshooting.
+	CorrelationID *string `json:"correlationId,omitempty"`
+	// HTTPRequest - The details of the operation.
+	HTTPRequest *string `json:"httpRequest,omitempty"`
 }
 
 // ResourceDeleteCancelData schema of the Data property of an EventGridEvent for an

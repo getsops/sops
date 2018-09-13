@@ -50,11 +50,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -74,12 +69,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -1172,7 +1161,7 @@
       }
     }
   },
-  "revision": "20180202",
+  "revision": "20180906",
   "rootUrl": "https://partners.googleapis.com/",
   "schemas": {
     "AdWordsManagerAccountInfo": {
@@ -1522,6 +1511,10 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "badgeAuthorityInAwn": {
+          "description": "Whether the company's badge authority is in AWN",
+          "type": "boolean"
         },
         "badgeTier": {
           "description": "Partner badge tier",
@@ -1931,7 +1924,7 @@
       "type": "object"
     },
     "Date": {
-      "description": "Represents a whole calendar date, e.g. date of birth. The time of day and\ntime zone are either specified elsewhere or are not significant. The date\nis relative to the Proleptic Gregorian Calendar. The day may be 0 to\nrepresent a year and month where the day is not significant, e.g. credit card\nexpiration date. The year may be 0 to represent a month and day independent\nof year, e.g. anniversary date. Related types are google.type.TimeOfDay\nand `google.protobuf.Timestamp`.",
+      "description": "Represents a whole calendar date, for example date of birth. The time of day\nand time zone are either specified elsewhere or are not significant. The date\nis relative to the Proleptic Gregorian Calendar. The day can be 0 to\nrepresent a year and month where the day is not significant, for example\ncredit card expiration date. The year can be 0 to represent a month and day\nindependent of year, for example anniversary date. Related types are\ngoogle.type.TimeOfDay and `google.protobuf.Timestamp`.",
       "id": "Date",
       "properties": {
         "day": {
@@ -1940,7 +1933,7 @@
           "type": "integer"
         },
         "month": {
-          "description": "Month of year. Must be from 1 to 12.",
+          "description": "Month of year. Must be from 1 to 12, or 0 if specifying a date without a\nmonth.",
           "format": "int32",
           "type": "integer"
         },
@@ -3360,6 +3353,10 @@
       "description": "A resource representing a user of the Partners platform.",
       "id": "User",
       "properties": {
+        "afaInfoShared": {
+          "description": "Whether or not the user has opted to share their Academy for Ads info with\nGoogle Partners.",
+          "type": "boolean"
+        },
         "availableAdwordsManagerAccounts": {
           "description": "This is the list of AdWords Manager Accounts the user has edit access to.\nIf the user has edit access to multiple accounts, the user can choose the\npreferred account and we use this when a personal account is needed. Can\nbe empty meaning the user has access to no accounts.\n@OutputOnly",
           "items": {

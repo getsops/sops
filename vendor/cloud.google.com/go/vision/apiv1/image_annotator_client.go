@@ -20,11 +20,14 @@ import (
 	"time"
 
 	"cloud.google.com/go/internal/version"
+	"cloud.google.com/go/longrunning"
+	lroauto "cloud.google.com/go/longrunning/autogen"
 	gax "github.com/googleapis/gax-go"
 	"golang.org/x/net/context"
 	"google.golang.org/api/option"
 	"google.golang.org/api/transport"
 	visionpb "google.golang.org/genproto/googleapis/cloud/vision/v1"
+	longrunningpb "google.golang.org/genproto/googleapis/longrunning"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -32,7 +35,8 @@ import (
 
 // ImageAnnotatorCallOptions contains the retry settings for each method of ImageAnnotatorClient.
 type ImageAnnotatorCallOptions struct {
-	BatchAnnotateImages []gax.CallOption
+	BatchAnnotateImages     []gax.CallOption
+	AsyncBatchAnnotateFiles []gax.CallOption
 }
 
 func defaultImageAnnotatorClientOptions() []option.ClientOption {
@@ -58,17 +62,25 @@ func defaultImageAnnotatorCallOptions() *ImageAnnotatorCallOptions {
 		},
 	}
 	return &ImageAnnotatorCallOptions{
-		BatchAnnotateImages: retry[[2]string{"default", "idempotent"}],
+		BatchAnnotateImages:     retry[[2]string{"default", "idempotent"}],
+		AsyncBatchAnnotateFiles: retry[[2]string{"default", "idempotent"}],
 	}
 }
 
-// ImageAnnotatorClient is a client for interacting with Google Cloud Vision API.
+// ImageAnnotatorClient is a client for interacting with Cloud Vision API.
+//
+// Methods, except Close, may be called concurrently. However, fields must not be modified concurrently with method calls.
 type ImageAnnotatorClient struct {
 	// The connection to the service.
 	conn *grpc.ClientConn
 
 	// The gRPC API client.
 	imageAnnotatorClient visionpb.ImageAnnotatorClient
+
+	// LROClient is used internally to handle longrunning operations.
+	// It is exposed so that its CallOptions can be modified if required.
+	// Users should not Close this client.
+	LROClient *lroauto.OperationsClient
 
 	// The call options for this service.
 	CallOptions *ImageAnnotatorCallOptions
@@ -94,6 +106,17 @@ func NewImageAnnotatorClient(ctx context.Context, opts ...option.ClientOption) (
 		imageAnnotatorClient: visionpb.NewImageAnnotatorClient(conn),
 	}
 	c.setGoogleClientInfo()
+
+	c.LROClient, err = lroauto.NewOperationsClient(ctx, option.WithGRPCConn(conn))
+	if err != nil {
+		// This error "should not happen", since we are just reusing old connection
+		// and never actually need to dial.
+		// If this does happen, we could leak conn. However, we cannot close conn:
+		// If the user invoked the function with option.WithGRPCConn,
+		// we would close a connection that's still in use.
+		// TODO(pongad): investigate error conditions.
+		return nil, err
+	}
 	return c, nil
 }
 
@@ -131,4 +154,96 @@ func (c *ImageAnnotatorClient) BatchAnnotateImages(ctx context.Context, req *vis
 		return nil, err
 	}
 	return resp, nil
+}
+
+// AsyncBatchAnnotateFiles run asynchronous image detection and annotation for a list of generic
+// files, such as PDF files, which may contain multiple pages and multiple
+// images per page. Progress and results can be retrieved through the
+// google.longrunning.Operations interface.
+// Operation.metadata contains OperationMetadata (metadata).
+// Operation.response contains AsyncBatchAnnotateFilesResponse (results).
+func (c *ImageAnnotatorClient) AsyncBatchAnnotateFiles(ctx context.Context, req *visionpb.AsyncBatchAnnotateFilesRequest, opts ...gax.CallOption) (*AsyncBatchAnnotateFilesOperation, error) {
+	ctx = insertMetadata(ctx, c.xGoogMetadata)
+	opts = append(c.CallOptions.AsyncBatchAnnotateFiles[0:len(c.CallOptions.AsyncBatchAnnotateFiles):len(c.CallOptions.AsyncBatchAnnotateFiles)], opts...)
+	var resp *longrunningpb.Operation
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.imageAnnotatorClient.AsyncBatchAnnotateFiles(ctx, req, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &AsyncBatchAnnotateFilesOperation{
+		lro: longrunning.InternalNewOperation(c.LROClient, resp),
+	}, nil
+}
+
+// AsyncBatchAnnotateFilesOperation manages a long-running operation from AsyncBatchAnnotateFiles.
+type AsyncBatchAnnotateFilesOperation struct {
+	lro *longrunning.Operation
+}
+
+// AsyncBatchAnnotateFilesOperation returns a new AsyncBatchAnnotateFilesOperation from a given name.
+// The name must be that of a previously created AsyncBatchAnnotateFilesOperation, possibly from a different process.
+func (c *ImageAnnotatorClient) AsyncBatchAnnotateFilesOperation(name string) *AsyncBatchAnnotateFilesOperation {
+	return &AsyncBatchAnnotateFilesOperation{
+		lro: longrunning.InternalNewOperation(c.LROClient, &longrunningpb.Operation{Name: name}),
+	}
+}
+
+// Wait blocks until the long-running operation is completed, returning the response and any errors encountered.
+//
+// See documentation of Poll for error-handling information.
+func (op *AsyncBatchAnnotateFilesOperation) Wait(ctx context.Context, opts ...gax.CallOption) (*visionpb.AsyncBatchAnnotateFilesResponse, error) {
+	var resp visionpb.AsyncBatchAnnotateFilesResponse
+	if err := op.lro.WaitWithInterval(ctx, &resp, 45000*time.Millisecond, opts...); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+// Poll fetches the latest state of the long-running operation.
+//
+// Poll also fetches the latest metadata, which can be retrieved by Metadata.
+//
+// If Poll fails, the error is returned and op is unmodified. If Poll succeeds and
+// the operation has completed with failure, the error is returned and op.Done will return true.
+// If Poll succeeds and the operation has completed successfully,
+// op.Done will return true, and the response of the operation is returned.
+// If Poll succeeds and the operation has not completed, the returned response and error are both nil.
+func (op *AsyncBatchAnnotateFilesOperation) Poll(ctx context.Context, opts ...gax.CallOption) (*visionpb.AsyncBatchAnnotateFilesResponse, error) {
+	var resp visionpb.AsyncBatchAnnotateFilesResponse
+	if err := op.lro.Poll(ctx, &resp, opts...); err != nil {
+		return nil, err
+	}
+	if !op.Done() {
+		return nil, nil
+	}
+	return &resp, nil
+}
+
+// Metadata returns metadata associated with the long-running operation.
+// Metadata itself does not contact the server, but Poll does.
+// To get the latest metadata, call this method after a successful call to Poll.
+// If the metadata is not available, the returned metadata and error are both nil.
+func (op *AsyncBatchAnnotateFilesOperation) Metadata() (*visionpb.OperationMetadata, error) {
+	var meta visionpb.OperationMetadata
+	if err := op.lro.Metadata(&meta); err == longrunning.ErrNoMetadata {
+		return nil, nil
+	} else if err != nil {
+		return nil, err
+	}
+	return &meta, nil
+}
+
+// Done reports whether the long-running operation has completed.
+func (op *AsyncBatchAnnotateFilesOperation) Done() bool {
+	return op.lro.Done()
+}
+
+// Name returns the name of the long-running operation.
+// The name is assigned by the server and is unique within the service from which the operation is created.
+func (op *AsyncBatchAnnotateFilesOperation) Name() string {
+	return op.lro.Name()
 }

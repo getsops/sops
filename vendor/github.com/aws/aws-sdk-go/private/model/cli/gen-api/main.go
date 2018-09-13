@@ -119,6 +119,10 @@ func main() {
 	flag.Parse()
 	api.Bootstrap()
 
+	if len(os.Getenv("AWS_SDK_CODEGEN_DEBUG")) != 0 {
+		api.LogDebug(os.Stdout)
+	}
+
 	files := []string{}
 	for i := 0; i < flag.NArg(); i++ {
 		file := flag.Arg(i)
@@ -209,6 +213,10 @@ func writeServiceFiles(g *generateInfo, filename string) {
 	Must(writeWaitersFile(g))
 	Must(writeAPIErrorsFile(g))
 	Must(writeExamplesFile(g))
+
+	if g.API.HasEventStream {
+		Must(writeAPIEventStreamTestFile(g))
+	}
 }
 
 // Must will panic if the error passed in is not nil.
@@ -311,5 +319,14 @@ func writeAPIErrorsFile(g *generateInfo) error {
 		"",
 		g.API.PackageName(),
 		g.API.APIErrorsGoCode(),
+	)
+}
+
+func writeAPIEventStreamTestFile(g *generateInfo) error {
+	return writeGoFile(filepath.Join(g.PackageDir, "eventstream_test.go"),
+		codeLayout,
+		"// +build go1.6\n",
+		g.API.PackageName(),
+		g.API.APIEventStreamTestGoCode(),
 	)
 }

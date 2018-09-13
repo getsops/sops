@@ -133,6 +133,7 @@ func NewPartnersService(s *Service) *PartnersService {
 	rs := &PartnersService{s: s}
 	rs.Customers = NewPartnersCustomersService(s)
 	rs.Devices = NewPartnersDevicesService(s)
+	rs.Vendors = NewPartnersVendorsService(s)
 	return rs
 }
 
@@ -142,6 +143,8 @@ type PartnersService struct {
 	Customers *PartnersCustomersService
 
 	Devices *PartnersDevicesService
+
+	Vendors *PartnersVendorsService
 }
 
 func NewPartnersCustomersService(s *Service) *PartnersCustomersService {
@@ -162,6 +165,27 @@ type PartnersDevicesService struct {
 	s *Service
 }
 
+func NewPartnersVendorsService(s *Service) *PartnersVendorsService {
+	rs := &PartnersVendorsService{s: s}
+	rs.Customers = NewPartnersVendorsCustomersService(s)
+	return rs
+}
+
+type PartnersVendorsService struct {
+	s *Service
+
+	Customers *PartnersVendorsCustomersService
+}
+
+func NewPartnersVendorsCustomersService(s *Service) *PartnersVendorsCustomersService {
+	rs := &PartnersVendorsCustomersService{s: s}
+	return rs
+}
+
+type PartnersVendorsCustomersService struct {
+	s *Service
+}
+
 // ClaimDeviceRequest: Request message to claim a device on behalf of a
 // customer.
 type ClaimDeviceRequest struct {
@@ -178,6 +202,7 @@ type ClaimDeviceRequest struct {
 	//
 	// Possible values:
 	//   "SECTION_TYPE_UNSPECIFIED" - Unspecified section type.
+	//   "SECTION_TYPE_SIM_LOCK" - SIM-lock section type.
 	//   "SECTION_TYPE_ZERO_TOUCH" - Zero-touch enrollment section type.
 	SectionType string `json:"sectionType,omitempty"`
 
@@ -274,7 +299,8 @@ func (s *ClaimDevicesRequest) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// Company: A customer resource in the zero-touch enrollment API.
+// Company: A reseller, vendor, or customer in the zero-touch reseller
+// and customer APIs.
 type Company struct {
 	// AdminEmails: Input only. Optional. Email address of customer's users
 	// in the admin role.
@@ -286,16 +312,21 @@ type Company struct {
 	CompanyId int64 `json:"companyId,omitempty,string"`
 
 	// CompanyName: Required. The name of the company. For example _XYZ
-	// Corp_. Characters
-	// allowed are: Latin letters, numerals, hyphens, and spaces. Displayed
-	// to the
-	// customer's employees in the zero-touch enrollment portal.
+	// Corp_. Displayed to the
+	// company's employees in the zero-touch enrollment portal.
 	CompanyName string `json:"companyName,omitempty"`
 
-	// Name: Output only. The API resource name of the company in the
-	// format
-	// `partners/[PARTNER_ID]/customers/[CUSTOMER_ID]`. Assigned by the
-	// server.
+	// Name: Output only. The API resource name of the company. The resource
+	// name is one
+	// of the following formats:
+	//
+	// * `partners/[PARTNER_ID]/customers/[CUSTOMER_ID]`
+	// * `partners/[PARTNER_ID]/vendors/[VENDOR_ID]`
+	// *
+	// `partners/[PARTNER_ID]/vendors/[VENDOR_ID]/customers/[CUSTOMER_ID]`
+	//
+	// A
+	// ssigned by the server.
 	Name string `json:"name,omitempty"`
 
 	// OwnerEmails: Input only. Email address of customer's users in the
@@ -306,6 +337,23 @@ type Company struct {
 	// add,
 	// delete, and edit your organization's portal users.
 	OwnerEmails []string `json:"ownerEmails,omitempty"`
+
+	// TermsStatus: Output only. Whether any user from the company has
+	// accepted the latest
+	// Terms of Service (ToS). See
+	// TermsStatus.
+	//
+	// Possible values:
+	//   "TERMS_STATUS_UNSPECIFIED" - Default value. This value should never
+	// be set if the enum is present.
+	//   "TERMS_STATUS_NOT_ACCEPTED" - None of the company's users have
+	// accepted the ToS.
+	//   "TERMS_STATUS_ACCEPTED" - One (or more) of the company's users has
+	// accepted the ToS.
+	//   "TERMS_STATUS_STALE" - None of the company's users has accepted the
+	// current ToS but at least one
+	// user accepted a previous ToS.
+	TermsStatus string `json:"termsStatus,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
@@ -790,10 +838,14 @@ type DeviceClaim struct {
 	// OwnerCompanyId: The ID of the Customer that purchased the device.
 	OwnerCompanyId int64 `json:"ownerCompanyId,omitempty,string"`
 
+	// ResellerId: The ID of the reseller that claimed the device.
+	ResellerId int64 `json:"resellerId,omitempty,string"`
+
 	// SectionType: Output only. The type of claim made on the device.
 	//
 	// Possible values:
 	//   "SECTION_TYPE_UNSPECIFIED" - Unspecified section type.
+	//   "SECTION_TYPE_SIM_LOCK" - SIM-lock section type.
 	//   "SECTION_TYPE_ZERO_TOUCH" - Zero-touch enrollment section type.
 	SectionType string `json:"sectionType,omitempty"`
 
@@ -822,26 +874,37 @@ func (s *DeviceClaim) MarshalJSON() ([]byte, error) {
 }
 
 // DeviceIdentifier: Encapsulates hardware and product IDs to identify a
-// manufactured device. To
-// learn more, read [Identifiers](/zero-touch/guides/identifiers).
+// manufactured device.
+// To understand requirements on identifier sets,
+// read
+// [Identifiers](/zero-touch/guides/identifiers).
 type DeviceIdentifier struct {
 	// Imei: The device’s IMEI number. Validated on input.
 	Imei string `json:"imei,omitempty"`
 
-	// Manufacturer: Required. The device manufacturer’s name. Matches the
-	// device's built-in
+	// Manufacturer: The device manufacturer’s name. Matches the device's
+	// built-in
 	// value returned from `android.os.Build.MANUFACTURER`. Allowed values
 	// are
-	// listed in [manufacturer
-	// names](/zero-touch/resources/manufacturer-names).
+	// listed
+	// in
+	// [manufacturers](/zero-touch/resources/manufacturer-names#manufactur
+	// ers-names).
 	Manufacturer string `json:"manufacturer,omitempty"`
 
 	// Meid: The device’s MEID number.
 	Meid string `json:"meid,omitempty"`
 
+	// Model: The device model's name. Matches the device's built-in value
+	// returned from
+	// `android.os.Build.MODEL`. Allowed values are listed
+	// in
+	// [models](/zero-touch/resources/manufacturer-names#model-names).
+	Model string `json:"model,omitempty"`
+
 	// SerialNumber: The manufacturer's serial number for the device. This
 	// value might not be
-	// unique.
+	// unique across different device models.
 	SerialNumber string `json:"serialNumber,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Imei") to
@@ -967,7 +1030,7 @@ type DevicesLongRunningOperationMetadata struct {
 	//   "BATCH_PROCESS_PENDING" - Pending.
 	//   "BATCH_PROCESS_IN_PROGRESS" - In progress.
 	//   "BATCH_PROCESS_PROCESSED" - Processed.
-	// This doesn't mean all items were processed sucessfully, you
+	// This doesn't mean all items were processed successfully, you
 	// should
 	// check the `response` field for the result of every item.
 	ProcessingStatus string `json:"processingStatus,omitempty"`
@@ -1044,8 +1107,10 @@ func (s *DevicesLongRunningOperationResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// Dpc: An EMM's DPC ([device policy
-// controller](/android/work/dpc/build-dpc)).
+// Dpc: An EMM's DPC ([device
+// policy
+// controller](http://developer.android.com/work/dpc/build-dpc.htm
+// l)).
 // Zero-touch enrollment installs a DPC (listed in the `Configuration`)
 // on a
 // device to maintain the customer's mobile policies. All the DPCs
@@ -1206,6 +1271,7 @@ type FindDevicesByOwnerRequest struct {
 	//
 	// Possible values:
 	//   "SECTION_TYPE_UNSPECIFIED" - Unspecified section type.
+	//   "SECTION_TYPE_SIM_LOCK" - SIM-lock section type.
 	//   "SECTION_TYPE_ZERO_TOUCH" - Zero-touch enrollment section type.
 	SectionType string `json:"sectionType,omitempty"`
 
@@ -1298,6 +1364,83 @@ type ListCustomersResponse struct {
 
 func (s *ListCustomersResponse) MarshalJSON() ([]byte, error) {
 	type NoMethod ListCustomersResponse
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// ListVendorCustomersResponse: Response message to list customers of
+// the vendor.
+type ListVendorCustomersResponse struct {
+	// Customers: List of customers of the vendor.
+	Customers []*Company `json:"customers,omitempty"`
+
+	// NextPageToken: A token to retrieve the next page of results. Omitted
+	// if no further results
+	// are available.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Customers") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Customers") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *ListVendorCustomersResponse) MarshalJSON() ([]byte, error) {
+	type NoMethod ListVendorCustomersResponse
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// ListVendorsResponse: Response message to list vendors of the partner.
+type ListVendorsResponse struct {
+	// NextPageToken: A token to retrieve the next page of results. Omitted
+	// if no further results
+	// are available.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// Vendors: List of vendors of the reseller partner. Fields `name`,
+	// `companyId` and
+	// `companyName` are populated to the Company object.
+	Vendors []*Company `json:"vendors,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "NextPageToken") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "NextPageToken") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *ListVendorsResponse) MarshalJSON() ([]byte, error) {
+	type NoMethod ListVendorsResponse
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -1423,6 +1566,7 @@ type PartnerClaim struct {
 	//
 	// Possible values:
 	//   "SECTION_TYPE_UNSPECIFIED" - Unspecified section type.
+	//   "SECTION_TYPE_SIM_LOCK" - SIM-lock section type.
 	//   "SECTION_TYPE_ZERO_TOUCH" - Zero-touch enrollment section type.
 	SectionType string `json:"sectionType,omitempty"`
 
@@ -1462,6 +1606,7 @@ type PartnerUnclaim struct {
 	//
 	// Possible values:
 	//   "SECTION_TYPE_UNSPECIFIED" - Unspecified section type.
+	//   "SECTION_TYPE_SIM_LOCK" - SIM-lock section type.
 	//   "SECTION_TYPE_ZERO_TOUCH" - Zero-touch enrollment section type.
 	SectionType string `json:"sectionType,omitempty"`
 
@@ -1677,6 +1822,7 @@ type UnclaimDeviceRequest struct {
 	//
 	// Possible values:
 	//   "SECTION_TYPE_UNSPECIFIED" - Unspecified section type.
+	//   "SECTION_TYPE_SIM_LOCK" - SIM-lock section type.
 	//   "SECTION_TYPE_ZERO_TOUCH" - Zero-touch enrollment section type.
 	SectionType string `json:"sectionType,omitempty"`
 
@@ -1901,6 +2047,7 @@ func (c *CustomersListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/customers")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2052,6 +2199,7 @@ func (c *CustomersConfigurationsCreateCall) doRequest(alt string) (*http.Respons
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/configurations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2179,6 +2327,7 @@ func (c *CustomersConfigurationsDeleteCall) doRequest(alt string) (*http.Respons
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -2315,6 +2464,7 @@ func (c *CustomersConfigurationsGetCall) doRequest(alt string) (*http.Response, 
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2451,6 +2601,7 @@ func (c *CustomersConfigurationsListCall) doRequest(alt string) (*http.Response,
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/configurations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2593,6 +2744,7 @@ func (c *CustomersConfigurationsPatchCall) doRequest(alt string) (*http.Response
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -2735,6 +2887,7 @@ func (c *CustomersDevicesApplyConfigurationCall) doRequest(alt string) (*http.Re
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/devices:applyConfiguration")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2874,6 +3027,7 @@ func (c *CustomersDevicesGetCall) doRequest(alt string) (*http.Response, error) 
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3025,6 +3179,7 @@ func (c *CustomersDevicesListCall) doRequest(alt string) (*http.Response, error)
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/devices")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3186,6 +3341,7 @@ func (c *CustomersDevicesRemoveConfigurationCall) doRequest(alt string) (*http.R
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/devices:removeConfiguration")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3324,6 +3480,7 @@ func (c *CustomersDevicesUnclaimCall) doRequest(alt string) (*http.Response, err
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/devices:unclaim")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3465,6 +3622,7 @@ func (c *CustomersDpcsListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/dpcs")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3605,6 +3763,7 @@ func (c *OperationsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3740,6 +3899,7 @@ func (c *PartnersCustomersCreateCall) doRequest(alt string) (*http.Response, err
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/customers")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3883,6 +4043,7 @@ func (c *PartnersCustomersListCall) doRequest(alt string) (*http.Response, error
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/partners/{+partnerId}/customers")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4016,6 +4177,7 @@ func (c *PartnersDevicesClaimCall) doRequest(alt string) (*http.Response, error)
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/partners/{+partnerId}/devices:claim")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4153,6 +4315,7 @@ func (c *PartnersDevicesClaimAsyncCall) doRequest(alt string) (*http.Response, e
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/partners/{+partnerId}/devices:claimAsync")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4287,6 +4450,7 @@ func (c *PartnersDevicesFindByIdentifierCall) doRequest(alt string) (*http.Respo
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/partners/{+partnerId}/devices:findByIdentifier")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4448,6 +4612,7 @@ func (c *PartnersDevicesFindByOwnerCall) doRequest(alt string) (*http.Response, 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/partners/{+partnerId}/devices:findByOwner")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4609,6 +4774,7 @@ func (c *PartnersDevicesGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4740,6 +4906,7 @@ func (c *PartnersDevicesMetadataCall) doRequest(alt string) (*http.Response, err
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/partners/{+metadataOwnerId}/devices/{+deviceId}/metadata")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4885,6 +5052,7 @@ func (c *PartnersDevicesUnclaimCall) doRequest(alt string) (*http.Response, erro
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/partners/{+partnerId}/devices:unclaim")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5023,6 +5191,7 @@ func (c *PartnersDevicesUnclaimAsyncCall) doRequest(alt string) (*http.Response,
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/partners/{+partnerId}/devices:unclaimAsync")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5162,6 +5331,7 @@ func (c *PartnersDevicesUpdateMetadataAsyncCall) doRequest(alt string) (*http.Re
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/partners/{+partnerId}/devices:updateMetadataAsync")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5236,4 +5406,370 @@ func (c *PartnersDevicesUpdateMetadataAsyncCall) Do(opts ...googleapi.CallOption
 	//   }
 	// }
 
+}
+
+// method id "androiddeviceprovisioning.partners.vendors.list":
+
+type PartnersVendorsListCall struct {
+	s            *Service
+	parent       string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
+	header_      http.Header
+}
+
+// List: Lists the vendors of the partner.
+func (r *PartnersVendorsService) List(parent string) *PartnersVendorsListCall {
+	c := &PartnersVendorsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.parent = parent
+	return c
+}
+
+// PageSize sets the optional parameter "pageSize": The maximum number
+// of results to be returned.
+func (c *PartnersVendorsListCall) PageSize(pageSize int64) *PartnersVendorsListCall {
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": A token
+// identifying a page of results returned by the server.
+func (c *PartnersVendorsListCall) PageToken(pageToken string) *PartnersVendorsListCall {
+	c.urlParams_.Set("pageToken", pageToken)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *PartnersVendorsListCall) Fields(s ...googleapi.Field) *PartnersVendorsListCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *PartnersVendorsListCall) IfNoneMatch(entityTag string) *PartnersVendorsListCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *PartnersVendorsListCall) Context(ctx context.Context) *PartnersVendorsListCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *PartnersVendorsListCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *PartnersVendorsListCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/vendors")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"parent": c.parent,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "androiddeviceprovisioning.partners.vendors.list" call.
+// Exactly one of *ListVendorsResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *ListVendorsResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *PartnersVendorsListCall) Do(opts ...googleapi.CallOption) (*ListVendorsResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &ListVendorsResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Lists the vendors of the partner.",
+	//   "flatPath": "v1/partners/{partnersId}/vendors",
+	//   "httpMethod": "GET",
+	//   "id": "androiddeviceprovisioning.partners.vendors.list",
+	//   "parameterOrder": [
+	//     "parent"
+	//   ],
+	//   "parameters": {
+	//     "pageSize": {
+	//       "description": "The maximum number of results to be returned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "A token identifying a page of results returned by the server.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "parent": {
+	//       "description": "Required. The resource name in the format `partners/[PARTNER_ID]`.",
+	//       "location": "path",
+	//       "pattern": "^partners/[^/]+$",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/{+parent}/vendors",
+	//   "response": {
+	//     "$ref": "ListVendorsResponse"
+	//   }
+	// }
+
+}
+
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *PartnersVendorsListCall) Pages(ctx context.Context, f func(*ListVendorsResponse) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
+}
+
+// method id "androiddeviceprovisioning.partners.vendors.customers.list":
+
+type PartnersVendorsCustomersListCall struct {
+	s            *Service
+	parent       string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
+	header_      http.Header
+}
+
+// List: Lists the customers of the vendor.
+func (r *PartnersVendorsCustomersService) List(parent string) *PartnersVendorsCustomersListCall {
+	c := &PartnersVendorsCustomersListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.parent = parent
+	return c
+}
+
+// PageSize sets the optional parameter "pageSize": The maximum number
+// of results to be returned.
+func (c *PartnersVendorsCustomersListCall) PageSize(pageSize int64) *PartnersVendorsCustomersListCall {
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": A token
+// identifying a page of results returned by the server.
+func (c *PartnersVendorsCustomersListCall) PageToken(pageToken string) *PartnersVendorsCustomersListCall {
+	c.urlParams_.Set("pageToken", pageToken)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *PartnersVendorsCustomersListCall) Fields(s ...googleapi.Field) *PartnersVendorsCustomersListCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *PartnersVendorsCustomersListCall) IfNoneMatch(entityTag string) *PartnersVendorsCustomersListCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *PartnersVendorsCustomersListCall) Context(ctx context.Context) *PartnersVendorsCustomersListCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *PartnersVendorsCustomersListCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *PartnersVendorsCustomersListCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/customers")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"parent": c.parent,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "androiddeviceprovisioning.partners.vendors.customers.list" call.
+// Exactly one of *ListVendorCustomersResponse or error will be non-nil.
+// Any non-2xx status code is an error. Response headers are in either
+// *ListVendorCustomersResponse.ServerResponse.Header or (if a response
+// was returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *PartnersVendorsCustomersListCall) Do(opts ...googleapi.CallOption) (*ListVendorCustomersResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &ListVendorCustomersResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Lists the customers of the vendor.",
+	//   "flatPath": "v1/partners/{partnersId}/vendors/{vendorsId}/customers",
+	//   "httpMethod": "GET",
+	//   "id": "androiddeviceprovisioning.partners.vendors.customers.list",
+	//   "parameterOrder": [
+	//     "parent"
+	//   ],
+	//   "parameters": {
+	//     "pageSize": {
+	//       "description": "The maximum number of results to be returned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "A token identifying a page of results returned by the server.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "parent": {
+	//       "description": "Required. The resource name in the format\n`partners/[PARTNER_ID]/vendors/[VENDOR_ID]`.",
+	//       "location": "path",
+	//       "pattern": "^partners/[^/]+/vendors/[^/]+$",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/{+parent}/customers",
+	//   "response": {
+	//     "$ref": "ListVendorCustomersResponse"
+	//   }
+	// }
+
+}
+
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *PartnersVendorsCustomersListCall) Pages(ctx context.Context, f func(*ListVendorCustomersResponse) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
 }

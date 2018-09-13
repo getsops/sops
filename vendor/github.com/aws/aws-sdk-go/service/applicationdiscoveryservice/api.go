@@ -15,7 +15,7 @@ const opAssociateConfigurationItemsToApplication = "AssociateConfigurationItemsT
 
 // AssociateConfigurationItemsToApplicationRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateConfigurationItemsToApplication operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -105,7 +105,7 @@ const opCreateApplication = "CreateApplication"
 
 // CreateApplicationRequest generates a "aws/request.Request" representing the
 // client's request for the CreateApplication operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -195,7 +195,7 @@ const opCreateTags = "CreateTags"
 
 // CreateTagsRequest generates a "aws/request.Request" representing the
 // client's request for the CreateTags operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -291,7 +291,7 @@ const opDeleteApplications = "DeleteApplications"
 
 // DeleteApplicationsRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteApplications operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -382,7 +382,7 @@ const opDeleteTags = "DeleteTags"
 
 // DeleteTagsRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteTags operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -477,7 +477,7 @@ const opDescribeAgents = "DescribeAgents"
 
 // DescribeAgentsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeAgents operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -517,8 +517,9 @@ func (c *ApplicationDiscoveryService) DescribeAgentsRequest(input *DescribeAgent
 
 // DescribeAgents API operation for AWS Application Discovery Service.
 //
-// Lists agents or the Connector by ID or lists all agents/Connectors associated
-// with your user account if you did not specify an ID.
+// Lists agents or connectors as specified by ID or other filters. All agents/connectors
+// associated with your user account can be listed if you call DescribeAgents
+// as is without passing any parameters.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -568,7 +569,7 @@ const opDescribeConfigurations = "DescribeConfigurations"
 
 // DescribeConfigurationsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeConfigurations operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -608,11 +609,22 @@ func (c *ApplicationDiscoveryService) DescribeConfigurationsRequest(input *Descr
 
 // DescribeConfigurations API operation for AWS Application Discovery Service.
 //
-// Retrieves attributes for a list of configuration item IDs. All of the supplied
-// IDs must be for the same asset type (server, application, process, or connection).
-// Output fields are specific to the asset type selected. For example, the output
-// for a server configuration item includes a list of attributes about the server,
-// such as host name, operating system, and number of network cards.
+// Retrieves attributes for a list of configuration item IDs.
+//
+// All of the supplied IDs must be for the same asset type from one of the follwoing:
+//
+// server
+//
+// application
+//
+// process
+//
+// connection
+//
+// Output fields are specific to the asset type specified. For example, the
+// output for a server configuration item includes a list of attributes about
+// the server, such as host name, operating system, number of network cards,
+// etc.
 //
 // For a complete list of outputs for each asset type, see Using the DescribeConfigurations
 // Action (http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations).
@@ -661,11 +673,166 @@ func (c *ApplicationDiscoveryService) DescribeConfigurationsWithContext(ctx aws.
 	return out, req.Send()
 }
 
+const opDescribeContinuousExports = "DescribeContinuousExports"
+
+// DescribeContinuousExportsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeContinuousExports operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeContinuousExports for more information on using the DescribeContinuousExports
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeContinuousExportsRequest method.
+//    req, resp := client.DescribeContinuousExportsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/DescribeContinuousExports
+func (c *ApplicationDiscoveryService) DescribeContinuousExportsRequest(input *DescribeContinuousExportsInput) (req *request.Request, output *DescribeContinuousExportsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeContinuousExports,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &DescribeContinuousExportsInput{}
+	}
+
+	output = &DescribeContinuousExportsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeContinuousExports API operation for AWS Application Discovery Service.
+//
+// Lists exports as specified by ID. All continuous exports associated with
+// your user account can be listed if you call DescribeContinuousExports as
+// is without passing any parameters.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Application Discovery Service's
+// API operation DescribeContinuousExports for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
+//   The AWS user account does not have permission to perform the action. Check
+//   the IAM policy associated with this account.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   One or more parameters are not valid. Verify the parameters and try again.
+//
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
+//   The value of one or more parameters are either invalid or out of range. Verify
+//   the parameter values and try again.
+//
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
+//   The server experienced an internal error. Try again.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not permitted.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified configuration ID was not located. Verify the configuration
+//   ID and try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/DescribeContinuousExports
+func (c *ApplicationDiscoveryService) DescribeContinuousExports(input *DescribeContinuousExportsInput) (*DescribeContinuousExportsOutput, error) {
+	req, out := c.DescribeContinuousExportsRequest(input)
+	return out, req.Send()
+}
+
+// DescribeContinuousExportsWithContext is the same as DescribeContinuousExports with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeContinuousExports for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ApplicationDiscoveryService) DescribeContinuousExportsWithContext(ctx aws.Context, input *DescribeContinuousExportsInput, opts ...request.Option) (*DescribeContinuousExportsOutput, error) {
+	req, out := c.DescribeContinuousExportsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// DescribeContinuousExportsPages iterates over the pages of a DescribeContinuousExports operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeContinuousExports method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeContinuousExports operation.
+//    pageNum := 0
+//    err := client.DescribeContinuousExportsPages(params,
+//        func(page *DescribeContinuousExportsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ApplicationDiscoveryService) DescribeContinuousExportsPages(input *DescribeContinuousExportsInput, fn func(*DescribeContinuousExportsOutput, bool) bool) error {
+	return c.DescribeContinuousExportsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeContinuousExportsPagesWithContext same as DescribeContinuousExportsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ApplicationDiscoveryService) DescribeContinuousExportsPagesWithContext(ctx aws.Context, input *DescribeContinuousExportsInput, fn func(*DescribeContinuousExportsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeContinuousExportsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeContinuousExportsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*DescribeContinuousExportsOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opDescribeExportConfigurations = "DescribeExportConfigurations"
 
 // DescribeExportConfigurationsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeExportConfigurations operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -687,6 +854,8 @@ const opDescribeExportConfigurations = "DescribeExportConfigurations"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/DescribeExportConfigurations
+//
+// Deprecated: DescribeExportConfigurations has been deprecated
 func (c *ApplicationDiscoveryService) DescribeExportConfigurationsRequest(input *DescribeExportConfigurationsInput) (req *request.Request, output *DescribeExportConfigurationsOutput) {
 	if c.Client.Config.Logger != nil {
 		c.Client.Config.Logger.Log("This operation, DescribeExportConfigurations, has been deprecated")
@@ -708,10 +877,9 @@ func (c *ApplicationDiscoveryService) DescribeExportConfigurationsRequest(input 
 
 // DescribeExportConfigurations API operation for AWS Application Discovery Service.
 //
-// Deprecated. Use DescribeExportTasks instead.
+// DescribeExportConfigurations is deprecated.
 //
-// Retrieves the status of a given export process. You can retrieve status from
-// a maximum of 100 processes.
+// Use instead DescribeExportTasks (http://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -740,6 +908,8 @@ func (c *ApplicationDiscoveryService) DescribeExportConfigurationsRequest(input 
 //   The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/DescribeExportConfigurations
+//
+// Deprecated: DescribeExportConfigurations has been deprecated
 func (c *ApplicationDiscoveryService) DescribeExportConfigurations(input *DescribeExportConfigurationsInput) (*DescribeExportConfigurationsOutput, error) {
 	req, out := c.DescribeExportConfigurationsRequest(input)
 	return out, req.Send()
@@ -754,6 +924,8 @@ func (c *ApplicationDiscoveryService) DescribeExportConfigurations(input *Descri
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: DescribeExportConfigurationsWithContext has been deprecated
 func (c *ApplicationDiscoveryService) DescribeExportConfigurationsWithContext(ctx aws.Context, input *DescribeExportConfigurationsInput, opts ...request.Option) (*DescribeExportConfigurationsOutput, error) {
 	req, out := c.DescribeExportConfigurationsRequest(input)
 	req.SetContext(ctx)
@@ -765,7 +937,7 @@ const opDescribeExportTasks = "DescribeExportTasks"
 
 // DescribeExportTasksRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeExportTasks operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -856,7 +1028,7 @@ const opDescribeTags = "DescribeTags"
 
 // DescribeTagsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeTags operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -896,8 +1068,19 @@ func (c *ApplicationDiscoveryService) DescribeTagsRequest(input *DescribeTagsInp
 
 // DescribeTags API operation for AWS Application Discovery Service.
 //
-// Retrieves a list of configuration items that are tagged with a specific tag.
-// Or retrieves a list of all tags assigned to a specific configuration item.
+// Retrieves a list of configuration items that have tags as specified by the
+// key-value pairs, name and value, passed to the optional parameter filters.
+//
+// There are three valid tag filter names:
+//
+//    * tagKey
+//
+//    * tagValue
+//
+//    * configurationId
+//
+// Also, all configuration items associated with your user account that have
+// tags can be listed if you call DescribeTags as is without passing any parameters.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -951,7 +1134,7 @@ const opDisassociateConfigurationItemsFromApplication = "DisassociateConfigurati
 
 // DisassociateConfigurationItemsFromApplicationRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateConfigurationItemsFromApplication operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1041,7 +1224,7 @@ const opExportConfigurations = "ExportConfigurations"
 
 // ExportConfigurationsRequest generates a "aws/request.Request" representing the
 // client's request for the ExportConfigurations operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1063,6 +1246,8 @@ const opExportConfigurations = "ExportConfigurations"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/ExportConfigurations
+//
+// Deprecated: ExportConfigurations has been deprecated
 func (c *ApplicationDiscoveryService) ExportConfigurationsRequest(input *ExportConfigurationsInput) (req *request.Request, output *ExportConfigurationsOutput) {
 	if c.Client.Config.Logger != nil {
 		c.Client.Config.Logger.Log("This operation, ExportConfigurations, has been deprecated")
@@ -1118,6 +1303,8 @@ func (c *ApplicationDiscoveryService) ExportConfigurationsRequest(input *ExportC
 //   This operation is not permitted.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/ExportConfigurations
+//
+// Deprecated: ExportConfigurations has been deprecated
 func (c *ApplicationDiscoveryService) ExportConfigurations(input *ExportConfigurationsInput) (*ExportConfigurationsOutput, error) {
 	req, out := c.ExportConfigurationsRequest(input)
 	return out, req.Send()
@@ -1132,6 +1319,8 @@ func (c *ApplicationDiscoveryService) ExportConfigurations(input *ExportConfigur
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: ExportConfigurationsWithContext has been deprecated
 func (c *ApplicationDiscoveryService) ExportConfigurationsWithContext(ctx aws.Context, input *ExportConfigurationsInput, opts ...request.Option) (*ExportConfigurationsOutput, error) {
 	req, out := c.ExportConfigurationsRequest(input)
 	req.SetContext(ctx)
@@ -1143,7 +1332,7 @@ const opGetDiscoverySummary = "GetDiscoverySummary"
 
 // GetDiscoverySummaryRequest generates a "aws/request.Request" representing the
 // client's request for the GetDiscoverySummary operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1184,6 +1373,9 @@ func (c *ApplicationDiscoveryService) GetDiscoverySummaryRequest(input *GetDisco
 // GetDiscoverySummary API operation for AWS Application Discovery Service.
 //
 // Retrieves a short summary of discovered assets.
+//
+// This API operation takes no request parameters and is called as is at the
+// command prompt as shown in the example.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1233,7 +1425,7 @@ const opListConfigurations = "ListConfigurations"
 
 // ListConfigurationsRequest generates a "aws/request.Request" representing the
 // client's request for the ListConfigurations operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1273,8 +1465,9 @@ func (c *ApplicationDiscoveryService) ListConfigurationsRequest(input *ListConfi
 
 // ListConfigurations API operation for AWS Application Discovery Service.
 //
-// Retrieves a list of configuration items according to criteria that you specify
-// in a filter. The filter criteria identifies the relationship requirements.
+// Retrieves a list of configuration items as specified by the value passed
+// to the required paramater configurationType. Optional filtering may be applied
+// to refine search results.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1328,7 +1521,7 @@ const opListServerNeighbors = "ListServerNeighbors"
 
 // ListServerNeighborsRequest generates a "aws/request.Request" representing the
 // client's request for the ListServerNeighbors operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1415,11 +1608,108 @@ func (c *ApplicationDiscoveryService) ListServerNeighborsWithContext(ctx aws.Con
 	return out, req.Send()
 }
 
+const opStartContinuousExport = "StartContinuousExport"
+
+// StartContinuousExportRequest generates a "aws/request.Request" representing the
+// client's request for the StartContinuousExport operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartContinuousExport for more information on using the StartContinuousExport
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartContinuousExportRequest method.
+//    req, resp := client.StartContinuousExportRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/StartContinuousExport
+func (c *ApplicationDiscoveryService) StartContinuousExportRequest(input *StartContinuousExportInput) (req *request.Request, output *StartContinuousExportOutput) {
+	op := &request.Operation{
+		Name:       opStartContinuousExport,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartContinuousExportInput{}
+	}
+
+	output = &StartContinuousExportOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartContinuousExport API operation for AWS Application Discovery Service.
+//
+// Start the continuous flow of agent's discovered data into Amazon Athena.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Application Discovery Service's
+// API operation StartContinuousExport for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeConflictErrorException "ConflictErrorException"
+//
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
+//   The AWS user account does not have permission to perform the action. Check
+//   the IAM policy associated with this account.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   One or more parameters are not valid. Verify the parameters and try again.
+//
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
+//   The value of one or more parameters are either invalid or out of range. Verify
+//   the parameter values and try again.
+//
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
+//   The server experienced an internal error. Try again.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not permitted.
+//
+//   * ErrCodeResourceInUseException "ResourceInUseException"
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/StartContinuousExport
+func (c *ApplicationDiscoveryService) StartContinuousExport(input *StartContinuousExportInput) (*StartContinuousExportOutput, error) {
+	req, out := c.StartContinuousExportRequest(input)
+	return out, req.Send()
+}
+
+// StartContinuousExportWithContext is the same as StartContinuousExport with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartContinuousExport for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ApplicationDiscoveryService) StartContinuousExportWithContext(ctx aws.Context, input *StartContinuousExportInput, opts ...request.Option) (*StartContinuousExportOutput, error) {
+	req, out := c.StartContinuousExportRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStartDataCollectionByAgentIds = "StartDataCollectionByAgentIds"
 
 // StartDataCollectionByAgentIdsRequest generates a "aws/request.Request" representing the
 // client's request for the StartDataCollectionByAgentIds operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1509,7 +1799,7 @@ const opStartExportTask = "StartExportTask"
 
 // StartExportTaskRequest generates a "aws/request.Request" representing the
 // client's request for the StartExportTask operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1608,11 +1898,110 @@ func (c *ApplicationDiscoveryService) StartExportTaskWithContext(ctx aws.Context
 	return out, req.Send()
 }
 
+const opStopContinuousExport = "StopContinuousExport"
+
+// StopContinuousExportRequest generates a "aws/request.Request" representing the
+// client's request for the StopContinuousExport operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StopContinuousExport for more information on using the StopContinuousExport
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StopContinuousExportRequest method.
+//    req, resp := client.StopContinuousExportRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/StopContinuousExport
+func (c *ApplicationDiscoveryService) StopContinuousExportRequest(input *StopContinuousExportInput) (req *request.Request, output *StopContinuousExportOutput) {
+	op := &request.Operation{
+		Name:       opStopContinuousExport,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopContinuousExportInput{}
+	}
+
+	output = &StopContinuousExportOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StopContinuousExport API operation for AWS Application Discovery Service.
+//
+// Stop the continuous flow of agent's discovered data into Amazon Athena.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Application Discovery Service's
+// API operation StopContinuousExport for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
+//   The AWS user account does not have permission to perform the action. Check
+//   the IAM policy associated with this account.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   One or more parameters are not valid. Verify the parameters and try again.
+//
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
+//   The value of one or more parameters are either invalid or out of range. Verify
+//   the parameter values and try again.
+//
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
+//   The server experienced an internal error. Try again.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not permitted.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified configuration ID was not located. Verify the configuration
+//   ID and try again.
+//
+//   * ErrCodeResourceInUseException "ResourceInUseException"
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/StopContinuousExport
+func (c *ApplicationDiscoveryService) StopContinuousExport(input *StopContinuousExportInput) (*StopContinuousExportOutput, error) {
+	req, out := c.StopContinuousExportRequest(input)
+	return out, req.Send()
+}
+
+// StopContinuousExportWithContext is the same as StopContinuousExport with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StopContinuousExport for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ApplicationDiscoveryService) StopContinuousExportWithContext(ctx aws.Context, input *StopContinuousExportInput, opts ...request.Option) (*StopContinuousExportOutput, error) {
+	req, out := c.StopContinuousExportRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStopDataCollectionByAgentIds = "StopDataCollectionByAgentIds"
 
 // StopDataCollectionByAgentIdsRequest generates a "aws/request.Request" representing the
 // client's request for the StopDataCollectionByAgentIds operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1702,7 +2091,7 @@ const opUpdateApplication = "UpdateApplication"
 
 // UpdateApplicationRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateApplication operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2059,7 +2448,7 @@ type ConfigurationTag struct {
 
 	// The time the configuration tag was created in Coordinated Universal Time
 	// (UTC).
-	TimeOfCreation *time.Time `locationName:"timeOfCreation" type:"timestamp" timestampFormat:"unix"`
+	TimeOfCreation *time.Time `locationName:"timeOfCreation" type:"timestamp"`
 
 	// A value on which to filter. For example key = serverType and value = web
 	// server.
@@ -2103,6 +2492,114 @@ func (s *ConfigurationTag) SetTimeOfCreation(v time.Time) *ConfigurationTag {
 // SetValue sets the Value field's value.
 func (s *ConfigurationTag) SetValue(v string) *ConfigurationTag {
 	s.Value = &v
+	return s
+}
+
+// A list of continuous export descriptions.
+type ContinuousExportDescription struct {
+	_ struct{} `type:"structure"`
+
+	// The type of data collector used to gather this data (currently only offered
+	// for AGENT).
+	DataSource *string `locationName:"dataSource" type:"string" enum:"DataSource"`
+
+	// The unique ID assigned to this export.
+	ExportId *string `locationName:"exportId" type:"string"`
+
+	// The name of the s3 bucket where the export data parquet files are stored.
+	S3Bucket *string `locationName:"s3Bucket" type:"string"`
+
+	// An object which describes how the data is stored.
+	//
+	//    * databaseName - the name of the Glue database used to store the schema.
+	SchemaStorageConfig map[string]*string `locationName:"schemaStorageConfig" type:"map"`
+
+	// The timestamp representing when the continuous export was started.
+	StartTime *time.Time `locationName:"startTime" type:"timestamp"`
+
+	// Describes the status of the export. Can be one of the following values:
+	//
+	//    * START_IN_PROGRESS - setting up resources to start continuous export.
+	//
+	//    * START_FAILED - an error occurred setting up continuous export. To recover,
+	//    call start-continuous-export again.
+	//
+	//    * ACTIVE - data is being exported to the customer bucket.
+	//
+	//    * ERROR - an error occurred during export. To fix the issue, call stop-continuous-export
+	//    and start-continuous-export.
+	//
+	//    * STOP_IN_PROGRESS - stopping the export.
+	//
+	//    * STOP_FAILED - an error occurred stopping the export. To recover, call
+	//    stop-continuous-export again.
+	//
+	//    * INACTIVE - the continuous export has been stopped. Data is no longer
+	//    being exported to the customer bucket.
+	Status *string `locationName:"status" type:"string" enum:"ContinuousExportStatus"`
+
+	// Contains information about any errors that may have occurred.
+	StatusDetail *string `locationName:"statusDetail" min:"1" type:"string"`
+
+	// The timestamp that represents when this continuous export was stopped.
+	StopTime *time.Time `locationName:"stopTime" type:"timestamp"`
+}
+
+// String returns the string representation
+func (s ContinuousExportDescription) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ContinuousExportDescription) GoString() string {
+	return s.String()
+}
+
+// SetDataSource sets the DataSource field's value.
+func (s *ContinuousExportDescription) SetDataSource(v string) *ContinuousExportDescription {
+	s.DataSource = &v
+	return s
+}
+
+// SetExportId sets the ExportId field's value.
+func (s *ContinuousExportDescription) SetExportId(v string) *ContinuousExportDescription {
+	s.ExportId = &v
+	return s
+}
+
+// SetS3Bucket sets the S3Bucket field's value.
+func (s *ContinuousExportDescription) SetS3Bucket(v string) *ContinuousExportDescription {
+	s.S3Bucket = &v
+	return s
+}
+
+// SetSchemaStorageConfig sets the SchemaStorageConfig field's value.
+func (s *ContinuousExportDescription) SetSchemaStorageConfig(v map[string]*string) *ContinuousExportDescription {
+	s.SchemaStorageConfig = v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *ContinuousExportDescription) SetStartTime(v time.Time) *ContinuousExportDescription {
+	s.StartTime = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ContinuousExportDescription) SetStatus(v string) *ContinuousExportDescription {
+	s.Status = &v
+	return s
+}
+
+// SetStatusDetail sets the StatusDetail field's value.
+func (s *ContinuousExportDescription) SetStatusDetail(v string) *ContinuousExportDescription {
+	s.StatusDetail = &v
+	return s
+}
+
+// SetStopTime sets the StopTime field's value.
+func (s *ContinuousExportDescription) SetStopTime(v time.Time) *ContinuousExportDescription {
+	s.StopTime = &v
 	return s
 }
 
@@ -2744,19 +3241,104 @@ func (s *DescribeConfigurationsOutput) SetConfigurations(v []map[string]*string)
 	return s
 }
 
+type DescribeContinuousExportsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique IDs assigned to the exports.
+	ExportIds []*string `locationName:"exportIds" type:"list"`
+
+	// A number between 1 and 100 specifying the maximum number of continuous export
+	// descriptions returned.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token from the previous call to DescribeExportTasks.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeContinuousExportsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeContinuousExportsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeContinuousExportsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeContinuousExportsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExportIds sets the ExportIds field's value.
+func (s *DescribeContinuousExportsInput) SetExportIds(v []*string) *DescribeContinuousExportsInput {
+	s.ExportIds = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *DescribeContinuousExportsInput) SetMaxResults(v int64) *DescribeContinuousExportsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeContinuousExportsInput) SetNextToken(v string) *DescribeContinuousExportsInput {
+	s.NextToken = &v
+	return s
+}
+
+type DescribeContinuousExportsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of continuous export descriptions.
+	Descriptions []*ContinuousExportDescription `locationName:"descriptions" type:"list"`
+
+	// The token from the previous call to DescribeExportTasks.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeContinuousExportsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeContinuousExportsOutput) GoString() string {
+	return s.String()
+}
+
+// SetDescriptions sets the Descriptions field's value.
+func (s *DescribeContinuousExportsOutput) SetDescriptions(v []*ContinuousExportDescription) *DescribeContinuousExportsOutput {
+	s.Descriptions = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeContinuousExportsOutput) SetNextToken(v string) *DescribeContinuousExportsOutput {
+	s.NextToken = &v
+	return s
+}
+
 type DescribeExportConfigurationsInput struct {
 	_ struct{} `type:"structure"`
 
-	// A unique identifier that you can use to query the export status.
+	// A list of continuous export ids to search for.
 	ExportIds []*string `locationName:"exportIds" type:"list"`
 
-	// The maximum number of results that you want to display as a part of the query.
+	// A number between 1 and 100 specifying the maximum number of continuous export
+	// descriptions returned.
 	MaxResults *int64 `locationName:"maxResults" type:"integer"`
 
-	// A token to get the next set of results. For example, if you specify 100 IDs
-	// for DescribeExportConfigurationsRequest$exportIds but set DescribeExportConfigurationsRequest$maxResults
-	// to 10, you get results in a set of 10. Use the token in the query to get
-	// the next set of 10.
+	// The token from the previous call to describe-export-tasks.
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
@@ -2791,14 +3373,9 @@ func (s *DescribeExportConfigurationsInput) SetNextToken(v string) *DescribeExpo
 type DescribeExportConfigurationsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Returns export details. When the status is complete, the response includes
-	// a URL for an Amazon S3 bucket where you can view the data in a CSV file.
 	ExportsInfo []*ExportInfo `locationName:"exportsInfo" type:"list"`
 
-	// A token to get the next set of results. For example, if you specify 100 IDs
-	// for DescribeExportConfigurationsRequest$exportIds but set DescribeExportConfigurationsRequest$maxResults
-	// to 10, you get results in a set of 10. Use the token in the query to get
-	// the next set of 10.
+	// The token from the previous call to describe-export-tasks.
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
@@ -3227,7 +3804,7 @@ type ExportInfo struct {
 	// The time that the data export was initiated.
 	//
 	// ExportRequestTime is a required field
-	ExportRequestTime *time.Time `locationName:"exportRequestTime" type:"timestamp" timestampFormat:"unix" required:"true"`
+	ExportRequestTime *time.Time `locationName:"exportRequestTime" type:"timestamp" required:"true"`
 
 	// The status of the data export job.
 	//
@@ -3242,11 +3819,11 @@ type ExportInfo struct {
 
 	// The endTime used in the StartExportTask request. If no endTime was requested,
 	// this result does not appear in ExportInfo.
-	RequestedEndTime *time.Time `locationName:"requestedEndTime" type:"timestamp" timestampFormat:"unix"`
+	RequestedEndTime *time.Time `locationName:"requestedEndTime" type:"timestamp"`
 
 	// The value of startTime parameter in the StartExportTask request. If no startTime
 	// was requested, this result does not appear in ExportInfo.
-	RequestedStartTime *time.Time `locationName:"requestedStartTime" type:"timestamp" timestampFormat:"unix"`
+	RequestedStartTime *time.Time `locationName:"requestedStartTime" type:"timestamp"`
 
 	// A status message provided for API callers.
 	//
@@ -3850,6 +4427,82 @@ func (s *OrderByElement) SetSortOrder(v string) *OrderByElement {
 	return s
 }
 
+type StartContinuousExportInput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s StartContinuousExportInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartContinuousExportInput) GoString() string {
+	return s.String()
+}
+
+type StartContinuousExportOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The type of data collector used to gather this data (currently only offered
+	// for AGENT).
+	DataSource *string `locationName:"dataSource" type:"string" enum:"DataSource"`
+
+	// The unique ID assigned to this export.
+	ExportId *string `locationName:"exportId" type:"string"`
+
+	// The name of the s3 bucket where the export data parquet files are stored.
+	S3Bucket *string `locationName:"s3Bucket" type:"string"`
+
+	// A dictionary which describes how the data is stored.
+	//
+	//    * databaseName - the name of the Glue database used to store the schema.
+	SchemaStorageConfig map[string]*string `locationName:"schemaStorageConfig" type:"map"`
+
+	// The timestamp representing when the continuous export was started.
+	StartTime *time.Time `locationName:"startTime" type:"timestamp"`
+}
+
+// String returns the string representation
+func (s StartContinuousExportOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartContinuousExportOutput) GoString() string {
+	return s.String()
+}
+
+// SetDataSource sets the DataSource field's value.
+func (s *StartContinuousExportOutput) SetDataSource(v string) *StartContinuousExportOutput {
+	s.DataSource = &v
+	return s
+}
+
+// SetExportId sets the ExportId field's value.
+func (s *StartContinuousExportOutput) SetExportId(v string) *StartContinuousExportOutput {
+	s.ExportId = &v
+	return s
+}
+
+// SetS3Bucket sets the S3Bucket field's value.
+func (s *StartContinuousExportOutput) SetS3Bucket(v string) *StartContinuousExportOutput {
+	s.S3Bucket = &v
+	return s
+}
+
+// SetSchemaStorageConfig sets the SchemaStorageConfig field's value.
+func (s *StartContinuousExportOutput) SetSchemaStorageConfig(v map[string]*string) *StartContinuousExportOutput {
+	s.SchemaStorageConfig = v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *StartContinuousExportOutput) SetStartTime(v time.Time) *StartContinuousExportOutput {
+	s.StartTime = &v
+	return s
+}
+
 type StartDataCollectionByAgentIdsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3925,7 +4578,7 @@ type StartExportTaskInput struct {
 	// The end timestamp for exported data from the single Application Discovery
 	// Agent selected in the filters. If no value is specified, exported data includes
 	// the most recent data collected by the agent.
-	EndTime *time.Time `locationName:"endTime" type:"timestamp" timestampFormat:"unix"`
+	EndTime *time.Time `locationName:"endTime" type:"timestamp"`
 
 	// The file format for the returned export data. Default value is CSV. Note:TheGRAPHMLoption
 	// has been deprecated.
@@ -3941,7 +4594,7 @@ type StartExportTaskInput struct {
 	// The start timestamp for exported data from the single Application Discovery
 	// Agent selected in the filters. If no value is specified, data is exported
 	// starting from the first data collected by the agent.
-	StartTime *time.Time `locationName:"startTime" type:"timestamp" timestampFormat:"unix"`
+	StartTime *time.Time `locationName:"startTime" type:"timestamp"`
 }
 
 // String returns the string representation
@@ -4018,6 +4671,77 @@ func (s StartExportTaskOutput) GoString() string {
 // SetExportId sets the ExportId field's value.
 func (s *StartExportTaskOutput) SetExportId(v string) *StartExportTaskOutput {
 	s.ExportId = &v
+	return s
+}
+
+type StopContinuousExportInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique ID assigned to this export.
+	//
+	// ExportId is a required field
+	ExportId *string `locationName:"exportId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StopContinuousExportInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopContinuousExportInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopContinuousExportInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopContinuousExportInput"}
+	if s.ExportId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ExportId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExportId sets the ExportId field's value.
+func (s *StopContinuousExportInput) SetExportId(v string) *StopContinuousExportInput {
+	s.ExportId = &v
+	return s
+}
+
+type StopContinuousExportOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Timestamp that represents when this continuous export started collecting
+	// data.
+	StartTime *time.Time `locationName:"startTime" type:"timestamp"`
+
+	// Timestamp that represents when this continuous export was stopped.
+	StopTime *time.Time `locationName:"stopTime" type:"timestamp"`
+}
+
+// String returns the string representation
+func (s StopContinuousExportOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopContinuousExportOutput) GoString() string {
+	return s.String()
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *StopContinuousExportOutput) SetStartTime(v time.Time) *StopContinuousExportOutput {
+	s.StartTime = &v
+	return s
+}
+
+// SetStopTime sets the StopTime field's value.
+func (s *StopContinuousExportOutput) SetStopTime(v time.Time) *StopContinuousExportOutput {
+	s.StopTime = &v
 	return s
 }
 
@@ -4292,6 +5016,34 @@ const (
 
 	// ConfigurationItemTypeApplication is a ConfigurationItemType enum value
 	ConfigurationItemTypeApplication = "APPLICATION"
+)
+
+const (
+	// ContinuousExportStatusStartInProgress is a ContinuousExportStatus enum value
+	ContinuousExportStatusStartInProgress = "START_IN_PROGRESS"
+
+	// ContinuousExportStatusStartFailed is a ContinuousExportStatus enum value
+	ContinuousExportStatusStartFailed = "START_FAILED"
+
+	// ContinuousExportStatusActive is a ContinuousExportStatus enum value
+	ContinuousExportStatusActive = "ACTIVE"
+
+	// ContinuousExportStatusError is a ContinuousExportStatus enum value
+	ContinuousExportStatusError = "ERROR"
+
+	// ContinuousExportStatusStopInProgress is a ContinuousExportStatus enum value
+	ContinuousExportStatusStopInProgress = "STOP_IN_PROGRESS"
+
+	// ContinuousExportStatusStopFailed is a ContinuousExportStatus enum value
+	ContinuousExportStatusStopFailed = "STOP_FAILED"
+
+	// ContinuousExportStatusInactive is a ContinuousExportStatus enum value
+	ContinuousExportStatusInactive = "INACTIVE"
+)
+
+const (
+	// DataSourceAgent is a DataSource enum value
+	DataSourceAgent = "AGENT"
 )
 
 const (

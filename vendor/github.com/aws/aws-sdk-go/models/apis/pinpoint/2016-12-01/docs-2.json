@@ -7,23 +7,24 @@
     "CreateExportJob" : "Creates an export job.",
     "CreateImportJob" : "Creates or updates an import job.",
     "CreateSegment" : "Used to create or update a segment.",
-    "DeleteAdmChannel" : "Delete an ADM channel",
+    "DeleteAdmChannel" : "Delete an ADM channel.",
     "DeleteApnsChannel" : "Deletes the APNs channel for an app.",
-    "DeleteApnsSandboxChannel" : "Delete an APNS sandbox channel",
+    "DeleteApnsSandboxChannel" : "Delete an APNS sandbox channel.",
     "DeleteApnsVoipChannel" : "Delete an APNS VoIP channel",
     "DeleteApnsVoipSandboxChannel" : "Delete an APNS VoIP sandbox channel",
     "DeleteApp" : "Deletes an app.",
     "DeleteBaiduChannel" : "Delete a BAIDU GCM channel",
     "DeleteCampaign" : "Deletes a campaign.",
-    "DeleteEmailChannel" : "Delete an email channel",
+    "DeleteEmailChannel" : "Delete an email channel.",
     "DeleteEndpoint" : "Deletes an endpoint.",
     "DeleteEventStream" : "Deletes the event stream for an app.",
     "DeleteGcmChannel" : "Deletes the GCM channel for an app.",
     "DeleteSegment" : "Deletes a segment.",
-    "DeleteSmsChannel" : "Delete an SMS channel",
-    "GetAdmChannel" : "Get an ADM channel",
+    "DeleteSmsChannel" : "Delete an SMS channel.",
+    "DeleteUserEndpoints" : "Deletes endpoints that are associated with a User ID.",
+    "GetAdmChannel" : "Get an ADM channel.",
     "GetApnsChannel" : "Returns information about the APNs channel for an app.",
-    "GetApnsSandboxChannel" : "Get an APNS sandbox channel",
+    "GetApnsSandboxChannel" : "Get an APNS sandbox channel.",
     "GetApnsVoipChannel" : "Get an APNS VoIP channel",
     "GetApnsVoipSandboxChannel" : "Get an APNS VoIPSandbox channel",
     "GetApp" : "Returns information about an app.",
@@ -35,7 +36,8 @@
     "GetCampaignVersion" : "Returns information about a specific version of a campaign.",
     "GetCampaignVersions" : "Returns information about your campaign versions.",
     "GetCampaigns" : "Returns information about your campaigns.",
-    "GetEmailChannel" : "Get an email channel",
+    "GetChannels" : "Get all channels.",
+    "GetEmailChannel" : "Get an email channel.",
     "GetEndpoint" : "Returns information about an endpoint.",
     "GetEventStream" : "Returns the event stream for an app.",
     "GetExportJob" : "Returns information about an export job.",
@@ -49,24 +51,28 @@
     "GetSegmentVersion" : "Returns information about a segment version.",
     "GetSegmentVersions" : "Returns information about your segment versions.",
     "GetSegments" : "Used to get information about your segments.",
-    "GetSmsChannel" : "Get an SMS channel",
+    "GetSmsChannel" : "Get an SMS channel.",
+    "GetUserEndpoints" : "Returns information about the endpoints that are associated with a User ID.",
+    "PhoneNumberValidate" : "Returns information about the specified phone number.",
     "PutEventStream" : "Use to create or update the event stream for an app.",
-    "SendMessages" : "Send a batch of messages",
-    "SendUsersMessages" : "Send a batch of messages to users",
-    "UpdateAdmChannel" : "Update an ADM channel",
+    "PutEvents" : "Use to record events for endpoints. This method creates events and creates or updates the endpoints that those events are associated with.",
+    "RemoveAttributes" : "Used to remove the attributes for an app",
+    "SendMessages" : "Used to send a direct message.",
+    "SendUsersMessages" : "Used to send a message to a list of users.",
+    "UpdateAdmChannel" : "Update an ADM channel.",
     "UpdateApnsChannel" : "Use to update the APNs channel for an app.",
-    "UpdateApnsSandboxChannel" : "Update an APNS sandbox channel",
+    "UpdateApnsSandboxChannel" : "Update an APNS sandbox channel.",
     "UpdateApnsVoipChannel" : "Update an APNS VoIP channel",
     "UpdateApnsVoipSandboxChannel" : "Update an APNS VoIP sandbox channel",
     "UpdateApplicationSettings" : "Used to update the settings for an app.",
     "UpdateBaiduChannel" : "Update a BAIDU GCM channel",
     "UpdateCampaign" : "Use to update a campaign.",
-    "UpdateEmailChannel" : "Update an email channel",
-    "UpdateEndpoint" : "Use to update an endpoint.",
+    "UpdateEmailChannel" : "Update an email channel.",
+    "UpdateEndpoint" : "Creates or updates an endpoint.",
     "UpdateEndpointsBatch" : "Use to update a batch of endpoints.",
     "UpdateGcmChannel" : "Use to update the GCM channel for an app.",
-    "UpdateSegment" : "Use to update a segment.",
-    "UpdateSmsChannel" : "Update an SMS channel"
+    "UpdateSegment" : "Used to update a segment.",
+    "UpdateSmsChannel" : "Update an SMS channel."
   },
   "shapes" : {
     "ADMChannelRequest" : {
@@ -139,19 +145,19 @@
     "ActivityResponse" : {
       "base" : "Activity definition",
       "refs" : {
-        "ActivitiesResponse$Item" : "List of campaign activities"
+        "ListOfActivityResponse$member" : null
       }
     },
     "AddressConfiguration" : {
       "base" : "Address configuration.",
       "refs" : {
-        "MessageRequest$Addresses" : "A map of destination addresses, with the address as the key(Email address, phone number or push token) and the Address Configuration as the value."
+        "MapOfAddressConfiguration$member" : null
       }
     },
     "ApplicationResponse" : {
       "base" : "Application Response.",
       "refs" : {
-        "ApplicationsResponse$Item" : "List of applications returned in this page."
+        "ListOfApplicationResponse$member" : null
       }
     },
     "ApplicationSettingsResource" : {
@@ -165,8 +171,7 @@
     "AttributeDimension" : {
       "base" : "Custom attibute dimension",
       "refs" : {
-        "SegmentDimensions$Attributes" : "Custom segment attributes.",
-        "SegmentDimensions$UserAttributes" : "Custom segment user attributes."
+        "MapOfAttributeDimension$member" : null
       }
     },
     "AttributeType" : {
@@ -175,8 +180,12 @@
         "AttributeDimension$AttributeType" : "The type of dimension:\nINCLUSIVE - Endpoints that match the criteria are included in the segment.\nEXCLUSIVE - Endpoints that match the criteria are excluded from the segment."
       }
     },
+    "AttributesResource" : {
+      "base" : "Attributes.",
+      "refs" : { }
+    },
     "BadRequestException" : {
-      "base" : null,
+      "base" : "Simple message object.",
       "refs" : { }
     },
     "BaiduChannelRequest" : {
@@ -200,7 +209,7 @@
       }
     },
     "CampaignHook" : {
-      "base" : null,
+      "base" : "Campaign hook information.",
       "refs" : {
         "ApplicationSettingsResource$CampaignHook" : "Default campaign hook.",
         "CampaignResponse$Hook" : "Campaign hook information.",
@@ -220,7 +229,7 @@
     "CampaignResponse" : {
       "base" : "Campaign definition",
       "refs" : {
-        "CampaignsResponse$Item" : "A list of campaigns."
+        "ListOfCampaignResponse$member" : null
       }
     },
     "CampaignSmsMessage" : {
@@ -247,21 +256,32 @@
       "base" : "List of available campaigns.",
       "refs" : { }
     },
+    "ChannelResponse" : {
+      "base" : "Base definition for channel response.",
+      "refs" : {
+        "MapOfChannelResponse$member" : null
+      }
+    },
     "ChannelType" : {
       "base" : null,
       "refs" : {
         "AddressConfiguration$ChannelType" : "The channel type.\n\nValid values: GCM | APNS | APNS_SANDBOX | APNS_VOIP | APNS_VOIP_SANDBOX | ADM | SMS | EMAIL | BAIDU",
         "EndpointBatchItem$ChannelType" : "The channel type.\n\nValid values: GCM | APNS | APNS_SANDBOX | APNS_VOIP | APNS_VOIP_SANDBOX | ADM | SMS | EMAIL | BAIDU",
         "EndpointRequest$ChannelType" : "The channel type.\n\nValid values: GCM | APNS | APNS_SANDBOX | APNS_VOIP | APNS_VOIP_SANDBOX | ADM | SMS | EMAIL | BAIDU",
-        "EndpointResponse$ChannelType" : "The channel type.\n\nValid values: GCM | APNS | APNS_SANDBOX | APNS_VOIP | APNS_VOIP_SANDBOX | ADM | SMS | EMAIL | BAIDU"
+        "EndpointResponse$ChannelType" : "The channel type.\n\nValid values: GCM | APNS | APNS_SANDBOX | APNS_VOIP | APNS_VOIP_SANDBOX | ADM | SMS | EMAIL | BAIDU",
+        "PublicEndpoint$ChannelType" : "The channel type.\n\nValid values: APNS, GCM"
       }
+    },
+    "ChannelsResponse" : {
+      "base" : "Get channels definition",
+      "refs" : { }
     },
     "CreateApplicationRequest" : {
       "base" : "Application Request.",
       "refs" : { }
     },
     "DefaultMessage" : {
-      "base" : "Default Message across push notification, email, and sms.",
+      "base" : "The default message to use across all channels.",
       "refs" : {
         "DirectMessageConfiguration$DefaultMessage" : "The default message for all channels."
       }
@@ -275,8 +295,8 @@
     "DeliveryStatus" : {
       "base" : null,
       "refs" : {
-        "EndpointMessageResult$DeliveryStatus" : "Delivery status of message.",
-        "MessageResult$DeliveryStatus" : "Delivery status of message."
+        "EndpointMessageResult$DeliveryStatus" : "The delivery status of the message. Possible values:\n\nSUCCESS - The message was successfully delivered to the endpoint.\n\nTRANSIENT_FAILURE - A temporary error occurred. Amazon Pinpoint will attempt to deliver the message again later.\n\nFAILURE_PERMANENT - An error occurred when delivering the message to the endpoint. Amazon Pinpoint won't attempt to send the message again.\n\nTIMEOUT - The message couldn't be sent within the timeout period.\n\nQUIET_TIME - The local time for the endpoint was within the Quiet Hours for the campaign.\n\nDAILY_CAP - The endpoint has received the maximum number of messages it can receive within a 24-hour period.\n\nHOLDOUT - The endpoint was in a hold out treatment for the campaign.\n\nTHROTTLED - Amazon Pinpoint throttled sending to this endpoint.\n\nEXPIRED - The endpoint address is expired.\n\nCAMPAIGN_CAP - The endpoint received the maximum number of messages allowed by the campaign.\n\nSERVICE_FAILURE - A service-level failure prevented Amazon Pinpoint from delivering the message.\n\nUNKNOWN - An unknown error occurred.",
+        "MessageResult$DeliveryStatus" : "The delivery status of the message. Possible values:\n\nSUCCESS - The message was successfully delivered to the endpoint.\n\nTRANSIENT_FAILURE - A temporary error occurred. Amazon Pinpoint will attempt to deliver the message again later.\n\nFAILURE_PERMANENT - An error occurred when delivering the message to the endpoint. Amazon Pinpoint won't attempt to send the message again.\n\nTIMEOUT - The message couldn't be sent within the timeout period.\n\nQUIET_TIME - The local time for the endpoint was within the Quiet Hours for the campaign.\n\nDAILY_CAP - The endpoint has received the maximum number of messages it can receive within a 24-hour period.\n\nHOLDOUT - The endpoint was in a hold out treatment for the campaign.\n\nTHROTTLED - Amazon Pinpoint throttled sending to this endpoint.\n\nEXPIRED - The endpoint address is expired.\n\nCAMPAIGN_CAP - The endpoint received the maximum number of messages allowed by the campaign.\n\nSERVICE_FAILURE - A service-level failure prevented Amazon Pinpoint from delivering the message.\n\nUNKNOWN - An unknown error occurred."
       }
     },
     "DimensionType" : {
@@ -286,10 +306,10 @@
       }
     },
     "DirectMessageConfiguration" : {
-      "base" : "The message configuration.",
+      "base" : "Message definitions for the default message and any messages that are tailored for specific channels.",
       "refs" : {
         "MessageRequest$MessageConfiguration" : "Message configuration.",
-        "SendUsersMessageRequest$MessageConfiguration" : "Message configuration."
+        "SendUsersMessageRequest$MessageConfiguration" : "Message definitions for the default message and any messages that are tailored for specific channels."
       }
     },
     "Duration" : {
@@ -309,7 +329,7 @@
     "EndpointBatchItem" : {
       "base" : "Endpoint update request",
       "refs" : {
-        "EndpointBatchRequest$Item" : "List of items to update. Maximum 100 items"
+        "ListOfEndpointBatchItem$member" : null
       }
     },
     "EndpointBatchRequest" : {
@@ -317,26 +337,33 @@
       "refs" : { }
     },
     "EndpointDemographic" : {
-      "base" : "Endpoint demographic data",
+      "base" : "Demographic information about the endpoint.",
       "refs" : {
         "EndpointBatchItem$Demographic" : "The endpoint demographic attributes.",
-        "EndpointRequest$Demographic" : "The endpoint demographic attributes.",
-        "EndpointResponse$Demographic" : "The endpoint demographic attributes."
+        "EndpointRequest$Demographic" : "Demographic attributes for the endpoint.",
+        "EndpointResponse$Demographic" : "The endpoint demographic attributes.",
+        "PublicEndpoint$Demographic" : "The endpoint demographic attributes."
+      }
+    },
+    "EndpointItemResponse" : {
+      "base" : "The responses that are returned after you create or update an endpoint and record an event.",
+      "refs" : {
+        "ItemResponse$EndpointItemResponse" : "Endpoint item response after endpoint registration"
       }
     },
     "EndpointLocation" : {
-      "base" : "Endpoint location data",
+      "base" : "Location data for the endpoint.",
       "refs" : {
         "EndpointBatchItem$Location" : "The endpoint location attributes.",
         "EndpointRequest$Location" : "The endpoint location attributes.",
-        "EndpointResponse$Location" : "The endpoint location attributes."
+        "EndpointResponse$Location" : "The endpoint location attributes.",
+        "PublicEndpoint$Location" : "The endpoint location attributes."
       }
     },
     "EndpointMessageResult" : {
       "base" : "The result from sending a message to an endpoint.",
       "refs" : {
-        "MessageResponse$EndpointResult" : "A map containing a multi part response for each address, with the endpointId as the key and the result as the value.",
-        "SendUsersMessageResponse$Result" : "A map containing of UserId to Map of EndpointId to Endpoint Message Result."
+        "MapOfEndpointMessageResult$member" : null
       }
     },
     "EndpointRequest" : {
@@ -345,13 +372,14 @@
     },
     "EndpointResponse" : {
       "base" : "Endpoint response",
-      "refs" : { }
+      "refs" : {
+        "ListOfEndpointResponse$member" : null
+      }
     },
     "EndpointSendConfiguration" : {
       "base" : "Endpoint send configuration.",
       "refs" : {
-        "MessageRequest$Endpoints" : "A map of destination addresses, with the address as the key(Email address, phone number or push token) and the Address Configuration as the value.",
-        "SendUsersMessageRequest$Users" : "A map of destination endpoints, with the EndpointId as the key Endpoint Message Configuration as the value."
+        "MapOfEndpointSendConfiguration$member" : null
       }
     },
     "EndpointUser" : {
@@ -359,27 +387,58 @@
       "refs" : {
         "EndpointBatchItem$User" : "Custom user-specific attributes that your app reports to Amazon Pinpoint.",
         "EndpointRequest$User" : "Custom user-specific attributes that your app reports to Amazon Pinpoint.",
-        "EndpointResponse$User" : "Custom user-specific attributes that your app reports to Amazon Pinpoint."
+        "EndpointResponse$User" : "Custom user-specific attributes that your app reports to Amazon Pinpoint.",
+        "PublicEndpoint$User" : "Custom user-specific attributes that your app reports to Amazon Pinpoint."
+      }
+    },
+    "EndpointsResponse" : {
+      "base" : "List of endpoints",
+      "refs" : { }
+    },
+    "Event" : {
+      "base" : "Model for creating or updating events.",
+      "refs" : {
+        "MapOfEvent$member" : null
+      }
+    },
+    "EventItemResponse" : {
+      "base" : "The responses that are returned after you record an event.",
+      "refs" : {
+        "MapOfEventItemResponse$member" : null
       }
     },
     "EventStream" : {
       "base" : "Model for an event publishing subscription export.",
       "refs" : { }
     },
+    "EventsBatch" : {
+      "base" : "Events batch definition",
+      "refs" : {
+        "MapOfEventsBatch$member" : null
+      }
+    },
+    "EventsRequest" : {
+      "base" : "Put Events request",
+      "refs" : { }
+    },
+    "EventsResponse" : {
+      "base" : "The results from processing a put events request",
+      "refs" : { }
+    },
     "ExportJobRequest" : {
-      "base" : null,
+      "base" : "Export job request.",
       "refs" : { }
     },
     "ExportJobResource" : {
-      "base" : null,
+      "base" : "Export job resource.",
       "refs" : {
         "ExportJobResponse$Definition" : "The export job settings."
       }
     },
     "ExportJobResponse" : {
-      "base" : null,
+      "base" : "Export job response.",
       "refs" : {
-        "ExportJobsResponse$Item" : "A list of export jobs for the application."
+        "ListOfExportJobResponse$member" : null
       }
     },
     "ExportJobsResponse" : {
@@ -387,7 +446,7 @@
       "refs" : { }
     },
     "ForbiddenException" : {
-      "base" : null,
+      "base" : "Simple message object.",
       "refs" : { }
     },
     "Format" : {
@@ -418,119 +477,63 @@
         "DirectMessageConfiguration$GCMMessage" : "The message to GCM channels. Overrides the default push notification message."
       }
     },
+    "GPSCoordinates" : {
+      "base" : "GPS coordinates",
+      "refs" : {
+        "GPSPointDimension$Coordinates" : "Coordinate to measure distance from."
+      }
+    },
+    "GPSPointDimension" : {
+      "base" : "GPS point location dimension",
+      "refs" : {
+        "SegmentLocation$GPSPoint" : "The GPS Point dimension."
+      }
+    },
     "ImportJobRequest" : {
-      "base" : null,
+      "base" : "Import job request.",
       "refs" : { }
     },
     "ImportJobResource" : {
-      "base" : null,
+      "base" : "Import job resource",
       "refs" : {
         "ImportJobResponse$Definition" : "The import job settings."
       }
     },
     "ImportJobResponse" : {
-      "base" : null,
+      "base" : "Import job response.",
       "refs" : {
-        "ImportJobsResponse$Item" : "A list of import jobs for the application."
+        "ListOfImportJobResponse$member" : null
       }
     },
     "ImportJobsResponse" : {
       "base" : "Import job list.",
       "refs" : { }
     },
-    "InternalServerErrorException" : {
+    "Include" : {
       "base" : null,
+      "refs" : {
+        "SegmentGroupList$Include" : "Specify how to handle multiple segment groups. For example, if the segment includes three segment groups, should the resulting segment include endpoints that are matched by all, any, or none of the segment groups you created. Acceptable values: ALL, ANY, or NONE."
+      }
+    },
+    "InternalServerErrorException" : {
+      "base" : "Simple message object.",
       "refs" : { }
+    },
+    "ItemResponse" : {
+      "base" : "The endpoint and events combined response definition",
+      "refs" : {
+        "MapOfItemResponse$member" : null
+      }
     },
     "JobStatus" : {
       "base" : null,
       "refs" : {
-        "ExportJobResponse$JobStatus" : "The status of the export job.\nValid values: CREATED, INITIALIZING, PROCESSING, COMPLETING, COMPLETED, FAILING, FAILED\n\nThe job status is FAILED if one or more pieces failed.",
+        "ExportJobResponse$JobStatus" : "The status of the job.\nValid values: CREATED, INITIALIZING, PROCESSING, COMPLETING, COMPLETED, FAILING, FAILED\n\nThe job status is FAILED if one or more pieces failed.",
         "ImportJobResponse$JobStatus" : "The status of the import job.\nValid values: CREATED, INITIALIZING, PROCESSING, COMPLETING, COMPLETED, FAILING, FAILED\n\nThe job status is FAILED if one or more pieces failed to import."
       }
     },
-    "ListOfActivityResponse" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "ListOfApplicationResponse" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "ListOfCampaignResponse" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "ListOfEndpointBatchItem" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "ListOfExportJobResponse" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "ListOfImportJobResponse" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "ListOfSegmentResponse" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "ListOfTreatmentResource" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "ListOfWriteTreatmentResource" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "ListOf__string" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "MapOfAddressConfiguration" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "MapOfAttributeDimension" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "MapOfEndpointMessageResult" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "MapOfEndpointSendConfiguration" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "MapOfListOf__string" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "MapOfMapOfEndpointMessageResult" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "MapOfMessageResult" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "MapOf__double" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "MapOf__integer" : {
-      "base" : null,
-      "refs" : { }
-    },
-    "MapOf__string" : {
-      "base" : null,
-      "refs" : { }
-    },
     "Message" : {
-      "base" : null,
+      "base" : "Message to send",
       "refs" : {
         "MessageConfiguration$ADMMessage" : "The message that the campaign delivers to ADM channels. Overrides the default message.",
         "MessageConfiguration$APNSMessage" : "The message that the campaign delivers to APNS channels. Overrides the default message.",
@@ -563,7 +566,7 @@
     "MessageResult" : {
       "base" : "The result from sending a message to an address.",
       "refs" : {
-        "MessageResponse$Result" : "A map containing a multi part response for each address, with the address as the key(Email address, phone number or push token) and the result as the value."
+        "MapOfMessageResult$member" : null
       }
     },
     "MessageType" : {
@@ -574,8 +577,14 @@
       }
     },
     "MethodNotAllowedException" : {
-      "base" : null,
+      "base" : "Simple message object.",
       "refs" : { }
+    },
+    "MetricDimension" : {
+      "base" : "Custom metric dimension",
+      "refs" : {
+        "MapOfMetricDimension$member" : null
+      }
     },
     "Mode" : {
       "base" : null,
@@ -584,8 +593,22 @@
       }
     },
     "NotFoundException" : {
-      "base" : null,
+      "base" : "Simple message object.",
       "refs" : { }
+    },
+    "NumberValidateRequest" : {
+      "base" : "Phone Number Information request.",
+      "refs" : { }
+    },
+    "NumberValidateResponse" : {
+      "base" : "Phone Number Information response.",
+      "refs" : { }
+    },
+    "PublicEndpoint" : {
+      "base" : "Public endpoint attributes.",
+      "refs" : {
+        "EventsBatch$Endpoint" : "Endpoint information"
+      }
     },
     "QuietTime" : {
       "base" : "Quiet Time",
@@ -646,7 +669,21 @@
       "base" : "Segment dimensions",
       "refs" : {
         "SegmentResponse$Dimensions" : "The segment dimensions attributes.",
-        "WriteSegmentRequest$Dimensions" : "The segment dimensions attributes."
+        "WriteSegmentRequest$Dimensions" : "The segment dimensions attributes.",
+        "ListOfSegmentDimensions$member" : null
+      }
+    },
+    "SegmentGroup" : {
+      "base" : "Segment group definition.",
+      "refs" : {
+        "ListOfSegmentGroup$member" : null
+      }
+    },
+    "SegmentGroupList" : {
+      "base" : "Segment group definition.",
+      "refs" : {
+        "SegmentResponse$SegmentGroups" : "A segment group, which consists of zero or more source segments, plus dimensions that are applied to those source segments.",
+        "WriteSegmentRequest$SegmentGroups" : "A segment group, which consists of zero or more source segments, plus dimensions that are applied to those source segments. Your request can only include one segment group. Your request can include either a SegmentGroups object or a Dimensions object, but not both."
       }
     },
     "SegmentImportResource" : {
@@ -661,10 +698,16 @@
         "SegmentDimensions$Location" : "The segment location attributes."
       }
     },
+    "SegmentReference" : {
+      "base" : "Segment reference.",
+      "refs" : {
+        "ListOfSegmentReference$member" : null
+      }
+    },
     "SegmentResponse" : {
       "base" : "Segment definition.",
       "refs" : {
-        "SegmentsResponse$Item" : "The list of segments."
+        "ListOfSegmentResponse$member" : null
       }
     },
     "SegmentType" : {
@@ -685,6 +728,12 @@
       "base" : "User send message response.",
       "refs" : { }
     },
+    "Session" : {
+      "base" : "Information about a session.",
+      "refs" : {
+        "Event$Session" : "The session"
+      }
+    },
     "SetDimension" : {
       "base" : "Dimension specification of a segment.",
       "refs" : {
@@ -697,15 +746,31 @@
         "SegmentLocation$Country" : "The country filter according to ISO 3166-1 Alpha-2 codes."
       }
     },
-    "TooManyRequestsException" : {
+    "SourceType" : {
       "base" : null,
+      "refs" : {
+        "SegmentGroup$SourceType" : "Specify how to handle multiple source segments. For example, if you specify three source segments, should the resulting segment be based on any or all of the segments? Acceptable values: ANY or ALL."
+      }
+    },
+    "TooManyRequestsException" : {
+      "base" : "Simple message object.",
       "refs" : { }
     },
     "TreatmentResource" : {
       "base" : "Treatment resource",
       "refs" : {
-        "CampaignResponse$AdditionalTreatments" : "Treatments that are defined in addition to the default treatment."
+        "ListOfTreatmentResource$member" : null
       }
+    },
+    "Type" : {
+      "base" : null,
+      "refs" : {
+        "SegmentGroup$Type" : "Specify how to handle multiple segment dimensions. For example, if you specify three dimensions, should the resulting segment include endpoints that are matched by all, any, or none of the dimensions? Acceptable values: ALL, ANY, or NONE."
+      }
+    },
+    "UpdateAttributesRequest" : {
+      "base" : "Update attributes request",
+      "refs" : { }
     },
     "WriteApplicationSettingsRequest" : {
       "base" : "Creating application setting request",
@@ -726,52 +791,55 @@
     "WriteTreatmentResource" : {
       "base" : "Used to create a campaign treatment.",
       "refs" : {
-        "WriteCampaignRequest$AdditionalTreatments" : "Treatments that are defined in addition to the default treatment."
+        "ListOfWriteTreatmentResource$member" : null
       }
     },
     "__boolean" : {
       "base" : null,
       "refs" : {
-        "ADMChannelRequest$Enabled" : "If the channel is enabled for sending messages.",
-        "ADMChannelResponse$Enabled" : "If the channel is enabled for sending messages.",
-        "ADMChannelResponse$HasCredential" : "Indicates whether the channel is configured with ADM credentials. Amazon Pinpoint uses your credentials to authenticate push notifications with ADM. Provide your credentials by setting the ClientId and ClientSecret attributes.",
-        "ADMChannelResponse$IsArchived" : "Is this channel archived",
+        "ADMChannelRequest$Enabled" : "Indicates whether or not the channel is enabled for sending messages.",
+        "ADMChannelResponse$Enabled" : "Indicates whether or not the channel is enabled for sending messages.",
+        "ADMChannelResponse$HasCredential" : "Not used. Retained for backwards compatibility.",
+        "ADMChannelResponse$IsArchived" : "Indicates whether or not the channel is archived.",
         "ADMMessage$SilentPush" : "Indicates if the message should display on the users device. Silent pushes can be used for Remote Configuration and Phone Home use cases.",
         "APNSChannelRequest$Enabled" : "If the channel is enabled for sending messages.",
         "APNSChannelResponse$Enabled" : "If the channel is enabled for sending messages.",
-        "APNSChannelResponse$HasCredential" : "Indicates whether the channel is configured with APNs credentials. Amazon Pinpoint uses your credentials to authenticate push notifications with APNs. To use APNs token authentication, set the BundleId, TeamId, TokenKey, and TokenKeyId attributes. To use certificate authentication, set the Certificate and PrivateKey attributes.",
+        "APNSChannelResponse$HasCredential" : "Not used. Retained for backwards compatibility.",
         "APNSChannelResponse$HasTokenKey" : "Indicates whether the channel is configured with a key for APNs token authentication. Provide a token key by setting the TokenKey attribute.",
-        "APNSChannelResponse$IsArchived" : "Is this channel archived",
+        "APNSChannelResponse$IsArchived" : "Indicates whether or not the channel is archived.",
         "APNSMessage$SilentPush" : "Indicates if the message should display on the users device. Silent pushes can be used for Remote Configuration and Phone Home use cases.",
         "APNSSandboxChannelRequest$Enabled" : "If the channel is enabled for sending messages.",
         "APNSSandboxChannelResponse$Enabled" : "If the channel is enabled for sending messages.",
-        "APNSSandboxChannelResponse$HasCredential" : "Indicates whether the channel is configured with APNs credentials. Amazon Pinpoint uses your credentials to authenticate push notifications with APNs. To use APNs token authentication, set the BundleId, TeamId, TokenKey, and TokenKeyId attributes. To use certificate authentication, set the Certificate and PrivateKey attributes.",
+        "APNSSandboxChannelResponse$HasCredential" : "Not used. Retained for backwards compatibility.",
         "APNSSandboxChannelResponse$HasTokenKey" : "Indicates whether the channel is configured with a key for APNs token authentication. Provide a token key by setting the TokenKey attribute.",
         "APNSSandboxChannelResponse$IsArchived" : "Is this channel archived",
         "APNSVoipChannelRequest$Enabled" : "If the channel is enabled for sending messages.",
         "APNSVoipChannelResponse$Enabled" : "If the channel is enabled for sending messages.",
-        "APNSVoipChannelResponse$HasCredential" : "If the channel is registered with a credential for authentication.",
+        "APNSVoipChannelResponse$HasCredential" : "Not used. Retained for backwards compatibility.",
         "APNSVoipChannelResponse$HasTokenKey" : "If the channel is registered with a token key for authentication.",
         "APNSVoipChannelResponse$IsArchived" : "Is this channel archived",
         "APNSVoipSandboxChannelRequest$Enabled" : "If the channel is enabled for sending messages.",
         "APNSVoipSandboxChannelResponse$Enabled" : "If the channel is enabled for sending messages.",
-        "APNSVoipSandboxChannelResponse$HasCredential" : "If the channel is registered with a credential for authentication.",
+        "APNSVoipSandboxChannelResponse$HasCredential" : "Not used. Retained for backwards compatibility.",
         "APNSVoipSandboxChannelResponse$HasTokenKey" : "If the channel is registered with a token key for authentication.",
         "APNSVoipSandboxChannelResponse$IsArchived" : "Is this channel archived",
         "BaiduChannelRequest$Enabled" : "If the channel is enabled for sending messages.",
         "BaiduChannelResponse$Enabled" : "If the channel is enabled for sending messages.",
-        "BaiduChannelResponse$HasCredential" : "Indicates whether the channel is configured with Baidu Cloud Push credentials. Amazon Pinpoint uses your credentials to authenticate push notifications with Baidu Cloud Push. Provide your credentials by setting the ApiKey and SecretKey attributes.",
+        "BaiduChannelResponse$HasCredential" : "Not used. Retained for backwards compatibility.",
         "BaiduChannelResponse$IsArchived" : "Is this channel archived",
         "BaiduMessage$SilentPush" : "Indicates if the message should display on the users device. Silent pushes can be used for Remote Configuration and Phone Home use cases.",
         "CampaignResponse$IsPaused" : "Indicates whether the campaign is paused. A paused campaign does not send messages unless you resume it by setting IsPaused to false.",
+        "ChannelResponse$Enabled" : "If the channel is enabled for sending messages.",
+        "ChannelResponse$HasCredential" : "Not used. Retained for backwards compatibility.",
+        "ChannelResponse$IsArchived" : "Is this channel archived",
         "DefaultPushNotificationMessage$SilentPush" : "Indicates if the message should display on the users device. Silent pushes can be used for Remote Configuration and Phone Home use cases.",
         "EmailChannelRequest$Enabled" : "If the channel is enabled for sending messages.",
         "EmailChannelResponse$Enabled" : "If the channel is enabled for sending messages.",
-        "EmailChannelResponse$HasCredential" : "If the channel is registered with a credential for authentication.",
+        "EmailChannelResponse$HasCredential" : "Not used. Retained for backwards compatibility.",
         "EmailChannelResponse$IsArchived" : "Is this channel archived",
         "GCMChannelRequest$Enabled" : "If the channel is enabled for sending messages.",
         "GCMChannelResponse$Enabled" : "If the channel is enabled for sending messages.",
-        "GCMChannelResponse$HasCredential" : "Indicates whether the channel is configured with FCM or GCM credentials. Amazon Pinpoint uses your credentials to authenticate push notifications with FCM or GCM. Provide your credentials by setting the ApiKey attribute.",
+        "GCMChannelResponse$HasCredential" : "Not used. Retained for backwards compatibility.",
         "GCMChannelResponse$IsArchived" : "Is this channel archived",
         "GCMMessage$SilentPush" : "Indicates if the message should display on the users device. Silent pushes can be used for Remote Configuration and Phone Home use cases.",
         "ImportJobRequest$DefineSegment" : "Sets whether the endpoints create a segment when they are imported.",
@@ -781,27 +849,30 @@
         "Message$SilentPush" : "Indicates if the message should display on the users device.\n\nSilent pushes can be used for Remote Configuration and Phone Home use cases. ",
         "SMSChannelRequest$Enabled" : "If the channel is enabled for sending messages.",
         "SMSChannelResponse$Enabled" : "If the channel is enabled for sending messages.",
-        "SMSChannelResponse$HasCredential" : "If the channel is registered with a credential for authentication.",
+        "SMSChannelResponse$HasCredential" : "Not used. Retained for backwards compatibility.",
         "SMSChannelResponse$IsArchived" : "Is this channel archived",
         "Schedule$IsLocalTime" : "Indicates whether the campaign schedule takes effect according to each user's local time.",
+        "WriteApplicationSettingsRequest$CloudWatchMetricsEnabled" : "The CloudWatchMetrics settings for the app.",
         "WriteCampaignRequest$IsPaused" : "Indicates whether the campaign is paused. A paused campaign does not send messages unless you resume it by setting IsPaused to false."
       }
     },
     "__double" : {
       "base" : null,
       "refs" : {
-        "EndpointBatchItem$Metrics" : "Custom metrics that your app reports to Amazon Pinpoint.",
-        "EndpointLocation$Latitude" : "The latitude of the endpoint location. Rounded to one decimal (Roughly corresponding to a mile).",
-        "EndpointLocation$Longitude" : "The longitude of the endpoint location. Rounded to one decimal (Roughly corresponding to a mile).",
-        "EndpointRequest$Metrics" : "Custom metrics that your app reports to Amazon Pinpoint.",
-        "EndpointResponse$Metrics" : "Custom metrics that your app reports to Amazon Pinpoint."
+        "EndpointLocation$Latitude" : "The latitude of the endpoint location, rounded to one decimal place.",
+        "EndpointLocation$Longitude" : "The longitude of the endpoint location, rounded to one decimal place.",
+        "GPSCoordinates$Latitude" : "Latitude",
+        "GPSCoordinates$Longitude" : "Longitude",
+        "GPSPointDimension$RangeInKilometers" : "Range in kilometers from the coordinate.",
+        "MetricDimension$Value" : "Value to be compared.",
+        "MapOf__double$member" : null
       }
     },
     "__integer" : {
       "base" : null,
       "refs" : {
-        "ADMChannelResponse$Version" : "Version of channel",
-        "APNSChannelResponse$Version" : "Version of channel",
+        "ADMChannelResponse$Version" : "The channel version.",
+        "APNSChannelResponse$Version" : "The channel version.",
         "APNSMessage$Badge" : "Include this key when you want the system to modify the badge of your app icon. If this key is not included in the dictionary, the badge is not changed. To remove the badge, set the value of this key to 0.",
         "APNSMessage$TimeToLive" : "The length of time (in seconds) that APNs stores and attempts to deliver the message. If the value is 0, APNs does not store the message or attempt to deliver it more than once. Amazon Pinpoint uses this value to set the apns-expiration request header when it sends the message to APNs.",
         "APNSSandboxChannelResponse$Version" : "Version of channel",
@@ -812,6 +883,7 @@
         "ActivityResponse$TimezonesTotalCount" : "The total number of unique timezones present in the segment.",
         "ActivityResponse$TotalEndpointCount" : "The total number of endpoints to which the campaign attempts to deliver messages.",
         "BaiduChannelResponse$Version" : "Version of channel",
+        "BaiduMessage$TimeToLive" : "This parameter specifies how long (in seconds) the message should be kept in Baidu storage if the device is offline. The and the default value and the maximum time to live supported is 7 days (604800 seconds)",
         "CampaignLimits$Daily" : "The maximum number of messages that the campaign can send daily.",
         "CampaignLimits$MaximumDuration" : "The length of time (in seconds) that the campaign can run before it ends and message deliveries stop. This duration begins at the scheduled start time for the campaign. The minimum value is 60.",
         "CampaignLimits$MessagesPerSecond" : "The number of messages that the campaign can send per second. The minimum value is 50, and the maximum is 20000.",
@@ -819,8 +891,14 @@
         "CampaignResponse$HoldoutPercent" : "The allocated percentage of end users who will not receive messages from this campaign.",
         "CampaignResponse$SegmentVersion" : "The version of the segment to which the campaign sends messages.",
         "CampaignResponse$Version" : "The campaign version number.",
+        "ChannelResponse$Version" : "Version of channel",
+        "EmailChannelResponse$MessagesPerSecond" : "Messages per second that can be sent",
         "EmailChannelResponse$Version" : "Version of channel",
+        "EndpointItemResponse$StatusCode" : "The status code to respond with for a particular endpoint id after endpoint registration",
         "EndpointMessageResult$StatusCode" : "Downstream service status code.",
+        "EventItemResponse$StatusCode" : "The status code to respond with for a particular event id",
+        "ExportJobRequest$SegmentVersion" : "The version of the segment to export if specified.",
+        "ExportJobResource$SegmentVersion" : "The version of the segment to export if specified.",
         "ExportJobResponse$CompletedPieces" : "The number of pieces that have successfully completed as of the time of the request.",
         "ExportJobResponse$FailedPieces" : "The number of pieces that failed to be processed as of the time of the request.",
         "ExportJobResponse$TotalFailures" : "The number of endpoints that were not processed; for example, because of syntax errors.",
@@ -833,340 +911,593 @@
         "ImportJobResponse$TotalFailures" : "The number of endpoints that failed to import; for example, because of syntax errors.",
         "ImportJobResponse$TotalPieces" : "The total number of pieces that must be imported to finish the job. Each piece is an approximately equal portion of the endpoints to import.",
         "ImportJobResponse$TotalProcessed" : "The number of endpoints that were processed by the import job.",
+        "Message$TimeToLive" : "This parameter specifies how long (in seconds) the message should be kept if the service is unable to deliver the notification the first time. If the value is 0, it treats the notification as if it expires immediately and does not store the notification or attempt to redeliver it. This value is converted to the expiration field when sent to the service. It only applies to APNs and GCM",
         "MessageResult$StatusCode" : "Downstream service status code.",
+        "NumberValidateResponse$PhoneTypeCode" : "The phone type, represented by an integer. Possible values include 0 (MOBILE), 1 (LANDLINE), 2 (VOIP), 3 (INVALID), 4 (OTHER), and 5 (PREPAID).",
+        "SMSChannelResponse$PromotionalMessagesPerSecond" : "Promotional messages per second that can be sent",
+        "SMSChannelResponse$TransactionalMessagesPerSecond" : "Transactional messages per second that can be sent",
         "SMSChannelResponse$Version" : "Version of channel",
-        "SegmentImportResource$ChannelCounts" : "Channel type counts",
         "SegmentImportResource$Size" : "The number of endpoints that were successfully imported to create this segment.",
+        "SegmentReference$Version" : "If specified contains a specific version of the segment included.",
         "SegmentResponse$Version" : "The segment version number.",
+        "Session$Duration" : "Session duration in millis",
         "TreatmentResource$SizePercent" : "The allocated percentage of users for this treatment.",
         "WriteCampaignRequest$HoldoutPercent" : "The allocated percentage of end users who will not receive messages from this campaign.",
         "WriteCampaignRequest$SegmentVersion" : "The version of the segment to which the campaign sends messages.",
-        "WriteTreatmentResource$SizePercent" : "The allocated percentage of users for this treatment."
+        "WriteTreatmentResource$SizePercent" : "The allocated percentage of users for this treatment.",
+        "MapOf__integer$member" : null
+      }
+    },
+    "ListOfActivityResponse" : {
+      "base" : null,
+      "refs" : {
+        "ActivitiesResponse$Item" : "List of campaign activities"
+      }
+    },
+    "ListOfApplicationResponse" : {
+      "base" : null,
+      "refs" : {
+        "ApplicationsResponse$Item" : "List of applications returned in this page."
+      }
+    },
+    "ListOfCampaignResponse" : {
+      "base" : null,
+      "refs" : {
+        "CampaignsResponse$Item" : "A list of campaigns."
+      }
+    },
+    "ListOfEndpointBatchItem" : {
+      "base" : null,
+      "refs" : {
+        "EndpointBatchRequest$Item" : "List of items to update. Maximum 100 items"
+      }
+    },
+    "ListOfEndpointResponse" : {
+      "base" : null,
+      "refs" : {
+        "EndpointsResponse$Item" : "The list of endpoints."
+      }
+    },
+    "ListOfExportJobResponse" : {
+      "base" : null,
+      "refs" : {
+        "ExportJobsResponse$Item" : "A list of export jobs for the application."
+      }
+    },
+    "ListOfImportJobResponse" : {
+      "base" : null,
+      "refs" : {
+        "ImportJobsResponse$Item" : "A list of import jobs for the application."
+      }
+    },
+    "ListOfSegmentDimensions" : {
+      "base" : null,
+      "refs" : {
+        "SegmentGroup$Dimensions" : "List of dimensions to include or exclude."
+      }
+    },
+    "ListOfSegmentGroup" : {
+      "base" : null,
+      "refs" : {
+        "SegmentGroupList$Groups" : "A set of segment criteria to evaluate."
+      }
+    },
+    "ListOfSegmentReference" : {
+      "base" : null,
+      "refs" : {
+        "SegmentGroup$SourceSegments" : "The base segment that you build your segment on. The source segment defines the starting \"universe\" of endpoints. When you add dimensions to the segment, it filters the source segment based on the dimensions that you specify. You can specify more than one dimensional segment. You can only specify one imported segment."
+      }
+    },
+    "ListOfSegmentResponse" : {
+      "base" : null,
+      "refs" : {
+        "SegmentsResponse$Item" : "The list of segments."
+      }
+    },
+    "ListOfTreatmentResource" : {
+      "base" : null,
+      "refs" : {
+        "CampaignResponse$AdditionalTreatments" : "Treatments that are defined in addition to the default treatment."
+      }
+    },
+    "ListOfWriteTreatmentResource" : {
+      "base" : null,
+      "refs" : {
+        "WriteCampaignRequest$AdditionalTreatments" : "Treatments that are defined in addition to the default treatment."
+      }
+    },
+    "ListOf__string" : {
+      "base" : null,
+      "refs" : {
+        "AttributeDimension$Values" : "The criteria values for the segment dimension. Endpoints with matching attribute values are included or excluded from the segment, depending on the setting for Type.",
+        "AttributesResource$Attributes" : "The attributes for the application.",
+        "ExportJobResponse$Failures" : "Provides up to 100 of the first failed entries for the job, if any exist.",
+        "ImportJobResponse$Failures" : "Provides up to 100 of the first failed entries for the job, if any exist.",
+        "SetDimension$Values" : "The criteria values for the segment dimension. Endpoints with matching attribute values are included or excluded from the segment, depending on the setting for Type.",
+        "UpdateAttributesRequest$Blacklist" : "The GLOB wildcard for removing the attributes in the application",
+        "MapOfListOf__string$member" : null
+      }
+    },
+    "MapOfAddressConfiguration" : {
+      "base" : null,
+      "refs" : {
+        "MessageRequest$Addresses" : "A map of key-value pairs, where each key is an address and each value is an AddressConfiguration object. An address can be a push notification token, a phone number, or an email address."
+      }
+    },
+    "MapOfAttributeDimension" : {
+      "base" : null,
+      "refs" : {
+        "SegmentDimensions$Attributes" : "Custom segment attributes.",
+        "SegmentDimensions$UserAttributes" : "Custom segment user attributes."
+      }
+    },
+    "MapOfChannelResponse" : {
+      "base" : null,
+      "refs" : {
+        "ChannelsResponse$Channels" : "A map of channels, with the ChannelType as the key and the Channel as the value."
+      }
+    },
+    "MapOfEndpointMessageResult" : {
+      "base" : null,
+      "refs" : {
+        "MessageResponse$EndpointResult" : "A map containing a multi part response for each address, with the endpointId as the key and the result as the value.",
+        "MapOfMapOfEndpointMessageResult$member" : null
+      }
+    },
+    "MapOfEndpointSendConfiguration" : {
+      "base" : null,
+      "refs" : {
+        "MessageRequest$Endpoints" : "A map of key-value pairs, where each key is an endpoint ID and each value is an EndpointSendConfiguration object. Within an EndpointSendConfiguration object, you can tailor the message for an endpoint by specifying message overrides or substitutions.",
+        "SendUsersMessageRequest$Users" : "A map that associates user IDs with EndpointSendConfiguration objects. Within an EndpointSendConfiguration object, you can tailor the message for a user by specifying message overrides or substitutions."
+      }
+    },
+    "MapOfEvent" : {
+      "base" : null,
+      "refs" : {
+        "EventsBatch$Events" : "Events"
+      }
+    },
+    "MapOfEventItemResponse" : {
+      "base" : null,
+      "refs" : {
+        "ItemResponse$EventsItemResponse" : "Events item response is a multipart response object per event Id, with eventId as the key and EventItemResponse object as the value"
+      }
+    },
+    "MapOfEventsBatch" : {
+      "base" : null,
+      "refs" : {
+        "EventsRequest$BatchItem" : "Batch of events with endpoint id as the key and an object of EventsBatch as value. The EventsBatch object has the PublicEndpoint and a map of event Id's to events"
+      }
+    },
+    "MapOfItemResponse" : {
+      "base" : null,
+      "refs" : {
+        "EventsResponse$Results" : "A map containing a multi part response for each endpoint, with the endpoint id as the key and item response as the value"
+      }
+    },
+    "MapOfMessageResult" : {
+      "base" : null,
+      "refs" : {
+        "MessageResponse$Result" : "A map containing a multi part response for each address, with the address as the key(Email address, phone number or push token) and the result as the value."
+      }
+    },
+    "MapOfMetricDimension" : {
+      "base" : null,
+      "refs" : {
+        "SegmentDimensions$Metrics" : "Custom segment metrics."
+      }
+    },
+    "MapOf__double" : {
+      "base" : null,
+      "refs" : {
+        "EndpointBatchItem$Metrics" : "Custom metrics that your app reports to Amazon Pinpoint.",
+        "EndpointRequest$Metrics" : "Custom metrics that your app reports to Amazon Pinpoint.",
+        "EndpointResponse$Metrics" : "Custom metrics that your app reports to Amazon Pinpoint.",
+        "Event$Metrics" : "Event metrics",
+        "PublicEndpoint$Metrics" : "Custom metrics that your app reports to Amazon Pinpoint."
+      }
+    },
+    "MapOf__integer" : {
+      "base" : null,
+      "refs" : {
+        "SegmentImportResource$ChannelCounts" : "The number of channel types in the imported segment."
+      }
+    },
+    "MapOfListOf__string" : {
+      "base" : null,
+      "refs" : {
+        "ADMMessage$Substitutions" : "Default message substitutions. Can be overridden by individual address substitutions.",
+        "APNSMessage$Substitutions" : "Default message substitutions. Can be overridden by individual address substitutions.",
+        "AddressConfiguration$Substitutions" : "A map of substitution values for the message to be merged with the DefaultMessage's substitutions. Substitutions on this map take precedence over the all other substitutions.",
+        "BaiduMessage$Substitutions" : "Default message substitutions. Can be overridden by individual address substitutions.",
+        "DefaultMessage$Substitutions" : "Default message substitutions. Can be overridden by individual address substitutions.",
+        "DefaultPushNotificationMessage$Substitutions" : "Default message substitutions. Can be overridden by individual address substitutions.",
+        "EndpointBatchItem$Attributes" : "Custom attributes that describe the endpoint by associating a name with an array of values. For example, an attribute named \"interests\" might have the values [\"science\", \"politics\", \"travel\"]. You can use these attributes as selection criteria when you create a segment of users to engage with a messaging campaign.\n\nThe following characters are not recommended in attribute names: # : ? \\ /. The Amazon Pinpoint console does not display attributes that include these characters in the name. This limitation does not apply to attribute values.",
+        "EndpointRequest$Attributes" : "Custom attributes that describe the endpoint by associating a name with an array of values. For example, an attribute named \"interests\" might have the values [\"science\", \"politics\", \"travel\"]. You can use these attributes as selection criteria when you create a segment of users to engage with a messaging campaign.\n\nThe following characters are not recommended in attribute names: # : ? \\ /. The Amazon Pinpoint console does not display attributes that include these characters in the name. This limitation does not apply to attribute values.",
+        "EndpointResponse$Attributes" : "Custom attributes that describe the endpoint by associating a name with an array of values. For example, an attribute named \"interests\" might have the following values: [\"science\", \"politics\", \"travel\"]. You can use these attributes as selection criteria when you create segments.\n\nThe Amazon Pinpoint console can't display attribute names that include the following characters: hash/pound sign (#), colon (:), question mark (?), backslash (\\), and forward slash (/). For this reason, you should avoid using these characters in the names of custom attributes.",
+        "EndpointSendConfiguration$Substitutions" : "A map of substitution values for the message to be merged with the DefaultMessage's substitutions. Substitutions on this map take precedence over the all other substitutions.",
+        "EndpointUser$UserAttributes" : "Custom attributes that describe the user by associating a name with an array of values. For example, an attribute named \"interests\" might have the following values: [\"science\", \"politics\", \"travel\"]. You can use these attributes as selection criteria when you create segments.\n\nThe Amazon Pinpoint console can't display attribute names that include the following characters: hash/pound sign (#), colon (:), question mark (?), backslash (\\), and forward slash (/). For this reason, you should avoid using these characters in the names of custom attributes.",
+        "GCMMessage$Substitutions" : "Default message substitutions. Can be overridden by individual address substitutions.",
+        "PublicEndpoint$Attributes" : "Custom attributes that your app reports to Amazon Pinpoint. You can use these attributes as selection criteria when you create a segment.",
+        "SMSMessage$Substitutions" : "Default message substitutions. Can be overridden by individual address substitutions."
+      }
+    },
+    "MapOfMapOfEndpointMessageResult" : {
+      "base" : null,
+      "refs" : {
+        "SendUsersMessageResponse$Result" : "An object that shows the endpoints that were messaged for each user. The object provides a list of user IDs. For each user ID, it provides the endpoint IDs that were messaged. For each endpoint ID, it provides an EndpointMessageResult object."
+      }
+    },
+    "MapOf__string" : {
+      "base" : null,
+      "refs" : {
+        "ADMMessage$Data" : "The data payload used for a silent push. This payload is added to the notifications' data.pinpoint.jsonBody' object",
+        "APNSMessage$Data" : "The data payload used for a silent push. This payload is added to the notifications' data.pinpoint.jsonBody' object",
+        "AddressConfiguration$Context" : "A map of custom attributes to attributes to be attached to the message for this address. This payload is added to the push notification's 'data.pinpoint' object or added to the email/sms delivery receipt event attributes.",
+        "BaiduMessage$Data" : "The data payload used for a silent push. This payload is added to the notifications' data.pinpoint.jsonBody' object",
+        "DefaultPushNotificationMessage$Data" : "The data payload used for a silent push. This payload is added to the notifications' data.pinpoint.jsonBody' object",
+        "EndpointSendConfiguration$Context" : "A map of custom attributes to attributes to be attached to the message for this address. This payload is added to the push notification's 'data.pinpoint' object or added to the email/sms delivery receipt event attributes.",
+        "Event$Attributes" : "Custom attributes that are associated with the event you're adding or updating.",
+        "GCMMessage$Data" : "The data payload used for a silent push. This payload is added to the notifications' data.pinpoint.jsonBody' object",
+        "MessageRequest$Context" : "A map of custom attributes to attributes to be attached to the message. This payload is added to the push notification's 'data.pinpoint' object or added to the email/sms delivery receipt event attributes.",
+        "SendUsersMessageRequest$Context" : "A map of custom attribute-value pairs. Amazon Pinpoint adds these attributes to the data.pinpoint object in the body of the push notification payload. Amazon Pinpoint also provides these attributes in the events that it generates for users-messages deliveries."
       }
     },
     "__string" : {
       "base" : null,
       "refs" : {
-        "ADMChannelRequest$ClientId": "Client ID as gotten from Amazon",
-        "ADMChannelRequest$ClientSecret": "Client secret as gotten from Amazon",
-        "ADMChannelResponse$ApplicationId": "The ID of the application to which the channel applies.",
-        "ADMChannelResponse$CreationDate": "When was this segment created",
-        "ADMChannelResponse$Id": "Channel ID. Not used, only for backwards compatibility.",
-        "ADMChannelResponse$LastModifiedBy": "Who last updated this entry",
-        "ADMChannelResponse$LastModifiedDate": "Last date this was updated",
-        "ADMChannelResponse$Platform": "Platform type. Will be \"ADM\"",
-        "ADMMessage$Body": "The message body of the notification, the email body or the text message.",
-        "ADMMessage$ConsolidationKey": "Optional. Arbitrary string used to indicate multiple messages are logically the same and that ADM is allowed to drop previously enqueued messages in favor of this one.",
-        "ADMMessage$Data": "The data payload used for a silent push. This payload is added to the notifications' data.pinpoint.jsonBody' object",
-        "ADMMessage$ExpiresAfter": "Optional. Number of seconds ADM should retain the message if the device is offline",
-        "ADMMessage$IconReference": "The icon image name of the asset saved in your application.",
-        "ADMMessage$ImageIconUrl": "The URL that points to an image used as the large icon to the notification content view.",
-        "ADMMessage$ImageUrl": "The URL that points to an image used in the push notification.",
-        "ADMMessage$MD5": "Optional. Base-64-encoded MD5 checksum of the data parameter. Used to verify data integrity",
-        "ADMMessage$RawContent": "The Raw JSON formatted string to be used as the payload. This value overrides the message.",
-        "ADMMessage$SmallImageIconUrl": "The URL that points to an image used as the small icon for the notification which will be used to represent the notification in the status bar and content view",
-        "ADMMessage$Sound": "Indicates a sound to play when the device receives the notification. Supports default, or the filename of a sound resource bundled in the app. Android sound files must reside in /res/raw/",
-        "ADMMessage$Title": "The message title that displays above the message on the user's device.",
-        "ADMMessage$Url": "The URL to open in the user's mobile browser. Used if the value for Action is URL.",
-        "APNSChannelRequest$BundleId": "The bundle id used for APNs Tokens.",
-        "APNSChannelRequest$Certificate": "The distribution certificate from Apple.",
-        "APNSChannelRequest$DefaultAuthenticationMethod": "The default authentication method used for APNs.",
-        "APNSChannelRequest$PrivateKey": "The certificate private key.",
-        "APNSChannelRequest$TeamId": "The team id used for APNs Tokens.",
-        "APNSChannelRequest$TokenKey": "The token key used for APNs Tokens.",
-        "APNSChannelRequest$TokenKeyId": "The token key used for APNs Tokens.",
-        "APNSChannelResponse$ApplicationId": "The ID of the application to which the channel applies.",
-        "APNSChannelResponse$CreationDate": "When was this segment created",
-        "APNSChannelResponse$DefaultAuthenticationMethod": "The default authentication method used for APNs.",
-        "APNSChannelResponse$Id": "Channel ID. Not used. Present only for backwards compatibility.",
-        "APNSChannelResponse$LastModifiedBy": "Who last updated this entry",
-        "APNSChannelResponse$LastModifiedDate": "Last date this was updated",
-        "APNSChannelResponse$Platform": "The platform type. Will be APNS.",
-        "APNSMessage$Body": "The message body of the notification, the email body or the text message.",
-        "APNSMessage$Category": "Provide this key with a string value that represents the notification's type. This value corresponds to the value in the identifier property of one of your app's registered categories.",
-        "APNSMessage$CollapseId": "An ID that, if assigned to multiple messages, causes APNs to coalesce the messages into a single push notification instead of delivering each message individually. The value must not exceed 64 bytes. Amazon Pinpoint uses this value to set the apns-collapse-id request header when it sends the message to APNs.",
-        "APNSMessage$Data": "The data payload used for a silent push. This payload is added to the notifications' data.pinpoint.jsonBody' object",
-        "APNSMessage$MediaUrl": "The URL that points to a video used in the push notification.",
-        "APNSMessage$PreferredAuthenticationMethod": "The preferred authentication method, either \"CERTIFICATE\" or \"TOKEN\"",
-        "APNSMessage$Priority": "The message priority. Amazon Pinpoint uses this value to set the apns-priority request header when it sends the message to APNs. Accepts the following values:\n\n\"5\" - Low priority. Messages might be delayed, delivered in groups, and throttled.\n\n\"10\" - High priority. Messages are sent immediately. High priority messages must cause an alert, sound, or badge on the receiving device.\n\nThe default value is \"10\".\n\nThe equivalent values for FCM or GCM messages are \"normal\" and \"high\". Amazon Pinpoint accepts these values for APNs messages and converts them.\n\nFor more information about the apns-priority parameter, see Communicating with APNs in the APNs Local and Remote Notification Programming Guide.",
-        "APNSMessage$RawContent": "The Raw JSON formatted string to be used as the payload. This value overrides the message.",
-        "APNSMessage$Sound": "Include this key when you want the system to play a sound. The value of this key is the name of a sound file in your app's main bundle or in the Library/Sounds folder of your app's data container. If the sound file cannot be found, or if you specify defaultfor the value, the system plays the default alert sound.",
-        "APNSMessage$ThreadId": "Provide this key with a string value that represents the app-specific identifier for grouping notifications. If you provide a Notification Content app extension, you can use this value to group your notifications together.",
-        "APNSMessage$Title": "The message title that displays above the message on the user's device.",
-        "APNSMessage$Url": "The URL to open in the user's mobile browser. Used if the value for Action is URL.",
-        "APNSSandboxChannelRequest$BundleId": "The bundle id used for APNs Tokens.",
-        "APNSSandboxChannelRequest$Certificate": "The distribution certificate from Apple.",
-        "APNSSandboxChannelRequest$DefaultAuthenticationMethod": "The default authentication method used for APNs.",
-        "APNSSandboxChannelRequest$PrivateKey": "The certificate private key.",
-        "APNSSandboxChannelRequest$TeamId": "The team id used for APNs Tokens.",
-        "APNSSandboxChannelRequest$TokenKey": "The token key used for APNs Tokens.",
-        "APNSSandboxChannelRequest$TokenKeyId": "The token key used for APNs Tokens.",
-        "APNSSandboxChannelResponse$ApplicationId": "The ID of the application to which the channel applies.",
-        "APNSSandboxChannelResponse$CreationDate": "When was this segment created",
-        "APNSSandboxChannelResponse$DefaultAuthenticationMethod": "The default authentication method used for APNs.",
-        "APNSSandboxChannelResponse$Id": "Channel ID. Not used, only for backwards compatibility.",
-        "APNSSandboxChannelResponse$LastModifiedBy": "Who last updated this entry",
-        "APNSSandboxChannelResponse$LastModifiedDate": "Last date this was updated",
-        "APNSSandboxChannelResponse$Platform": "The platform type. Will be APNS_SANDBOX.",
-        "APNSVoipChannelRequest$BundleId": "The bundle id used for APNs Tokens.",
-        "APNSVoipChannelRequest$Certificate": "The distribution certificate from Apple.",
-        "APNSVoipChannelRequest$DefaultAuthenticationMethod": "The default authentication method used for APNs.",
-        "APNSVoipChannelRequest$PrivateKey": "The certificate private key.",
-        "APNSVoipChannelRequest$TeamId": "The team id used for APNs Tokens.",
-        "APNSVoipChannelRequest$TokenKey": "The token key used for APNs Tokens.",
-        "APNSVoipChannelRequest$TokenKeyId": "The token key used for APNs Tokens.",
-        "APNSVoipChannelResponse$ApplicationId": "Application id",
-        "APNSVoipChannelResponse$CreationDate": "When was this segment created",
-        "APNSVoipChannelResponse$DefaultAuthenticationMethod": "The default authentication method used for APNs.",
-        "APNSVoipChannelResponse$Id": "Channel ID. Not used, only for backwards compatibility.",
-        "APNSVoipChannelResponse$LastModifiedBy": "Who made the last change",
-        "APNSVoipChannelResponse$LastModifiedDate": "Last date this was updated",
-        "APNSVoipChannelResponse$Platform": "The platform type. Will be APNS.",
-        "APNSVoipSandboxChannelRequest$BundleId": "The bundle id used for APNs Tokens.",
-        "APNSVoipSandboxChannelRequest$Certificate": "The distribution certificate from Apple.",
-        "APNSVoipSandboxChannelRequest$DefaultAuthenticationMethod": "The default authentication method used for APNs.",
-        "APNSVoipSandboxChannelRequest$PrivateKey": "The certificate private key.",
-        "APNSVoipSandboxChannelRequest$TeamId": "The team id used for APNs Tokens.",
-        "APNSVoipSandboxChannelRequest$TokenKey": "The token key used for APNs Tokens.",
-        "APNSVoipSandboxChannelRequest$TokenKeyId": "The token key used for APNs Tokens.",
-        "APNSVoipSandboxChannelResponse$ApplicationId": "Application id",
-        "APNSVoipSandboxChannelResponse$CreationDate": "When was this segment created",
-        "APNSVoipSandboxChannelResponse$DefaultAuthenticationMethod": "The default authentication method used for APNs.",
-        "APNSVoipSandboxChannelResponse$Id": "Channel ID. Not used, only for backwards compatibility.",
-        "APNSVoipSandboxChannelResponse$LastModifiedBy": "Who made the last change",
-        "APNSVoipSandboxChannelResponse$LastModifiedDate": "Last date this was updated",
-        "APNSVoipSandboxChannelResponse$Platform": "The platform type. Will be APNS.",
-        "ActivityResponse$ApplicationId": "The ID of the application to which the campaign applies.",
-        "ActivityResponse$CampaignId": "The ID of the campaign to which the activity applies.",
-        "ActivityResponse$End": "The actual time the activity was marked CANCELLED or COMPLETED. Provided in ISO 8601 format.",
-        "ActivityResponse$Id": "The unique activity ID.",
-        "ActivityResponse$Result": "Indicates whether the activity succeeded.\n\nValid values: SUCCESS, FAIL",
-        "ActivityResponse$ScheduledStart": "The scheduled start time for the activity in ISO 8601 format.",
-        "ActivityResponse$Start": "The actual start time of the activity in ISO 8601 format.",
-        "ActivityResponse$State": "The state of the activity.\n\nValid values: PENDING, INITIALIZING, RUNNING, PAUSED, CANCELLED, COMPLETED",
-        "ActivityResponse$TreatmentId": "The ID of a variation of the campaign used for A/B testing.",
-        "AddressConfiguration$BodyOverride": "Body override. If specified will override default body.",
-        "AddressConfiguration$Context": "A map of custom attributes to attributes to be attached to the message for this address. This payload is added to the push notification's 'data.pinpoint' object or added to the email/sms delivery receipt event attributes.",
-        "AddressConfiguration$RawContent": "The Raw JSON formatted string to be used as the payload. This value overrides the message.",
-        "AddressConfiguration$TitleOverride": "Title override. If specified will override default title if applicable.",
-        "ApplicationResponse$Id": "The unique application ID.",
-        "ApplicationResponse$Name": "The display name of the application.",
-        "ApplicationSettingsResource$ApplicationId": "The unique ID for the application.",
-        "ApplicationSettingsResource$LastModifiedDate": "The date that the settings were last updated in ISO 8601 format.",
-        "ApplicationsResponse$NextToken": "The string that you use in a subsequent request to get the next page of results in a paginated response.",
-        "BaiduChannelRequest$ApiKey": "Platform credential API key from Baidu.",
-        "BaiduChannelRequest$SecretKey": "Platform credential Secret key from Baidu.",
-        "BaiduChannelResponse$ApplicationId": "Application id",
-        "BaiduChannelResponse$CreationDate": "When was this segment created",
-        "BaiduChannelResponse$Credential": "The Baidu API key from Baidu.",
-        "BaiduChannelResponse$Id": "Channel ID. Not used, only for backwards compatibility.",
-        "BaiduChannelResponse$LastModifiedBy": "Who made the last change",
-        "BaiduChannelResponse$LastModifiedDate": "Last date this was updated",
-        "BaiduChannelResponse$Platform": "The platform type. Will be BAIDU",
-        "BaiduMessage$Body": "The message body of the notification, the email body or the text message.",
-        "BaiduMessage$Data": "The data payload used for a silent push. This payload is added to the notifications' data.pinpoint.jsonBody' object",
-        "BaiduMessage$IconReference": "The icon image name of the asset saved in your application.",
-        "BaiduMessage$ImageIconUrl": "The URL that points to an image used as the large icon to the notification content view.",
-        "BaiduMessage$ImageUrl": "The URL that points to an image used in the push notification.",
-        "BaiduMessage$RawContent": "The Raw JSON formatted string to be used as the payload. This value overrides the message.",
-        "BaiduMessage$SmallImageIconUrl": "The URL that points to an image used as the small icon for the notification which will be used to represent the notification in the status bar and content view",
-        "BaiduMessage$Sound": "Indicates a sound to play when the device receives the notification. Supports default, or the filename of a sound resource bundled in the app. Android sound files must reside in /res/raw/",
-        "BaiduMessage$Title": "The message title that displays above the message on the user's device.",
-        "BaiduMessage$Url": "The URL to open in the user's mobile browser. Used if the value for Action is URL.",
-        "CampaignEmailMessage$Body": "The email text body.",
-        "CampaignEmailMessage$FromAddress": "The email address used to send the email from. Defaults to use FromAddress specified in the Email Channel.",
-        "CampaignEmailMessage$HtmlBody": "The email html body.",
-        "CampaignEmailMessage$Title": "The email title (Or subject).",
-        "CampaignHook$LambdaFunctionName": "Lambda function name or arn to be called for delivery",
-        "CampaignHook$WebUrl": "Web URL to call for hook. If the URL has authentication specified it will be added as authentication to the request",
-        "CampaignResponse$ApplicationId": "The ID of the application to which the campaign applies.",
-        "CampaignResponse$CreationDate": "The date the campaign was created in ISO 8601 format.",
-        "CampaignResponse$Description": "A description of the campaign.",
-        "CampaignResponse$Id": "The unique campaign ID.",
-        "CampaignResponse$LastModifiedDate": "The date the campaign was last updated in ISO 8601 format.\t",
-        "CampaignResponse$Name": "The custom name of the campaign.",
-        "CampaignResponse$SegmentId": "The ID of the segment to which the campaign sends messages.",
-        "CampaignResponse$TreatmentDescription": "A custom description for the treatment.",
-        "CampaignResponse$TreatmentName": "The custom name of a variation of the campaign used for A/B testing.",
-        "CampaignSmsMessage$Body": "The SMS text body.",
-        "CampaignSmsMessage$SenderId": "Sender ID of sent message.",
-        "CampaignsResponse$NextToken": "The string that you use in a subsequent request to get the next page of results in a paginated response.",
-        "CreateApplicationRequest$Name": "The display name of the application. Used in the Amazon Pinpoint console.",
-        "DefaultMessage$Body": "The message body of the notification, the email body or the text message.",
-        "DefaultPushNotificationMessage$Body": "The message body of the notification, the email body or the text message.",
-        "DefaultPushNotificationMessage$Data": "The data payload used for a silent push. This payload is added to the notifications' data.pinpoint.jsonBody' object",
-        "DefaultPushNotificationMessage$Title": "The message title that displays above the message on the user's device.",
-        "DefaultPushNotificationMessage$Url": "The URL to open in the user's mobile browser. Used if the value for Action is URL.",
-        "EmailChannelRequest$FromAddress": "The email address used to send emails from.",
-        "EmailChannelRequest$Identity": "The ARN of an identity verified with SES.",
-        "EmailChannelRequest$RoleArn": "The ARN of an IAM Role used to submit events to Mobile Analytics' event ingestion service",
-        "EmailChannelResponse$ApplicationId": "The unique ID of the application to which the email channel belongs.",
-        "EmailChannelResponse$CreationDate": "The date that the settings were last updated in ISO 8601 format.",
-        "EmailChannelResponse$FromAddress": "The email address used to send emails from.",
-        "EmailChannelResponse$Id": "Channel ID. Not used, only for backwards compatibility.",
-        "EmailChannelResponse$Identity": "The ARN of an identity verified with SES.",
-        "EmailChannelResponse$LastModifiedBy": "Who last updated this entry",
-        "EmailChannelResponse$LastModifiedDate": "Last date this was updated",
-        "EmailChannelResponse$Platform": "Platform type. Will be \"EMAIL\"",
-        "EmailChannelResponse$RoleArn": "The ARN of an IAM Role used to submit events to Mobile Analytics' event ingestion service",
-        "EndpointBatchItem$Address": "The address or token of the endpoint as provided by your push provider (e.g. DeviceToken or RegistrationId).",
-        "EndpointBatchItem$EffectiveDate": "The last time the endpoint was updated. Provided in ISO 8601 format.",
-        "EndpointBatchItem$EndpointStatus": "The endpoint status. Can be either ACTIVE or INACTIVE. Will be set to INACTIVE if a delivery fails. Will be set to ACTIVE if the address is updated.",
-        "EndpointBatchItem$Id": "The unique Id for the Endpoint in the batch.",
-        "EndpointBatchItem$OptOut": "Indicates whether a user has opted out of receiving messages with one of the following values:\n\nALL - User has opted out of all messages.\n\nNONE - Users has not opted out and receives all messages.",
-        "EndpointBatchItem$RequestId": "The unique ID for the most recent request to update the endpoint.",
-        "EndpointDemographic$AppVersion": "The version of the application associated with the endpoint.",
-        "EndpointDemographic$Locale": "The endpoint locale in the following format: The ISO 639-1 alpha-2 code, followed by an underscore, followed by an ISO 3166-1 alpha-2 value.\n",
-        "EndpointDemographic$Make": "The endpoint make, such as such as Apple or Samsung.",
-        "EndpointDemographic$Model": "The endpoint model, such as iPhone.",
-        "EndpointDemographic$ModelVersion": "The endpoint model version.",
-        "EndpointDemographic$Platform": "The endpoint platform, such as ios or android.",
-        "EndpointDemographic$PlatformVersion": "The endpoint platform version.",
-        "EndpointDemographic$Timezone": "The timezone of the endpoint. Specified as a tz database value, such as Americas/Los_Angeles.",
-        "EndpointLocation$City": "The city where the endpoint is located.",
-        "EndpointLocation$Country": "Country according to ISO 3166-1 Alpha-2 codes. For example, US.",
-        "EndpointLocation$PostalCode": "The postal code or zip code of the endpoint.",
-        "EndpointLocation$Region": "The region of the endpoint location. For example, corresponds to a state in US.",
-        "EndpointMessageResult$Address": "Address that endpoint message was delivered to.",
-        "EndpointMessageResult$StatusMessage": "Status message for message delivery.",
-        "EndpointMessageResult$UpdatedToken": "If token was updated as part of delivery. (This is GCM Specific)",
-        "EndpointRequest$Address": "The address or token of the endpoint as provided by your push provider (e.g. DeviceToken or RegistrationId).",
-        "EndpointRequest$EffectiveDate": "The last time the endpoint was updated. Provided in ISO 8601 format.",
-        "EndpointRequest$EndpointStatus": "The endpoint status. Can be either ACTIVE or INACTIVE. Will be set to INACTIVE if a delivery fails. Will be set to ACTIVE if the address is updated.",
-        "EndpointRequest$OptOut": "Indicates whether a user has opted out of receiving messages with one of the following values:\n\nALL - User has opted out of all messages.\n\nNONE - Users has not opted out and receives all messages.",
-        "EndpointRequest$RequestId": "The unique ID for the most recent request to update the endpoint.",
-        "EndpointResponse$Address": "The address or token of the endpoint as provided by your push provider (e.g. DeviceToken or RegistrationId).",
-        "EndpointResponse$ApplicationId": "The ID of the application associated with the endpoint.",
-        "EndpointResponse$CohortId": "A number from 0 - 99 that represents the cohort the endpoint is assigned to. Endpoints are grouped into cohorts randomly, and each cohort contains approximately 1 percent of the endpoints for an app. Amazon Pinpoint assigns cohorts to the holdout or treatment allocations for a campaign.",
-        "EndpointResponse$CreationDate": "The last time the endpoint was created. Provided in ISO 8601 format.",
-        "EndpointResponse$EffectiveDate": "The last time the endpoint was updated. Provided in ISO 8601 format.",
-        "EndpointResponse$EndpointStatus": "The endpoint status. Can be either ACTIVE or INACTIVE. Will be set to INACTIVE if a delivery fails. Will be set to ACTIVE if the address is updated.",
-        "EndpointResponse$Id": "The unique ID that you assigned to the endpoint. The ID should be a globally unique identifier (GUID) to ensure that it is unique compared to all other endpoints for the application.",
-        "EndpointResponse$OptOut": "Indicates whether a user has opted out of receiving messages with one of the following values:\n\nALL - User has opted out of all messages.\n\nNONE - Users has not opted out and receives all messages.",
-        "EndpointResponse$RequestId": "The unique ID for the most recent request to update the endpoint.",
-        "EndpointSendConfiguration$BodyOverride": "Body override. If specified will override default body.",
-        "EndpointSendConfiguration$Context": "A map of custom attributes to attributes to be attached to the message for this address. This payload is added to the push notification's 'data.pinpoint' object or added to the email/sms delivery receipt event attributes.",
-        "EndpointSendConfiguration$RawContent": "The Raw JSON formatted string to be used as the payload. This value overrides the message.",
-        "EndpointSendConfiguration$TitleOverride": "Title override. If specified will override default title if applicable.",
-        "EndpointUser$UserId": "The unique ID of the user.",
-        "EventStream$ApplicationId": "The ID of the application from which events should be published.",
-        "EventStream$DestinationStreamArn": "The Amazon Resource Name (ARN) of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.\n Firehose ARN: arn:aws:firehose:REGION:ACCOUNT_ID:deliverystream/STREAM_NAME\n Kinesis ARN: arn:aws:kinesis:REGION:ACCOUNT_ID:stream/STREAM_NAME",
-        "EventStream$ExternalId": "DEPRECATED. Your AWS account ID, which you assigned to the ExternalID key in an IAM trust policy. Used by Amazon Pinpoint to assume an IAM role. This requirement is removed, and external IDs are not recommended for IAM roles assumed by Amazon Pinpoint.",
-        "EventStream$LastModifiedDate": "The date the event stream was last updated in ISO 8601 format.",
-        "EventStream$LastUpdatedBy": "The IAM user who last modified the event stream.",
-        "EventStream$RoleArn": "The IAM role that authorizes Amazon Pinpoint to publish events to the stream in your account.",
+        "ADMChannelRequest$ClientId" : "The Client ID that you obtained from the Amazon App Distribution Portal.",
+        "ADMChannelRequest$ClientSecret" : "The Client Secret that you obtained from the Amazon App Distribution Portal.",
+        "ADMChannelResponse$ApplicationId" : "The ID of the application to which the channel applies.",
+        "ADMChannelResponse$CreationDate" : "The date and time when this channel was created.",
+        "ADMChannelResponse$Id" : "(Deprecated) An identifier for the channel. Retained for backwards compatibility.",
+        "ADMChannelResponse$LastModifiedBy" : "The user who last updated this channel.",
+        "ADMChannelResponse$LastModifiedDate" : "The date and time when this channel was last modified.",
+        "ADMChannelResponse$Platform" : "The platform type. For this channel, the value is always \"ADM.\"",
+        "ADMMessage$Body" : "The message body of the notification.",
+        "ADMMessage$ConsolidationKey" : "Optional. Arbitrary string used to indicate multiple messages are logically the same and that ADM is allowed to drop previously enqueued messages in favor of this one.",
+        "ADMMessage$ExpiresAfter" : "Optional. Number of seconds ADM should retain the message if the device is offline",
+        "ADMMessage$IconReference" : "The icon image name of the asset saved in your application.",
+        "ADMMessage$ImageIconUrl" : "The URL that points to an image used as the large icon to the notification content view.",
+        "ADMMessage$ImageUrl" : "The URL that points to an image used in the push notification.",
+        "ADMMessage$MD5" : "Optional. Base-64-encoded MD5 checksum of the data parameter. Used to verify data integrity",
+        "ADMMessage$RawContent" : "The Raw JSON formatted string to be used as the payload. This value overrides the message.",
+        "ADMMessage$SmallImageIconUrl" : "The URL that points to an image used as the small icon for the notification which will be used to represent the notification in the status bar and content view",
+        "ADMMessage$Sound" : "Indicates a sound to play when the device receives the notification. Supports default, or the filename of a sound resource bundled in the app. Android sound files must reside in /res/raw/",
+        "ADMMessage$Title" : "The message title that displays above the message on the user's device.",
+        "ADMMessage$Url" : "The URL to open in the user's mobile browser. Used if the value for Action is URL.",
+        "APNSChannelRequest$BundleId" : "The bundle id used for APNs Tokens.",
+        "APNSChannelRequest$Certificate" : "The distribution certificate from Apple.",
+        "APNSChannelRequest$DefaultAuthenticationMethod" : "The default authentication method used for APNs.",
+        "APNSChannelRequest$PrivateKey" : "The certificate private key.",
+        "APNSChannelRequest$TeamId" : "The team id used for APNs Tokens.",
+        "APNSChannelRequest$TokenKey" : "The token key used for APNs Tokens.",
+        "APNSChannelRequest$TokenKeyId" : "The token key used for APNs Tokens.",
+        "APNSChannelResponse$ApplicationId" : "The ID of the application that the channel applies to.",
+        "APNSChannelResponse$CreationDate" : "The date and time when this channel was created.",
+        "APNSChannelResponse$DefaultAuthenticationMethod" : "The default authentication method used for APNs.",
+        "APNSChannelResponse$Id" : "(Deprecated) An identifier for the channel. Retained for backwards compatibility.",
+        "APNSChannelResponse$LastModifiedBy" : "The user who last updated this channel.",
+        "APNSChannelResponse$LastModifiedDate" : "The date and time when this channel was last modified.",
+        "APNSChannelResponse$Platform" : "The platform type. For this channel, the value is always \"ADM.\"",
+        "APNSMessage$Body" : "The message body of the notification.",
+        "APNSMessage$Category" : "Provide this key with a string value that represents the notification's type. This value corresponds to the value in the identifier property of one of your app's registered categories.",
+        "APNSMessage$CollapseId" : "An ID that, if assigned to multiple messages, causes APNs to coalesce the messages into a single push notification instead of delivering each message individually. The value must not exceed 64 bytes. Amazon Pinpoint uses this value to set the apns-collapse-id request header when it sends the message to APNs.",
+        "APNSMessage$MediaUrl" : "The URL that points to a video used in the push notification.",
+        "APNSMessage$PreferredAuthenticationMethod" : "The preferred authentication method, either \"CERTIFICATE\" or \"TOKEN\"",
+        "APNSMessage$Priority" : "The message priority. Amazon Pinpoint uses this value to set the apns-priority request header when it sends the message to APNs. Accepts the following values:\n\n\"5\" - Low priority. Messages might be delayed, delivered in groups, and throttled.\n\n\"10\" - High priority. Messages are sent immediately. High priority messages must cause an alert, sound, or badge on the receiving device.\n\nThe default value is \"10\".\n\nThe equivalent values for FCM or GCM messages are \"normal\" and \"high\". Amazon Pinpoint accepts these values for APNs messages and converts them.\n\nFor more information about the apns-priority parameter, see Communicating with APNs in the APNs Local and Remote Notification Programming Guide.",
+        "APNSMessage$RawContent" : "The Raw JSON formatted string to be used as the payload. This value overrides the message.",
+        "APNSMessage$Sound" : "Include this key when you want the system to play a sound. The value of this key is the name of a sound file in your app's main bundle or in the Library/Sounds folder of your app's data container. If the sound file cannot be found, or if you specify defaultfor the value, the system plays the default alert sound.",
+        "APNSMessage$ThreadId" : "Provide this key with a string value that represents the app-specific identifier for grouping notifications. If you provide a Notification Content app extension, you can use this value to group your notifications together.",
+        "APNSMessage$Title" : "The message title that displays above the message on the user's device.",
+        "APNSMessage$Url" : "The URL to open in the user's mobile browser. Used if the value for Action is URL.",
+        "APNSSandboxChannelRequest$BundleId" : "The bundle id used for APNs Tokens.",
+        "APNSSandboxChannelRequest$Certificate" : "The distribution certificate from Apple.",
+        "APNSSandboxChannelRequest$DefaultAuthenticationMethod" : "The default authentication method used for APNs.",
+        "APNSSandboxChannelRequest$PrivateKey" : "The certificate private key.",
+        "APNSSandboxChannelRequest$TeamId" : "The team id used for APNs Tokens.",
+        "APNSSandboxChannelRequest$TokenKey" : "The token key used for APNs Tokens.",
+        "APNSSandboxChannelRequest$TokenKeyId" : "The token key used for APNs Tokens.",
+        "APNSSandboxChannelResponse$ApplicationId" : "The ID of the application to which the channel applies.",
+        "APNSSandboxChannelResponse$CreationDate" : "When was this segment created",
+        "APNSSandboxChannelResponse$DefaultAuthenticationMethod" : "The default authentication method used for APNs.",
+        "APNSSandboxChannelResponse$Id" : "Channel ID. Not used, only for backwards compatibility.",
+        "APNSSandboxChannelResponse$LastModifiedBy" : "Who last updated this entry",
+        "APNSSandboxChannelResponse$LastModifiedDate" : "Last date this was updated",
+        "APNSSandboxChannelResponse$Platform" : "The platform type. Will be APNS_SANDBOX.",
+        "APNSVoipChannelRequest$BundleId" : "The bundle id used for APNs Tokens.",
+        "APNSVoipChannelRequest$Certificate" : "The distribution certificate from Apple.",
+        "APNSVoipChannelRequest$DefaultAuthenticationMethod" : "The default authentication method used for APNs.",
+        "APNSVoipChannelRequest$PrivateKey" : "The certificate private key.",
+        "APNSVoipChannelRequest$TeamId" : "The team id used for APNs Tokens.",
+        "APNSVoipChannelRequest$TokenKey" : "The token key used for APNs Tokens.",
+        "APNSVoipChannelRequest$TokenKeyId" : "The token key used for APNs Tokens.",
+        "APNSVoipChannelResponse$ApplicationId" : "Application id",
+        "APNSVoipChannelResponse$CreationDate" : "When was this segment created",
+        "APNSVoipChannelResponse$DefaultAuthenticationMethod" : "The default authentication method used for APNs.",
+        "APNSVoipChannelResponse$Id" : "Channel ID. Not used, only for backwards compatibility.",
+        "APNSVoipChannelResponse$LastModifiedBy" : "Who made the last change",
+        "APNSVoipChannelResponse$LastModifiedDate" : "Last date this was updated",
+        "APNSVoipChannelResponse$Platform" : "The platform type. Will be APNS.",
+        "APNSVoipSandboxChannelRequest$BundleId" : "The bundle id used for APNs Tokens.",
+        "APNSVoipSandboxChannelRequest$Certificate" : "The distribution certificate from Apple.",
+        "APNSVoipSandboxChannelRequest$DefaultAuthenticationMethod" : "The default authentication method used for APNs.",
+        "APNSVoipSandboxChannelRequest$PrivateKey" : "The certificate private key.",
+        "APNSVoipSandboxChannelRequest$TeamId" : "The team id used for APNs Tokens.",
+        "APNSVoipSandboxChannelRequest$TokenKey" : "The token key used for APNs Tokens.",
+        "APNSVoipSandboxChannelRequest$TokenKeyId" : "The token key used for APNs Tokens.",
+        "APNSVoipSandboxChannelResponse$ApplicationId" : "Application id",
+        "APNSVoipSandboxChannelResponse$CreationDate" : "When was this segment created",
+        "APNSVoipSandboxChannelResponse$DefaultAuthenticationMethod" : "The default authentication method used for APNs.",
+        "APNSVoipSandboxChannelResponse$Id" : "Channel ID. Not used, only for backwards compatibility.",
+        "APNSVoipSandboxChannelResponse$LastModifiedBy" : "Who made the last change",
+        "APNSVoipSandboxChannelResponse$LastModifiedDate" : "Last date this was updated",
+        "APNSVoipSandboxChannelResponse$Platform" : "The platform type. Will be APNS.",
+        "ActivitiesResponse$NextToken" : "The string that you use in a subsequent request to get the next page of results in a paginated response.",
+        "ActivityResponse$ApplicationId" : "The ID of the application to which the campaign applies.",
+        "ActivityResponse$CampaignId" : "The ID of the campaign to which the activity applies.",
+        "ActivityResponse$End" : "The actual time the activity was marked CANCELLED or COMPLETED. Provided in ISO 8601 format.",
+        "ActivityResponse$Id" : "The unique activity ID.",
+        "ActivityResponse$Result" : "Indicates whether the activity succeeded.\n\nValid values: SUCCESS, FAIL",
+        "ActivityResponse$ScheduledStart" : "The scheduled start time for the activity in ISO 8601 format.",
+        "ActivityResponse$Start" : "The actual start time of the activity in ISO 8601 format.",
+        "ActivityResponse$State" : "The state of the activity.\n\nValid values: PENDING, INITIALIZING, RUNNING, PAUSED, CANCELLED, COMPLETED",
+        "ActivityResponse$TreatmentId" : "The ID of a variation of the campaign used for A/B testing.",
+        "AddressConfiguration$BodyOverride" : "Body override. If specified will override default body.",
+        "AddressConfiguration$RawContent" : "The Raw JSON formatted string to be used as the payload. This value overrides the message.",
+        "AddressConfiguration$TitleOverride" : "Title override. If specified will override default title if applicable.",
+        "ApplicationResponse$Id" : "The unique application ID.",
+        "ApplicationResponse$Name" : "The display name of the application.",
+        "ApplicationSettingsResource$ApplicationId" : "The unique ID for the application.",
+        "ApplicationSettingsResource$LastModifiedDate" : "The date that the settings were last updated in ISO 8601 format.",
+        "ApplicationsResponse$NextToken" : "The string that you use in a subsequent request to get the next page of results in a paginated response.",
+        "AttributesResource$ApplicationId" : "The unique ID for the application.",
+        "AttributesResource$AttributeType" : "The attribute type for the application.",
+        "BaiduChannelRequest$ApiKey" : "Platform credential API key from Baidu.",
+        "BaiduChannelRequest$SecretKey" : "Platform credential Secret key from Baidu.",
+        "BaiduChannelResponse$ApplicationId" : "Application id",
+        "BaiduChannelResponse$CreationDate" : "When was this segment created",
+        "BaiduChannelResponse$Credential" : "The Baidu API key from Baidu.",
+        "BaiduChannelResponse$Id" : "Channel ID. Not used, only for backwards compatibility.",
+        "BaiduChannelResponse$LastModifiedBy" : "Who made the last change",
+        "BaiduChannelResponse$LastModifiedDate" : "Last date this was updated",
+        "BaiduChannelResponse$Platform" : "The platform type. Will be BAIDU",
+        "BaiduMessage$Body" : "The message body of the notification.",
+        "BaiduMessage$IconReference" : "The icon image name of the asset saved in your application.",
+        "BaiduMessage$ImageIconUrl" : "The URL that points to an image used as the large icon to the notification content view.",
+        "BaiduMessage$ImageUrl" : "The URL that points to an image used in the push notification.",
+        "BaiduMessage$RawContent" : "The Raw JSON formatted string to be used as the payload. This value overrides the message.",
+        "BaiduMessage$SmallImageIconUrl" : "The URL that points to an image used as the small icon for the notification which will be used to represent the notification in the status bar and content view",
+        "BaiduMessage$Sound" : "Indicates a sound to play when the device receives the notification. Supports default, or the filename of a sound resource bundled in the app. Android sound files must reside in /res/raw/",
+        "BaiduMessage$Title" : "The message title that displays above the message on the user's device.",
+        "BaiduMessage$Url" : "The URL to open in the user's mobile browser. Used if the value for Action is URL.",
+        "CampaignEmailMessage$Body" : "The email text body.",
+        "CampaignEmailMessage$FromAddress" : "The email address used to send the email from. Defaults to use FromAddress specified in the Email Channel.",
+        "CampaignEmailMessage$HtmlBody" : "The email html body.",
+        "CampaignEmailMessage$Title" : "The email title (Or subject).",
+        "CampaignHook$LambdaFunctionName" : "Lambda function name or arn to be called for delivery",
+        "CampaignHook$WebUrl" : "Web URL to call for hook. If the URL has authentication specified it will be added as authentication to the request",
+        "CampaignResponse$ApplicationId" : "The ID of the application to which the campaign applies.",
+        "CampaignResponse$CreationDate" : "The date the campaign was created in ISO 8601 format.",
+        "CampaignResponse$Description" : "A description of the campaign.",
+        "CampaignResponse$Id" : "The unique campaign ID.",
+        "CampaignResponse$LastModifiedDate" : "The date the campaign was last updated in ISO 8601 format.\t",
+        "CampaignResponse$Name" : "The custom name of the campaign.",
+        "CampaignResponse$SegmentId" : "The ID of the segment to which the campaign sends messages.",
+        "CampaignResponse$TreatmentDescription" : "A custom description for the treatment.",
+        "CampaignResponse$TreatmentName" : "The custom name of a variation of the campaign used for A/B testing.",
+        "CampaignSmsMessage$Body" : "The SMS text body.",
+        "CampaignSmsMessage$SenderId" : "Sender ID of sent message.",
+        "CampaignsResponse$NextToken" : "The string that you use in a subsequent request to get the next page of results in a paginated response.",
+        "ChannelResponse$ApplicationId" : "Application id",
+        "ChannelResponse$CreationDate" : "When was this segment created",
+        "ChannelResponse$Id" : "Channel ID. Not used, only for backwards compatibility.",
+        "ChannelResponse$LastModifiedBy" : "Who made the last change",
+        "ChannelResponse$LastModifiedDate" : "Last date this was updated",
+        "CreateApplicationRequest$Name" : "The display name of the application. Used in the Amazon Pinpoint console.",
+        "DefaultMessage$Body" : "The message body of the notification, the email body or the text message.",
+        "DefaultPushNotificationMessage$Body" : "The message body of the notification.",
+        "DefaultPushNotificationMessage$Title" : "The message title that displays above the message on the user's device.",
+        "DefaultPushNotificationMessage$Url" : "The URL to open in the user's mobile browser. Used if the value for Action is URL.",
+        "EmailChannelRequest$FromAddress" : "The email address used to send emails from.",
+        "EmailChannelRequest$Identity" : "The ARN of an identity verified with SES.",
+        "EmailChannelRequest$RoleArn" : "The ARN of an IAM Role used to submit events to Mobile Analytics' event ingestion service",
+        "EmailChannelResponse$ApplicationId" : "The unique ID of the application to which the email channel belongs.",
+        "EmailChannelResponse$CreationDate" : "The date that the settings were last updated in ISO 8601 format.",
+        "EmailChannelResponse$FromAddress" : "The email address used to send emails from.",
+        "EmailChannelResponse$Id" : "Channel ID. Not used, only for backwards compatibility.",
+        "EmailChannelResponse$Identity" : "The ARN of an identity verified with SES.",
+        "EmailChannelResponse$LastModifiedBy" : "Who last updated this entry",
+        "EmailChannelResponse$LastModifiedDate" : "Last date this was updated",
+        "EmailChannelResponse$Platform" : "Platform type. Will be \"EMAIL\"",
+        "EmailChannelResponse$RoleArn" : "The ARN of an IAM Role used to submit events to Mobile Analytics' event ingestion service",
+        "EndpointBatchItem$Address" : "The destination for messages that you send to this endpoint. The address varies by channel. For mobile push channels, use the token provided by the push notification service, such as the APNs device token or the FCM registration token. For the SMS channel, use a phone number in E.164 format, such as +12065550100. For the email channel, use an email address.",
+        "EndpointBatchItem$EffectiveDate" : "The last time the endpoint was updated. Provided in ISO 8601 format.",
+        "EndpointBatchItem$EndpointStatus" : "Unused.",
+        "EndpointBatchItem$Id" : "The unique Id for the Endpoint in the batch.",
+        "EndpointBatchItem$OptOut" : "Indicates whether a user has opted out of receiving messages with one of the following values:\n\nALL - User has opted out of all messages.\n\nNONE - Users has not opted out and receives all messages.",
+        "EndpointBatchItem$RequestId" : "The unique ID for the most recent request to update the endpoint.",
+        "EndpointDemographic$AppVersion" : "The version of the application associated with the endpoint.",
+        "EndpointDemographic$Locale" : "The endpoint locale in the following format: The ISO 639-1 alpha-2 code, followed by an underscore, followed by an ISO 3166-1 alpha-2 value.\n",
+        "EndpointDemographic$Make" : "The manufacturer of the endpoint device, such as Apple or Samsung.",
+        "EndpointDemographic$Model" : "The model name or number of the endpoint device, such as iPhone.",
+        "EndpointDemographic$ModelVersion" : "The model version of the endpoint device.",
+        "EndpointDemographic$Platform" : "The platform of the endpoint device, such as iOS or Android.",
+        "EndpointDemographic$PlatformVersion" : "The platform version of the endpoint device.",
+        "EndpointDemographic$Timezone" : "The timezone of the endpoint. Specified as a tz database value, such as Americas/Los_Angeles.",
+        "EndpointItemResponse$Message" : "A custom message associated with the registration of an endpoint when issuing a response.",
+        "EndpointLocation$City" : "The city where the endpoint is located.",
+        "EndpointLocation$Country" : "The two-letter code for the country or region of the endpoint. Specified as an ISO 3166-1 Alpha-2 code, such as \"US\" for the United States.",
+        "EndpointLocation$PostalCode" : "The postal code or zip code of the endpoint.",
+        "EndpointLocation$Region" : "The region of the endpoint location. For example, in the United States, this corresponds to a state.",
+        "EndpointMessageResult$Address" : "Address that endpoint message was delivered to.",
+        "EndpointMessageResult$MessageId" : "Unique message identifier associated with the message that was sent.",
+        "EndpointMessageResult$StatusMessage" : "Status message for message delivery.",
+        "EndpointMessageResult$UpdatedToken" : "If token was updated as part of delivery. (This is GCM Specific)",
+        "EndpointRequest$Address" : "The destination for messages that you send to this endpoint. The address varies by channel. For mobile push channels, use the token provided by the push notification service, such as the APNs device token or the FCM registration token. For the SMS channel, use a phone number in E.164 format, such as +12065550100. For the email channel, use an email address.",
+        "EndpointRequest$EffectiveDate" : "The date and time when the endpoint was updated, shown in ISO 8601 format.",
+        "EndpointRequest$EndpointStatus" : "Unused.",
+        "EndpointRequest$OptOut" : "Indicates whether a user has opted out of receiving messages with one of the following values:\n\nALL - User has opted out of all messages.\n\nNONE - Users has not opted out and receives all messages.",
+        "EndpointRequest$RequestId" : "The unique ID for the most recent request to update the endpoint.",
+        "EndpointResponse$Address" : "The address of the endpoint as provided by your push provider. For example, the DeviceToken or RegistrationId.",
+        "EndpointResponse$ApplicationId" : "The ID of the application that is associated with the endpoint.",
+        "EndpointResponse$CohortId" : "A number from 0-99 that represents the cohort the endpoint is assigned to. Endpoints are grouped into cohorts randomly, and each cohort contains approximately 1 percent of the endpoints for an app. Amazon Pinpoint assigns cohorts to the holdout or treatment allocations for a campaign.",
+        "EndpointResponse$CreationDate" : "The date and time when the endpoint was created, shown in ISO 8601 format.",
+        "EndpointResponse$EffectiveDate" : "The date and time when the endpoint was last updated, shown in ISO 8601 format.",
+        "EndpointResponse$EndpointStatus" : "Unused.",
+        "EndpointResponse$Id" : "The unique ID that you assigned to the endpoint. The ID should be a globally unique identifier (GUID) to ensure that it doesn't conflict with other endpoint IDs associated with the application.",
+        "EndpointResponse$OptOut" : "Indicates whether a user has opted out of receiving messages with one of the following values:\n\nALL - User has opted out of all messages.\n\nNONE - Users has not opted out and receives all messages.",
+        "EndpointResponse$RequestId" : "The unique ID for the most recent request to update the endpoint.",
+        "EndpointSendConfiguration$BodyOverride" : "Body override. If specified will override default body.",
+        "EndpointSendConfiguration$RawContent" : "The Raw JSON formatted string to be used as the payload. This value overrides the message.",
+        "EndpointSendConfiguration$TitleOverride" : "Title override. If specified will override default title if applicable.",
+        "EndpointUser$UserId" : "The unique ID of the user.",
+        "Event$ClientSdkVersion" : "The version of the SDK that's running on the client device.",
+        "Event$EventType" : "The name of the custom event that you're recording.",
+        "Event$Timestamp" : "The date and time when the event occurred, in ISO 8601 format.",
+        "EventItemResponse$Message" : "A custom message that is associated with the processing of an event.",
+        "EventStream$ApplicationId" : "The ID of the application from which events should be published.",
+        "EventStream$DestinationStreamArn" : "The Amazon Resource Name (ARN) of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.\n Firehose ARN: arn:aws:firehose:REGION:ACCOUNT_ID:deliverystream/STREAM_NAME\n Kinesis ARN: arn:aws:kinesis:REGION:ACCOUNT_ID:stream/STREAM_NAME",
+        "EventStream$ExternalId" : "(Deprecated) Your AWS account ID, which you assigned to the ExternalID key in an IAM trust policy. Used by Amazon Pinpoint to assume an IAM role. This requirement is removed, and external IDs are not recommended for IAM roles assumed by Amazon Pinpoint.",
+        "EventStream$LastModifiedDate" : "The date the event stream was last updated in ISO 8601 format.",
+        "EventStream$LastUpdatedBy" : "The IAM user who last modified the event stream.",
+        "EventStream$RoleArn" : "The IAM role that authorizes Amazon Pinpoint to publish events to the stream in your account.",
         "ExportJobRequest$RoleArn" : "The Amazon Resource Name (ARN) of an IAM role that grants Amazon Pinpoint access to the Amazon S3 location that endpoints will be exported to.",
-        "ExportJobRequest$S3UrlPrefix" : "A URL that points to the location within an Amazon S3 bucket that will receive the export. The location is typically a folder with multiple files.\nThe URL should follow this format: s3://bucket-name/folder-name/\n\nAmazon Pinpoint will export endpoints to this location.",
-        "ExportJobRequest$SegmentId" : "The ID of the segment to export endpoints from. If not present, all endpoints will be exported.",
+        "ExportJobRequest$S3UrlPrefix" : "A URL that points to the location within an Amazon S3 bucket that will receive the export. The location is typically a folder with multiple files.\n\nThe URL should follow this format: s3://bucket-name/folder-name/\n\nAmazon Pinpoint will export endpoints to this location.",
+        "ExportJobRequest$SegmentId" : "The ID of the segment to export endpoints from. If not present, Amazon Pinpoint exports all of the endpoints that belong to the application.",
         "ExportJobResource$RoleArn" : "The Amazon Resource Name (ARN) of an IAM role that grants Amazon Pinpoint access to the Amazon S3 location that endpoints will be exported to.",
-        "ExportJobResource$S3UrlPrefix" : "A URL that points to the location within an Amazon S3 bucket that will receive the export. The location is typically a folder with multiple files.\nThe URL should follow this format: s3://bucket-name/folder-name/\n\nAmazon Pinpoint will export endpoints to this location.",
-        "ExportJobResource$SegmentId" : "The ID of the segment to export endpoints from. If not present all endpoints will be exported.",
-        "ExportJobResponse$ApplicationId" : "The unique ID of the application to which the job applies.",
+        "ExportJobResource$S3UrlPrefix" : "A URL that points to the location within an Amazon S3 bucket that will receive the export. The location is typically a folder with multiple files.\n\nThe URL should follow this format: s3://bucket-name/folder-name/\n\nAmazon Pinpoint will export endpoints to this location.",
+        "ExportJobResource$SegmentId" : "The ID of the segment to export endpoints from. If not present, Amazon Pinpoint exports all of the endpoints that belong to the application.",
+        "ExportJobResponse$ApplicationId" : "The unique ID of the application associated with the export job.",
         "ExportJobResponse$CompletionDate" : "The date the job completed in ISO 8601 format.",
         "ExportJobResponse$CreationDate" : "The date the job was created in ISO 8601 format.",
         "ExportJobResponse$Id" : "The unique ID of the job.",
         "ExportJobResponse$Type" : "The job type. Will be 'EXPORT'.",
         "ExportJobsResponse$NextToken" : "The string that you use in a subsequent request to get the next page of results in a paginated response.",
-        "GCMChannelRequest$ApiKey": "Platform credential API key from Google.",
-        "GCMChannelResponse$ApplicationId": "The ID of the application to which the channel applies.",
-        "GCMChannelResponse$CreationDate": "When was this segment created",
-        "GCMChannelResponse$Credential": "The GCM API key from Google.",
-        "GCMChannelResponse$Id": "Channel ID. Not used. Present only for backwards compatibility.",
-        "GCMChannelResponse$LastModifiedBy": "Who last updated this entry",
-        "GCMChannelResponse$LastModifiedDate": "Last date this was updated",
-        "GCMChannelResponse$Platform": "The platform type. Will be GCM",
-        "GCMMessage$Body": "The message body of the notification, the email body or the text message.",
-        "GCMMessage$CollapseKey": "This parameter identifies a group of messages (e.g., with collapse_key: \"Updates Available\") that can be collapsed, so that only the last message gets sent when delivery can be resumed. This is intended to avoid sending too many of the same messages when the device comes back online or becomes active.",
-        "GCMMessage$Data": "The data payload used for a silent push. This payload is added to the notifications' data.pinpoint.jsonBody' object",
-        "GCMMessage$IconReference": "The icon image name of the asset saved in your application.",
-        "GCMMessage$ImageIconUrl": "The URL that points to an image used as the large icon to the notification content view.",
-        "GCMMessage$ImageUrl": "The URL that points to an image used in the push notification.",
-        "GCMMessage$Priority": "The message priority. Amazon Pinpoint uses this value to set the FCM or GCM priority parameter when it sends the message. Accepts the following values:\n\n\"Normal\" - Messages might be delayed. Delivery is optimized for battery usage on the receiving device. Use normal priority unless immediate delivery is required.\n\n\"High\" - Messages are sent immediately and might wake a sleeping device.\n\nThe equivalent values for APNs messages are \"5\" and \"10\". Amazon Pinpoint accepts these values here and converts them.\n\nFor more information, see About FCM Messages in the Firebase documentation.",
-        "GCMMessage$RawContent": "The Raw JSON formatted string to be used as the payload. This value overrides the message.",
-        "GCMMessage$RestrictedPackageName": "This parameter specifies the package name of the application where the registration tokens must match in order to receive the message.",
-        "GCMMessage$SmallImageIconUrl": "The URL that points to an image used as the small icon for the notification which will be used to represent the notification in the status bar and content view",
-        "GCMMessage$Sound": "Indicates a sound to play when the device receives the notification. Supports default, or the filename of a sound resource bundled in the app. Android sound files must reside in /res/raw/",
-        "GCMMessage$Title": "The message title that displays above the message on the user's device.",
-        "GCMMessage$Url": "The URL to open in the user's mobile browser. Used if the value for Action is URL.",
-        "ImportJobRequest$ExternalId": "DEPRECATED. Your AWS account ID, which you assigned to the ExternalID key in an IAM trust policy. Used by Amazon Pinpoint to assume an IAM role. This requirement is removed, and external IDs are not recommended for IAM roles assumed by Amazon Pinpoint.",
-        "ImportJobRequest$RoleArn": "The Amazon Resource Name (ARN) of an IAM role that grants Amazon Pinpoint access to the Amazon S3 location that contains the endpoints to import.",
-        "ImportJobRequest$S3Url": "A URL that points to the location within an Amazon S3 bucket that contains the endpoints to import. The location can be a folder or a single file.\nThe URL should follow this format: s3://bucket-name/folder-name/file-name\n\nAmazon Pinpoint will import endpoints from this location and any subfolders it contains.",
-        "ImportJobRequest$SegmentId": "The ID of the segment to update if the import job is meant to update an existing segment.",
-        "ImportJobRequest$SegmentName": "A custom name for the segment created by the import job. Use if DefineSegment is true.",
-        "ImportJobResource$ExternalId": "DEPRECATED. Your AWS account ID, which you assigned to the ExternalID key in an IAM trust policy. Used by Amazon Pinpoint to assume an IAM role. This requirement is removed, and external IDs are not recommended for IAM roles assumed by Amazon Pinpoint.",
-        "ImportJobResource$RoleArn": "The Amazon Resource Name (ARN) of an IAM role that grants Amazon Pinpoint access to the Amazon S3 location that contains the endpoints to import.",
-        "ImportJobResource$S3Url": "A URL that points to the location within an Amazon S3 bucket that contains the endpoints to import. The location can be a folder or a single file.\nThe URL should follow this format: s3://bucket-name/folder-name/file-name\n\nAmazon Pinpoint will import endpoints from this location and any subfolders it contains.",
-        "ImportJobResource$SegmentId": "The ID of the segment to update if the import job is meant to update an existing segment.",
-        "ImportJobResource$SegmentName": "A custom name for the segment created by the import job. Use if DefineSegment is true.",
-        "ImportJobResponse$ApplicationId": "The unique ID of the application to which the import job applies.",
-        "ImportJobResponse$CompletionDate": "The date the import job completed in ISO 8601 format.",
-        "ImportJobResponse$CreationDate": "The date the import job was created in ISO 8601 format.",
-        "ImportJobResponse$Id": "The unique ID of the import job.",
-        "ImportJobResponse$Type": "The job type. Will be Import.",
-        "ImportJobsResponse$NextToken": "The string that you use in a subsequent request to get the next page of results in a paginated response.",
-        "Message$Body": "The message body. Can include up to 140 characters.",
-        "Message$ImageIconUrl": "The URL that points to the icon image for the push notification icon, for example, the app icon.",
-        "Message$ImageSmallIconUrl": "The URL that points to the small icon image for the push notification icon, for example, the app icon.",
-        "Message$ImageUrl": "The URL that points to an image used in the push notification.",
-        "Message$JsonBody": "The JSON payload used for a silent push.",
-        "Message$MediaUrl": "The URL that points to the media resource, for example a .mp4 or .gif file.",
-        "Message$RawContent": "The Raw JSON formatted string to be used as the payload. This value overrides the message.",
-        "Message$Title": "The message title that displays above the message on the user's device.",
-        "Message$Url": "The URL to open in the user's mobile browser. Used if the value for Action is URL.",
-        "MessageBody$Message": "The error message returned from the API.",
-        "MessageBody$RequestID": "The unique message body ID.",
-        "MessageRequest$Context": "A map of custom attributes to attributes to be attached to the message. This payload is added to the push notification's 'data.pinpoint' object or added to the email/sms delivery receipt event attributes.",
-        "MessageResponse$ApplicationId": "Application id of the message.",
-        "MessageResponse$RequestId": "Original request Id for which this message was delivered.",
-        "MessageResult$StatusMessage": "Status message for message delivery.",
-        "MessageResult$UpdatedToken": "If token was updated as part of delivery. (This is GCM Specific)",
-        "QuietTime$End": "The default end time for quiet time in ISO 8601 format.",
-        "QuietTime$Start": "The default start time for quiet time in ISO 8601 format.",
-        "SMSChannelRequest$SenderId": "Sender identifier of your messages.",
-        "SMSChannelRequest$ShortCode": "ShortCode registered with phone provider.",
-        "SMSChannelResponse$ApplicationId": "The unique ID of the application to which the SMS channel belongs.",
-        "SMSChannelResponse$CreationDate": "The date that the settings were last updated in ISO 8601 format.",
-        "SMSChannelResponse$Id": "Channel ID. Not used, only for backwards compatibility.",
-        "SMSChannelResponse$LastModifiedBy": "Who last updated this entry",
-        "SMSChannelResponse$LastModifiedDate": "Last date this was updated",
-        "SMSChannelResponse$Platform": "Platform type. Will be \"SMS\"",
-        "SMSChannelResponse$SenderId": "Sender identifier of your messages.",
-        "SMSChannelResponse$ShortCode": "The short code registered with the phone provider.",
-        "SMSMessage$Body": "The message body of the notification, the email body or the text message.",
-        "SMSMessage$OriginationNumber": "The phone number that the SMS message originates from. Specify one of the dedicated long codes or short codes that you requested from AWS Support and that is assigned to your account. If this attribute is not specified, Amazon Pinpoint randomly assigns a long code.",
-        "SMSMessage$SenderId": "The sender ID that is shown as the message sender on the recipient's device. Support for sender IDs varies by country or region.",
-        "Schedule$EndTime": "The scheduled time that the campaign ends in ISO 8601 format.",
-        "Schedule$StartTime": "The scheduled time that the campaign begins in ISO 8601 format.",
-        "Schedule$Timezone": "The starting UTC offset for the schedule if the value for isLocalTime is true\n\nValid values: \nUTC\nUTC+01\nUTC+02\nUTC+03\nUTC+03:30\nUTC+04\nUTC+04:30\nUTC+05\nUTC+05:30\nUTC+05:45\nUTC+06\nUTC+06:30\nUTC+07\nUTC+08\nUTC+09\nUTC+09:30\nUTC+10\nUTC+10:30\nUTC+11\nUTC+12\nUTC+13\nUTC-02\nUTC-03\nUTC-04\nUTC-05\nUTC-06\nUTC-07\nUTC-08\nUTC-09\nUTC-10\nUTC-11",
-        "SegmentImportResource$ExternalId": "DEPRECATED. Your AWS account ID, which you assigned to the ExternalID key in an IAM trust policy. Used by Amazon Pinpoint to assume an IAM role. This requirement is removed, and external IDs are not recommended for IAM roles assumed by Amazon Pinpoint.",
-        "SegmentImportResource$RoleArn": "The Amazon Resource Name (ARN) of an IAM role that grants Amazon Pinpoint access to the endpoints in Amazon S3.",
-        "SegmentImportResource$S3Url": "A URL that points to the Amazon S3 location from which the endpoints for this segment were imported.",
-        "SegmentResponse$ApplicationId": "The ID of the application to which the segment applies.",
-        "SegmentResponse$CreationDate": "The date the segment was created in ISO 8601 format.",
-        "SegmentResponse$Id": "The unique segment ID.",
-        "SegmentResponse$LastModifiedDate": "The date the segment was last updated in ISO 8601 format.",
-        "SegmentResponse$Name": "The name of segment",
-        "SegmentsResponse$NextToken": "An identifier used to retrieve the next page of results. The token is null if no additional pages exist.",
-        "SendUsersMessageRequest$Context": "A map of custom attributes to attributes to be attached to the message. This payload is added to the push notification's 'data.pinpoint' object or added to the email/sms delivery receipt event attributes.",
-        "SendUsersMessageResponse$ApplicationId": "Application id of the message.",
-        "SendUsersMessageResponse$RequestId": "Original request Id for which this message was delivered.",
-        "TreatmentResource$Id": "The unique treatment ID.",
-        "TreatmentResource$TreatmentDescription": "A custom description for the treatment.",
-        "TreatmentResource$TreatmentName": "The custom name of a variation of the campaign used for A/B testing.",
-        "WriteCampaignRequest$Description": "A description of the campaign.",
-        "WriteCampaignRequest$Name": "The custom name of the campaign.",
-        "WriteCampaignRequest$SegmentId": "The ID of the segment to which the campaign sends messages.",
-        "WriteCampaignRequest$TreatmentDescription": "A custom description for the treatment.",
-        "WriteCampaignRequest$TreatmentName": "The custom name of a variation of the campaign used for A/B testing.",
-        "WriteEventStream$DestinationStreamArn": "The Amazon Resource Name (ARN) of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.\n Firehose ARN: arn:aws:firehose:REGION:ACCOUNT_ID:deliverystream/STREAM_NAME\n Kinesis ARN: arn:aws:kinesis:REGION:ACCOUNT_ID:stream/STREAM_NAME",
-        "WriteEventStream$RoleArn": "The IAM role that authorizes Amazon Pinpoint to publish events to the stream in your account.",
-        "WriteSegmentRequest$Name": "The name of segment",
-        "WriteTreatmentResource$TreatmentDescription": "A custom description for the treatment.",
-        "WriteTreatmentResource$TreatmentName": "The custom name of a variation of the campaign used for A/B testing.",
-        "PutEventStreamRequest$ApplicationId": "Application Id.",
-        "PutEventStreamRequest$WriteEventStream": "Write event stream wrapper.",
-        "GetEventStreamRequest$ApplicationId": "Application Id.",
-        "DeleteEventStreamRequest$ApplicationId": "Application Id."
+        "GCMChannelRequest$ApiKey" : "Platform credential API key from Google.",
+        "GCMChannelResponse$ApplicationId" : "The ID of the application to which the channel applies.",
+        "GCMChannelResponse$CreationDate" : "When was this segment created",
+        "GCMChannelResponse$Credential" : "The GCM API key from Google.",
+        "GCMChannelResponse$Id" : "Channel ID. Not used. Present only for backwards compatibility.",
+        "GCMChannelResponse$LastModifiedBy" : "Who last updated this entry",
+        "GCMChannelResponse$LastModifiedDate" : "Last date this was updated",
+        "GCMChannelResponse$Platform" : "The platform type. Will be GCM",
+        "GCMMessage$Body" : "The message body of the notification.",
+        "GCMMessage$CollapseKey" : "This parameter identifies a group of messages (e.g., with collapse_key: \"Updates Available\") that can be collapsed, so that only the last message gets sent when delivery can be resumed. This is intended to avoid sending too many of the same messages when the device comes back online or becomes active.",
+        "GCMMessage$IconReference" : "The icon image name of the asset saved in your application.",
+        "GCMMessage$ImageIconUrl" : "The URL that points to an image used as the large icon to the notification content view.",
+        "GCMMessage$ImageUrl" : "The URL that points to an image used in the push notification.",
+        "GCMMessage$Priority" : "The message priority. Amazon Pinpoint uses this value to set the FCM or GCM priority parameter when it sends the message. Accepts the following values:\n\n\"Normal\" - Messages might be delayed. Delivery is optimized for battery usage on the receiving device. Use normal priority unless immediate delivery is required.\n\n\"High\" - Messages are sent immediately and might wake a sleeping device.\n\nThe equivalent values for APNs messages are \"5\" and \"10\". Amazon Pinpoint accepts these values here and converts them.\n\nFor more information, see About FCM Messages in the Firebase documentation.",
+        "GCMMessage$RawContent" : "The Raw JSON formatted string to be used as the payload. This value overrides the message.",
+        "GCMMessage$RestrictedPackageName" : "This parameter specifies the package name of the application where the registration tokens must match in order to receive the message.",
+        "GCMMessage$SmallImageIconUrl" : "The URL that points to an image used as the small icon for the notification which will be used to represent the notification in the status bar and content view",
+        "GCMMessage$Sound" : "Indicates a sound to play when the device receives the notification. Supports default, or the filename of a sound resource bundled in the app. Android sound files must reside in /res/raw/",
+        "GCMMessage$Title" : "The message title that displays above the message on the user's device.",
+        "GCMMessage$Url" : "The URL to open in the user's mobile browser. Used if the value for Action is URL.",
+        "ImportJobRequest$ExternalId" : "(Deprecated) Your AWS account ID, which you assigned to the ExternalID key in an IAM trust policy. Used by Amazon Pinpoint to assume an IAM role. This requirement is removed, and external IDs are not recommended for IAM roles assumed by Amazon Pinpoint.",
+        "ImportJobRequest$RoleArn" : "The Amazon Resource Name (ARN) of an IAM role that grants Amazon Pinpoint access to the Amazon S3 location that contains the endpoints to import.",
+        "ImportJobRequest$S3Url" : "The URL of the S3 bucket that contains the segment information to import. The location can be a folder or a single file. The URL should use the following format: s3://bucket-name/folder-name/file-name\n\nAmazon Pinpoint imports endpoints from this location and any subfolders it contains.",
+        "ImportJobRequest$SegmentId" : "The ID of the segment to update if the import job is meant to update an existing segment.",
+        "ImportJobRequest$SegmentName" : "A custom name for the segment created by the import job. Use if DefineSegment is true.",
+        "ImportJobResource$ExternalId" : "(Deprecated) Your AWS account ID, which you assigned to the ExternalID key in an IAM trust policy. Used by Amazon Pinpoint to assume an IAM role. This requirement is removed, and external IDs are not recommended for IAM roles assumed by Amazon Pinpoint.",
+        "ImportJobResource$RoleArn" : "The Amazon Resource Name (ARN) of an IAM role that grants Amazon Pinpoint access to the Amazon S3 location that contains the endpoints to import.",
+        "ImportJobResource$S3Url" : "The URL of the S3 bucket that contains the segment information to import. The location can be a folder or a single file. The URL should use the following format: s3://bucket-name/folder-name/file-name\n\nAmazon Pinpoint imports endpoints from this location and any subfolders it contains.",
+        "ImportJobResource$SegmentId" : "The ID of the segment to update if the import job is meant to update an existing segment.",
+        "ImportJobResource$SegmentName" : "A custom name for the segment created by the import job. Use if DefineSegment is true.",
+        "ImportJobResponse$ApplicationId" : "The unique ID of the application to which the import job applies.",
+        "ImportJobResponse$CompletionDate" : "The date the import job completed in ISO 8601 format.",
+        "ImportJobResponse$CreationDate" : "The date the import job was created in ISO 8601 format.",
+        "ImportJobResponse$Id" : "The unique ID of the import job.",
+        "ImportJobResponse$Type" : "The job type. Will be Import.",
+        "ImportJobsResponse$NextToken" : "The string that you use in a subsequent request to get the next page of results in a paginated response.",
+        "Message$Body" : "The message body. Can include up to 140 characters.",
+        "Message$ImageIconUrl" : "The URL that points to the icon image for the push notification icon, for example, the app icon.",
+        "Message$ImageSmallIconUrl" : "The URL that points to the small icon image for the push notification icon, for example, the app icon.",
+        "Message$ImageUrl" : "The URL that points to an image used in the push notification.",
+        "Message$JsonBody" : "The JSON payload used for a silent push.",
+        "Message$MediaUrl" : "The URL that points to the media resource, for example a .mp4 or .gif file.",
+        "Message$RawContent" : "The Raw JSON formatted string to be used as the payload. This value overrides the message.",
+        "Message$Title" : "The message title that displays above the message on the user's device.",
+        "Message$Url" : "The URL to open in the user's mobile browser. Used if the value for Action is URL.",
+        "MessageBody$Message" : "The error message that's returned from the API.",
+        "MessageBody$RequestID" : "The unique message body ID.",
+        "MessageRequest$TraceId" : "A unique ID that you can use to trace a message. This ID is visible to recipients.",
+        "MessageResponse$ApplicationId" : "Application id of the message.",
+        "MessageResponse$RequestId" : "Original request Id for which this message was delivered.",
+        "MessageResult$MessageId" : "Unique message identifier associated with the message that was sent.",
+        "MessageResult$StatusMessage" : "Status message for message delivery.",
+        "MessageResult$UpdatedToken" : "If token was updated as part of delivery. (This is GCM Specific)",
+        "MetricDimension$ComparisonOperator" : "GREATER_THAN | LESS_THAN | GREATER_THAN_OR_EQUAL | LESS_THAN_OR_EQUAL | EQUAL",
+        "NumberValidateRequest$IsoCountryCode" : "(Optional) The two-character ISO country code for the country or region where the phone number was originally registered.",
+        "NumberValidateRequest$PhoneNumber" : "The phone number to get information about. The phone number that you provide should include a country code. If the number doesn't include a valid country code, the operation might result in an error.",
+        "NumberValidateResponse$Carrier" : "The carrier or servive provider that the phone number is currently registered with.",
+        "NumberValidateResponse$City" : "The city where the phone number was originally registered.",
+        "NumberValidateResponse$CleansedPhoneNumberE164" : "The cleansed phone number, shown in E.164 format.",
+        "NumberValidateResponse$CleansedPhoneNumberNational" : "The cleansed phone number, shown in the local phone number format.",
+        "NumberValidateResponse$Country" : "The country or region where the phone number was originally registered.",
+        "NumberValidateResponse$CountryCodeIso2" : "The two-character ISO code for the country or region where the phone number was originally registered.",
+        "NumberValidateResponse$CountryCodeNumeric" : "The numeric code for the country or region where the phone number was originally registered.",
+        "NumberValidateResponse$County" : "The county where the phone number was originally registered.",
+        "NumberValidateResponse$OriginalCountryCodeIso2" : "The two-character ISO code for the country or region that you included in the request body.",
+        "NumberValidateResponse$OriginalPhoneNumber" : "The phone number that you included in the request body.",
+        "NumberValidateResponse$PhoneType" : "A description of the phone type. Possible values are MOBILE, LANDLINE, VOIP, INVALID, PREPAID, and OTHER.",
+        "NumberValidateResponse$Timezone" : "The time zone for the location where the phone number was originally registered.",
+        "NumberValidateResponse$ZipCode" : "The postal code for the location where the phone number was originally registered.",
+        "PublicEndpoint$Address" : "The unique identifier for the recipient. For example, an address could be a device token or an endpoint ID.",
+        "PublicEndpoint$EffectiveDate" : "The date and time when the endpoint was last updated.",
+        "PublicEndpoint$EndpointStatus" : "The status of the endpoint. If the update fails, the value is INACTIVE. If the endpoint is updated successfully, the value is ACTIVE.",
+        "PublicEndpoint$OptOut" : "Indicates whether a user has opted out of receiving messages with one of the following values:\n\nALL - User has opted out of all messages.\n\nNONE - Users has not opted out and receives all messages.",
+        "PublicEndpoint$RequestId" : "A unique identifier that is generated each time the endpoint is updated.",
+        "QuietTime$End" : "The default end time for quiet time in ISO 8601 format.",
+        "QuietTime$Start" : "The default start time for quiet time in ISO 8601 format.",
+        "SMSChannelRequest$SenderId" : "Sender identifier of your messages.",
+        "SMSChannelRequest$ShortCode" : "ShortCode registered with phone provider.",
+        "SMSChannelResponse$ApplicationId" : "The unique ID of the application to which the SMS channel belongs.",
+        "SMSChannelResponse$CreationDate" : "The date that the settings were last updated in ISO 8601 format.",
+        "SMSChannelResponse$Id" : "Channel ID. Not used, only for backwards compatibility.",
+        "SMSChannelResponse$LastModifiedBy" : "Who last updated this entry",
+        "SMSChannelResponse$LastModifiedDate" : "Last date this was updated",
+        "SMSChannelResponse$Platform" : "Platform type. Will be \"SMS\"",
+        "SMSChannelResponse$SenderId" : "Sender identifier of your messages.",
+        "SMSChannelResponse$ShortCode" : "The short code registered with the phone provider.",
+        "SMSMessage$Body" : "The body of the SMS message.",
+        "SMSMessage$Keyword" : "The SMS program name that you provided to AWS Support when you requested your dedicated number.",
+        "SMSMessage$OriginationNumber" : "The phone number that the SMS message originates from. Specify one of the dedicated long codes or short codes that you requested from AWS Support and that is assigned to your account. If this attribute is not specified, Amazon Pinpoint randomly assigns a long code.",
+        "SMSMessage$SenderId" : "The sender ID that is shown as the message sender on the recipient's device. Support for sender IDs varies by country or region.",
+        "Schedule$EndTime" : "The scheduled time that the campaign ends in ISO 8601 format.",
+        "Schedule$StartTime" : "The scheduled time that the campaign begins in ISO 8601 format.",
+        "Schedule$Timezone" : "The starting UTC offset for the schedule if the value for isLocalTime is true\n\nValid values: \nUTC\nUTC+01\nUTC+02\nUTC+03\nUTC+03:30\nUTC+04\nUTC+04:30\nUTC+05\nUTC+05:30\nUTC+05:45\nUTC+06\nUTC+06:30\nUTC+07\nUTC+08\nUTC+09\nUTC+09:30\nUTC+10\nUTC+10:30\nUTC+11\nUTC+12\nUTC+13\nUTC-02\nUTC-03\nUTC-04\nUTC-05\nUTC-06\nUTC-07\nUTC-08\nUTC-09\nUTC-10\nUTC-11",
+        "SegmentImportResource$ExternalId" : "(Deprecated) Your AWS account ID, which you assigned to the ExternalID key in an IAM trust policy. Used by Amazon Pinpoint to assume an IAM role. This requirement is removed, and external IDs are not recommended for IAM roles assumed by Amazon Pinpoint.",
+        "SegmentImportResource$RoleArn" : "The Amazon Resource Name (ARN) of an IAM role that grants Amazon Pinpoint access to the endpoints in Amazon S3.",
+        "SegmentImportResource$S3Url" : "The URL of the S3 bucket that the segment was imported from.",
+        "SegmentReference$Id" : "A unique identifier for the segment.",
+        "SegmentResponse$ApplicationId" : "The ID of the application that the segment applies to.",
+        "SegmentResponse$CreationDate" : "The date and time when the segment was created.",
+        "SegmentResponse$Id" : "The unique segment ID.",
+        "SegmentResponse$LastModifiedDate" : "The date and time when the segment was last modified.",
+        "SegmentResponse$Name" : "The name of the segment.",
+        "SegmentsResponse$NextToken" : "An identifier used to retrieve the next page of results. The token is null if no additional pages exist.",
+        "SendUsersMessageRequest$TraceId" : "A unique ID that you can use to trace a message. This ID is visible to recipients.",
+        "SendUsersMessageResponse$ApplicationId" : "The unique ID of the Amazon Pinpoint project used to send the message.",
+        "SendUsersMessageResponse$RequestId" : "The unique ID assigned to the users-messages request.",
+        "Session$Id" : "A unique identifier for the session.",
+        "Session$StartTimestamp" : "The date and time when the session began.",
+        "Session$StopTimestamp" : "The date and time when the session ended.",
+        "TreatmentResource$Id" : "The unique treatment ID.",
+        "TreatmentResource$TreatmentDescription" : "A custom description for the treatment.",
+        "TreatmentResource$TreatmentName" : "The custom name of a variation of the campaign used for A/B testing.",
+        "WriteCampaignRequest$Description" : "A description of the campaign.",
+        "WriteCampaignRequest$Name" : "The custom name of the campaign.",
+        "WriteCampaignRequest$SegmentId" : "The ID of the segment to which the campaign sends messages.",
+        "WriteCampaignRequest$TreatmentDescription" : "A custom description for the treatment.",
+        "WriteCampaignRequest$TreatmentName" : "The custom name of a variation of the campaign used for A/B testing.",
+        "WriteEventStream$DestinationStreamArn" : "The Amazon Resource Name (ARN) of the Amazon Kinesis stream or Firehose delivery stream to which you want to publish events.\n Firehose ARN: arn:aws:firehose:REGION:ACCOUNT_ID:deliverystream/STREAM_NAME\n Kinesis ARN: arn:aws:kinesis:REGION:ACCOUNT_ID:stream/STREAM_NAME",
+        "WriteEventStream$RoleArn" : "The IAM role that authorizes Amazon Pinpoint to publish events to the stream in your account.",
+        "WriteSegmentRequest$Name" : "The name of segment",
+        "WriteTreatmentResource$TreatmentDescription" : "A custom description for the treatment.",
+        "WriteTreatmentResource$TreatmentName" : "The custom name of a variation of the campaign used for A/B testing.",
+        "ListOf__string$member" : null,
+        "MapOf__string$member" : null
       }
     }
   }

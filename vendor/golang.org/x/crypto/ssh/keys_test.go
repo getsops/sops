@@ -13,7 +13,9 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
+	"encoding/pem"
 	"fmt"
+	"io"
 	"reflect"
 	"strings"
 	"testing"
@@ -496,5 +498,34 @@ func TestFingerprintSHA256(t *testing.T) {
 	want := "SHA256:Anr3LjZK8YVpjrxu79myrW9Hrb/wpcMNpVvTq/RcBm8" // ssh-keygen -lf rsa
 	if fingerprint != want {
 		t.Errorf("got fingerprint %q want %q", fingerprint, want)
+	}
+}
+
+func TestInvalidKeys(t *testing.T) {
+	keyTypes := []string{
+		"RSA PRIVATE KEY",
+		"PRIVATE KEY",
+		"EC PRIVATE KEY",
+		"DSA PRIVATE KEY",
+		"OPENSSH PRIVATE KEY",
+	}
+
+	for _, keyType := range keyTypes {
+		for _, dataLen := range []int{0, 1, 2, 5, 10, 20} {
+			data := make([]byte, dataLen)
+			if _, err := io.ReadFull(rand.Reader, data); err != nil {
+				t.Fatal(err)
+			}
+
+			var buf bytes.Buffer
+			pem.Encode(&buf, &pem.Block{
+				Type:  keyType,
+				Bytes: data,
+			})
+
+			// This test is just to ensure that the function
+			// doesn't panic so the return value is ignored.
+			ParseRawPrivateKey(buf.Bytes())
+		}
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -42,10 +42,10 @@ var cmpOpt = cmpopts.IgnoreUnexported(profile.Profile{}, profile.Function{},
 // TestRuntimeFunctionTrimming tests if symbolize trims runtime functions as intended.
 func TestRuntimeFunctionTrimming(t *testing.T) {
 	fakeFuncMap := map[uintptr]*fakeFunc{
-		0x10: &fakeFunc{"runtime.goexit", "runtime.go", 10},
-		0x20: &fakeFunc{"runtime.other", "runtime.go", 20},
-		0x30: &fakeFunc{"foo", "foo.go", 30},
-		0x40: &fakeFunc{"bar", "bar.go", 40},
+		0x10: {"runtime.goexit", "runtime.go", 10},
+		0x20: {"runtime.other", "runtime.go", 20},
+		0x30: {"foo", "foo.go", 30},
+		0x40: {"bar", "bar.go", 40},
 	}
 	backupFuncForPC := funcForPC
 	funcForPC = func(pc uintptr) function {
@@ -130,8 +130,8 @@ func TestRuntimeFunctionTrimming(t *testing.T) {
 // profiles as intended.
 func TestParseAndSymbolize(t *testing.T) {
 	fakeFuncMap := map[uintptr]*fakeFunc{
-		0x10: &fakeFunc{"foo", "foo.go", 10},
-		0x20: &fakeFunc{"bar", "bar.go", 20},
+		0x10: {"foo", "foo.go", 10},
+		0x20: {"bar", "bar.go", 20},
 	}
 	backupFuncForPC := funcForPC
 	funcForPC = func(pc uintptr) function {
@@ -147,7 +147,7 @@ func TestParseAndSymbolize(t *testing.T) {
 	}
 	testProfile := &profile.Profile{
 		SampleType: []*profile.ValueType{
-			&profile.ValueType{Type: "cpu", Unit: "nanoseconds"},
+			{Type: "cpu", Unit: "nanoseconds"},
 		},
 		PeriodType: &profile.ValueType{Type: "cpu", Unit: "nanoseconds"},
 		Sample: []*profile.Sample{
@@ -170,7 +170,7 @@ func TestParseAndSymbolize(t *testing.T) {
 	}
 	wantProfile := &profile.Profile{
 		SampleType: []*profile.ValueType{
-			&profile.ValueType{Type: "cpu", Unit: "nanoseconds"},
+			{Type: "cpu", Unit: "nanoseconds"},
 		},
 		PeriodType: &profile.ValueType{Type: "cpu", Unit: "nanoseconds"},
 		Sample: []*profile.Sample{

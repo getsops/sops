@@ -15,7 +15,7 @@
   "baseUrl": "https://firestore.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Firestore",
-  "description": "",
+  "description": "Accesses the NoSQL document database built for automatic scaling, high performance, and ease of application development.\n",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/firestore",
   "fullyEncodeReservedExpansion": true,
@@ -63,11 +63,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -87,12 +82,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -121,6 +110,66 @@
     "projects": {
       "resources": {
         "databases": {
+          "methods": {
+            "exportDocuments": {
+              "description": "Exports a copy of all or a subset of documents from Google Cloud Firestore\nto another storage system, such as Google Cloud Storage. Recent updates to\ndocuments may not be reflected in the export. The export occurs in the\nbackground and its progress can be monitored and managed via the\nOperation resource that is created. The output of an export may only be\nused once the associated operation is done. If an export operation is\ncancelled before completion it may leave partial data behind in Google\nCloud Storage.",
+              "flatPath": "v1beta1/projects/{projectsId}/databases/{databasesId}:exportDocuments",
+              "httpMethod": "POST",
+              "id": "firestore.projects.databases.exportDocuments",
+              "parameterOrder": [
+                "name"
+              ],
+              "parameters": {
+                "name": {
+                  "description": "Database to export. Should be of the form:\n`projects/{project_id}/databases/{database_id}`.",
+                  "location": "path",
+                  "pattern": "^projects/[^/]+/databases/[^/]+$",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1beta1/{+name}:exportDocuments",
+              "request": {
+                "$ref": "GoogleFirestoreAdminV1beta1ExportDocumentsRequest"
+              },
+              "response": {
+                "$ref": "GoogleLongrunningOperation"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform",
+                "https://www.googleapis.com/auth/datastore"
+              ]
+            },
+            "importDocuments": {
+              "description": "Imports documents into Google Cloud Firestore. Existing documents with the\nsame name are overwritten. The import occurs in the background and its\nprogress can be monitored and managed via the Operation resource that is\ncreated. If an ImportDocuments operation is cancelled, it is possible\nthat a subset of the data has already been imported to Cloud Firestore.",
+              "flatPath": "v1beta1/projects/{projectsId}/databases/{databasesId}:importDocuments",
+              "httpMethod": "POST",
+              "id": "firestore.projects.databases.importDocuments",
+              "parameterOrder": [
+                "name"
+              ],
+              "parameters": {
+                "name": {
+                  "description": "Database to import into. Should be of the form:\n`projects/{project_id}/databases/{database_id}`.",
+                  "location": "path",
+                  "pattern": "^projects/[^/]+/databases/[^/]+$",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1beta1/{+name}:importDocuments",
+              "request": {
+                "$ref": "GoogleFirestoreAdminV1beta1ImportDocumentsRequest"
+              },
+              "response": {
+                "$ref": "GoogleLongrunningOperation"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform",
+                "https://www.googleapis.com/auth/datastore"
+              ]
+            }
+          },
           "resources": {
             "documents": {
               "methods": {
@@ -631,10 +680,10 @@
                   },
                   "path": "v1beta1/{+parent}/indexes",
                   "request": {
-                    "$ref": "Index"
+                    "$ref": "GoogleFirestoreAdminV1beta1Index"
                   },
                   "response": {
-                    "$ref": "Operation"
+                    "$ref": "GoogleLongrunningOperation"
                   },
                   "scopes": [
                     "https://www.googleapis.com/auth/cloud-platform",
@@ -686,7 +735,7 @@
                   },
                   "path": "v1beta1/{+name}",
                   "response": {
-                    "$ref": "Index"
+                    "$ref": "GoogleFirestoreAdminV1beta1Index"
                   },
                   "scopes": [
                     "https://www.googleapis.com/auth/cloud-platform",
@@ -727,7 +776,7 @@
                   },
                   "path": "v1beta1/{+parent}/indexes",
                   "response": {
-                    "$ref": "ListIndexesResponse"
+                    "$ref": "GoogleFirestoreAdminV1beta1ListIndexesResponse"
                   },
                   "scopes": [
                     "https://www.googleapis.com/auth/cloud-platform",
@@ -741,7 +790,7 @@
       }
     }
   },
-  "revision": "20180321",
+  "revision": "20180814",
   "rootUrl": "https://firestore.googleapis.com/",
   "schemas": {
     "ArrayValue": {
@@ -1123,7 +1172,8 @@
             "LESS_THAN_OR_EQUAL",
             "GREATER_THAN",
             "GREATER_THAN_OR_EQUAL",
-            "EQUAL"
+            "EQUAL",
+            "ARRAY_CONTAINS"
           ],
           "enumDescriptions": [
             "Unspecified. This value must not be used.",
@@ -1131,7 +1181,8 @@
             "Less than or equal. Requires that the field come first in `order_by`.",
             "Greater than. Requires that the field come first in `order_by`.",
             "Greater than or equal. Requires that the field come first in\n`order_by`.",
-            "Equal."
+            "Equal.",
+            "Contains. Requires that the field is an array."
           ],
           "type": "string"
         },
@@ -1156,9 +1207,17 @@
       "description": "A transformation of a field of the document.",
       "id": "FieldTransform",
       "properties": {
+        "appendMissingElements": {
+          "$ref": "ArrayValue",
+          "description": "Append the given elements in order if they are not already present in\nthe current field value.\nIf the field is not an array, or if the field does not yet exist, it is\nfirst set to the empty array.\n\nEquivalent numbers of different types (e.g. 3L and 3.0) are\nconsidered equal when checking if a value is missing.\nNaN is equal to NaN, and Null is equal to Null.\nIf the input contains multiple equivalent values, only the first will\nbe considered.\n\nThe corresponding transform_result will be the null value."
+        },
         "fieldPath": {
           "description": "The path of the field. See Document.fields for the field path syntax\nreference.",
           "type": "string"
+        },
+        "removeAllFromArray": {
+          "$ref": "ArrayValue",
+          "description": "Remove all of the given elements from the array in the field.\nIf the field is not an array, or if the field does not yet exist, it is\nset to the empty array.\n\nEquivalent numbers of the different types (e.g. 3L and 3.0) are\nconsidered equal when deciding whether an element should be removed.\nNaN is equal to NaN, and Null is equal to Null.\nThis will remove all equivalent values if there are duplicates.\n\nThe corresponding transform_result will be the null value."
         },
         "setToServerValue": {
           "description": "Sets the field to the given server value.",
@@ -1194,9 +1253,176 @@
       },
       "type": "object"
     },
-    "Index": {
+    "GoogleFirestoreAdminV1beta1ExportDocumentsMetadata": {
+      "description": "Metadata for ExportDocuments operations.",
+      "id": "GoogleFirestoreAdminV1beta1ExportDocumentsMetadata",
+      "properties": {
+        "collectionIds": {
+          "description": "Which collection ids are being exported.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "endTime": {
+          "description": "The time the operation ended, either successfully or otherwise. Unset if\nthe operation is still active.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "operationState": {
+          "description": "The state of the export operation.",
+          "enum": [
+            "STATE_UNSPECIFIED",
+            "INITIALIZING",
+            "PROCESSING",
+            "CANCELLING",
+            "FINALIZING",
+            "SUCCESSFUL",
+            "FAILED",
+            "CANCELLED"
+          ],
+          "enumDescriptions": [
+            "Unspecified.",
+            "Request is being prepared for processing.",
+            "Request is actively being processed.",
+            "Request is in the process of being cancelled after user called\ngoogle.longrunning.Operations.CancelOperation on the operation.",
+            "Request has been processed and is in its finalization stage.",
+            "Request has completed successfully.",
+            "Request has finished being processed, but encountered an error.",
+            "Request has finished being cancelled after user called\ngoogle.longrunning.Operations.CancelOperation."
+          ],
+          "type": "string"
+        },
+        "outputUriPrefix": {
+          "description": "Where the entities are being exported to.",
+          "type": "string"
+        },
+        "progressBytes": {
+          "$ref": "GoogleFirestoreAdminV1beta1Progress",
+          "description": "An estimate of the number of bytes processed."
+        },
+        "progressDocuments": {
+          "$ref": "GoogleFirestoreAdminV1beta1Progress",
+          "description": "An estimate of the number of documents processed."
+        },
+        "startTime": {
+          "description": "The time that work began on the operation.",
+          "format": "google-datetime",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleFirestoreAdminV1beta1ExportDocumentsRequest": {
+      "description": "The request for FirestoreAdmin.ExportDocuments.",
+      "id": "GoogleFirestoreAdminV1beta1ExportDocumentsRequest",
+      "properties": {
+        "collectionIds": {
+          "description": "Which collection ids to export. Unspecified means all collections.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "outputUriPrefix": {
+          "description": "The output URI. Currently only supports Google Cloud Storage URIs of the\nform: `gs://BUCKET_NAME[/NAMESPACE_PATH]`, where `BUCKET_NAME` is the name\nof the Google Cloud Storage bucket and `NAMESPACE_PATH` is an optional\nGoogle Cloud Storage namespace path. When\nchoosing a name, be sure to consider Google Cloud Storage naming\nguidelines: https://cloud.google.com/storage/docs/naming.\nIf the URI is a bucket (without a namespace path), a prefix will be\ngenerated based on the start time.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleFirestoreAdminV1beta1ExportDocumentsResponse": {
+      "description": "Returned in the google.longrunning.Operation response field.",
+      "id": "GoogleFirestoreAdminV1beta1ExportDocumentsResponse",
+      "properties": {
+        "outputUriPrefix": {
+          "description": "Location of the output files. This can be used to begin an import\ninto Cloud Firestore (this project or another project) after the operation\ncompletes successfully.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleFirestoreAdminV1beta1ImportDocumentsMetadata": {
+      "description": "Metadata for ImportDocuments operations.",
+      "id": "GoogleFirestoreAdminV1beta1ImportDocumentsMetadata",
+      "properties": {
+        "collectionIds": {
+          "description": "Which collection ids are being imported.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "endTime": {
+          "description": "The time the operation ended, either successfully or otherwise. Unset if\nthe operation is still active.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "inputUriPrefix": {
+          "description": "The location of the documents being imported.",
+          "type": "string"
+        },
+        "operationState": {
+          "description": "The state of the import operation.",
+          "enum": [
+            "STATE_UNSPECIFIED",
+            "INITIALIZING",
+            "PROCESSING",
+            "CANCELLING",
+            "FINALIZING",
+            "SUCCESSFUL",
+            "FAILED",
+            "CANCELLED"
+          ],
+          "enumDescriptions": [
+            "Unspecified.",
+            "Request is being prepared for processing.",
+            "Request is actively being processed.",
+            "Request is in the process of being cancelled after user called\ngoogle.longrunning.Operations.CancelOperation on the operation.",
+            "Request has been processed and is in its finalization stage.",
+            "Request has completed successfully.",
+            "Request has finished being processed, but encountered an error.",
+            "Request has finished being cancelled after user called\ngoogle.longrunning.Operations.CancelOperation."
+          ],
+          "type": "string"
+        },
+        "progressBytes": {
+          "$ref": "GoogleFirestoreAdminV1beta1Progress",
+          "description": "An estimate of the number of bytes processed."
+        },
+        "progressDocuments": {
+          "$ref": "GoogleFirestoreAdminV1beta1Progress",
+          "description": "An estimate of the number of documents processed."
+        },
+        "startTime": {
+          "description": "The time that work began on the operation.",
+          "format": "google-datetime",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleFirestoreAdminV1beta1ImportDocumentsRequest": {
+      "description": "The request for FirestoreAdmin.ImportDocuments.",
+      "id": "GoogleFirestoreAdminV1beta1ImportDocumentsRequest",
+      "properties": {
+        "collectionIds": {
+          "description": "Which collection ids to import. Unspecified means all collections included\nin the import.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "inputUriPrefix": {
+          "description": "Location of the exported files.\nThis must match the output_uri_prefix of an ExportDocumentsResponse from\nan export that has completed successfully.\nSee:\ngoogle.firestore.admin.v1beta1.ExportDocumentsResponse.output_uri_prefix.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleFirestoreAdminV1beta1Index": {
       "description": "An index definition.",
-      "id": "Index",
+      "id": "GoogleFirestoreAdminV1beta1Index",
       "properties": {
         "collectionId": {
           "description": "The collection ID to which this index applies. Required.",
@@ -1205,7 +1431,7 @@
         "fields": {
           "description": "The fields to index.",
           "items": {
-            "$ref": "IndexField"
+            "$ref": "GoogleFirestoreAdminV1beta1IndexField"
           },
           "type": "array"
         },
@@ -1232,9 +1458,9 @@
       },
       "type": "object"
     },
-    "IndexField": {
+    "GoogleFirestoreAdminV1beta1IndexField": {
       "description": "A field of an index.",
-      "id": "IndexField",
+      "id": "GoogleFirestoreAdminV1beta1IndexField",
       "properties": {
         "fieldPath": {
           "description": "The path of the field. Must match the field path specification described\nby google.firestore.v1beta1.Document.fields.\nSpecial field path `__name__` may be used by itself or at the end of a\npath. `__type__` may be used only at the end of path.",
@@ -1245,14 +1471,133 @@
           "enum": [
             "MODE_UNSPECIFIED",
             "ASCENDING",
-            "DESCENDING"
+            "DESCENDING",
+            "ARRAY_CONTAINS"
           ],
           "enumDescriptions": [
             "The mode is unspecified.",
             "The field's values are indexed so as to support sequencing in\nascending order and also query by \u003c, \u003e, \u003c=, \u003e=, and =.",
-            "The field's values are indexed so as to support sequencing in\ndescending order and also query by \u003c, \u003e, \u003c=, \u003e=, and =."
+            "The field's values are indexed so as to support sequencing in\ndescending order and also query by \u003c, \u003e, \u003c=, \u003e=, and =.",
+            "The field's array values are indexed so as to support membership using\nARRAY_CONTAINS queries."
           ],
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleFirestoreAdminV1beta1IndexOperationMetadata": {
+      "description": "Metadata for index operations. This metadata populates\nthe metadata field of google.longrunning.Operation.",
+      "id": "GoogleFirestoreAdminV1beta1IndexOperationMetadata",
+      "properties": {
+        "cancelled": {
+          "description": "True if the [google.longrunning.Operation] was cancelled. If the\ncancellation is in progress, cancelled will be true but\ngoogle.longrunning.Operation.done will be false.",
+          "type": "boolean"
+        },
+        "documentProgress": {
+          "$ref": "GoogleFirestoreAdminV1beta1Progress",
+          "description": "Progress of the existing operation, measured in number of documents."
+        },
+        "endTime": {
+          "description": "The time the operation ended, either successfully or otherwise. Unset if\nthe operation is still active.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "index": {
+          "description": "The index resource that this operation is acting on. For example:\n`projects/{project_id}/databases/{database_id}/indexes/{index_id}`",
+          "type": "string"
+        },
+        "operationType": {
+          "description": "The type of index operation.",
+          "enum": [
+            "OPERATION_TYPE_UNSPECIFIED",
+            "CREATING_INDEX"
+          ],
+          "enumDescriptions": [
+            "Unspecified. Never set by server.",
+            "The operation is creating the index. Initiated by a `CreateIndex` call."
+          ],
+          "type": "string"
+        },
+        "startTime": {
+          "description": "The time that work began on the operation.",
+          "format": "google-datetime",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleFirestoreAdminV1beta1ListIndexesResponse": {
+      "description": "The response for FirestoreAdmin.ListIndexes.",
+      "id": "GoogleFirestoreAdminV1beta1ListIndexesResponse",
+      "properties": {
+        "indexes": {
+          "description": "The indexes.",
+          "items": {
+            "$ref": "GoogleFirestoreAdminV1beta1Index"
+          },
+          "type": "array"
+        },
+        "nextPageToken": {
+          "description": "The standard List next-page token.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleFirestoreAdminV1beta1LocationMetadata": {
+      "description": "The metadata message for google.cloud.location.Location.metadata.",
+      "id": "GoogleFirestoreAdminV1beta1LocationMetadata",
+      "properties": {},
+      "type": "object"
+    },
+    "GoogleFirestoreAdminV1beta1Progress": {
+      "description": "Measures the progress of a particular metric.",
+      "id": "GoogleFirestoreAdminV1beta1Progress",
+      "properties": {
+        "workCompleted": {
+          "description": "An estimate of how much work has been completed. Note that this may be\ngreater than `work_estimated`.",
+          "format": "int64",
+          "type": "string"
+        },
+        "workEstimated": {
+          "description": "An estimate of how much work needs to be performed. Zero if the\nwork estimate is unavailable. May change as work progresses.",
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleLongrunningOperation": {
+      "description": "This resource represents a long-running operation that is the result of a\nnetwork API call.",
+      "id": "GoogleLongrunningOperation",
+      "properties": {
+        "done": {
+          "description": "If the value is `false`, it means the operation is still in progress.\nIf `true`, the operation is completed, and either `error` or `response` is\navailable.",
+          "type": "boolean"
+        },
+        "error": {
+          "$ref": "Status",
+          "description": "The error result of the operation in case of failure or cancellation."
+        },
+        "metadata": {
+          "additionalProperties": {
+            "description": "Properties of the object. Contains field @type with type URL.",
+            "type": "any"
+          },
+          "description": "Service-specific metadata associated with the operation.  It typically\ncontains progress information and common metadata such as create time.\nSome services might not provide such metadata.  Any method that returns a\nlong-running operation should document the metadata type, if any.",
+          "type": "object"
+        },
+        "name": {
+          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should have the format of `operations/some/unique/name`.",
+          "type": "string"
+        },
+        "response": {
+          "additionalProperties": {
+            "description": "Properties of the object. Contains field @type with type URL.",
+            "type": "any"
+          },
+          "description": "The normal response of the operation in case of success.  If the original\nmethod returns no data on success, such as `Delete`, the response is\n`google.protobuf.Empty`.  If the original method is standard\n`Get`/`Create`/`Update`, the response should be the resource.  For other\nmethods, the response should have the type `XxxResponse`, where `Xxx`\nis the original method name.  For example, if the original method name\nis `TakeSnapshot()`, the inferred response type is\n`TakeSnapshotResponse`.",
+          "type": "object"
         }
       },
       "type": "object"
@@ -1326,24 +1671,6 @@
       },
       "type": "object"
     },
-    "ListIndexesResponse": {
-      "description": "The response for FirestoreAdmin.ListIndexes.",
-      "id": "ListIndexesResponse",
-      "properties": {
-        "indexes": {
-          "description": "The indexes.",
-          "items": {
-            "$ref": "Index"
-          },
-          "type": "array"
-        },
-        "nextPageToken": {
-          "description": "The standard List next-page token.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "ListenRequest": {
       "description": "A request for Firestore.Listen",
       "id": "ListenRequest",
@@ -1403,41 +1730,6 @@
             "$ref": "Value"
           },
           "description": "The map's fields.\n\nThe map keys represent field names. Field names matching the regular\nexpression `__.*__` are reserved. Reserved field names are forbidden except\nin certain documented contexts. The map keys, represented as UTF-8, must\nnot exceed 1,500 bytes and cannot be empty.",
-          "type": "object"
-        }
-      },
-      "type": "object"
-    },
-    "Operation": {
-      "description": "This resource represents a long-running operation that is the result of a\nnetwork API call.",
-      "id": "Operation",
-      "properties": {
-        "done": {
-          "description": "If the value is `false`, it means the operation is still in progress.\nIf `true`, the operation is completed, and either `error` or `response` is\navailable.",
-          "type": "boolean"
-        },
-        "error": {
-          "$ref": "Status",
-          "description": "The error result of the operation in case of failure or cancellation."
-        },
-        "metadata": {
-          "additionalProperties": {
-            "description": "Properties of the object. Contains field @type with type URL.",
-            "type": "any"
-          },
-          "description": "Service-specific metadata associated with the operation.  It typically\ncontains progress information and common metadata such as create time.\nSome services might not provide such metadata.  Any method that returns a\nlong-running operation should document the metadata type, if any.",
-          "type": "object"
-        },
-        "name": {
-          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should have the format of `operations/some/unique/name`.",
-          "type": "string"
-        },
-        "response": {
-          "additionalProperties": {
-            "description": "Properties of the object. Contains field @type with type URL.",
-            "type": "any"
-          },
-          "description": "The normal response of the operation in case of success.  If the original\nmethod returns no data on success, such as `Delete`, the response is\n`google.protobuf.Empty`.  If the original method is standard\n`Get`/`Create`/`Update`, the response should be the resource.  For other\nmethods, the response should have the type `XxxResponse`, where `Xxx`\nis the original method name.  For example, if the original method name\nis `TakeSnapshot()`, the inferred response type is\n`TakeSnapshotResponse`.",
           "type": "object"
         }
       },
@@ -1801,7 +2093,7 @@
       "properties": {
         "arrayValue": {
           "$ref": "ArrayValue",
-          "description": "An array value.\n\nCannot contain another array value."
+          "description": "An array value.\n\nCannot directly contain another array value, though can contain an\nmap which contains another array."
         },
         "booleanValue": {
           "description": "A boolean value.",
@@ -1962,7 +2254,7 @@
     }
   },
   "servicePath": "",
-  "title": "Google Cloud Firestore API",
+  "title": "Cloud Firestore API",
   "version": "v1beta1",
   "version_module": true
 }

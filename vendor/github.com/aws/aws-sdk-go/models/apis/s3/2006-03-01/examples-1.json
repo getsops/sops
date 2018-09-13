@@ -257,21 +257,6 @@
     "DeleteObject": [
       {
         "input": {
-          "Bucket": "ExampleBucket",
-          "Key": "HappyFace.jpg"
-        },
-        "comments": {
-          "input": {
-          },
-          "output": {
-          }
-        },
-        "description": "The following example deletes an object from a non-versioned bucket.",
-        "id": "to-delete-an-object-from-a-non-versioned-bucket-1481588533089",
-        "title": "To delete an object (from a non-versioned bucket)"
-      },
-      {
-        "input": {
           "Bucket": "examplebucket",
           "Key": "objectkey.jpg"
         },
@@ -286,6 +271,21 @@
         "description": "The following example deletes an object from an S3 bucket.",
         "id": "to-delete-an-object-1472850136595",
         "title": "To delete an object"
+      },
+      {
+        "input": {
+          "Bucket": "ExampleBucket",
+          "Key": "HappyFace.jpg"
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following example deletes an object from a non-versioned bucket.",
+        "id": "to-delete-an-object-from-a-non-versioned-bucket-1481588533089",
+        "title": "To delete an object (from a non-versioned bucket)"
       }
     ],
     "DeleteObjectTagging": [
@@ -1569,14 +1569,11 @@
         "input": {
           "Body": "filetoupload",
           "Bucket": "examplebucket",
-          "Key": "exampleobject",
-          "ServerSideEncryption": "AES256",
-          "Tagging": "key1=value1&key2=value2"
+          "Key": "objectkey"
         },
         "output": {
           "ETag": "\"6805f2cfc46c0f04559748bb039d69ae\"",
-          "ServerSideEncryption": "AES256",
-          "VersionId": "Ri.vC6qVlA4dEnjgRV4ZHsHoFIjqEMNt"
+          "VersionId": "Bvq0EDKxOcXLJXNo_Lkz37eM3R4pfzyQ"
         },
         "comments": {
           "input": {
@@ -1584,9 +1581,32 @@
           "output": {
           }
         },
-        "description": "The following example uploads and object. The request specifies the optional server-side encryption option. The request also specifies optional object tags. If the bucket is versioning enabled, S3 returns version ID in response.",
-        "id": "to-upload-an-object-and-specify-server-side-encryption-and-object-tags-1483398331831",
-        "title": "To upload an object and specify server-side encryption and object tags"
+        "description": "The following example creates an object. If the bucket is versioning enabled, S3 returns version ID in response.",
+        "id": "to-create-an-object-1483147613675",
+        "title": "To create an object."
+      },
+      {
+        "input": {
+          "Body": "HappyFace.jpg",
+          "Bucket": "examplebucket",
+          "Key": "HappyFace.jpg",
+          "ServerSideEncryption": "AES256",
+          "StorageClass": "STANDARD_IA"
+        },
+        "output": {
+          "ETag": "\"6805f2cfc46c0f04559748bb039d69ae\"",
+          "ServerSideEncryption": "AES256",
+          "VersionId": "CG612hodqujkf8FaaNfp8U..FIhLROcp"
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following example uploads an object. The request specifies optional request headers to directs S3 to use specific storage class and use server-side encryption.",
+        "id": "to-upload-an-object-(specify-optional-headers)",
+        "title": "To upload an object (specify optional headers)"
       },
       {
         "input": {
@@ -1633,11 +1653,15 @@
         "input": {
           "Body": "filetoupload",
           "Bucket": "examplebucket",
-          "Key": "objectkey"
+          "Key": "exampleobject",
+          "Metadata": {
+            "metadata1": "value1",
+            "metadata2": "value2"
+          }
         },
         "output": {
           "ETag": "\"6805f2cfc46c0f04559748bb039d69ae\"",
-          "VersionId": "Bvq0EDKxOcXLJXNo_Lkz37eM3R4pfzyQ"
+          "VersionId": "pSKidl4pHBiNwukdbcPXAIs.sshFFOc0"
         },
         "comments": {
           "input": {
@@ -1645,9 +1669,9 @@
           "output": {
           }
         },
-        "description": "The following example creates an object. If the bucket is versioning enabled, S3 returns version ID in response.",
-        "id": "to-create-an-object-1483147613675",
-        "title": "To create an object."
+        "description": "The following example creates an object. The request also specifies optional metadata. If the bucket is versioning enabled, S3 returns version ID in response.",
+        "id": "to-upload-object-and-specify-user-defined-metadata-1483396974757",
+        "title": "To upload object and specify user-defined metadata"
       },
       {
         "input": {
@@ -1675,14 +1699,13 @@
           "Body": "filetoupload",
           "Bucket": "examplebucket",
           "Key": "exampleobject",
-          "Metadata": {
-            "metadata1": "value1",
-            "metadata2": "value2"
-          }
+          "ServerSideEncryption": "AES256",
+          "Tagging": "key1=value1&key2=value2"
         },
         "output": {
           "ETag": "\"6805f2cfc46c0f04559748bb039d69ae\"",
-          "VersionId": "pSKidl4pHBiNwukdbcPXAIs.sshFFOc0"
+          "ServerSideEncryption": "AES256",
+          "VersionId": "Ri.vC6qVlA4dEnjgRV4ZHsHoFIjqEMNt"
         },
         "comments": {
           "input": {
@@ -1690,32 +1713,9 @@
           "output": {
           }
         },
-        "description": "The following example creates an object. The request also specifies optional metadata. If the bucket is versioning enabled, S3 returns version ID in response.",
-        "id": "to-upload-object-and-specify-user-defined-metadata-1483396974757",
-        "title": "To upload object and specify user-defined metadata"
-      },
-      {
-        "input": {
-          "Body": "HappyFace.jpg",
-          "Bucket": "examplebucket",
-          "Key": "HappyFace.jpg",
-          "ServerSideEncryption": "AES256",
-          "StorageClass": "STANDARD_IA"
-        },
-        "output": {
-          "ETag": "\"6805f2cfc46c0f04559748bb039d69ae\"",
-          "ServerSideEncryption": "AES256",
-          "VersionId": "CG612hodqujkf8FaaNfp8U..FIhLROcp"
-        },
-        "comments": {
-          "input": {
-          },
-          "output": {
-          }
-        },
-        "description": "The following example uploads an object. The request specifies optional request headers to directs S3 to use specific storage class and use server-side encryption.",
-        "id": "to-upload-an-object-(specify-optional-headers)",
-        "title": "To upload an object (specify optional headers)"
+        "description": "The following example uploads and object. The request specifies the optional server-side encryption option. The request also specifies optional object tags. If the bucket is versioning enabled, S3 returns version ID in response.",
+        "id": "to-upload-an-object-and-specify-server-side-encryption-and-object-tags-1483398331831",
+        "title": "To upload an object and specify server-side encryption and object tags"
       }
     ],
     "PutObjectAcl": [
@@ -1826,6 +1826,30 @@
         "input": {
           "Bucket": "examplebucket",
           "CopySource": "/bucketname/sourceobjectkey",
+          "Key": "examplelargeobject",
+          "PartNumber": "1",
+          "UploadId": "exampleuoh_10OhKhT7YukE9bjzTPRiuaCotmZM_pFngJFir9OZNrSr5cWa3cq3LZSUsfjI4FI7PkP91We7Nrw--"
+        },
+        "output": {
+          "CopyPartResult": {
+            "ETag": "\"b0c6f0e7e054ab8fa2536a2677f8734d\"",
+            "LastModified": "2016-12-29T21:24:43.000Z"
+          }
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following example uploads a part of a multipart upload by copying data from an existing object as data source.",
+        "id": "to-upload-a-part-by-copying-data-from-an-existing-object-as-data-source-1483046746348",
+        "title": "To upload a part by copying data from an existing object as data source"
+      },
+      {
+        "input": {
+          "Bucket": "examplebucket",
+          "CopySource": "/bucketname/sourceobjectkey",
           "CopySourceRange": "bytes=1-100000",
           "Key": "examplelargeobject",
           "PartNumber": "2",
@@ -1846,30 +1870,6 @@
         "description": "The following example uploads a part of a multipart upload by copying a specified byte range from an existing object as data source.",
         "id": "to-upload-a-part-by-copying-byte-range-from-an-existing-object-as-data-source-1483048068594",
         "title": "To upload a part by copying byte range from an existing object as data source"
-      },
-      {
-        "input": {
-          "Bucket": "examplebucket",
-          "CopySource": "/bucketname/sourceobjectkey",
-          "Key": "examplelargeobject",
-          "PartNumber": "1",
-          "UploadId": "exampleuoh_10OhKhT7YukE9bjzTPRiuaCotmZM_pFngJFir9OZNrSr5cWa3cq3LZSUsfjI4FI7PkP91We7Nrw--"
-        },
-        "output": {
-          "CopyPartResult": {
-            "ETag": "\"b0c6f0e7e054ab8fa2536a2677f8734d\"",
-            "LastModified": "2016-12-29T21:24:43.000Z"
-          }
-        },
-        "comments": {
-          "input": {
-          },
-          "output": {
-          }
-        },
-        "description": "The following example uploads a part of a multipart upload by copying data from an existing object as data source.",
-        "id": "to-upload-a-part-by-copying-data-from-an-existing-object-as-data-source-1483046746348",
-        "title": "To upload a part by copying data from an existing object as data source"
       }
     ]
   }

@@ -2,6 +2,7 @@ package credentials
 
 import (
 	"testing"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/stretchr/testify/assert"
@@ -62,6 +63,14 @@ func TestCredentialsExpire(t *testing.T) {
 	assert.True(t, c.IsExpired(), "Expected to be expired")
 }
 
+type MockProvider struct {
+	Expiry
+}
+
+func (*MockProvider) Retrieve() (Value, error) {
+	return Value{}, nil
+}
+
 func TestCredentialsGetWithProviderName(t *testing.T) {
 	stub := &stubProvider{}
 
@@ -70,4 +79,21 @@ func TestCredentialsGetWithProviderName(t *testing.T) {
 	creds, err := c.Get()
 	assert.Nil(t, err, "Expected no error")
 	assert.Equal(t, creds.ProviderName, "stubProvider", "Expected provider name to match")
+}
+
+func TestCredentialsIsExpired_Race(t *testing.T) {
+	creds := NewChainCredentials([]Provider{&MockProvider{}})
+
+	starter := make(chan struct{})
+	for i := 0; i < 10; i++ {
+		go func() {
+			<-starter
+			for {
+				creds.IsExpired()
+			}
+		}()
+	}
+	close(starter)
+
+	time.Sleep(10 * time.Second)
 }

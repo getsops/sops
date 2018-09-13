@@ -1,4 +1,4 @@
-// Package abusiveexperiencereport provides access to the Google Abusive Experience Report API.
+// Package abusiveexperiencereport provides access to the Abusive Experience Report API.
 //
 // See https://developers.google.com/abusive-experience-report/
 //
@@ -97,6 +97,7 @@ type ViolatingSitesService struct {
 }
 
 // SiteSummaryResponse: Response message for GetSiteSummary.
+// Do not confuse with same message in google.ads.experiencereport.v1
 type SiteSummaryResponse struct {
 	// AbusiveStatus: The status of the site reviewed for the abusive
 	// experiences.
@@ -256,6 +257,7 @@ func (c *SitesGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -394,6 +396,7 @@ func (c *ViolatingSitesListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/violatingSites")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)

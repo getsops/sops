@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // Amazon Redshift.
 //    func myFunc(svc redshiftiface.RedshiftAPI) bool {
-//        // Make svc.AuthorizeClusterSecurityGroupIngress request
+//        // Make svc.AcceptReservedNodeExchange request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockRedshiftClient struct {
 //        redshiftiface.RedshiftAPI
 //    }
-//    func (m *mockRedshiftClient) AuthorizeClusterSecurityGroupIngress(input *redshift.AuthorizeClusterSecurityGroupIngressInput) (*redshift.AuthorizeClusterSecurityGroupIngressOutput, error) {
+//    func (m *mockRedshiftClient) AcceptReservedNodeExchange(input *redshift.AcceptReservedNodeExchangeInput) (*redshift.AcceptReservedNodeExchangeOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type RedshiftAPI interface {
+	AcceptReservedNodeExchange(*redshift.AcceptReservedNodeExchangeInput) (*redshift.AcceptReservedNodeExchangeOutput, error)
+	AcceptReservedNodeExchangeWithContext(aws.Context, *redshift.AcceptReservedNodeExchangeInput, ...request.Option) (*redshift.AcceptReservedNodeExchangeOutput, error)
+	AcceptReservedNodeExchangeRequest(*redshift.AcceptReservedNodeExchangeInput) (*request.Request, *redshift.AcceptReservedNodeExchangeOutput)
+
 	AuthorizeClusterSecurityGroupIngress(*redshift.AuthorizeClusterSecurityGroupIngressInput) (*redshift.AuthorizeClusterSecurityGroupIngressOutput, error)
 	AuthorizeClusterSecurityGroupIngressWithContext(aws.Context, *redshift.AuthorizeClusterSecurityGroupIngressInput, ...request.Option) (*redshift.AuthorizeClusterSecurityGroupIngressOutput, error)
 	AuthorizeClusterSecurityGroupIngressRequest(*redshift.AuthorizeClusterSecurityGroupIngressInput) (*request.Request, *redshift.AuthorizeClusterSecurityGroupIngressOutput)
@@ -152,6 +156,10 @@ type RedshiftAPI interface {
 	DeleteTagsWithContext(aws.Context, *redshift.DeleteTagsInput, ...request.Option) (*redshift.DeleteTagsOutput, error)
 	DeleteTagsRequest(*redshift.DeleteTagsInput) (*request.Request, *redshift.DeleteTagsOutput)
 
+	DescribeClusterDbRevisions(*redshift.DescribeClusterDbRevisionsInput) (*redshift.DescribeClusterDbRevisionsOutput, error)
+	DescribeClusterDbRevisionsWithContext(aws.Context, *redshift.DescribeClusterDbRevisionsInput, ...request.Option) (*redshift.DescribeClusterDbRevisionsOutput, error)
+	DescribeClusterDbRevisionsRequest(*redshift.DescribeClusterDbRevisionsInput) (*request.Request, *redshift.DescribeClusterDbRevisionsOutput)
+
 	DescribeClusterParameterGroups(*redshift.DescribeClusterParameterGroupsInput) (*redshift.DescribeClusterParameterGroupsOutput, error)
 	DescribeClusterParameterGroupsWithContext(aws.Context, *redshift.DescribeClusterParameterGroupsInput, ...request.Option) (*redshift.DescribeClusterParameterGroupsOutput, error)
 	DescribeClusterParameterGroupsRequest(*redshift.DescribeClusterParameterGroupsInput) (*request.Request, *redshift.DescribeClusterParameterGroupsOutput)
@@ -186,6 +194,10 @@ type RedshiftAPI interface {
 
 	DescribeClusterSubnetGroupsPages(*redshift.DescribeClusterSubnetGroupsInput, func(*redshift.DescribeClusterSubnetGroupsOutput, bool) bool) error
 	DescribeClusterSubnetGroupsPagesWithContext(aws.Context, *redshift.DescribeClusterSubnetGroupsInput, func(*redshift.DescribeClusterSubnetGroupsOutput, bool) bool, ...request.Option) error
+
+	DescribeClusterTracks(*redshift.DescribeClusterTracksInput) (*redshift.DescribeClusterTracksOutput, error)
+	DescribeClusterTracksWithContext(aws.Context, *redshift.DescribeClusterTracksInput, ...request.Option) (*redshift.DescribeClusterTracksOutput, error)
+	DescribeClusterTracksRequest(*redshift.DescribeClusterTracksInput) (*request.Request, *redshift.DescribeClusterTracksOutput)
 
 	DescribeClusterVersions(*redshift.DescribeClusterVersionsInput) (*redshift.DescribeClusterVersionsOutput, error)
 	DescribeClusterVersionsWithContext(aws.Context, *redshift.DescribeClusterVersionsInput, ...request.Option) (*redshift.DescribeClusterVersionsOutput, error)
@@ -301,9 +313,17 @@ type RedshiftAPI interface {
 	GetClusterCredentialsWithContext(aws.Context, *redshift.GetClusterCredentialsInput, ...request.Option) (*redshift.GetClusterCredentialsOutput, error)
 	GetClusterCredentialsRequest(*redshift.GetClusterCredentialsInput) (*request.Request, *redshift.GetClusterCredentialsOutput)
 
+	GetReservedNodeExchangeOfferings(*redshift.GetReservedNodeExchangeOfferingsInput) (*redshift.GetReservedNodeExchangeOfferingsOutput, error)
+	GetReservedNodeExchangeOfferingsWithContext(aws.Context, *redshift.GetReservedNodeExchangeOfferingsInput, ...request.Option) (*redshift.GetReservedNodeExchangeOfferingsOutput, error)
+	GetReservedNodeExchangeOfferingsRequest(*redshift.GetReservedNodeExchangeOfferingsInput) (*request.Request, *redshift.GetReservedNodeExchangeOfferingsOutput)
+
 	ModifyCluster(*redshift.ModifyClusterInput) (*redshift.ModifyClusterOutput, error)
 	ModifyClusterWithContext(aws.Context, *redshift.ModifyClusterInput, ...request.Option) (*redshift.ModifyClusterOutput, error)
 	ModifyClusterRequest(*redshift.ModifyClusterInput) (*request.Request, *redshift.ModifyClusterOutput)
+
+	ModifyClusterDbRevision(*redshift.ModifyClusterDbRevisionInput) (*redshift.ModifyClusterDbRevisionOutput, error)
+	ModifyClusterDbRevisionWithContext(aws.Context, *redshift.ModifyClusterDbRevisionInput, ...request.Option) (*redshift.ModifyClusterDbRevisionOutput, error)
+	ModifyClusterDbRevisionRequest(*redshift.ModifyClusterDbRevisionInput) (*request.Request, *redshift.ModifyClusterDbRevisionOutput)
 
 	ModifyClusterIamRoles(*redshift.ModifyClusterIamRolesInput) (*redshift.ModifyClusterIamRolesOutput, error)
 	ModifyClusterIamRolesWithContext(aws.Context, *redshift.ModifyClusterIamRolesInput, ...request.Option) (*redshift.ModifyClusterIamRolesOutput, error)
@@ -336,6 +356,10 @@ type RedshiftAPI interface {
 	ResetClusterParameterGroup(*redshift.ResetClusterParameterGroupInput) (*redshift.ClusterParameterGroupNameMessage, error)
 	ResetClusterParameterGroupWithContext(aws.Context, *redshift.ResetClusterParameterGroupInput, ...request.Option) (*redshift.ClusterParameterGroupNameMessage, error)
 	ResetClusterParameterGroupRequest(*redshift.ResetClusterParameterGroupInput) (*request.Request, *redshift.ClusterParameterGroupNameMessage)
+
+	ResizeCluster(*redshift.ResizeClusterInput) (*redshift.ResizeClusterOutput, error)
+	ResizeClusterWithContext(aws.Context, *redshift.ResizeClusterInput, ...request.Option) (*redshift.ResizeClusterOutput, error)
+	ResizeClusterRequest(*redshift.ResizeClusterInput) (*request.Request, *redshift.ResizeClusterOutput)
 
 	RestoreFromClusterSnapshot(*redshift.RestoreFromClusterSnapshotInput) (*redshift.RestoreFromClusterSnapshotOutput, error)
 	RestoreFromClusterSnapshotWithContext(aws.Context, *redshift.RestoreFromClusterSnapshotInput, ...request.Option) (*redshift.RestoreFromClusterSnapshotOutput, error)

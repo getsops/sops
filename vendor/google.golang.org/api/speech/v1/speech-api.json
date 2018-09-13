@@ -14,7 +14,7 @@
   "canonicalName": "Speech",
   "description": "Converts audio to text by applying powerful neural network models.",
   "discoveryVersion": "v1",
-  "documentationLink": "https://cloud.google.com/speech/",
+  "documentationLink": "https://cloud.google.com/speech-to-text/docs/quickstart-protocol",
   "fullyEncodeReservedExpansion": true,
   "icons": {
     "x16": "http://www.google.com/images/icons/product/search-16.gif",
@@ -60,11 +60,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -84,12 +79,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -185,7 +174,7 @@
       }
     }
   },
-  "revision": "20180326",
+  "revision": "20180713",
   "rootUrl": "https://speech.googleapis.com/",
   "schemas": {
     "LongRunningRecognizeRequest": {
@@ -371,7 +360,7 @@
           "type": "string"
         },
         "words": {
-          "description": "Output only. A list of word-specific information for each recognized word.",
+          "description": "Output only. A list of word-specific information for each recognized word.\nNote: When enable_speaker_diarization is true, you will see all the words\nfrom the beginning of the audio.",
           "items": {
             "$ref": "WordInfo"
           },
@@ -429,6 +418,11 @@
           "description": "Output only. Time offset relative to the beginning of the audio,\nand corresponding to the end of the spoken word.\nThis field is only set if `enable_word_time_offsets=true` and only\nin the top hypothesis.\nThis is an experimental feature and the accuracy of the time offset can\nvary.",
           "format": "google-duration",
           "type": "string"
+        },
+        "speakerTag": {
+          "description": "Output only. A distinct integer value is assigned for every speaker within\nthe audio. This field specifies which one of those speakers was detected to\nhave spoken this word. Value ranges from '1' to diarization_speaker_count.\nspeaker_tag is set if enable_speaker_diarization = 'true' and only in the\ntop alternative.",
+          "format": "int32",
+          "type": "integer"
         },
         "startTime": {
           "description": "Output only. Time offset relative to the beginning of the audio,\nand corresponding to the start of the spoken word.\nThis field is only set if `enable_word_time_offsets=true` and only\nin the top hypothesis.\nThis is an experimental feature and the accuracy of the time offset can\nvary.",

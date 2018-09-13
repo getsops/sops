@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -36,11 +36,11 @@ func TestProcessPreconditionsForVerify(t *testing.T) {
 		},
 		{
 			in:   []Precondition{Exists},
-			want: &pb.Precondition{&pb.Precondition_Exists{true}},
+			want: &pb.Precondition{ConditionType: &pb.Precondition_Exists{true}},
 		},
 		{
 			in:   []Precondition{LastUpdateTime(aTime)},
-			want: &pb.Precondition{&pb.Precondition_UpdateTime{aTimestamp}},
+			want: &pb.Precondition{ConditionType: &pb.Precondition_UpdateTime{aTimestamp}},
 		},
 		{
 			in:      []Precondition{Exists, LastUpdateTime(aTime)},
@@ -79,11 +79,11 @@ func TestProcessPreconditionsForDelete(t *testing.T) {
 		},
 		{
 			in:   []Precondition{Exists},
-			want: &pb.Precondition{&pb.Precondition_Exists{true}},
+			want: &pb.Precondition{ConditionType: &pb.Precondition_Exists{true}},
 		},
 		{
 			in:   []Precondition{LastUpdateTime(aTime)},
-			want: &pb.Precondition{&pb.Precondition_UpdateTime{aTimestamp}},
+			want: &pb.Precondition{ConditionType: &pb.Precondition_UpdateTime{aTimestamp}},
 		},
 		{
 			in:      []Precondition{Exists, LastUpdateTime(aTime)},
@@ -114,11 +114,11 @@ func TestProcessPreconditionsForUpdate(t *testing.T) {
 	}{
 		{
 			in:   nil,
-			want: &pb.Precondition{&pb.Precondition_Exists{true}},
+			want: &pb.Precondition{ConditionType: &pb.Precondition_Exists{true}},
 		},
 		{
 			in:   []Precondition{},
-			want: &pb.Precondition{&pb.Precondition_Exists{true}},
+			want: &pb.Precondition{ConditionType: &pb.Precondition_Exists{true}},
 		},
 
 		{
@@ -127,7 +127,7 @@ func TestProcessPreconditionsForUpdate(t *testing.T) {
 		},
 		{
 			in:   []Precondition{LastUpdateTime(aTime)},
-			want: &pb.Precondition{&pb.Precondition_UpdateTime{aTimestamp}},
+			want: &pb.Precondition{ConditionType: &pb.Precondition_UpdateTime{aTimestamp}},
 		},
 		{
 			in:      []Precondition{Exists, LastUpdateTime(aTime)},

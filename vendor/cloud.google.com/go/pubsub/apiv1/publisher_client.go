@@ -20,8 +20,8 @@ import (
 	"math"
 	"time"
 
-	"cloud.google.com/go/iam"
 	"cloud.google.com/go/internal/version"
+	"github.com/golang/protobuf/proto"
 	gax "github.com/googleapis/gax-go"
 	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
@@ -95,6 +95,8 @@ func defaultPublisherCallOptions() *PublisherCallOptions {
 }
 
 // PublisherClient is a client for interacting with Google Cloud Pub/Sub API.
+//
+// Methods, except Close, may be called concurrently. However, fields must not be modified concurrently with method calls.
 type PublisherClient struct {
 	// The connection to the service.
 	conn *grpc.ClientConn
@@ -148,15 +150,8 @@ func (c *PublisherClient) SetGoogleClientInfo(keyval ...string) {
 	c.xGoogMetadata = metadata.Pairs("x-goog-api-client", gax.XGoogHeader(kv...))
 }
 
-func (c *PublisherClient) SubscriptionIAM(subscription *pubsubpb.Subscription) *iam.Handle {
-	return iam.InternalNewHandle(c.Connection(), subscription.Name)
-}
-
-func (c *PublisherClient) TopicIAM(topic *pubsubpb.Topic) *iam.Handle {
-	return iam.InternalNewHandle(c.Connection(), topic.Name)
-}
-
-// CreateTopic creates the given topic with the given name.
+// CreateTopic creates the given topic with the given name. See the
+// <a href="/pubsub/docs/admin#resource_names"> resource name rules</a>.
 func (c *PublisherClient) CreateTopic(ctx context.Context, req *pubsubpb.Topic, opts ...gax.CallOption) (*pubsubpb.Topic, error) {
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.CreateTopic[0:len(c.CallOptions.CreateTopic):len(c.CallOptions.CreateTopic)], opts...)
@@ -172,12 +167,8 @@ func (c *PublisherClient) CreateTopic(ctx context.Context, req *pubsubpb.Topic, 
 	return resp, nil
 }
 
-// UpdateTopic updates an existing topic. Note that certain properties of a topic are not
-// modifiable.  Options settings follow the style guide:
-// NOTE:  The style guide requires body: "topic" instead of body: "*".
-// Keeping the latter for internal consistency in V1, however it should be
-// corrected in V2.  See
-// https://cloud.google.com/apis/design/standard_methods#update for details.
+// UpdateTopic updates an existing topic. Note that certain properties of a
+// topic are not modifiable.
 func (c *PublisherClient) UpdateTopic(ctx context.Context, req *pubsubpb.UpdateTopicRequest, opts ...gax.CallOption) (*pubsubpb.Topic, error) {
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.UpdateTopic[0:len(c.CallOptions.UpdateTopic):len(c.CallOptions.UpdateTopic)], opts...)
@@ -232,6 +223,7 @@ func (c *PublisherClient) ListTopics(ctx context.Context, req *pubsubpb.ListTopi
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.ListTopics[0:len(c.CallOptions.ListTopics):len(c.CallOptions.ListTopics)], opts...)
 	it := &TopicIterator{}
+	req = proto.Clone(req).(*pubsubpb.ListTopicsRequest)
 	it.InternalFetch = func(pageSize int, pageToken string) ([]*pubsubpb.Topic, string, error) {
 		var resp *pubsubpb.ListTopicsResponse
 		req.PageToken = pageToken
@@ -259,14 +251,16 @@ func (c *PublisherClient) ListTopics(ctx context.Context, req *pubsubpb.ListTopi
 		return nextPageToken, nil
 	}
 	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.PageSize)
 	return it
 }
 
-// ListTopicSubscriptions lists the name of the subscriptions for this topic.
+// ListTopicSubscriptions lists the names of the subscriptions on this topic.
 func (c *PublisherClient) ListTopicSubscriptions(ctx context.Context, req *pubsubpb.ListTopicSubscriptionsRequest, opts ...gax.CallOption) *StringIterator {
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.ListTopicSubscriptions[0:len(c.CallOptions.ListTopicSubscriptions):len(c.CallOptions.ListTopicSubscriptions)], opts...)
 	it := &StringIterator{}
+	req = proto.Clone(req).(*pubsubpb.ListTopicSubscriptionsRequest)
 	it.InternalFetch = func(pageSize int, pageToken string) ([]string, string, error) {
 		var resp *pubsubpb.ListTopicSubscriptionsResponse
 		req.PageToken = pageToken
@@ -294,6 +288,7 @@ func (c *PublisherClient) ListTopicSubscriptions(ctx context.Context, req *pubsu
 		return nextPageToken, nil
 	}
 	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.PageSize)
 	return it
 }
 

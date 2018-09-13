@@ -84,6 +84,7 @@ type PasswordCredential = original.PasswordCredential
 type PasswordCredentialListResult = original.PasswordCredentialListResult
 type PasswordCredentialsUpdateParameters = original.PasswordCredentialsUpdateParameters
 type PasswordProfile = original.PasswordProfile
+type Permissions = original.Permissions
 type RequiredResourceAccess = original.RequiredResourceAccess
 type ResourceAccess = original.ResourceAccess
 type ServicePrincipal = original.ServicePrincipal
@@ -101,6 +102,7 @@ type UserListResult = original.UserListResult
 type UserListResultIterator = original.UserListResultIterator
 type UserListResultPage = original.UserListResultPage
 type UserUpdateParameters = original.UserUpdateParameters
+type OAuth2Client = original.OAuth2Client
 type ObjectsClient = original.ObjectsClient
 type ServicePrincipalsClient = original.ServicePrincipalsClient
 type UsersClient = original.UsersClient
@@ -134,6 +136,12 @@ func PossibleObjectTypeValues() []ObjectType {
 }
 func PossibleUserTypeValues() []UserType {
 	return original.PossibleUserTypeValues()
+}
+func NewOAuth2Client(tenantID string) OAuth2Client {
+	return original.NewOAuth2Client(tenantID)
+}
+func NewOAuth2ClientWithBaseURI(baseURI string, tenantID string) OAuth2Client {
+	return original.NewOAuth2ClientWithBaseURI(baseURI, tenantID)
 }
 func NewObjectsClient(tenantID string) ObjectsClient {
 	return original.NewObjectsClient(tenantID)

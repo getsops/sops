@@ -6,8 +6,7 @@ type WaitGroup struct {
 	counter int
 	ch      chan struct{}
 
-	state1 [12]byte
-	sema   uint32
+	state1 [3]uint32
 }
 
 func (wg *WaitGroup) Add(delta int) {

@@ -2,10 +2,11 @@
   "version": "2.0",
   "service": "<fullname>Amazon Redshift</fullname> <p> <b>Overview</b> </p> <p>This is an interface reference for Amazon Redshift. It contains documentation for one of the programming or command line interfaces you can use to manage Amazon Redshift clusters. Note that Amazon Redshift is asynchronous, which means that some interfaces may require techniques, such as polling or asynchronous callback handlers, to determine when a command has been applied. In this reference, the parameter descriptions indicate whether a change is applied immediately, on the next instance reboot, or during the next maintenance window. For a summary of the Amazon Redshift cluster management interfaces, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/using-aws-sdk.html\">Using the Amazon Redshift Management Interfaces</a>.</p> <p>Amazon Redshift manages all the work of setting up, operating, and scaling a data warehouse: provisioning capacity, monitoring and backing up the cluster, and applying patches and upgrades to the Amazon Redshift engine. You can focus on using your data to acquire new insights for your business and customers.</p> <p>If you are a first-time user of Amazon Redshift, we recommend that you begin by reading the <a href=\"http://docs.aws.amazon.com/redshift/latest/gsg/getting-started.html\">Amazon Redshift Getting Started Guide</a>.</p> <p>If you are a database developer, the <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/welcome.html\">Amazon Redshift Database Developer Guide</a> explains how to design, build, query, and maintain the databases that make up your data warehouse. </p>",
   "operations": {
+    "AcceptReservedNodeExchange": "<p>Exchanges a DC1 Reserved Node for a DC2 Reserved Node with no changes to the configuration (term, payment type, or number of nodes) and no additional costs. </p>",
     "AuthorizeClusterSecurityGroupIngress": "<p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href=\"http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>",
     "AuthorizeSnapshotAccess": "<p>Authorizes the specified AWS customer account to restore the specified snapshot.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>",
     "CopyClusterSnapshot": "<p>Copies the specified automated cluster snapshot to a new manual cluster snapshot. The source must be an automated snapshot and it must be in the available state.</p> <p>When you delete a cluster, Amazon Redshift deletes any automated snapshots of the cluster. Also, when the retention period of the snapshot expires, Amazon Redshift automatically deletes it. If you want to keep an automated snapshot for a longer period, you can make a manual copy of the snapshot. Manual snapshots are retained until you delete them.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>",
-    "CreateCluster": "<p>Creates a new cluster.</p> <p>To create the cluster in Virtual Private Cloud (VPC), you must provide a cluster subnet group name. The cluster subnet group identifies the subnets of your VPC that Amazon Redshift uses when creating the cluster. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>",
+    "CreateCluster": "<p>Creates a new cluster.</p> <p>To create a cluster in Virtual Private Cloud (VPC), you must provide a cluster subnet group name. The cluster subnet group identifies the subnets of your VPC that Amazon Redshift uses when creating the cluster. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>",
     "CreateClusterParameterGroup": "<p>Creates an Amazon Redshift parameter group.</p> <p>Creating parameter groups is independent of creating clusters. You can associate a cluster with a parameter group when you create the cluster. You can also associate an existing cluster with a parameter group after the cluster is created by using <a>ModifyCluster</a>. </p> <p>Parameters in the parameter group define specific behavior that applies to the databases you create on the cluster. For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>",
     "CreateClusterSecurityGroup": "<p>Creates a new Amazon Redshift security group. You use security groups to control access to non-VPC clusters.</p> <p> For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>",
     "CreateClusterSnapshot": "<p>Creates a manual snapshot of the specified cluster. The cluster must be in the <code>available</code> state. </p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>",
@@ -14,7 +15,7 @@
     "CreateHsmClientCertificate": "<p>Creates an HSM client certificate that an Amazon Redshift cluster will use to connect to the client's HSM in order to store and retrieve the keys used to encrypt the cluster databases.</p> <p>The command returns a public key, which you must store in the HSM. In addition to creating the HSM certificate, you must create an Amazon Redshift HSM configuration that provides a cluster the information needed to store and use encryption keys in the HSM. For more information, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html\">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>",
     "CreateHsmConfiguration": "<p>Creates an HSM configuration that contains the information required by an Amazon Redshift cluster to store and use database encryption keys in a Hardware Security Module (HSM). After creating the HSM configuration, you can specify it as a parameter when creating a cluster. The cluster will then store its encryption keys in the HSM.</p> <p>In addition to creating an HSM configuration, you must also create an HSM client certificate. For more information, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html\">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>",
     "CreateSnapshotCopyGrant": "<p>Creates a snapshot copy grant that permits Amazon Redshift to use a customer master key (CMK) from AWS Key Management Service (AWS KMS) to encrypt copied snapshots in a destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html\">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>",
-    "CreateTags": "<p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 10 tags. If you try to create more than 10 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>",
+    "CreateTags": "<p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 50 tags. If you try to create more than 50 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>",
     "DeleteCluster": "<p>Deletes a previously provisioned cluster. A successful response from the web service indicates that the request was received correctly. Use <a>DescribeClusters</a> to monitor the status of the deletion. The delete operation cannot be canceled or reverted once submitted. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you want to shut down the cluster and retain it for future use, set <i>SkipFinalClusterSnapshot</i> to <code>false</code> and specify a name for <i>FinalClusterSnapshotIdentifier</i>. You can later restore this snapshot to resume using the cluster. If a final cluster snapshot is requested, the status of the cluster will be \"final-snapshot\" while the snapshot is being taken, then it's \"deleting\" once Amazon Redshift begins deleting the cluster. </p> <p> For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>",
     "DeleteClusterParameterGroup": "<p>Deletes a specified Amazon Redshift parameter group.</p> <note> <p>You cannot delete a parameter group if it is associated with a cluster.</p> </note>",
     "DeleteClusterSecurityGroup": "<p>Deletes an Amazon Redshift security group.</p> <note> <p>You cannot delete a security group that is associated with any clusters. You cannot delete the default security group.</p> </note> <p> For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>",
@@ -25,11 +26,13 @@
     "DeleteHsmConfiguration": "<p>Deletes the specified Amazon Redshift HSM configuration.</p>",
     "DeleteSnapshotCopyGrant": "<p>Deletes the specified snapshot copy grant.</p>",
     "DeleteTags": "<p>Deletes a tag or tags from a resource. You must provide the ARN of the resource from which you want to delete the tag or tags.</p>",
+    "DescribeClusterDbRevisions": "<p>Returns an array of <code>ClusterDbRevision</code> objects.</p>",
     "DescribeClusterParameterGroups": "<p>Returns a list of Amazon Redshift parameter groups, including parameter groups you created and the default parameter group. For each parameter group, the response includes the parameter group name, description, and parameter group family name. You can optionally specify a name to retrieve the description of a specific parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all parameter groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all parameter groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, parameter groups are returned regardless of whether they have tag keys or values associated with them.</p>",
     "DescribeClusterParameters": "<p>Returns a detailed list of parameters contained within the specified Amazon Redshift parameter group. For each parameter the response includes information such as parameter name, description, data type, value, whether the parameter value is modifiable, and so on.</p> <p>You can specify <i>source</i> filter to retrieve parameters of only specific type. For example, to retrieve parameters that were modified by a user action such as from <a>ModifyClusterParameterGroup</a>, you can specify <i>source</i> equal to <i>user</i>.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>",
     "DescribeClusterSecurityGroups": "<p>Returns information about Amazon Redshift security groups. If the name of a security group is specified, the response will contain only information about only that security group.</p> <p> For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all security groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all security groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, security groups are returned regardless of whether they have tag keys or values associated with them.</p>",
     "DescribeClusterSnapshots": "<p>Returns one or more snapshot objects, which contain metadata about your cluster snapshots. By default, this operation returns information about all snapshots of all clusters that are owned by you AWS customer account. No information is returned for snapshots owned by inactive AWS customer accounts.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all snapshots that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all snapshots that have any combination of those values are returned. Only snapshots that you own are returned in the response; shared snapshots are not returned with the tag key and tag value request parameters.</p> <p>If both tag keys and values are omitted from the request, snapshots are returned regardless of whether they have tag keys or values associated with them.</p>",
     "DescribeClusterSubnetGroups": "<p>Returns one or more cluster subnet group objects, which contain metadata about your cluster subnet groups. By default, this operation returns information about all cluster subnet groups that are defined in you AWS account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all subnet groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subnet groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subnet groups are returned regardless of whether they have tag keys or values associated with them.</p>",
+    "DescribeClusterTracks": "<p>Returns a list of all the available maintenance tracks.</p>",
     "DescribeClusterVersions": "<p>Returns descriptions of the available Amazon Redshift cluster versions. You can call this operation even before creating any clusters to learn more about the Amazon Redshift versions. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>",
     "DescribeClusters": "<p>Returns properties of provisioned clusters including general cluster properties, cluster database properties, maintenance and backup properties, and security and access properties. This operation supports pagination. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all clusters that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all clusters that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, clusters are returned regardless of whether they have tag keys or values associated with them.</p>",
     "DescribeDefaultClusterParameters": "<p>Returns a list of parameter settings for the specified parameter group family.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>",
@@ -51,7 +54,9 @@
     "EnableLogging": "<p>Starts logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>",
     "EnableSnapshotCopy": "<p>Enables the automatic copy of snapshots from one region to another region for a specified cluster.</p>",
     "GetClusterCredentials": "<p>Returns a database user name and temporary password with temporary authorization to log on to an Amazon Redshift database. The action returns the database user name prefixed with <code>IAM:</code> if <code>AutoCreate</code> is <code>False</code> or <code>IAMA:</code> if <code>AutoCreate</code> is <code>True</code>. You can optionally specify one or more database user groups that the user will join at log on. By default, the temporary credentials expire in 900 seconds. You can optionally specify a duration between 900 seconds (15 minutes) and 3600 seconds (60 minutes). For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/generating-user-credentials.html\">Using IAM Authentication to Generate Database User Credentials</a> in the Amazon Redshift Cluster Management Guide.</p> <p>The AWS Identity and Access Management (IAM)user or role that executes GetClusterCredentials must have an IAM policy attached that allows access to all necessary actions and resources. For more information about permissions, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/redshift-iam-access-control-identity-based.html#redshift-policy-resources.getclustercredentials-resources\">Resource Policies for GetClusterCredentials</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If the <code>DbGroups</code> parameter is specified, the IAM policy must allow the <code>redshift:JoinGroup</code> action with access to the listed <code>dbgroups</code>. </p> <p>In addition, if the <code>AutoCreate</code> parameter is set to <code>True</code>, then the policy must include the <code>redshift:CreateClusterUser</code> privilege.</p> <p>If the <code>DbName</code> parameter is specified, the IAM policy must allow access to the resource <code>dbname</code> for the specified database name. </p>",
+    "GetReservedNodeExchangeOfferings": "<p>Returns an array of DC2 ReservedNodeOfferings that matches the payment type, term, and usage price of the given DC1 reserved node.</p>",
     "ModifyCluster": "<p>Modifies the settings for a cluster. For example, you can add another security or parameter group, update the preferred maintenance window, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p>",
+    "ModifyClusterDbRevision": "<p>Modifies the database revision of a cluster. The database revision is a unique revision of the database running in a cluster.</p>",
     "ModifyClusterIamRoles": "<p>Modifies the list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p> <p>A cluster can have up to 10 IAM roles associated at any time.</p>",
     "ModifyClusterParameterGroup": "<p>Modifies the parameters of a parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>",
     "ModifyClusterSubnetGroup": "<p>Modifies a cluster subnet group to include the specified list of VPC subnets. The operation replaces the existing list of subnets with the new list of subnets.</p>",
@@ -60,6 +65,7 @@
     "PurchaseReservedNodeOffering": "<p>Allows you to purchase reserved nodes. Amazon Redshift offers a predefined set of reserved node offerings. You can purchase one or more of the offerings. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. You can call this API by providing a specific reserved node offering and the number of nodes you want to reserve. </p> <p> For more information about reserved node offerings, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html\">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>",
     "RebootCluster": "<p>Reboots a cluster. This action is taken as soon as possible. It results in a momentary outage to the cluster, during which the cluster status is set to <code>rebooting</code>. A cluster event is created when the reboot is completed. Any pending cluster modifications (see <a>ModifyCluster</a>) are applied at this reboot. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>",
     "ResetClusterParameterGroup": "<p>Sets one or more parameters of the specified parameter group to their default values and sets the source values of the parameters to \"engine-default\". To reset the entire parameter group specify the <i>ResetAllParameters</i> parameter. For parameter changes to take effect you must reboot any associated clusters. </p>",
+    "ResizeCluster": "<p>Changes the size of the cluster. You can change the cluster's type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize your cluster is avaialble for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> </ul> </li> <li> <p>The type of nodes you add must match the node type for the cluster.</p> </li> </ul>",
     "RestoreFromClusterSnapshot": "<p>Creates a new cluster from a snapshot. By default, Amazon Redshift creates the resulting cluster with the same configuration as the original cluster from which the snapshot was created, except that the new cluster is created with the default cluster security and parameter groups. After Amazon Redshift creates the cluster, you can use the <a>ModifyCluster</a> API to associate a different security group and different parameter group with the restored cluster. If you are using a DS node type, you can also choose to change to another DS node type of the same size during restore.</p> <p>If you restore a cluster into a VPC, you must provide a cluster subnet group where you want the cluster restored.</p> <p> For more information about working with snapshots, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html\">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>",
     "RestoreTableFromClusterSnapshot": "<p>Creates a new table from a table in an Amazon Redshift cluster snapshot. You must create the new table within the Amazon Redshift cluster that the snapshot was taken from.</p> <p>You cannot use <code>RestoreTableFromClusterSnapshot</code> to restore a table with the same name as an existing table in an Amazon Redshift cluster. That is, you cannot overwrite an existing table in a cluster with a restored table. If you want to replace your original table with a new, restored table, then rename or drop your original table before you call <code>RestoreTableFromClusterSnapshot</code>. When you have renamed your original table, then you can pass the original name of the table as the <code>NewTableName</code> parameter value in the call to <code>RestoreTableFromClusterSnapshot</code>. This way, you can replace the original table with the table created from the snapshot.</p>",
     "RevokeClusterSecurityGroupIngress": "<p>Revokes an ingress rule in an Amazon Redshift security group for a previously authorized IP range or Amazon EC2 security group. To add an ingress rule, see <a>AuthorizeClusterSecurityGroupIngress</a>. For information about managing security groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html\">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>",
@@ -67,6 +73,16 @@
     "RotateEncryptionKey": "<p>Rotates the encryption keys for a cluster.</p>"
   },
   "shapes": {
+    "AcceptReservedNodeExchangeInputMessage": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "AcceptReservedNodeExchangeOutputMessage": {
+      "base": null,
+      "refs": {
+      }
+    },
     "AccessToSnapshotDeniedFault": {
       "base": "<p>The owner of the specified snapshot has not authorized your account to access the snapshot.</p>",
       "refs": {
@@ -162,9 +178,11 @@
         "ModifyClusterMessage$AllowVersionUpgrade": "<p>If <code>true</code>, major version upgrades will be applied automatically to the cluster during the maintenance window. </p> <p>Default: <code>false</code> </p>",
         "ModifyClusterMessage$PubliclyAccessible": "<p>If <code>true</code>, the cluster can be accessed from a public network. Only clusters in VPCs can be set to be publicly available.</p>",
         "ModifyClusterMessage$EnhancedVpcRouting": "<p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html\">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>",
+        "ModifyClusterMessage$Encrypted": "<p>Indicates whether the cluster is encrypted. If the cluster is encrypted and you provide a value for the <code>KmsKeyId</code> parameter, we will encrypt the cluster with the provided <code>KmsKeyId</code>. If you don't provide a <code>KmsKeyId</code>, we will encrypt with the default key. In the China region we will use legacy encryption if you specify that the cluster is encrypted.</p>",
         "ModifyEventSubscriptionMessage$Enabled": "<p>A Boolean value indicating if the subscription is enabled. <code>true</code> indicates the subscription is enabled </p>",
         "PendingModifiedValues$PubliclyAccessible": "<p>The pending or in-progress change of the ability to connect to the cluster from the public network.</p>",
         "PendingModifiedValues$EnhancedVpcRouting": "<p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html\">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>",
+        "ResizeClusterMessage$Classic": "<p>A boolean value indicating whether the resize operation is using the classic resize process. If you don't provide this parameter or set the value to <code>false</code> the resize type is elastic. </p>",
         "RestoreFromClusterSnapshotMessage$AllowVersionUpgrade": "<p>If <code>true</code>, major version upgrades can be applied during the maintenance window to the Amazon Redshift engine that is running on the cluster. </p> <p>Default: <code>true</code> </p>",
         "RestoreFromClusterSnapshotMessage$PubliclyAccessible": "<p>If <code>true</code>, the cluster can be accessed from a public network. </p>",
         "RestoreFromClusterSnapshotMessage$EnhancedVpcRouting": "<p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html\">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>"
@@ -183,10 +201,12 @@
         "DeleteClusterResult$Cluster": null,
         "DisableSnapshotCopyResult$Cluster": null,
         "EnableSnapshotCopyResult$Cluster": null,
+        "ModifyClusterDbRevisionResult$Cluster": null,
         "ModifyClusterIamRolesResult$Cluster": null,
         "ModifyClusterResult$Cluster": null,
         "ModifySnapshotCopyRetentionPeriodResult$Cluster": null,
         "RebootClusterResult$Cluster": null,
+        "ResizeClusterResult$Cluster": null,
         "RestoreFromClusterSnapshotResult$Cluster": null,
         "RotateEncryptionKeyResult$Cluster": null
       }
@@ -198,6 +218,23 @@
     },
     "ClusterCredentials": {
       "base": "<p>Temporary credentials with authorization to log on to an Amazon Redshift database. </p>",
+      "refs": {
+      }
+    },
+    "ClusterDbRevision": {
+      "base": "<p>Describes a <code>ClusterDbRevision</code>.</p>",
+      "refs": {
+        "ClusterDbRevisionsList$member": null
+      }
+    },
+    "ClusterDbRevisionsList": {
+      "base": null,
+      "refs": {
+        "ClusterDbRevisionsMessage$ClusterDbRevisions": "<p>A list of revisions.</p>"
+      }
+    },
+    "ClusterDbRevisionsMessage": {
+      "base": null,
       "refs": {
       }
     },
@@ -233,6 +270,11 @@
     },
     "ClusterNotFoundFault": {
       "base": "<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>",
+      "refs": {
+      }
+    },
+    "ClusterOnLatestRevisionFault": {
+      "base": "<p>Cluster is already on the latest database revision.</p>",
       "refs": {
       }
     },
@@ -631,6 +673,11 @@
       "refs": {
       }
     },
+    "DescribeClusterDbRevisionsMessage": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DescribeClusterParameterGroupsMessage": {
       "base": "<p/>",
       "refs": {
@@ -653,6 +700,11 @@
     },
     "DescribeClusterSubnetGroupsMessage": {
       "base": "<p/>",
+      "refs": {
+      }
+    },
+    "DescribeClusterTracksMessage": {
+      "base": null,
       "refs": {
       }
     },
@@ -795,6 +847,12 @@
         "Cluster$ElasticIpStatus": "<p>The status of the elastic IP (EIP) address.</p>"
       }
     },
+    "EligibleTracksToUpdateList": {
+      "base": null,
+      "refs": {
+        "MaintenanceTrack$UpdateTargets": "<p>An array of <a>UpdateTarget</a> objects to update with the maintenance track. </p>"
+      }
+    },
     "EnableLoggingMessage": {
       "base": "<p/>",
       "refs": {
@@ -898,6 +956,16 @@
     },
     "GetClusterCredentialsMessage": {
       "base": "<p>The request parameters to get cluster credentials.</p>",
+      "refs": {
+      }
+    },
+    "GetReservedNodeExchangeOfferingsInputMessage": {
+      "base": "<p/>",
+      "refs": {
+      }
+    },
+    "GetReservedNodeExchangeOfferingsOutputMessage": {
+      "base": null,
       "refs": {
       }
     },
@@ -1042,6 +1110,7 @@
         "ReservedNode$Duration": "<p>The duration of the node reservation in seconds.</p>",
         "ReservedNode$NodeCount": "<p>The number of reserved compute nodes.</p>",
         "ReservedNodeOffering$Duration": "<p>The duration, in seconds, for which the offering will reserve the node.</p>",
+        "ResizeClusterMessage$NumberOfNodes": "<p>The new number of nodes for the cluster.</p>",
         "Snapshot$Port": "<p>The port that the cluster is listening on.</p>",
         "Snapshot$NumberOfNodes": "<p>The number of nodes in the cluster.</p>"
       }
@@ -1052,11 +1121,13 @@
         "CreateClusterMessage$AutomatedSnapshotRetentionPeriod": "<p>The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with <a>CreateClusterSnapshot</a>. </p> <p>Default: <code>1</code> </p> <p>Constraints: Must be a value from 0 to 35.</p>",
         "CreateClusterMessage$Port": "<p>The port number on which the cluster accepts incoming connections.</p> <p>The cluster is accessible only via the JDBC and ODBC connection strings. Part of the connection string requires the port on which the cluster will listen for incoming connections.</p> <p>Default: <code>5439</code> </p> <p>Valid Values: <code>1150-65535</code> </p>",
         "CreateClusterMessage$NumberOfNodes": "<p>The number of compute nodes in the cluster. This parameter is required when the <b>ClusterType</b> parameter is specified as <code>multi-node</code>. </p> <p>For information about determining how many nodes you need, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes\"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>If you don't specify this parameter, you get a single-node cluster. When requesting a multi-node cluster, you must specify the number of nodes that you want in the cluster.</p> <p>Default: <code>1</code> </p> <p>Constraints: Value must be at least 1 and no more than 100.</p>",
+        "DescribeClusterDbRevisionsMessage$MaxRecords": "<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified MaxRecords value, a value is returned in the <code>marker</code> field of the response. You can retrieve the next set of response records by providing the returned <code>marker</code> value in the <code>marker</code> parameter and retrying the request. </p> <p>Default: 100</p> <p>Constraints: minimum 20, maximum 100.</p>",
         "DescribeClusterParameterGroupsMessage$MaxRecords": "<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>",
         "DescribeClusterParametersMessage$MaxRecords": "<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>",
         "DescribeClusterSecurityGroupsMessage$MaxRecords": "<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>",
         "DescribeClusterSnapshotsMessage$MaxRecords": "<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>",
         "DescribeClusterSubnetGroupsMessage$MaxRecords": "<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>",
+        "DescribeClusterTracksMessage$MaxRecords": "<p>An integer value for the maximum number of maintenance tracks to return.</p>",
         "DescribeClusterVersionsMessage$MaxRecords": "<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>",
         "DescribeClustersMessage$MaxRecords": "<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>",
         "DescribeDefaultClusterParametersMessage$MaxRecords": "<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>",
@@ -1073,6 +1144,7 @@
         "DescribeTagsMessage$MaxRecords": "<p>The maximum number or response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned <code>marker</code> value. </p>",
         "EnableSnapshotCopyMessage$RetentionPeriod": "<p>The number of days to retain automated snapshots in the destination region after they are copied from the source region.</p> <p>Default: 7.</p> <p>Constraints: Must be at least 1 and no more than 35.</p>",
         "GetClusterCredentialsMessage$DurationSeconds": "<p>The number of seconds until the returned temporary password expires.</p> <p>Constraint: minimum 900, maximum 3600.</p> <p>Default: 900</p>",
+        "GetReservedNodeExchangeOfferingsInputMessage$MaxRecords": "<p>An integer setting the maximum number of ReservedNodeOfferings to retrieve.</p>",
         "ModifyClusterMessage$NumberOfNodes": "<p>The new number of nodes of the cluster. If you specify a new number of nodes, you must also specify the node type parameter.</p> <p>When you submit your request to resize a cluster, Amazon Redshift sets access permissions for the cluster to read-only. After Amazon Redshift provisions a new cluster according to your resize requirements, there will be a temporary outage while the old cluster is deleted and your connection is switched to the new cluster. When the new connection is complete, the original access permissions for the cluster are restored. You can use <a>DescribeResize</a> to track the progress of the resize request. </p> <p>Valid Values: Integer greater than <code>0</code>.</p>",
         "ModifyClusterMessage$AutomatedSnapshotRetentionPeriod": "<p>The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with <a>CreateClusterSnapshot</a>. </p> <p>If you decrease the automated snapshot retention period from its current value, existing automated snapshots that fall outside of the new retention period will be immediately deleted.</p> <p>Default: Uses existing setting.</p> <p>Constraints: Must be a value from 0 to 35.</p>",
         "PendingModifiedValues$NumberOfNodes": "<p>The pending or in-progress change of the number of nodes in the cluster.</p>",
@@ -1113,6 +1185,11 @@
       "refs": {
       }
     },
+    "InvalidClusterTrackFault": {
+      "base": "<p>The provided cluster track name is not valid.</p>",
+      "refs": {
+      }
+    },
     "InvalidElasticIpFault": {
       "base": "<p>The Elastic IP (EIP) is invalid or cannot be found.</p>",
       "refs": {
@@ -1125,6 +1202,11 @@
     },
     "InvalidHsmConfigurationStateFault": {
       "base": "<p>The specified HSM configuration is not in the <code>available</code> state, or it is still in use by one or more Amazon Redshift clusters.</p>",
+      "refs": {
+      }
+    },
+    "InvalidReservedNodeStateFault": {
+      "base": "<p>Indicates that the Reserved Node being exchanged is not in an active state.</p>",
       "refs": {
       }
     },
@@ -1204,6 +1286,22 @@
         "ResizeProgressMessage$EstimatedTimeToCompletionInSeconds": "<p>The estimated time remaining, in seconds, until the resize operation is complete. This value is calculated based on the average resize rate and the estimated amount of data remaining to be processed. Once the resize operation is complete, this value will be 0.</p>",
         "TableRestoreStatus$ProgressInMegaBytes": "<p>The amount of data restored to the new table so far, in megabytes (MB).</p>",
         "TableRestoreStatus$TotalDataInMegaBytes": "<p>The total amount of data to restore to the new table, in megabytes (MB).</p>"
+      }
+    },
+    "MaintenanceTrack": {
+      "base": "<p>Defines a maintenance track that determines which Amazon Redshift version to apply during a maintenance window. If the value for <code>MaintenanceTrack</code> is <code>current</code>, the cluster is updated to the most recently certified maintenance release. If the value is <code>trailing</code>, the cluster is updated to the previously certified maintenance release. </p>",
+      "refs": {
+        "TrackList$member": null
+      }
+    },
+    "ModifyClusterDbRevisionMessage": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ModifyClusterDbRevisionResult": {
+      "base": null,
+      "refs": {
       }
     },
     "ModifyClusterIamRolesMessage": {
@@ -1315,6 +1413,12 @@
         "ResetClusterParameterGroupMessage$Parameters": "<p>An array of names of parameters to be reset. If <i>ResetAllParameters</i> option is not used, then at least one parameter name must be supplied. </p> <p>Constraints: A maximum of 20 parameters can be reset in a single request.</p>"
       }
     },
+    "PendingActionsList": {
+      "base": null,
+      "refs": {
+        "Cluster$PendingActions": "<p>Cluster operations that are waiting to be started.</p>"
+      }
+    },
     "PendingModifiedValues": {
       "base": "<p>Describes cluster attributes that are in a pending state. A change to one or more the attributes was requested and is in progress or will be applied.</p>",
       "refs": {
@@ -1357,12 +1461,18 @@
     "ReservedNode": {
       "base": "<p>Describes a reserved node. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. </p>",
       "refs": {
+        "AcceptReservedNodeExchangeOutputMessage$ExchangedReservedNode": null,
         "PurchaseReservedNodeOfferingResult$ReservedNode": null,
         "ReservedNodeList$member": null
       }
     },
     "ReservedNodeAlreadyExistsFault": {
       "base": "<p>User already has a reservation with the given identifier.</p>",
+      "refs": {
+      }
+    },
+    "ReservedNodeAlreadyMigratedFault": {
+      "base": "<p>Indicates that the reserved node has already been exchanged.</p>",
       "refs": {
       }
     },
@@ -1386,6 +1496,7 @@
     "ReservedNodeOfferingList": {
       "base": null,
       "refs": {
+        "GetReservedNodeExchangeOfferingsOutputMessage$ReservedNodeOfferings": "<p>Returns an array of <a>ReservedNodeOffering</a> objects.</p>",
         "ReservedNodeOfferingsMessage$ReservedNodeOfferings": "<p>A list of <code>ReservedNodeOffering</code> objects.</p>"
       }
     },
@@ -1418,6 +1529,16 @@
     },
     "ResetClusterParameterGroupMessage": {
       "base": "<p/>",
+      "refs": {
+      }
+    },
+    "ResizeClusterMessage": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ResizeClusterResult": {
+      "base": null,
       "refs": {
       }
     },
@@ -1466,6 +1587,18 @@
     "RestoreTableFromClusterSnapshotResult": {
       "base": null,
       "refs": {
+      }
+    },
+    "RevisionTarget": {
+      "base": "<p>Describes a <code>RevisionTarget</code>.</p>",
+      "refs": {
+        "RevisionTargetsList$member": null
+      }
+    },
+    "RevisionTargetsList": {
+      "base": null,
+      "refs": {
+        "ClusterDbRevision$RevisionTargets": "<p>A list of <code>RevisionTarget</code> objects, where each object describes the database revision that a cluster can be updated to.</p>"
       }
     },
     "RevokeClusterSecurityGroupIngressMessage": {
@@ -1612,6 +1745,8 @@
     "String": {
       "base": null,
       "refs": {
+        "AcceptReservedNodeExchangeInputMessage$ReservedNodeId": "<p>A string representing the node identifier of the DC1 Reserved Node to be exchanged.</p>",
+        "AcceptReservedNodeExchangeInputMessage$TargetReservedNodeOfferingId": "<p>The unique identifier of the DC2 Reserved Node offering to be used for the exchange. You can obtain the value for the parameter by calling <a>GetReservedNodeExchangeOfferings</a> </p>",
         "AccountWithRestoreAccess$AccountId": "<p>The identifier of an AWS customer account authorized to restore a snapshot.</p>",
         "AccountWithRestoreAccess$AccountAlias": "<p>The identifier of an AWS support account authorized to restore a snapshot. For AWS support, the identifier is <code>amazon-redshift-support</code>. </p>",
         "AuthorizeClusterSecurityGroupIngressMessage$ClusterSecurityGroupName": "<p>The name of the security group to which the ingress rule is added.</p>",
@@ -1636,7 +1771,12 @@
         "Cluster$ClusterPublicKey": "<p>The public key for the cluster.</p>",
         "Cluster$ClusterRevisionNumber": "<p>The specific revision number of the database in the cluster.</p>",
         "Cluster$KmsKeyId": "<p>The AWS Key Management Service (AWS KMS) key ID of the encryption key used to encrypt data in the cluster.</p>",
+        "Cluster$MaintenanceTrackName": "<p>The name of the maintenance track for the cluster.</p>",
+        "Cluster$ElasticResizeNumberOfNodeOptions": "<p>Indicates the number of nodes the cluster can be resized to with the elastic resize method. </p>",
         "ClusterCredentials$DbUser": "<p>A database user name that is authorized to log on to the database <code>DbName</code> using the password <code>DbPassword</code>. If the specified DbUser exists in the database, the new user name has the same database privileges as the the user named in DbUser. By default, the user is added to PUBLIC. If the <code>DbGroups</code> parameter is specifed, <code>DbUser</code> is added to the listed groups for any sessions created using these credentials.</p>",
+        "ClusterDbRevision$ClusterIdentifier": "<p>The unique identifier of the cluster.</p>",
+        "ClusterDbRevision$CurrentDatabaseRevision": "<p>A string representing the current cluster version.</p>",
+        "ClusterDbRevisionsMessage$Marker": "<p>A string representing the starting point for the next set of revisions. If a value is returned in a response, you can retrieve the next set of revisions by providing the value in the <code>marker</code> parameter and retrying the command. If the <code>marker</code> field is empty, all revisions have already been returned.</p>",
         "ClusterIamRole$IamRoleArn": "<p>The Amazon Resource Name (ARN) of the IAM role, for example, <code>arn:aws:iam::123456789012:role/RedshiftCopyUnload</code>. </p>",
         "ClusterIamRole$ApplyStatus": "<p>A value that describes the status of the IAM role's association with an Amazon Redshift cluster.</p> <p>The following are possible statuses and descriptions.</p> <ul> <li> <p> <code>in-sync</code>: The role is available for use by the cluster.</p> </li> <li> <p> <code>adding</code>: The role is in the process of being associated with the cluster.</p> </li> <li> <p> <code>removing</code>: The role is in the process of being disassociated with the cluster.</p> </li> </ul>",
         "ClusterNode$NodeRole": "<p>Whether the node is a leader node or a compute node.</p>",
@@ -1691,6 +1831,7 @@
         "CreateClusterMessage$ElasticIp": "<p>The Elastic IP (EIP) address for the cluster.</p> <p>Constraints: The cluster must be provisioned in EC2-VPC and publicly-accessible through an Internet gateway. For more information about provisioning clusters in EC2-VPC, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#cluster-platforms\">Supported Platforms to Launch Your Cluster</a> in the Amazon Redshift Cluster Management Guide.</p>",
         "CreateClusterMessage$KmsKeyId": "<p>The AWS Key Management Service (KMS) key ID of the encryption key that you want to use to encrypt data in the cluster.</p>",
         "CreateClusterMessage$AdditionalInfo": "<p>Reserved.</p>",
+        "CreateClusterMessage$MaintenanceTrackName": "<p>An optional parameter for the name of the maintenance track for the cluster. If you don't provide a maintenance track name, the cluster is assigned to the <code>current</code> track.</p>",
         "CreateClusterParameterGroupMessage$ParameterGroupName": "<p>The name of the cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique withing your AWS account.</p> </li> </ul> <note> <p>This value is stored as a lower-case string.</p> </note>",
         "CreateClusterParameterGroupMessage$ParameterGroupFamily": "<p>The Amazon Redshift engine version to which the cluster parameter group applies. The cluster engine version determines the set of parameters.</p> <p>To get a list of valid parameter group family names, you can call <a>DescribeClusterParameterGroups</a>. By default, Amazon Redshift returns a list of all the parameter groups that are owned by your AWS account, including the default parameter groups for each Amazon Redshift engine version. The parameter group family names associated with the default parameter groups provide you the valid values. For example, a valid family name is \"redshift-1.0\". </p>",
         "CreateClusterParameterGroupMessage$Description": "<p>A description of the parameter group.</p>",
@@ -1729,6 +1870,8 @@
         "DeleteHsmConfigurationMessage$HsmConfigurationIdentifier": "<p>The identifier of the Amazon Redshift HSM configuration to be deleted.</p>",
         "DeleteSnapshotCopyGrantMessage$SnapshotCopyGrantName": "<p>The name of the snapshot copy grant to delete.</p>",
         "DeleteTagsMessage$ResourceName": "<p>The Amazon Resource Name (ARN) from which you want to remove the tag or tags. For example, <code>arn:aws:redshift:us-east-1:123456789:cluster:t1</code>. </p>",
+        "DescribeClusterDbRevisionsMessage$ClusterIdentifier": "<p>A unique identifier for a cluster whose <code>ClusterDbRevisions</code> you are requesting. This parameter is case sensitive. All clusters defined for an account are returned by default.</p>",
+        "DescribeClusterDbRevisionsMessage$Marker": "<p>An optional parameter that specifies the starting point for returning a set of response records. When the results of a <code>DescribeClusterDbRevisions</code> request exceed the value specified in <code>MaxRecords</code>, Amazon Redshift returns a value in the <code>marker</code> field of the response. You can retrieve the next set of response records by providing the returned <code>marker</code> value in the <code>marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <code>ClusterIdentifier</code> parameter, or the <code>marker</code> parameter, but not both.</p>",
         "DescribeClusterParameterGroupsMessage$ParameterGroupName": "<p>The name of a specific parameter group for which to return details. By default, details about all parameter groups and the default parameter group are returned.</p>",
         "DescribeClusterParameterGroupsMessage$Marker": "<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterParameterGroups</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>",
         "DescribeClusterParametersMessage$ParameterGroupName": "<p>The name of a cluster parameter group for which to return details.</p>",
@@ -1743,6 +1886,8 @@
         "DescribeClusterSnapshotsMessage$OwnerAccount": "<p>The AWS customer account used to create or copy the snapshot. Use this field to filter the results to snapshots owned by a particular account. To describe snapshots you own, either specify your AWS customer account, or do not specify the parameter.</p>",
         "DescribeClusterSubnetGroupsMessage$ClusterSubnetGroupName": "<p>The name of the cluster subnet group for which information is requested.</p>",
         "DescribeClusterSubnetGroupsMessage$Marker": "<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterSubnetGroups</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>",
+        "DescribeClusterTracksMessage$MaintenanceTrackName": "<p>The name of the maintenance track. </p>",
+        "DescribeClusterTracksMessage$Marker": "<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <code>DescribeClusterTracks</code> request exceed the value specified in <code>MaxRecords</code>, Amazon Redshift returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>",
         "DescribeClusterVersionsMessage$ClusterVersion": "<p>The specific cluster version to return.</p> <p>Example: <code>1.0</code> </p>",
         "DescribeClusterVersionsMessage$ClusterParameterGroupFamily": "<p>The name of a specific cluster parameter group family to return details for.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>",
         "DescribeClusterVersionsMessage$Marker": "<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterVersions</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>",
@@ -1810,6 +1955,9 @@
         "GetClusterCredentialsMessage$DbUser": "<p>The name of a database user. If a user name matching <code>DbUser</code> exists in the database, the temporary user credentials have the same permissions as the existing user. If <code>DbUser</code> doesn't exist in the database and <code>Autocreate</code> is <code>True</code>, a new user is created using the value for <code>DbUser</code> with PUBLIC permissions. If a database user matching the value for <code>DbUser</code> doesn't exist and <code>Autocreate</code> is <code>False</code>, then the command succeeds but the connection attempt will fail because the user doesn't exist in the database.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_USER.html\">CREATE USER</a> in the Amazon Redshift Database Developer Guide. </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 64 alphanumeric characters or hyphens. The user name can't be <code>PUBLIC</code>.</p> </li> <li> <p>Must contain only lowercase letters, numbers, underscore, plus sign, period (dot), at symbol (@), or hyphen.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Must not contain a colon ( : ) or slash ( / ). </p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html\">Reserved Words</a> in the Amazon Redshift Database Developer Guide.</p> </li> </ul>",
         "GetClusterCredentialsMessage$DbName": "<p>The name of a database that <code>DbUser</code> is authorized to log on to. If <code>DbName</code> is not specified, <code>DbUser</code> can log on to any existing database.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 64 alphanumeric characters or hyphens</p> </li> <li> <p>Must contain only lowercase letters, numbers, underscore, plus sign, period (dot), at symbol (@), or hyphen.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Must not contain a colon ( : ) or slash ( / ). </p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html\">Reserved Words</a> in the Amazon Redshift Database Developer Guide.</p> </li> </ul>",
         "GetClusterCredentialsMessage$ClusterIdentifier": "<p>The unique identifier of the cluster that contains the database for which your are requesting credentials. This parameter is case sensitive.</p>",
+        "GetReservedNodeExchangeOfferingsInputMessage$ReservedNodeId": "<p>A string representing the node identifier for the DC1 Reserved Node to be exchanged.</p>",
+        "GetReservedNodeExchangeOfferingsInputMessage$Marker": "<p>A value that indicates the starting point for the next set of ReservedNodeOfferings.</p>",
+        "GetReservedNodeExchangeOfferingsOutputMessage$Marker": "<p>An optional parameter that specifies the starting point for returning a set of response records. When the results of a <code>GetReservedNodeExchangeOfferings</code> request exceed the value specified in MaxRecords, Amazon Redshift returns a value in the marker field of the response. You can retrieve the next set of response records by providing the returned marker value in the marker parameter and retrying the request. </p>",
         "HsmClientCertificate$HsmClientCertificateIdentifier": "<p>The identifier of the HSM client certificate.</p>",
         "HsmClientCertificate$HsmClientCertificatePublicKey": "<p>The public key that the Amazon Redshift cluster will use to connect to the HSM. You must register the public key in the HSM.</p>",
         "HsmClientCertificateMessage$Marker": "<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>",
@@ -1830,6 +1978,10 @@
         "LoggingStatus$BucketName": "<p>The name of the S3 bucket where the log files are stored.</p>",
         "LoggingStatus$S3KeyPrefix": "<p>The prefix applied to the log file names.</p>",
         "LoggingStatus$LastFailureMessage": "<p>The message indicating that logs failed to be delivered.</p>",
+        "MaintenanceTrack$MaintenanceTrackName": "<p>The name of the maintenance track. Possible values are <code>current</code> and <code>trailing</code>.</p>",
+        "MaintenanceTrack$DatabaseVersion": "<p>The version number for the cluster release.</p>",
+        "ModifyClusterDbRevisionMessage$ClusterIdentifier": "<p>The unique identifier of a cluster whose database revision you want to modify. </p> <p>Example: <code>examplecluster</code> </p>",
+        "ModifyClusterDbRevisionMessage$RevisionTarget": "<p>The identifier of the database revision. You can retrieve this value from the response to the <a>DescribeClusterDbRevisions</a> request.</p>",
         "ModifyClusterIamRolesMessage$ClusterIdentifier": "<p>The unique identifier of the cluster for which you want to associate or disassociate IAM roles.</p>",
         "ModifyClusterMessage$ClusterIdentifier": "<p>The unique identifier of the cluster to be modified.</p> <p>Example: <code>examplecluster</code> </p>",
         "ModifyClusterMessage$ClusterType": "<p>The new cluster type.</p> <p>When you submit your cluster resize request, your existing cluster goes into a read-only mode. After Amazon Redshift provisions a new cluster based on your resize requirements, there will be outage for a period while the old cluster is deleted and your connection is switched to the new cluster. You can use <a>DescribeResize</a> to track the progress of the resize request. </p> <p>Valid Values: <code> multi-node | single-node </code> </p>",
@@ -1842,6 +1994,8 @@
         "ModifyClusterMessage$HsmConfigurationIdentifier": "<p>Specifies the name of the HSM configuration that contains the information the Amazon Redshift cluster can use to retrieve and store keys in an HSM.</p>",
         "ModifyClusterMessage$NewClusterIdentifier": "<p>The new identifier for the cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul> <p>Example: <code>examplecluster</code> </p>",
         "ModifyClusterMessage$ElasticIp": "<p>The Elastic IP (EIP) address for the cluster.</p> <p>Constraints: The cluster must be provisioned in EC2-VPC and publicly-accessible through an Internet gateway. For more information about provisioning clusters in EC2-VPC, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#cluster-platforms\">Supported Platforms to Launch Your Cluster</a> in the Amazon Redshift Cluster Management Guide.</p>",
+        "ModifyClusterMessage$MaintenanceTrackName": "<p>The name for the maintenance track that you want to assign for the cluster. This name change is asynchronous. The new track name stays in the <code>PendingModifiedValues</code> for the cluster until the next maintenance window. When the maintenance track changes, the cluster is switched to the latest cluster release available for the maintenance track. At this point, the maintenance track name is applied.</p>",
+        "ModifyClusterMessage$KmsKeyId": "<p>The AWS Key Management Service (KMS) key ID of the encryption key that you want to use to encrypt data in the cluster.</p>",
         "ModifyClusterParameterGroupMessage$ParameterGroupName": "<p>The name of the parameter group to be modified.</p>",
         "ModifyClusterSubnetGroupMessage$ClusterSubnetGroupName": "<p>The name of the subnet group to be modified.</p>",
         "ModifyClusterSubnetGroupMessage$Description": "<p>A text description of the subnet group to be modified.</p>",
@@ -1861,11 +2015,14 @@
         "Parameter$DataType": "<p>The data type of the parameter.</p>",
         "Parameter$AllowedValues": "<p>The valid range of values for the parameter.</p>",
         "Parameter$MinimumEngineVersion": "<p>The earliest engine version to which the parameter can apply.</p>",
+        "PendingActionsList$member": null,
         "PendingModifiedValues$MasterUserPassword": "<p>The pending or in-progress change of the master user password for the cluster.</p>",
         "PendingModifiedValues$NodeType": "<p>The pending or in-progress change of the cluster's node type.</p>",
         "PendingModifiedValues$ClusterType": "<p>The pending or in-progress change of the cluster type.</p>",
         "PendingModifiedValues$ClusterVersion": "<p>The pending or in-progress change of the service version.</p>",
         "PendingModifiedValues$ClusterIdentifier": "<p>The pending or in-progress change of the new identifier for the cluster.</p>",
+        "PendingModifiedValues$MaintenanceTrackName": "<p>The name of the maintenance track that the cluster will change to during the next maintenance window.</p>",
+        "PendingModifiedValues$EncryptionType": "<p>The encryption type for a cluster. Possible values are: KMS and None. For the China region the possible values are None, and Legacy. </p>",
         "PurchaseReservedNodeOfferingMessage$ReservedNodeOfferingId": "<p>The unique identifier of the reserved node offering you want to purchase.</p>",
         "RebootClusterMessage$ClusterIdentifier": "<p>The cluster identifier.</p>",
         "RecurringCharge$RecurringChargeFrequency": "<p>The frequency at which the recurring charge amount is applied.</p>",
@@ -1873,7 +2030,7 @@
         "ReservedNode$ReservedNodeOfferingId": "<p>The identifier for the reserved node offering.</p>",
         "ReservedNode$NodeType": "<p>The node type of the reserved node.</p>",
         "ReservedNode$CurrencyCode": "<p>The currency code for the reserved cluster.</p>",
-        "ReservedNode$State": "<p>The state of the reserved compute node.</p> <p>Possible Values:</p> <ul> <li> <p>pending-payment-This reserved node has recently been purchased, and the sale has been approved, but payment has not yet been confirmed.</p> </li> <li> <p>active-This reserved node is owned by the caller and is available for use.</p> </li> <li> <p>payment-failed-Payment failed for the purchase attempt.</p> </li> </ul>",
+        "ReservedNode$State": "<p>The state of the reserved compute node.</p> <p>Possible Values:</p> <ul> <li> <p>pending-payment-This reserved node has recently been purchased, and the sale has been approved, but payment has not yet been confirmed.</p> </li> <li> <p>active-This reserved node is owned by the caller and is available for use.</p> </li> <li> <p>payment-failed-Payment failed for the purchase attempt.</p> </li> <li> <p>retired-The reserved node is no longer available. </p> </li> <li> <p>exchanging-The owner is exchanging the reserved node for another reserved node.</p> </li> </ul>",
         "ReservedNode$OfferingType": "<p>The anticipated utilization of the reserved node, as defined in the reserved node offering.</p>",
         "ReservedNodeOffering$ReservedNodeOfferingId": "<p>The offering identifier.</p>",
         "ReservedNodeOffering$NodeType": "<p>The node type offered by the reserved node offering.</p>",
@@ -1882,9 +2039,15 @@
         "ReservedNodeOfferingsMessage$Marker": "<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>",
         "ReservedNodesMessage$Marker": "<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>",
         "ResetClusterParameterGroupMessage$ParameterGroupName": "<p>The name of the cluster parameter group to be reset.</p>",
+        "ResizeClusterMessage$ClusterIdentifier": "<p>The unique identifier for the cluster to resize.</p>",
+        "ResizeClusterMessage$ClusterType": "<p>The new cluster type for the specified cluster.</p>",
+        "ResizeClusterMessage$NodeType": "<p>The new node type for the nodes you are adding.</p>",
         "ResizeProgressMessage$TargetNodeType": "<p>The node type that the cluster will have after the resize operation is complete.</p>",
         "ResizeProgressMessage$TargetClusterType": "<p>The cluster type after the resize operation is complete.</p> <p>Valid Values: <code>multi-node</code> | <code>single-node</code> </p>",
         "ResizeProgressMessage$Status": "<p>The status of the resize operation.</p> <p>Valid Values: <code>NONE</code> | <code>IN_PROGRESS</code> | <code>FAILED</code> | <code>SUCCEEDED</code> </p>",
+        "ResizeProgressMessage$ResizeType": "<p>An enum with possible values of ClassicResize and ElasticResize. These values describe the type of resize operation being performed. </p>",
+        "ResizeProgressMessage$Message": "<p>An optional string to provide additional details about the resize action.</p>",
+        "ResizeProgressMessage$TargetEncryptionType": "<p>The type of encryption for the cluster after the resize is complete.</p> <p>Possible values are <code>KMS</code> and <code>None</code>. In the China region possible values are: <code>Legacy</code> and <code>None</code>.</p>",
         "RestorableNodeTypeList$member": null,
         "RestoreFromClusterSnapshotMessage$ClusterIdentifier": "<p>The identifier of the cluster that will be created from restoring the snapshot.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul>",
         "RestoreFromClusterSnapshotMessage$SnapshotIdentifier": "<p>The name of the snapshot from which to create the new cluster. This parameter isn't case sensitive.</p> <p>Example: <code>my-snapshot-id</code> </p>",
@@ -1900,6 +2063,7 @@
         "RestoreFromClusterSnapshotMessage$KmsKeyId": "<p>The AWS Key Management Service (KMS) key ID of the encryption key that you want to use to encrypt data in the cluster that you restore from a shared snapshot.</p>",
         "RestoreFromClusterSnapshotMessage$NodeType": "<p>The node type that the restored cluster will be provisioned with.</p> <p>Default: The node type of the cluster from which the snapshot was taken. You can modify this if you are using any DS node type. In that case, you can choose to restore into another DS node type of the same size. For example, you can restore ds1.8xlarge into ds2.8xlarge, or ds1.xlarge into ds2.xlarge. If you have a DC instance type, you must restore into that same instance type and size. In other words, you can only restore a dc1.large instance type into another dc1.large instance type or dc2.large instance type. You can't restore dc1.8xlarge to dc2.8xlarge. First restore to a dc1.8xlareg cluster, then resize to a dc2.8large cluster. For more information about node types, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#rs-about-clusters-and-nodes\"> About Clusters and Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>",
         "RestoreFromClusterSnapshotMessage$AdditionalInfo": "<p>Reserved.</p>",
+        "RestoreFromClusterSnapshotMessage$MaintenanceTrackName": "<p>The name of the maintenance track for the restored cluster. When you take a snapshot, the snapshot inherits the <code>MaintenanceTrack</code> value from the cluster. The snapshot might be on a different track than the cluster that was the source for the snapshot. For example, suppose that you take a snapshot of a cluster that is on the current track and then change the cluster to be on the trailing track. In this case, the snapshot and the source cluster are on different tracks.</p>",
         "RestoreStatus$Status": "<p>The status of the restore action. Returns starting, restoring, completed, or failed.</p>",
         "RestoreTableFromClusterSnapshotMessage$ClusterIdentifier": "<p>The identifier of the Amazon Redshift cluster to restore the table to.</p>",
         "RestoreTableFromClusterSnapshotMessage$SnapshotIdentifier": "<p>The identifier of the snapshot to restore the table from. This snapshot must have been created from the Amazon Redshift cluster specified by the <code>ClusterIdentifier</code> parameter.</p>",
@@ -1909,6 +2073,8 @@
         "RestoreTableFromClusterSnapshotMessage$TargetDatabaseName": "<p>The name of the database to restore the table to.</p>",
         "RestoreTableFromClusterSnapshotMessage$TargetSchemaName": "<p>The name of the schema to restore the table to.</p>",
         "RestoreTableFromClusterSnapshotMessage$NewTableName": "<p>The name of the table to create as a result of the current request.</p>",
+        "RevisionTarget$DatabaseRevision": "<p>A unique string that identifies the version to update the cluster to. You can use this value in <a>ModifyClusterDbRevision</a>.</p>",
+        "RevisionTarget$Description": "<p>A string that describes the changes and features that will be applied to the cluster when it is updated to the corresponding <a>ClusterDbRevision</a>.</p>",
         "RevokeClusterSecurityGroupIngressMessage$ClusterSecurityGroupName": "<p>The name of the security Group from which to revoke the ingress rule.</p>",
         "RevokeClusterSecurityGroupIngressMessage$CIDRIP": "<p>The IP range for which to revoke access. This range must be a valid Classless Inter-Domain Routing (CIDR) block of IP addresses. If <code>CIDRIP</code> is specified, <code>EC2SecurityGroupName</code> and <code>EC2SecurityGroupOwnerId</code> cannot be provided. </p>",
         "RevokeClusterSecurityGroupIngressMessage$EC2SecurityGroupName": "<p>The name of the EC2 Security Group whose access is to be revoked. If <code>EC2SecurityGroupName</code> is specified, <code>EC2SecurityGroupOwnerId</code> must also be provided and <code>CIDRIP</code> cannot be provided. </p>",
@@ -1930,6 +2096,7 @@
         "Snapshot$KmsKeyId": "<p>The AWS Key Management Service (KMS) key ID of the encryption key that was used to encrypt data in the cluster from which the snapshot was taken.</p>",
         "Snapshot$OwnerAccount": "<p>For manual snapshots, the AWS customer account used to create or copy the snapshot. For automatic snapshots, the owner of the cluster. The owner can perform all snapshot actions, such as sharing a manual snapshot.</p>",
         "Snapshot$SourceRegion": "<p>The source region from which the snapshot was copied.</p>",
+        "Snapshot$MaintenanceTrackName": "<p>The name of the maintenance track for the snapshot.</p>",
         "SnapshotCopyGrant$SnapshotCopyGrantName": "<p>The name of the snapshot copy grant.</p>",
         "SnapshotCopyGrant$KmsKeyId": "<p>The unique identifier of the customer master key (CMK) in AWS KMS to which Amazon Redshift is granted permission.</p>",
         "SnapshotCopyGrantMessage$Marker": "<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <code>DescribeSnapshotCopyGrant</code> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <b>SnapshotCopyGrantName</b> parameter or the <b>Marker</b> parameter, but not both. </p>",
@@ -1957,6 +2124,9 @@
         "TaggedResource$ResourceName": "<p>The Amazon Resource Name (ARN) with which the tag is associated. For example, <code>arn:aws:redshift:us-east-1:123456789:cluster:t1</code>.</p>",
         "TaggedResource$ResourceType": "<p>The type of resource with which the tag is associated. Valid resource types are: </p> <ul> <li> <p>Cluster</p> </li> <li> <p>CIDR/IP</p> </li> <li> <p>EC2 security group</p> </li> <li> <p>Snapshot</p> </li> <li> <p>Cluster security group</p> </li> <li> <p>Subnet group</p> </li> <li> <p>HSM connection</p> </li> <li> <p>HSM certificate</p> </li> <li> <p>Parameter group</p> </li> </ul> <p>For more information about Amazon Redshift resource types and constructing ARNs, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/redshift-iam-access-control-overview.html#redshift-iam-access-control-specify-actions\">Constructing an Amazon Redshift Amazon Resource Name (ARN)</a> in the Amazon Redshift Cluster Management Guide. </p>",
         "TaggedResourceListMessage$Marker": "<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>",
+        "TrackListMessage$Marker": "<p>The starting point to return a set of response tracklist records. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request.</p>",
+        "UpdateTarget$MaintenanceTrackName": "<p>The name of the new maintenance track.</p>",
+        "UpdateTarget$DatabaseVersion": "<p>The cluster version for the new maintenance track.</p>",
         "VpcSecurityGroupIdList$member": null,
         "VpcSecurityGroupMembership$VpcSecurityGroupId": "<p>The identifier of the VPC security group.</p>",
         "VpcSecurityGroupMembership$Status": "<p>The status of the VPC security group.</p>"
@@ -2028,6 +2198,7 @@
       "refs": {
         "Cluster$ClusterCreateTime": "<p>The date and time that the cluster was created.</p>",
         "ClusterCredentials$Expiration": "<p>The date and time the password in <code>DbPassword</code> expires.</p>",
+        "ClusterDbRevision$DatabaseRevisionReleaseDate": "<p>The date on which the database revision was released.</p>",
         "DescribeClusterSnapshotsMessage$StartTime": "<p>A value that requests only snapshots created at or after the specified time. The time value is specified in ISO 8601 format. For more information about ISO 8601, go to the <a href=\"http://en.wikipedia.org/wiki/ISO_8601\">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2012-07-16T18:00:00Z</code> </p>",
         "DescribeClusterSnapshotsMessage$EndTime": "<p>A time value that requests only snapshots created at or before the specified time. The time value is specified in ISO 8601 format. For more information about ISO 8601, go to the <a href=\"http://en.wikipedia.org/wiki/ISO_8601\">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2012-07-16T18:00:00Z</code> </p>",
         "DescribeEventsMessage$StartTime": "<p>The beginning of the time interval to retrieve events for, specified in ISO 8601 format. For more information about ISO 8601, go to the <a href=\"http://en.wikipedia.org/wiki/ISO_8601\">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2009-07-08T18:00Z</code> </p>",
@@ -2037,9 +2208,15 @@
         "LoggingStatus$LastSuccessfulDeliveryTime": "<p>The last time that logs were delivered.</p>",
         "LoggingStatus$LastFailureTime": "<p>The last time when logs failed to be delivered.</p>",
         "ReservedNode$StartTime": "<p>The time the reservation started. You purchase a reserved node offering for a duration. This is the start time of that duration.</p>",
+        "RevisionTarget$DatabaseRevisionReleaseDate": "<p>The date on which the database revision was released.</p>",
         "Snapshot$SnapshotCreateTime": "<p>The time (UTC) when Amazon Redshift began the snapshot. A snapshot contains a copy of the cluster data as of this exact time.</p>",
         "Snapshot$ClusterCreateTime": "<p>The time (UTC) when the cluster was originally created.</p>",
         "TableRestoreStatus$RequestTime": "<p>The time that the table restore request was made, in Universal Coordinated Time (UTC).</p>"
+      }
+    },
+    "TableLimitExceededFault": {
+      "base": "<p>The number of tables in the cluster exceeds the limit for the requested new cluster node type. </p>",
+      "refs": {
       }
     },
     "TableRestoreNotFoundFault": {
@@ -2095,7 +2272,7 @@
       }
     },
     "TagLimitExceededFault": {
-      "base": "<p>The request exceeds the limit of 10 tags for the resource.</p>",
+      "base": "<p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>",
       "refs": {
       }
     },
@@ -2157,6 +2334,17 @@
       "refs": {
       }
     },
+    "TrackList": {
+      "base": null,
+      "refs": {
+        "TrackListMessage$MaintenanceTracks": "<p>A list of maintenance tracks output by the <code>DescribeClusterTracks</code> operation. </p>"
+      }
+    },
+    "TrackListMessage": {
+      "base": null,
+      "refs": {
+      }
+    },
     "UnauthorizedOperation": {
       "base": "<p>Your account is not authorized to perform the requested operation.</p>",
       "refs": {
@@ -2177,11 +2365,17 @@
       "refs": {
       }
     },
+    "UpdateTarget": {
+      "base": "<p>A maintenance track that you can switch the current track to.</p>",
+      "refs": {
+        "EligibleTracksToUpdateList$member": null
+      }
+    },
     "VpcSecurityGroupIdList": {
       "base": null,
       "refs": {
         "CreateClusterMessage$VpcSecurityGroupIds": "<p>A list of Virtual Private Cloud (VPC) security groups to be associated with the cluster.</p> <p>Default: The default VPC security group is associated with the cluster.</p>",
-        "ModifyClusterMessage$VpcSecurityGroupIds": "<p>A list of virtual private cloud (VPC) security groups to be associated with the cluster.</p>",
+        "ModifyClusterMessage$VpcSecurityGroupIds": "<p>A list of virtual private cloud (VPC) security groups to be associated with the cluster. This change is asynchronously applied as soon as possible.</p>",
         "RestoreFromClusterSnapshotMessage$VpcSecurityGroupIds": "<p>A list of Virtual Private Cloud (VPC) security groups to be associated with the cluster.</p> <p>Default: The default VPC security group is associated with the cluster.</p> <p>VPC security groups only apply to clusters in VPCs.</p>"
       }
     },

@@ -157,6 +157,35 @@ func (this *AssertionsFixture) TestShouldResemble() {
 	this.fail(so(IntAlias(42), ShouldResemble, 42), `42|42|Expected: '42' Actual: 'assertions.IntAlias(42)' (Should resemble)!`)
 }
 
+func (this *AssertionsFixture) TestShouldEqualJSON() {
+	this.fail(so("hi", ShouldEqualJSON), "This assertion requires exactly 1 comparison values (you provided 0).")
+	this.fail(so("hi", ShouldEqualJSON, "hi", "hi"), "This assertion requires exactly 1 comparison values (you provided 2).")
+
+	// basic identity of keys/values
+	this.pass(so(`{"my":"val"}`, ShouldEqualJSON, `{"my":"val"}`))
+	this.fail(so(`{"my":"val"}`, ShouldEqualJSON, `{"your":"val"}`),
+		`{"your":"val"}|{"my":"val"}|Expected: '{"your":"val"}' Actual: '{"my":"val"}' (Should be equal)`)
+
+	// out of order values causes comparison failure:
+	this.pass(so(`{"key0":"val0","key1":"val1"}`, ShouldEqualJSON, `{"key1":"val1","key0":"val0"}`))
+	this.fail(so(`{"key0":"val0","key1":"val1"}`, ShouldEqualJSON, `{"key1":"val0","key0":"val0"}`),
+		`{"key0":"val0","key1":"val0"}|{"key0":"val0","key1":"val1"}|Expected: '{"key0":"val0","key1":"val0"}' Actual: '{"key0":"val0","key1":"val1"}' (Should be equal)`)
+
+	// missing values causes comparison failure:
+	this.fail(so(
+		`{"key0":"val0","key1":"val1"}`,
+		ShouldEqualJSON,
+		`{"key1":"val0"}`),
+		`{"key1":"val0"}|{"key0":"val0","key1":"val1"}|Expected: '{"key1":"val0"}' Actual: '{"key0":"val0","key1":"val1"}' (Should be equal)`)
+
+	// whitespace shouldn't interfere with comparison:
+	this.pass(so("\n{ \"my\"  :   \"val\"\n}", ShouldEqualJSON, `{"my":"val"}`))
+
+	// Invalid JSON for either actual or expected value is invalid:
+	this.fail(so("{}", ShouldEqualJSON, ""), "Expected value not valid JSON: unexpected end of JSON input")
+	this.fail(so("", ShouldEqualJSON, "{}"), "Actual value not valid JSON: unexpected end of JSON input")
+}
+
 func (this *AssertionsFixture) TestShouldNotResemble() {
 	this.fail(so(Thing1{"hi"}, ShouldNotResemble), "This assertion requires exactly 1 comparison values (you provided 0).")
 	this.fail(so(Thing1{"hi"}, ShouldNotResemble, Thing1{"hi"}, Thing1{"hi"}), "This assertion requires exactly 1 comparison values (you provided 2).")
@@ -294,4 +323,21 @@ func (this *AssertionsFixture) TestShouldBeZeroValue() {
 	this.pass(so(false, ShouldBeZeroValue))
 	this.pass(so("", ShouldBeZeroValue))
 	this.pass(so(struct{}{}, ShouldBeZeroValue))
+}
+
+func (this *AssertionsFixture) TestShouldNotBeZeroValue() {
+	this.fail(so(0, ShouldNotBeZeroValue, 1, 2, 3), "This assertion requires exactly 0 comparison values (you provided 3).")
+	this.fail(so(false, ShouldNotBeZeroValue, true), "This assertion requires exactly 0 comparison values (you provided 1).")
+
+	this.fail(so(0, ShouldNotBeZeroValue), "0|0|'0' should NOT have been the zero value")
+	this.fail(so(false, ShouldNotBeZeroValue), "false|false|'false' should NOT have been the zero value")
+	this.fail(so("", ShouldNotBeZeroValue), "||'' should NOT have been the zero value")
+	this.fail(so(struct{}{}, ShouldNotBeZeroValue), "{}|{}|'{}' should NOT have been the zero value")
+
+	this.pass(so(1, ShouldNotBeZeroValue))
+	this.pass(so(true, ShouldNotBeZeroValue))
+	this.pass(so("123", ShouldNotBeZeroValue))
+	this.pass(so(" ", ShouldNotBeZeroValue))
+	this.pass(so([]string{"Nonempty"}, ShouldNotBeZeroValue))
+	this.pass(so(struct{ a string }{a: "asdf"}, ShouldNotBeZeroValue))
 }

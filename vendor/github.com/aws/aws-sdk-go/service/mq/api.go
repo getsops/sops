@@ -3,6 +3,8 @@
 package mq
 
 import (
+	"time"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -12,7 +14,7 @@ const opCreateBroker = "CreateBroker"
 
 // CreateBrokerRequest generates a "aws/request.Request" representing the
 // client's request for the CreateBroker operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -65,10 +67,10 @@ func (c *MQ) CreateBrokerRequest(input *CreateBrokerRequest) (req *request.Reque
 //   * ErrCodeBadRequestException "BadRequestException"
 //   Returns information about an error.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   Returns information about an error.
 //
-//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
 //   Returns information about an error.
 //
 //   * ErrCodeConflictException "ConflictException"
@@ -103,7 +105,7 @@ const opCreateConfiguration = "CreateConfiguration"
 
 // CreateConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the CreateConfiguration operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -144,8 +146,7 @@ func (c *MQ) CreateConfigurationRequest(input *CreateConfigurationRequest) (req 
 // CreateConfiguration API operation for AmazonMQ.
 //
 // Creates a new configuration for the specified configuration name. Amazon
-// MQ uses the default configuration (the engine type and version). Note: If
-// the configuration name already exists, Amazon MQ doesn't create a configuration.
+// MQ uses the default configuration (the engine type and version).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -193,7 +194,7 @@ const opCreateUser = "CreateUser"
 
 // CreateUserRequest generates a "aws/request.Request" representing the
 // client's request for the CreateUser operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -284,7 +285,7 @@ const opDeleteBroker = "DeleteBroker"
 
 // DeleteBrokerRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteBroker operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -372,7 +373,7 @@ const opDeleteUser = "DeleteUser"
 
 // DeleteUserRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteUser operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -460,7 +461,7 @@ const opDescribeBroker = "DescribeBroker"
 
 // DescribeBrokerRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeBroker operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -548,7 +549,7 @@ const opDescribeConfiguration = "DescribeConfiguration"
 
 // DescribeConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeConfiguration operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -636,7 +637,7 @@ const opDescribeConfigurationRevision = "DescribeConfigurationRevision"
 
 // DescribeConfigurationRevisionRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeConfigurationRevision operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -724,7 +725,7 @@ const opDescribeUser = "DescribeUser"
 
 // DescribeUserRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeUser operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -812,7 +813,7 @@ const opListBrokers = "ListBrokers"
 
 // ListBrokersRequest generates a "aws/request.Request" representing the
 // client's request for the ListBrokers operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -897,7 +898,7 @@ const opListConfigurationRevisions = "ListConfigurationRevisions"
 
 // ListConfigurationRevisionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListConfigurationRevisions operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -985,7 +986,7 @@ const opListConfigurations = "ListConfigurations"
 
 // ListConfigurationsRequest generates a "aws/request.Request" representing the
 // client's request for the ListConfigurations operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1070,7 +1071,7 @@ const opListUsers = "ListUsers"
 
 // ListUsersRequest generates a "aws/request.Request" representing the
 // client's request for the ListUsers operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1158,7 +1159,7 @@ const opRebootBroker = "RebootBroker"
 
 // RebootBrokerRequest generates a "aws/request.Request" representing the
 // client's request for the RebootBroker operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1246,7 +1247,7 @@ const opUpdateBroker = "UpdateBroker"
 
 // UpdateBrokerRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateBroker operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1334,7 +1335,7 @@ const opUpdateConfiguration = "UpdateConfiguration"
 
 // UpdateConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateConfiguration operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1425,7 +1426,7 @@ const opUpdateUser = "UpdateUser"
 
 // UpdateUserRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateUser operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1521,6 +1522,9 @@ type BrokerInstance struct {
 
 	// The broker's wire-level protocol endpoints.
 	Endpoints []*string `locationName:"endpoints" type:"list"`
+
+	// The IP address of the ENI attached to the broker.
+	IpAddress *string `locationName:"ipAddress" type:"string"`
 }
 
 // String returns the string representation
@@ -1545,6 +1549,12 @@ func (s *BrokerInstance) SetEndpoints(v []*string) *BrokerInstance {
 	return s
 }
 
+// SetIpAddress sets the IpAddress field's value.
+func (s *BrokerInstance) SetIpAddress(v string) *BrokerInstance {
+	s.IpAddress = &v
+	return s
+}
+
 // The Amazon Resource Name (ARN) of the broker.
 type BrokerSummary struct {
 	_ struct{} `type:"structure"`
@@ -1561,17 +1571,16 @@ type BrokerSummary struct {
 	// characters.
 	BrokerName *string `locationName:"brokerName" type:"string"`
 
-	// The status of the broker. Possible values: CREATION_IN_PROGRESS, CREATION_FAILED,
-	// DELETION_IN_PROGRESS, RUNNING, REBOOT_IN_PROGRESS
+	// The status of the broker.
 	BrokerState *string `locationName:"brokerState" type:"string" enum:"BrokerState"`
 
-	// Required. The deployment mode of the broker. Possible values: SINGLE_INSTANCE,
-	// ACTIVE_STANDBY_MULTI_AZ SINGLE_INSTANCE creates a single-instance broker
-	// in a single Availability Zone. ACTIVE_STANDBY_MULTI_AZ creates an active/standby
-	// broker for high availability.
+	// The time when the broker was created.
+	Created *time.Time `locationName:"created" type:"timestamp" timestampFormat:"iso8601"`
+
+	// Required. The deployment mode of the broker.
 	DeploymentMode *string `locationName:"deploymentMode" type:"string" enum:"DeploymentMode"`
 
-	// The broker's instance type. Possible values: mq.t2.micro, mq.m4.large
+	// The broker's instance type.
 	HostInstanceType *string `locationName:"hostInstanceType" type:"string"`
 }
 
@@ -1609,6 +1618,12 @@ func (s *BrokerSummary) SetBrokerState(v string) *BrokerSummary {
 	return s
 }
 
+// SetCreated sets the Created field's value.
+func (s *BrokerSummary) SetCreated(v time.Time) *BrokerSummary {
+	s.Created = &v
+	return s
+}
+
 // SetDeploymentMode sets the DeploymentMode field's value.
 func (s *BrokerSummary) SetDeploymentMode(v string) *BrokerSummary {
 	s.DeploymentMode = &v
@@ -1627,6 +1642,9 @@ type Configuration struct {
 
 	// Required. The ARN of the configuration.
 	Arn *string `locationName:"arn" type:"string"`
+
+	// Required. The date and time of the configuration revision.
+	Created *time.Time `locationName:"created" type:"timestamp" timestampFormat:"iso8601"`
 
 	// Required. The description of the configuration.
 	Description *string `locationName:"description" type:"string"`
@@ -1663,6 +1681,12 @@ func (s Configuration) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *Configuration) SetArn(v string) *Configuration {
 	s.Arn = &v
+	return s
+}
+
+// SetCreated sets the Created field's value.
+func (s *Configuration) SetCreated(v time.Time) *Configuration {
+	s.Created = &v
 	return s
 }
 
@@ -1709,7 +1733,7 @@ type ConfigurationId struct {
 	// Required. The unique ID that Amazon MQ generates for the configuration.
 	Id *string `locationName:"id" type:"string"`
 
-	// The Universally Unique Identifier (UUID) of the request.
+	// The revision number of the configuration.
 	Revision *int64 `locationName:"revision" type:"integer"`
 }
 
@@ -1739,10 +1763,13 @@ func (s *ConfigurationId) SetRevision(v int64) *ConfigurationId {
 type ConfigurationRevision struct {
 	_ struct{} `type:"structure"`
 
+	// Required. The date and time of the configuration revision.
+	Created *time.Time `locationName:"created" type:"timestamp" timestampFormat:"iso8601"`
+
 	// The description of the configuration revision.
 	Description *string `locationName:"description" type:"string"`
 
-	// Required. The revision of the configuration.
+	// Required. The revision number of the configuration.
 	Revision *int64 `locationName:"revision" type:"integer"`
 }
 
@@ -1754,6 +1781,12 @@ func (s ConfigurationRevision) String() string {
 // GoString returns the string representation
 func (s ConfigurationRevision) GoString() string {
 	return s.String()
+}
+
+// SetCreated sets the Created field's value.
+func (s *ConfigurationRevision) SetCreated(v time.Time) *ConfigurationRevision {
+	s.Created = &v
+	return s
 }
 
 // SetDescription sets the Description field's value.
@@ -1822,9 +1855,7 @@ type CreateBrokerRequest struct {
 
 	CreatorRequestId *string `locationName:"creatorRequestId" type:"string" idempotencyToken:"true"`
 
-	// The deployment mode of the broker. Possible values: SINGLE_INSTANCE, ACTIVE_STANDBY_MULTI_AZ
-	// SINGLE_INSTANCE creates a single-instance broker in a single Availability
-	// Zone. ACTIVE_STANDBY_MULTI_AZ creates an active/standby broker for high availability.
+	// The deployment mode of the broker.
 	DeploymentMode *string `locationName:"deploymentMode" type:"string" enum:"DeploymentMode"`
 
 	// The type of broker engine. Note: Currently, Amazon MQ supports only ActiveMQ.
@@ -1833,6 +1864,9 @@ type CreateBrokerRequest struct {
 	EngineVersion *string `locationName:"engineVersion" type:"string"`
 
 	HostInstanceType *string `locationName:"hostInstanceType" type:"string"`
+
+	// The list of information about logs to be enabled for the specified broker.
+	Logs *Logs `locationName:"logs" type:"structure"`
 
 	// The scheduled time period relative to UTC during which Amazon MQ begins to
 	// apply pending updates or patches to the broker.
@@ -1902,6 +1936,12 @@ func (s *CreateBrokerRequest) SetEngineVersion(v string) *CreateBrokerRequest {
 // SetHostInstanceType sets the HostInstanceType field's value.
 func (s *CreateBrokerRequest) SetHostInstanceType(v string) *CreateBrokerRequest {
 	s.HostInstanceType = &v
+	return s
+}
+
+// SetLogs sets the Logs field's value.
+func (s *CreateBrokerRequest) SetLogs(v *Logs) *CreateBrokerRequest {
+	s.Logs = v
 	return s
 }
 
@@ -2009,6 +2049,8 @@ type CreateConfigurationResponse struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	Created *time.Time `locationName:"created" type:"timestamp" timestampFormat:"iso8601"`
+
 	Id *string `locationName:"id" type:"string"`
 
 	// Returns information about the specified configuration revision.
@@ -2030,6 +2072,12 @@ func (s CreateConfigurationResponse) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *CreateConfigurationResponse) SetArn(v string) *CreateConfigurationResponse {
 	s.Arn = &v
+	return s
+}
+
+// SetCreated sets the Created field's value.
+func (s *CreateConfigurationResponse) SetCreated(v time.Time) *CreateConfigurationResponse {
+	s.Created = &v
 	return s
 }
 
@@ -2306,16 +2354,15 @@ type DescribeBrokerResponse struct {
 
 	BrokerName *string `locationName:"brokerName" type:"string"`
 
-	// The status of the broker. Possible values: CREATION_IN_PROGRESS, CREATION_FAILED,
-	// DELETION_IN_PROGRESS, RUNNING, REBOOT_IN_PROGRESS
+	// The status of the broker.
 	BrokerState *string `locationName:"brokerState" type:"string" enum:"BrokerState"`
 
 	// Broker configuration information
 	Configurations *Configurations `locationName:"configurations" type:"structure"`
 
-	// The deployment mode of the broker. Possible values: SINGLE_INSTANCE, ACTIVE_STANDBY_MULTI_AZ
-	// SINGLE_INSTANCE creates a single-instance broker in a single Availability
-	// Zone. ACTIVE_STANDBY_MULTI_AZ creates an active/standby broker for high availability.
+	Created *time.Time `locationName:"created" type:"timestamp" timestampFormat:"iso8601"`
+
+	// The deployment mode of the broker.
 	DeploymentMode *string `locationName:"deploymentMode" type:"string" enum:"DeploymentMode"`
 
 	// The type of broker engine. Note: Currently, Amazon MQ supports only ActiveMQ.
@@ -2324,6 +2371,10 @@ type DescribeBrokerResponse struct {
 	EngineVersion *string `locationName:"engineVersion" type:"string"`
 
 	HostInstanceType *string `locationName:"hostInstanceType" type:"string"`
+
+	// The list of information about logs currently enabled and pending to be deployed
+	// for the specified broker.
+	Logs *LogsSummary `locationName:"logs" type:"structure"`
 
 	// The scheduled time period relative to UTC during which Amazon MQ begins to
 	// apply pending updates or patches to the broker.
@@ -2390,6 +2441,12 @@ func (s *DescribeBrokerResponse) SetConfigurations(v *Configurations) *DescribeB
 	return s
 }
 
+// SetCreated sets the Created field's value.
+func (s *DescribeBrokerResponse) SetCreated(v time.Time) *DescribeBrokerResponse {
+	s.Created = &v
+	return s
+}
+
 // SetDeploymentMode sets the DeploymentMode field's value.
 func (s *DescribeBrokerResponse) SetDeploymentMode(v string) *DescribeBrokerResponse {
 	s.DeploymentMode = &v
@@ -2411,6 +2468,12 @@ func (s *DescribeBrokerResponse) SetEngineVersion(v string) *DescribeBrokerRespo
 // SetHostInstanceType sets the HostInstanceType field's value.
 func (s *DescribeBrokerResponse) SetHostInstanceType(v string) *DescribeBrokerResponse {
 	s.HostInstanceType = &v
+	return s
+}
+
+// SetLogs sets the Logs field's value.
+func (s *DescribeBrokerResponse) SetLogs(v *LogsSummary) *DescribeBrokerResponse {
+	s.Logs = v
 	return s
 }
 
@@ -2485,6 +2548,8 @@ type DescribeConfigurationOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	Created *time.Time `locationName:"created" type:"timestamp" timestampFormat:"iso8601"`
+
 	Description *string `locationName:"description" type:"string"`
 
 	// The type of broker engine. Note: Currently, Amazon MQ supports only ActiveMQ.
@@ -2513,6 +2578,12 @@ func (s DescribeConfigurationOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *DescribeConfigurationOutput) SetArn(v string) *DescribeConfigurationOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetCreated sets the Created field's value.
+func (s *DescribeConfigurationOutput) SetCreated(v time.Time) *DescribeConfigurationOutput {
+	s.Created = &v
 	return s
 }
 
@@ -2605,6 +2676,8 @@ type DescribeConfigurationRevisionResponse struct {
 
 	ConfigurationId *string `locationName:"configurationId" type:"string"`
 
+	Created *time.Time `locationName:"created" type:"timestamp" timestampFormat:"iso8601"`
+
 	Data *string `locationName:"data" type:"string"`
 
 	Description *string `locationName:"description" type:"string"`
@@ -2623,6 +2696,12 @@ func (s DescribeConfigurationRevisionResponse) GoString() string {
 // SetConfigurationId sets the ConfigurationId field's value.
 func (s *DescribeConfigurationRevisionResponse) SetConfigurationId(v string) *DescribeConfigurationRevisionResponse {
 	s.ConfigurationId = &v
+	return s
+}
+
+// SetCreated sets the Created field's value.
+func (s *DescribeConfigurationRevisionResponse) SetCreated(v time.Time) *DescribeConfigurationRevisionResponse {
+	s.Created = &v
 	return s
 }
 
@@ -3057,7 +3136,7 @@ type ListUsersResponse struct {
 
 	BrokerId *string `locationName:"brokerId" type:"string"`
 
-	MaxResults *int64 `locationName:"maxResults" type:"integer"`
+	MaxResults *int64 `locationName:"maxResults" min:"5" type:"integer"`
 
 	NextToken *string `locationName:"nextToken" type:"string"`
 
@@ -3095,6 +3174,137 @@ func (s *ListUsersResponse) SetNextToken(v string) *ListUsersResponse {
 // SetUsers sets the Users field's value.
 func (s *ListUsersResponse) SetUsers(v []*UserSummary) *ListUsersResponse {
 	s.Users = v
+	return s
+}
+
+// The list of information about logs to be enabled for the specified broker.
+type Logs struct {
+	_ struct{} `type:"structure"`
+
+	// Enables audit logging. Every user management action made using JMX or the
+	// ActiveMQ Web Console is logged.
+	Audit *bool `locationName:"audit" type:"boolean"`
+
+	// Enables general logging.
+	General *bool `locationName:"general" type:"boolean"`
+}
+
+// String returns the string representation
+func (s Logs) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Logs) GoString() string {
+	return s.String()
+}
+
+// SetAudit sets the Audit field's value.
+func (s *Logs) SetAudit(v bool) *Logs {
+	s.Audit = &v
+	return s
+}
+
+// SetGeneral sets the General field's value.
+func (s *Logs) SetGeneral(v bool) *Logs {
+	s.General = &v
+	return s
+}
+
+// The list of information about logs currently enabled and pending to be deployed
+// for the specified broker.
+type LogsSummary struct {
+	_ struct{} `type:"structure"`
+
+	// Enables audit logging. Every user management action made using JMX or the
+	// ActiveMQ Web Console is logged.
+	Audit *bool `locationName:"audit" type:"boolean"`
+
+	// Location of CloudWatch Log group where audit logs will be sent.
+	AuditLogGroup *string `locationName:"auditLogGroup" type:"string"`
+
+	// Enables general logging.
+	General *bool `locationName:"general" type:"boolean"`
+
+	// Location of CloudWatch Log group where general logs will be sent.
+	GeneralLogGroup *string `locationName:"generalLogGroup" type:"string"`
+
+	// The list of information about logs pending to be deployed for the specified
+	// broker.
+	Pending *PendingLogs `locationName:"pending" type:"structure"`
+}
+
+// String returns the string representation
+func (s LogsSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s LogsSummary) GoString() string {
+	return s.String()
+}
+
+// SetAudit sets the Audit field's value.
+func (s *LogsSummary) SetAudit(v bool) *LogsSummary {
+	s.Audit = &v
+	return s
+}
+
+// SetAuditLogGroup sets the AuditLogGroup field's value.
+func (s *LogsSummary) SetAuditLogGroup(v string) *LogsSummary {
+	s.AuditLogGroup = &v
+	return s
+}
+
+// SetGeneral sets the General field's value.
+func (s *LogsSummary) SetGeneral(v bool) *LogsSummary {
+	s.General = &v
+	return s
+}
+
+// SetGeneralLogGroup sets the GeneralLogGroup field's value.
+func (s *LogsSummary) SetGeneralLogGroup(v string) *LogsSummary {
+	s.GeneralLogGroup = &v
+	return s
+}
+
+// SetPending sets the Pending field's value.
+func (s *LogsSummary) SetPending(v *PendingLogs) *LogsSummary {
+	s.Pending = v
+	return s
+}
+
+// The list of information about logs to be enabled for the specified broker.
+type PendingLogs struct {
+	_ struct{} `type:"structure"`
+
+	// Enables audit logging. Every user management action made using JMX or the
+	// ActiveMQ Web Console is logged.
+	Audit *bool `locationName:"audit" type:"boolean"`
+
+	// Enables general logging.
+	General *bool `locationName:"general" type:"boolean"`
+}
+
+// String returns the string representation
+func (s PendingLogs) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PendingLogs) GoString() string {
+	return s.String()
+}
+
+// SetAudit sets the Audit field's value.
+func (s *PendingLogs) SetAudit(v bool) *PendingLogs {
+	s.Audit = &v
+	return s
+}
+
+// SetGeneral sets the General field's value.
+func (s *PendingLogs) SetGeneral(v bool) *PendingLogs {
+	s.General = &v
 	return s
 }
 
@@ -3160,12 +3370,6 @@ type SanitizationWarning struct {
 	ElementName *string `locationName:"elementName" type:"string"`
 
 	// Required. The reason for which the XML elements or attributes were sanitized.
-	// Possible values: DISALLOWED_ELEMENT_REMOVED, DISALLOWED_ATTRIBUTE_REMOVED,
-	// INVALID_ATTRIBUTE_VALUE_REMOVED DISALLOWED_ELEMENT_REMOVED shows that the
-	// provided element isn't allowed and has been removed. DISALLOWED_ATTRIBUTE_REMOVED
-	// shows that the provided attribute isn't allowed and has been removed. INVALID_ATTRIBUTE_VALUE_REMOVED
-	// shows that the provided value for the attribute isn't allowed and has been
-	// removed.
 	Reason *string `locationName:"reason" type:"string" enum:"SanitizationWarningReason"`
 }
 
@@ -3205,6 +3409,9 @@ type UpdateBrokerRequest struct {
 
 	// A list of information about the configuration.
 	Configuration *ConfigurationId `locationName:"configuration" type:"structure"`
+
+	// The list of information about logs to be enabled for the specified broker.
+	Logs *Logs `locationName:"logs" type:"structure"`
 }
 
 // String returns the string representation
@@ -3242,6 +3449,12 @@ func (s *UpdateBrokerRequest) SetConfiguration(v *ConfigurationId) *UpdateBroker
 	return s
 }
 
+// SetLogs sets the Logs field's value.
+func (s *UpdateBrokerRequest) SetLogs(v *Logs) *UpdateBrokerRequest {
+	s.Logs = v
+	return s
+}
+
 type UpdateBrokerResponse struct {
 	_ struct{} `type:"structure"`
 
@@ -3249,6 +3462,9 @@ type UpdateBrokerResponse struct {
 
 	// A list of information about the configuration.
 	Configuration *ConfigurationId `locationName:"configuration" type:"structure"`
+
+	// The list of information about logs to be enabled for the specified broker.
+	Logs *Logs `locationName:"logs" type:"structure"`
 }
 
 // String returns the string representation
@@ -3270,6 +3486,12 @@ func (s *UpdateBrokerResponse) SetBrokerId(v string) *UpdateBrokerResponse {
 // SetConfiguration sets the Configuration field's value.
 func (s *UpdateBrokerResponse) SetConfiguration(v *ConfigurationId) *UpdateBrokerResponse {
 	s.Configuration = v
+	return s
+}
+
+// SetLogs sets the Logs field's value.
+func (s *UpdateBrokerResponse) SetLogs(v *Logs) *UpdateBrokerResponse {
+	s.Logs = v
 	return s
 }
 
@@ -3330,6 +3552,8 @@ type UpdateConfigurationResponse struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	Created *time.Time `locationName:"created" type:"timestamp" timestampFormat:"iso8601"`
+
 	Id *string `locationName:"id" type:"string"`
 
 	// Returns information about the specified configuration revision.
@@ -3353,6 +3577,12 @@ func (s UpdateConfigurationResponse) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *UpdateConfigurationResponse) SetArn(v string) *UpdateConfigurationResponse {
 	s.Arn = &v
+	return s
+}
+
+// SetCreated sets the Created field's value.
+func (s *UpdateConfigurationResponse) SetCreated(v time.Time) *UpdateConfigurationResponse {
+	s.Created = &v
 	return s
 }
 
@@ -3536,8 +3766,7 @@ type UserPendingChanges struct {
 	// and tildes (- . _ ~). This value must be 2-100 characters long.
 	Groups []*string `locationName:"groups" type:"list"`
 
-	// Required. The type of change pending for the ActiveMQ user. Possible values:
-	// CREATE, UPDATE, DELETE
+	// Required. The type of change pending for the ActiveMQ user.
 	PendingChange *string `locationName:"pendingChange" type:"string" enum:"ChangeType"`
 }
 
@@ -3573,8 +3802,7 @@ func (s *UserPendingChanges) SetPendingChange(v string) *UserPendingChanges {
 type UserSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The type of change pending for the ActiveMQ user. Possible values: CREATE,
-	// UPDATE, DELETE
+	// The type of change pending for the ActiveMQ user.
 	PendingChange *string `locationName:"pendingChange" type:"string" enum:"ChangeType"`
 
 	// Required. The username of the ActiveMQ user. This value can contain only
@@ -3610,8 +3838,7 @@ func (s *UserSummary) SetUsername(v string) *UserSummary {
 type WeeklyStartTime struct {
 	_ struct{} `type:"structure"`
 
-	// Required. The day of the week. Possible values: MONDAY, TUESDAY, WEDNESDAY,
-	// THURSDAY, FRIDAY, SATURDAY, SUNDAY
+	// Required. The day of the week.
 	DayOfWeek *string `locationName:"dayOfWeek" type:"string" enum:"DayOfWeek"`
 
 	// Required. The time, in 24-hour format.
@@ -3650,8 +3877,7 @@ func (s *WeeklyStartTime) SetTimeZone(v string) *WeeklyStartTime {
 	return s
 }
 
-// The status of the broker. Possible values: CREATION_IN_PROGRESS, CREATION_FAILED,
-// DELETION_IN_PROGRESS, RUNNING, REBOOT_IN_PROGRESS
+// The status of the broker.
 const (
 	// BrokerStateCreationInProgress is a BrokerState enum value
 	BrokerStateCreationInProgress = "CREATION_IN_PROGRESS"
@@ -3669,8 +3895,7 @@ const (
 	BrokerStateRebootInProgress = "REBOOT_IN_PROGRESS"
 )
 
-// The type of change pending for the ActiveMQ user. Possible values: CREATE,
-// UPDATE, DELETE
+// The type of change pending for the ActiveMQ user.
 const (
 	// ChangeTypeCreate is a ChangeType enum value
 	ChangeTypeCreate = "CREATE"
@@ -3705,9 +3930,7 @@ const (
 	DayOfWeekSunday = "SUNDAY"
 )
 
-// The deployment mode of the broker. Possible values: SINGLE_INSTANCE, ACTIVE_STANDBY_MULTI_AZ
-// SINGLE_INSTANCE creates a single-instance broker in a single Availability
-// Zone. ACTIVE_STANDBY_MULTI_AZ creates an active/standby broker for high availability.
+// The deployment mode of the broker.
 const (
 	// DeploymentModeSingleInstance is a DeploymentMode enum value
 	DeploymentModeSingleInstance = "SINGLE_INSTANCE"
@@ -3722,13 +3945,7 @@ const (
 	EngineTypeActivemq = "ACTIVEMQ"
 )
 
-// The reason for which the XML elements or attributes were sanitized. Possible
-// values: DISALLOWED_ELEMENT_REMOVED, DISALLOWED_ATTRIBUTE_REMOVED, INVALID_ATTRIBUTE_VALUE_REMOVED
-// DISALLOWED_ELEMENT_REMOVED shows that the provided element isn't allowed
-// and has been removed. DISALLOWED_ATTRIBUTE_REMOVED shows that the provided
-// attribute isn't allowed and has been removed. INVALID_ATTRIBUTE_VALUE_REMOVED
-// shows that the provided value for the attribute isn't allowed and has been
-// removed.
+// The reason for which the XML elements or attributes were sanitized.
 const (
 	// SanitizationWarningReasonDisallowedElementRemoved is a SanitizationWarningReason enum value
 	SanitizationWarningReasonDisallowedElementRemoved = "DISALLOWED_ELEMENT_REMOVED"

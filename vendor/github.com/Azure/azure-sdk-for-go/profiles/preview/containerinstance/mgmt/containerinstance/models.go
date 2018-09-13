@@ -26,9 +26,9 @@ const (
 )
 
 type BaseClient = original.BaseClient
+type ContainerClient = original.ContainerClient
 type ContainerGroupsClient = original.ContainerGroupsClient
 type ContainerGroupUsageClient = original.ContainerGroupUsageClient
-type ContainerLogsClient = original.ContainerLogsClient
 type ContainerGroupNetworkProtocol = original.ContainerGroupNetworkProtocol
 
 const (
@@ -65,19 +65,31 @@ const (
 	User   OperationsOrigin = original.User
 )
 
+type Scheme = original.Scheme
+
+const (
+	HTTP  Scheme = original.HTTP
+	HTTPS Scheme = original.HTTPS
+)
+
 type AzureFileVolume = original.AzureFileVolume
 type Container = original.Container
+type ContainerExec = original.ContainerExec
 type ContainerExecRequest = original.ContainerExecRequest
 type ContainerExecRequestTerminalSize = original.ContainerExecRequestTerminalSize
 type ContainerExecResponse = original.ContainerExecResponse
 type ContainerGroup = original.ContainerGroup
+type ContainerGroupDiagnostics = original.ContainerGroupDiagnostics
 type ContainerGroupListResult = original.ContainerGroupListResult
 type ContainerGroupListResultIterator = original.ContainerGroupListResultIterator
 type ContainerGroupListResultPage = original.ContainerGroupListResultPage
 type ContainerGroupProperties = original.ContainerGroupProperties
 type ContainerGroupPropertiesInstanceView = original.ContainerGroupPropertiesInstanceView
 type ContainerGroupsCreateOrUpdateFuture = original.ContainerGroupsCreateOrUpdateFuture
+type ContainerGroupsRestartFuture = original.ContainerGroupsRestartFuture
+type ContainerHTTPGet = original.ContainerHTTPGet
 type ContainerPort = original.ContainerPort
+type ContainerProbe = original.ContainerProbe
 type ContainerProperties = original.ContainerProperties
 type ContainerPropertiesInstanceView = original.ContainerPropertiesInstanceView
 type ContainerState = original.ContainerState
@@ -86,6 +98,7 @@ type Event = original.Event
 type GitRepoVolume = original.GitRepoVolume
 type ImageRegistryCredential = original.ImageRegistryCredential
 type IPAddress = original.IPAddress
+type LogAnalytics = original.LogAnalytics
 type Logs = original.Logs
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
@@ -101,13 +114,18 @@ type UsageName = original.UsageName
 type Volume = original.Volume
 type VolumeMount = original.VolumeMount
 type OperationsClient = original.OperationsClient
-type StartContainerClient = original.StartContainerClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
 }
 func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 	return original.NewWithBaseURI(baseURI, subscriptionID)
+}
+func NewContainerClient(subscriptionID string) ContainerClient {
+	return original.NewContainerClient(subscriptionID)
+}
+func NewContainerClientWithBaseURI(baseURI string, subscriptionID string) ContainerClient {
+	return original.NewContainerClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewContainerGroupsClient(subscriptionID string) ContainerGroupsClient {
 	return original.NewContainerGroupsClient(subscriptionID)
@@ -120,12 +138,6 @@ func NewContainerGroupUsageClient(subscriptionID string) ContainerGroupUsageClie
 }
 func NewContainerGroupUsageClientWithBaseURI(baseURI string, subscriptionID string) ContainerGroupUsageClient {
 	return original.NewContainerGroupUsageClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewContainerLogsClient(subscriptionID string) ContainerLogsClient {
-	return original.NewContainerLogsClient(subscriptionID)
-}
-func NewContainerLogsClientWithBaseURI(baseURI string, subscriptionID string) ContainerLogsClient {
-	return original.NewContainerLogsClientWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleContainerGroupNetworkProtocolValues() []ContainerGroupNetworkProtocol {
 	return original.PossibleContainerGroupNetworkProtocolValues()
@@ -142,17 +154,14 @@ func PossibleOperatingSystemTypesValues() []OperatingSystemTypes {
 func PossibleOperationsOriginValues() []OperationsOrigin {
 	return original.PossibleOperationsOriginValues()
 }
+func PossibleSchemeValues() []Scheme {
+	return original.PossibleSchemeValues()
+}
 func NewOperationsClient(subscriptionID string) OperationsClient {
 	return original.NewOperationsClient(subscriptionID)
 }
 func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
 	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewStartContainerClient(subscriptionID string) StartContainerClient {
-	return original.NewStartContainerClient(subscriptionID)
-}
-func NewStartContainerClientWithBaseURI(baseURI string, subscriptionID string) StartContainerClient {
-	return original.NewStartContainerClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

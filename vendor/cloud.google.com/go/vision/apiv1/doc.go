@@ -15,7 +15,7 @@
 // AUTO-GENERATED CODE. DO NOT EDIT.
 
 // Package vision is an auto-generated package for the
-// Google Cloud Vision API.
+// Cloud Vision API.
 
 //
 // Integrates Google Vision features, including image labeling, face, logo,

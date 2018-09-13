@@ -78,7 +78,7 @@ func (client VirtualMachineSizesClient) ListPreparer(ctx context.Context, locati
 		"subscriptionId": autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2017-12-01"
+	const APIVersion = "2018-04-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}

@@ -537,10 +537,12 @@ func (s *AuthorizedDomain) MarshalJSON() ([]byte, error) {
 // AutomaticScaling: Automatic scaling is based on request rate,
 // response latencies, and other application metrics.
 type AutomaticScaling struct {
-	// CoolDownPeriod: Amount of time that the Autoscaler
+	// CoolDownPeriod: The time period that the Autoscaler
 	// (https://cloud.google.com/compute/docs/autoscaler/) should wait
-	// between changes to the number of virtual machines. Only applicable in
-	// the App Engine flexible environment.
+	// before it starts collecting information from a new instance. This
+	// prevents the autoscaler from collecting information when the instance
+	// is initializing, during which the collected usage would not be
+	// reliable. Only applicable in the App Engine flexible environment.
 	CoolDownPeriod string `json:"coolDownPeriod,omitempty"`
 
 	// CpuUtilization: Target scaling by CPU usage.
@@ -714,9 +716,9 @@ func (s *BatchUpdateIngressRulesResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// BuildInfo: Google Cloud Container Builder build information.
+// BuildInfo: Google Cloud Build information.
 type BuildInfo struct {
-	// CloudBuildId: The Google Cloud Container Builder build id. Example:
+	// CloudBuildId: The Google Cloud Build id. Example:
 	// "f966068f-08b2-42c8-bdfe-74137dff2bf9"
 	CloudBuildId string `json:"cloudBuildId,omitempty"`
 
@@ -1097,17 +1099,16 @@ func (s *DebugInstanceRequest) MarshalJSON() ([]byte, error) {
 // Deployment: Code and application artifacts used to deploy a version
 // to App Engine.
 type Deployment struct {
-	// Build: Google Cloud Container Builder build information. Only
-	// applicable for instances running in the App Engine flexible
-	// environment.
+	// Build: Google Cloud Build build information. Only applicable for
+	// instances running in the App Engine flexible environment.
 	Build *BuildInfo `json:"build,omitempty"`
 
-	// CloudBuildOptions: Options for any Google Cloud Container Builder
-	// builds created as a part of this deployment.Note that this is
-	// orthogonal to the build parameter, where the deployment depends on an
-	// already existing cloud build. These options will only be used if a
-	// new build is created, such as when deploying to the App Engine
-	// flexible environment using files or zip.
+	// CloudBuildOptions: Options for any Google Cloud Build builds created
+	// as a part of this deployment.Note that this is orthogonal to the
+	// build parameter, where the deployment depends on an already existing
+	// cloud build. These options will only be used if a new build is
+	// created, such as when deploying to the App Engine flexible
+	// environment using files or zip.
 	CloudBuildOptions *CloudBuildOptions `json:"cloudBuildOptions,omitempty"`
 
 	// Container: The Docker image for the container that runs the version.
@@ -1252,17 +1253,25 @@ type Empty struct {
 // (https://cloud.google.com/endpoints) configuration. The Endpoints API
 // Service provides tooling for serving Open API and gRPC endpoints via
 // an NGINX proxy. Only valid for App Engine Flexible environment
-// deployments.The fields here refer to the name and configuration id of
+// deployments.The fields here refer to the name and configuration ID of
 // a "service" resource in the Service Management API
 // (https://cloud.google.com/service-management/overview).
 type EndpointsApiService struct {
-	// ConfigId: Endpoints service configuration id as specified by the
-	// Service Management API. For example "2016-09-19r1"By default, the
-	// Endpoints service configuration id is fixed and config_id must be
-	// specified. To keep the Endpoints service configuration id updated
-	// with each rollout, specify RolloutStrategy.MANAGED and omit
-	// config_id.
+	// ConfigId: Endpoints service configuration ID as specified by the
+	// Service Management API. For example "2016-09-19r1".By default, the
+	// rollout strategy for Endpoints is RolloutStrategy.FIXED. This means
+	// that Endpoints starts up with a particular configuration ID. When a
+	// new configuration is rolled out, Endpoints must be given the new
+	// configuration ID. The config_id field is used to give the
+	// configuration ID and is required in this case.Endpoints also has a
+	// rollout strategy called RolloutStrategy.MANAGED. When using this,
+	// Endpoints fetches the latest configuration and does not need the
+	// configuration ID. In this case, config_id must be omitted.
 	ConfigId string `json:"configId,omitempty"`
+
+	// DisableTraceSampling: Enable or disable trace sampling. By default,
+	// this is set to false for enabled.
+	DisableTraceSampling bool `json:"disableTraceSampling,omitempty"`
 
 	// Name: Endpoints service name which is the name of the "service"
 	// resource in the Service Management API. For example
@@ -1274,9 +1283,9 @@ type EndpointsApiService struct {
 	//
 	// Possible values:
 	//   "UNSPECIFIED_ROLLOUT_STRATEGY" - Not specified. Defaults to FIXED.
-	//   "FIXED" - Endpoints service configuration id will be fixed to the
-	// configuration id specified by config_id.
-	//   "MANAGED" - Endpoints service configuration id will be updated with
+	//   "FIXED" - Endpoints service configuration ID will be fixed to the
+	// configuration ID specified by config_id.
+	//   "MANAGED" - Endpoints service configuration ID will be updated with
 	// each rollout.
 	RolloutStrategy string `json:"rolloutStrategy,omitempty"`
 
@@ -1299,6 +1308,35 @@ type EndpointsApiService struct {
 
 func (s *EndpointsApiService) MarshalJSON() ([]byte, error) {
 	type NoMethod EndpointsApiService
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// Entrypoint: The entrypoint for the application.
+type Entrypoint struct {
+	// Shell: The format should be a shell command that can be fed to bash
+	// -c.
+	Shell string `json:"shell,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Shell") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Shell") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *Entrypoint) MarshalJSON() ([]byte, error) {
+	type NoMethod Entrypoint
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -1550,6 +1588,10 @@ type IdentityAwareProxy struct {
 
 	// Oauth2ClientId: OAuth2 client ID to use for the authentication flow.
 	Oauth2ClientId string `json:"oauth2ClientId,omitempty"`
+
+	// Oauth2ClientInfo: InputOnly OAuth client info required to generate
+	// client id to be used for IAP.
+	Oauth2ClientInfo *OAuth2ClientInfo `json:"oauth2ClientInfo,omitempty"`
 
 	// Oauth2ClientSecret: OAuth2 client secret to use for the
 	// authentication flow.For security reasons, this value cannot be
@@ -2394,6 +2436,42 @@ type NetworkUtilization struct {
 
 func (s *NetworkUtilization) MarshalJSON() ([]byte, error) {
 	type NoMethod NetworkUtilization
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type OAuth2ClientInfo struct {
+	// ApplicationName: Application name to be used in OAuth consent screen.
+	ApplicationName string `json:"applicationName,omitempty"`
+
+	// ClientName: Nameof the client to be generated. Optional - If not
+	// provided, the name will be autogenerated by the backend.
+	ClientName string `json:"clientName,omitempty"`
+
+	// DeveloperEmailAddress: Developer's information to be used in OAuth
+	// consent screen.
+	DeveloperEmailAddress string `json:"developerEmailAddress,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ApplicationName") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "ApplicationName") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *OAuth2ClientInfo) MarshalJSON() ([]byte, error) {
+	type NoMethod OAuth2ClientInfo
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -3348,7 +3426,8 @@ type UrlMap struct {
 	// status code and an error message.
 	AuthFailAction string `json:"authFailAction,omitempty"`
 
-	// Login: Level of login required to access this resource.
+	// Login: Level of login required to access this resource. Not supported
+	// for Node.js in the App Engine standard environment.
 	//
 	// Possible values:
 	//   "LOGIN_UNSPECIFIED" - Not specified. LOGIN_OPTIONAL is assumed.
@@ -3374,8 +3453,9 @@ type UrlMap struct {
 	//   "REDIRECT_HTTP_RESPONSE_CODE_307" - 307 Temporary Redirect code.
 	RedirectHttpResponseCode string `json:"redirectHttpResponseCode,omitempty"`
 
-	// Script: Executes a script to handle the request that matches this URL
-	// pattern.
+	// Script: Executes a script to handle the requests that match this URL
+	// pattern. Only the auto value is supported for Node.js in the App
+	// Engine standard environment, for example "script": "auto".
 	Script *ScriptHandler `json:"script,omitempty"`
 
 	// SecurityLevel: Security (HTTPS) enforcement for this URL.
@@ -3482,6 +3562,9 @@ type Version struct {
 	// endpoints_api_service is set, the Cloud Endpoints Extensible Service
 	// Proxy will be provided to serve the API implemented by the app.
 	EndpointsApiService *EndpointsApiService `json:"endpointsApiService,omitempty"`
+
+	// Entrypoint: The entrypoint for the application.
+	Entrypoint *Entrypoint `json:"entrypoint,omitempty"`
 
 	// Env: App Engine execution environment for this version.Defaults to
 	// standard.
@@ -3616,6 +3699,9 @@ type Version struct {
 	// machine.
 	Vm bool `json:"vm,omitempty"`
 
+	// VpcAccessConnector: Enables VPC connectivity for standard apps.
+	VpcAccessConnector *VpcAccessConnector `json:"vpcAccessConnector,omitempty"`
+
 	// Zones: The Google Compute Engine zones that are supported by this
 	// version in the App Engine flexible environment.
 	Zones []string `json:"zones,omitempty"`
@@ -3694,6 +3780,35 @@ func (s *Volume) UnmarshalJSON(data []byte) error {
 	}
 	s.SizeGb = float64(s1.SizeGb)
 	return nil
+}
+
+// VpcAccessConnector: VPC access connector specification.
+type VpcAccessConnector struct {
+	// Name: Full Serverless VPC Access Connector name e.g.
+	// /projects/my-project/locations/us-central1/connectors/c1.
+	Name string `json:"name,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Name") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Name") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *VpcAccessConnector) MarshalJSON() ([]byte, error) {
+	type NoMethod VpcAccessConnector
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 // ZipInfo: The zip file information for a zip deployment.
@@ -3794,6 +3909,7 @@ func (c *AppsCreateCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3923,6 +4039,7 @@ func (c *AppsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4068,6 +4185,7 @@ func (c *AppsPatchCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -4212,6 +4330,7 @@ func (c *AppsRepairCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}:repair")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4346,6 +4465,7 @@ func (c *AppsAuthorizedCertificatesCreateCall) doRequest(alt string) (*http.Resp
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/authorizedCertificates")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4475,6 +4595,7 @@ func (c *AppsAuthorizedCertificatesDeleteCall) doRequest(alt string) (*http.Resp
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/authorizedCertificates/{authorizedCertificatesId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -4634,6 +4755,7 @@ func (c *AppsAuthorizedCertificatesGetCall) doRequest(alt string) (*http.Respons
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/authorizedCertificates/{authorizedCertificatesId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4817,6 +4939,7 @@ func (c *AppsAuthorizedCertificatesListCall) doRequest(alt string) (*http.Respon
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/authorizedCertificates")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -5006,6 +5129,7 @@ func (c *AppsAuthorizedCertificatesPatchCall) doRequest(alt string) (*http.Respo
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/authorizedCertificates/{authorizedCertificatesId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -5175,6 +5299,7 @@ func (c *AppsAuthorizedDomainsListCall) doRequest(alt string) (*http.Response, e
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/authorizedDomains")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -5356,6 +5481,7 @@ func (c *AppsDomainMappingsCreateCall) doRequest(alt string) (*http.Response, er
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/domainMappings")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5497,6 +5623,7 @@ func (c *AppsDomainMappingsDeleteCall) doRequest(alt string) (*http.Response, er
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/domainMappings/{domainMappingsId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -5645,6 +5772,7 @@ func (c *AppsDomainMappingsGetCall) doRequest(alt string) (*http.Response, error
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/domainMappings/{domainMappingsId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -5807,6 +5935,7 @@ func (c *AppsDomainMappingsListCall) doRequest(alt string) (*http.Response, erro
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/domainMappings")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -5985,6 +6114,7 @@ func (c *AppsDomainMappingsPatchCall) doRequest(alt string) (*http.Response, err
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/domainMappings/{domainMappingsId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -6137,6 +6267,7 @@ func (c *AppsFirewallIngressRulesBatchUpdateCall) doRequest(alt string) (*http.R
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/firewall/ingressRules:batchUpdate")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -6271,6 +6402,7 @@ func (c *AppsFirewallIngressRulesCreateCall) doRequest(alt string) (*http.Respon
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/firewall/ingressRules")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -6400,6 +6532,7 @@ func (c *AppsFirewallIngressRulesDeleteCall) doRequest(alt string) (*http.Respon
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/firewall/ingressRules/{ingressRulesId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -6548,6 +6681,7 @@ func (c *AppsFirewallIngressRulesGetCall) doRequest(alt string) (*http.Response,
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/firewall/ingressRules/{ingressRulesId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -6719,6 +6853,7 @@ func (c *AppsFirewallIngressRulesListCall) doRequest(alt string) (*http.Response
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/firewall/ingressRules")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -6898,6 +7033,7 @@ func (c *AppsFirewallIngressRulesPatchCall) doRequest(alt string) (*http.Respons
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/firewall/ingressRules/{ingressRulesId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -7055,6 +7191,7 @@ func (c *AppsLocationsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/locations/{locationsId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7225,6 +7362,7 @@ func (c *AppsLocationsListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/locations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7406,6 +7544,7 @@ func (c *AppsOperationsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/operations/{operationsId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7584,6 +7723,7 @@ func (c *AppsOperationsListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/operations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7749,6 +7889,7 @@ func (c *AppsServicesDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/services/{servicesId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -7897,6 +8038,7 @@ func (c *AppsServicesGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/services/{servicesId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8059,6 +8201,7 @@ func (c *AppsServicesListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/services")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8254,6 +8397,7 @@ func (c *AppsServicesPatchCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/services/{servicesId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -8409,6 +8553,7 @@ func (c *AppsServicesVersionsCreateCall) doRequest(alt string) (*http.Response, 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/services/{servicesId}/versions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -8548,6 +8693,7 @@ func (c *AppsServicesVersionsDeleteCall) doRequest(alt string) (*http.Response, 
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/services/{servicesId}/versions/{versionsId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -8719,6 +8865,7 @@ func (c *AppsServicesVersionsGetCall) doRequest(alt string) (*http.Response, err
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/services/{servicesId}/versions/{versionsId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8911,6 +9058,7 @@ func (c *AppsServicesVersionsListCall) doRequest(alt string) (*http.Response, er
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/services/{servicesId}/versions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -9051,48 +9199,61 @@ type AppsServicesVersionsPatchCall struct {
 
 // Patch: Updates the specified Version resource. You can specify the
 // following fields depending on the App Engine environment and type of
-// scaling that the version resource uses:
-// serving_status
-// (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1be
-// ta/apps.services.versions#Version.FIELDS.serving_status):  For
-// Version resources that use basic scaling, manual scaling, or run in
-// the App Engine flexible environment.
+// scaling that the version resource uses:Standard
+// environment
 // instance_class
 // (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1be
-// ta/apps.services.versions#Version.FIELDS.instance_class):  For
-// Version resources that run in the App Engine standard
-// environment.
+// ta/apps.services.versions#Version.FIELDS.instance_class)automatic
+// scaling in the standard
+// environment:
 // automatic_scaling.min_idle_instances
 // (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1be
-// ta/apps.services.versions#Version.FIELDS.automatic_scaling):  For
-// Version resources that use automatic scaling and run in the App
-// Engine standard environment.
-// automatic_scaling.max_idle_instances
+// ta/apps.services.versions#Version.FIELDS.automatic_scaling)
+// automatic_
+// scaling.max_idle_instances
 // (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1be
-// ta/apps.services.versions#Version.FIELDS.automatic_scaling):  For
-// Version resources that use automatic scaling and run in the App
-// Engine standard environment.
+// ta/apps.services.versions#Version.FIELDS.automatic_scaling)
+// automaticS
+// caling.standard_scheduler_settings.max_instances
+// (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1be
+// ta/apps.services.versions#StandardSchedulerSettings)
+// automaticScaling.
+// standard_scheduler_settings.min_instances
+// (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1be
+// ta/apps.services.versions#StandardSchedulerSettings)
+// automaticScaling.
+// standard_scheduler_settings.target_cpu_utilization
+// (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1be
+// ta/apps.services.versions#StandardSchedulerSettings)
+// automaticScaling.
+// standard_scheduler_settings.target_throughput_utilization
+// (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1be
+// ta/apps.services.versions#StandardSchedulerSettings)basic scaling or
+// manual scaling in the standard environment:
+// serving_status
+// (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1be
+// ta/apps.services.versions#Version.FIELDS.serving_status)Flexible
+// environment
+// serving_status
+// (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1be
+// ta/apps.services.versions#Version.FIELDS.serving_status)automatic
+// scaling in the flexible
+// environment:
 // automatic_scaling.min_total_instances
 // (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1be
-// ta/apps.services.versions#Version.FIELDS.automatic_scaling):  For
-// Version resources that use automatic scaling and run in the App
-// Engine flexible environment.
-// automatic_scaling.max_total_instances
+// ta/apps.services.versions#Version.FIELDS.automatic_scaling)
+// automatic_
+// scaling.max_total_instances
 // (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1be
-// ta/apps.services.versions#Version.FIELDS.automatic_scaling):  For
-// Version resources that use automatic scaling and run in the App
-// Engine flexible environment.
-// automatic_scaling.cool_down_period_sec
+// ta/apps.services.versions#Version.FIELDS.automatic_scaling)
+// automatic_
+// scaling.cool_down_period_sec
 // (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1be
-// ta/apps.services.versions#Version.FIELDS.automatic_scaling):  For
-// Version resources that use automatic scaling and run in the App
-// Engine flexible
-// environment.
-// automatic_scaling.cpu_utilization.target_utilization
+// ta/apps.services.versions#Version.FIELDS.automatic_scaling)
+// automatic_
+// scaling.cpu_utilization.target_utilization
 // (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1be
-// ta/apps.services.versions#Version.FIELDS.automatic_scaling):  For
-// Version resources that use automatic scaling and run in the App
-// Engine flexible environment.
+// ta/apps.services.versions#Version.FIELDS.automatic_scaling)
 func (r *AppsServicesVersionsService) Patch(appsId string, servicesId string, versionsId string, version *Version) *AppsServicesVersionsPatchCall {
 	c := &AppsServicesVersionsPatchCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.appsId = appsId
@@ -9147,6 +9308,7 @@ func (c *AppsServicesVersionsPatchCall) doRequest(alt string) (*http.Response, e
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/services/{servicesId}/versions/{versionsId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -9197,7 +9359,7 @@ func (c *AppsServicesVersionsPatchCall) Do(opts ...googleapi.CallOption) (*Opera
 	}
 	return ret, nil
 	// {
-	//   "description": "Updates the specified Version resource. You can specify the following fields depending on the App Engine environment and type of scaling that the version resource uses:\nserving_status (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.serving_status):  For Version resources that use basic scaling, manual scaling, or run in  the App Engine flexible environment.\ninstance_class (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.instance_class):  For Version resources that run in the App Engine standard environment.\nautomatic_scaling.min_idle_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling):  For Version resources that use automatic scaling and run in the App  Engine standard environment.\nautomatic_scaling.max_idle_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling):  For Version resources that use automatic scaling and run in the App  Engine standard environment.\nautomatic_scaling.min_total_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling):  For Version resources that use automatic scaling and run in the App  Engine flexible environment.\nautomatic_scaling.max_total_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling):  For Version resources that use automatic scaling and run in the App  Engine flexible environment.\nautomatic_scaling.cool_down_period_sec (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling):  For Version resources that use automatic scaling and run in the App  Engine flexible environment.\nautomatic_scaling.cpu_utilization.target_utilization (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling):  For Version resources that use automatic scaling and run in the App  Engine flexible environment.",
+	//   "description": "Updates the specified Version resource. You can specify the following fields depending on the App Engine environment and type of scaling that the version resource uses:Standard environment\ninstance_class (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.instance_class)automatic scaling in the standard environment:\nautomatic_scaling.min_idle_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling)\nautomatic_scaling.max_idle_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling)\nautomaticScaling.standard_scheduler_settings.max_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#StandardSchedulerSettings)\nautomaticScaling.standard_scheduler_settings.min_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#StandardSchedulerSettings)\nautomaticScaling.standard_scheduler_settings.target_cpu_utilization (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#StandardSchedulerSettings)\nautomaticScaling.standard_scheduler_settings.target_throughput_utilization (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#StandardSchedulerSettings)basic scaling or manual scaling in the standard environment:\nserving_status (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.serving_status)Flexible environment\nserving_status (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.serving_status)automatic scaling in the flexible environment:\nautomatic_scaling.min_total_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling)\nautomatic_scaling.max_total_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling)\nautomatic_scaling.cool_down_period_sec (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling)\nautomatic_scaling.cpu_utilization.target_utilization (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling)",
 	//   "flatPath": "v1beta/apps/{appsId}/services/{servicesId}/versions/{versionsId}",
 	//   "httpMethod": "PATCH",
 	//   "id": "appengine.apps.services.versions.patch",
@@ -9315,6 +9477,7 @@ func (c *AppsServicesVersionsInstancesDebugCall) doRequest(alt string) (*http.Re
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/services/{servicesId}/versions/{versionsId}/instances/{instancesId}:debug")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -9472,6 +9635,7 @@ func (c *AppsServicesVersionsInstancesDeleteCall) doRequest(alt string) (*http.R
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/services/{servicesId}/versions/{versionsId}/instances/{instancesId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -9640,6 +9804,7 @@ func (c *AppsServicesVersionsInstancesGetCall) doRequest(alt string) (*http.Resp
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/services/{servicesId}/versions/{versionsId}/instances/{instancesId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -9825,6 +9990,7 @@ func (c *AppsServicesVersionsInstancesListCall) doRequest(alt string) (*http.Res
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta/apps/{appsId}/services/{servicesId}/versions/{versionsId}/instances")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)

@@ -123,45 +123,100 @@ type WorkersService struct {
 	s *Service
 }
 
-// Action: Action specifies a single action that runs a docker
-// container.
+// Accelerator: Carries information about an accelerator that can be
+// attached to a VM.
+type Accelerator struct {
+	// Count: How many accelerators of this type to attach.
+	Count int64 `json:"count,omitempty,string"`
+
+	// Type: The accelerator type string (for example,
+	// "nvidia-tesla-k80").
+	//
+	// Only NVIDIA GPU accelerators are currently supported. If an NVIDIA
+	// GPU is
+	// attached, the required runtime libraries will be made available to
+	// all
+	// containers under `/usr/local/nvidia`. The driver version to install
+	// must
+	// be specified using the NVIDIA driver version parameter on the
+	// virtual
+	// machine specification. Note that attaching a GPU increases the worker
+	// VM
+	// startup time by a few minutes.
+	Type string `json:"type,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Count") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Count") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *Accelerator) MarshalJSON() ([]byte, error) {
+	type NoMethod Accelerator
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// Action: Specifies a single action that runs a Docker container.
 type Action struct {
-	// Commands: If specified, overrides the CMD specified in the container.
-	//  If the
-	// container also has an ENTRYPOINT the values are used as
+	// Commands: If specified, overrides the `CMD` specified in the
+	// container. If the
+	// container also has an `ENTRYPOINT` the values are used as
 	// entrypoint
-	// arguments.  Otherwise, they are used as a command and arguments to
+	// arguments. Otherwise, they are used as a command and arguments to
 	// run
 	// inside the container.
 	Commands []string `json:"commands,omitempty"`
 
-	// Entrypoint: If specified, overrides the ENTRYPOINT specified in the
+	// Credentials: If the specified image is hosted on a private registry
+	// other than Google
+	// Container Registry, the credentials required to pull the image must
+	// be
+	// specified here as an encrypted secret.
+	//
+	// The secret must decrypt to a JSON-encoded dictionary containing
+	// both
+	// `username` and `password` keys.
+	Credentials *Secret `json:"credentials,omitempty"`
+
+	// Entrypoint: If specified, overrides the `ENTRYPOINT` specified in the
 	// container.
 	Entrypoint string `json:"entrypoint,omitempty"`
 
-	// Environment: The environment to pass into the container.  This
+	// Environment: The environment to pass into the container. This
 	// environment is merged
-	// with any values specified in the Pipeline message.  These values
-	// overwrite
-	// any in the Pipeline message.
+	// with any values specified in the `Pipeline` message. These
+	// values
+	// overwrite any in the `Pipeline` message.
 	//
 	// In addition to the values passed here, a few other values
 	// are
-	// automatically injected into the environment.  These cannot be hidden
+	// automatically injected into the environment. These cannot be hidden
 	// or
 	// overwritten.
 	//
-	// `GOOGLE_PIPELINE_FAILED` will be set to "1" if the pipeline has
+	// `GOOGLE_PIPELINE_FAILED` will be set to "1" if the pipeline
 	// failed
 	// because an action has exited with a non-zero status (and did not have
 	// the
-	// IGNORE_EXIT_STATUS flag set).  This can be used to determine if
+	// `IGNORE_EXIT_STATUS` flag set). This can be used to determine if
 	// additional
 	// debug or logging actions should execute.
 	//
 	// `GOOGLE_LAST_EXIT_STATUS` will be set to the exit status of the
 	// last
-	// non-background action that executed.  This can be used by workflow
+	// non-background action that executed. This can be used by workflow
 	// engine
 	// authors to determine whether an individual action has succeeded or
 	// failed.
@@ -172,61 +227,55 @@ type Action struct {
 	// Possible values:
 	//   "FLAG_UNSPECIFIED" - Unspecified flag.
 	//   "IGNORE_EXIT_STATUS" - Normally, a non-zero exit status causes the
-	// pipeline to fail.  This flag
+	// pipeline to fail. This flag
 	// allows execution of other actions to continue instead.
 	//   "RUN_IN_BACKGROUND" - This flag allows an action to continue
 	// running in the background while
-	// executing subsequent actions.  This is useful to provide services
+	// executing subsequent actions. This is useful to provide services
 	// to
-	// other actions (or to provide debugging support tools like ssh
+	// other actions (or to provide debugging support tools like SSH
 	// servers).
-	//   "ALWAYS_RUN" - Normally, once an action fails no further actions
-	// are run.  This flag
+	//   "ALWAYS_RUN" - By default, after an action fails, no further
+	// actions are run. This flag
 	// indicates that this action must be run even if the pipeline has
 	// already
-	// failed.  This is useful for actions that copy output files off of the
+	// failed. This is useful for actions that copy output files off of the
 	// VM
 	// or for debugging.
 	//   "ENABLE_FUSE" - Enable access to the FUSE device for this action.
 	// Filesystems can then
-	// be mounted into disks shared with other actions.  The other actions
+	// be mounted into disks shared with other actions. The other actions
 	// do
-	// not need the ENABLE_FUSE flag to access the mounted filesystem.
+	// not need the `ENABLE_FUSE` flag to access the mounted
+	// filesystem.
 	//
 	// This has the effect of causing the container to be executed
 	// with
-	// CAP_SYS_ADMIN and exposes /dev/fuse to the container, so it should
+	// `CAP_SYS_ADMIN` and exposes `/dev/fuse` to the container, so use it
 	// only
-	// be used for containers you trust.
-	//   "PUBLISH_EXPOSED_PORTS" - Expose all ports specified by EXPOSE
-	// statements in the container.  To
-	// discover the host side port numbers, consult the ACTION_STARTED event
-	// in
-	// the operation metadata.
-	//   "DISABLE_IMAGE_PREFETCH" - Normally, all container images are
+	// for containers you trust.
+	//   "PUBLISH_EXPOSED_PORTS" - Exposes all ports specified by `EXPOSE`
+	// statements in the container. To
+	// discover the host side port numbers, consult the `ACTION_STARTED`
+	// event
+	// in the operation metadata.
+	//   "DISABLE_IMAGE_PREFETCH" - All container images are typically
 	// downloaded before any actions are
-	// executed.  This helps prevent typos in URIs or issues like lack of
+	// executed. This helps prevent typos in URIs or issues like lack of
 	// disk
 	// space from wasting large amounts of compute resources.
 	//
 	// If set, this flag prevents the worker from downloading the image
 	// until
 	// just before the action is executed.
-	//
-	// This is useful for two reasons: first, if the image is large and a
-	// step
-	// earlier in the pipeline can fail, it can save time to avoid fetching
-	// the
-	// image until it is needed.
-	//
-	// Second, if the image is private (that is, it requires running
-	// `docker
-	// login` to access) this flag **must** be set so that a preceding
-	// action
-	// can establish the credentials required to fetch it.
+	//   "DISABLE_STANDARD_ERROR_CAPTURE" - A small portion of the
+	// container's standard error stream is typically
+	// captured and returned inside the `ContainerStoppedEvent`. Setting
+	// this
+	// flag disables this functionality.
 	Flags []string `json:"flags,omitempty"`
 
-	// ImageUri: The URI to pull the container image from.  Note that all
+	// ImageUri: The URI to pull the container image from. Note that all
 	// images referenced
 	// by actions in the pipeline are pulled before the first action runs.
 	// If
@@ -236,66 +285,76 @@ type Action struct {
 	// pipeline.
 	ImageUri string `json:"imageUri,omitempty"`
 
-	// Labels: Labels to associate with the action.  This field is provided
+	// Labels: Labels to associate with the action. This field is provided
 	// to assist
 	// workflow engine authors in identifying actions (for example, to
 	// indicate
-	// what sort of action they perform: eg. localization, debugging, etc).
-	// They
-	// are returned in the operation metadata but are otherwise ignored.
+	// what sort of action they perform, such as localization or
+	// debugging).
+	// They are returned in the operation metadata, but are otherwise
+	// ignored.
 	Labels map[string]string `json:"labels,omitempty"`
 
 	// Mounts: A list of mounts to make available to the action.
 	//
 	// In addition to the values specified here, every action has a
 	// special
-	// virtual disk mounted under /google that contains log files and
+	// virtual disk mounted under `/google` that contains log files and
 	// other
 	// operational components.
 	//
 	// <ul>
-	//   <li><code>/google/logs</code>: all logs written during the
-	// pipeline
-	//   execution are stored here.</li>
-	//   <li><code>/google/logs/output</code>: the combined standard output
+	//   <li><code>/google/logs</code> All logs written during the pipeline
+	//   execution.</li>
+	//   <li><code>/google/logs/output</code> The combined standard output
 	// and
 	//   standard error of all actions run as part of the pipeline
 	//   execution.</li>
-	//   <li><code>/google/logs/action/*/stdout</code>: the complete
-	// contents of
-	//   each individual action's standard output</li>
-	//   <li><code>/google/logs/action/*/stderr</code>: the complete
-	// contents of
-	//   each individual action's standard error output</li>
+	//   <li><code>/google/logs/action/*/stdout</code> The complete contents
+	// of
+	//   each individual action's standard output.</li>
+	//   <li><code>/google/logs/action/*/stderr</code> The complete contents
+	// of
+	//   each individual action's standard error output.</li>
 	// </ul>
 	Mounts []*Mount `json:"mounts,omitempty"`
 
-	// Name: An optional name for the container.  The container hostname
-	// will be set to
-	// this name, making it useful for inter-container communication.  The
+	// Name: An optional name for the container. The container hostname will
+	// be set to
+	// this name, making it useful for inter-container communication. The
 	// name
 	// must contain only upper and lowercase alphanumeric characters and
 	// hypens
 	// and cannot start with a hypen.
 	Name string `json:"name,omitempty"`
 
-	// PidNamespace: The PID namespace to run the action inside.  If
+	// PidNamespace: The PID namespace to run the action inside. If
 	// unspecified, a separate
 	// isolated namespace is used.
 	PidNamespace string `json:"pidNamespace,omitempty"`
 
-	// PortMappings: A map of container to host port mappings for this
-	// container.  Note that if
-	// the container already specifies exposed ports, the
-	// PUBLISH_EXPOSED_PORTS
-	// flag should be used instead.
+	// PortMappings: A map of containers to host port mappings for this
+	// container. If the
+	// container already specifies exposed ports, use
+	// the
+	// `PUBLISH_EXPOSED_PORTS` flag instead.
 	//
-	// The host port number must be less than 65536.  If it is zero, an
+	// The host port number must be less than 65536. If it is zero, an
 	// unused
-	// random port is assigned.  To determine the resulting port number,
+	// random port is assigned. To determine the resulting port number,
 	// consult
-	// the ContainerStartedEvent in the operation metadata.
+	// the `ContainerStartedEvent` in the operation metadata.
 	PortMappings map[string]int64 `json:"portMappings,omitempty"`
+
+	// Timeout: The maximum amount of time to give the action to complete.
+	// If the action
+	// fails to complete before the timeout, it will be terminated and the
+	// exit
+	// status will be non-zero. The pipeline will continue or terminate
+	// based
+	// on the rules defined by the `ALWAYS_RUN` and `IGNORE_EXIT_STATUS`
+	// flags.
+	Timeout string `json:"timeout,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Commands") to
 	// unconditionally include in API requests. By default, fields with
@@ -336,6 +395,9 @@ type CheckInRequest struct {
 
 	// Result: The operation has finished with the given result.
 	Result *Status `json:"result,omitempty"`
+
+	// WorkerStatus: Data about the status of the worker VM.
+	WorkerStatus *WorkerStatus `json:"workerStatus,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "DeadlineExpired") to
 	// unconditionally include in API requests. By default, fields with
@@ -442,26 +504,57 @@ func (s *ComputeEngine) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// ContainerStartedEvent: This event is generated when a container
-// starts.
+// ContainerKilledEvent: An event generated when a container is forcibly
+// terminated by the
+// worker. Currently, this only occurs when the container outlives
+// the
+// timeout specified by the user.
+type ContainerKilledEvent struct {
+	// ActionId: The numeric ID of the action that started the container.
+	ActionId int64 `json:"actionId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ActionId") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "ActionId") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *ContainerKilledEvent) MarshalJSON() ([]byte, error) {
+	type NoMethod ContainerKilledEvent
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// ContainerStartedEvent: An event generated when a container starts.
 type ContainerStartedEvent struct {
 	// ActionId: The numeric ID of the action that started this container.
 	ActionId int64 `json:"actionId,omitempty"`
 
 	// IpAddress: The public IP address that can be used to connect to the
-	// container.  This
-	// field is only populated when at least one port mapping is present.
-	// If the
-	// instance was created with a private address this field will be empty
+	// container. This
+	// field is only populated when at least one port mapping is present. If
+	// the
+	// instance was created with a private address, this field will be empty
 	// even
 	// if port mappings exist.
 	IpAddress string `json:"ipAddress,omitempty"`
 
-	// PortMappings: The container to host port mappings installed for this
-	// container.  This
-	// set will contain any ports exposed using the PUBLISH_EXPOSED_PORTS
-	// flag as
-	// well as any specified in the Action definition.
+	// PortMappings: The container-to-host port mappings installed for this
+	// container. This
+	// set will contain any ports exposed using the `PUBLISH_EXPOSED_PORTS`
+	// flag
+	// as well as any specified in the `Action` definition.
 	PortMappings map[string]int64 `json:"portMappings,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "ActionId") to
@@ -487,14 +580,29 @@ func (s *ContainerStartedEvent) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// ContainerStoppedEvent: This event is generated when a container
-// exits.
+// ContainerStoppedEvent: An event generated when a container exits.
 type ContainerStoppedEvent struct {
 	// ActionId: The numeric ID of the action that started this container.
 	ActionId int64 `json:"actionId,omitempty"`
 
 	// ExitStatus: The exit status of the container.
 	ExitStatus int64 `json:"exitStatus,omitempty"`
+
+	// Stderr: The tail end of any content written to standard error by the
+	// container.
+	// If the content emits large amounts of debugging noise or
+	// contains
+	// sensitive information, you can prevent the content from being printed
+	// by
+	// setting the `DISABLE_STANDARD_ERROR_CAPTURE` flag.
+	//
+	// Note that only a small amount of the end of the stream is captured
+	// here.
+	// The entire stream is stored in the `/google/logs` directory mounted
+	// into
+	// each action, and can be copied off the machine as described
+	// elsewhere.
+	Stderr string `json:"stderr,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "ActionId") to
 	// unconditionally include in API requests. By default, fields with
@@ -519,13 +627,13 @@ func (s *ContainerStoppedEvent) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// DelayedEvent: This event is generated whenever a resource limitation
-// or transient error
+// DelayedEvent: An event generated whenever a resource limitation or
+// transient error
 // delays execution of a pipeline that was otherwise ready to run.
 type DelayedEvent struct {
-	// Cause: A textual description of the cause of the delay.  The string
-	// may change
-	// without notice since it is often generated by another service (such
+	// Cause: A textual description of the cause of the delay. The string
+	// can change
+	// without notice because it is often generated by another service (such
 	// as
 	// Compute Engine).
 	Cause string `json:"cause,omitempty"`
@@ -534,9 +642,9 @@ type DelayedEvent struct {
 	// lists the
 	// Compute Engine metrics that are preventing this operation from
 	// running
-	// (for example, CPUS or INSTANCES).  If the particular metric is not
-	// known,
-	// a single UNKNOWN metric will be present.
+	// (for example, `CPUS` or `INSTANCES`). If the particular metric is
+	// not
+	// known, a single `UNKNOWN` metric will be present.
 	Metrics []string `json:"metrics,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Cause") to
@@ -562,29 +670,39 @@ func (s *DelayedEvent) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// Disk: Carries information about a disk that can be attached to a VM.
+// Disk: Carries information about a disk that can be attached to a
+// VM.
+//
+// See https://cloud.google.com/compute/docs/disks/performance for
+// more
+// information about disk type, size, and performance considerations.
 type Disk struct {
-	// Name: A user supplied name for the disk, used when mounting it into
-	// actions.
-	// The name must contain only upper and lowercase alphanumeric
-	// characters and
-	// hypens and cannot start with a hypen.
+	// Name: A user-supplied name for the disk. Used when mounting the disk
+	// into
+	// actions. The name must contain only upper and lowercase
+	// alphanumeric
+	// characters and hypens and cannot start with a hypen.
 	Name string `json:"name,omitempty"`
 
-	// SizeGb: The size, in gigabytes, of the disk to attach.  Note that
-	// this value is
-	// not configurable for some disk types such as local-ssd.  If the size
-	// is
-	// not specified, a size of at least 500gb is used to ensure reasonable
-	// I/O
+	// SizeGb: The size, in GB, of the disk to attach. If the size is
+	// not
+	// specified, a default is chosen to ensure reasonable I/O
 	// performance.
+	//
+	// If the disk type is specified as `local-ssd`, multiple local drives
+	// are
+	// automatically combined to provide the requested size. Note, however,
+	// that
+	// each physical SSD is 375GB in size, and no more than 8 drives can
+	// be
+	// attached to a single instance.
 	SizeGb int64 `json:"sizeGb,omitempty"`
 
 	// SourceImage: An optional image to put on the disk before attaching it
 	// to the VM.
 	SourceImage string `json:"sourceImage,omitempty"`
 
-	// Type: The Compute Engine disk type.  If unspecified, 'standard-pd' is
+	// Type: The Compute Engine disk type. If unspecified, `pd-standard` is
 	// used.
 	Type string `json:"type,omitempty"`
 
@@ -611,6 +729,38 @@ func (s *Disk) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// DiskStatus: The status of a disk on a VM.
+type DiskStatus struct {
+	// FreeSpaceBytes: Free disk space.
+	FreeSpaceBytes uint64 `json:"freeSpaceBytes,omitempty,string"`
+
+	// TotalSpaceBytes: Total disk space.
+	TotalSpaceBytes uint64 `json:"totalSpaceBytes,omitempty,string"`
+
+	// ForceSendFields is a list of field names (e.g. "FreeSpaceBytes") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "FreeSpaceBytes") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *DiskStatus) MarshalJSON() ([]byte, error) {
+	type NoMethod DiskStatus
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // Empty: A generic empty message that you can re-use to avoid defining
 // duplicated
 // empty messages in your APIs. A typical example is to use it as the
@@ -629,20 +779,20 @@ type Empty struct {
 	googleapi.ServerResponse `json:"-"`
 }
 
-// Event: Event carries information about events that occur during
-// pipeline execution.
+// Event: Carries information about events that occur during pipeline
+// execution.
 type Event struct {
-	// Description: A human readable description of the event.  Note that
-	// these strings may
-	// change at any time without notice.  Any application logic must use
+	// Description: A human-readable description of the event. Note that
+	// these strings can
+	// change at any time without notice. Any application logic must use
 	// the
-	// information in the details field.
+	// information in the `details` field.
 	Description string `json:"description,omitempty"`
 
-	// Details: Machine readable details about the event.
+	// Details: Machine-readable details about the event.
 	Details googleapi.RawMessage `json:"details,omitempty"`
 
-	// Timestamp: The time that the event occurred.
+	// Timestamp: The time at which the event occurred.
 	Timestamp string `json:"timestamp,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Description") to
@@ -668,11 +818,11 @@ func (s *Event) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// FailedEvent: This event is generated when the execution of a pipeline
-// has failed.  Note
-// that other events may continue to occur after this event.
+// FailedEvent: An event generated when the execution of a pipeline has
+// failed. Note
+// that other events can continue to occur after this event.
 type FailedEvent struct {
-	// Cause: The human readable description of the cause of the failure.
+	// Cause: The human-readable description of the cause of the failure.
 	Cause string `json:"cause,omitempty"`
 
 	// Code: The Google standard error code that best describes this
@@ -951,23 +1101,31 @@ func (s *ListOperationsResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// Metadata: Metadata carries information about the pipeline execution
-// that is returned
+// Metadata: Carries information about the pipeline execution that is
+// returned
 // in the long running operation's metadata field.
 type Metadata struct {
-	// CreateTime: The time that the operation was created by the API.
+	// CreateTime: The time at which the operation was created by the API.
 	CreateTime string `json:"createTime,omitempty"`
+
+	// EndTime: The time at which execution was completed and resources were
+	// cleaned up.
+	EndTime string `json:"endTime,omitempty"`
 
 	// Events: The list of events that have happened so far during the
 	// execution of this
 	// operation.
 	Events []*Event `json:"events,omitempty"`
 
-	// Labels: The user defined labels associated with this operation.
+	// Labels: The user-defined labels associated with this operation.
 	Labels map[string]string `json:"labels,omitempty"`
 
 	// Pipeline: The pipeline this operation represents.
 	Pipeline *Pipeline `json:"pipeline,omitempty"`
+
+	// StartTime: The first time at which resources were allocated to
+	// execute the pipeline.
+	StartTime string `json:"startTime,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "CreateTime") to
 	// unconditionally include in API requests. By default, fields with
@@ -992,17 +1150,17 @@ func (s *Metadata) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// Mount: Mount carries information about a particular disk mount inside
-// a container.
+// Mount: Carries information about a particular disk mount inside a
+// container.
 type Mount struct {
 	// Disk: The name of the disk to mount, as specified in the resources
 	// section.
 	Disk string `json:"disk,omitempty"`
 
-	// Path: The path to mount the disk at inside the container.
+	// Path: The path to mount the disk inside the container.
 	Path string `json:"path,omitempty"`
 
-	// ReadOnly: If true, the disk is mounted read only inside the
+	// ReadOnly: If true, the disk is mounted read-only inside the
 	// container.
 	ReadOnly bool `json:"readOnly,omitempty"`
 
@@ -1031,14 +1189,34 @@ func (s *Mount) MarshalJSON() ([]byte, error) {
 
 // Network: VM networking options.
 type Network struct {
-	// Name: The network name to attach the VM's network interface to.  If
-	// unspecified,
-	// the global default network is used.
+	// Name: The network name to attach the VM's network interface to. The
+	// value will
+	// be prefixed with `global/networks/` unless it contains a `/`, in
+	// which
+	// case it is assumed to be a fully specified network resource URL.
+	//
+	// If unspecified, the global default network is used.
 	Name string `json:"name,omitempty"`
 
+	// Subnetwork: If the specified network is configured for custom subnet
+	// creation, the
+	// name of the subnetwork to attach the instance to must be specified
+	// here.
+	//
+	// The value is prefixed with `regions/*/subnetworks/` unless it
+	// contains a
+	// `/`, in which case it is assumed to be a fully specified
+	// subnetwork
+	// resource URL.
+	//
+	// If the `*` character appears in the value, it is replaced with the
+	// region
+	// that the virtual machine has been allocated in.
+	Subnetwork string `json:"subnetwork,omitempty"`
+
 	// UsePrivateAddress: If set to true, do not attach a public IP address
-	// to the VM.  Note that
-	// without an public IP address, additional configuration is required
+	// to the VM. Note that
+	// without a public IP address, additional configuration is required
 	// to
 	// allow the VM to access Google services.
 	//
@@ -1228,23 +1406,33 @@ func (s *OperationMetadata) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// Pipeline: The Pipeline object describes a series of actions to
-// execute, expressed as
-// docker containers.
+// Pipeline: Specifies a series of actions to execute, expressed as
+// Docker containers.
 type Pipeline struct {
 	// Actions: The list of actions to execute, in the order they are
 	// specified.
 	Actions []*Action `json:"actions,omitempty"`
 
-	// Environment: The environment to pass into every action.  Each action
-	// may also specify
+	// Environment: The environment to pass into every action. Each action
+	// can also specify
 	// additional environment variables but cannot delete an entry from this
 	// map
-	// (though they may overwrite it with a different value).
+	// (though they can overwrite it with a different value).
 	Environment map[string]string `json:"environment,omitempty"`
 
 	// Resources: The resources required for execution.
 	Resources *Resources `json:"resources,omitempty"`
+
+	// Timeout: The maximum amount of time to give the pipeline to complete.
+	//  This includes
+	// the time spent waiting for a worker to be allocated.  If the pipeline
+	// fails
+	// to complete before the timeout, it will be cancelled and the error
+	// code
+	// will be set to DEADLINE_EXCEEDED.
+	//
+	// If unspecified, it will default to 7 days.
+	Timeout string `json:"timeout,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Actions") to
 	// unconditionally include in API requests. By default, fields with
@@ -1269,8 +1457,8 @@ func (s *Pipeline) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// PullStartedEvent: This event is generated when the worker starts
-// pulling an image.
+// PullStartedEvent: An event generated when the worker starts pulling
+// an image.
 type PullStartedEvent struct {
 	// ImageUri: The URI of the image that was pulled.
 	ImageUri string `json:"imageUri,omitempty"`
@@ -1298,8 +1486,8 @@ func (s *PullStartedEvent) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// PullStoppedEvent: This event is generated when the worker stops
-// pulling an image.
+// PullStoppedEvent: An event generated when the worker stops pulling an
+// image.
 type PullStoppedEvent struct {
 	// ImageUri: The URI of the image that was pulled.
 	ImageUri string `json:"imageUri,omitempty"`
@@ -1332,19 +1520,19 @@ func (s *PullStoppedEvent) MarshalJSON() ([]byte, error) {
 // At least one zone or region must be specified or the pipeline run
 // will fail.
 type Resources struct {
-	// ProjectId: The customer project ID to allocate resources in.
+	// ProjectId: The project ID to allocate resources in.
 	ProjectId string `json:"projectId,omitempty"`
 
-	// Regions: The list of regions allowed for VM allocation.  If set, the
-	// zones field
+	// Regions: The list of regions allowed for VM allocation. If set, the
+	// `zones` field
 	// must not be set.
 	Regions []string `json:"regions,omitempty"`
 
 	// VirtualMachine: The virtual machine specification.
 	VirtualMachine *VirtualMachine `json:"virtualMachine,omitempty"`
 
-	// Zones: The list of zones allowed for VM allocation.  If set, the
-	// regions field
+	// Zones: The list of zones allowed for VM allocation. If set, the
+	// `regions` field
 	// must not be set.
 	Zones []string `json:"zones,omitempty"`
 
@@ -1371,21 +1559,21 @@ func (s *Resources) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// RunPipelineRequest: The arguments to the RunPipeline method.  The
+// RunPipelineRequest: The arguments to the `RunPipeline` method. The
 // requesting user must have
-// the iam.serviceAccounts.actAs permission for the Google Genomics
-// Service
-// Account or the request will fail.
+// the `iam.serviceAccounts.actAs` permission for the Cloud Genomics
+// service
+// account or the request will fail.
 type RunPipelineRequest struct {
-	// Labels: User defined labels to associate with the returned operation.
-	//  These
+	// Labels: User-defined labels to associate with the returned operation.
+	// These
 	// labels are not propagated to any Google Cloud Platform resources used
 	// by
-	// the operation, and may be modified at any time.
+	// the operation, and can be modified at any time.
 	//
 	// To associate labels with resources created while executing the
 	// operation,
-	// see the appropriate resource message (i.e., VirtualMachine).
+	// see the appropriate resource message (for example, `VirtualMachine`).
 	Labels map[string]string `json:"labels,omitempty"`
 
 	// Pipeline: The description of the pipeline to run.
@@ -1412,6 +1600,12 @@ func (s *RunPipelineRequest) MarshalJSON() ([]byte, error) {
 	type NoMethod RunPipelineRequest
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// RunPipelineResponse: The response to the RunPipeline method, returned
+// in the operation's result
+// field on success.
+type RunPipelineResponse struct {
 }
 
 // RuntimeMetadata: Runtime metadata that will be populated in
@@ -1446,17 +1640,57 @@ func (s *RuntimeMetadata) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// ServiceAccount: Carries information about a Google Cloud Service
-// Account.
+// Secret: Holds encrypted information that is only decrypted and stored
+// in RAM
+// by the worker VM when running the pipeline.
+type Secret struct {
+	// CipherText: The value of the cipherText response from the `encrypt`
+	// method. This field
+	// is intentionally unaudited.
+	CipherText string `json:"cipherText,omitempty"`
+
+	// KeyName: The name of the Cloud KMS key that will be used to decrypt
+	// the secret
+	// value. The VM service account must have the required permissions
+	// and
+	// authentication scopes to invoke the `decrypt` method on the specified
+	// key.
+	KeyName string `json:"keyName,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "CipherText") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "CipherText") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *Secret) MarshalJSON() ([]byte, error) {
+	type NoMethod Secret
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// ServiceAccount: Carries information about a Google Cloud service
+// account.
 type ServiceAccount struct {
-	// Email: Email address of the service account.  If not specified, the
+	// Email: Email address of the service account. If not specified, the
 	// default
-	// compute engine service account for the project will be used.
+	// Compute Engine service account for the project will be used.
 	Email string `json:"email,omitempty"`
 
 	// Scopes: List of scopes to be enabled for this service account on the
 	// VM, in
-	// addition to the Google Genomics API scope.
+	// addition to the Cloud Genomics API scope.
 	Scopes []string `json:"scopes,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Email") to
@@ -1601,13 +1835,13 @@ func (s *Status) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// UnexpectedExitStatusEvent: This event is generated when the execution
-// of a container results in a
-// non-zero exit status that was not otherwise ignored.  Execution
+// UnexpectedExitStatusEvent: An event generated when the execution of a
+// container results in a
+// non-zero exit status that was not otherwise ignored. Execution
 // will
-// continue, but only actions that are flagged as ALWAYS_RUN will be
-// executed:
-// other actions will be skipped.
+// continue, but only actions that are flagged as `ALWAYS_RUN` will
+// be
+// executed. Other actions will be skipped.
 type UnexpectedExitStatusEvent struct {
 	// ActionId: The numeric ID of the action that started the container.
 	ActionId int64 `json:"actionId,omitempty"`
@@ -1641,9 +1875,12 @@ func (s *UnexpectedExitStatusEvent) MarshalJSON() ([]byte, error) {
 // VirtualMachine: Carries information about a Compute Engine VM
 // resource.
 type VirtualMachine struct {
-	// BootDiskSizeGb: The size of the boot disk, in gigabytes. The boot
-	// disk must be large
-	// enough to accommodate all of the docker images from each action in
+	// Accelerators: The list of accelerators to attach to the VM.
+	Accelerators []*Accelerator `json:"accelerators,omitempty"`
+
+	// BootDiskSizeGb: The size of the boot disk, in GB. The boot disk must
+	// be large
+	// enough to accommodate all of the Docker images from each action in
 	// the
 	// pipeline at the same time. If not specified, a small but
 	// reasonable
@@ -1652,11 +1889,11 @@ type VirtualMachine struct {
 
 	// BootImage: The host operating system image to use.
 	//
-	// At present, only Container Optimized OS images may be used.
+	// Currently, only Container-Optimized OS images can be used.
 	//
 	// The default value is
-	// "projects/cos-cloud/global/images/family/cos-stable"
-	// which selects the latest stable release of Container Optimized
+	// `projects/cos-cloud/global/images/family/cos-stable`,
+	// which selects the latest stable release of Container-Optimized
 	// OS.
 	//
 	// This option is provided to allow testing against the beta release of
@@ -1665,25 +1902,25 @@ type VirtualMachine struct {
 	// interact
 	// negatively with production pipelines.
 	//
-	// To test a pipeline against the beta release of COS, use the
-	// value
-	// "projects/cos-cloud/global/images/family/cos-beta".
+	// To test a pipeline against the beta release of Container-Optimized
+	// OS,
+	// use the value `projects/cos-cloud/global/images/family/cos-beta`.
 	BootImage string `json:"bootImage,omitempty"`
 
-	// CpuPlatform: The CPU platform to request.  An instance based on a
-	// newer platform may be
-	// allocated but never one with less capabilities.  The value of
+	// CpuPlatform: The CPU platform to request. An instance based on a
+	// newer platform can be
+	// allocated, but never one with fewer capabilities. The value of
 	// this
 	// parameter must be a valid Compute Engine CPU platform name (such as
 	// "Intel
-	// Skylake").  This parameter is only useful for carefully optimized
+	// Skylake"). This parameter is only useful for carefully optimized
 	// work
 	// loads where the CPU platform has a significant impact.
 	//
-	// For more information about the effect of this parameter, please
-	// visit
-	// https://cloud.google.com/compute/docs/instances/specify-min-cpu-
-	// platform.
+	// For more information about the effect of this parameter,
+	// see
+	// https://cloud.google.com/compute/docs/instances/specify-min-cpu-pl
+	// atform.
 	CpuPlatform string `json:"cpuPlatform,omitempty"`
 
 	// Disks: The list of disks to create and attach to the VM.
@@ -1695,13 +1932,12 @@ type VirtualMachine struct {
 	// labels
 	// imposed by Compute Engine.
 	//
-	// These labels are applied at creation time to the VM and are applied
-	// on a
-	// best-effort basis to attached disk resources shortly after VM
-	// creation.
+	// Labels applied at creation time to the VM. Applied on a best-effort
+	// basis
+	// to attached disk resources shortly after VM creation.
 	Labels map[string]string `json:"labels,omitempty"`
 
-	// MachineType: The machine type of the virtual machine to create.  Must
+	// MachineType: The machine type of the virtual machine to create. Must
 	// be the short name
 	// of a standard machine type (such as "n1-standard-1") or a custom
 	// machine
@@ -1711,15 +1947,25 @@ type VirtualMachine struct {
 	// Network: The VM network configuration.
 	Network *Network `json:"network,omitempty"`
 
+	// NvidiaDriverVersion: The NVIDIA driver version to use when attaching
+	// an NVIDIA GPU accelerator.
+	// The version specified here must be compatible with the GPU
+	// libraries
+	// contained in the container being executed, and must be one of the
+	// drivers
+	// hosted in the `nvidia-drivers-us-public` bucket on Google Cloud
+	// Storage.
+	NvidiaDriverVersion string `json:"nvidiaDriverVersion,omitempty"`
+
 	// Preemptible: If true, allocate a preemptible VM.
 	Preemptible bool `json:"preemptible,omitempty"`
 
-	// ServiceAccount: The service account to install on the VM.  This
+	// ServiceAccount: The service account to install on the VM. This
 	// account does not need
 	// any permissions other than those required by the pipeline.
 	ServiceAccount *ServiceAccount `json:"serviceAccount,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "BootDiskSizeGb") to
+	// ForceSendFields is a list of field names (e.g. "Accelerators") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -1727,13 +1973,12 @@ type VirtualMachine struct {
 	// used to include empty fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "BootDiskSizeGb") to
-	// include in API requests with the JSON null value. By default, fields
-	// with empty values are omitted from API requests. However, any field
-	// with an empty value appearing in NullFields will be sent to the
-	// server as null. It is an error if a field in this list has a
-	// non-empty value. This may be used to include null fields in Patch
-	// requests.
+	// NullFields is a list of field names (e.g. "Accelerators") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
 	NullFields []string `json:"-"`
 }
 
@@ -1743,8 +1988,8 @@ func (s *VirtualMachine) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// WorkerAssignedEvent: This event is generated once a worker VM has
-// been assigned to run the
+// WorkerAssignedEvent: An event generated after a worker VM has been
+// assigned to run the
 // pipeline.
 type WorkerAssignedEvent struct {
 	// Instance: The worker's instance name.
@@ -1776,9 +2021,9 @@ func (s *WorkerAssignedEvent) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// WorkerReleasedEvent: This event is generated when the worker VM that
-// was assigned to the pipeline
-// has been released (i.e., deleted).
+// WorkerReleasedEvent: An event generated when the worker VM that was
+// assigned to the pipeline
+// has been released (deleted).
 type WorkerReleasedEvent struct {
 	// Instance: The worker's instance name.
 	Instance string `json:"instance,omitempty"`
@@ -1809,6 +2054,46 @@ func (s *WorkerReleasedEvent) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// WorkerStatus: The status of the worker VM.
+type WorkerStatus struct {
+	// AttachedDisks: Status of attached disks.
+	AttachedDisks map[string]DiskStatus `json:"attachedDisks,omitempty"`
+
+	// BootDisk: Status of the boot disk.
+	BootDisk *DiskStatus `json:"bootDisk,omitempty"`
+
+	// FreeRamBytes: Free RAM.
+	FreeRamBytes uint64 `json:"freeRamBytes,omitempty,string"`
+
+	// TotalRamBytes: Total RAM.
+	TotalRamBytes uint64 `json:"totalRamBytes,omitempty,string"`
+
+	// UptimeSeconds: System uptime.
+	UptimeSeconds int64 `json:"uptimeSeconds,omitempty,string"`
+
+	// ForceSendFields is a list of field names (e.g. "AttachedDisks") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "AttachedDisks") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *WorkerStatus) MarshalJSON() ([]byte, error) {
+	type NoMethod WorkerStatus
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // method id "genomics.pipelines.run":
 
 type PipelinesRunCall struct {
@@ -1821,15 +2106,15 @@ type PipelinesRunCall struct {
 
 // Run: Runs a pipeline.
 //
-// **Note:** In order to use this method, the Genomics Service
+// **Note:** Before you can use this method, the Genomics Service
 // Agent
-// must have access to your project.  This is done automatically when
+// must have access to your project. This is done automatically when
 // the
-// Genomics API is first enabled, but if you delete this permission, or
-// if
-// you have already enabled the Genomics API prior to the launch of
-// the
-// v2alpha1 API, you must disable and re-enable the API to grant the
+// Cloud Genomics API is first enabled, but if you delete this
+// permission,
+// or if you enabled the Cloud Genomics API before the v2alpha1
+// API
+// launch, you must disable and re-enable the API to grant the
 // Genomics
 // Service Agent the required permissions.
 //
@@ -1878,6 +2163,7 @@ func (c *PipelinesRunCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2alpha1/pipelines:run")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1923,7 +2209,7 @@ func (c *PipelinesRunCall) Do(opts ...googleapi.CallOption) (*Operation, error) 
 	}
 	return ret, nil
 	// {
-	//   "description": "Runs a pipeline.\n\n**Note:** In order to use this method, the Genomics Service Agent\nmust have access to your project.  This is done automatically when the\nGenomics API is first enabled, but if you delete this permission, or if\nyou have already enabled the Genomics API prior to the launch of the\nv2alpha1 API, you must disable and re-enable the API to grant the Genomics\nService Agent the required permissions.\n\n[1]: /genomics/gsa",
+	//   "description": "Runs a pipeline.\n\n**Note:** Before you can use this method, the Genomics Service Agent\nmust have access to your project. This is done automatically when the\nCloud Genomics API is first enabled, but if you delete this permission,\nor if you enabled the Cloud Genomics API before the v2alpha1 API\nlaunch, you must disable and re-enable the API to grant the Genomics\nService Agent the required permissions.\n\n[1]: /genomics/gsa",
 	//   "flatPath": "v2alpha1/pipelines:run",
 	//   "httpMethod": "POST",
 	//   "id": "genomics.pipelines.run",
@@ -2005,6 +2291,7 @@ func (c *ProjectsOperationsCancelCall) doRequest(alt string) (*http.Response, er
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2alpha1/{+name}:cancel")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2152,6 +2439,7 @@ func (c *ProjectsOperationsGetCall) doRequest(alt string) (*http.Response, error
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2alpha1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2260,6 +2548,9 @@ func (r *ProjectsOperationsService) List(name string) *ProjectsOperationsListCal
 // the
 //   pipeline finishes, the value is the standard Google error code.
 // * labels.key or labels."key with space" where key is a label key.
+// * done&#58; If the pipeline is running, this value is false. Once
+// the
+//   pipeline finishes, the value is true.
 //
 // In v1 and v1alpha2, the following filter fields are supported&#58;
 //
@@ -2347,6 +2638,7 @@ func (c *ProjectsOperationsListCall) doRequest(alt string) (*http.Response, erro
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2alpha1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2404,7 +2696,7 @@ func (c *ProjectsOperationsListCall) Do(opts ...googleapi.CallOption) (*ListOper
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "A string for filtering Operations.\nIn v2alpha1, the following filter fields are supported\u0026#58;\n\n* createTime\u0026#58; The time this job was created\n* events\u0026#58; The set of event (names) that have occurred while running\n  the pipeline.  The \u0026#58; operator can be used to determine if a\n  particular event has occurred.\n* error\u0026#58; If the pipeline is running, this value is NULL.  Once the\n  pipeline finishes, the value is the standard Google error code.\n* labels.key or labels.\"key with space\" where key is a label key.\n\nIn v1 and v1alpha2, the following filter fields are supported\u0026#58;\n\n* projectId\u0026#58; Required. Corresponds to\n  OperationMetadata.projectId.\n* createTime\u0026#58; The time this job was created, in seconds from the\n  [epoch](http://en.wikipedia.org/wiki/Unix_time). Can use `\u003e=` and/or `\u003c=`\n  operators.\n* status\u0026#58; Can be `RUNNING`, `SUCCESS`, `FAILURE`, or `CANCELED`. Only\n  one status may be specified.\n* labels.key where key is a label key.\n\nExamples\u0026#58;\n\n* `projectId = my-project AND createTime \u003e= 1432140000`\n* `projectId = my-project AND createTime \u003e= 1432140000 AND createTime \u003c= 1432150000 AND status = RUNNING`\n* `projectId = my-project AND labels.color = *`\n* `projectId = my-project AND labels.color = red`",
+	//       "description": "A string for filtering Operations.\nIn v2alpha1, the following filter fields are supported\u0026#58;\n\n* createTime\u0026#58; The time this job was created\n* events\u0026#58; The set of event (names) that have occurred while running\n  the pipeline.  The \u0026#58; operator can be used to determine if a\n  particular event has occurred.\n* error\u0026#58; If the pipeline is running, this value is NULL.  Once the\n  pipeline finishes, the value is the standard Google error code.\n* labels.key or labels.\"key with space\" where key is a label key.\n* done\u0026#58; If the pipeline is running, this value is false. Once the\n  pipeline finishes, the value is true.\n\nIn v1 and v1alpha2, the following filter fields are supported\u0026#58;\n\n* projectId\u0026#58; Required. Corresponds to\n  OperationMetadata.projectId.\n* createTime\u0026#58; The time this job was created, in seconds from the\n  [epoch](http://en.wikipedia.org/wiki/Unix_time). Can use `\u003e=` and/or `\u003c=`\n  operators.\n* status\u0026#58; Can be `RUNNING`, `SUCCESS`, `FAILURE`, or `CANCELED`. Only\n  one status may be specified.\n* labels.key where key is a label key.\n\nExamples\u0026#58;\n\n* `projectId = my-project AND createTime \u003e= 1432140000`\n* `projectId = my-project AND createTime \u003e= 1432140000 AND createTime \u003c= 1432150000 AND status = RUNNING`\n* `projectId = my-project AND labels.color = *`\n* `projectId = my-project AND labels.color = red`",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -2519,6 +2811,7 @@ func (c *WorkersCheckInCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2alpha1/workers/{id}:checkIn")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)

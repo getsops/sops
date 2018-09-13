@@ -19,6 +19,9 @@
         },
         "https://www.googleapis.com/auth/analytics.readonly": {
           "description": "View your Google Analytics data"
+        },
+        "https://www.googleapis.com/auth/analytics.user.deletion": {
+          "description": "Manage Google Analytics user deletion requests"
         }
       }
     }
@@ -29,7 +32,7 @@
   "description": "Views and manages your Google Analytics data.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/analytics/",
-  "etag": "\"-iA1DTNe4s-I6JZXPt1t1Ypy8IU/pZyXISvfodVzorQpGHmIl5L61w8\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/ICz6S7dLg1NqZR9DoI37oXz6hEo\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/analytics-16.png",
     "x32": "https://www.google.com/images/icons/product/analytics-32.png"
@@ -74,12 +77,12 @@
       "type": "boolean"
     },
     "quotaUser": {
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+      "description": "An opaque string that represents a user for quota purposes. Must not exceed 40 characters.",
       "location": "query",
       "type": "string"
     },
     "userIp": {
-      "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+      "description": "Deprecated. Please use quotaUser instead.",
       "location": "query",
       "type": "string"
     }
@@ -560,6 +563,26 @@
               },
               "scopes": [
                 "https://www.googleapis.com/auth/analytics",
+                "https://www.googleapis.com/auth/analytics.edit",
+                "https://www.googleapis.com/auth/analytics.readonly"
+              ]
+            }
+          }
+        },
+        "clientId": {
+          "methods": {
+            "hashClientId": {
+              "description": "Hashes the given Client ID.",
+              "httpMethod": "POST",
+              "id": "analytics.management.clientId.hashClientId",
+              "path": "management/clientId:hashClientId",
+              "request": {
+                "$ref": "HashClientIdRequest"
+              },
+              "response": {
+                "$ref": "HashClientIdResponse"
+              },
+              "scopes": [
                 "https://www.googleapis.com/auth/analytics.edit",
                 "https://www.googleapis.com/auth/analytics.readonly"
               ]
@@ -3757,9 +3780,31 @@
           ]
         }
       }
+    },
+    "userDeletion": {
+      "resources": {
+        "userDeletionRequest": {
+          "methods": {
+            "upsert": {
+              "description": "Insert or update a user deletion requests.",
+              "httpMethod": "POST",
+              "id": "analytics.userDeletion.userDeletionRequest.upsert",
+              "path": "userDeletion/userDeletionRequests:upsert",
+              "request": {
+                "$ref": "UserDeletionRequest"
+              },
+              "response": {
+                "$ref": "UserDeletionRequest"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/analytics.user.deletion"
+              ]
+            }
+          }
+        }
+      }
     }
   },
-  "revision": "20180309",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Account": {
@@ -3976,22 +4021,16 @@
         },
         "accountSettings": {
           "properties": {
-            "admobReporting": {
+            "shareAnonymouslyWithOthers": {
               "type": "boolean"
             },
-            "sharingWithGoogleAnySales": {
+            "shareWithGoogleProducts": {
               "type": "boolean"
             },
-            "sharingWithGoogleProducts": {
+            "shareWithSpecialists": {
               "type": "boolean"
             },
-            "sharingWithGoogleSales": {
-              "type": "boolean"
-            },
-            "sharingWithGoogleSupport": {
-              "type": "boolean"
-            },
-            "sharingWithOthers": {
+            "shareWithSupport": {
               "type": "boolean"
             }
           },
@@ -4047,22 +4086,16 @@
         },
         "accountSettings": {
           "properties": {
-            "admobReporting": {
+            "shareAnonymouslyWithOthers": {
               "type": "boolean"
             },
-            "sharingWithGoogleAnySales": {
+            "shareWithGoogleProducts": {
               "type": "boolean"
             },
-            "sharingWithGoogleProducts": {
+            "shareWithSpecialists": {
               "type": "boolean"
             },
-            "sharingWithGoogleSales": {
-              "type": "boolean"
-            },
-            "sharingWithGoogleSupport": {
-              "type": "boolean"
-            },
-            "sharingWithOthers": {
+            "shareWithSupport": {
               "type": "boolean"
             }
           },
@@ -5844,6 +5877,43 @@
       },
       "type": "object"
     },
+    "HashClientIdRequest": {
+      "description": "JSON template for a hash Client Id request resource.",
+      "id": "HashClientIdRequest",
+      "properties": {
+        "clientId": {
+          "type": "string"
+        },
+        "kind": {
+          "default": "analytics#hashClientIdRequest",
+          "type": "string"
+        },
+        "webPropertyId": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "HashClientIdResponse": {
+      "description": "JSON template for a hash Client Id response resource.",
+      "id": "HashClientIdResponse",
+      "properties": {
+        "clientId": {
+          "type": "string"
+        },
+        "hashedClientId": {
+          "type": "string"
+        },
+        "kind": {
+          "default": "analytics#hashClientIdResponse",
+          "type": "string"
+        },
+        "webPropertyId": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "IncludeConditions": {
       "description": "JSON template for an Analytics Remarketing Include Conditions.",
       "id": "IncludeConditions",
@@ -7104,6 +7174,46 @@
       },
       "type": "object"
     },
+    "UserDeletionRequest": {
+      "description": "JSON template for a user deletion request resource.",
+      "id": "UserDeletionRequest",
+      "properties": {
+        "deletionRequestTime": {
+          "description": "This marks the point in time for which all user data before should be deleted",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "firebaseProjectId": {
+          "description": "Firebase Project Id",
+          "type": "string"
+        },
+        "id": {
+          "description": "User ID.",
+          "properties": {
+            "type": {
+              "description": "Type of user",
+              "type": "string"
+            },
+            "userId": {
+              "description": "The User's id",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "kind": {
+          "default": "analytics#userDeletionRequest",
+          "description": "Value is \"analytics#userDeletionRequest\".",
+          "type": "string"
+        },
+        "webPropertyId": {
+          "description": "Web property ID of the form UA-XXXXX-YY.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "UserRef": {
       "description": "JSON template for a user reference.",
       "id": "UserRef",
@@ -7271,6 +7381,14 @@
           "description": "Time this web property was created.",
           "format": "date-time",
           "readOnly": true,
+          "type": "string"
+        },
+        "dataRetentionResetOnNewActivity": {
+          "description": "Set to true to reset the retention period of the user identifier with each new event from that user (thus setting the expiration date to current time plus retention period).\nSet to false to delete data associated with the user identifer automatically after the rentention period.\nThis property cannot be set on insert.",
+          "type": "boolean"
+        },
+        "dataRetentionTtl": {
+          "description": "The length of time for which user and event data is retained.\nThis property cannot be set on insert.",
           "type": "string"
         },
         "defaultProfileId": {

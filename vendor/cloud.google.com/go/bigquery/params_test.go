@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package bigquery
 import (
 	"errors"
 	"math"
+	"math/big"
 	"reflect"
 	"testing"
 	"time"
@@ -50,6 +51,7 @@ var scalarTests = []struct {
 	{civil.DateTime{Date: civil.Date{Year: 2016, Month: 3, Day: 20}, Time: civil.Time{Hour: 4, Minute: 5, Second: 6, Nanosecond: 789000000}},
 		"2016-03-20 04:05:06.789000",
 		dateTimeParamType},
+	{big.NewRat(12345, 1000), "12.345000000", numericParamType},
 }
 
 type (
@@ -88,7 +90,7 @@ var (
 	s1ParamValue = bq.QueryParameterValue{
 		StructValues: map[string]bq.QueryParameterValue{
 			"A": sval("1"),
-			"B": bq.QueryParameterValue{
+			"B": {
 				StructValues: map[string]bq.QueryParameterValue{
 					"D": sval("s"),
 				},

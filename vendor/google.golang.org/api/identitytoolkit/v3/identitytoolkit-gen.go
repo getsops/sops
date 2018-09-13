@@ -485,6 +485,15 @@ type IdentitytoolkitRelyingpartyCreateAuthUriRequest struct {
 	// SessionId: The session_id passed by client.
 	SessionId string `json:"sessionId,omitempty"`
 
+	// TenantId: For multi-tenant use cases, in order to construct sign-in
+	// URL with the correct IDP parameters, Firebear needs to know which
+	// Tenant to retrieve IDP configs from.
+	TenantId string `json:"tenantId,omitempty"`
+
+	// TenantProjectNumber: Tenant project number to be used for idp
+	// discovery.
+	TenantProjectNumber uint64 `json:"tenantProjectNumber,omitempty,string"`
+
 	// ForceSendFields is a list of field names (e.g. "AppId") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
@@ -1146,6 +1155,15 @@ type IdentitytoolkitRelyingpartySignupNewUserRequest struct {
 	// PhotoUrl: The photo url of the user.
 	PhotoUrl string `json:"photoUrl,omitempty"`
 
+	// TenantId: For multi-tenant use cases, in order to construct sign-in
+	// URL with the correct IDP parameters, Firebear needs to know which
+	// Tenant to retrieve IDP configs from.
+	TenantId string `json:"tenantId,omitempty"`
+
+	// TenantProjectNumber: Tenant project number to be used for idp
+	// discovery.
+	TenantProjectNumber uint64 `json:"tenantProjectNumber,omitempty,string"`
+
 	// ForceSendFields is a list of field names (e.g. "CaptchaChallenge") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
@@ -1286,6 +1304,15 @@ type IdentitytoolkitRelyingpartyVerifyAssertionRequest struct {
 	// createAuthUri request.
 	SessionId string `json:"sessionId,omitempty"`
 
+	// TenantId: For multi-tenant use cases, in order to construct sign-in
+	// URL with the correct IDP parameters, Firebear needs to know which
+	// Tenant to retrieve IDP configs from.
+	TenantId string `json:"tenantId,omitempty"`
+
+	// TenantProjectNumber: Tenant project number to be used for idp
+	// discovery.
+	TenantProjectNumber uint64 `json:"tenantProjectNumber,omitempty,string"`
+
 	// ForceSendFields is a list of field names (e.g. "AutoCreate") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
@@ -1383,6 +1410,15 @@ type IdentitytoolkitRelyingpartyVerifyPasswordRequest struct {
 	// ReturnSecureToken: Whether return sts id token and refresh token
 	// instead of gitkit token.
 	ReturnSecureToken bool `json:"returnSecureToken,omitempty"`
+
+	// TenantId: For multi-tenant use cases, in order to construct sign-in
+	// URL with the correct IDP parameters, Firebear needs to know which
+	// Tenant to retrieve IDP configs from.
+	TenantId string `json:"tenantId,omitempty"`
+
+	// TenantProjectNumber: Tenant project number to be used for idp
+	// discovery.
+	TenantProjectNumber uint64 `json:"tenantProjectNumber,omitempty,string"`
 
 	// ForceSendFields is a list of field names (e.g. "CaptchaChallenge") to
 	// unconditionally include in API requests. By default, fields with
@@ -2373,6 +2409,7 @@ func (c *RelyingpartyCreateAuthUriCall) doRequest(alt string) (*http.Response, e
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "createAuthUri")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2490,6 +2527,7 @@ func (c *RelyingpartyDeleteAccountCall) doRequest(alt string) (*http.Response, e
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "deleteAccount")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2607,6 +2645,7 @@ func (c *RelyingpartyDownloadAccountCall) doRequest(alt string) (*http.Response,
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "downloadAccount")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2746,6 +2785,7 @@ func (c *RelyingpartyEmailLinkSigninCall) doRequest(alt string) (*http.Response,
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "emailLinkSignin")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2863,6 +2903,7 @@ func (c *RelyingpartyGetAccountInfoCall) doRequest(alt string) (*http.Response, 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "getAccountInfo")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2980,6 +3021,7 @@ func (c *RelyingpartyGetOobConfirmationCodeCall) doRequest(alt string) (*http.Re
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "getOobConfirmationCode")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3119,6 +3161,7 @@ func (c *RelyingpartyGetProjectConfigCall) doRequest(alt string) (*http.Response
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "getProjectConfig")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3254,6 +3297,7 @@ func (c *RelyingpartyGetPublicKeysCall) doRequest(alt string) (*http.Response, e
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "publicKeys")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3355,6 +3399,7 @@ func (c *RelyingpartyGetRecaptchaParamCall) doRequest(alt string) (*http.Respons
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "getRecaptchaParam")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3469,6 +3514,7 @@ func (c *RelyingpartyResetPasswordCall) doRequest(alt string) (*http.Response, e
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "resetPassword")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3586,6 +3632,7 @@ func (c *RelyingpartySendVerificationCodeCall) doRequest(alt string) (*http.Resp
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "sendVerificationCode")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3706,6 +3753,7 @@ func (c *RelyingpartySetAccountInfoCall) doRequest(alt string) (*http.Response, 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "setAccountInfo")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3823,6 +3871,7 @@ func (c *RelyingpartySetProjectConfigCall) doRequest(alt string) (*http.Response
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "setProjectConfig")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3942,6 +3991,7 @@ func (c *RelyingpartySignOutUserCall) doRequest(alt string) (*http.Response, err
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "signOutUser")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4061,6 +4111,7 @@ func (c *RelyingpartySignupNewUserCall) doRequest(alt string) (*http.Response, e
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "signupNewUser")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4178,6 +4229,7 @@ func (c *RelyingpartyUploadAccountCall) doRequest(alt string) (*http.Response, e
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "uploadAccount")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4296,6 +4348,7 @@ func (c *RelyingpartyVerifyAssertionCall) doRequest(alt string) (*http.Response,
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "verifyAssertion")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4413,6 +4466,7 @@ func (c *RelyingpartyVerifyCustomTokenCall) doRequest(alt string) (*http.Respons
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "verifyCustomToken")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4530,6 +4584,7 @@ func (c *RelyingpartyVerifyPasswordCall) doRequest(alt string) (*http.Response, 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "verifyPassword")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4648,6 +4703,7 @@ func (c *RelyingpartyVerifyPhoneNumberCall) doRequest(alt string) (*http.Respons
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "verifyPhoneNumber")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)

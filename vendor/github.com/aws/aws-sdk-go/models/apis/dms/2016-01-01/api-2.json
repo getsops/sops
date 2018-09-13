@@ -552,7 +552,8 @@
       "output":{"shape":"StartReplicationTaskResponse"},
       "errors":[
         {"shape":"ResourceNotFoundFault"},
-        {"shape":"InvalidResourceStateFault"}
+        {"shape":"InvalidResourceStateFault"},
+        {"shape":"AccessDeniedFault"}
       ]
     },
     "StartReplicationTaskAssessment":{
@@ -719,8 +720,11 @@
         "Tags":{"shape":"TagList"},
         "CertificateArn":{"shape":"String"},
         "SslMode":{"shape":"DmsSslModeValue"},
+        "ServiceAccessRoleArn":{"shape":"String"},
+        "ExternalTableDefinition":{"shape":"String"},
         "DynamoDbSettings":{"shape":"DynamoDbSettings"},
         "S3Settings":{"shape":"S3Settings"},
+        "DmsTransferSettings":{"shape":"DmsTransferSettings"},
         "MongoDbSettings":{"shape":"MongoDbSettings"}
       }
     },
@@ -819,6 +823,8 @@
         "TableMappings":{"shape":"String"},
         "ReplicationTaskSettings":{"shape":"String"},
         "CdcStartTime":{"shape":"TStamp"},
+        "CdcStartPosition":{"shape":"String"},
+        "CdcStopPosition":{"shape":"String"},
         "Tags":{"shape":"TagList"}
       }
     },
@@ -1174,6 +1180,13 @@
         "verify-full"
       ]
     },
+    "DmsTransferSettings":{
+      "type":"structure",
+      "members":{
+        "ServiceAccessRoleArn":{"shape":"String"},
+        "BucketName":{"shape":"String"}
+      }
+    },
     "DynamoDbSettings":{
       "type":"structure",
       "required":["ServiceAccessRoleArn"],
@@ -1187,6 +1200,7 @@
         "EndpointIdentifier":{"shape":"String"},
         "EndpointType":{"shape":"ReplicationEndpointTypeValue"},
         "EngineName":{"shape":"String"},
+        "EngineDisplayName":{"shape":"String"},
         "Username":{"shape":"String"},
         "ServerName":{"shape":"String"},
         "Port":{"shape":"IntegerOptional"},
@@ -1197,9 +1211,12 @@
         "EndpointArn":{"shape":"String"},
         "CertificateArn":{"shape":"String"},
         "SslMode":{"shape":"DmsSslModeValue"},
+        "ServiceAccessRoleArn":{"shape":"String"},
+        "ExternalTableDefinition":{"shape":"String"},
         "ExternalId":{"shape":"String"},
         "DynamoDbSettings":{"shape":"DynamoDbSettings"},
         "S3Settings":{"shape":"S3Settings"},
+        "DmsTransferSettings":{"shape":"DmsTransferSettings"},
         "MongoDbSettings":{"shape":"MongoDbSettings"}
       }
     },
@@ -1369,8 +1386,11 @@
         "ExtraConnectionAttributes":{"shape":"String"},
         "CertificateArn":{"shape":"String"},
         "SslMode":{"shape":"DmsSslModeValue"},
+        "ServiceAccessRoleArn":{"shape":"String"},
+        "ExternalTableDefinition":{"shape":"String"},
         "DynamoDbSettings":{"shape":"DynamoDbSettings"},
         "S3Settings":{"shape":"S3Settings"},
+        "DmsTransferSettings":{"shape":"DmsTransferSettings"},
         "MongoDbSettings":{"shape":"MongoDbSettings"}
       }
     },
@@ -1447,7 +1467,9 @@
         "MigrationType":{"shape":"MigrationTypeValue"},
         "TableMappings":{"shape":"String"},
         "ReplicationTaskSettings":{"shape":"String"},
-        "CdcStartTime":{"shape":"TStamp"}
+        "CdcStartTime":{"shape":"TStamp"},
+        "CdcStartPosition":{"shape":"String"},
+        "CdcStopPosition":{"shape":"String"}
       }
     },
     "ModifyReplicationTaskResponse":{
@@ -1469,7 +1491,8 @@
         "NestingLevel":{"shape":"NestingLevelValue"},
         "ExtractDocId":{"shape":"String"},
         "DocsToInvestigate":{"shape":"String"},
-        "AuthSource":{"shape":"String"}
+        "AuthSource":{"shape":"String"},
+        "KmsKeyId":{"shape":"String"}
       }
     },
     "NestingLevelValue":{
@@ -1544,6 +1567,13 @@
         "refreshing"
       ]
     },
+    "ReloadOptionValue":{
+      "type":"string",
+      "enum":[
+        "data-reload",
+        "validate-only"
+      ]
+    },
     "ReloadTablesMessage":{
       "type":"structure",
       "required":[
@@ -1552,7 +1582,8 @@
       ],
       "members":{
         "ReplicationTaskArn":{"shape":"String"},
-        "TablesToReload":{"shape":"TableListToReload"}
+        "TablesToReload":{"shape":"TableListToReload"},
+        "ReloadOption":{"shape":"ReloadOptionValue"}
       }
     },
     "ReloadTablesResponse":{
@@ -1613,7 +1644,8 @@
         "ReplicationInstancePublicIpAddresses":{"shape":"ReplicationInstancePublicIpAddressList"},
         "ReplicationInstancePrivateIpAddresses":{"shape":"ReplicationInstancePrivateIpAddressList"},
         "PubliclyAccessible":{"shape":"Boolean"},
-        "SecondaryAvailabilityZone":{"shape":"String"}
+        "SecondaryAvailabilityZone":{"shape":"String"},
+        "FreeUntil":{"shape":"TStamp"}
       }
     },
     "ReplicationInstanceList":{
@@ -1685,6 +1717,9 @@
         "StopReason":{"shape":"String"},
         "ReplicationTaskCreationDate":{"shape":"TStamp"},
         "ReplicationTaskStartDate":{"shape":"TStamp"},
+        "CdcStartPosition":{"shape":"String"},
+        "CdcStopPosition":{"shape":"String"},
+        "RecoveryCheckpoint":{"shape":"String"},
         "ReplicationTaskArn":{"shape":"String"},
         "ReplicationTaskStats":{"shape":"ReplicationTaskStats"}
       }
@@ -1805,7 +1840,9 @@
       "members":{
         "ReplicationTaskArn":{"shape":"String"},
         "StartReplicationTaskType":{"shape":"StartReplicationTaskTypeValue"},
-        "CdcStartTime":{"shape":"TStamp"}
+        "CdcStartTime":{"shape":"TStamp"},
+        "CdcStartPosition":{"shape":"String"},
+        "CdcStopPosition":{"shape":"String"}
       }
     },
     "StartReplicationTaskResponse":{
@@ -1871,7 +1908,8 @@
       "members":{
         "EngineName":{"shape":"String"},
         "SupportsCDC":{"shape":"Boolean"},
-        "EndpointType":{"shape":"ReplicationEndpointTypeValue"}
+        "EndpointType":{"shape":"ReplicationEndpointTypeValue"},
+        "EngineDisplayName":{"shape":"String"}
       }
     },
     "SupportedEndpointTypeList":{
@@ -1900,7 +1938,8 @@
         "ValidationPendingRecords":{"shape":"Long"},
         "ValidationFailedRecords":{"shape":"Long"},
         "ValidationSuspendedRecords":{"shape":"Long"},
-        "ValidationState":{"shape":"String"}
+        "ValidationState":{"shape":"String"},
+        "ValidationStateDetails":{"shape":"String"}
       }
     },
     "TableStatisticsList":{

@@ -1,15 +1,18 @@
 {
   "version": "2.0",
-  "service": "<fullname>AWS IoT</fullname> <p>AWS IoT provides secure, bi-directional communication between Internet-connected things (such as sensors, actuators, embedded devices, or smart appliances) and the AWS cloud. You can discover your custom IoT-Data endpoint to communicate with, configure rules for data processing and integration with other services, organize resources associated with each thing (Thing Registry), configure logging, and create and manage policies and credentials to authenticate things.</p> <p>For more information about how AWS IoT works, see the <a href=\"http://docs.aws.amazon.com/iot/latest/developerguide/aws-iot-how-it-works.html\">Developer Guide</a>.</p>",
+  "service": "<fullname>AWS IoT</fullname> <p>AWS IoT provides secure, bi-directional communication between Internet-connected devices (such as sensors, actuators, embedded devices, or smart appliances) and the AWS cloud. You can discover your custom IoT-Data endpoint to communicate with, configure rules for data processing and integration with other services, organize resources associated with each device (Registry), configure logging, and create and manage policies and credentials to authenticate devices.</p> <p>For more information about how AWS IoT works, see the <a href=\"http://docs.aws.amazon.com/iot/latest/developerguide/aws-iot-how-it-works.html\">Developer Guide</a>.</p> <p>For information about how to use the credentials provider for AWS IoT, see <a href=\"http://docs.aws.amazon.com/iot/latest/developerguide/authorizing-direct-aws.html\">Authorizing Direct Calls to AWS Services</a>.</p>",
   "operations": {
     "AcceptCertificateTransfer": "<p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>",
     "AddThingToThingGroup": "<p>Adds a thing to a thing group.</p>",
     "AssociateTargetsWithJob": "<p>Associates a group with a continuous job. The following criteria must be met: </p> <ul> <li> <p>The job must have been created with the <code>targetSelection</code> field set to \"CONTINUOUS\".</p> </li> <li> <p>The job status must currently be \"IN_PROGRESS\".</p> </li> <li> <p>The total number of targets associated with a job must not exceed 100.</p> </li> </ul>",
     "AttachPolicy": "<p>Attaches a policy to the specified target.</p>",
     "AttachPrincipalPolicy": "<p>Attaches the specified policy to the specified principal (certificate or other credential).</p> <p> <b>Note:</b> This API is deprecated. Please use <a>AttachPolicy</a> instead.</p>",
+    "AttachSecurityProfile": "<p>Associates a Device Defender security profile with a thing group or with this account. Each thing group or account can have up to five security profiles associated with it.</p>",
     "AttachThingPrincipal": "<p>Attaches the specified principal to the specified thing.</p>",
+    "CancelAuditTask": "<p>Cancels an audit that is in progress. The audit can be either scheduled or on-demand. If the audit is not in progress, an \"InvalidRequestException\" occurs.</p>",
     "CancelCertificateTransfer": "<p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>",
     "CancelJob": "<p>Cancels a job.</p>",
+    "CancelJobExecution": "<p>Cancels the execution of a job for a given thing.</p>",
     "ClearDefaultAuthorizer": "<p>Clears the default authorizer.</p>",
     "CreateAuthorizer": "<p>Creates an authorizer.</p>",
     "CreateCertificateFromCsr": "<p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c \"cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path\"</p>",
@@ -19,19 +22,26 @@
     "CreatePolicy": "<p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>",
     "CreatePolicyVersion": "<p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>",
     "CreateRoleAlias": "<p>Creates a role alias.</p>",
+    "CreateScheduledAudit": "<p>Creates a scheduled audit that is run at a specified time interval.</p>",
+    "CreateSecurityProfile": "<p>Creates a Device Defender security profile.</p>",
     "CreateStream": "<p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream. The total size of a file associated with the stream cannot exceed more than 2 MB. The stream will be created with version 0. If a stream is created with the same streamID as a stream that existed and was deleted within last 90 days, we will resurrect that old stream by incrementing the version by 1.</p>",
-    "CreateThing": "<p>Creates a thing record in the thing registry.</p>",
-    "CreateThingGroup": "<p>Create a thing group.</p>",
+    "CreateThing": "<p>Creates a thing record in the registry.</p> <note> <p>This is a control plane operation. See <a href=\"http://docs.aws.amazon.com/iot/latest/developerguide/authorization.html\">Authorization</a> for information about authorizing control plane actions.</p> </note>",
+    "CreateThingGroup": "<p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href=\"http://docs.aws.amazon.com/iot/latest/developerguide/authorization.html\">Authorization</a> for information about authorizing control plane actions.</p> </note>",
     "CreateThingType": "<p>Creates a new thing type.</p>",
     "CreateTopicRule": "<p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>",
+    "DeleteAccountAuditConfiguration": "<p>Restores the default settings for Device Defender audits for this account. Any configuration data you entered is deleted and all audit checks are reset to disabled. </p>",
     "DeleteAuthorizer": "<p>Deletes an authorizer.</p>",
     "DeleteCACertificate": "<p>Deletes a registered CA certificate.</p>",
     "DeleteCertificate": "<p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>",
+    "DeleteJob": "<p>Deletes a job and its related job executions.</p> <p>Deleting a job may take time, depending on the number of job executions created for the job and various other factors. While the job is being deleted, the status of the job will be shown as \"DELETION_IN_PROGRESS\". Attempting to delete or cancel a job whose status is already \"DELETION_IN_PROGRESS\" will result in an error.</p> <p>Only 10 jobs may have status \"DELETION_IN_PROGRESS\" at the same time, or a LimitExceededException will occur.</p>",
+    "DeleteJobExecution": "<p>Deletes a job execution.</p>",
     "DeleteOTAUpdate": "<p>Delete an OTA update.</p>",
     "DeletePolicy": "<p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>",
     "DeletePolicyVersion": "<p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>",
     "DeleteRegistrationCode": "<p>Deletes a CA certificate registration code.</p>",
     "DeleteRoleAlias": "<p>Deletes a role alias</p>",
+    "DeleteScheduledAudit": "<p>Deletes a scheduled audit.</p>",
+    "DeleteSecurityProfile": "<p>Deletes a Device Defender security profile.</p>",
     "DeleteStream": "<p>Deletes a stream.</p>",
     "DeleteThing": "<p>Deletes the specified thing.</p>",
     "DeleteThingGroup": "<p>Deletes a thing group.</p>",
@@ -39,6 +49,8 @@
     "DeleteTopicRule": "<p>Deletes the rule.</p>",
     "DeleteV2LoggingLevel": "<p>Deletes a logging level.</p>",
     "DeprecateThingType": "<p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>",
+    "DescribeAccountAuditConfiguration": "<p>Gets information about the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>",
+    "DescribeAuditTask": "<p>Gets information about a Device Defender audit.</p>",
     "DescribeAuthorizer": "<p>Describes an authorizer.</p>",
     "DescribeCACertificate": "<p>Describes a registered CA certificate.</p>",
     "DescribeCertificate": "<p>Gets information about the specified certificate.</p>",
@@ -49,6 +61,8 @@
     "DescribeJob": "<p>Describes a job.</p>",
     "DescribeJobExecution": "<p>Describes a job execution.</p>",
     "DescribeRoleAlias": "<p>Describes a role alias.</p>",
+    "DescribeScheduledAudit": "<p>Gets information about a scheduled audit.</p>",
+    "DescribeSecurityProfile": "<p>Gets information about a Device Defender security profile.</p>",
     "DescribeStream": "<p>Gets information about a stream.</p>",
     "DescribeThing": "<p>Gets information about the specified thing.</p>",
     "DescribeThingGroup": "<p>Describe a thing group.</p>",
@@ -56,20 +70,24 @@
     "DescribeThingType": "<p>Gets information about the specified thing type.</p>",
     "DetachPolicy": "<p>Detaches a policy from the specified target.</p>",
     "DetachPrincipalPolicy": "<p>Removes the specified policy from the specified certificate.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>DetachPolicy</a> instead.</p>",
+    "DetachSecurityProfile": "<p>Disassociates a Device Defender security profile from a thing group or from this account.</p>",
     "DetachThingPrincipal": "<p>Detaches the specified principal from the specified thing.</p>",
     "DisableTopicRule": "<p>Disables the rule.</p>",
     "EnableTopicRule": "<p>Enables the rule.</p>",
-    "GetEffectivePolicies": "<p>Gets effective policies.</p>",
+    "GetEffectivePolicies": "<p>Gets a list of the policies that have an effect on the authorization behavior of the specified device when it connects to the AWS IoT device gateway.</p>",
     "GetIndexingConfiguration": "<p>Gets the search configuration.</p>",
     "GetJobDocument": "<p>Gets a job document.</p>",
-    "GetLoggingOptions": "<p>Gets the logging options.</p>",
+    "GetLoggingOptions": "<p>Gets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>GetV2LoggingOptions</code> instead.</p>",
     "GetOTAUpdate": "<p>Gets an OTA update.</p>",
     "GetPolicy": "<p>Gets information about the specified policy with the policy document of the default version.</p>",
     "GetPolicyVersion": "<p>Gets information about the specified policy version.</p>",
     "GetRegistrationCode": "<p>Gets a registration code used to register a CA certificate with AWS IoT.</p>",
     "GetTopicRule": "<p>Gets information about the rule.</p>",
     "GetV2LoggingOptions": "<p>Gets the fine grained logging options.</p>",
+    "ListActiveViolations": "<p>Lists the active violations for a given Device Defender security profile.</p>",
     "ListAttachedPolicies": "<p>Lists the policies attached to the specified thing group.</p>",
+    "ListAuditFindings": "<p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 180 days.)</p>",
+    "ListAuditTasks": "<p>Lists the Device Defender audits that have been performed during a given time period.</p>",
     "ListAuthorizers": "<p>Lists the authorizers registered in your account.</p>",
     "ListCACertificates": "<p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>",
     "ListCertificates": "<p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>",
@@ -86,8 +104,12 @@
     "ListPrincipalPolicies": "<p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href=\"http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax\">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>",
     "ListPrincipalThings": "<p>Lists the things associated with the specified principal.</p>",
     "ListRoleAliases": "<p>Lists the role aliases registered in your account.</p>",
+    "ListScheduledAudits": "<p>Lists all of your scheduled audits.</p>",
+    "ListSecurityProfiles": "<p>Lists the Device Defender security profiles you have created. You can use filters to list only those security profiles associated with a thing group or only those associated with your account.</p>",
+    "ListSecurityProfilesForTarget": "<p>Lists the Device Defender security profiles attached to a target (thing group).</p>",
     "ListStreams": "<p>Lists all of the streams in your AWS account.</p>",
     "ListTargetsForPolicy": "<p>List targets for the specified policy.</p>",
+    "ListTargetsForSecurityProfile": "<p>Lists the targets (thing groups) associated with a given Device Defender security profile.</p>",
     "ListThingGroups": "<p>List the thing groups in your account.</p>",
     "ListThingGroupsForThing": "<p>List the thing groups to which the specified thing belongs.</p>",
     "ListThingPrincipals": "<p>Lists the principals associated with the specified thing.</p>",
@@ -98,6 +120,7 @@
     "ListThingsInThingGroup": "<p>Lists the things in the specified group.</p>",
     "ListTopicRules": "<p>Lists the rules for the specific topic.</p>",
     "ListV2LoggingLevels": "<p>Lists logging levels.</p>",
+    "ListViolationEvents": "<p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior or thing (device).</p>",
     "RegisterCACertificate": "<p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>",
     "RegisterCertificate": "<p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>",
     "RegisterThing": "<p>Provisions a thing.</p>",
@@ -107,24 +130,29 @@
     "SearchIndex": "<p>The query search index.</p>",
     "SetDefaultAuthorizer": "<p>Sets the default authorizer. This will be used if a websocket connection is made without specifying an authorizer.</p>",
     "SetDefaultPolicyVersion": "<p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>",
-    "SetLoggingOptions": "<p>Sets the logging options.</p>",
+    "SetLoggingOptions": "<p>Sets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>SetV2LoggingOptions</code> instead.</p>",
     "SetV2LoggingLevel": "<p>Sets the logging level.</p>",
     "SetV2LoggingOptions": "<p>Sets the logging options for the V2 logging service.</p>",
+    "StartOnDemandAuditTask": "<p>Starts an on-demand Device Defender audit.</p>",
     "StartThingRegistrationTask": "<p>Creates a bulk thing provisioning task.</p>",
     "StopThingRegistrationTask": "<p>Cancels a bulk thing provisioning task.</p>",
-    "TestAuthorization": "<p>Test custom authorization.</p>",
-    "TestInvokeAuthorizer": "<p>Invoke the specified custom authorizer for testing purposes.</p>",
+    "TestAuthorization": "<p>Tests if a specified principal is authorized to perform an AWS IoT action on a specified resource. Use this to test and debug the authorization behavior of devices that connect to the AWS IoT device gateway.</p>",
+    "TestInvokeAuthorizer": "<p>Tests a custom authorization behavior by invoking a specified custom authorizer. Use this to test and debug the custom authorization behavior of devices that connect to the AWS IoT device gateway.</p>",
     "TransferCertificate": "<p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>",
+    "UpdateAccountAuditConfiguration": "<p>Configures or reconfigures the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>",
     "UpdateAuthorizer": "<p>Updates an authorizer.</p>",
     "UpdateCACertificate": "<p>Updates a registered CA certificate.</p>",
     "UpdateCertificate": "<p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>",
     "UpdateEventConfigurations": "<p>Updates the event configurations.</p>",
     "UpdateIndexingConfiguration": "<p>Updates the search configuration.</p>",
     "UpdateRoleAlias": "<p>Updates a role alias.</p>",
+    "UpdateScheduledAudit": "<p>Updates a scheduled audit, including what checks are performed and how often the audit takes place.</p>",
+    "UpdateSecurityProfile": "<p>Updates a Device Defender security profile.</p>",
     "UpdateStream": "<p>Updates an existing stream. The stream version will be incremented by one.</p>",
     "UpdateThing": "<p>Updates the data for a thing.</p>",
     "UpdateThingGroup": "<p>Update a thing group.</p>",
-    "UpdateThingGroupsForThing": "<p>Updates the groups to which the thing belongs.</p>"
+    "UpdateThingGroupsForThing": "<p>Updates the groups to which the thing belongs.</p>",
+    "ValidateSecurityProfileBehaviors": "<p>Validates a Device Defender security profile behaviors specification.</p>"
   },
   "shapes": {
     "AcceptCertificateTransferRequest": {
@@ -153,6 +181,18 @@
         "AuthInfo$actionType": "<p>The type of action for which the principal is being authorized.</p>"
       }
     },
+    "ActiveViolation": {
+      "base": "<p>Information about an active Device Defender security profile behavior violation.</p>",
+      "refs": {
+        "ActiveViolations$member": null
+      }
+    },
+    "ActiveViolations": {
+      "base": null,
+      "refs": {
+        "ListActiveViolationsResponse$activeViolations": "<p>The list of active violations.</p>"
+      }
+    },
     "AddThingToThingGroupRequest": {
       "base": null,
       "refs": {
@@ -174,6 +214,33 @@
       "base": null,
       "refs": {
         "CloudwatchAlarmAction$alarmName": "<p>The CloudWatch alarm name.</p>"
+      }
+    },
+    "AlertTarget": {
+      "base": "<p>A structure containing the alert target ARN and the role ARN.</p>",
+      "refs": {
+        "AlertTargets$value": null
+      }
+    },
+    "AlertTargetArn": {
+      "base": null,
+      "refs": {
+        "AlertTarget$alertTargetArn": "<p>The ARN of the notification target to which alerts are sent.</p>"
+      }
+    },
+    "AlertTargetType": {
+      "base": "<p>The type of alert target: one of \"SNS\".</p>",
+      "refs": {
+        "AlertTargets$key": null
+      }
+    },
+    "AlertTargets": {
+      "base": null,
+      "refs": {
+        "CreateSecurityProfileRequest$alertTargets": "<p>Specifies the destinations to which alerts are sent. (Alerts are always sent to the console.) Alerts are generated when a device (thing) violates a behavior.</p>",
+        "DescribeSecurityProfileResponse$alertTargets": "<p>Where the alerts are sent. (Alerts are always sent to the console.)</p>",
+        "UpdateSecurityProfileRequest$alertTargets": "<p>Where the alerts are sent. (Alerts are always sent to the console.)</p>",
+        "UpdateSecurityProfileResponse$alertTargets": "<p>Where the alerts are sent. (Alerts are always sent to the console.)</p>"
       }
     },
     "AllowAutoRegistration": {
@@ -223,6 +290,16 @@
       "refs": {
       }
     },
+    "AttachSecurityProfileRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "AttachSecurityProfileResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "AttachThingPrincipalRequest": {
       "base": "<p>The input for the AttachThingPrincipal operation.</p>",
       "refs": {
@@ -231,6 +308,13 @@
     "AttachThingPrincipalResponse": {
       "base": "<p>The output from the AttachThingPrincipal operation.</p>",
       "refs": {
+      }
+    },
+    "AttributeKey": {
+      "base": null,
+      "refs": {
+        "AdditionalParameterMap$key": null,
+        "AttributesMap$key": null
       }
     },
     "AttributeName": {
@@ -262,13 +346,140 @@
         "AttributePayload$attributes": "<p>A JSON string containing up to three key-value pair in JSON format. For example:</p> <p> <code>{\\\"attributes\\\":{\\\"string1\\\":\\\"string2\\\"}}</code> </p>",
         "DescribeThingResponse$attributes": "<p>The thing attributes.</p>",
         "ThingAttribute$attributes": "<p>A list of thing attributes which are name-value pairs.</p>",
-        "ThingDocument$attributes": "<p>The attributes.</p>"
+        "ThingDocument$attributes": "<p>The attributes.</p>",
+        "ThingGroupDocument$attributes": "<p>The thing group attributes.</p>"
       }
     },
     "AttributesMap": {
       "base": null,
       "refs": {
         "OTAUpdateFile$attributes": "<p>A list of name/attribute pairs.</p>"
+      }
+    },
+    "AuditCheckConfiguration": {
+      "base": "<p>Which audit checks are enabled and disabled for this account.</p>",
+      "refs": {
+        "AuditCheckConfigurations$value": null
+      }
+    },
+    "AuditCheckConfigurations": {
+      "base": null,
+      "refs": {
+        "DescribeAccountAuditConfigurationResponse$auditCheckConfigurations": "<p>Which audit checks are enabled and disabled for this account.</p>",
+        "UpdateAccountAuditConfigurationRequest$auditCheckConfigurations": "<p>Specifies which audit checks are enabled and disabled for this account. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are currently enabled.</p> <p>Note that some data collection may begin immediately when certain checks are enabled. When a check is disabled, any data collected so far in relation to the check is deleted.</p> <p>You cannot disable a check if it is used by any scheduled audit. You must first delete the check from the scheduled audit or delete the scheduled audit itself.</p> <p>On the first call to <code>UpdateAccountAuditConfiguration</code> this parameter is required and must specify at least one enabled check.</p>"
+      }
+    },
+    "AuditCheckDetails": {
+      "base": "<p>Information about the audit check.</p>",
+      "refs": {
+        "AuditDetails$value": null
+      }
+    },
+    "AuditCheckName": {
+      "base": "<p>An audit check name. Checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>",
+      "refs": {
+        "AuditCheckConfigurations$key": null,
+        "AuditDetails$key": null,
+        "AuditFinding$checkName": "<p>The audit check that generated this result.</p>",
+        "ListAuditFindingsRequest$checkName": "<p>A filter to limit results to the findings for the specified audit check.</p>",
+        "TargetAuditCheckNames$member": null
+      }
+    },
+    "AuditCheckRunStatus": {
+      "base": null,
+      "refs": {
+        "AuditCheckDetails$checkRunStatus": "<p>The completion status of this check, one of \"IN_PROGRESS\", \"WAITING_FOR_DATA_COLLECTION\", \"CANCELED\", \"COMPLETED_COMPLIANT\", \"COMPLETED_NON_COMPLIANT\", or \"FAILED\".</p>"
+      }
+    },
+    "AuditDetails": {
+      "base": null,
+      "refs": {
+        "DescribeAuditTaskResponse$auditDetails": "<p>Detailed information about each check performed during this audit.</p>"
+      }
+    },
+    "AuditFinding": {
+      "base": "<p>The findings (results) of the audit.</p>",
+      "refs": {
+        "AuditFindings$member": null
+      }
+    },
+    "AuditFindingSeverity": {
+      "base": null,
+      "refs": {
+        "AuditFinding$severity": "<p>The severity of the result (finding).</p>"
+      }
+    },
+    "AuditFindings": {
+      "base": null,
+      "refs": {
+        "ListAuditFindingsResponse$findings": "<p>The findings (results) of the audit.</p>"
+      }
+    },
+    "AuditFrequency": {
+      "base": null,
+      "refs": {
+        "CreateScheduledAuditRequest$frequency": "<p>How often the scheduled audit takes place. Can be one of \"DAILY\", \"WEEKLY\", \"BIWEEKLY\" or \"MONTHLY\". The actual start time of each audit is determined by the system.</p>",
+        "DescribeScheduledAuditResponse$frequency": "<p>How often the scheduled audit takes place. One of \"DAILY\", \"WEEKLY\", \"BIWEEKLY\" or \"MONTHLY\". The actual start time of each audit is determined by the system.</p>",
+        "ScheduledAuditMetadata$frequency": "<p>How often the scheduled audit takes place.</p>",
+        "UpdateScheduledAuditRequest$frequency": "<p>How often the scheduled audit takes place. Can be one of \"DAILY\", \"WEEKLY\", \"BIWEEKLY\" or \"MONTHLY\". The actual start time of each audit is determined by the system.</p>"
+      }
+    },
+    "AuditNotificationTarget": {
+      "base": "<p>Information about the targets to which audit notifications are sent.</p>",
+      "refs": {
+        "AuditNotificationTargetConfigurations$value": null
+      }
+    },
+    "AuditNotificationTargetConfigurations": {
+      "base": null,
+      "refs": {
+        "DescribeAccountAuditConfigurationResponse$auditNotificationTargetConfigurations": "<p>Information about the targets to which audit notifications are sent for this account.</p>",
+        "UpdateAccountAuditConfigurationRequest$auditNotificationTargetConfigurations": "<p>Information about the targets to which audit notifications are sent.</p>"
+      }
+    },
+    "AuditNotificationType": {
+      "base": null,
+      "refs": {
+        "AuditNotificationTargetConfigurations$key": null
+      }
+    },
+    "AuditTaskId": {
+      "base": null,
+      "refs": {
+        "AuditFinding$taskId": "<p>The ID of the audit that generated this result (finding)</p>",
+        "AuditTaskMetadata$taskId": "<p>The ID of this audit.</p>",
+        "CancelAuditTaskRequest$taskId": "<p>The ID of the audit you want to cancel. You can only cancel an audit that is \"IN_PROGRESS\".</p>",
+        "DescribeAuditTaskRequest$taskId": "<p>The ID of the audit whose information you want to get.</p>",
+        "ListAuditFindingsRequest$taskId": "<p>A filter to limit results to the audit with the specified ID. You must specify either the taskId or the startTime and endTime, but not both.</p>",
+        "StartOnDemandAuditTaskResponse$taskId": "<p>The ID of the on-demand audit you started.</p>"
+      }
+    },
+    "AuditTaskMetadata": {
+      "base": "<p>The audits that were performed.</p>",
+      "refs": {
+        "AuditTaskMetadataList$member": null
+      }
+    },
+    "AuditTaskMetadataList": {
+      "base": null,
+      "refs": {
+        "ListAuditTasksResponse$tasks": "<p>The audits that were performed during the specified time period.</p>"
+      }
+    },
+    "AuditTaskStatus": {
+      "base": null,
+      "refs": {
+        "AuditTaskMetadata$taskStatus": "<p>The status of this audit: one of \"IN_PROGRESS\", \"COMPLETED\", \"FAILED\" or \"CANCELED\".</p>",
+        "DescribeAuditTaskResponse$taskStatus": "<p>The status of the audit: one of \"IN_PROGRESS\", \"COMPLETED\", \"FAILED\", or \"CANCELED\".</p>",
+        "ListAuditTasksRequest$taskStatus": "<p>A filter to limit the output to audits with the specified completion status: can be one of \"IN_PROGRESS\", \"COMPLETED\", \"FAILED\" or \"CANCELED\".</p>"
+      }
+    },
+    "AuditTaskType": {
+      "base": null,
+      "refs": {
+        "AuditTaskMetadata$taskType": "<p>The type of this audit: one of \"ON_DEMAND_AUDIT_TASK\" or \"SCHEDULED_AUDIT_TASK\".</p>",
+        "DescribeAuditTaskResponse$taskType": "<p>The type of audit: \"ON_DEMAND_AUDIT_TASK\" or \"SCHEDULED_AUDIT_TASK\".</p>",
+        "ListAuditTasksRequest$taskType": "<p>A filter to limit the output to the specified type of audit: can be one of \"ON_DEMAND_AUDIT_TASK\" or \"SCHEDULED__AUDIT_TASK\".</p>"
       }
     },
     "AuthDecision": {
@@ -378,6 +589,7 @@
         "CertificateDescription$ownedBy": "<p>The ID of the AWS account that owns the certificate.</p>",
         "CertificateDescription$previousOwnedBy": "<p>The ID of the AWS account of the previous owner of the certificate.</p>",
         "OutgoingCertificate$transferredTo": "<p>The AWS account to which the transfer was made.</p>",
+        "ResourceIdentifier$account": "<p>The account with which the resource is associated.</p>",
         "RoleAliasDescription$owner": "<p>The role alias owner.</p>",
         "TransferCertificateRequest$targetAwsAccount": "<p>The AWS account.</p>"
       }
@@ -393,14 +605,17 @@
         "FirehoseAction$roleArn": "<p>The IAM role that grants access to the Amazon Kinesis Firehose stream.</p>",
         "GetLoggingOptionsResponse$roleArn": "<p>The ARN of the IAM role that grants access.</p>",
         "GetV2LoggingOptionsResponse$roleArn": "<p>The IAM role ARN AWS IoT uses to write to your CloudWatch logs.</p>",
+        "IotAnalyticsAction$channelArn": "<p>(deprecated) The ARN of the IoT Analytics channel to which message data will be sent.</p>",
+        "IotAnalyticsAction$roleArn": "<p>The ARN of the role which has a policy that grants IoT Analytics permission to send message data via IoT Analytics (iotanalytics:BatchPutMessage).</p>",
         "KinesisAction$roleArn": "<p>The ARN of the IAM role that grants access to the Amazon Kinesis stream.</p>",
         "LoggingOptionsPayload$roleArn": "<p>The ARN of the IAM role that grants access.</p>",
         "RepublishAction$roleArn": "<p>The ARN of the IAM role that grants access.</p>",
         "S3Action$roleArn": "<p>The ARN of the IAM role that grants access.</p>",
-        "SetV2LoggingOptionsRequest$roleArn": "<p>The role ARN that allows IoT to write to Cloudwatch logs.</p>",
+        "SetV2LoggingOptionsRequest$roleArn": "<p>The ARN of the role that allows IoT to write to Cloudwatch logs.</p>",
         "SnsAction$targetArn": "<p>The ARN of the SNS topic.</p>",
         "SnsAction$roleArn": "<p>The ARN of the IAM role that grants access.</p>",
-        "SqsAction$roleArn": "<p>The ARN of the IAM role that grants access.</p>"
+        "SqsAction$roleArn": "<p>The ARN of the IAM role that grants access.</p>",
+        "StepFunctionsAction$roleArn": "<p>The ARN of the role that grants IoT permission to start execution of a state machine (\"Action\":\"states:StartExecution\").</p>"
       }
     },
     "AwsIotJobArn": {
@@ -422,6 +637,49 @@
       "refs": {
         "TopicRule$awsIotSqlVersion": "<p>The version of the SQL rules engine to use when evaluating the rule.</p>",
         "TopicRulePayload$awsIotSqlVersion": "<p>The version of the SQL rules engine to use when evaluating the rule.</p>"
+      }
+    },
+    "AwsJobExecutionsRolloutConfig": {
+      "base": "<p>Configuration for the rollout of OTA updates.</p>",
+      "refs": {
+        "CreateOTAUpdateRequest$awsJobExecutionsRolloutConfig": "<p>Configuration for the rollout of OTA updates.</p>",
+        "OTAUpdateInfo$awsJobExecutionsRolloutConfig": "<p>Configuration for the rollout of OTA updates.</p>"
+      }
+    },
+    "Behavior": {
+      "base": "<p>A Device Defender security profile behavior.</p>",
+      "refs": {
+        "ActiveViolation$behavior": "<p>The behavior which is being violated.</p>",
+        "Behaviors$member": null,
+        "ViolationEvent$behavior": "<p>The behavior which was violated.</p>"
+      }
+    },
+    "BehaviorCriteria": {
+      "base": "<p>The criteria by which the behavior is determined to be normal.</p>",
+      "refs": {
+        "Behavior$criteria": "<p>The criteria that determine if a device is behaving normally in regard to the <code>metric</code>.</p>"
+      }
+    },
+    "BehaviorMetric": {
+      "base": null,
+      "refs": {
+        "Behavior$metric": "<p>What is measured by the behavior.</p>"
+      }
+    },
+    "BehaviorName": {
+      "base": null,
+      "refs": {
+        "Behavior$name": "<p>The name you have given to the behavior.</p>"
+      }
+    },
+    "Behaviors": {
+      "base": null,
+      "refs": {
+        "CreateSecurityProfileRequest$behaviors": "<p>Specifies the behaviors that, when violated by a device (thing), cause an alert.</p>",
+        "DescribeSecurityProfileResponse$behaviors": "<p>Specifies the behaviors that, when violated by a device (thing), cause an alert.</p>",
+        "UpdateSecurityProfileRequest$behaviors": "<p>Specifies the behaviors that, when violated by a device (thing), cause an alert.</p>",
+        "UpdateSecurityProfileResponse$behaviors": "<p>Specifies the behaviors that, when violated by a device (thing), cause an alert.</p>",
+        "ValidateSecurityProfileBehaviorsRequest$behaviors": "<p>Specifies the behaviors that, when violated by a device (thing), cause an alert.</p>"
       }
     },
     "Boolean": {
@@ -462,8 +720,23 @@
         "ListCACertificatesResponse$certificates": "<p>The CA certificates registered in your AWS account.</p>"
       }
     },
+    "CancelAuditTaskRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CancelAuditTaskResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "CancelCertificateTransferRequest": {
       "base": "<p>The input for the CancelCertificateTransfer operation.</p>",
+      "refs": {
+      }
+    },
+    "CancelJobExecutionRequest": {
+      "base": null,
       "refs": {
       }
     },
@@ -475,6 +748,12 @@
     "CancelJobResponse": {
       "base": null,
       "refs": {
+      }
+    },
+    "CanceledChecksCount": {
+      "base": null,
+      "refs": {
+        "TaskStatistics$canceledChecks": "<p>The number of checks that did not run because the audit was canceled.</p>"
       }
     },
     "CanceledThings": {
@@ -507,6 +786,7 @@
         "OutgoingCertificate$certificateArn": "<p>The certificate ARN.</p>",
         "RegisterCACertificateResponse$certificateArn": "<p>The CA certificate ARN.</p>",
         "RegisterCertificateResponse$certificateArn": "<p>The certificate ARN.</p>",
+        "SigningProfileParameter$certificateArn": "<p>Certificate ARN.</p>",
         "TransferCertificateResponse$transferredCertificateArn": "<p>The ARN of the certificate.</p>"
       }
     },
@@ -524,33 +804,41 @@
     "CertificateId": {
       "base": null,
       "refs": {
-        "AcceptCertificateTransferRequest$certificateId": "<p>The ID of the certificate.</p>",
+        "AcceptCertificateTransferRequest$certificateId": "<p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>",
         "CACertificate$certificateId": "<p>The ID of the CA certificate.</p>",
         "CACertificateDescription$certificateId": "<p>The CA certificate ID.</p>",
-        "CancelCertificateTransferRequest$certificateId": "<p>The ID of the certificate.</p>",
-        "Certificate$certificateId": "<p>The ID of the certificate.</p>",
+        "CancelCertificateTransferRequest$certificateId": "<p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>",
+        "Certificate$certificateId": "<p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>",
         "CertificateDescription$certificateId": "<p>The ID of the certificate.</p>",
         "CertificateDescription$caCertificateId": "<p>The certificate ID of the CA certificate used to sign this certificate.</p>",
         "CreateCertificateFromCsrResponse$certificateId": "<p>The ID of the certificate. Certificate management operations only take a certificateId.</p>",
         "CreateKeysAndCertificateResponse$certificateId": "<p>The ID of the certificate. AWS IoT issues a default subject name for the certificate (for example, AWS IoT Certificate).</p>",
-        "DeleteCACertificateRequest$certificateId": "<p>The ID of the certificate to delete.</p>",
-        "DeleteCertificateRequest$certificateId": "<p>The ID of the certificate.</p>",
+        "DeleteCACertificateRequest$certificateId": "<p>The ID of the certificate to delete. (The last part of the certificate ARN contains the certificate ID.)</p>",
+        "DeleteCertificateRequest$certificateId": "<p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>",
         "DescribeCACertificateRequest$certificateId": "<p>The CA certificate identifier.</p>",
-        "DescribeCertificateRequest$certificateId": "<p>The ID of the certificate.</p>",
+        "DescribeCertificateRequest$certificateId": "<p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>",
         "ListCertificatesByCARequest$caCertificateId": "<p>The ID of the CA certificate. This operation will list all registered device certificate that were signed by this CA certificate.</p>",
         "OutgoingCertificate$certificateId": "<p>The certificate ID.</p>",
         "RegisterCACertificateResponse$certificateId": "<p>The CA certificate identifier.</p>",
         "RegisterCertificateResponse$certificateId": "<p>The certificate identifier.</p>",
-        "RejectCertificateTransferRequest$certificateId": "<p>The ID of the certificate.</p>",
-        "TransferCertificateRequest$certificateId": "<p>The ID of the certificate.</p>",
+        "RejectCertificateTransferRequest$certificateId": "<p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>",
+        "ResourceIdentifier$deviceCertificateId": "<p>The ID of the certificate attached to the resource.</p>",
+        "ResourceIdentifier$caCertificateId": "<p>The ID of the CA certificate used to authorize the certificate.</p>",
+        "TransferCertificateRequest$certificateId": "<p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>",
         "UpdateCACertificateRequest$certificateId": "<p>The CA certificate identifier.</p>",
-        "UpdateCertificateRequest$certificateId": "<p>The ID of the certificate.</p>"
+        "UpdateCertificateRequest$certificateId": "<p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>"
       }
     },
     "CertificateName": {
       "base": null,
       "refs": {
         "CodeSigningCertificateChain$certificateName": "<p>The name of the certificate.</p>"
+      }
+    },
+    "CertificatePathOnDevice": {
+      "base": null,
+      "refs": {
+        "SigningProfileParameter$certificatePathOnDevice": "<p>The location of the code-signing certificate on your device.</p>"
       }
     },
     "CertificatePem": {
@@ -564,7 +852,7 @@
         "RegisterCACertificateRequest$verificationCertificate": "<p>The private key verification certificate.</p>",
         "RegisterCertificateRequest$certificatePem": "<p>The certificate data, in PEM format.</p>",
         "RegisterCertificateRequest$caCertificatePem": "<p>The CA certificate used to sign the device certificate being registered.</p>",
-        "RegisterThingResponse$certificatePem": null
+        "RegisterThingResponse$certificatePem": "<p>.</p>"
       }
     },
     "CertificateSigningRequest": {
@@ -592,11 +880,42 @@
       "refs": {
       }
     },
+    "CertificateValidity": {
+      "base": "<p>When the certificate is valid.</p>",
+      "refs": {
+        "CACertificateDescription$validity": "<p>When the CA certificate is valid.</p>",
+        "CertificateDescription$validity": "<p>When the certificate is valid.</p>"
+      }
+    },
     "Certificates": {
       "base": null,
       "refs": {
         "ListCertificatesByCAResponse$certificates": "<p>The device certificates signed by the specified CA certificate.</p>",
         "ListCertificatesResponse$certificates": "<p>The descriptions of the certificates.</p>"
+      }
+    },
+    "ChannelName": {
+      "base": null,
+      "refs": {
+        "IotAnalyticsAction$channelName": "<p>The name of the IoT Analytics channel to which message data will be sent.</p>"
+      }
+    },
+    "CheckCompliant": {
+      "base": null,
+      "refs": {
+        "AuditCheckDetails$checkCompliant": "<p>True if the check completed and found all resources compliant.</p>"
+      }
+    },
+    "Cidr": {
+      "base": null,
+      "refs": {
+        "Cidrs$member": null
+      }
+    },
+    "Cidrs": {
+      "base": null,
+      "refs": {
+        "MetricValue$cidrs": "<p>If the <code>comparisonOperator</code> calls for a set of CIDRs, use this to specify that set to be compared with the <code>metric</code>.</p>"
       }
     },
     "ClearDefaultAuthorizerRequest": {
@@ -613,6 +932,7 @@
       "base": null,
       "refs": {
         "DescribeThingResponse$defaultClientId": "<p>The default client ID.</p>",
+        "ResourceIdentifier$clientId": "<p>The client ID.</p>",
         "TestAuthorizationRequest$clientId": "<p>The MQTT client ID.</p>"
       }
     },
@@ -656,6 +976,7 @@
       "base": null,
       "refs": {
         "GetEffectivePoliciesRequest$cognitoIdentityPoolId": "<p>The Cognito identity pool ID.</p>",
+        "ResourceIdentifier$cognitoIdentityPoolId": "<p>The ID of the Cognito Identity Pool.</p>",
         "TestAuthorizationRequest$cognitoIdentityPoolId": "<p>The Cognito identity pool ID.</p>"
       }
     },
@@ -665,6 +986,18 @@
         "AssociateTargetsWithJobRequest$comment": "<p>An optional comment string describing why the job was associated with the targets.</p>",
         "CancelJobRequest$comment": "<p>An optional comment string describing why the job was canceled.</p>",
         "Job$comment": "<p>If the job was updated, describes the reason for the update.</p>"
+      }
+    },
+    "ComparisonOperator": {
+      "base": null,
+      "refs": {
+        "BehaviorCriteria$comparisonOperator": "<p>The operator that relates the thing measured (<code>metric</code>) to the criteria (<code>value</code>).</p>"
+      }
+    },
+    "CompliantChecksCount": {
+      "base": null,
+      "refs": {
+        "TaskStatistics$compliantChecks": "<p>The number of checks that found compliant resources.</p>"
       }
     },
     "Configuration": {
@@ -765,6 +1098,26 @@
       "refs": {
       }
     },
+    "CreateScheduledAuditRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateScheduledAuditResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateSecurityProfileRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateSecurityProfileResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "CreateStreamRequest": {
       "base": null,
       "refs": {
@@ -843,8 +1196,8 @@
     "CustomerVersion": {
       "base": null,
       "refs": {
-        "CACertificateDescription$customerVersion": null,
-        "CertificateDescription$customerVersion": null
+        "CACertificateDescription$customerVersion": "<p>The customer version of the CA certificate.</p>",
+        "CertificateDescription$customerVersion": "<p>The customer version of the certificate.</p>"
       }
     },
     "DateType": {
@@ -854,14 +1207,16 @@
         "AuthorizerDescription$lastModifiedDate": "<p>The UNIX timestamp of when the authorizer was last updated.</p>",
         "CACertificate$creationDate": "<p>The date the CA certificate was created.</p>",
         "CACertificateDescription$creationDate": "<p>The date the CA certificate was created.</p>",
-        "CACertificateDescription$lastModifiedDate": null,
+        "CACertificateDescription$lastModifiedDate": "<p>The date the CA certificate was last modified.</p>",
         "Certificate$creationDate": "<p>The date and time the certificate was created.</p>",
         "CertificateDescription$creationDate": "<p>The date and time the certificate was created.</p>",
         "CertificateDescription$lastModifiedDate": "<p>The date and time the certificate was last modified.</p>",
-        "GetPolicyResponse$creationDate": null,
-        "GetPolicyResponse$lastModifiedDate": null,
-        "GetPolicyVersionResponse$creationDate": null,
-        "GetPolicyVersionResponse$lastModifiedDate": null,
+        "CertificateValidity$notBefore": "<p>The certificate is not valid before this date.</p>",
+        "CertificateValidity$notAfter": "<p>The certificate is not valid after this date.</p>",
+        "GetPolicyResponse$creationDate": "<p>The date the policy was created.</p>",
+        "GetPolicyResponse$lastModifiedDate": "<p>The date the policy was last modified.</p>",
+        "GetPolicyVersionResponse$creationDate": "<p>The date the policy version was created.</p>",
+        "GetPolicyVersionResponse$lastModifiedDate": "<p>The date the policy version was last modified.</p>",
         "Job$createdAt": "<p>The time, in milliseconds since the epoch, when the job was created.</p>",
         "Job$lastUpdatedAt": "<p>The time, in milliseconds since the epoch, when the job was last updated.</p>",
         "Job$completedAt": "<p>The time, in milliseconds since the epoch, when the job was completed.</p>",
@@ -887,6 +1242,34 @@
         "TransferData$transferDate": "<p>The date the transfer took place.</p>",
         "TransferData$acceptDate": "<p>The date the transfer was accepted.</p>",
         "TransferData$rejectDate": "<p>The date the transfer was rejected.</p>"
+      }
+    },
+    "DayOfMonth": {
+      "base": null,
+      "refs": {
+        "CreateScheduledAuditRequest$dayOfMonth": "<p>The day of the month on which the scheduled audit takes place. Can be \"1\" through \"31\" or \"LAST\". This field is required if the \"frequency\" parameter is set to \"MONTHLY\". If days 29-31 are specified, and the month does not have that many days, the audit takes place on the \"LAST\" day of the month.</p>",
+        "DescribeScheduledAuditResponse$dayOfMonth": "<p>The day of the month on which the scheduled audit takes place. Will be \"1\" through \"31\" or \"LAST\". If days 29-31 are specified, and the month does not have that many days, the audit takes place on the \"LAST\" day of the month.</p>",
+        "ScheduledAuditMetadata$dayOfMonth": "<p>The day of the month on which the scheduled audit is run (if the <code>frequency</code> is \"MONTHLY\"). If days 29-31 are specified, and the month does not have that many days, the audit takes place on the \"LAST\" day of the month.</p>",
+        "UpdateScheduledAuditRequest$dayOfMonth": "<p>The day of the month on which the scheduled audit takes place. Can be \"1\" through \"31\" or \"LAST\". This field is required if the \"frequency\" parameter is set to \"MONTHLY\". If days 29-31 are specified, and the month does not have that many days, the audit takes place on the \"LAST\" day of the month.</p>"
+      }
+    },
+    "DayOfWeek": {
+      "base": null,
+      "refs": {
+        "CreateScheduledAuditRequest$dayOfWeek": "<p>The day of the week on which the scheduled audit takes place. Can be one of \"SUN\", \"MON\", \"TUE\", \"WED\", \"THU\", \"FRI\" or \"SAT\". This field is required if the \"frequency\" parameter is set to \"WEEKLY\" or \"BIWEEKLY\".</p>",
+        "DescribeScheduledAuditResponse$dayOfWeek": "<p>The day of the week on which the scheduled audit takes place. One of \"SUN\", \"MON\", \"TUE\", \"WED\", \"THU\", \"FRI\" or \"SAT\".</p>",
+        "ScheduledAuditMetadata$dayOfWeek": "<p>The day of the week on which the scheduled audit is run (if the <code>frequency</code> is \"WEEKLY\" or \"BIWEEKLY\").</p>",
+        "UpdateScheduledAuditRequest$dayOfWeek": "<p>The day of the week on which the scheduled audit takes place. Can be one of \"SUN\", \"MON\", \"TUE\", \"WED\", \"THU\", \"FRI\" or \"SAT\". This field is required if the \"frequency\" parameter is set to \"WEEKLY\" or \"BIWEEKLY\".</p>"
+      }
+    },
+    "DeleteAccountAuditConfigurationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteAccountAuditConfigurationResponse": {
+      "base": null,
+      "refs": {
       }
     },
     "DeleteAuthorizerRequest": {
@@ -916,6 +1299,16 @@
     },
     "DeleteConflictException": {
       "base": "<p>You can't delete the resource because it is attached to one or more resources.</p>",
+      "refs": {
+      }
+    },
+    "DeleteJobExecutionRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteJobRequest": {
+      "base": null,
       "refs": {
       }
     },
@@ -957,6 +1350,38 @@
     "DeleteRoleAliasResponse": {
       "base": null,
       "refs": {
+      }
+    },
+    "DeleteScheduledAuditRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteScheduledAuditResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteScheduledAudits": {
+      "base": null,
+      "refs": {
+        "DeleteAccountAuditConfigurationRequest$deleteScheduledAudits": "<p>If true, all scheduled audits are deleted.</p>"
+      }
+    },
+    "DeleteSecurityProfileRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteSecurityProfileResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteStream": {
+      "base": null,
+      "refs": {
+        "DeleteOTAUpdateRequest$deleteStream": "<p>Specifies if the stream associated with an OTA update should be deleted when the OTA update is deleted.</p>"
       }
     },
     "DeleteStreamRequest": {
@@ -1035,6 +1460,26 @@
       "base": null,
       "refs": {
         "ThingTypeMetadata$deprecationDate": "<p>The date and time when the thing type was deprecated.</p>"
+      }
+    },
+    "DescribeAccountAuditConfigurationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeAccountAuditConfigurationResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeAuditTaskRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeAuditTaskResponse": {
+      "base": null,
+      "refs": {
       }
     },
     "DescribeAuthorizerRequest": {
@@ -1137,6 +1582,26 @@
       "refs": {
       }
     },
+    "DescribeScheduledAuditRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeScheduledAuditResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeSecurityProfileRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeSecurityProfileResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DescribeStreamRequest": {
       "base": null,
       "refs": {
@@ -1194,6 +1659,12 @@
         "TopicRulePayload$description": "<p>The description of the rule.</p>"
       }
     },
+    "Destination": {
+      "base": "<p>Describes the location of the updated firmware.</p>",
+      "refs": {
+        "StartSigningJobParameter$destination": "<p>The location to write the code-signed file.</p>"
+      }
+    },
     "DetachPolicyRequest": {
       "base": null,
       "refs": {
@@ -1201,6 +1672,16 @@
     },
     "DetachPrincipalPolicyRequest": {
       "base": "<p>The input for the DetachPrincipalPolicy operation.</p>",
+      "refs": {
+      }
+    },
+    "DetachSecurityProfileRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DetachSecurityProfileResponse": {
+      "base": null,
       "refs": {
       }
     },
@@ -1223,6 +1704,7 @@
     "DetailsMap": {
       "base": null,
       "refs": {
+        "CancelJobExecutionRequest$statusDetails": "<p>A collection of name/value pairs that describe the status of the job execution. If not specified, the statusDetails are unchanged. You can specify at most 10 name/value pairs.</p>",
         "JobExecutionStatusDetails$detailsMap": "<p>The job execution status.</p>"
       }
     },
@@ -1236,12 +1718,18 @@
       "base": null,
       "refs": {
         "GetV2LoggingOptionsResponse$disableAllLogs": "<p>Disables all logs.</p>",
-        "SetV2LoggingOptionsRequest$disableAllLogs": "<p>Set to true to disable all logs, otherwise set to false.</p>"
+        "SetV2LoggingOptionsRequest$disableAllLogs": "<p>If true all logs are disabled. The default is false.</p>"
       }
     },
     "DisableTopicRuleRequest": {
       "base": "<p>The input for the DisableTopicRuleRequest operation.</p>",
       "refs": {
+      }
+    },
+    "DurationSeconds": {
+      "base": null,
+      "refs": {
+        "BehaviorCriteria$durationSeconds": "<p>Use this to specify the period of time over which the behavior is evaluated, for those criteria which have a time dimension (for example, <code>NUM_MESSAGES_SENT</code>).</p>"
       }
     },
     "DynamoDBAction": {
@@ -1319,6 +1807,8 @@
     "Enabled": {
       "base": null,
       "refs": {
+        "AuditCheckConfiguration$enabled": "<p>True if this audit check is enabled for this account.</p>",
+        "AuditNotificationTarget$enabled": "<p>True if notifications to the target are enabled.</p>",
         "Configuration$Enabled": "<p>True to enable the configuration.</p>"
       }
     },
@@ -1331,7 +1821,13 @@
     "EndpointType": {
       "base": null,
       "refs": {
-        "DescribeEndpointRequest$endpointType": "<p>The endpoint type.</p>"
+        "DescribeEndpointRequest$endpointType": "<p>The endpoint type (such as <code>iot:Data</code>, <code>iot:CredentialProvider</code> and <code>iot:Jobs</code>). </p>"
+      }
+    },
+    "ErrorCode": {
+      "base": null,
+      "refs": {
+        "AuditCheckDetails$errorCode": "<p>The code of any error encountered when performing this check during this audit. One of \"INSUFFICIENT_PERMISSIONS\", or \"AUDIT_CHECK_DISABLED\".</p>"
       }
     },
     "ErrorInfo": {
@@ -1343,7 +1839,9 @@
     "ErrorMessage": {
       "base": null,
       "refs": {
-        "DescribeThingRegistrationTaskResponse$message": "<p>The message.</p>"
+        "AuditCheckDetails$message": "<p>The message associated with any error encountered when performing this check during this audit.</p>",
+        "DescribeThingRegistrationTaskResponse$message": "<p>The message.</p>",
+        "ValidationError$errorMessage": "<p>The description of an error found in the behaviors.</p>"
       }
     },
     "EventConfigurations": {
@@ -1359,12 +1857,25 @@
         "EventConfigurations$key": null
       }
     },
+    "ExecutionNamePrefix": {
+      "base": null,
+      "refs": {
+        "StepFunctionsAction$executionNamePrefix": "<p>(Optional) A name will be given to the state machine execution consisting of this prefix followed by a UUID. Step Functions automatically creates a unique name for each state machine execution if one is not provided.</p>"
+      }
+    },
     "ExecutionNumber": {
       "base": null,
       "refs": {
+        "DeleteJobExecutionRequest$executionNumber": "<p>The ID of the job execution to be deleted. The <code>executionNumber</code> refers to the execution of a particular job on a particular device.</p> <p>Note that once a job execution is deleted, the <code>executionNumber</code> may be reused by IoT, so be sure you get and use the correct value here.</p>",
         "DescribeJobExecutionRequest$executionNumber": "<p>A string (consisting of the digits \"0\" through \"9\" which is used to specify a particular job execution on a particular device.</p>",
         "JobExecution$executionNumber": "<p>A string (consisting of the digits \"0\" through \"9\") which identifies this particular job execution on this particular device. It can be used in commands which return or update job execution information. </p>",
         "JobExecutionSummary$executionNumber": "<p>A string (consisting of the digits \"0\" through \"9\") which identifies this particular job execution on this particular device. It can be used later in commands which return or update job execution information.</p>"
+      }
+    },
+    "ExpectedVersion": {
+      "base": null,
+      "refs": {
+        "CancelJobExecutionRequest$expectedVersion": "<p>(Optional) The expected current version of the job execution. Each time you update the job execution, its version is incremented. If the version of the job execution stored in Jobs does not match, the update is rejected with a VersionMismatch error, and an ErrorResponse that contains the current job execution status data is returned. (This makes it unnecessary to perform a separate DescribeJobExecution request in order to obtain the job execution status data.)</p>"
       }
     },
     "ExpiresInSec": {
@@ -1379,6 +1890,12 @@
         "Denied$explicitDeny": "<p>Information that explicitly denies the authorization. </p>"
       }
     },
+    "FailedChecksCount": {
+      "base": null,
+      "refs": {
+        "TaskStatistics$failedChecks": "<p>The number of checks </p>"
+      }
+    },
     "FailedThings": {
       "base": null,
       "refs": {
@@ -1390,6 +1907,12 @@
       "refs": {
         "Stream$fileId": "<p>The ID of a file associated with a stream.</p>",
         "StreamFile$fileId": "<p>The file ID.</p>"
+      }
+    },
+    "FileLocation": {
+      "base": "<p>The location of the OTA update.</p>",
+      "refs": {
+        "OTAUpdateFile$fileLocation": "<p>The location of the updated firmware.</p>"
       }
     },
     "FileName": {
@@ -1422,6 +1945,28 @@
         "DeleteCertificateRequest$forceDelete": "<p>Forces a certificate request to be deleted.</p>"
       }
     },
+    "ForceDeleteAWSJob": {
+      "base": null,
+      "refs": {
+        "DeleteOTAUpdateRequest$forceDeleteAWSJob": "<p>Specifies if the AWS Job associated with the OTA update should be deleted with the OTA update is deleted.</p>"
+      }
+    },
+    "ForceFlag": {
+      "base": null,
+      "refs": {
+        "CancelJobExecutionRequest$force": "<p>(Optional) If <code>true</code> the job execution will be canceled if it has status IN_PROGRESS or QUEUED, otherwise the job execution will be canceled only if it has status QUEUED. If you attempt to cancel a job execution that is IN_PROGRESS, and you do not set <code>force</code> to <code>true</code>, then an <code>InvalidStateTransitionException</code> will be thrown. The default is <code>false</code>.</p> <p>Canceling a job execution which is \"IN_PROGRESS\", will cause the device to be unable to update the job execution status. Use caution and ensure that the device is able to recover to a valid state.</p>",
+        "CancelJobRequest$force": "<p>(Optional) If <code>true</code> job executions with status \"IN_PROGRESS\" and \"QUEUED\" are canceled, otherwise only job executions with status \"QUEUED\" are canceled. The default is <code>false</code>.</p> <p>Canceling a job which is \"IN_PROGRESS\", will cause a device which is executing the job to be unable to update the job execution status. Use caution and ensure that each device executing a job which is canceled is able to recover to a valid state.</p>",
+        "DeleteJobExecutionRequest$force": "<p>(Optional) When true, you can delete a job execution which is \"IN_PROGRESS\". Otherwise, you can only delete a job execution which is in a terminal state (\"SUCCEEDED\", \"FAILED\", \"REJECTED\", \"REMOVED\" or \"CANCELED\") or an exception will occur. The default is false.</p> <note> <p>Deleting a job execution which is \"IN_PROGRESS\", will cause the device to be unable to access job information or update the job execution status. Use caution and ensure that the device is able to recover to a valid state.</p> </note>",
+        "DeleteJobRequest$force": "<p>(Optional) When true, you can delete a job which is \"IN_PROGRESS\". Otherwise, you can only delete a job which is in a terminal state (\"COMPLETED\" or \"CANCELED\") or an exception will occur. The default is false.</p> <note> <p>Deleting a job which is \"IN_PROGRESS\", will cause a device which is executing the job to be unable to access job information or update the job execution status. Use caution and ensure that each device executing a job which is deleted is able to recover to a valid state.</p> </note>"
+      }
+    },
+    "Forced": {
+      "base": null,
+      "refs": {
+        "Job$forceCanceled": "<p>Will be <code>true</code> if the job was canceled with the optional <code>force</code> parameter set to <code>true</code>.</p>",
+        "JobExecution$forceCanceled": "<p>Will be <code>true</code> if the job execution was canceled with the optional <code>force</code> parameter set to <code>true</code>.</p>"
+      }
+    },
     "FunctionArn": {
       "base": null,
       "refs": {
@@ -1437,10 +1982,10 @@
     "GenerationId": {
       "base": null,
       "refs": {
-        "CACertificateDescription$generationId": null,
-        "CertificateDescription$generationId": null,
-        "GetPolicyResponse$generationId": null,
-        "GetPolicyVersionResponse$generationId": null
+        "CACertificateDescription$generationId": "<p>The generation ID of the CA certificate.</p>",
+        "CertificateDescription$generationId": "<p>The generation ID of the certificate.</p>",
+        "GetPolicyResponse$generationId": "<p>The generation ID of the policy.</p>",
+        "GetPolicyVersionResponse$generationId": "<p>The generation ID of the policy version.</p>"
       }
     },
     "GetEffectivePoliciesRequest": {
@@ -1573,6 +2118,12 @@
         "Denied$implicitDeny": "<p>Information that implicitly denies the authorization. When a policy doesn't explicitly deny or allow an action on a resource it is considered an implicit deny.</p>"
       }
     },
+    "InProgressChecksCount": {
+      "base": null,
+      "refs": {
+        "TaskStatistics$inProgressChecks": "<p>The number of checks in progress.</p>"
+      }
+    },
     "InProgressThings": {
       "base": null,
       "refs": {
@@ -1642,6 +2193,17 @@
       "refs": {
       }
     },
+    "InvalidStateTransitionException": {
+      "base": "<p>An attempt was made to change to an invalid state, for example by deleting a job or a job execution which is \"IN_PROGRESS\" without setting the <code>force</code> parameter.</p>",
+      "refs": {
+      }
+    },
+    "IotAnalyticsAction": {
+      "base": "<p>Sends messge data to an AWS IoT Analytics channel.</p>",
+      "refs": {
+        "Action$iotAnalytics": "<p>Sends message data to an AWS IoT Analytics channel.</p>"
+      }
+    },
     "IsAuthenticated": {
       "base": null,
       "refs": {
@@ -1696,13 +2258,6 @@
       "refs": {
         "CreateJobRequest$document": "<p>The job document.</p>",
         "GetJobDocumentResponse$document": "<p>The job document content.</p>"
-      }
-    },
-    "JobDocumentParameters": {
-      "base": null,
-      "refs": {
-        "CreateJobRequest$documentParameters": "<p>Parameters for the job document.</p>",
-        "Job$documentParameters": "<p>The parameters specified for the job document.</p>"
       }
     },
     "JobDocumentSource": {
@@ -1776,10 +2331,13 @@
       "refs": {
         "AssociateTargetsWithJobRequest$jobId": "<p>The unique identifier you assigned to this job when it was created.</p>",
         "AssociateTargetsWithJobResponse$jobId": "<p>The unique identifier you assigned to this job when it was created.</p>",
+        "CancelJobExecutionRequest$jobId": "<p>The ID of the job to be canceled.</p>",
         "CancelJobRequest$jobId": "<p>The unique identifier you assigned to this job when it was created.</p>",
         "CancelJobResponse$jobId": "<p>The unique identifier you assigned to this job when it was created.</p>",
         "CreateJobRequest$jobId": "<p>A job identifier which must be unique for your AWS account. We recommend using a UUID. Alpha-numeric characters, \"-\" and \"_\" are valid for use here.</p>",
         "CreateJobResponse$jobId": "<p>The unique identifier you assigned to this job.</p>",
+        "DeleteJobExecutionRequest$jobId": "<p>The ID of the job whose execution on a particular device will be deleted.</p>",
+        "DeleteJobRequest$jobId": "<p>The ID of the job to be deleted.</p> <p>After a job deletion is completed, you may reuse this jobId when you create a new job. However, this is not recommended, and you must ensure that your devices are not using the jobId to refer to the deleted job.</p>",
         "DescribeJobExecutionRequest$jobId": "<p>The unique identifier you assigned to this job when it was created.</p>",
         "DescribeJobRequest$jobId": "<p>The unique identifier you assigned to this job when it was created.</p>",
         "GetJobDocumentRequest$jobId": "<p>The unique identifier you assigned to this job when it was created.</p>",
@@ -1827,14 +2385,12 @@
     "JsonDocument": {
       "base": null,
       "refs": {
-        "ThingDocument$shadow": "<p>The thing shadow.</p>"
+        "ThingDocument$shadow": "<p>The shadow.</p>"
       }
     },
     "Key": {
       "base": null,
       "refs": {
-        "AdditionalParameterMap$key": null,
-        "AttributesMap$key": null,
         "S3Action$key": "<p>The object key.</p>"
       }
     },
@@ -1884,7 +2440,17 @@
       }
     },
     "LimitExceededException": {
-      "base": "<p>The number of attached entities exceeds the limit.</p>",
+      "base": "<p>A limit has been exceeded.</p>",
+      "refs": {
+      }
+    },
+    "ListActiveViolationsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListActiveViolationsResponse": {
+      "base": null,
       "refs": {
       }
     },
@@ -1894,6 +2460,26 @@
       }
     },
     "ListAttachedPoliciesResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListAuditFindingsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListAuditFindingsResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListAuditTasksRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListAuditTasksResponse": {
       "base": null,
       "refs": {
       }
@@ -2058,6 +2644,36 @@
       "refs": {
       }
     },
+    "ListScheduledAuditsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListScheduledAuditsResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListSecurityProfilesForTargetRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListSecurityProfilesForTargetResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListSecurityProfilesRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListSecurityProfilesResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "ListStreamsRequest": {
       "base": null,
       "refs": {
@@ -2074,6 +2690,16 @@
       }
     },
     "ListTargetsForPolicyResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListTargetsForSecurityProfileRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListTargetsForSecurityProfileResponse": {
       "base": null,
       "refs": {
       }
@@ -2178,6 +2804,16 @@
       "refs": {
       }
     },
+    "ListViolationEventsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListViolationEventsResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "LogLevel": {
       "base": null,
       "refs": {
@@ -2270,8 +2906,22 @@
     "MaxResults": {
       "base": null,
       "refs": {
+        "ListActiveViolationsRequest$maxResults": "<p>The maximum number of results to return at one time.</p>",
+        "ListAuditFindingsRequest$maxResults": "<p>The maximum number of results to return at one time. The default is 25.</p>",
+        "ListAuditTasksRequest$maxResults": "<p>The maximum number of results to return at one time. The default is 25.</p>",
         "ListOTAUpdatesRequest$maxResults": "<p>The maximum number of results to return at one time.</p>",
-        "ListStreamsRequest$maxResults": "<p>The maximum number of results to return at a time.</p>"
+        "ListScheduledAuditsRequest$maxResults": "<p>The maximum number of results to return at one time. The default is 25.</p>",
+        "ListSecurityProfilesForTargetRequest$maxResults": "<p>The maximum number of results to return at one time.</p>",
+        "ListSecurityProfilesRequest$maxResults": "<p>The maximum number of results to return at one time.</p>",
+        "ListStreamsRequest$maxResults": "<p>The maximum number of results to return at a time.</p>",
+        "ListTargetsForSecurityProfileRequest$maxResults": "<p>The maximum number of results to return at one time.</p>",
+        "ListViolationEventsRequest$maxResults": "<p>The maximum number of results to return at one time.</p>"
+      }
+    },
+    "MaximumPerMinute": {
+      "base": null,
+      "refs": {
+        "AwsJobExecutionsRolloutConfig$maximumPerMinute": "<p>The maximum number of OTA update job executions started per minute.</p>"
       }
     },
     "Message": {
@@ -2287,37 +2937,15 @@
     "MessageFormat": {
       "base": null,
       "refs": {
-        "SnsAction$messageFormat": "<p>The message format of the message to publish. Optional. Accepted values are \"JSON\" and \"RAW\". The default value of the attribute is \"RAW\". SNS uses this setting to determine if the payload should be parsed and relevant platform-specific bits of the payload should be extracted. To read more about SNS message formats, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/json-formats.html\">http://docs.aws.amazon.com/sns/latest/dg/json-formats.html</a> refer to their official documentation.</p>"
-      }
-    },
-    "MetricName": {
-      "base": null,
-      "refs": {
-        "CloudwatchMetricAction$metricName": "<p>The CloudWatch metric name.</p>"
-      }
-    },
-    "MetricNamespace": {
-      "base": null,
-      "refs": {
-        "CloudwatchMetricAction$metricNamespace": "<p>The CloudWatch metric namespace name.</p>"
-      }
-    },
-    "MetricTimestamp": {
-      "base": null,
-      "refs": {
-        "CloudwatchMetricAction$metricTimestamp": "<p>An optional <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#about_timestamp\">Unix timestamp</a>.</p>"
-      }
-    },
-    "MetricUnit": {
-      "base": null,
-      "refs": {
-        "CloudwatchMetricAction$metricUnit": "<p>The <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#Unit\">metric unit</a> supported by CloudWatch.</p>"
+        "SnsAction$messageFormat": "<p>(Optional) The message format of the message to publish. Accepted values are \"JSON\" and \"RAW\". The default value of the attribute is \"RAW\". SNS uses this setting to determine if the payload should be parsed and relevant platform-specific bits of the payload should be extracted. To read more about SNS message formats, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/json-formats.html\">http://docs.aws.amazon.com/sns/latest/dg/json-formats.html</a> refer to their official documentation.</p>"
       }
     },
     "MetricValue": {
-      "base": null,
+      "base": "<p>The value to be compared with the <code>metric</code>.</p>",
       "refs": {
-        "CloudwatchMetricAction$metricValue": "<p>The CloudWatch metric value.</p>"
+        "ActiveViolation$lastViolationValue": "<p>The value of the metric (the measurement) which caused the most recent violation.</p>",
+        "BehaviorCriteria$value": "<p>The value to be compared with the <code>metric</code>.</p>",
+        "ViolationEvent$metricValue": "<p>The value of the metric (the measurement).</p>"
       }
     },
     "MissingContextValue": {
@@ -2335,6 +2963,12 @@
     "NextToken": {
       "base": null,
       "refs": {
+        "ListActiveViolationsRequest$nextToken": "<p>The token for the next set of results.</p>",
+        "ListActiveViolationsResponse$nextToken": "<p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>",
+        "ListAuditFindingsRequest$nextToken": "<p>The token for the next set of results.</p>",
+        "ListAuditFindingsResponse$nextToken": "<p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>",
+        "ListAuditTasksRequest$nextToken": "<p>The token for the next set of results.</p>",
+        "ListAuditTasksResponse$nextToken": "<p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>",
         "ListIndicesRequest$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
         "ListIndicesResponse$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
         "ListJobExecutionsForJobRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
@@ -2343,32 +2977,60 @@
         "ListJobExecutionsForThingResponse$nextToken": "<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>",
         "ListJobsRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
         "ListJobsResponse$nextToken": "<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>",
-        "ListOTAUpdatesRequest$nextToken": "<p>A token used to retreive the next set of results.</p>",
+        "ListOTAUpdatesRequest$nextToken": "<p>A token used to retrieve the next set of results.</p>",
         "ListOTAUpdatesResponse$nextToken": "<p>A token to use to get the next set of results.</p>",
-        "ListPrincipalThingsRequest$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
+        "ListPrincipalThingsRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
         "ListPrincipalThingsResponse$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
+        "ListScheduledAuditsRequest$nextToken": "<p>The token for the next set of results.</p>",
+        "ListScheduledAuditsResponse$nextToken": "<p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>",
+        "ListSecurityProfilesForTargetRequest$nextToken": "<p>The token for the next set of results.</p>",
+        "ListSecurityProfilesForTargetResponse$nextToken": "<p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>",
+        "ListSecurityProfilesRequest$nextToken": "<p>The token for the next set of results.</p>",
+        "ListSecurityProfilesResponse$nextToken": "<p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>",
         "ListStreamsRequest$nextToken": "<p>A token used to get the next set of results.</p>",
         "ListStreamsResponse$nextToken": "<p>A token used to get the next set of results.</p>",
-        "ListThingGroupsForThingRequest$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
+        "ListTargetsForSecurityProfileRequest$nextToken": "<p>The token for the next set of results.</p>",
+        "ListTargetsForSecurityProfileResponse$nextToken": "<p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>",
+        "ListThingGroupsForThingRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
         "ListThingGroupsForThingResponse$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
-        "ListThingGroupsRequest$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
+        "ListThingGroupsRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
         "ListThingGroupsResponse$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
         "ListThingRegistrationTaskReportsRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
-        "ListThingRegistrationTaskReportsResponse$nextToken": "<p>The token to retrieve the next set of results.</p>",
-        "ListThingRegistrationTasksRequest$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
+        "ListThingRegistrationTaskReportsResponse$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
+        "ListThingRegistrationTasksRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
         "ListThingRegistrationTasksResponse$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
-        "ListThingTypesRequest$nextToken": "<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>",
+        "ListThingTypesRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
         "ListThingTypesResponse$nextToken": "<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>",
-        "ListThingsInThingGroupRequest$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
+        "ListThingsInThingGroupRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
         "ListThingsInThingGroupResponse$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
-        "ListThingsRequest$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
+        "ListThingsRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
         "ListThingsResponse$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
         "ListTopicRulesRequest$nextToken": "<p>A token used to retrieve the next value.</p>",
         "ListTopicRulesResponse$nextToken": "<p>A token used to retrieve the next value.</p>",
         "ListV2LoggingLevelsRequest$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
         "ListV2LoggingLevelsResponse$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
+        "ListViolationEventsRequest$nextToken": "<p>The token for the next set of results.</p>",
+        "ListViolationEventsResponse$nextToken": "<p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>",
         "SearchIndexRequest$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
         "SearchIndexResponse$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>"
+      }
+    },
+    "NonCompliantChecksCount": {
+      "base": null,
+      "refs": {
+        "TaskStatistics$nonCompliantChecks": "<p>The number of checks that found non-compliant resources.</p>"
+      }
+    },
+    "NonCompliantResource": {
+      "base": "<p>Information about the resource that was non-compliant with the audit check.</p>",
+      "refs": {
+        "AuditFinding$nonCompliantResource": "<p>The resource that was found to be non-compliant with the audit check.</p>"
+      }
+    },
+    "NonCompliantResourcesCount": {
+      "base": null,
+      "refs": {
+        "AuditCheckDetails$nonCompliantResourcesCount": "<p>The number of resources that the check found non-compliant.</p>"
       }
     },
     "NotConfiguredException": {
@@ -2456,8 +3118,10 @@
     "OptionalVersion": {
       "base": null,
       "refs": {
+        "DeleteSecurityProfileRequest$expectedVersion": "<p>The expected version of the security profile. A new version is generated whenever the security profile is updated. If you specify a value that is different than the actual version, a <code>VersionConflictException</code> is thrown.</p>",
         "DeleteThingGroupRequest$expectedVersion": "<p>The expected version of the thing group to delete.</p>",
         "DeleteThingRequest$expectedVersion": "<p>The expected version of the thing record in the registry. If the version of the record in the registry does not match the expected version specified in the request, the <code>DeleteThing</code> request is rejected with a <code>VersionConflictException</code>.</p>",
+        "UpdateSecurityProfileRequest$expectedVersion": "<p>The expected version of the security profile. A new version is generated whenever the security profile is updated. If you specify a value that is different than the actual version, a <code>VersionConflictException</code> is thrown.</p>",
         "UpdateThingGroupRequest$expectedVersion": "<p>The expected version of the thing group. If this does not match the version of the thing group being updated, the update will fail.</p>",
         "UpdateThingRequest$expectedVersion": "<p>The expected version of the thing record in the registry. If the version of the record in the registry does not match the expected version specified in the request, the <code>UpdateThing</code> request is rejected with a <code>VersionConflictException</code>.</p>"
       }
@@ -2496,22 +3160,10 @@
         "Parameters$key": null
       }
     },
-    "ParameterKey": {
-      "base": null,
-      "refs": {
-        "JobDocumentParameters$key": null
-      }
-    },
-    "ParameterValue": {
-      "base": null,
-      "refs": {
-        "JobDocumentParameters$value": null
-      }
-    },
     "Parameters": {
       "base": null,
       "refs": {
-        "RegisterThingRequest$parameters": "<p>The parameters for provisioning a thing.</p>"
+        "RegisterThingRequest$parameters": "<p>The parameters for provisioning a thing. See <a href=\"http://docs.aws.amazon.com/iot/latest/developerguide/programmatic-provisioning.html\">Programmatic Provisioning</a> for more information.</p>"
       }
     },
     "PartitionKey": {
@@ -2530,6 +3182,12 @@
       "base": null,
       "refs": {
         "DescribeThingRegistrationTaskResponse$percentageProgress": "<p>The progress of the bulk provisioning task expressed as a percentage.</p>"
+      }
+    },
+    "Platform": {
+      "base": null,
+      "refs": {
+        "SigningProfileParameter$platform": "<p>The hardware platform of your device.</p>"
       }
     },
     "Policies": {
@@ -2601,6 +3259,7 @@
         "ListTargetsForPolicyRequest$policyName": "<p>The policy name.</p>",
         "Policy$policyName": "<p>The policy name.</p>",
         "PolicyNames$member": null,
+        "PolicyVersionIdentifier$policyName": "<p>The name of the policy.</p>",
         "SetDefaultPolicyVersionRequest$policyName": "<p>The policy name.</p>"
       }
     },
@@ -2642,13 +3301,38 @@
         "GetPolicyVersionRequest$policyVersionId": "<p>The policy version ID.</p>",
         "GetPolicyVersionResponse$policyVersionId": "<p>The policy version ID.</p>",
         "PolicyVersion$versionId": "<p>The policy version ID.</p>",
+        "PolicyVersionIdentifier$policyVersionId": "<p>The ID of the version of the policy associated with the resource.</p>",
         "SetDefaultPolicyVersionRequest$policyVersionId": "<p>The policy version ID.</p>"
+      }
+    },
+    "PolicyVersionIdentifier": {
+      "base": "<p>Information about the version of the policy associated with the resource.</p>",
+      "refs": {
+        "ResourceIdentifier$policyVersionIdentifier": "<p>The version of the policy associated with the resource.</p>"
       }
     },
     "PolicyVersions": {
       "base": null,
       "refs": {
         "ListPolicyVersionsResponse$policyVersions": "<p>The policy versions.</p>"
+      }
+    },
+    "Port": {
+      "base": null,
+      "refs": {
+        "Ports$member": null
+      }
+    },
+    "Ports": {
+      "base": null,
+      "refs": {
+        "MetricValue$ports": "<p>If the <code>comparisonOperator</code> calls for a set of ports, use this to specify that set to be compared with the <code>metric</code>.</p>"
+      }
+    },
+    "Prefix": {
+      "base": null,
+      "refs": {
+        "S3Destination$prefix": "<p>The S3 prefix.</p>"
       }
     },
     "PresignedUrlConfig": {
@@ -2705,7 +3389,7 @@
     "ProcessingTargetNameList": {
       "base": null,
       "refs": {
-        "JobProcessDetails$processingTargets": "<p>The devices on which the job is executing.</p>"
+        "JobProcessDetails$processingTargets": "<p>The target devices to which the job execution is being rolled out. This value will be null after the job execution has finished rolling out to all the target devices.</p>"
       }
     },
     "PublicKey": {
@@ -2771,10 +3455,23 @@
         "DynamoDBAction$rangeKeyValue": "<p>The range key value.</p>"
       }
     },
+    "ReasonForNonCompliance": {
+      "base": null,
+      "refs": {
+        "AuditFinding$reasonForNonCompliance": "<p>The reason the resource was non-compliant.</p>"
+      }
+    },
+    "ReasonForNonComplianceCode": {
+      "base": null,
+      "refs": {
+        "AuditFinding$reasonForNonComplianceCode": "<p>A code which indicates the reason that the resource was non-compliant.</p>"
+      }
+    },
     "Recursive": {
       "base": null,
       "refs": {
         "ListAttachedPoliciesRequest$recursive": "<p>When true, recursively list attached policies.</p>",
+        "ListSecurityProfilesForTargetRequest$recursive": "<p>If true, return child groups as well.</p>",
         "ListThingsInThingGroupRequest$recursive": "<p>When true, list things in this thing group and in all child groups as well.</p>"
       }
     },
@@ -2871,6 +3568,18 @@
         "JobProcessDetails$numberOfRejectedThings": "<p>The number of things that rejected the job.</p>"
       }
     },
+    "RelatedResource": {
+      "base": "<p>Information about a related resource.</p>",
+      "refs": {
+        "RelatedResources$member": null
+      }
+    },
+    "RelatedResources": {
+      "base": null,
+      "refs": {
+        "AuditFinding$relatedResources": "<p>The list of related resources.</p>"
+      }
+    },
     "RemoveAutoRegistration": {
       "base": null,
       "refs": {
@@ -2940,6 +3649,14 @@
         "RegisterThingResponse$resourceArns": "<p>ARNs for the generated resources.</p>"
       }
     },
+    "ResourceIdentifier": {
+      "base": "<p>Information identifying the non-compliant resource.</p>",
+      "refs": {
+        "ListAuditFindingsRequest$resourceIdentifier": "<p>Information identifying the non-compliant resource.</p>",
+        "NonCompliantResource$resourceIdentifier": "<p>Information identifying the non-compliant resource.</p>",
+        "RelatedResource$resourceIdentifier": "<p>Information identifying the resource.</p>"
+      }
+    },
     "ResourceLogicalId": {
       "base": null,
       "refs": {
@@ -2954,6 +3671,13 @@
     "ResourceRegistrationFailureException": {
       "base": "<p>The resource registration failed.</p>",
       "refs": {
+      }
+    },
+    "ResourceType": {
+      "base": null,
+      "refs": {
+        "NonCompliantResource$resourceType": "<p>The type of the non-compliant resource.</p>",
+        "RelatedResource$resourceType": "<p>The type of resource.</p>"
       }
     },
     "Resources": {
@@ -2979,7 +3703,7 @@
       "base": null,
       "refs": {
         "CreateRoleAliasResponse$roleAliasArn": "<p>The role alias ARN.</p>",
-        "RoleAliasDescription$roleAliasArn": null,
+        "RoleAliasDescription$roleAliasArn": "<p>The ARN of the role alias.</p>",
         "UpdateRoleAliasResponse$roleAliasArn": "<p>The role alias ARN.</p>"
       }
     },
@@ -2998,15 +3722,19 @@
     "RoleArn": {
       "base": null,
       "refs": {
+        "AlertTarget$roleArn": "<p>The ARN of the role that grants permission to send alerts to the notification target.</p>",
+        "AuditNotificationTarget$roleArn": "<p>The ARN of the role that grants permission to send notifications to the target.</p>",
         "CreateOTAUpdateRequest$roleArn": "<p>The IAM role that allows access to the AWS IoT Jobs service.</p>",
         "CreateRoleAliasRequest$roleArn": "<p>The role ARN.</p>",
         "CreateStreamRequest$roleArn": "<p>An IAM role that allows the IoT service principal assumes to access your S3 files.</p>",
+        "DescribeAccountAuditConfigurationResponse$roleArn": "<p>The ARN of the role that grants permission to AWS IoT to access information about your devices, policies, certificates and other items as necessary when performing an audit.</p> <p>On the first call to <code>UpdateAccountAuditConfiguration</code> this parameter is required.</p>",
         "DescribeThingRegistrationTaskResponse$roleArn": "<p>The role ARN that grants access to the input file bucket.</p>",
         "PresignedUrlConfig$roleArn": "<p>The ARN of an IAM role that grants grants permission to download files from the S3 bucket where the job data/updates are stored. The role must also grant permission for IoT to download the files.</p>",
         "RegistrationConfig$roleArn": "<p>The ARN of the role.</p>",
         "RoleAliasDescription$roleArn": "<p>The role ARN.</p>",
         "StartThingRegistrationTaskRequest$roleArn": "<p>The IAM role ARN that grants permission the input file.</p>",
         "StreamInfo$roleArn": "<p>An IAM role AWS IoT assumes to access your S3 files.</p>",
+        "UpdateAccountAuditConfigurationRequest$roleArn": "<p>The ARN of the role that grants permission to AWS IoT to access information about your devices, policies, certificates and other items as necessary when performing an audit.</p>",
         "UpdateRoleAliasRequest$roleArn": "<p>The role ARN.</p>",
         "UpdateStreamRequest$roleArn": "<p>An IAM role that allows the IoT service principal assumes to access your S3 files.</p>"
       }
@@ -3040,7 +3768,14 @@
     "S3Bucket": {
       "base": null,
       "refs": {
-        "S3Location$bucket": "<p>The S3 bucket that contains the file to stream.</p>"
+        "S3Destination$bucket": "<p>The S3 bucket that contains the updated firmware.</p>",
+        "S3Location$bucket": "<p>The S3 bucket.</p>"
+      }
+    },
+    "S3Destination": {
+      "base": "<p>Describes the location of updated firmware in S3.</p>",
+      "refs": {
+        "Destination$s3Destination": "<p>Describes the location in S3 of the updated firmware.</p>"
       }
     },
     "S3FileUrl": {
@@ -3058,19 +3793,20 @@
     "S3Key": {
       "base": null,
       "refs": {
-        "S3Location$key": "<p>The name of the file within the S3 bucket to stream.</p>"
+        "S3Location$key": "<p>The S3 key.</p>"
       }
     },
     "S3Location": {
-      "base": "<p>The location in S3 the contains the files to stream.</p>",
+      "base": "<p>The S3 location.</p>",
       "refs": {
+        "FileLocation$s3Location": "<p>The location of the updated firmware in S3.</p>",
         "StreamFile$s3Location": "<p>The location of the file in S3.</p>"
       }
     },
     "S3Version": {
       "base": null,
       "refs": {
-        "S3Location$version": "<p>The file version.</p>"
+        "S3Location$version": "<p>The S3 bucket version.</p>"
       }
     },
     "SQL": {
@@ -3098,6 +3834,39 @@
         "SalesforceAction$token": "<p>The token used to authenticate access to the Salesforce IoT Cloud Input Stream. The token is available from the Salesforce IoT Cloud platform after creation of the Input Stream.</p>"
       }
     },
+    "ScheduledAuditArn": {
+      "base": null,
+      "refs": {
+        "CreateScheduledAuditResponse$scheduledAuditArn": "<p>The ARN of the scheduled audit.</p>",
+        "DescribeScheduledAuditResponse$scheduledAuditArn": "<p>The ARN of the scheduled audit.</p>",
+        "ScheduledAuditMetadata$scheduledAuditArn": "<p>The ARN of the scheduled audit.</p>",
+        "UpdateScheduledAuditResponse$scheduledAuditArn": "<p>The ARN of the scheduled audit.</p>"
+      }
+    },
+    "ScheduledAuditMetadata": {
+      "base": "<p>Information about the scheduled audit.</p>",
+      "refs": {
+        "ScheduledAuditMetadataList$member": null
+      }
+    },
+    "ScheduledAuditMetadataList": {
+      "base": null,
+      "refs": {
+        "ListScheduledAuditsResponse$scheduledAudits": "<p>The list of scheduled audits.</p>"
+      }
+    },
+    "ScheduledAuditName": {
+      "base": null,
+      "refs": {
+        "CreateScheduledAuditRequest$scheduledAuditName": "<p>The name you want to give to the scheduled audit. (Max. 128 chars)</p>",
+        "DeleteScheduledAuditRequest$scheduledAuditName": "<p>The name of the scheduled audit you want to delete.</p>",
+        "DescribeAuditTaskResponse$scheduledAuditName": "<p>The name of the scheduled audit (only if the audit was a scheduled audit).</p>",
+        "DescribeScheduledAuditRequest$scheduledAuditName": "<p>The name of the scheduled audit whose information you want to get.</p>",
+        "DescribeScheduledAuditResponse$scheduledAuditName": "<p>The name of the scheduled audit.</p>",
+        "ScheduledAuditMetadata$scheduledAuditName": "<p>The name of the scheduled audit.</p>",
+        "UpdateScheduledAuditRequest$scheduledAuditName": "<p>The name of the scheduled audit. (Max. 128 chars)</p>"
+      }
+    },
     "SearchIndexRequest": {
       "base": null,
       "refs": {
@@ -3119,6 +3888,91 @@
       "refs": {
         "TestInvokeAuthorizerResponse$refreshAfterInSeconds": "<p>The number of seconds after which the temporary credentials are refreshed.</p>",
         "TestInvokeAuthorizerResponse$disconnectAfterInSeconds": "<p>The number of seconds after which the connection is terminated.</p>"
+      }
+    },
+    "SecurityProfileArn": {
+      "base": null,
+      "refs": {
+        "CreateSecurityProfileResponse$securityProfileArn": "<p>The ARN of the security profile.</p>",
+        "DescribeSecurityProfileResponse$securityProfileArn": "<p>The ARN of the security profile.</p>",
+        "SecurityProfileIdentifier$arn": "<p>The ARN of the security profile.</p>",
+        "UpdateSecurityProfileResponse$securityProfileArn": "<p>The ARN of the security profile that was updated.</p>"
+      }
+    },
+    "SecurityProfileDescription": {
+      "base": null,
+      "refs": {
+        "CreateSecurityProfileRequest$securityProfileDescription": "<p>A description of the security profile.</p>",
+        "DescribeSecurityProfileResponse$securityProfileDescription": "<p>A description of the security profile (associated with the security profile when it was created or updated).</p>",
+        "UpdateSecurityProfileRequest$securityProfileDescription": "<p>A description of the security profile.</p>",
+        "UpdateSecurityProfileResponse$securityProfileDescription": "<p>The description of the security profile.</p>"
+      }
+    },
+    "SecurityProfileIdentifier": {
+      "base": "<p>Identifying information for a Device Defender security profile.</p>",
+      "refs": {
+        "SecurityProfileIdentifiers$member": null,
+        "SecurityProfileTargetMapping$securityProfileIdentifier": "<p>Information that identifies the security profile.</p>"
+      }
+    },
+    "SecurityProfileIdentifiers": {
+      "base": null,
+      "refs": {
+        "ListSecurityProfilesResponse$securityProfileIdentifiers": "<p>A list of security profile identifiers (names and ARNs).</p>"
+      }
+    },
+    "SecurityProfileName": {
+      "base": null,
+      "refs": {
+        "ActiveViolation$securityProfileName": "<p>The security profile whose behavior is in violation.</p>",
+        "AttachSecurityProfileRequest$securityProfileName": "<p>The security profile that is attached.</p>",
+        "CreateSecurityProfileRequest$securityProfileName": "<p>The name you are giving to the security profile.</p>",
+        "CreateSecurityProfileResponse$securityProfileName": "<p>The name you gave to the security profile.</p>",
+        "DeleteSecurityProfileRequest$securityProfileName": "<p>The name of the security profile to be deleted.</p>",
+        "DescribeSecurityProfileRequest$securityProfileName": "<p>The name of the security profile whose information you want to get.</p>",
+        "DescribeSecurityProfileResponse$securityProfileName": "<p>The name of the security profile.</p>",
+        "DetachSecurityProfileRequest$securityProfileName": "<p>The security profile that is detached.</p>",
+        "ListActiveViolationsRequest$securityProfileName": "<p>The name of the Device Defender security profile for which violations are listed.</p>",
+        "ListTargetsForSecurityProfileRequest$securityProfileName": "<p>The security profile.</p>",
+        "ListViolationEventsRequest$securityProfileName": "<p>A filter to limit results to those alerts generated by the specified security profile.</p>",
+        "SecurityProfileIdentifier$name": "<p>The name you have given to the security profile.</p>",
+        "UpdateSecurityProfileRequest$securityProfileName": "<p>The name of the security profile you want to update.</p>",
+        "UpdateSecurityProfileResponse$securityProfileName": "<p>The name of the security profile that was updated.</p>",
+        "ViolationEvent$securityProfileName": "<p>The name of the security profile whose behavior was violated.</p>"
+      }
+    },
+    "SecurityProfileTarget": {
+      "base": "<p>A target to which an alert is sent when a security profile behavior is violated.</p>",
+      "refs": {
+        "SecurityProfileTargetMapping$target": "<p>Information about the target (thing group) associated with the security profile.</p>",
+        "SecurityProfileTargets$member": null
+      }
+    },
+    "SecurityProfileTargetArn": {
+      "base": null,
+      "refs": {
+        "AttachSecurityProfileRequest$securityProfileTargetArn": "<p>The ARN of the target (thing group) to which the security profile is attached.</p>",
+        "DetachSecurityProfileRequest$securityProfileTargetArn": "<p>The ARN of the thing group from which the security profile is detached.</p>",
+        "ListSecurityProfilesForTargetRequest$securityProfileTargetArn": "<p>The ARN of the target (thing group) whose attached security profiles you want to get.</p>",
+        "SecurityProfileTarget$arn": "<p>The ARN of the security profile.</p>"
+      }
+    },
+    "SecurityProfileTargetMapping": {
+      "base": "<p>Information about a security profile and the target associated with it.</p>",
+      "refs": {
+        "SecurityProfileTargetMappings$member": null
+      }
+    },
+    "SecurityProfileTargetMappings": {
+      "base": null,
+      "refs": {
+        "ListSecurityProfilesForTargetResponse$securityProfileTargetMappings": "<p>A list of security profiles and their associated targets.</p>"
+      }
+    },
+    "SecurityProfileTargets": {
+      "base": null,
+      "refs": {
+        "ListTargetsForSecurityProfileResponse$securityProfileTargets": "<p>The thing groups to which the security profile is attached.</p>"
       }
     },
     "ServiceUnavailableException": {
@@ -3195,6 +4049,18 @@
         "CodeSigning$awsSignerJobId": "<p>The ID of the AWSSignerJob which was created to sign the file.</p>"
       }
     },
+    "SigningProfileName": {
+      "base": null,
+      "refs": {
+        "StartSigningJobParameter$signingProfileName": "<p>The code-signing profile name.</p>"
+      }
+    },
+    "SigningProfileParameter": {
+      "base": "<p>Describes the code-signing profile.</p>",
+      "refs": {
+        "StartSigningJobParameter$signingProfileParameter": "<p>Describes the code-signing profile.</p>"
+      }
+    },
     "SkyfallMaxResults": {
       "base": null,
       "refs": {
@@ -3218,6 +4084,22 @@
         "Action$sqs": "<p>Publish to an Amazon SQS queue.</p>"
       }
     },
+    "StartOnDemandAuditTaskRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "StartOnDemandAuditTaskResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "StartSigningJobParameter": {
+      "base": "<p>Information required to start a signing job.</p>",
+      "refs": {
+        "CodeSigning$startSigningJobParameter": "<p>Describes the code-signing job.</p>"
+      }
+    },
     "StartThingRegistrationTaskRequest": {
       "base": null,
       "refs": {
@@ -3226,6 +4108,12 @@
     "StartThingRegistrationTaskResponse": {
       "base": null,
       "refs": {
+      }
+    },
+    "StateMachineName": {
+      "base": null,
+      "refs": {
+        "StepFunctionsAction$stateMachineName": "<p>The name of the Step Functions state machine whose execution will be started.</p>"
       }
     },
     "StateReason": {
@@ -3247,6 +4135,12 @@
         "ListThingRegistrationTasksRequest$status": "<p>The status of the bulk thing provisioning task.</p>"
       }
     },
+    "StepFunctionsAction": {
+      "base": "<p>Starts execution of a Step Functions state machine.</p>",
+      "refs": {
+        "Action$stepFunctions": "<p>Starts execution of a Step Functions state machine.</p>"
+      }
+    },
     "StopThingRegistrationTaskRequest": {
       "base": null,
       "refs": {
@@ -3260,9 +4154,7 @@
     "Stream": {
       "base": "<p>Describes a group of files that can be streamed.</p>",
       "refs": {
-        "CodeSigningCertificateChain$stream": "<p>A stream of the certificate chain files.</p>",
-        "CodeSigningSignature$stream": "<p>A stream of the code signing signature.</p>",
-        "OTAUpdateFile$fileSource": "<p>The source of the file.</p>"
+        "FileLocation$stream": "<p>The stream that contains the OTA update.</p>"
       }
     },
     "StreamArn": {
@@ -3346,6 +4238,25 @@
         "ListStreamsResponse$streams": "<p>A list of streams.</p>"
       }
     },
+    "String": {
+      "base": null,
+      "refs": {
+        "CloudwatchMetricAction$metricNamespace": "<p>The CloudWatch metric namespace name.</p>",
+        "CloudwatchMetricAction$metricName": "<p>The CloudWatch metric name.</p>",
+        "CloudwatchMetricAction$metricValue": "<p>The CloudWatch metric value.</p>",
+        "CloudwatchMetricAction$metricUnit": "<p>The <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#Unit\">metric unit</a> supported by CloudWatch.</p>",
+        "CloudwatchMetricAction$metricTimestamp": "<p>An optional <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#about_timestamp\">Unix timestamp</a>.</p>",
+        "StringMap$key": null,
+        "StringMap$value": null
+      }
+    },
+    "StringMap": {
+      "base": null,
+      "refs": {
+        "NonCompliantResource$additionalInfo": "<p>Additional information about the non-compliant resource.</p>",
+        "RelatedResource$additionalInfo": "<p>Additional information about the resource.</p>"
+      }
+    },
     "SucceededThings": {
       "base": null,
       "refs": {
@@ -3368,7 +4279,17 @@
     "TargetArn": {
       "base": null,
       "refs": {
+        "AuditNotificationTarget$targetArn": "<p>The ARN of the target (SNS topic) to which audit notifications are sent.</p>",
         "JobTargets$member": null
+      }
+    },
+    "TargetAuditCheckNames": {
+      "base": null,
+      "refs": {
+        "CreateScheduledAuditRequest$targetCheckNames": "<p>Which checks are performed during the scheduled audit. Checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>",
+        "DescribeScheduledAuditResponse$targetCheckNames": "<p>Which checks are performed during the scheduled audit. (Note that checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>",
+        "StartOnDemandAuditTaskRequest$targetCheckNames": "<p>Which checks are performed during the audit. The checks you specify must be enabled for your account or an exception occurs. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.</p>",
+        "UpdateScheduledAuditRequest$targetCheckNames": "<p>Which checks are performed during the scheduled audit. Checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>"
       }
     },
     "TargetSelection": {
@@ -3406,11 +4327,17 @@
         "ListThingRegistrationTasksResponse$taskIds": "<p>A list of bulk thing provisioning task IDs.</p>"
       }
     },
+    "TaskStatistics": {
+      "base": "<p>Statistics for the checks performed during the audit.</p>",
+      "refs": {
+        "DescribeAuditTaskResponse$taskStatistics": "<p>Statistical information about the audit.</p>"
+      }
+    },
     "TemplateBody": {
       "base": null,
       "refs": {
         "DescribeThingRegistrationTaskResponse$templateBody": "<p>The task's template.</p>",
-        "RegisterThingRequest$templateBody": "<p>The provisioning template. </p>",
+        "RegisterThingRequest$templateBody": "<p>The provisioning template. See <a href=\"http://docs.aws.amazon.com/iot/latest/developerguide/programmatic-provisioning.html\">Programmatic Provisioning</a> for more information.</p>",
         "RegistrationConfig$templateBody": "<p>The template body.</p>",
         "StartThingRegistrationTaskRequest$templateBody": "<p>The provisioning template.</p>"
       }
@@ -3484,7 +4411,20 @@
     "ThingGroupDescription": {
       "base": null,
       "refs": {
+        "ThingGroupDocument$thingGroupDescription": "<p>The thing group description.</p>",
         "ThingGroupProperties$thingGroupDescription": "<p>The thing group description.</p>"
+      }
+    },
+    "ThingGroupDocument": {
+      "base": "<p>The thing group search index document.</p>",
+      "refs": {
+        "ThingGroupDocumentList$member": null
+      }
+    },
+    "ThingGroupDocumentList": {
+      "base": null,
+      "refs": {
+        "SearchIndexResponse$thingGroups": "<p>The thing groups that match the search query.</p>"
       }
     },
     "ThingGroupId": {
@@ -3493,7 +4433,21 @@
         "CreateThingGroupResponse$thingGroupId": "<p>The thing group ID.</p>",
         "DescribeThingGroupResponse$thingGroupId": "<p>The thing group ID.</p>",
         "JobSummary$thingGroupId": "<p>The ID of the thing group.</p>",
-        "ListJobsRequest$thingGroupId": "<p>A filter that limits the returned jobs to those for the specified group.</p>"
+        "ListJobsRequest$thingGroupId": "<p>A filter that limits the returned jobs to those for the specified group.</p>",
+        "ThingGroupDocument$thingGroupId": "<p>The thing group ID.</p>"
+      }
+    },
+    "ThingGroupIndexingConfiguration": {
+      "base": "<p>Thing group indexing configuration.</p>",
+      "refs": {
+        "GetIndexingConfigurationResponse$thingGroupIndexingConfiguration": "<p>The index configuration.</p>",
+        "UpdateIndexingConfigurationRequest$thingGroupIndexingConfiguration": "<p>Thing group indexing configuration.</p>"
+      }
+    },
+    "ThingGroupIndexingMode": {
+      "base": null,
+      "refs": {
+        "ThingGroupIndexingConfiguration$thingGroupIndexingMode": "<p>Thing group indexing mode.</p>"
       }
     },
     "ThingGroupList": {
@@ -3525,6 +4479,7 @@
         "ListThingGroupsRequest$namePrefixFilter": "<p>A filter that limits the results to those with the specified name prefix.</p>",
         "ListThingsInThingGroupRequest$thingGroupName": "<p>The thing group name.</p>",
         "RemoveThingFromThingGroupRequest$thingGroupName": "<p>The group name.</p>",
+        "ThingGroupDocument$thingGroupName": "<p>The thing group name.</p>",
         "ThingGroupList$member": null,
         "ThingGroupMetadata$parentGroupName": "<p>The parent thing group name.</p>",
         "ThingGroupNameList$member": null,
@@ -3542,7 +4497,8 @@
     "ThingGroupNameList": {
       "base": null,
       "refs": {
-        "ThingDocument$thingGroupNames": "<p>Thing group names.</p>"
+        "ThingDocument$thingGroupNames": "<p>Thing group names.</p>",
+        "ThingGroupDocument$parentGroupNames": "<p>Parent group names.</p>"
       }
     },
     "ThingGroupProperties": {
@@ -3577,25 +4533,31 @@
     "ThingName": {
       "base": null,
       "refs": {
+        "ActiveViolation$thingName": "<p>The name of the thing responsible for the active violation.</p>",
         "AddThingToThingGroupRequest$thingName": "<p>The name of the thing to add to a group.</p>",
         "AttachThingPrincipalRequest$thingName": "<p>The name of the thing.</p>",
+        "CancelJobExecutionRequest$thingName": "<p>The name of the thing whose execution of the job will be canceled.</p>",
         "CreateThingRequest$thingName": "<p>The name of the thing to create.</p>",
         "CreateThingResponse$thingName": "<p>The name of the new thing.</p>",
+        "DeleteJobExecutionRequest$thingName": "<p>The name of the thing whose job execution will be deleted.</p>",
         "DeleteThingRequest$thingName": "<p>The name of the thing to delete.</p>",
         "DescribeJobExecutionRequest$thingName": "<p>The name of the thing on which the job execution is running.</p>",
         "DescribeThingRequest$thingName": "<p>The name of the thing.</p>",
         "DescribeThingResponse$thingName": "<p>The name of the thing.</p>",
         "DetachThingPrincipalRequest$thingName": "<p>The name of the thing.</p>",
         "GetEffectivePoliciesRequest$thingName": "<p>The thing name.</p>",
+        "ListActiveViolationsRequest$thingName": "<p>The name of the thing whose active violations are listed.</p>",
         "ListJobExecutionsForThingRequest$thingName": "<p>The thing name.</p>",
         "ListThingGroupsForThingRequest$thingName": "<p>The thing name.</p>",
         "ListThingPrincipalsRequest$thingName": "<p>The name of the thing.</p>",
+        "ListViolationEventsRequest$thingName": "<p>A filter to limit results to those alerts caused by the specified thing.</p>",
         "RemoveThingFromThingGroupRequest$thingName": "<p>The name of the thing to remove from the group.</p>",
         "ThingAttribute$thingName": "<p>The name of the thing.</p>",
         "ThingDocument$thingName": "<p>The thing name.</p>",
         "ThingNameList$member": null,
         "UpdateThingGroupsForThingRequest$thingName": "<p>The thing whose group memberships will be updated.</p>",
-        "UpdateThingRequest$thingName": "<p>The name of the thing to update.</p>"
+        "UpdateThingRequest$thingName": "<p>The name of the thing to update.</p>",
+        "ViolationEvent$thingName": "<p>The name of the thing responsible for the violation event.</p>"
       }
     },
     "ThingNameList": {
@@ -3677,6 +4639,27 @@
       "refs": {
       }
     },
+    "Timestamp": {
+      "base": null,
+      "refs": {
+        "ActiveViolation$lastViolationTime": "<p>The time the most recent violation occurred.</p>",
+        "ActiveViolation$violationStartTime": "<p>The time the violation started.</p>",
+        "AuditFinding$taskStartTime": "<p>The time the audit started.</p>",
+        "AuditFinding$findingTime": "<p>The time the result (finding) was discovered.</p>",
+        "DescribeAuditTaskResponse$taskStartTime": "<p>The time the audit started.</p>",
+        "DescribeSecurityProfileResponse$creationDate": "<p>The time the security profile was created.</p>",
+        "DescribeSecurityProfileResponse$lastModifiedDate": "<p>The time the security profile was last modified.</p>",
+        "ListAuditFindingsRequest$startTime": "<p>A filter to limit results to those found after the specified time. You must specify either the startTime and endTime or the taskId, but not both.</p>",
+        "ListAuditFindingsRequest$endTime": "<p>A filter to limit results to those found before the specified time. You must specify either the startTime and endTime or the taskId, but not both.</p>",
+        "ListAuditTasksRequest$startTime": "<p>The beginning of the time period. Note that audit information is retained for a limited time (180 days). Requesting a start time prior to what is retained results in an \"InvalidRequestException\".</p>",
+        "ListAuditTasksRequest$endTime": "<p>The end of the time period.</p>",
+        "ListViolationEventsRequest$startTime": "<p>The start time for the alerts to be listed.</p>",
+        "ListViolationEventsRequest$endTime": "<p>The end time for the alerts to be listed.</p>",
+        "UpdateSecurityProfileResponse$creationDate": "<p>The time the security profile was created.</p>",
+        "UpdateSecurityProfileResponse$lastModifiedDate": "<p>The time the security profile was last modified.</p>",
+        "ViolationEvent$violationEventTime": "<p>The time the violation event occurred.</p>"
+      }
+    },
     "Token": {
       "base": null,
       "refs": {
@@ -3735,6 +4718,18 @@
         "ReplaceTopicRuleRequest$topicRulePayload": "<p>The rule payload.</p>"
       }
     },
+    "TotalChecksCount": {
+      "base": null,
+      "refs": {
+        "TaskStatistics$totalChecks": "<p>The number of checks in this audit.</p>"
+      }
+    },
+    "TotalResourcesCount": {
+      "base": null,
+      "refs": {
+        "AuditCheckDetails$totalResourcesCount": "<p>The number of resources on which the check was performed.</p>"
+      }
+    },
     "TransferAlreadyCompletedException": {
       "base": "<p>You can't revert the certificate transfer because the transfer is already complete.</p>",
       "refs": {
@@ -3770,6 +4765,22 @@
       "base": null,
       "refs": {
         "DeprecateThingTypeRequest$undoDeprecate": "<p>Whether to undeprecate a deprecated thing type. If <b>true</b>, the thing type will not be deprecated anymore and you can associate it with things.</p>"
+      }
+    },
+    "UnsignedLong": {
+      "base": null,
+      "refs": {
+        "MetricValue$count": "<p>If the <code>comparisonOperator</code> calls for a numeric value, use this to specify that numeric value to be compared with the <code>metric</code>.</p>"
+      }
+    },
+    "UpdateAccountAuditConfigurationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateAccountAuditConfigurationResponse": {
+      "base": null,
+      "refs": {
       }
     },
     "UpdateAuthorizerRequest": {
@@ -3822,6 +4833,26 @@
       "refs": {
       }
     },
+    "UpdateScheduledAuditRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateScheduledAuditResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateSecurityProfileRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateSecurityProfileResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "UpdateStreamRequest": {
       "base": null,
       "refs": {
@@ -3868,6 +4899,34 @@
         "SqsAction$useBase64": "<p>Specifies whether to use Base64 encoding.</p>"
       }
     },
+    "Valid": {
+      "base": null,
+      "refs": {
+        "ValidateSecurityProfileBehaviorsResponse$valid": "<p>True if the behaviors were valid.</p>"
+      }
+    },
+    "ValidateSecurityProfileBehaviorsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ValidateSecurityProfileBehaviorsResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ValidationError": {
+      "base": "<p>Information about an error found in a behavior specification.</p>",
+      "refs": {
+        "ValidationErrors$member": null
+      }
+    },
+    "ValidationErrors": {
+      "base": null,
+      "refs": {
+        "ValidateSecurityProfileBehaviorsResponse$validationErrors": "<p>The list of any errors found in the behaviors.</p>"
+      }
+    },
     "Value": {
       "base": null,
       "refs": {
@@ -3879,20 +4938,59 @@
     "Version": {
       "base": null,
       "refs": {
+        "DescribeSecurityProfileResponse$version": "<p>The version of the security profile. A new version is generated whenever the security profile is updated.</p>",
         "DescribeThingGroupResponse$version": "<p>The version of the thing group.</p>",
         "DescribeThingResponse$version": "<p>The current version of the thing record in the registry.</p> <note> <p>To avoid unintentional changes to the information in the registry, you can pass the version information in the <code>expectedVersion</code> parameter of the <code>UpdateThing</code> and <code>DeleteThing</code> calls.</p> </note>",
         "ThingAttribute$version": "<p>The version of the thing record in the registry.</p>",
+        "UpdateSecurityProfileResponse$version": "<p>The updated version of the security profile.</p>",
         "UpdateThingGroupResponse$version": "<p>The version of the updated thing group.</p>"
       }
     },
     "VersionConflictException": {
-      "base": "<p>An exception thrown when the version of a thing passed to a command is different than the version specified with the --version parameter.</p>",
+      "base": "<p>An exception thrown when the version of an entity specified with the <code>expectedVersion</code> parameter does not match the latest version in the system.</p>",
       "refs": {
+      }
+    },
+    "VersionNumber": {
+      "base": null,
+      "refs": {
+        "JobExecution$versionNumber": "<p>The version of the job execution. Job execution versions are incremented each time they are updated by a device.</p>"
       }
     },
     "VersionsLimitExceededException": {
       "base": "<p>The number of policy versions exceeds the limit.</p>",
       "refs": {
+      }
+    },
+    "ViolationEvent": {
+      "base": "<p>Information about a Device Defender security profile behavior violation.</p>",
+      "refs": {
+        "ViolationEvents$member": null
+      }
+    },
+    "ViolationEventType": {
+      "base": null,
+      "refs": {
+        "ViolationEvent$violationEventType": "<p>The type of violation event.</p>"
+      }
+    },
+    "ViolationEvents": {
+      "base": null,
+      "refs": {
+        "ListViolationEventsResponse$violationEvents": "<p>The security profile violation alerts issued for this account during the given time frame, potentially filtered by security profile, behavior violated, or thing (device) violating.</p>"
+      }
+    },
+    "ViolationId": {
+      "base": null,
+      "refs": {
+        "ActiveViolation$violationId": "<p>The ID of the active violation.</p>",
+        "ViolationEvent$violationId": "<p>The ID of the violation event.</p>"
+      }
+    },
+    "WaitingForDataCollectionChecksCount": {
+      "base": null,
+      "refs": {
+        "TaskStatistics$waitingForDataCollectionChecks": "<p>The number of checks waiting for data collection.</p>"
       }
     },
     "errorMessage": {
@@ -3901,21 +4999,22 @@
         "CertificateConflictException$message": "<p>The message for the exception.</p>",
         "CertificateStateException$message": "<p>The message for the exception.</p>",
         "CertificateValidationException$message": "<p>Additional information about the exception.</p>",
-        "ConflictingResourceUpdateException$message": null,
+        "ConflictingResourceUpdateException$message": "<p>The message for the exception.</p>",
         "DeleteConflictException$message": "<p>The message for the exception.</p>",
-        "IndexNotReadyException$message": null,
+        "IndexNotReadyException$message": "<p>The message for the exception.</p>",
         "InternalException$message": "<p>The message for the exception.</p>",
         "InternalFailureException$message": "<p>The message for the exception.</p>",
-        "InvalidQueryException$message": null,
+        "InvalidQueryException$message": "<p>The message for the exception.</p>",
         "InvalidRequestException$message": "<p>The message for the exception.</p>",
-        "InvalidResponseException$message": null,
+        "InvalidResponseException$message": "<p>The message for the exception.</p>",
+        "InvalidStateTransitionException$message": "<p>The message for the exception.</p>",
         "LimitExceededException$message": "<p>The message for the exception.</p>",
         "MalformedPolicyException$message": "<p>The message for the exception.</p>",
-        "NotConfiguredException$message": null,
+        "NotConfiguredException$message": "<p>The message for the exception.</p>",
         "RegistrationCodeValidationException$message": "<p>Additional information about the exception.</p>",
         "ResourceAlreadyExistsException$message": "<p>The message for the exception.</p>",
         "ResourceNotFoundException$message": "<p>The message for the exception.</p>",
-        "ResourceRegistrationFailureException$message": null,
+        "ResourceRegistrationFailureException$message": "<p>The message for the exception.</p>",
         "ServiceUnavailableException$message": "<p>The message for the exception.</p>",
         "SqlParseException$message": "<p>The message for the exception.</p>",
         "ThrottlingException$message": "<p>The message for the exception.</p>",

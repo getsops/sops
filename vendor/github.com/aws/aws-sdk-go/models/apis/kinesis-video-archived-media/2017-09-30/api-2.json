@@ -11,6 +11,25 @@
     "uid":"kinesis-video-archived-media-2017-09-30"
   },
   "operations":{
+    "GetHLSStreamingSessionURL":{
+      "name":"GetHLSStreamingSessionURL",
+      "http":{
+        "method":"POST",
+        "requestUri":"/getHLSStreamingSessionURL"
+      },
+      "input":{"shape":"GetHLSStreamingSessionURLInput"},
+      "output":{"shape":"GetHLSStreamingSessionURLOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidArgumentException"},
+        {"shape":"ClientLimitExceededException"},
+        {"shape":"NotAuthorizedException"},
+        {"shape":"UnsupportedStreamMediaTypeException"},
+        {"shape":"NoDataRetentionException"},
+        {"shape":"MissingCodecPrivateDataException"},
+        {"shape":"InvalidCodecPrivateDataException"}
+      ]
+    },
     "GetMediaForFragmentList":{
       "name":"GetMediaForFragmentList",
       "http":{
@@ -57,7 +76,19 @@
       "min":1,
       "pattern":"^[a-zA-Z0-9_\\.\\-]+$"
     },
+    "DiscontinuityMode":{
+      "type":"string",
+      "enum":[
+        "ALWAYS",
+        "NEVER"
+      ]
+    },
     "ErrorMessage":{"type":"string"},
+    "Expires":{
+      "type":"integer",
+      "max":43200,
+      "min":300
+    },
     "Fragment":{
       "type":"structure",
       "members":{
@@ -74,7 +105,9 @@
     },
     "FragmentNumberList":{
       "type":"list",
-      "member":{"shape":"FragmentNumberString"}
+      "member":{"shape":"FragmentNumberString"},
+      "max":1000,
+      "min":1
     },
     "FragmentNumberString":{
       "type":"string",
@@ -100,6 +133,24 @@
         "SERVER_TIMESTAMP"
       ]
     },
+    "GetHLSStreamingSessionURLInput":{
+      "type":"structure",
+      "members":{
+        "StreamName":{"shape":"StreamName"},
+        "StreamARN":{"shape":"ResourceARN"},
+        "PlaybackMode":{"shape":"PlaybackMode"},
+        "HLSFragmentSelector":{"shape":"HLSFragmentSelector"},
+        "DiscontinuityMode":{"shape":"DiscontinuityMode"},
+        "Expires":{"shape":"Expires"},
+        "MaxMediaPlaylistFragmentResults":{"shape":"PageLimit"}
+      }
+    },
+    "GetHLSStreamingSessionURLOutput":{
+      "type":"structure",
+      "members":{
+        "HLSStreamingSessionURL":{"shape":"HLSStreamingSessionURL"}
+      }
+    },
     "GetMediaForFragmentListInput":{
       "type":"structure",
       "required":[
@@ -123,7 +174,37 @@
       },
       "payload":"Payload"
     },
+    "HLSFragmentSelector":{
+      "type":"structure",
+      "members":{
+        "FragmentSelectorType":{"shape":"HLSFragmentSelectorType"},
+        "TimestampRange":{"shape":"HLSTimestampRange"}
+      }
+    },
+    "HLSFragmentSelectorType":{
+      "type":"string",
+      "enum":[
+        "PRODUCER_TIMESTAMP",
+        "SERVER_TIMESTAMP"
+      ]
+    },
+    "HLSStreamingSessionURL":{"type":"string"},
+    "HLSTimestampRange":{
+      "type":"structure",
+      "members":{
+        "StartTimestamp":{"shape":"Timestamp"},
+        "EndTimestamp":{"shape":"Timestamp"}
+      }
+    },
     "InvalidArgumentException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":400},
+      "exception":true
+    },
+    "InvalidCodecPrivateDataException":{
       "type":"structure",
       "members":{
         "Message":{"shape":"ErrorMessage"}
@@ -149,6 +230,22 @@
       }
     },
     "Long":{"type":"long"},
+    "MissingCodecPrivateDataException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":400},
+      "exception":true
+    },
+    "NoDataRetentionException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":400},
+      "exception":true
+    },
     "NotAuthorizedException":{
       "type":"structure",
       "members":{
@@ -165,6 +262,19 @@
     "Payload":{
       "type":"blob",
       "streaming":true
+    },
+    "PlaybackMode":{
+      "type":"string",
+      "enum":[
+        "LIVE",
+        "ON_DEMAND"
+      ]
+    },
+    "ResourceARN":{
+      "type":"string",
+      "max":1024,
+      "min":1,
+      "pattern":"arn:aws:kinesisvideo:[a-z0-9-]+:[0-9]+:[a-z]+/[a-zA-Z0-9_.-]+/[0-9]+"
     },
     "ResourceNotFoundException":{
       "type":"structure",
@@ -195,6 +305,14 @@
         "StartTimestamp":{"shape":"Timestamp"},
         "EndTimestamp":{"shape":"Timestamp"}
       }
+    },
+    "UnsupportedStreamMediaTypeException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":400},
+      "exception":true
     }
   }
 }

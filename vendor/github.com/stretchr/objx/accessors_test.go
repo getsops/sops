@@ -131,6 +131,23 @@ func TestAccessorsAccessSetDeepDeep(t *testing.T) {
 	assert.Equal(t, 5, m.Get("one.two.three.four").Data())
 }
 
+func TestAccessorsAccessSetDeepDeepWithoutExisting(t *testing.T) {
+	m := objx.Map{}
+
+	m.Set("one.two.three.four", 5)
+	m.Set("one.two.three.five", 6)
+
+	assert.Equal(t, 5, m.Get("one.two.three.four").Data())
+	assert.Equal(t, 6, m.Get("one.two.three.five").Data())
+
+	m.Set("one.two", 7)
+	assert.Equal(t, 7, m.Get("one.two").Data())
+	assert.Equal(t, nil, m.Get("one.two.three.four").Data())
+
+	m.Set("one.two.three", 8)
+	assert.Equal(t, 8, m.Get("one.two.three").Data())
+}
+
 func TestAccessorsAccessSetArray(t *testing.T) {
 	m := objx.Map{
 		"names": []interface{}{"Tyler"},

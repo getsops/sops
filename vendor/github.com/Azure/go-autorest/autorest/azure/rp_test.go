@@ -105,11 +105,11 @@ func TestDoRetrySkipRegistration(t *testing.T) {
 	req.Body = mocks.NewBody("lolol")
 	r, err := autorest.SendWithSender(client, req,
 		DoRetryWithRegistration(autorest.Client{
-			PollingDelay:    time.Second,
-			PollingDuration: time.Second * 10,
-			RetryAttempts:   5,
-			RetryDuration:   time.Second,
-			Sender:          client,
+			PollingDelay:                     time.Second,
+			PollingDuration:                  time.Second * 10,
+			RetryAttempts:                    5,
+			RetryDuration:                    time.Second,
+			Sender:                           client,
 			SkipResourceProviderRegistration: true,
 		}),
 	)
@@ -146,11 +146,11 @@ func TestDoRetryWithRegistration_CanBeCancelled(t *testing.T) {
 		req.Body = mocks.NewBody("lolol")
 		_, err = autorest.SendWithSender(client, req,
 			DoRetryWithRegistration(autorest.Client{
-				PollingDelay:    time.Second,
-				PollingDuration: delay,
-				RetryAttempts:   5,
-				RetryDuration:   time.Second,
-				Sender:          client,
+				PollingDelay:                     time.Second,
+				PollingDuration:                  delay,
+				RetryAttempts:                    5,
+				RetryDuration:                    time.Second,
+				Sender:                           client,
 				SkipResourceProviderRegistration: true,
 			}),
 		)

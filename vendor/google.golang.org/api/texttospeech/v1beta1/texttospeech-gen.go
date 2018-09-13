@@ -1,6 +1,8 @@
 // Package texttospeech provides access to the Cloud Text-to-Speech API.
 //
-// See http://cloud.google.com/speech/text-to-speech/
+// This package is DEPRECATED. Use package cloud.google.com/go/texttospeech/apiv1 instead.
+//
+// See https://cloud.google.com/text-to-speech/
 //
 // Usage example:
 //
@@ -116,6 +118,12 @@ type AudioConfig struct {
 	// higher
 	// than MP3 while using approximately the same bitrate.
 	AudioEncoding string `json:"audioEncoding,omitempty"`
+
+	// EffectsProfileId: An identifier which selects 'audio effects'
+	// profiles that are applied on
+	// (post synthesized) text to speech.
+	// Effects are applied on top of each other in the order they are given.
+	EffectsProfileId []string `json:"effectsProfileId,omitempty"`
 
 	// Pitch: Optional speaking pitch, in the range [-20.0, 20.0]. 20 means
 	// increase 20
@@ -546,6 +554,7 @@ func (c *TextSynthesizeCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/text:synthesize")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -621,8 +630,7 @@ type VoicesListCall struct {
 	header_      http.Header
 }
 
-// List: Returns a list of Voice
-// supported for synthesis.
+// List: Returns a list of Voice supported for synthesis.
 func (r *VoicesService) List() *VoicesListCall {
 	c := &VoicesListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	return c
@@ -695,6 +703,7 @@ func (c *VoicesListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/voices")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -740,7 +749,7 @@ func (c *VoicesListCall) Do(opts ...googleapi.CallOption) (*ListVoicesResponse, 
 	}
 	return ret, nil
 	// {
-	//   "description": "Returns a list of Voice\nsupported for synthesis.",
+	//   "description": "Returns a list of Voice supported for synthesis.",
 	//   "flatPath": "v1beta1/voices",
 	//   "httpMethod": "GET",
 	//   "id": "texttospeech.voices.list",

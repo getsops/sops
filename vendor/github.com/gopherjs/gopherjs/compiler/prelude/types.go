@@ -289,7 +289,7 @@ var $newType = function(size, kind, string, named, pkg, exported, constructor) {
           };
         };
         fields.forEach(function(f) {
-          if (f.anonymous) {
+          if (f.embedded) {
             $methodSet(f.typ).forEach(function(m) {
               synthesizeMethod(typ, m, f);
               synthesizeMethod(typ.ptr, m, f);
@@ -429,7 +429,7 @@ var $methodSet = function(typ) {
       switch (e.typ.kind) {
       case $kindStruct:
         e.typ.fields.forEach(function(f) {
-          if (f.anonymous) {
+          if (f.embedded) {
             var fTyp = f.typ;
             var fIsPtr = (fTyp.kind === $kindPtr);
             next.push({typ: fIsPtr ? fTyp.elem : fTyp, indirect: e.indirect || fIsPtr});
@@ -729,7 +729,11 @@ var $assertType = function(value, type, returnTuple) {
     if (returnTuple) {
       return [type.zero(), false];
     }
-    $panic(new $packages["runtime"].TypeAssertionError.ptr("", (value === $ifaceNil ? "" : value.constructor.string), type.string, missingMethod));
+    $panic(new $packages["runtime"].TypeAssertionError.ptr(
+      $packages["runtime"]._type.ptr.nil,
+      (value === $ifaceNil ? $packages["runtime"]._type.ptr.nil : new $packages["runtime"]._type.ptr(value.constructor.string)),
+      new $packages["runtime"]._type.ptr(type.string),
+      missingMethod));
   }
 
   if (!isInterface) {

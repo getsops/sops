@@ -7,7 +7,7 @@ const (
 	// ErrCodeInternalFailure for service response error code
 	// "InternalFailure".
 	//
-	// Internal failure occurred.
+	// An internal failure occurred.
 	ErrCodeInternalFailure = "InternalFailure"
 
 	// ErrCodeModelError for service response error code
@@ -19,7 +19,7 @@ const (
 	// ErrCodeServiceUnavailable for service response error code
 	// "ServiceUnavailable".
 	//
-	// Service is unavailable. Try your call again.
+	// The service is unavailable. Try your call again.
 	ErrCodeServiceUnavailable = "ServiceUnavailable"
 
 	// ErrCodeValidationError for service response error code

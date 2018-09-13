@@ -714,7 +714,7 @@ func (d *testRetryer) ShouldRetry(r *request.Request) bool {
 
 func TestEnforceShouldRetryCheck(t *testing.T) {
 	tp := &http.Transport{
-		Proxy: http.ProxyFromEnvironment,
+		Proxy:                 http.ProxyFromEnvironment,
 		ResponseHeaderTimeout: 1 * time.Millisecond,
 	}
 

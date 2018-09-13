@@ -60,11 +60,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -84,12 +79,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -118,7 +107,7 @@
     "billingAccounts": {
       "methods": {
         "create": {
-          "description": "Creates a billing account.\nThis method can only be used to create\n[billing subaccounts](https://cloud.google.com/billing/docs/concepts).\nWhen creating a subaccount, the current authenticated user must have the\n`billing.accounts.update` IAM permission on the master account, which is\ntypically given to billing account\n[administrators](https://cloud.google.com/billing/docs/how-to/billing-access).\n\n\u003e This method is currently in\n\u003e [Beta](https://cloud.google.com/terms/launch-stages).",
+          "description": "Creates a billing account.\nThis method can only be used to create\n[billing subaccounts](https://cloud.google.com/billing/docs/concepts)\nby GCP resellers.\nWhen creating a subaccount, the current authenticated user must have the\n`billing.accounts.update` IAM permission on the master account, which is\ntypically given to billing account\n[administrators](https://cloud.google.com/billing/docs/how-to/billing-access).\nThis method will return an error if the master account has not been\nprovisioned as a reseller account.",
           "flatPath": "v1/billingAccounts",
           "httpMethod": "POST",
           "id": "cloudbilling.billingAccounts.create",
@@ -161,7 +150,7 @@
           ]
         },
         "getIamPolicy": {
-          "description": "Gets the access control policy for a billing account.\nThe caller must have the `billing.accounts.getIamPolicy` permission on the\naccount, which is often given to billing account\n[viewers](https://cloud.google.com/billing/docs/how-to/billing-access).\n\n\u003e This method is currently in\n\u003e [Beta](https://cloud.google.com/terms/launch-stages).",
+          "description": "Gets the access control policy for a billing account.\nThe caller must have the `billing.accounts.getIamPolicy` permission on the\naccount, which is often given to billing account\n[viewers](https://cloud.google.com/billing/docs/how-to/billing-access).",
           "flatPath": "v1/billingAccounts/{billingAccountsId}:getIamPolicy",
           "httpMethod": "GET",
           "id": "cloudbilling.billingAccounts.getIamPolicy",
@@ -193,7 +182,7 @@
           "parameterOrder": [],
           "parameters": {
             "filter": {
-              "description": "Options for how to filter the returned billing accounts.\nCurrently this only supports filtering for\n[subaccounts](https://cloud.google.com/billing/docs/concepts) under a\nsingle provided reseller billing account.\n(e.g. \"master_billing_account=billingAccounts/012345-678901-ABCDEF\").\nBoolean algebra and other fields are not currently supported.\n\n\u003e This field is currently in\n\u003e [Beta](https://cloud.google.com/terms/launch-stages).",
+              "description": "Options for how to filter the returned billing accounts.\nCurrently this only supports filtering for\n[subaccounts](https://cloud.google.com/billing/docs/concepts) under a\nsingle provided reseller billing account.\n(e.g. \"master_billing_account=billingAccounts/012345-678901-ABCDEF\").\nBoolean algebra and other fields are not currently supported.",
               "location": "query",
               "type": "string"
             },
@@ -218,7 +207,7 @@
           ]
         },
         "patch": {
-          "description": "Updates a billing account's fields.\nCurrently the only field that can be edited is `display_name`.\nThe current authenticated user must have the `billing.accounts.update`\nIAM permission, which is typically given to the\n[administrator](https://cloud.google.com/billing/docs/how-to/billing-access)\nof the billing account.\n\n\u003e This method is currently in\n\u003e [Beta](https://cloud.google.com/terms/launch-stages).",
+          "description": "Updates a billing account's fields.\nCurrently the only field that can be edited is `display_name`.\nThe current authenticated user must have the `billing.accounts.update`\nIAM permission, which is typically given to the\n[administrator](https://cloud.google.com/billing/docs/how-to/billing-access)\nof the billing account.",
           "flatPath": "v1/billingAccounts/{billingAccountsId}",
           "httpMethod": "PATCH",
           "id": "cloudbilling.billingAccounts.patch",
@@ -252,7 +241,7 @@
           ]
         },
         "setIamPolicy": {
-          "description": "Sets the access control policy for a billing account. Replaces any existing\npolicy.\nThe caller must have the `billing.accounts.setIamPolicy` permission on the\naccount, which is often given to billing account\n[administrators](https://cloud.google.com/billing/docs/how-to/billing-access).\n\n\u003e This method is currently in\n\u003e [Beta](https://cloud.google.com/terms/launch-stages).",
+          "description": "Sets the access control policy for a billing account. Replaces any existing\npolicy.\nThe caller must have the `billing.accounts.setIamPolicy` permission on the\naccount, which is often given to billing account\n[administrators](https://cloud.google.com/billing/docs/how-to/billing-access).",
           "flatPath": "v1/billingAccounts/{billingAccountsId}:setIamPolicy",
           "httpMethod": "POST",
           "id": "cloudbilling.billingAccounts.setIamPolicy",
@@ -280,7 +269,7 @@
           ]
         },
         "testIamPermissions": {
-          "description": "Tests the access control policy for a billing account. This method takes\nthe resource and a set of permissions as input and returns the subset of\nthe input permissions that the caller is allowed for that resource.\n\n\u003e This method is currently in\n\u003e [Beta](https://cloud.google.com/terms/launch-stages).",
+          "description": "Tests the access control policy for a billing account. This method takes\nthe resource and a set of permissions as input and returns the subset of\nthe input permissions that the caller is allowed for that resource.",
           "flatPath": "v1/billingAccounts/{billingAccountsId}:testIamPermissions",
           "httpMethod": "POST",
           "id": "cloudbilling.billingAccounts.testIamPermissions",
@@ -432,7 +421,10 @@
           "path": "v1/services",
           "response": {
             "$ref": "ListServicesResponse"
-          }
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/cloud-platform"
+          ]
         }
       },
       "resources": {
@@ -486,14 +478,17 @@
               "path": "v1/{+parent}/skus",
               "response": {
                 "$ref": "ListSkusResponse"
-              }
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform"
+              ]
             }
           }
         }
       }
     }
   },
-  "revision": "20180307",
+  "revision": "20180806",
   "rootUrl": "https://cloudbilling.googleapis.com/",
   "schemas": {
     "AggregationInfo": {
@@ -539,7 +534,7 @@
       "id": "AuditConfig",
       "properties": {
         "auditLogConfigs": {
-          "description": "The configuration for logging of each type of permission.\nNext ID: 4",
+          "description": "The configuration for logging of each type of permission.",
           "items": {
             "$ref": "AuditLogConfig"
           },
@@ -591,7 +586,7 @@
           "type": "string"
         },
         "masterBillingAccount": {
-          "description": "If this account is a\n[subaccount](https://cloud.google.com/billing/docs/concepts), then this\nwill be the resource name of the master billing account that it is being\nresold through.\nOtherwise this will be empty.\n\n\u003e This field is currently in\n\u003e [Beta](https://cloud.google.com/terms/launch-stages).",
+          "description": "If this account is a\n[subaccount](https://cloud.google.com/billing/docs/concepts), then this\nwill be the resource name of the master billing account that it is being\nresold through.\nOtherwise this will be empty.",
           "type": "string"
         },
         "name": {
@@ -609,15 +604,19 @@
       "description": "Associates `members` with a `role`.",
       "id": "Binding",
       "properties": {
+        "condition": {
+          "$ref": "Expr",
+          "description": "Unimplemented. The condition that is associated with this binding.\nNOTE: an unsatisfied condition will not allow user access via current\nbinding. Different bindings, including their conditions, are examined\nindependently."
+        },
         "members": {
-          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` or `joe@example.com`.\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: A Google Apps domain name that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
+          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` .\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: A Google Apps domain name that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "role": {
-          "description": "Role that is assigned to `members`.\nFor example, `roles/viewer`, `roles/editor`, or `roles/owner`.\nRequired",
+          "description": "Role that is assigned to `members`.\nFor example, `roles/viewer`, `roles/editor`, or `roles/owner`.",
           "type": "string"
         }
       },
@@ -641,6 +640,29 @@
         },
         "usageType": {
           "description": "Represents how the SKU is consumed.\nExample: \"OnDemand\", \"Preemptible\", \"Commit1Mo\", \"Commit1Yr\" etc.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Expr": {
+      "description": "Represents an expression text. Example:\n\n    title: \"User account presence\"\n    description: \"Determines whether the request has a user account\"\n    expression: \"size(request.user) \u003e 0\"",
+      "id": "Expr",
+      "properties": {
+        "description": {
+          "description": "An optional description of the expression. This is a longer text which\ndescribes the expression, e.g. when hovered over it in a UI.",
+          "type": "string"
+        },
+        "expression": {
+          "description": "Textual representation of an expression in\nCommon Expression Language syntax.\n\nThe application context of the containing message determines which\nwell-known feature set of CEL is supported.",
+          "type": "string"
+        },
+        "location": {
+          "description": "An optional string indicating the location of the expression for error\nreporting, e.g. a file name and a position in the file.",
+          "type": "string"
+        },
+        "title": {
+          "description": "An optional title for the expression, i.e. a short string describing\nits purpose. This can be used e.g. in UIs which allow to enter the\nexpression.",
           "type": "string"
         }
       },
@@ -740,7 +762,7 @@
       "type": "object"
     },
     "Policy": {
-      "description": "Defines an Identity and Access Management (IAM) policy. It is used to\nspecify access control policies for Cloud Platform resources.\n\n\nA `Policy` consists of a list of `bindings`. A `Binding` binds a list of\n`members` to a `role`, where the members can be user accounts, Google groups,\nGoogle domains, and service accounts. A `role` is a named list of permissions\ndefined by IAM.\n\n**Example**\n\n    {\n      \"bindings\": [\n        {\n          \"role\": \"roles/owner\",\n          \"members\": [\n            \"user:mike@example.com\",\n            \"group:admins@example.com\",\n            \"domain:google.com\",\n            \"serviceAccount:my-other-app@appspot.gserviceaccount.com\",\n          ]\n        },\n        {\n          \"role\": \"roles/viewer\",\n          \"members\": [\"user:sean@example.com\"]\n        }\n      ]\n    }\n\nFor a description of IAM and its features, see the\n[IAM developer's guide](https://cloud.google.com/iam/docs).",
+      "description": "Defines an Identity and Access Management (IAM) policy. It is used to\nspecify access control policies for Cloud Platform resources.\n\n\nA `Policy` consists of a list of `bindings`. A `binding` binds a list of\n`members` to a `role`, where the members can be user accounts, Google groups,\nGoogle domains, and service accounts. A `role` is a named list of permissions\ndefined by IAM.\n\n**JSON Example**\n\n    {\n      \"bindings\": [\n        {\n          \"role\": \"roles/owner\",\n          \"members\": [\n            \"user:mike@example.com\",\n            \"group:admins@example.com\",\n            \"domain:google.com\",\n            \"serviceAccount:my-other-app@appspot.gserviceaccount.com\"\n          ]\n        },\n        {\n          \"role\": \"roles/viewer\",\n          \"members\": [\"user:sean@example.com\"]\n        }\n      ]\n    }\n\n**YAML Example**\n\n    bindings:\n    - members:\n      - user:mike@example.com\n      - group:admins@example.com\n      - domain:google.com\n      - serviceAccount:my-other-app@appspot.gserviceaccount.com\n      role: roles/owner\n    - members:\n      - user:sean@example.com\n      role: roles/viewer\n\n\nFor a description of IAM and its features, see the\n[IAM developer's guide](https://cloud.google.com/iam/docs).",
       "id": "Policy",
       "properties": {
         "auditConfigs": {

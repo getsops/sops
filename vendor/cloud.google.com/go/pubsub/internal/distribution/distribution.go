@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ func (d *D) Record(v int) {
 }
 
 // Percentile computes the p-th percentile of the distribution where
-// p is between 0 and 1.
+// p is between 0 and 1. This method is thread-safe.
 func (d *D) Percentile(p float64) int {
 	// NOTE: This implementation uses the nearest-rank method.
 	// https://en.wikipedia.org/wiki/Percentile#The_nearest-rank_method
@@ -57,14 +57,13 @@ func (d *D) Percentile(p float64) int {
 		log.Panicf("Percentile: percentile out of range: %f", p)
 	}
 
-	bucketSums := make([]uint64, len(d.buckets))
+	sums := make([]uint64, len(d.buckets))
 	var sum uint64
-	for i := range bucketSums {
+	for i := range sums {
 		sum += atomic.LoadUint64(&d.buckets[i])
-		bucketSums[i] = sum
+		sums[i] = sum
 	}
 
-	total := bucketSums[len(bucketSums)-1]
-	target := uint64(math.Ceil(float64(total) * p))
-	return sort.Search(len(bucketSums), func(i int) bool { return bucketSums[i] >= target })
+	target := uint64(math.Ceil(float64(sum) * p))
+	return sort.Search(len(sums), func(i int) bool { return sums[i] >= target })
 }

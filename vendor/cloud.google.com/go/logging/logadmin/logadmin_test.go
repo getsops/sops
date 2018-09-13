@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -167,8 +167,8 @@ func TestFromLogEntry(t *testing.T) {
 				Method: "GET",
 				URL:    u,
 				Header: map[string][]string{
-					"User-Agent": []string{"user-agent"},
-					"Referer":    []string{"referer"},
+					"User-Agent": {"user-agent"},
+					"Referer":    {"referer"},
 				},
 			},
 			RequestSize:                    100,
@@ -214,7 +214,7 @@ func TestFromLogEntry(t *testing.T) {
 
 	// JSON payload.
 	jstruct := &structpb.Struct{Fields: map[string]*structpb.Value{
-		"f": &structpb.Value{Kind: &structpb.Value_NumberValue{NumberValue: 3.1}},
+		"f": {Kind: &structpb.Value_NumberValue{NumberValue: 3.1}},
 	}}
 	logEntry = logpb.LogEntry{
 		LogName:   "projects/PROJECT_ID/logs/LOG_ID",

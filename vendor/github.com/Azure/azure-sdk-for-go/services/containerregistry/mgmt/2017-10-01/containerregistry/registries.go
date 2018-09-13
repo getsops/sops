@@ -372,9 +372,7 @@ func (client RegistriesClient) ImportImage(ctx context.Context, resourceGroupNam
 				{Target: "registryName", Name: validation.Pattern, Rule: `^[a-zA-Z0-9]*$`, Chain: nil}}},
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Source", Name: validation.Null, Rule: true,
-				Chain: []validation.Constraint{{Target: "parameters.Source.ResourceID", Name: validation.Null, Rule: true, Chain: nil},
-					{Target: "parameters.Source.SourceImage", Name: validation.Null, Rule: true, Chain: nil},
-				}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "parameters.Source.SourceImage", Name: validation.Null, Rule: true, Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("containerregistry.RegistriesClient", "ImportImage", err.Error())
 	}
 
@@ -703,6 +701,81 @@ func (client RegistriesClient) ListCredentialsResponder(resp *http.Response) (re
 	return
 }
 
+// ListPolicies lists the policies for the specified container registry.
+// Parameters:
+// resourceGroupName - the name of the resource group to which the container registry belongs.
+// registryName - the name of the container registry.
+func (client RegistriesClient) ListPolicies(ctx context.Context, resourceGroupName string, registryName string) (result RegistryPolicies, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: registryName,
+			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
+				{Target: "registryName", Name: validation.MinLength, Rule: 5, Chain: nil},
+				{Target: "registryName", Name: validation.Pattern, Rule: `^[a-zA-Z0-9]*$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("containerregistry.RegistriesClient", "ListPolicies", err.Error())
+	}
+
+	req, err := client.ListPoliciesPreparer(ctx, resourceGroupName, registryName)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "containerregistry.RegistriesClient", "ListPolicies", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.ListPoliciesSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "containerregistry.RegistriesClient", "ListPolicies", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.ListPoliciesResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "containerregistry.RegistriesClient", "ListPolicies", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// ListPoliciesPreparer prepares the ListPolicies request.
+func (client RegistriesClient) ListPoliciesPreparer(ctx context.Context, resourceGroupName string, registryName string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"registryName":      autorest.Encode("path", registryName),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2017-10-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsGet(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}/listPolicies", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// ListPoliciesSender sends the ListPolicies request. The method will close the
+// http.Response Body if it receives an error.
+func (client RegistriesClient) ListPoliciesSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// ListPoliciesResponder handles the response to the ListPolicies request. The method always
+// closes the http.Response Body.
+func (client RegistriesClient) ListPoliciesResponder(resp *http.Response) (result RegistryPolicies, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
 // ListUsages gets the quota usages for the specified container registry.
 // Parameters:
 // resourceGroupName - the name of the resource group to which the container registry belongs.
@@ -933,6 +1006,88 @@ func (client RegistriesClient) UpdateResponder(resp *http.Response) (result Regi
 		resp,
 		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// UpdatePolicies updates the policies for the specified container registry.
+// Parameters:
+// resourceGroupName - the name of the resource group to which the container registry belongs.
+// registryName - the name of the container registry.
+// registryPoliciesUpdateParameters - the parameters for updating policies of a container registry.
+func (client RegistriesClient) UpdatePolicies(ctx context.Context, resourceGroupName string, registryName string, registryPoliciesUpdateParameters RegistryPolicies) (result RegistriesUpdatePoliciesFuture, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: registryName,
+			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
+				{Target: "registryName", Name: validation.MinLength, Rule: 5, Chain: nil},
+				{Target: "registryName", Name: validation.Pattern, Rule: `^[a-zA-Z0-9]*$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("containerregistry.RegistriesClient", "UpdatePolicies", err.Error())
+	}
+
+	req, err := client.UpdatePoliciesPreparer(ctx, resourceGroupName, registryName, registryPoliciesUpdateParameters)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "containerregistry.RegistriesClient", "UpdatePolicies", nil, "Failure preparing request")
+		return
+	}
+
+	result, err = client.UpdatePoliciesSender(req)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "containerregistry.RegistriesClient", "UpdatePolicies", result.Response(), "Failure sending request")
+		return
+	}
+
+	return
+}
+
+// UpdatePoliciesPreparer prepares the UpdatePolicies request.
+func (client RegistriesClient) UpdatePoliciesPreparer(ctx context.Context, resourceGroupName string, registryName string, registryPoliciesUpdateParameters RegistryPolicies) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"registryName":      autorest.Encode("path", registryName),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2017-10-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}/updatePolicies", pathParameters),
+		autorest.WithJSON(registryPoliciesUpdateParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// UpdatePoliciesSender sends the UpdatePolicies request. The method will close the
+// http.Response Body if it receives an error.
+func (client RegistriesClient) UpdatePoliciesSender(req *http.Request) (future RegistriesUpdatePoliciesFuture, err error) {
+	var resp *http.Response
+	resp, err = autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
+	future.Future, err = azure.NewFutureFromResponse(resp)
+	return
+}
+
+// UpdatePoliciesResponder handles the response to the UpdatePolicies request. The method always
+// closes the http.Response Body.
+func (client RegistriesClient) UpdatePoliciesResponder(resp *http.Response) (result RegistryPolicies, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}

@@ -5,7 +5,7 @@
 package cldr
 
 // This file implements the various inheritance constructs defined by LDML.
-// See http://www.unicode.org/reports/tr35/#Inheritance_and_Validity
+// See https://www.unicode.org/reports/tr35/#Inheritance_and_Validity
 // for more details.
 
 import (

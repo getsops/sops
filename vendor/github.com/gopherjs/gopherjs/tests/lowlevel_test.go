@@ -1,5 +1,3 @@
-// +build !js
-
 package tests_test
 
 import (
@@ -7,6 +5,7 @@ import (
 	"io/ioutil"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"testing"
 )
 
@@ -15,6 +14,10 @@ import (
 //
 // See https://github.com/gopherjs/gopherjs/issues/279.
 func TestTimeInternalizationExternalization(t *testing.T) {
+	if runtime.GOARCH == "js" {
+		t.Skip("test meant to be run using normal Go compiler (needs os/exec)")
+	}
+
 	got, err := exec.Command("gopherjs", "run", filepath.Join("testdata", "time_inexternalization.go")).Output()
 	if err != nil {
 		t.Fatalf("%v:\n%s", err, got)

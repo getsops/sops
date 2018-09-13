@@ -19,7 +19,7 @@
 
 package policy
 
-import original "github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2018-03-01/policy"
+import original "github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2018-05-01/policy"
 
 type AssignmentsClient = original.AssignmentsClient
 
@@ -35,6 +35,13 @@ const (
 	All          Mode = original.All
 	Indexed      Mode = original.Indexed
 	NotSpecified Mode = original.NotSpecified
+)
+
+type ResourceIdentityType = original.ResourceIdentityType
+
+const (
+	None           ResourceIdentityType = original.None
+	SystemAssigned ResourceIdentityType = original.SystemAssigned
 )
 
 type Type = original.Type
@@ -57,6 +64,7 @@ type DefinitionListResultPage = original.DefinitionListResultPage
 type DefinitionProperties = original.DefinitionProperties
 type DefinitionReference = original.DefinitionReference
 type ErrorResponse = original.ErrorResponse
+type Identity = original.Identity
 type SetDefinition = original.SetDefinition
 type SetDefinitionListResult = original.SetDefinitionListResult
 type SetDefinitionListResultIterator = original.SetDefinitionListResultIterator
@@ -85,6 +93,9 @@ func NewDefinitionsClientWithBaseURI(baseURI string, subscriptionID string) Defi
 }
 func PossibleModeValues() []Mode {
 	return original.PossibleModeValues()
+}
+func PossibleResourceIdentityTypeValues() []ResourceIdentityType {
+	return original.PossibleResourceIdentityTypeValues()
 }
 func PossibleTypeValues() []Type {
 	return original.PossibleTypeValues()

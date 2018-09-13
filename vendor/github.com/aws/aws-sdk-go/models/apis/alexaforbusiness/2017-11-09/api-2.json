@@ -6,6 +6,7 @@
     "jsonVersion":"1.1",
     "protocol":"json",
     "serviceFullName":"Alexa For Business",
+    "serviceId":"Alexa For Business",
     "signatureVersion":"v4",
     "targetPrefix":"AlexaForBusiness",
     "uid":"alexaforbusiness-2017-11-09"
@@ -18,7 +19,10 @@
         "requestUri":"/"
       },
       "input":{"shape":"AssociateContactWithAddressBookRequest"},
-      "output":{"shape":"AssociateContactWithAddressBookResponse"}
+      "output":{"shape":"AssociateContactWithAddressBookResponse"},
+      "errors":[
+        {"shape":"LimitExceededException"}
+      ]
     },
     "AssociateDeviceWithRoom":{
       "name":"AssociateDeviceWithRoom",
@@ -29,7 +33,8 @@
       "input":{"shape":"AssociateDeviceWithRoomRequest"},
       "output":{"shape":"AssociateDeviceWithRoomResponse"},
       "errors":[
-        {"shape":"LimitExceededException"}
+        {"shape":"LimitExceededException"},
+        {"shape":"DeviceNotRegisteredException"}
       ]
     },
     "AssociateSkillGroupWithRoom":{
@@ -216,7 +221,10 @@
         "requestUri":"/"
       },
       "input":{"shape":"DisassociateDeviceFromRoomRequest"},
-      "output":{"shape":"DisassociateDeviceFromRoomResponse"}
+      "output":{"shape":"DisassociateDeviceFromRoomResponse"},
+      "errors":[
+        {"shape":"DeviceNotRegisteredException"}
+      ]
     },
     "DisassociateSkillGroupFromRoom":{
       "name":"DisassociateSkillGroupFromRoom",
@@ -307,6 +315,18 @@
       },
       "input":{"shape":"GetSkillGroupRequest"},
       "output":{"shape":"GetSkillGroupResponse"},
+      "errors":[
+        {"shape":"NotFoundException"}
+      ]
+    },
+    "ListDeviceEvents":{
+      "name":"ListDeviceEvents",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListDeviceEventsRequest"},
+      "output":{"shape":"ListDeviceEventsResponse"},
       "errors":[
         {"shape":"NotFoundException"}
       ]
@@ -448,7 +468,10 @@
         "requestUri":"/"
       },
       "input":{"shape":"StartDeviceSyncRequest"},
-      "output":{"shape":"StartDeviceSyncResponse"}
+      "output":{"shape":"StartDeviceSyncResponse"},
+      "errors":[
+        {"shape":"DeviceNotRegisteredException"}
+      ]
     },
     "TagResource":{
       "name":"TagResource",
@@ -508,7 +531,8 @@
       "input":{"shape":"UpdateDeviceRequest"},
       "output":{"shape":"UpdateDeviceResponse"},
       "errors":[
-        {"shape":"NotFoundException"}
+        {"shape":"NotFoundException"},
+        {"shape":"DeviceNotRegisteredException"}
       ]
     },
     "UpdateProfile":{
@@ -646,6 +670,13 @@
       "max":150,
       "min":10,
       "pattern":"[a-zA-Z0-9][a-zA-Z0-9_-]*"
+    },
+    "ConnectionStatus":{
+      "type":"string",
+      "enum":[
+        "ONLINE",
+        "OFFLINE"
+      ]
     },
     "Contact":{
       "type":"structure",
@@ -930,11 +961,38 @@
       "type":"list",
       "member":{"shape":"DeviceData"}
     },
+    "DeviceEvent":{
+      "type":"structure",
+      "members":{
+        "Type":{"shape":"DeviceEventType"},
+        "Value":{"shape":"DeviceEventValue"},
+        "Timestamp":{"shape":"Timestamp"}
+      }
+    },
+    "DeviceEventList":{
+      "type":"list",
+      "member":{"shape":"DeviceEvent"}
+    },
+    "DeviceEventType":{
+      "type":"string",
+      "enum":[
+        "CONNECTION_STATUS",
+        "DEVICE_STATUS"
+      ]
+    },
+    "DeviceEventValue":{"type":"string"},
     "DeviceName":{
       "type":"string",
       "max":100,
       "min":2,
       "pattern":"[\\u0009\\u000A\\u000D\\u0020-\\u007E\\u0085\\u00A0-\\uD7FF\\uE000-\\uFFFD\\u10000-\\u10FFFF]*"
+    },
+    "DeviceNotRegisteredException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ErrorMessage"}
+      },
+      "exception":true
     },
     "DeviceSerialNumber":{
       "type":"string",
@@ -945,7 +1003,8 @@
       "enum":[
         "READY",
         "PENDING",
-        "WAS_OFFLINE"
+        "WAS_OFFLINE",
+        "DEREGISTERED"
       ]
     },
     "DeviceStatusDetail":{
@@ -968,7 +1027,8 @@
     "DeviceStatusInfo":{
       "type":"structure",
       "members":{
-        "DeviceStatusDetails":{"shape":"DeviceStatusDetails"}
+        "DeviceStatusDetails":{"shape":"DeviceStatusDetails"},
+        "ConnectionStatus":{"shape":"ConnectionStatus"}
       }
     },
     "DeviceType":{
@@ -1042,6 +1102,7 @@
         "INITIALIZED",
         "PENDING",
         "REGISTERED",
+        "DISASSOCIATING",
         "DEREGISTERING"
       ]
     },
@@ -1197,6 +1258,23 @@
         "Message":{"shape":"ErrorMessage"}
       },
       "exception":true
+    },
+    "ListDeviceEventsRequest":{
+      "type":"structure",
+      "required":["DeviceArn"],
+      "members":{
+        "DeviceArn":{"shape":"Arn"},
+        "EventType":{"shape":"DeviceEventType"},
+        "NextToken":{"shape":"NextToken"},
+        "MaxResults":{"shape":"MaxResults"}
+      }
+    },
+    "ListDeviceEventsResponse":{
+      "type":"structure",
+      "members":{
+        "DeviceEvents":{"shape":"DeviceEventList"},
+        "NextToken":{"shape":"NextToken"}
+      }
     },
     "ListSkillsRequest":{
       "type":"structure",
@@ -1697,6 +1775,7 @@
         "CELSIUS"
       ]
     },
+    "Timestamp":{"type":"timestamp"},
     "Timezone":{
       "type":"string",
       "max":100,

@@ -27,18 +27,18 @@ import (
 // BaseClient is the base client for Face.
 type BaseClient struct {
 	autorest.Client
-	AzureRegion AzureRegions
+	Endpoint string
 }
 
 // New creates an instance of the BaseClient client.
-func New(azureRegion AzureRegions) BaseClient {
-	return NewWithoutDefaults(azureRegion)
+func New(endpoint string) BaseClient {
+	return NewWithoutDefaults(endpoint)
 }
 
 // NewWithoutDefaults creates an instance of the BaseClient client.
-func NewWithoutDefaults(azureRegion AzureRegions) BaseClient {
+func NewWithoutDefaults(endpoint string) BaseClient {
 	return BaseClient{
-		Client:      autorest.NewClientWithUserAgent(UserAgent()),
-		AzureRegion: azureRegion,
+		Client:   autorest.NewClientWithUserAgent(UserAgent()),
+		Endpoint: endpoint,
 	}
 }

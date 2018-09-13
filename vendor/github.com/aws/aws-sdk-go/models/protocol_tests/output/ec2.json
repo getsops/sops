@@ -452,7 +452,7 @@
     ]
   },
   {
-    "description": "Enum output",
+    "description": "Timestamp members",
     "metadata": {
       "protocol": "ec2"
     },
@@ -460,24 +460,38 @@
       "OutputShape": {
         "type": "structure",
         "members": {
-          "FooEnum": {
-            "shape": "EC2EnumType"
+          "TimeArg": {
+            "shape": "TimestampType"
           },
-          "ListEnums": {
-            "shape": "EC2EnumList"
+          "TimeCustom": {
+            "timestampFormat": "rfc822",
+            "shape": "TimestampType"
+          },
+          "TimeFormat": {
+            "shape": "TimestampFormatType"
+          },
+          "StructMember": {
+            "shape": "TimeContainer"
           }
         }
       },
-      "EC2EnumType":{
-        "type":"string",
-        "enum":[
-          "foo",
-          "bar"
-        ]
+      "TimeContainer": {
+        "type": "structure",
+        "members": {
+          "foo": {
+            "shape": "TimestampType"
+          },
+          "bar": {
+            "shape": "TimestampFormatType"
+          }
+        }
       },
-      "EC2EnumList":{
-        "type":"list",
-        "member": {"shape": "EC2EnumType"}
+      "TimestampFormatType": {
+        "timestampFormat": "unixTimestamp",
+        "type": "timestamp"
+      },
+      "TimestampType": {
+        "type": "timestamp"
       }
     },
     "cases": [
@@ -489,13 +503,18 @@
           "name": "OperationName"
         },
         "result": {
-          "FooEnum": "foo",
-          "ListEnums": ["foo", "bar"]
+          "TimeArg": 1398796238,
+          "TimeCustom": 1398796238,
+          "TimeFormat": 1398796238,
+          "StructMember": {
+            "foo": 1398796238,
+            "bar": 1398796238
+          }
         },
         "response": {
           "status_code": 200,
           "headers": {},
-          "body": "<OperationNameResponse><FooEnum>foo</FooEnum><ListEnums><member>foo</member><member>bar</member></ListEnums></OperationNameResponse>"
+          "body": "<OperationNameResponse><StructMember><foo>2014-04-29T18:30:38Z</foo><bar>1398796238</bar></StructMember><TimeArg>2014-04-29T18:30:38Z</TimeArg><TimeCustom>Tue, 29 Apr 2014 18:30:38 GMT</TimeCustom><TimeFormat>1398796238</TimeFormat><RequestId>requestid</RequestId></OperationNameResponse>"
         }
       }
     ]

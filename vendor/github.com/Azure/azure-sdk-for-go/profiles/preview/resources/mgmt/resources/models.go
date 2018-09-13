@@ -94,6 +94,7 @@ type GroupProperties = original.GroupProperties
 type GroupsDeleteFuture = original.GroupsDeleteFuture
 type HTTPMessage = original.HTTPMessage
 type Identity = original.Identity
+type IdentityUserAssignedIdentitiesValue = original.IdentityUserAssignedIdentitiesValue
 type ListResult = original.ListResult
 type ListResultIterator = original.ListResultIterator
 type ListResultPage = original.ListResultPage

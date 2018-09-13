@@ -21,6 +21,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/internal/version"
+	"github.com/golang/protobuf/proto"
 	gax "github.com/googleapis/gax-go"
 	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
@@ -101,6 +102,8 @@ func defaultCallOptions() *CallOptions {
 }
 
 // Client is a client for interacting with Google Cloud Firestore API.
+//
+// Methods, except Close, may be called concurrently. However, fields must not be modified concurrently with method calls.
 type Client struct {
 	// The connection to the service.
 	conn *grpc.ClientConn
@@ -192,6 +195,7 @@ func (c *Client) ListDocuments(ctx context.Context, req *firestorepb.ListDocumen
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.ListDocuments[0:len(c.CallOptions.ListDocuments):len(c.CallOptions.ListDocuments)], opts...)
 	it := &DocumentIterator{}
+	req = proto.Clone(req).(*firestorepb.ListDocumentsRequest)
 	it.InternalFetch = func(pageSize int, pageToken string) ([]*firestorepb.Document, string, error) {
 		var resp *firestorepb.ListDocumentsResponse
 		req.PageToken = pageToken
@@ -219,6 +223,7 @@ func (c *Client) ListDocuments(ctx context.Context, req *firestorepb.ListDocumen
 		return nextPageToken, nil
 	}
 	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.PageSize)
 	return it
 }
 
@@ -382,6 +387,7 @@ func (c *Client) ListCollectionIds(ctx context.Context, req *firestorepb.ListCol
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.ListCollectionIds[0:len(c.CallOptions.ListCollectionIds):len(c.CallOptions.ListCollectionIds)], opts...)
 	it := &StringIterator{}
+	req = proto.Clone(req).(*firestorepb.ListCollectionIdsRequest)
 	it.InternalFetch = func(pageSize int, pageToken string) ([]string, string, error) {
 		var resp *firestorepb.ListCollectionIdsResponse
 		req.PageToken = pageToken
@@ -409,6 +415,7 @@ func (c *Client) ListCollectionIds(ctx context.Context, req *firestorepb.ListCol
 		return nextPageToken, nil
 	}
 	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.PageSize)
 	return it
 }
 

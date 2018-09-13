@@ -1391,13 +1391,13 @@ func (client AppsClient) CreateOrUpdate(ctx context.Context, resourceGroupName s
 						Chain: []validation.Constraint{{Target: "siteEnvelope.SiteProperties.SiteConfig.Push.PushSettingsProperties", Name: validation.Null, Rule: false,
 							Chain: []validation.Constraint{{Target: "siteEnvelope.SiteProperties.SiteConfig.Push.PushSettingsProperties.IsPushEnabled", Name: validation.Null, Rule: true, Chain: nil}}},
 						}},
+						{Target: "siteEnvelope.SiteProperties.SiteConfig.ReservedInstanceCount", Name: validation.Null, Rule: false,
+							Chain: []validation.Constraint{{Target: "siteEnvelope.SiteProperties.SiteConfig.ReservedInstanceCount", Name: validation.InclusiveMaximum, Rule: int64(10), Chain: nil},
+								{Target: "siteEnvelope.SiteProperties.SiteConfig.ReservedInstanceCount", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+							}},
 					}},
 					{Target: "siteEnvelope.SiteProperties.CloningInfo", Name: validation.Null, Rule: false,
 						Chain: []validation.Constraint{{Target: "siteEnvelope.SiteProperties.CloningInfo.SourceWebAppID", Name: validation.Null, Rule: true, Chain: nil}}},
-					{Target: "siteEnvelope.SiteProperties.SnapshotInfo", Name: validation.Null, Rule: false,
-						Chain: []validation.Constraint{{Target: "siteEnvelope.SiteProperties.SnapshotInfo.SnapshotRecoveryRequestProperties", Name: validation.Null, Rule: false,
-							Chain: []validation.Constraint{{Target: "siteEnvelope.SiteProperties.SnapshotInfo.SnapshotRecoveryRequestProperties.Overwrite", Name: validation.Null, Rule: true, Chain: nil}}},
-						}},
 				}}}}}); err != nil {
 		return result, validation.NewError("web.AppsClient", "CreateOrUpdate", err.Error())
 	}
@@ -1487,6 +1487,10 @@ func (client AppsClient) CreateOrUpdateConfiguration(ctx context.Context, resour
 					Chain: []validation.Constraint{{Target: "siteConfig.SiteConfig.Push.PushSettingsProperties", Name: validation.Null, Rule: false,
 						Chain: []validation.Constraint{{Target: "siteConfig.SiteConfig.Push.PushSettingsProperties.IsPushEnabled", Name: validation.Null, Rule: true, Chain: nil}}},
 					}},
+					{Target: "siteConfig.SiteConfig.ReservedInstanceCount", Name: validation.Null, Rule: false,
+						Chain: []validation.Constraint{{Target: "siteConfig.SiteConfig.ReservedInstanceCount", Name: validation.InclusiveMaximum, Rule: int64(10), Chain: nil},
+							{Target: "siteConfig.SiteConfig.ReservedInstanceCount", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+						}},
 				}}}}}); err != nil {
 		return result, validation.NewError("web.AppsClient", "CreateOrUpdateConfiguration", err.Error())
 	}
@@ -1574,6 +1578,10 @@ func (client AppsClient) CreateOrUpdateConfigurationSlot(ctx context.Context, re
 					Chain: []validation.Constraint{{Target: "siteConfig.SiteConfig.Push.PushSettingsProperties", Name: validation.Null, Rule: false,
 						Chain: []validation.Constraint{{Target: "siteConfig.SiteConfig.Push.PushSettingsProperties.IsPushEnabled", Name: validation.Null, Rule: true, Chain: nil}}},
 					}},
+					{Target: "siteConfig.SiteConfig.ReservedInstanceCount", Name: validation.Null, Rule: false,
+						Chain: []validation.Constraint{{Target: "siteConfig.SiteConfig.ReservedInstanceCount", Name: validation.InclusiveMaximum, Rule: int64(10), Chain: nil},
+							{Target: "siteConfig.SiteConfig.ReservedInstanceCount", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+						}},
 				}}}}}); err != nil {
 		return result, validation.NewError("web.AppsClient", "CreateOrUpdateConfigurationSlot", err.Error())
 	}
@@ -1684,9 +1692,9 @@ func (client AppsClient) CreateOrUpdateDomainOwnershipIdentifier(ctx context.Con
 func (client AppsClient) CreateOrUpdateDomainOwnershipIdentifierPreparer(ctx context.Context, resourceGroupName string, name string, domainOwnershipIdentifierName string, domainOwnershipIdentifier Identifier) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"domainOwnershipIdentifierName": autorest.Encode("path", domainOwnershipIdentifierName),
-		"name":              autorest.Encode("path", name),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+		"name":                          autorest.Encode("path", name),
+		"resourceGroupName":             autorest.Encode("path", resourceGroupName),
+		"subscriptionId":                autorest.Encode("path", client.SubscriptionID),
 	}
 
 	const APIVersion = "2018-02-01"
@@ -1767,10 +1775,10 @@ func (client AppsClient) CreateOrUpdateDomainOwnershipIdentifierSlot(ctx context
 func (client AppsClient) CreateOrUpdateDomainOwnershipIdentifierSlotPreparer(ctx context.Context, resourceGroupName string, name string, domainOwnershipIdentifierName string, domainOwnershipIdentifier Identifier, slot string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"domainOwnershipIdentifierName": autorest.Encode("path", domainOwnershipIdentifierName),
-		"name":              autorest.Encode("path", name),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"slot":              autorest.Encode("path", slot),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+		"name":                          autorest.Encode("path", name),
+		"resourceGroupName":             autorest.Encode("path", resourceGroupName),
+		"slot":                          autorest.Encode("path", slot),
+		"subscriptionId":                autorest.Encode("path", client.SubscriptionID),
 	}
 
 	const APIVersion = "2018-02-01"
@@ -2488,13 +2496,13 @@ func (client AppsClient) CreateOrUpdateSlot(ctx context.Context, resourceGroupNa
 						Chain: []validation.Constraint{{Target: "siteEnvelope.SiteProperties.SiteConfig.Push.PushSettingsProperties", Name: validation.Null, Rule: false,
 							Chain: []validation.Constraint{{Target: "siteEnvelope.SiteProperties.SiteConfig.Push.PushSettingsProperties.IsPushEnabled", Name: validation.Null, Rule: true, Chain: nil}}},
 						}},
+						{Target: "siteEnvelope.SiteProperties.SiteConfig.ReservedInstanceCount", Name: validation.Null, Rule: false,
+							Chain: []validation.Constraint{{Target: "siteEnvelope.SiteProperties.SiteConfig.ReservedInstanceCount", Name: validation.InclusiveMaximum, Rule: int64(10), Chain: nil},
+								{Target: "siteEnvelope.SiteProperties.SiteConfig.ReservedInstanceCount", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+							}},
 					}},
 					{Target: "siteEnvelope.SiteProperties.CloningInfo", Name: validation.Null, Rule: false,
 						Chain: []validation.Constraint{{Target: "siteEnvelope.SiteProperties.CloningInfo.SourceWebAppID", Name: validation.Null, Rule: true, Chain: nil}}},
-					{Target: "siteEnvelope.SiteProperties.SnapshotInfo", Name: validation.Null, Rule: false,
-						Chain: []validation.Constraint{{Target: "siteEnvelope.SiteProperties.SnapshotInfo.SnapshotRecoveryRequestProperties", Name: validation.Null, Rule: false,
-							Chain: []validation.Constraint{{Target: "siteEnvelope.SiteProperties.SnapshotInfo.SnapshotRecoveryRequestProperties.Overwrite", Name: validation.Null, Rule: true, Chain: nil}}},
-						}},
 				}}}}}); err != nil {
 		return result, validation.NewError("web.AppsClient", "CreateOrUpdateSlot", err.Error())
 	}
@@ -2729,6 +2737,171 @@ func (client AppsClient) CreateOrUpdateSourceControlSlotResponder(resp *http.Res
 		resp,
 		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// CreateOrUpdateSwiftVirtualNetworkConnection integrates this Web App with a Virtual Network. This requires that 1)
+// "swiftSupported" is true when doing a GET against this resource, and 2) that the target Subnet has already been
+// delegated, and is not
+// in use by another App Service Plan other than the one this App is in.
+// Parameters:
+// resourceGroupName - name of the resource group to which the resource belongs.
+// name - name of the app.
+// connectionEnvelope - properties of the Virtual Network connection. See example.
+func (client AppsClient) CreateOrUpdateSwiftVirtualNetworkConnection(ctx context.Context, resourceGroupName string, name string, connectionEnvelope SwiftVirtualNetwork) (result SwiftVirtualNetwork, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+[^\.]$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("web.AppsClient", "CreateOrUpdateSwiftVirtualNetworkConnection", err.Error())
+	}
+
+	req, err := client.CreateOrUpdateSwiftVirtualNetworkConnectionPreparer(ctx, resourceGroupName, name, connectionEnvelope)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "CreateOrUpdateSwiftVirtualNetworkConnection", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.CreateOrUpdateSwiftVirtualNetworkConnectionSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "CreateOrUpdateSwiftVirtualNetworkConnection", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.CreateOrUpdateSwiftVirtualNetworkConnectionResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "CreateOrUpdateSwiftVirtualNetworkConnection", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// CreateOrUpdateSwiftVirtualNetworkConnectionPreparer prepares the CreateOrUpdateSwiftVirtualNetworkConnection request.
+func (client AppsClient) CreateOrUpdateSwiftVirtualNetworkConnectionPreparer(ctx context.Context, resourceGroupName string, name string, connectionEnvelope SwiftVirtualNetwork) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"name":              autorest.Encode("path", name),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-02-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPut(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config/virtualNetwork", pathParameters),
+		autorest.WithJSON(connectionEnvelope),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// CreateOrUpdateSwiftVirtualNetworkConnectionSender sends the CreateOrUpdateSwiftVirtualNetworkConnection request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) CreateOrUpdateSwiftVirtualNetworkConnectionSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// CreateOrUpdateSwiftVirtualNetworkConnectionResponder handles the response to the CreateOrUpdateSwiftVirtualNetworkConnection request. The method always
+// closes the http.Response Body.
+func (client AppsClient) CreateOrUpdateSwiftVirtualNetworkConnectionResponder(resp *http.Response) (result SwiftVirtualNetwork, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// CreateOrUpdateSwiftVirtualNetworkConnectionSlot integrates this Web App with a Virtual Network. This requires that
+// 1) "swiftSupported" is true when doing a GET against this resource, and 2) that the target Subnet has already been
+// delegated, and is not
+// in use by another App Service Plan other than the one this App is in.
+// Parameters:
+// resourceGroupName - name of the resource group to which the resource belongs.
+// name - name of the app.
+// connectionEnvelope - properties of the Virtual Network connection. See example.
+// slot - name of the deployment slot. If a slot is not specified, the API will add or update connections for
+// the production slot.
+func (client AppsClient) CreateOrUpdateSwiftVirtualNetworkConnectionSlot(ctx context.Context, resourceGroupName string, name string, connectionEnvelope SwiftVirtualNetwork, slot string) (result SwiftVirtualNetwork, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+[^\.]$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("web.AppsClient", "CreateOrUpdateSwiftVirtualNetworkConnectionSlot", err.Error())
+	}
+
+	req, err := client.CreateOrUpdateSwiftVirtualNetworkConnectionSlotPreparer(ctx, resourceGroupName, name, connectionEnvelope, slot)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "CreateOrUpdateSwiftVirtualNetworkConnectionSlot", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.CreateOrUpdateSwiftVirtualNetworkConnectionSlotSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "CreateOrUpdateSwiftVirtualNetworkConnectionSlot", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.CreateOrUpdateSwiftVirtualNetworkConnectionSlotResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "CreateOrUpdateSwiftVirtualNetworkConnectionSlot", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// CreateOrUpdateSwiftVirtualNetworkConnectionSlotPreparer prepares the CreateOrUpdateSwiftVirtualNetworkConnectionSlot request.
+func (client AppsClient) CreateOrUpdateSwiftVirtualNetworkConnectionSlotPreparer(ctx context.Context, resourceGroupName string, name string, connectionEnvelope SwiftVirtualNetwork, slot string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"name":              autorest.Encode("path", name),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"slot":              autorest.Encode("path", slot),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-02-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPut(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/slots/{slot}/config/virtualNetwork", pathParameters),
+		autorest.WithJSON(connectionEnvelope),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// CreateOrUpdateSwiftVirtualNetworkConnectionSlotSender sends the CreateOrUpdateSwiftVirtualNetworkConnectionSlot request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) CreateOrUpdateSwiftVirtualNetworkConnectionSlotSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// CreateOrUpdateSwiftVirtualNetworkConnectionSlotResponder handles the response to the CreateOrUpdateSwiftVirtualNetworkConnectionSlot request. The method always
+// closes the http.Response Body.
+func (client AppsClient) CreateOrUpdateSwiftVirtualNetworkConnectionSlotResponder(resp *http.Response) (result SwiftVirtualNetwork, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
@@ -3811,9 +3984,9 @@ func (client AppsClient) DeleteDomainOwnershipIdentifier(ctx context.Context, re
 func (client AppsClient) DeleteDomainOwnershipIdentifierPreparer(ctx context.Context, resourceGroupName string, name string, domainOwnershipIdentifierName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"domainOwnershipIdentifierName": autorest.Encode("path", domainOwnershipIdentifierName),
-		"name":              autorest.Encode("path", name),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+		"name":                          autorest.Encode("path", name),
+		"resourceGroupName":             autorest.Encode("path", resourceGroupName),
+		"subscriptionId":                autorest.Encode("path", client.SubscriptionID),
 	}
 
 	const APIVersion = "2018-02-01"
@@ -3889,10 +4062,10 @@ func (client AppsClient) DeleteDomainOwnershipIdentifierSlot(ctx context.Context
 func (client AppsClient) DeleteDomainOwnershipIdentifierSlotPreparer(ctx context.Context, resourceGroupName string, name string, domainOwnershipIdentifierName string, slot string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"domainOwnershipIdentifierName": autorest.Encode("path", domainOwnershipIdentifierName),
-		"name":              autorest.Encode("path", name),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"slot":              autorest.Encode("path", slot),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+		"name":                          autorest.Encode("path", name),
+		"resourceGroupName":             autorest.Encode("path", resourceGroupName),
+		"slot":                          autorest.Encode("path", slot),
+		"subscriptionId":                autorest.Encode("path", client.SubscriptionID),
 	}
 
 	const APIVersion = "2018-02-01"
@@ -5424,7 +5597,7 @@ func (client AppsClient) DeleteSlotResponder(resp *http.Response) (result autore
 // Parameters:
 // resourceGroupName - name of the resource group to which the resource belongs.
 // name - name of the app.
-func (client AppsClient) DeleteSourceControl(ctx context.Context, resourceGroupName string, name string) (result SetObject, err error) {
+func (client AppsClient) DeleteSourceControl(ctx context.Context, resourceGroupName string, name string) (result autorest.Response, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -5441,7 +5614,7 @@ func (client AppsClient) DeleteSourceControl(ctx context.Context, resourceGroupN
 
 	resp, err := client.DeleteSourceControlSender(req)
 	if err != nil {
-		result.Response = autorest.Response{Response: resp}
+		result.Response = resp
 		err = autorest.NewErrorWithError(err, "web.AppsClient", "DeleteSourceControl", resp, "Failure sending request")
 		return
 	}
@@ -5484,14 +5657,13 @@ func (client AppsClient) DeleteSourceControlSender(req *http.Request) (*http.Res
 
 // DeleteSourceControlResponder handles the response to the DeleteSourceControl request. The method always
 // closes the http.Response Body.
-func (client AppsClient) DeleteSourceControlResponder(resp *http.Response) (result SetObject, err error) {
+func (client AppsClient) DeleteSourceControlResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNotFound),
-		autorest.ByUnmarshallingJSON(&result.Value),
 		autorest.ByClosing())
-	result.Response = autorest.Response{Response: resp}
+	result.Response = resp
 	return
 }
 
@@ -5501,7 +5673,7 @@ func (client AppsClient) DeleteSourceControlResponder(resp *http.Response) (resu
 // name - name of the app.
 // slot - name of the deployment slot. If a slot is not specified, the API will delete the source control
 // configuration for the production slot.
-func (client AppsClient) DeleteSourceControlSlot(ctx context.Context, resourceGroupName string, name string, slot string) (result SetObject, err error) {
+func (client AppsClient) DeleteSourceControlSlot(ctx context.Context, resourceGroupName string, name string, slot string) (result autorest.Response, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -5518,7 +5690,7 @@ func (client AppsClient) DeleteSourceControlSlot(ctx context.Context, resourceGr
 
 	resp, err := client.DeleteSourceControlSlotSender(req)
 	if err != nil {
-		result.Response = autorest.Response{Response: resp}
+		result.Response = resp
 		err = autorest.NewErrorWithError(err, "web.AppsClient", "DeleteSourceControlSlot", resp, "Failure sending request")
 		return
 	}
@@ -5562,14 +5734,164 @@ func (client AppsClient) DeleteSourceControlSlotSender(req *http.Request) (*http
 
 // DeleteSourceControlSlotResponder handles the response to the DeleteSourceControlSlot request. The method always
 // closes the http.Response Body.
-func (client AppsClient) DeleteSourceControlSlotResponder(resp *http.Response) (result SetObject, err error) {
+func (client AppsClient) DeleteSourceControlSlotResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNotFound),
-		autorest.ByUnmarshallingJSON(&result.Value),
 		autorest.ByClosing())
-	result.Response = autorest.Response{Response: resp}
+	result.Response = resp
+	return
+}
+
+// DeleteSwiftVirtualNetwork deletes a Swift Virtual Network connection from an app (or deployment slot).
+// Parameters:
+// resourceGroupName - name of the resource group to which the resource belongs.
+// name - name of the app.
+func (client AppsClient) DeleteSwiftVirtualNetwork(ctx context.Context, resourceGroupName string, name string) (result autorest.Response, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+[^\.]$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("web.AppsClient", "DeleteSwiftVirtualNetwork", err.Error())
+	}
+
+	req, err := client.DeleteSwiftVirtualNetworkPreparer(ctx, resourceGroupName, name)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "DeleteSwiftVirtualNetwork", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.DeleteSwiftVirtualNetworkSender(req)
+	if err != nil {
+		result.Response = resp
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "DeleteSwiftVirtualNetwork", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.DeleteSwiftVirtualNetworkResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "DeleteSwiftVirtualNetwork", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// DeleteSwiftVirtualNetworkPreparer prepares the DeleteSwiftVirtualNetwork request.
+func (client AppsClient) DeleteSwiftVirtualNetworkPreparer(ctx context.Context, resourceGroupName string, name string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"name":              autorest.Encode("path", name),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-02-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsDelete(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config/virtualNetwork", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// DeleteSwiftVirtualNetworkSender sends the DeleteSwiftVirtualNetwork request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) DeleteSwiftVirtualNetworkSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// DeleteSwiftVirtualNetworkResponder handles the response to the DeleteSwiftVirtualNetwork request. The method always
+// closes the http.Response Body.
+func (client AppsClient) DeleteSwiftVirtualNetworkResponder(resp *http.Response) (result autorest.Response, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNotFound),
+		autorest.ByClosing())
+	result.Response = resp
+	return
+}
+
+// DeleteSwiftVirtualNetworkSlot deletes a Swift Virtual Network connection from an app (or deployment slot).
+// Parameters:
+// resourceGroupName - name of the resource group to which the resource belongs.
+// name - name of the app.
+// slot - name of the deployment slot. If a slot is not specified, the API will delete the connection for the
+// production slot.
+func (client AppsClient) DeleteSwiftVirtualNetworkSlot(ctx context.Context, resourceGroupName string, name string, slot string) (result autorest.Response, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+[^\.]$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("web.AppsClient", "DeleteSwiftVirtualNetworkSlot", err.Error())
+	}
+
+	req, err := client.DeleteSwiftVirtualNetworkSlotPreparer(ctx, resourceGroupName, name, slot)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "DeleteSwiftVirtualNetworkSlot", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.DeleteSwiftVirtualNetworkSlotSender(req)
+	if err != nil {
+		result.Response = resp
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "DeleteSwiftVirtualNetworkSlot", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.DeleteSwiftVirtualNetworkSlotResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "DeleteSwiftVirtualNetworkSlot", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// DeleteSwiftVirtualNetworkSlotPreparer prepares the DeleteSwiftVirtualNetworkSlot request.
+func (client AppsClient) DeleteSwiftVirtualNetworkSlotPreparer(ctx context.Context, resourceGroupName string, name string, slot string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"name":              autorest.Encode("path", name),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"slot":              autorest.Encode("path", slot),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-02-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsDelete(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/slots/{slot}/config/virtualNetwork", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// DeleteSwiftVirtualNetworkSlotSender sends the DeleteSwiftVirtualNetworkSlot request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) DeleteSwiftVirtualNetworkSlotSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// DeleteSwiftVirtualNetworkSlotResponder handles the response to the DeleteSwiftVirtualNetworkSlot request. The method always
+// closes the http.Response Body.
+func (client AppsClient) DeleteSwiftVirtualNetworkSlotResponder(resp *http.Response) (result autorest.Response, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNotFound),
+		autorest.ByClosing())
+	result.Response = resp
 	return
 }
 
@@ -5883,12 +6205,13 @@ func (client AppsClient) DeleteVnetConnectionSlotResponder(resp *http.Response) 
 	return
 }
 
-// DiscoverRestore discovers an existing app backup that can be restored from a blob in Azure storage.
+// DiscoverBackup discovers an existing app backup that can be restored from a blob in Azure storage. Use this to get
+// information about the databases stored in a backup.
 // Parameters:
 // resourceGroupName - name of the resource group to which the resource belongs.
 // name - name of the app.
 // request - a RestoreRequest object that includes Azure storage URL and blog name for discovery of backup.
-func (client AppsClient) DiscoverRestore(ctx context.Context, resourceGroupName string, name string, request RestoreRequest) (result RestoreRequest, err error) {
+func (client AppsClient) DiscoverBackup(ctx context.Context, resourceGroupName string, name string, request RestoreRequest) (result RestoreRequest, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -5899,32 +6222,32 @@ func (client AppsClient) DiscoverRestore(ctx context.Context, resourceGroupName 
 				Chain: []validation.Constraint{{Target: "request.RestoreRequestProperties.StorageAccountURL", Name: validation.Null, Rule: true, Chain: nil},
 					{Target: "request.RestoreRequestProperties.Overwrite", Name: validation.Null, Rule: true, Chain: nil},
 				}}}}}); err != nil {
-		return result, validation.NewError("web.AppsClient", "DiscoverRestore", err.Error())
+		return result, validation.NewError("web.AppsClient", "DiscoverBackup", err.Error())
 	}
 
-	req, err := client.DiscoverRestorePreparer(ctx, resourceGroupName, name, request)
+	req, err := client.DiscoverBackupPreparer(ctx, resourceGroupName, name, request)
 	if err != nil {
-		err = autorest.NewErrorWithError(err, "web.AppsClient", "DiscoverRestore", nil, "Failure preparing request")
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "DiscoverBackup", nil, "Failure preparing request")
 		return
 	}
 
-	resp, err := client.DiscoverRestoreSender(req)
+	resp, err := client.DiscoverBackupSender(req)
 	if err != nil {
 		result.Response = autorest.Response{Response: resp}
-		err = autorest.NewErrorWithError(err, "web.AppsClient", "DiscoverRestore", resp, "Failure sending request")
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "DiscoverBackup", resp, "Failure sending request")
 		return
 	}
 
-	result, err = client.DiscoverRestoreResponder(resp)
+	result, err = client.DiscoverBackupResponder(resp)
 	if err != nil {
-		err = autorest.NewErrorWithError(err, "web.AppsClient", "DiscoverRestore", resp, "Failure responding to request")
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "DiscoverBackup", resp, "Failure responding to request")
 	}
 
 	return
 }
 
-// DiscoverRestorePreparer prepares the DiscoverRestore request.
-func (client AppsClient) DiscoverRestorePreparer(ctx context.Context, resourceGroupName string, name string, request RestoreRequest) (*http.Request, error) {
+// DiscoverBackupPreparer prepares the DiscoverBackup request.
+func (client AppsClient) DiscoverBackupPreparer(ctx context.Context, resourceGroupName string, name string, request RestoreRequest) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"name":              autorest.Encode("path", name),
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
@@ -5938,24 +6261,24 @@ func (client AppsClient) DiscoverRestorePreparer(ctx context.Context, resourceGr
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
-		autorest.AsPut(),
+		autorest.AsPost(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/backups/discover", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/discoverbackup", pathParameters),
 		autorest.WithJSON(request),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// DiscoverRestoreSender sends the DiscoverRestore request. The method will close the
+// DiscoverBackupSender sends the DiscoverBackup request. The method will close the
 // http.Response Body if it receives an error.
-func (client AppsClient) DiscoverRestoreSender(req *http.Request) (*http.Response, error) {
+func (client AppsClient) DiscoverBackupSender(req *http.Request) (*http.Response, error) {
 	return autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// DiscoverRestoreResponder handles the response to the DiscoverRestore request. The method always
+// DiscoverBackupResponder handles the response to the DiscoverBackup request. The method always
 // closes the http.Response Body.
-func (client AppsClient) DiscoverRestoreResponder(resp *http.Response) (result RestoreRequest, err error) {
+func (client AppsClient) DiscoverBackupResponder(resp *http.Response) (result RestoreRequest, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
@@ -5966,14 +6289,15 @@ func (client AppsClient) DiscoverRestoreResponder(resp *http.Response) (result R
 	return
 }
 
-// DiscoverRestoreSlot discovers an existing app backup that can be restored from a blob in Azure storage.
+// DiscoverBackupSlot discovers an existing app backup that can be restored from a blob in Azure storage. Use this to
+// get information about the databases stored in a backup.
 // Parameters:
 // resourceGroupName - name of the resource group to which the resource belongs.
 // name - name of the app.
 // request - a RestoreRequest object that includes Azure storage URL and blog name for discovery of backup.
 // slot - name of the deployment slot. If a slot is not specified, the API will perform discovery for the
 // production slot.
-func (client AppsClient) DiscoverRestoreSlot(ctx context.Context, resourceGroupName string, name string, request RestoreRequest, slot string) (result RestoreRequest, err error) {
+func (client AppsClient) DiscoverBackupSlot(ctx context.Context, resourceGroupName string, name string, request RestoreRequest, slot string) (result RestoreRequest, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -5984,32 +6308,32 @@ func (client AppsClient) DiscoverRestoreSlot(ctx context.Context, resourceGroupN
 				Chain: []validation.Constraint{{Target: "request.RestoreRequestProperties.StorageAccountURL", Name: validation.Null, Rule: true, Chain: nil},
 					{Target: "request.RestoreRequestProperties.Overwrite", Name: validation.Null, Rule: true, Chain: nil},
 				}}}}}); err != nil {
-		return result, validation.NewError("web.AppsClient", "DiscoverRestoreSlot", err.Error())
+		return result, validation.NewError("web.AppsClient", "DiscoverBackupSlot", err.Error())
 	}
 
-	req, err := client.DiscoverRestoreSlotPreparer(ctx, resourceGroupName, name, request, slot)
+	req, err := client.DiscoverBackupSlotPreparer(ctx, resourceGroupName, name, request, slot)
 	if err != nil {
-		err = autorest.NewErrorWithError(err, "web.AppsClient", "DiscoverRestoreSlot", nil, "Failure preparing request")
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "DiscoverBackupSlot", nil, "Failure preparing request")
 		return
 	}
 
-	resp, err := client.DiscoverRestoreSlotSender(req)
+	resp, err := client.DiscoverBackupSlotSender(req)
 	if err != nil {
 		result.Response = autorest.Response{Response: resp}
-		err = autorest.NewErrorWithError(err, "web.AppsClient", "DiscoverRestoreSlot", resp, "Failure sending request")
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "DiscoverBackupSlot", resp, "Failure sending request")
 		return
 	}
 
-	result, err = client.DiscoverRestoreSlotResponder(resp)
+	result, err = client.DiscoverBackupSlotResponder(resp)
 	if err != nil {
-		err = autorest.NewErrorWithError(err, "web.AppsClient", "DiscoverRestoreSlot", resp, "Failure responding to request")
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "DiscoverBackupSlot", resp, "Failure responding to request")
 	}
 
 	return
 }
 
-// DiscoverRestoreSlotPreparer prepares the DiscoverRestoreSlot request.
-func (client AppsClient) DiscoverRestoreSlotPreparer(ctx context.Context, resourceGroupName string, name string, request RestoreRequest, slot string) (*http.Request, error) {
+// DiscoverBackupSlotPreparer prepares the DiscoverBackupSlot request.
+func (client AppsClient) DiscoverBackupSlotPreparer(ctx context.Context, resourceGroupName string, name string, request RestoreRequest, slot string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"name":              autorest.Encode("path", name),
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
@@ -6024,24 +6348,24 @@ func (client AppsClient) DiscoverRestoreSlotPreparer(ctx context.Context, resour
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
-		autorest.AsPut(),
+		autorest.AsPost(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/slots/{slot}/backups/discover", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/slots/{slot}/discoverbackup", pathParameters),
 		autorest.WithJSON(request),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// DiscoverRestoreSlotSender sends the DiscoverRestoreSlot request. The method will close the
+// DiscoverBackupSlotSender sends the DiscoverBackupSlot request. The method will close the
 // http.Response Body if it receives an error.
-func (client AppsClient) DiscoverRestoreSlotSender(req *http.Request) (*http.Response, error) {
+func (client AppsClient) DiscoverBackupSlotSender(req *http.Request) (*http.Response, error) {
 	return autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// DiscoverRestoreSlotResponder handles the response to the DiscoverRestoreSlot request. The method always
+// DiscoverBackupSlotResponder handles the response to the DiscoverBackupSlot request. The method always
 // closes the http.Response Body.
-func (client AppsClient) DiscoverRestoreSlotResponder(resp *http.Response) (result RestoreRequest, err error) {
+func (client AppsClient) DiscoverBackupSlotResponder(resp *http.Response) (result RestoreRequest, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
@@ -7710,9 +8034,9 @@ func (client AppsClient) GetDomainOwnershipIdentifier(ctx context.Context, resou
 func (client AppsClient) GetDomainOwnershipIdentifierPreparer(ctx context.Context, resourceGroupName string, name string, domainOwnershipIdentifierName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"domainOwnershipIdentifierName": autorest.Encode("path", domainOwnershipIdentifierName),
-		"name":              autorest.Encode("path", name),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+		"name":                          autorest.Encode("path", name),
+		"resourceGroupName":             autorest.Encode("path", resourceGroupName),
+		"subscriptionId":                autorest.Encode("path", client.SubscriptionID),
 	}
 
 	const APIVersion = "2018-02-01"
@@ -7789,10 +8113,10 @@ func (client AppsClient) GetDomainOwnershipIdentifierSlot(ctx context.Context, r
 func (client AppsClient) GetDomainOwnershipIdentifierSlotPreparer(ctx context.Context, resourceGroupName string, name string, domainOwnershipIdentifierName string, slot string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"domainOwnershipIdentifierName": autorest.Encode("path", domainOwnershipIdentifierName),
-		"name":              autorest.Encode("path", name),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"slot":              autorest.Encode("path", slot),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+		"name":                          autorest.Encode("path", name),
+		"resourceGroupName":             autorest.Encode("path", resourceGroupName),
+		"slot":                          autorest.Encode("path", slot),
+		"subscriptionId":                autorest.Encode("path", client.SubscriptionID),
 	}
 
 	const APIVersion = "2018-02-01"
@@ -11685,6 +12009,159 @@ func (client AppsClient) GetSourceControlSlotResponder(resp *http.Response) (res
 	return
 }
 
+// GetSwiftVirtualNetworkConnection gets a Swift Virtual Network connection.
+// Parameters:
+// resourceGroupName - name of the resource group to which the resource belongs.
+// name - name of the app.
+func (client AppsClient) GetSwiftVirtualNetworkConnection(ctx context.Context, resourceGroupName string, name string) (result SwiftVirtualNetwork, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+[^\.]$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("web.AppsClient", "GetSwiftVirtualNetworkConnection", err.Error())
+	}
+
+	req, err := client.GetSwiftVirtualNetworkConnectionPreparer(ctx, resourceGroupName, name)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "GetSwiftVirtualNetworkConnection", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.GetSwiftVirtualNetworkConnectionSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "GetSwiftVirtualNetworkConnection", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.GetSwiftVirtualNetworkConnectionResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "GetSwiftVirtualNetworkConnection", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// GetSwiftVirtualNetworkConnectionPreparer prepares the GetSwiftVirtualNetworkConnection request.
+func (client AppsClient) GetSwiftVirtualNetworkConnectionPreparer(ctx context.Context, resourceGroupName string, name string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"name":              autorest.Encode("path", name),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-02-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsGet(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config/virtualNetwork", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// GetSwiftVirtualNetworkConnectionSender sends the GetSwiftVirtualNetworkConnection request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) GetSwiftVirtualNetworkConnectionSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// GetSwiftVirtualNetworkConnectionResponder handles the response to the GetSwiftVirtualNetworkConnection request. The method always
+// closes the http.Response Body.
+func (client AppsClient) GetSwiftVirtualNetworkConnectionResponder(resp *http.Response) (result SwiftVirtualNetwork, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// GetSwiftVirtualNetworkConnectionSlot gets a Swift Virtual Network connection.
+// Parameters:
+// resourceGroupName - name of the resource group to which the resource belongs.
+// name - name of the app.
+// slot - name of the deployment slot. If a slot is not specified, the API will get a gateway for the
+// production slot's Virtual Network.
+func (client AppsClient) GetSwiftVirtualNetworkConnectionSlot(ctx context.Context, resourceGroupName string, name string, slot string) (result SwiftVirtualNetwork, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+[^\.]$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("web.AppsClient", "GetSwiftVirtualNetworkConnectionSlot", err.Error())
+	}
+
+	req, err := client.GetSwiftVirtualNetworkConnectionSlotPreparer(ctx, resourceGroupName, name, slot)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "GetSwiftVirtualNetworkConnectionSlot", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.GetSwiftVirtualNetworkConnectionSlotSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "GetSwiftVirtualNetworkConnectionSlot", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.GetSwiftVirtualNetworkConnectionSlotResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "GetSwiftVirtualNetworkConnectionSlot", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// GetSwiftVirtualNetworkConnectionSlotPreparer prepares the GetSwiftVirtualNetworkConnectionSlot request.
+func (client AppsClient) GetSwiftVirtualNetworkConnectionSlotPreparer(ctx context.Context, resourceGroupName string, name string, slot string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"name":              autorest.Encode("path", name),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"slot":              autorest.Encode("path", slot),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-02-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsGet(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/slots/{slot}/config/virtualNetwork", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// GetSwiftVirtualNetworkConnectionSlotSender sends the GetSwiftVirtualNetworkConnectionSlot request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) GetSwiftVirtualNetworkConnectionSlotSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// GetSwiftVirtualNetworkConnectionSlotResponder handles the response to the GetSwiftVirtualNetworkConnectionSlot request. The method always
+// closes the http.Response Body.
+func (client AppsClient) GetSwiftVirtualNetworkConnectionSlotResponder(resp *http.Response) (result SwiftVirtualNetwork, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
 // GetTriggeredWebJob gets a triggered web job by its ID for an app, or a deployment slot.
 // Parameters:
 // resourceGroupName - name of the resource group to which the resource belongs.
@@ -13178,6 +13655,159 @@ func (client AppsClient) ListApplicationSettingsSlotSender(req *http.Request) (*
 // ListApplicationSettingsSlotResponder handles the response to the ListApplicationSettingsSlot request. The method always
 // closes the http.Response Body.
 func (client AppsClient) ListApplicationSettingsSlotResponder(resp *http.Response) (result StringDictionary, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// ListAzureStorageAccounts gets the Azure storage account configurations of an app.
+// Parameters:
+// resourceGroupName - name of the resource group to which the resource belongs.
+// name - name of the app.
+func (client AppsClient) ListAzureStorageAccounts(ctx context.Context, resourceGroupName string, name string) (result AzureStoragePropertyDictionaryResource, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+[^\.]$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("web.AppsClient", "ListAzureStorageAccounts", err.Error())
+	}
+
+	req, err := client.ListAzureStorageAccountsPreparer(ctx, resourceGroupName, name)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "ListAzureStorageAccounts", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.ListAzureStorageAccountsSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "ListAzureStorageAccounts", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.ListAzureStorageAccountsResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "ListAzureStorageAccounts", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// ListAzureStorageAccountsPreparer prepares the ListAzureStorageAccounts request.
+func (client AppsClient) ListAzureStorageAccountsPreparer(ctx context.Context, resourceGroupName string, name string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"name":              autorest.Encode("path", name),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-02-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config/azurestorageaccounts/list", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// ListAzureStorageAccountsSender sends the ListAzureStorageAccounts request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) ListAzureStorageAccountsSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// ListAzureStorageAccountsResponder handles the response to the ListAzureStorageAccounts request. The method always
+// closes the http.Response Body.
+func (client AppsClient) ListAzureStorageAccountsResponder(resp *http.Response) (result AzureStoragePropertyDictionaryResource, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// ListAzureStorageAccountsSlot gets the Azure storage account configurations of an app.
+// Parameters:
+// resourceGroupName - name of the resource group to which the resource belongs.
+// name - name of the app.
+// slot - name of the deployment slot. If a slot is not specified, the API will update the Azure storage
+// account configurations for the production slot.
+func (client AppsClient) ListAzureStorageAccountsSlot(ctx context.Context, resourceGroupName string, name string, slot string) (result AzureStoragePropertyDictionaryResource, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+[^\.]$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("web.AppsClient", "ListAzureStorageAccountsSlot", err.Error())
+	}
+
+	req, err := client.ListAzureStorageAccountsSlotPreparer(ctx, resourceGroupName, name, slot)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "ListAzureStorageAccountsSlot", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.ListAzureStorageAccountsSlotSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "ListAzureStorageAccountsSlot", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.ListAzureStorageAccountsSlotResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "ListAzureStorageAccountsSlot", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// ListAzureStorageAccountsSlotPreparer prepares the ListAzureStorageAccountsSlot request.
+func (client AppsClient) ListAzureStorageAccountsSlotPreparer(ctx context.Context, resourceGroupName string, name string, slot string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"name":              autorest.Encode("path", name),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"slot":              autorest.Encode("path", slot),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-02-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/slots/{slot}/config/azurestorageaccounts/list", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// ListAzureStorageAccountsSlotSender sends the ListAzureStorageAccountsSlot request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) ListAzureStorageAccountsSlotSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// ListAzureStorageAccountsSlotResponder handles the response to the ListAzureStorageAccountsSlot request. The method always
+// closes the http.Response Body.
+func (client AppsClient) ListAzureStorageAccountsSlotResponder(resp *http.Response) (result AzureStoragePropertyDictionaryResource, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
@@ -17167,8 +17797,8 @@ func (client AppsClient) ListMetricDefinitionsSlotComplete(ctx context.Context, 
 // name - name of the app.
 // details - specify "true" to include metric details in the response. It is "false" by default.
 // filter - return only metrics specified in the filter (using OData syntax). For example: $filter=(name.value
-// eq 'Metric1' or name.value eq 'Metric2') and startTime eq '2014-01-01T00:00:00Z' and endTime eq
-// '2014-12-31T23:59:59Z' and timeGrain eq duration'[Hour|Minute|Day]'.
+// eq 'Metric1' or name.value eq 'Metric2') and startTime eq 2014-01-01T00:00:00Z and endTime eq
+// 2014-12-31T23:59:59Z and timeGrain eq duration'[Hour|Minute|Day]'.
 func (client AppsClient) ListMetrics(ctx context.Context, resourceGroupName string, name string, details *bool, filter string) (result ResourceMetricCollectionPage, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
@@ -17282,8 +17912,8 @@ func (client AppsClient) ListMetricsComplete(ctx context.Context, resourceGroupN
 // slot.
 // details - specify "true" to include metric details in the response. It is "false" by default.
 // filter - return only metrics specified in the filter (using OData syntax). For example: $filter=(name.value
-// eq 'Metric1' or name.value eq 'Metric2') and startTime eq '2014-01-01T00:00:00Z' and endTime eq
-// '2014-12-31T23:59:59Z' and timeGrain eq duration'[Hour|Minute|Day]'.
+// eq 'Metric1' or name.value eq 'Metric2') and startTime eq 2014-01-01T00:00:00Z and endTime eq
+// 2014-12-31T23:59:59Z and timeGrain eq duration'[Hour|Minute|Day]'.
 func (client AppsClient) ListMetricsSlot(ctx context.Context, resourceGroupName string, name string, slot string, details *bool, filter string) (result ResourceMetricCollectionPage, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
@@ -17552,7 +18182,7 @@ func (client AppsClient) ListNetworkFeaturesSlotResponder(resp *http.Response) (
 // resourceGroupName - name of the resource group to which the resource belongs.
 // name - name of web app.
 // filter - return only usages/metrics specified in the filter. Filter conforms to odata syntax. Example:
-// $filter=(startTime eq '2014-01-01T00:00:00Z' and endTime eq '2014-12-31T23:59:59Z' and timeGrain eq
+// $filter=(startTime eq 2014-01-01T00:00:00Z and endTime eq 2014-12-31T23:59:59Z and timeGrain eq
 // duration'[Hour|Minute|Day]'.
 func (client AppsClient) ListPerfMonCounters(ctx context.Context, resourceGroupName string, name string, filter string) (result PerfMonCounterCollectionPage, err error) {
 	if err := validation.Validate([]validation.Validation{
@@ -17662,7 +18292,7 @@ func (client AppsClient) ListPerfMonCountersComplete(ctx context.Context, resour
 // name - name of web app.
 // slot - name of web app slot. If not specified then will default to production slot.
 // filter - return only usages/metrics specified in the filter. Filter conforms to odata syntax. Example:
-// $filter=(startTime eq '2014-01-01T00:00:00Z' and endTime eq '2014-12-31T23:59:59Z' and timeGrain eq
+// $filter=(startTime eq 2014-01-01T00:00:00Z and endTime eq 2014-12-31T23:59:59Z and timeGrain eq
 // duration'[Hour|Minute|Day]'.
 func (client AppsClient) ListPerfMonCountersSlot(ctx context.Context, resourceGroupName string, name string, slot string, filter string) (result PerfMonCounterCollectionPage, err error) {
 	if err := validation.Validate([]validation.Validation{
@@ -20788,8 +21418,8 @@ func (client AppsClient) ListTriggeredWebJobsSlotComplete(ctx context.Context, r
 // resourceGroupName - name of the resource group to which the resource belongs.
 // name - name of the app.
 // filter - return only information specified in the filter (using OData syntax). For example:
-// $filter=(name.value eq 'Metric1' or name.value eq 'Metric2') and startTime eq '2014-01-01T00:00:00Z' and
-// endTime eq '2014-12-31T23:59:59Z' and timeGrain eq duration'[Hour|Minute|Day]'.
+// $filter=(name.value eq 'Metric1' or name.value eq 'Metric2') and startTime eq 2014-01-01T00:00:00Z and
+// endTime eq 2014-12-31T23:59:59Z and timeGrain eq duration'[Hour|Minute|Day]'.
 func (client AppsClient) ListUsages(ctx context.Context, resourceGroupName string, name string, filter string) (result CsmUsageQuotaCollectionPage, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
@@ -20899,8 +21529,8 @@ func (client AppsClient) ListUsagesComplete(ctx context.Context, resourceGroupNa
 // slot - name of the deployment slot. If a slot is not specified, the API will get quota information of the
 // production slot.
 // filter - return only information specified in the filter (using OData syntax). For example:
-// $filter=(name.value eq 'Metric1' or name.value eq 'Metric2') and startTime eq '2014-01-01T00:00:00Z' and
-// endTime eq '2014-12-31T23:59:59Z' and timeGrain eq duration'[Hour|Minute|Day]'.
+// $filter=(name.value eq 'Metric1' or name.value eq 'Metric2') and startTime eq 2014-01-01T00:00:00Z and
+// endTime eq 2014-12-31T23:59:59Z and timeGrain eq duration'[Hour|Minute|Day]'.
 func (client AppsClient) ListUsagesSlot(ctx context.Context, resourceGroupName string, name string, slot string, filter string) (result CsmUsageQuotaCollectionPage, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
@@ -24828,6 +25458,165 @@ func (client AppsClient) UpdateAuthSettingsSlotResponder(resp *http.Response) (r
 	return
 }
 
+// UpdateAzureStorageAccounts updates the Azure storage account configurations of an app.
+// Parameters:
+// resourceGroupName - name of the resource group to which the resource belongs.
+// name - name of the app.
+// azureStorageAccounts - azure storage accounts of the app.
+func (client AppsClient) UpdateAzureStorageAccounts(ctx context.Context, resourceGroupName string, name string, azureStorageAccounts AzureStoragePropertyDictionaryResource) (result AzureStoragePropertyDictionaryResource, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+[^\.]$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("web.AppsClient", "UpdateAzureStorageAccounts", err.Error())
+	}
+
+	req, err := client.UpdateAzureStorageAccountsPreparer(ctx, resourceGroupName, name, azureStorageAccounts)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdateAzureStorageAccounts", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.UpdateAzureStorageAccountsSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdateAzureStorageAccounts", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.UpdateAzureStorageAccountsResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdateAzureStorageAccounts", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// UpdateAzureStorageAccountsPreparer prepares the UpdateAzureStorageAccounts request.
+func (client AppsClient) UpdateAzureStorageAccountsPreparer(ctx context.Context, resourceGroupName string, name string, azureStorageAccounts AzureStoragePropertyDictionaryResource) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"name":              autorest.Encode("path", name),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-02-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPut(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config/azurestorageaccounts", pathParameters),
+		autorest.WithJSON(azureStorageAccounts),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// UpdateAzureStorageAccountsSender sends the UpdateAzureStorageAccounts request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) UpdateAzureStorageAccountsSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// UpdateAzureStorageAccountsResponder handles the response to the UpdateAzureStorageAccounts request. The method always
+// closes the http.Response Body.
+func (client AppsClient) UpdateAzureStorageAccountsResponder(resp *http.Response) (result AzureStoragePropertyDictionaryResource, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// UpdateAzureStorageAccountsSlot updates the Azure storage account configurations of an app.
+// Parameters:
+// resourceGroupName - name of the resource group to which the resource belongs.
+// name - name of the app.
+// azureStorageAccounts - azure storage accounts of the app.
+// slot - name of the deployment slot. If a slot is not specified, the API will update the Azure storage
+// account configurations for the production slot.
+func (client AppsClient) UpdateAzureStorageAccountsSlot(ctx context.Context, resourceGroupName string, name string, azureStorageAccounts AzureStoragePropertyDictionaryResource, slot string) (result AzureStoragePropertyDictionaryResource, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+[^\.]$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("web.AppsClient", "UpdateAzureStorageAccountsSlot", err.Error())
+	}
+
+	req, err := client.UpdateAzureStorageAccountsSlotPreparer(ctx, resourceGroupName, name, azureStorageAccounts, slot)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdateAzureStorageAccountsSlot", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.UpdateAzureStorageAccountsSlotSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdateAzureStorageAccountsSlot", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.UpdateAzureStorageAccountsSlotResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdateAzureStorageAccountsSlot", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// UpdateAzureStorageAccountsSlotPreparer prepares the UpdateAzureStorageAccountsSlot request.
+func (client AppsClient) UpdateAzureStorageAccountsSlotPreparer(ctx context.Context, resourceGroupName string, name string, azureStorageAccounts AzureStoragePropertyDictionaryResource, slot string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"name":              autorest.Encode("path", name),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"slot":              autorest.Encode("path", slot),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-02-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPut(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/slots/{slot}/config/azurestorageaccounts", pathParameters),
+		autorest.WithJSON(azureStorageAccounts),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// UpdateAzureStorageAccountsSlotSender sends the UpdateAzureStorageAccountsSlot request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) UpdateAzureStorageAccountsSlotSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// UpdateAzureStorageAccountsSlotResponder handles the response to the UpdateAzureStorageAccountsSlot request. The method always
+// closes the http.Response Body.
+func (client AppsClient) UpdateAzureStorageAccountsSlotResponder(resp *http.Response) (result AzureStoragePropertyDictionaryResource, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
 // UpdateBackupConfiguration updates the backup configuration of an app.
 // Parameters:
 // resourceGroupName - name of the resource group to which the resource belongs.
@@ -25344,7 +26133,7 @@ func (client AppsClient) UpdateDiagnosticLogsConfig(ctx context.Context, resourc
 					{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs", Name: validation.Null, Rule: false,
 						Chain: []validation.Constraint{{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem", Name: validation.Null, Rule: false,
 							Chain: []validation.Constraint{{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem.RetentionInMb", Name: validation.Null, Rule: false,
-								Chain: []validation.Constraint{{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem.RetentionInMb", Name: validation.InclusiveMaximum, Rule: 100, Chain: nil},
+								Chain: []validation.Constraint{{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem.RetentionInMb", Name: validation.InclusiveMaximum, Rule: int64(100), Chain: nil},
 									{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem.RetentionInMb", Name: validation.InclusiveMinimum, Rule: 25, Chain: nil},
 								}},
 							}},
@@ -25440,7 +26229,7 @@ func (client AppsClient) UpdateDiagnosticLogsConfigSlot(ctx context.Context, res
 					{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs", Name: validation.Null, Rule: false,
 						Chain: []validation.Constraint{{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem", Name: validation.Null, Rule: false,
 							Chain: []validation.Constraint{{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem.RetentionInMb", Name: validation.Null, Rule: false,
-								Chain: []validation.Constraint{{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem.RetentionInMb", Name: validation.InclusiveMaximum, Rule: 100, Chain: nil},
+								Chain: []validation.Constraint{{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem.RetentionInMb", Name: validation.InclusiveMaximum, Rule: int64(100), Chain: nil},
 									{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem.RetentionInMb", Name: validation.InclusiveMinimum, Rule: 25, Chain: nil},
 								}},
 							}},
@@ -25555,9 +26344,9 @@ func (client AppsClient) UpdateDomainOwnershipIdentifier(ctx context.Context, re
 func (client AppsClient) UpdateDomainOwnershipIdentifierPreparer(ctx context.Context, resourceGroupName string, name string, domainOwnershipIdentifierName string, domainOwnershipIdentifier Identifier) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"domainOwnershipIdentifierName": autorest.Encode("path", domainOwnershipIdentifierName),
-		"name":              autorest.Encode("path", name),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+		"name":                          autorest.Encode("path", name),
+		"resourceGroupName":             autorest.Encode("path", resourceGroupName),
+		"subscriptionId":                autorest.Encode("path", client.SubscriptionID),
 	}
 
 	const APIVersion = "2018-02-01"
@@ -25638,10 +26427,10 @@ func (client AppsClient) UpdateDomainOwnershipIdentifierSlot(ctx context.Context
 func (client AppsClient) UpdateDomainOwnershipIdentifierSlotPreparer(ctx context.Context, resourceGroupName string, name string, domainOwnershipIdentifierName string, domainOwnershipIdentifier Identifier, slot string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"domainOwnershipIdentifierName": autorest.Encode("path", domainOwnershipIdentifierName),
-		"name":              autorest.Encode("path", name),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"slot":              autorest.Encode("path", slot),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+		"name":                          autorest.Encode("path", name),
+		"resourceGroupName":             autorest.Encode("path", resourceGroupName),
+		"slot":                          autorest.Encode("path", slot),
+		"subscriptionId":                autorest.Encode("path", client.SubscriptionID),
 	}
 
 	const APIVersion = "2018-02-01"
@@ -25994,6 +26783,169 @@ func (client AppsClient) UpdateMetadataSlotSender(req *http.Request) (*http.Resp
 // UpdateMetadataSlotResponder handles the response to the UpdateMetadataSlot request. The method always
 // closes the http.Response Body.
 func (client AppsClient) UpdateMetadataSlotResponder(resp *http.Response) (result StringDictionary, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// UpdatePremierAddOn updates a named add-on of an app.
+// Parameters:
+// resourceGroupName - name of the resource group to which the resource belongs.
+// name - name of the app.
+// premierAddOnName - add-on name.
+// premierAddOn - a JSON representation of the edited premier add-on.
+func (client AppsClient) UpdatePremierAddOn(ctx context.Context, resourceGroupName string, name string, premierAddOnName string, premierAddOn PremierAddOnPatchResource) (result PremierAddOn, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+[^\.]$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("web.AppsClient", "UpdatePremierAddOn", err.Error())
+	}
+
+	req, err := client.UpdatePremierAddOnPreparer(ctx, resourceGroupName, name, premierAddOnName, premierAddOn)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdatePremierAddOn", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.UpdatePremierAddOnSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdatePremierAddOn", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.UpdatePremierAddOnResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdatePremierAddOn", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// UpdatePremierAddOnPreparer prepares the UpdatePremierAddOn request.
+func (client AppsClient) UpdatePremierAddOnPreparer(ctx context.Context, resourceGroupName string, name string, premierAddOnName string, premierAddOn PremierAddOnPatchResource) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"name":              autorest.Encode("path", name),
+		"premierAddOnName":  autorest.Encode("path", premierAddOnName),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-02-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPatch(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/premieraddons/{premierAddOnName}", pathParameters),
+		autorest.WithJSON(premierAddOn),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// UpdatePremierAddOnSender sends the UpdatePremierAddOn request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) UpdatePremierAddOnSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// UpdatePremierAddOnResponder handles the response to the UpdatePremierAddOn request. The method always
+// closes the http.Response Body.
+func (client AppsClient) UpdatePremierAddOnResponder(resp *http.Response) (result PremierAddOn, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// UpdatePremierAddOnSlot updates a named add-on of an app.
+// Parameters:
+// resourceGroupName - name of the resource group to which the resource belongs.
+// name - name of the app.
+// premierAddOnName - add-on name.
+// premierAddOn - a JSON representation of the edited premier add-on.
+// slot - name of the deployment slot. If a slot is not specified, the API will update the named add-on for the
+// production slot.
+func (client AppsClient) UpdatePremierAddOnSlot(ctx context.Context, resourceGroupName string, name string, premierAddOnName string, premierAddOn PremierAddOnPatchResource, slot string) (result PremierAddOn, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+[^\.]$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("web.AppsClient", "UpdatePremierAddOnSlot", err.Error())
+	}
+
+	req, err := client.UpdatePremierAddOnSlotPreparer(ctx, resourceGroupName, name, premierAddOnName, premierAddOn, slot)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdatePremierAddOnSlot", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.UpdatePremierAddOnSlotSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdatePremierAddOnSlot", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.UpdatePremierAddOnSlotResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdatePremierAddOnSlot", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// UpdatePremierAddOnSlotPreparer prepares the UpdatePremierAddOnSlot request.
+func (client AppsClient) UpdatePremierAddOnSlotPreparer(ctx context.Context, resourceGroupName string, name string, premierAddOnName string, premierAddOn PremierAddOnPatchResource, slot string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"name":              autorest.Encode("path", name),
+		"premierAddOnName":  autorest.Encode("path", premierAddOnName),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"slot":              autorest.Encode("path", slot),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-02-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPatch(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/slots/{slot}/premieraddons/{premierAddOnName}", pathParameters),
+		autorest.WithJSON(premierAddOn),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// UpdatePremierAddOnSlotSender sends the UpdatePremierAddOnSlot request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) UpdatePremierAddOnSlotSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// UpdatePremierAddOnSlotResponder handles the response to the UpdatePremierAddOnSlot request. The method always
+// closes the http.Response Body.
+func (client AppsClient) UpdatePremierAddOnSlotResponder(resp *http.Response) (result PremierAddOn, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
@@ -26565,7 +27517,7 @@ func (client AppsClient) UpdateSourceControlResponder(resp *http.Response) (resu
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
-		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
@@ -26646,7 +27598,172 @@ func (client AppsClient) UpdateSourceControlSlotResponder(resp *http.Response) (
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
-		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// UpdateSwiftVirtualNetworkConnection integrates this Web App with a Virtual Network. This requires that 1)
+// "swiftSupported" is true when doing a GET against this resource, and 2) that the target Subnet has already been
+// delegated, and is not
+// in use by another App Service Plan other than the one this App is in.
+// Parameters:
+// resourceGroupName - name of the resource group to which the resource belongs.
+// name - name of the app.
+// connectionEnvelope - properties of the Virtual Network connection. See example.
+func (client AppsClient) UpdateSwiftVirtualNetworkConnection(ctx context.Context, resourceGroupName string, name string, connectionEnvelope SwiftVirtualNetwork) (result SwiftVirtualNetwork, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+[^\.]$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("web.AppsClient", "UpdateSwiftVirtualNetworkConnection", err.Error())
+	}
+
+	req, err := client.UpdateSwiftVirtualNetworkConnectionPreparer(ctx, resourceGroupName, name, connectionEnvelope)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdateSwiftVirtualNetworkConnection", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.UpdateSwiftVirtualNetworkConnectionSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdateSwiftVirtualNetworkConnection", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.UpdateSwiftVirtualNetworkConnectionResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdateSwiftVirtualNetworkConnection", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// UpdateSwiftVirtualNetworkConnectionPreparer prepares the UpdateSwiftVirtualNetworkConnection request.
+func (client AppsClient) UpdateSwiftVirtualNetworkConnectionPreparer(ctx context.Context, resourceGroupName string, name string, connectionEnvelope SwiftVirtualNetwork) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"name":              autorest.Encode("path", name),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-02-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPatch(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config/virtualNetwork", pathParameters),
+		autorest.WithJSON(connectionEnvelope),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// UpdateSwiftVirtualNetworkConnectionSender sends the UpdateSwiftVirtualNetworkConnection request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) UpdateSwiftVirtualNetworkConnectionSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// UpdateSwiftVirtualNetworkConnectionResponder handles the response to the UpdateSwiftVirtualNetworkConnection request. The method always
+// closes the http.Response Body.
+func (client AppsClient) UpdateSwiftVirtualNetworkConnectionResponder(resp *http.Response) (result SwiftVirtualNetwork, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// UpdateSwiftVirtualNetworkConnectionSlot integrates this Web App with a Virtual Network. This requires that 1)
+// "swiftSupported" is true when doing a GET against this resource, and 2) that the target Subnet has already been
+// delegated, and is not
+// in use by another App Service Plan other than the one this App is in.
+// Parameters:
+// resourceGroupName - name of the resource group to which the resource belongs.
+// name - name of the app.
+// connectionEnvelope - properties of the Virtual Network connection. See example.
+// slot - name of the deployment slot. If a slot is not specified, the API will add or update connections for
+// the production slot.
+func (client AppsClient) UpdateSwiftVirtualNetworkConnectionSlot(ctx context.Context, resourceGroupName string, name string, connectionEnvelope SwiftVirtualNetwork, slot string) (result SwiftVirtualNetwork, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+[^\.]$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("web.AppsClient", "UpdateSwiftVirtualNetworkConnectionSlot", err.Error())
+	}
+
+	req, err := client.UpdateSwiftVirtualNetworkConnectionSlotPreparer(ctx, resourceGroupName, name, connectionEnvelope, slot)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdateSwiftVirtualNetworkConnectionSlot", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.UpdateSwiftVirtualNetworkConnectionSlotSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdateSwiftVirtualNetworkConnectionSlot", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.UpdateSwiftVirtualNetworkConnectionSlotResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "web.AppsClient", "UpdateSwiftVirtualNetworkConnectionSlot", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// UpdateSwiftVirtualNetworkConnectionSlotPreparer prepares the UpdateSwiftVirtualNetworkConnectionSlot request.
+func (client AppsClient) UpdateSwiftVirtualNetworkConnectionSlotPreparer(ctx context.Context, resourceGroupName string, name string, connectionEnvelope SwiftVirtualNetwork, slot string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"name":              autorest.Encode("path", name),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"slot":              autorest.Encode("path", slot),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-02-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPatch(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/slots/{slot}/config/virtualNetwork", pathParameters),
+		autorest.WithJSON(connectionEnvelope),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// UpdateSwiftVirtualNetworkConnectionSlotSender sends the UpdateSwiftVirtualNetworkConnectionSlot request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) UpdateSwiftVirtualNetworkConnectionSlotSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// UpdateSwiftVirtualNetworkConnectionSlotResponder handles the response to the UpdateSwiftVirtualNetworkConnectionSlot request. The method always
+// closes the http.Response Body.
+func (client AppsClient) UpdateSwiftVirtualNetworkConnectionSlotResponder(resp *http.Response) (result SwiftVirtualNetwork, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}

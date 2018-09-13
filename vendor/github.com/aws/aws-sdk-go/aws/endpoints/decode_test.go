@@ -115,3 +115,60 @@ func TestDecodeModelOptionsSet(t *testing.T) {
 		t.Errorf("expect %v options got %v", expect, actual)
 	}
 }
+
+func TestCustFixAppAutoscalingChina(t *testing.T) {
+	const doc = `
+{
+  "version": 3,
+  "partitions": [{
+    "defaults" : {
+      "hostname" : "{service}.{region}.{dnsSuffix}",
+      "protocols" : [ "https" ],
+      "signatureVersions" : [ "v4" ]
+    },
+    "dnsSuffix" : "amazonaws.com.cn",
+    "partition" : "aws-cn",
+    "partitionName" : "AWS China",
+    "regionRegex" : "^cn\\-\\w+\\-\\d+$",
+    "regions" : {
+      "cn-north-1" : {
+        "description" : "China (Beijing)"
+      },
+      "cn-northwest-1" : {
+        "description" : "China (Ningxia)"
+      }
+    },
+    "services" : {
+      "application-autoscaling" : {
+        "defaults" : {
+          "credentialScope" : {
+            "service" : "application-autoscaling"
+          },
+          "hostname" : "autoscaling.{region}.amazonaws.com",
+          "protocols" : [ "http", "https" ]
+        },
+        "endpoints" : {
+          "cn-north-1" : { },
+          "cn-northwest-1" : { }
+        }
+      }
+	}
+  }]
+}`
+
+	resolver, err := DecodeModel(strings.NewReader(doc))
+	if err != nil {
+		t.Fatalf("expect no error, got %v", err)
+	}
+
+	endpoint, err := resolver.EndpointFor(
+		"application-autoscaling", "cn-northwest-1",
+	)
+	if err != nil {
+		t.Fatalf("expect no error, got %v", err)
+	}
+
+	if e, a := `https://autoscaling.cn-northwest-1.amazonaws.com.cn`, endpoint.URL; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+}

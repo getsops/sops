@@ -30,7 +30,7 @@ func skipShort(t *testing.T) {
 }
 
 // This regression test runs the test set in NormalizationTest.txt
-// (taken from http://www.unicode.org/Public/<unicode.Version>/ucd/).
+// (taken from https://www.unicode.org/Public/<unicode.Version>/ucd/).
 //
 // NormalizationTest.txt has form:
 // @Part0 # Specific cases

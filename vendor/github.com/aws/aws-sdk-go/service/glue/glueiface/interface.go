@@ -120,6 +120,10 @@ type GlueAPI interface {
 	CreateScriptWithContext(aws.Context, *glue.CreateScriptInput, ...request.Option) (*glue.CreateScriptOutput, error)
 	CreateScriptRequest(*glue.CreateScriptInput) (*request.Request, *glue.CreateScriptOutput)
 
+	CreateSecurityConfiguration(*glue.CreateSecurityConfigurationInput) (*glue.CreateSecurityConfigurationOutput, error)
+	CreateSecurityConfigurationWithContext(aws.Context, *glue.CreateSecurityConfigurationInput, ...request.Option) (*glue.CreateSecurityConfigurationOutput, error)
+	CreateSecurityConfigurationRequest(*glue.CreateSecurityConfigurationInput) (*request.Request, *glue.CreateSecurityConfigurationOutput)
+
 	CreateTable(*glue.CreateTableInput) (*glue.CreateTableOutput, error)
 	CreateTableWithContext(aws.Context, *glue.CreateTableInput, ...request.Option) (*glue.CreateTableOutput, error)
 	CreateTableRequest(*glue.CreateTableInput) (*request.Request, *glue.CreateTableOutput)
@@ -159,6 +163,10 @@ type GlueAPI interface {
 	DeletePartition(*glue.DeletePartitionInput) (*glue.DeletePartitionOutput, error)
 	DeletePartitionWithContext(aws.Context, *glue.DeletePartitionInput, ...request.Option) (*glue.DeletePartitionOutput, error)
 	DeletePartitionRequest(*glue.DeletePartitionInput) (*request.Request, *glue.DeletePartitionOutput)
+
+	DeleteSecurityConfiguration(*glue.DeleteSecurityConfigurationInput) (*glue.DeleteSecurityConfigurationOutput, error)
+	DeleteSecurityConfigurationWithContext(aws.Context, *glue.DeleteSecurityConfigurationInput, ...request.Option) (*glue.DeleteSecurityConfigurationOutput, error)
+	DeleteSecurityConfigurationRequest(*glue.DeleteSecurityConfigurationInput) (*request.Request, *glue.DeleteSecurityConfigurationOutput)
 
 	DeleteTable(*glue.DeleteTableInput) (*glue.DeleteTableOutput, error)
 	DeleteTableWithContext(aws.Context, *glue.DeleteTableInput, ...request.Option) (*glue.DeleteTableOutput, error)
@@ -287,6 +295,14 @@ type GlueAPI interface {
 	GetPlanWithContext(aws.Context, *glue.GetPlanInput, ...request.Option) (*glue.GetPlanOutput, error)
 	GetPlanRequest(*glue.GetPlanInput) (*request.Request, *glue.GetPlanOutput)
 
+	GetSecurityConfiguration(*glue.GetSecurityConfigurationInput) (*glue.GetSecurityConfigurationOutput, error)
+	GetSecurityConfigurationWithContext(aws.Context, *glue.GetSecurityConfigurationInput, ...request.Option) (*glue.GetSecurityConfigurationOutput, error)
+	GetSecurityConfigurationRequest(*glue.GetSecurityConfigurationInput) (*request.Request, *glue.GetSecurityConfigurationOutput)
+
+	GetSecurityConfigurations(*glue.GetSecurityConfigurationsInput) (*glue.GetSecurityConfigurationsOutput, error)
+	GetSecurityConfigurationsWithContext(aws.Context, *glue.GetSecurityConfigurationsInput, ...request.Option) (*glue.GetSecurityConfigurationsOutput, error)
+	GetSecurityConfigurationsRequest(*glue.GetSecurityConfigurationsInput) (*request.Request, *glue.GetSecurityConfigurationsOutput)
+
 	GetTable(*glue.GetTableInput) (*glue.GetTableOutput, error)
 	GetTableWithContext(aws.Context, *glue.GetTableInput, ...request.Option) (*glue.GetTableOutput, error)
 	GetTableRequest(*glue.GetTableInput) (*request.Request, *glue.GetTableOutput)
@@ -334,6 +350,10 @@ type GlueAPI interface {
 	ImportCatalogToGlue(*glue.ImportCatalogToGlueInput) (*glue.ImportCatalogToGlueOutput, error)
 	ImportCatalogToGlueWithContext(aws.Context, *glue.ImportCatalogToGlueInput, ...request.Option) (*glue.ImportCatalogToGlueOutput, error)
 	ImportCatalogToGlueRequest(*glue.ImportCatalogToGlueInput) (*request.Request, *glue.ImportCatalogToGlueOutput)
+
+	PutDataCatalogEncryptionSettings(*glue.PutDataCatalogEncryptionSettingsInput) (*glue.PutDataCatalogEncryptionSettingsOutput, error)
+	PutDataCatalogEncryptionSettingsWithContext(aws.Context, *glue.PutDataCatalogEncryptionSettingsInput, ...request.Option) (*glue.PutDataCatalogEncryptionSettingsOutput, error)
+	PutDataCatalogEncryptionSettingsRequest(*glue.PutDataCatalogEncryptionSettingsInput) (*request.Request, *glue.PutDataCatalogEncryptionSettingsOutput)
 
 	ResetJobBookmark(*glue.ResetJobBookmarkInput) (*glue.ResetJobBookmarkOutput, error)
 	ResetJobBookmarkWithContext(aws.Context, *glue.ResetJobBookmarkInput, ...request.Option) (*glue.ResetJobBookmarkOutput, error)

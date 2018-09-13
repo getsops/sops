@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Google Inc. All Rights Reserved.
+Copyright 2017 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -476,8 +476,36 @@ func ExampleNewStatement() {
 
 func ExampleNewStatement_structLiteral() {
 	stmt := spanner.Statement{
-		SQL:    "SELECT FirstName, LastName FROM SINGERS WHERE LastName >= @start",
-		Params: map[string]interface{}{"start": "Dylan"},
+		SQL: `SELECT FirstName, LastName FROM SINGERS WHERE LastName = ("Lea", "Martin")`,
+	}
+	_ = stmt // TODO: Use stmt in Query.
+}
+
+func ExampleStructParam() {
+	stmt := spanner.Statement{
+		SQL: "SELECT * FROM SINGERS WHERE (FirstName, LastName) = @singerinfo",
+		Params: map[string]interface{}{
+			"singerinfo": struct {
+				FirstName string
+				LastName  string
+			}{"Bob", "Dylan"},
+		},
+	}
+	_ = stmt // TODO: Use stmt in Query.
+}
+
+func ExampleArrayOfStructParam() {
+	stmt := spanner.Statement{
+		SQL: "SELECT * FROM SINGERS WHERE (FirstName, LastName) IN UNNEST(@singerinfo)",
+		Params: map[string]interface{}{
+			"singerinfo": []struct {
+				FirstName string
+				LastName  string
+			}{
+				{"Ringo", "Starr"},
+				{"John", "Lennon"},
+			},
+		},
 	}
 	_ = stmt // TODO: Use stmt in Query.
 }

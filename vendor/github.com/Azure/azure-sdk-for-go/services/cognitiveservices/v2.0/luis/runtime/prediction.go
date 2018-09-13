@@ -31,8 +31,8 @@ type PredictionClient struct {
 }
 
 // NewPredictionClient creates an instance of the PredictionClient client.
-func NewPredictionClient(azureRegion AzureRegions) PredictionClient {
-	return PredictionClient{New(azureRegion)}
+func NewPredictionClient(endpoint string) PredictionClient {
+	return PredictionClient{New(endpoint)}
 }
 
 // Resolve gets predictions for a given utterance, in the form of intents and entities. The current maximum query size
@@ -77,7 +77,7 @@ func (client PredictionClient) Resolve(ctx context.Context, appID string, query 
 // ResolvePreparer prepares the Resolve request.
 func (client PredictionClient) ResolvePreparer(ctx context.Context, appID string, query string, timezoneOffset *float64, verbose *bool, staging *bool, spellCheck *bool, bingSpellCheckSubscriptionKey string, logParameter *bool) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
-		"AzureRegion": client.AzureRegion,
+		"Endpoint": client.Endpoint,
 	}
 
 	pathParameters := map[string]interface{}{
@@ -107,8 +107,8 @@ func (client PredictionClient) ResolvePreparer(ctx context.Context, appID string
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPost(),
-		autorest.WithCustomBaseURL("https://{AzureRegion}.api.cognitive.microsoft.com/luis/v2.0/apps", urlParameters),
-		autorest.WithPathParameters("/{appId}", pathParameters),
+		autorest.WithCustomBaseURL("{Endpoint}/luis/v2.0", urlParameters),
+		autorest.WithPathParameters("/apps/{appId}", pathParameters),
 		autorest.WithJSON(query),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))

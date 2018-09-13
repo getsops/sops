@@ -15,7 +15,7 @@ const opGetMedia = "GetMedia"
 
 // GetMediaRequest generates a "aws/request.Request" representing the
 // client's request for the GetMedia operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -326,7 +326,7 @@ type StartSelector struct {
 	// A time stamp value. This value is required if you choose the PRODUCER_TIMESTAMP
 	// or the SERVER_TIMESTAMP as the startSelectorType. The GetMedia API then starts
 	// with the chunk containing the fragment that has the specified time stamp.
-	StartTimestamp *time.Time `type:"timestamp" timestampFormat:"unix"`
+	StartTimestamp *time.Time `type:"timestamp"`
 }
 
 // String returns the string representation

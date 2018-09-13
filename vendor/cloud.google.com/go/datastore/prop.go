@@ -1,4 +1,4 @@
-// Copyright 2014 Google Inc. All Rights Reserved.
+// Copyright 2014 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ type Property struct {
 	//	- string
 	//	- float64
 	//	- *Key
-	//	- time.Time
+	//	- time.Time (retrieved as local time)
 	//	- GeoPoint
 	//	- []byte (up to 1 megabyte in length)
 	//	- *Entity (representing a nested struct)

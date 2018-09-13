@@ -14,7 +14,7 @@ const opDescribeAffectedEntities = "DescribeAffectedEntities"
 
 // DescribeAffectedEntitiesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeAffectedEntities operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -160,7 +160,7 @@ const opDescribeEntityAggregates = "DescribeEntityAggregates"
 
 // DescribeEntityAggregatesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEntityAggregates operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -236,7 +236,7 @@ const opDescribeEventAggregates = "DescribeEventAggregates"
 
 // DescribeEventAggregatesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEventAggregates operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -373,7 +373,7 @@ const opDescribeEventDetails = "DescribeEventDetails"
 
 // DescribeEventDetailsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEventDetails operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -459,7 +459,7 @@ const opDescribeEventTypes = "DescribeEventTypes"
 
 // DescribeEventTypesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEventTypes operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -598,7 +598,7 @@ const opDescribeEvents = "DescribeEvents"
 
 // DescribeEventsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEvents operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -753,12 +753,12 @@ type AffectedEntity struct {
 	// The ID of the affected entity.
 	EntityValue *string `locationName:"entityValue" type:"string"`
 
-	// The unique identifier for the event. Format: arn:aws:health:event-region::event/EVENT_TYPE_PLUS_ID.
-	// Example: arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331
+	// The unique identifier for the event. Format: arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID.
+	// Example: Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
 	EventArn *string `locationName:"eventArn" type:"string"`
 
 	// The most recent time that the entity was updated.
-	LastUpdatedTime *time.Time `locationName:"lastUpdatedTime" type:"timestamp" timestampFormat:"unix"`
+	LastUpdatedTime *time.Time `locationName:"lastUpdatedTime" type:"timestamp"`
 
 	// The most recent status of the entity affected by the event. The possible
 	// values are IMPAIRED, UNIMPAIRED, and UNKNOWN.
@@ -830,10 +830,10 @@ type DateTimeRange struct {
 	_ struct{} `type:"structure"`
 
 	// The starting date and time of a time range.
-	From *time.Time `locationName:"from" type:"timestamp" timestampFormat:"unix"`
+	From *time.Time `locationName:"from" type:"timestamp"`
 
 	// The ending date and time of a time range.
-	To *time.Time `locationName:"to" type:"timestamp" timestampFormat:"unix"`
+	To *time.Time `locationName:"to" type:"timestamp"`
 }
 
 // String returns the string representation
@@ -978,8 +978,8 @@ func (s *DescribeAffectedEntitiesOutput) SetNextToken(v string) *DescribeAffecte
 type DescribeEntityAggregatesInput struct {
 	_ struct{} `type:"structure"`
 
-	// A list of event ARNs (unique identifiers). For example: "arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331",
-	// "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"
+	// A list of event ARNs (unique identifiers). For example: "arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456",
+	// "arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101"
 	EventArns []*string `locationName:"eventArns" min:"1" type:"list"`
 }
 
@@ -1151,8 +1151,8 @@ func (s *DescribeEventAggregatesOutput) SetNextToken(v string) *DescribeEventAgg
 type DescribeEventDetailsInput struct {
 	_ struct{} `type:"structure"`
 
-	// A list of event ARNs (unique identifiers). For example: "arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331",
-	// "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"
+	// A list of event ARNs (unique identifiers). For example: "arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456",
+	// "arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101"
 	//
 	// EventArns is a required field
 	EventArns []*string `locationName:"eventArns" min:"1" type:"list" required:"true"`
@@ -1470,8 +1470,8 @@ type EntityAggregate struct {
 	// The number entities that match the criteria for the specified events.
 	Count *int64 `locationName:"count" type:"integer"`
 
-	// The unique identifier for the event. Format: arn:aws:health:event-region::event/EVENT_TYPE_PLUS_ID.
-	// Example: arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331
+	// The unique identifier for the event. Format: arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID.
+	// Example: Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
 	EventArn *string `locationName:"eventArn" type:"string"`
 }
 
@@ -1507,8 +1507,8 @@ type EntityFilter struct {
 	// A list of IDs for affected entities.
 	EntityValues []*string `locationName:"entityValues" min:"1" type:"list"`
 
-	// A list of event ARNs (unique identifiers). For example: "arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331",
-	// "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"
+	// A list of event ARNs (unique identifiers). For example: "arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456",
+	// "arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101"
 	//
 	// EventArns is a required field
 	EventArns []*string `locationName:"eventArns" min:"1" type:"list" required:"true"`
@@ -1603,17 +1603,18 @@ func (s *EntityFilter) SetTags(v []map[string]*string) *EntityFilter {
 type Event struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier for the event. Format: arn:aws:health:event-region::event/EVENT_TYPE_PLUS_ID.
-	// Example: arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331
+	// The unique identifier for the event. Format: arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID.
+	// Example: Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
 	Arn *string `locationName:"arn" type:"string"`
 
 	// The AWS Availability Zone of the event. For example, us-east-1a.
 	AvailabilityZone *string `locationName:"availabilityZone" type:"string"`
 
 	// The date and time that the event ended.
-	EndTime *time.Time `locationName:"endTime" type:"timestamp" timestampFormat:"unix"`
+	EndTime *time.Time `locationName:"endTime" type:"timestamp"`
 
-	// The
+	// The category of the event. Possible values are issue, scheduledChange, and
+	// accountNotification.
 	EventTypeCategory *string `locationName:"eventTypeCategory" min:"3" type:"string" enum:"eventTypeCategory"`
 
 	// The unique identifier for the event type. The format is AWS_SERVICE_DESCRIPTION;
@@ -1621,7 +1622,7 @@ type Event struct {
 	EventTypeCode *string `locationName:"eventTypeCode" min:"3" type:"string"`
 
 	// The most recent date and time that the event was updated.
-	LastUpdatedTime *time.Time `locationName:"lastUpdatedTime" type:"timestamp" timestampFormat:"unix"`
+	LastUpdatedTime *time.Time `locationName:"lastUpdatedTime" type:"timestamp"`
 
 	// The AWS region name of the event.
 	Region *string `locationName:"region" type:"string"`
@@ -1630,7 +1631,7 @@ type Event struct {
 	Service *string `locationName:"service" min:"2" type:"string"`
 
 	// The date and time that the event began.
-	StartTime *time.Time `locationName:"startTime" type:"timestamp" timestampFormat:"unix"`
+	StartTime *time.Time `locationName:"startTime" type:"timestamp"`
 
 	// The most recent status of the event. Possible values are open, closed, and
 	// upcoming.
@@ -1821,8 +1822,8 @@ type EventDetailsErrorItem struct {
 	// The name of the error.
 	ErrorName *string `locationName:"errorName" type:"string"`
 
-	// The unique identifier for the event. Format: arn:aws:health:event-region::event/EVENT_TYPE_PLUS_ID.
-	// Example: arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331
+	// The unique identifier for the event. Format: arn:aws:health:event-region::event/SERVICE/EVENT_TYPE_CODE/EVENT_TYPE_PLUS_ID.
+	// Example: Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456
 	EventArn *string `locationName:"eventArn" type:"string"`
 }
 
@@ -1872,8 +1873,8 @@ type EventFilter struct {
 	// volumes (vol-426ab23e).
 	EntityValues []*string `locationName:"entityValues" min:"1" type:"list"`
 
-	// A list of event ARNs (unique identifiers). For example: "arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331",
-	// "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"
+	// A list of event ARNs (unique identifiers). For example: "arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456",
+	// "arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101"
 	EventArns []*string `locationName:"eventArns" min:"1" type:"list"`
 
 	// A list of event status codes.

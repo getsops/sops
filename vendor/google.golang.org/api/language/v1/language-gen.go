@@ -1,5 +1,7 @@
 // Package language provides access to the Cloud Natural Language API.
 //
+// This package is DEPRECATED. Use package cloud.google.com/go/language/apiv1 instead.
+//
 // See https://cloud.google.com/natural-language/
 //
 // Usage example:
@@ -828,6 +830,7 @@ func (s *DependencyEdge) MarshalJSON() ([]byte, error) {
 // Represents the input to API methods.
 type Document struct {
 	// Content: The content of the input in string format.
+	// Cloud audit logging exempt since it is based on user data.
 	Content string `json:"content,omitempty"`
 
 	// GcsContentUri: The Google Cloud Storage URI where the file content is
@@ -1591,6 +1594,7 @@ func (c *DocumentsAnalyzeEntitiesCall) doRequest(alt string) (*http.Response, er
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/documents:analyzeEntities")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1714,6 +1718,7 @@ func (c *DocumentsAnalyzeEntitySentimentCall) doRequest(alt string) (*http.Respo
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/documents:analyzeEntitySentiment")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1835,6 +1840,7 @@ func (c *DocumentsAnalyzeSentimentCall) doRequest(alt string) (*http.Response, e
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/documents:analyzeSentiment")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1960,6 +1966,7 @@ func (c *DocumentsAnalyzeSyntaxCall) doRequest(alt string) (*http.Response, erro
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/documents:analyzeSyntax")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2083,6 +2090,7 @@ func (c *DocumentsAnnotateTextCall) doRequest(alt string) (*http.Response, error
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/documents:annotateText")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2204,6 +2212,7 @@ func (c *DocumentsClassifyTextCall) doRequest(alt string) (*http.Response, error
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/documents:classifyText")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)

@@ -63,6 +63,8 @@ func defaultImageAnnotatorCallOptions() *ImageAnnotatorCallOptions {
 }
 
 // ImageAnnotatorClient is a client for interacting with Google Cloud Vision API.
+//
+// Methods, except Close, may be called concurrently. However, fields must not be modified concurrently with method calls.
 type ImageAnnotatorClient struct {
 	// The connection to the service.
 	conn *grpc.ClientConn

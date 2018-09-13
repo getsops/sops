@@ -15,7 +15,7 @@
   "baseUrl": "https://cloudtrace.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Cloud Trace",
-  "description": "Sends application trace data to Stackdriver Trace for viewing. Trace data is collected for all App Engine applications by default. Trace data from other applications can be provided using this API.\n",
+  "description": "Sends application trace data to Stackdriver Trace for viewing. Trace data is collected for all App Engine applications by default. Trace data from other applications can be provided using this API. This library is used to interact with the Trace API directly. If you are looking to instrument your application for Stackdriver Trace, we recommend using OpenCensus.\n",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/trace",
   "fullyEncodeReservedExpansion": true,
@@ -63,11 +63,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -87,12 +82,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -191,7 +180,7 @@
       }
     }
   },
-  "revision": "20180130",
+  "revision": "20180820",
   "rootUrl": "https://cloudtrace.googleapis.com/",
   "schemas": {
     "Annotation": {
@@ -386,7 +375,7 @@
         },
         "displayName": {
           "$ref": "TruncatableString",
-          "description": "A description of the span's operation (up to 128 bytes).\nStackdriver Trace displays the description in the\n{% dynamic print site_values.console_name %}.\nFor example, the display name can be a qualified method name or a file name\nand a line number where the operation is called. A best practice is to use\nthe same display name within an application and at the same call point.\nThis makes it easier to correlate spans in different traces."
+          "description": "A description of the span's operation (up to 128 bytes).\nStackdriver Trace displays the description in the\nGoogle Cloud Platform Console.\nFor example, the display name can be a qualified method name or a file name\nand a line number where the operation is called. A best practice is to use\nthe same display name within an application and at the same call point.\nThis makes it easier to correlate spans in different traces."
         },
         "endTime": {
           "description": "The end time of the span. On the client side, this is the time kept by\nthe local machine where the span execution ends. On the server side, this\nis the time when the server application handler stops running.",

@@ -262,8 +262,6 @@ type DataSource struct {
 
 	// ClientId: Data source client id which should be used to receive
 	// refresh token.
-	// When not supplied, no offline credentials are populated for data
-	// transfer.
 	ClientId string `json:"clientId,omitempty"`
 
 	// DataRefreshType: Specifies whether the data source supports automatic
@@ -321,18 +319,17 @@ type DataSource struct {
 	// schedule runs.
 	MinimumScheduleInterval string `json:"minimumScheduleInterval,omitempty"`
 
-	// Name: Data source resource name.
+	// Name: Output only. Data source resource name.
 	Name string `json:"name,omitempty"`
 
 	// Parameters: Data source parameters.
 	Parameters []*DataSourceParameter `json:"parameters,omitempty"`
 
 	// Scopes: Api auth scopes for which refresh token needs to be obtained.
-	// Only valid
-	// when `client_id` is specified. Ignored otherwise. These are scopes
-	// needed
-	// by a data source to prepare data and ingest them into BigQuery,
-	// e.g., https://www.googleapis.com/auth/bigquery
+	// These are
+	// scopes needed by a data source to prepare data and ingest them
+	// into
+	// BigQuery, e.g., https://www.googleapis.com/auth/bigquery
 	Scopes []string `json:"scopes,omitempty"`
 
 	// SupportsCustomSchedule: Specifies whether the data source supports a
@@ -341,9 +338,7 @@ type DataSource struct {
 	// When set to `true`, user can override default schedule.
 	SupportsCustomSchedule bool `json:"supportsCustomSchedule,omitempty"`
 
-	// SupportsMultipleTransfers: Indicates whether the data source supports
-	// multiple transfers
-	// to different BigQuery targets.
+	// SupportsMultipleTransfers: Deprecated. This field has no effect.
 	SupportsMultipleTransfers bool `json:"supportsMultipleTransfers,omitempty"`
 
 	// TransferType: Deprecated. This field has no effect.
@@ -359,7 +354,7 @@ type DataSource struct {
 
 	// UpdateDeadlineSeconds: The number of seconds to wait for an update
 	// from the data source
-	// before BigQuery marks the transfer as failed.
+	// before the Data Transfer Service marks the transfer as FAILED.
 	UpdateDeadlineSeconds int64 `json:"updateDeadlineSeconds,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -410,7 +405,7 @@ type DataSourceParameter struct {
 	// DisplayName: Parameter display name in the user interface.
 	DisplayName string `json:"displayName,omitempty"`
 
-	// Fields: When parameter is a record, describes child fields.
+	// Fields: Deprecated. This field has no effect.
 	Fields []*DataSourceParameter `json:"fields,omitempty"`
 
 	// Immutable: Cannot be changed after initial creation.
@@ -427,12 +422,10 @@ type DataSourceParameter struct {
 	// ParamId: Parameter identifier.
 	ParamId string `json:"paramId,omitempty"`
 
-	// Recurse: If set to true, schema should be taken from the parent with
-	// the same
-	// parameter_id. Only applicable when parameter type is RECORD.
+	// Recurse: Deprecated. This field has no effect.
 	Recurse bool `json:"recurse,omitempty"`
 
-	// Repeated: Can parameter have multiple values.
+	// Repeated: Deprecated. This field has no effect.
 	Repeated bool `json:"repeated,omitempty"`
 
 	// Required: Is parameter required.
@@ -447,7 +440,7 @@ type DataSourceParameter struct {
 	// Will be serialized to json as string.
 	//   "DOUBLE" - Double precision floating point parameter.
 	//   "BOOLEAN" - Boolean parameter.
-	//   "RECORD" - Record parameter.
+	//   "RECORD" - Deprecated. This field has no effect.
 	//   "PLUS_PAGE" - Page ID for a Google+ Page.
 	Type string `json:"type,omitempty"`
 
@@ -972,7 +965,6 @@ func (s *Status) MarshalJSON() ([]byte, error) {
 // `destination_dataset_id` is created when needed and shared with
 // the
 // appropriate data source service account.
-// Next id: 21
 type TransferConfig struct {
 	// DataRefreshWindowDays: The number of days to look back to
 	// automatically refresh the data.
@@ -1137,7 +1129,6 @@ func (s *TransferMessage) MarshalJSON() ([]byte, error) {
 }
 
 // TransferRun: Represents a data transfer run.
-// Next id: 27
 type TransferRun struct {
 	// DataSourceId: Output only. Data source id.
 	DataSourceId string `json:"dataSourceId,omitempty"`
@@ -1175,7 +1166,7 @@ type TransferRun struct {
 	// scheduled manually, this is empty.
 	// NOTE: the system might choose to delay the schedule depending on
 	// the
-	// current load, so `schedule_time` doesn't always matches this.
+	// current load, so `schedule_time` doesn't always match this.
 	Schedule string `json:"schedule,omitempty"`
 
 	// ScheduleTime: Minimum time after which a transfer run can be started.
@@ -1305,6 +1296,7 @@ func (c *ProjectsDataSourcesCheckValidCredsCall) doRequest(alt string) (*http.Re
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:checkValidCreds")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1451,6 +1443,7 @@ func (c *ProjectsDataSourcesGetCall) doRequest(alt string) (*http.Response, erro
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1611,6 +1604,7 @@ func (c *ProjectsDataSourcesListCall) doRequest(alt string) (*http.Response, err
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/dataSources")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1784,6 +1778,7 @@ func (c *ProjectsLocationsGetCall) doRequest(alt string) (*http.Response, error)
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1947,6 +1942,7 @@ func (c *ProjectsLocationsListCall) doRequest(alt string) (*http.Response, error
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}/locations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2127,6 +2123,7 @@ func (c *ProjectsLocationsDataSourcesCheckValidCredsCall) doRequest(alt string) 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:checkValidCreds")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2273,6 +2270,7 @@ func (c *ProjectsLocationsDataSourcesGetCall) doRequest(alt string) (*http.Respo
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2433,6 +2431,7 @@ func (c *ProjectsLocationsDataSourcesListCall) doRequest(alt string) (*http.Resp
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/dataSources")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2630,6 +2629,7 @@ func (c *ProjectsLocationsTransferConfigsCreateCall) doRequest(alt string) (*htt
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/transferConfigs")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2692,7 +2692,7 @@ func (c *ProjectsLocationsTransferConfigsCreateCall) Do(opts ...googleapi.CallOp
 	//       "type": "string"
 	//     },
 	//     "parent": {
-	//       "description": "The BigQuery project id where the transfer configuration should be created.\nMust be in the format /projects/{project_id}/locations/{location_id}\nIf specified location and location of the destination bigquery dataset\ndo not match - the request will fail.",
+	//       "description": "The BigQuery project id where the transfer configuration should be created.\nMust be in the format projects/{project_id}/locations/{location_id}\nIf specified location and location of the destination bigquery dataset\ndo not match - the request will fail.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+/locations/[^/]+$",
 	//       "required": true,
@@ -2764,6 +2764,7 @@ func (c *ProjectsLocationsTransferConfigsDeleteCall) doRequest(alt string) (*htt
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -2833,7 +2834,6 @@ func (c *ProjectsLocationsTransferConfigsDeleteCall) Do(opts ...googleapi.CallOp
 	//     "$ref": "Empty"
 	//   },
 	//   "scopes": [
-	//     "https://www.googleapis.com/auth/bigquery",
 	//     "https://www.googleapis.com/auth/cloud-platform"
 	//   ]
 	// }
@@ -2904,6 +2904,7 @@ func (c *ProjectsLocationsTransferConfigsGetCall) doRequest(alt string) (*http.R
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3071,6 +3072,7 @@ func (c *ProjectsLocationsTransferConfigsListCall) doRequest(alt string) (*http.
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/transferConfigs")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3282,6 +3284,7 @@ func (c *ProjectsLocationsTransferConfigsPatchCall) doRequest(alt string) (*http
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -3433,6 +3436,7 @@ func (c *ProjectsLocationsTransferConfigsScheduleRunsCall) doRequest(alt string)
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}:scheduleRuns")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3562,6 +3566,7 @@ func (c *ProjectsLocationsTransferConfigsRunsDeleteCall) doRequest(alt string) (
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -3702,6 +3707,7 @@ func (c *ProjectsLocationsTransferConfigsRunsGetCall) doRequest(alt string) (*ht
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3887,6 +3893,7 @@ func (c *ProjectsLocationsTransferConfigsRunsListCall) doRequest(alt string) (*h
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/runs")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4115,6 +4122,7 @@ func (c *ProjectsLocationsTransferConfigsRunsTransferLogsListCall) doRequest(alt
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/transferLogs")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4324,6 +4332,7 @@ func (c *ProjectsTransferConfigsCreateCall) doRequest(alt string) (*http.Respons
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/transferConfigs")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4386,7 +4395,7 @@ func (c *ProjectsTransferConfigsCreateCall) Do(opts ...googleapi.CallOption) (*T
 	//       "type": "string"
 	//     },
 	//     "parent": {
-	//       "description": "The BigQuery project id where the transfer configuration should be created.\nMust be in the format /projects/{project_id}/locations/{location_id}\nIf specified location and location of the destination bigquery dataset\ndo not match - the request will fail.",
+	//       "description": "The BigQuery project id where the transfer configuration should be created.\nMust be in the format projects/{project_id}/locations/{location_id}\nIf specified location and location of the destination bigquery dataset\ndo not match - the request will fail.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+$",
 	//       "required": true,
@@ -4458,6 +4467,7 @@ func (c *ProjectsTransferConfigsDeleteCall) doRequest(alt string) (*http.Respons
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -4527,7 +4537,6 @@ func (c *ProjectsTransferConfigsDeleteCall) Do(opts ...googleapi.CallOption) (*E
 	//     "$ref": "Empty"
 	//   },
 	//   "scopes": [
-	//     "https://www.googleapis.com/auth/bigquery",
 	//     "https://www.googleapis.com/auth/cloud-platform"
 	//   ]
 	// }
@@ -4598,6 +4607,7 @@ func (c *ProjectsTransferConfigsGetCall) doRequest(alt string) (*http.Response, 
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4765,6 +4775,7 @@ func (c *ProjectsTransferConfigsListCall) doRequest(alt string) (*http.Response,
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/transferConfigs")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4976,6 +4987,7 @@ func (c *ProjectsTransferConfigsPatchCall) doRequest(alt string) (*http.Response
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -5127,6 +5139,7 @@ func (c *ProjectsTransferConfigsScheduleRunsCall) doRequest(alt string) (*http.R
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}:scheduleRuns")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5256,6 +5269,7 @@ func (c *ProjectsTransferConfigsRunsDeleteCall) doRequest(alt string) (*http.Res
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -5396,6 +5410,7 @@ func (c *ProjectsTransferConfigsRunsGetCall) doRequest(alt string) (*http.Respon
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -5581,6 +5596,7 @@ func (c *ProjectsTransferConfigsRunsListCall) doRequest(alt string) (*http.Respo
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/runs")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -5809,6 +5825,7 @@ func (c *ProjectsTransferConfigsRunsTransferLogsListCall) doRequest(alt string) 
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/transferLogs")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)

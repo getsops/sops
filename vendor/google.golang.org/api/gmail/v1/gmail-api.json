@@ -41,7 +41,7 @@
   "description": "Access Gmail mailboxes including sending user email.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/gmail/api/",
-  "etag": "\"-iA1DTNe4s-I6JZXPt1t1Ypy8IU/HU5u3llBS2pcCtNMtKD_RzuFbzU\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/6MVOLkrACdE8trspKIAVVfI4jS8\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/googlemail-16.png",
     "x32": "https://www.google.com/images/icons/product/googlemail-32.png"
@@ -86,12 +86,12 @@
       "type": "boolean"
     },
     "quotaUser": {
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+      "description": "An opaque string that represents a user for quota purposes. Must not exceed 40 characters.",
       "location": "query",
       "type": "string"
     },
     "userIp": {
-      "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+      "description": "Deprecated. Please use quotaUser instead.",
       "location": "query",
       "type": "string"
     }
@@ -1486,6 +1486,126 @@
             }
           },
           "resources": {
+            "delegates": {
+              "methods": {
+                "create": {
+                  "description": "Adds a delegate with its verification status set directly to accepted, without sending any verification email. The delegate user must be a member of the same G Suite organization as the delegator user.\n\nGmail imposes limtations on the number of delegates and delegators each user in a G Suite organization can have. These limits depend on your organization, but in general each user can have up to 25 delegates and up to 10 delegators.\n\nNote that a delegate user must be referred to by their primary email address, and not an email alias.\n\nAlso note that when a new delegate is created, there may be up to a one minute delay before the new delegate is available for use.\n\nThis method is only available to service account clients that have been delegated domain-wide authority.",
+                  "httpMethod": "POST",
+                  "id": "gmail.users.settings.delegates.create",
+                  "parameterOrder": [
+                    "userId"
+                  ],
+                  "parameters": {
+                    "userId": {
+                      "default": "me",
+                      "description": "User's email address. The special value \"me\" can be used to indicate the authenticated user.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "{userId}/settings/delegates",
+                  "request": {
+                    "$ref": "Delegate"
+                  },
+                  "response": {
+                    "$ref": "Delegate"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/gmail.settings.sharing"
+                  ]
+                },
+                "delete": {
+                  "description": "Removes the specified delegate (which can be of any verification status), and revokes any verification that may have been required for using it.\n\nNote that a delegate user must be referred to by their primary email address, and not an email alias.\n\nThis method is only available to service account clients that have been delegated domain-wide authority.",
+                  "httpMethod": "DELETE",
+                  "id": "gmail.users.settings.delegates.delete",
+                  "parameterOrder": [
+                    "userId",
+                    "delegateEmail"
+                  ],
+                  "parameters": {
+                    "delegateEmail": {
+                      "description": "The email address of the user to be removed as a delegate.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "userId": {
+                      "default": "me",
+                      "description": "User's email address. The special value \"me\" can be used to indicate the authenticated user.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "{userId}/settings/delegates/{delegateEmail}",
+                  "scopes": [
+                    "https://www.googleapis.com/auth/gmail.settings.sharing"
+                  ]
+                },
+                "get": {
+                  "description": "Gets the specified delegate.\n\nNote that a delegate user must be referred to by their primary email address, and not an email alias.\n\nThis method is only available to service account clients that have been delegated domain-wide authority.",
+                  "httpMethod": "GET",
+                  "id": "gmail.users.settings.delegates.get",
+                  "parameterOrder": [
+                    "userId",
+                    "delegateEmail"
+                  ],
+                  "parameters": {
+                    "delegateEmail": {
+                      "description": "The email address of the user whose delegate relationship is to be retrieved.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "userId": {
+                      "default": "me",
+                      "description": "User's email address. The special value \"me\" can be used to indicate the authenticated user.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "{userId}/settings/delegates/{delegateEmail}",
+                  "response": {
+                    "$ref": "Delegate"
+                  },
+                  "scopes": [
+                    "https://mail.google.com/",
+                    "https://www.googleapis.com/auth/gmail.modify",
+                    "https://www.googleapis.com/auth/gmail.readonly",
+                    "https://www.googleapis.com/auth/gmail.settings.basic"
+                  ]
+                },
+                "list": {
+                  "description": "Lists the delegates for the specified account.\n\nThis method is only available to service account clients that have been delegated domain-wide authority.",
+                  "httpMethod": "GET",
+                  "id": "gmail.users.settings.delegates.list",
+                  "parameterOrder": [
+                    "userId"
+                  ],
+                  "parameters": {
+                    "userId": {
+                      "default": "me",
+                      "description": "User's email address. The special value \"me\" can be used to indicate the authenticated user.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "{userId}/settings/delegates",
+                  "response": {
+                    "$ref": "ListDelegatesResponse"
+                  },
+                  "scopes": [
+                    "https://mail.google.com/",
+                    "https://www.googleapis.com/auth/gmail.modify",
+                    "https://www.googleapis.com/auth/gmail.readonly",
+                    "https://www.googleapis.com/auth/gmail.settings.basic"
+                  ]
+                }
+              }
+            },
             "filters": {
               "methods": {
                 "create": {
@@ -2382,7 +2502,7 @@
       }
     }
   },
-  "revision": "20180319",
+  "revision": "20180821",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "AutoForwarding": {
@@ -2454,6 +2574,35 @@
             "type": "string"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "Delegate": {
+      "description": "Settings for a delegate. Delegates can read, send, and delete messages, as well as manage contacts, for the delegator's account. See \"Set up mail delegation\" for more information about delegates.",
+      "id": "Delegate",
+      "properties": {
+        "delegateEmail": {
+          "description": "The email address of the delegate.",
+          "type": "string"
+        },
+        "verificationStatus": {
+          "description": "Indicates whether this address has been verified and can act as a delegate for the account. Read-only.",
+          "enum": [
+            "accepted",
+            "expired",
+            "pending",
+            "rejected",
+            "verificationStatusUnspecified"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
         }
       },
       "type": "object"
@@ -2844,6 +2993,20 @@
         "textColor": {
           "description": "The text color of the label, represented as hex string. This field is required in order to set the color of a label. Only the following predefined set of color values are allowed:\n#000000, #434343, #666666, #999999, #cccccc, #efefef, #f3f3f3, #ffffff, #fb4c2f, #ffad47, #fad165, #16a766, #43d692, #4a86e8, #a479e2, #f691b3, #f6c5be, #ffe6c7, #fef1d1, #b9e4d0, #c6f3de, #c9daf8, #e4d7f5, #fcdee8, #efa093, #ffd6a2, #fce8b3, #89d3b2, #a0eac9, #a4c2f4, #d0bcf1, #fbc8d9, #e66550, #ffbc6b, #fcda83, #44b984, #68dfa9, #6d9eeb, #b694e8, #f7a7c0, #cc3a21, #eaa041, #f2c960, #149e60, #3dc789, #3c78d8, #8e63ce, #e07798, #ac2b16, #cf8933, #d5ae49, #0b804b, #2a9c68, #285bac, #653e9b, #b65775, #822111, #a46a21, #aa8831, #076239, #1a764d, #1c4587, #41236d, #83334c",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ListDelegatesResponse": {
+      "description": "Response for the ListDelegates method.",
+      "id": "ListDelegatesResponse",
+      "properties": {
+        "delegates": {
+          "description": "List of the user's delegates (with any verification status).",
+          "items": {
+            "$ref": "Delegate"
+          },
+          "type": "array"
         }
       },
       "type": "object"

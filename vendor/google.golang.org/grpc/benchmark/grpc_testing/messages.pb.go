@@ -12,6 +12,12 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
+
 // The type of payload that should be returned.
 type PayloadType int32
 
@@ -38,7 +44,9 @@ var PayloadType_value = map[string]int32{
 func (x PayloadType) String() string {
 	return proto.EnumName(PayloadType_name, int32(x))
 }
-func (PayloadType) EnumDescriptor() ([]byte, []int) { return fileDescriptor1, []int{0} }
+func (PayloadType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_messages_5c70222ad96bf232, []int{0}
+}
 
 // Compression algorithms
 type CompressionType int32
@@ -64,20 +72,44 @@ var CompressionType_value = map[string]int32{
 func (x CompressionType) String() string {
 	return proto.EnumName(CompressionType_name, int32(x))
 }
-func (CompressionType) EnumDescriptor() ([]byte, []int) { return fileDescriptor1, []int{1} }
+func (CompressionType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_messages_5c70222ad96bf232, []int{1}
+}
 
 // A block of data, to simply increase gRPC message size.
 type Payload struct {
 	// The type of data in body.
-	Type PayloadType `protobuf:"varint,1,opt,name=type,enum=grpc.testing.PayloadType" json:"type,omitempty"`
+	Type PayloadType `protobuf:"varint,1,opt,name=type,proto3,enum=grpc.testing.PayloadType" json:"type,omitempty"`
 	// Primary contents of payload.
-	Body []byte `protobuf:"bytes,2,opt,name=body,proto3" json:"body,omitempty"`
+	Body                 []byte   `protobuf:"bytes,2,opt,name=body,proto3" json:"body,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Payload) Reset()                    { *m = Payload{} }
-func (m *Payload) String() string            { return proto.CompactTextString(m) }
-func (*Payload) ProtoMessage()               {}
-func (*Payload) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{0} }
+func (m *Payload) Reset()         { *m = Payload{} }
+func (m *Payload) String() string { return proto.CompactTextString(m) }
+func (*Payload) ProtoMessage()    {}
+func (*Payload) Descriptor() ([]byte, []int) {
+	return fileDescriptor_messages_5c70222ad96bf232, []int{0}
+}
+func (m *Payload) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Payload.Unmarshal(m, b)
+}
+func (m *Payload) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Payload.Marshal(b, m, deterministic)
+}
+func (dst *Payload) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Payload.Merge(dst, src)
+}
+func (m *Payload) XXX_Size() int {
+	return xxx_messageInfo_Payload.Size(m)
+}
+func (m *Payload) XXX_DiscardUnknown() {
+	xxx_messageInfo_Payload.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Payload proto.InternalMessageInfo
 
 func (m *Payload) GetType() PayloadType {
 	if m != nil {
@@ -96,14 +128,36 @@ func (m *Payload) GetBody() []byte {
 // A protobuf representation for grpc status. This is used by test
 // clients to specify a status that the server should attempt to return.
 type EchoStatus struct {
-	Code    int32  `protobuf:"varint,1,opt,name=code" json:"code,omitempty"`
-	Message string `protobuf:"bytes,2,opt,name=message" json:"message,omitempty"`
+	Code                 int32    `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Message              string   `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *EchoStatus) Reset()                    { *m = EchoStatus{} }
-func (m *EchoStatus) String() string            { return proto.CompactTextString(m) }
-func (*EchoStatus) ProtoMessage()               {}
-func (*EchoStatus) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{1} }
+func (m *EchoStatus) Reset()         { *m = EchoStatus{} }
+func (m *EchoStatus) String() string { return proto.CompactTextString(m) }
+func (*EchoStatus) ProtoMessage()    {}
+func (*EchoStatus) Descriptor() ([]byte, []int) {
+	return fileDescriptor_messages_5c70222ad96bf232, []int{1}
+}
+func (m *EchoStatus) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_EchoStatus.Unmarshal(m, b)
+}
+func (m *EchoStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_EchoStatus.Marshal(b, m, deterministic)
+}
+func (dst *EchoStatus) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EchoStatus.Merge(dst, src)
+}
+func (m *EchoStatus) XXX_Size() int {
+	return xxx_messageInfo_EchoStatus.Size(m)
+}
+func (m *EchoStatus) XXX_DiscardUnknown() {
+	xxx_messageInfo_EchoStatus.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EchoStatus proto.InternalMessageInfo
 
 func (m *EchoStatus) GetCode() int32 {
 	if m != nil {
@@ -123,26 +177,48 @@ func (m *EchoStatus) GetMessage() string {
 type SimpleRequest struct {
 	// Desired payload type in the response from the server.
 	// If response_type is RANDOM, server randomly chooses one from other formats.
-	ResponseType PayloadType `protobuf:"varint,1,opt,name=response_type,json=responseType,enum=grpc.testing.PayloadType" json:"response_type,omitempty"`
+	ResponseType PayloadType `protobuf:"varint,1,opt,name=response_type,json=responseType,proto3,enum=grpc.testing.PayloadType" json:"response_type,omitempty"`
 	// Desired payload size in the response from the server.
 	// If response_type is COMPRESSABLE, this denotes the size before compression.
-	ResponseSize int32 `protobuf:"varint,2,opt,name=response_size,json=responseSize" json:"response_size,omitempty"`
+	ResponseSize int32 `protobuf:"varint,2,opt,name=response_size,json=responseSize,proto3" json:"response_size,omitempty"`
 	// Optional input payload sent along with the request.
-	Payload *Payload `protobuf:"bytes,3,opt,name=payload" json:"payload,omitempty"`
+	Payload *Payload `protobuf:"bytes,3,opt,name=payload,proto3" json:"payload,omitempty"`
 	// Whether SimpleResponse should include username.
-	FillUsername bool `protobuf:"varint,4,opt,name=fill_username,json=fillUsername" json:"fill_username,omitempty"`
+	FillUsername bool `protobuf:"varint,4,opt,name=fill_username,json=fillUsername,proto3" json:"fill_username,omitempty"`
 	// Whether SimpleResponse should include OAuth scope.
-	FillOauthScope bool `protobuf:"varint,5,opt,name=fill_oauth_scope,json=fillOauthScope" json:"fill_oauth_scope,omitempty"`
+	FillOauthScope bool `protobuf:"varint,5,opt,name=fill_oauth_scope,json=fillOauthScope,proto3" json:"fill_oauth_scope,omitempty"`
 	// Compression algorithm to be used by the server for the response (stream)
-	ResponseCompression CompressionType `protobuf:"varint,6,opt,name=response_compression,json=responseCompression,enum=grpc.testing.CompressionType" json:"response_compression,omitempty"`
+	ResponseCompression CompressionType `protobuf:"varint,6,opt,name=response_compression,json=responseCompression,proto3,enum=grpc.testing.CompressionType" json:"response_compression,omitempty"`
 	// Whether server should return a given status
-	ResponseStatus *EchoStatus `protobuf:"bytes,7,opt,name=response_status,json=responseStatus" json:"response_status,omitempty"`
+	ResponseStatus       *EchoStatus `protobuf:"bytes,7,opt,name=response_status,json=responseStatus,proto3" json:"response_status,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
-func (m *SimpleRequest) Reset()                    { *m = SimpleRequest{} }
-func (m *SimpleRequest) String() string            { return proto.CompactTextString(m) }
-func (*SimpleRequest) ProtoMessage()               {}
-func (*SimpleRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{2} }
+func (m *SimpleRequest) Reset()         { *m = SimpleRequest{} }
+func (m *SimpleRequest) String() string { return proto.CompactTextString(m) }
+func (*SimpleRequest) ProtoMessage()    {}
+func (*SimpleRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_messages_5c70222ad96bf232, []int{2}
+}
+func (m *SimpleRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SimpleRequest.Unmarshal(m, b)
+}
+func (m *SimpleRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SimpleRequest.Marshal(b, m, deterministic)
+}
+func (dst *SimpleRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SimpleRequest.Merge(dst, src)
+}
+func (m *SimpleRequest) XXX_Size() int {
+	return xxx_messageInfo_SimpleRequest.Size(m)
+}
+func (m *SimpleRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SimpleRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SimpleRequest proto.InternalMessageInfo
 
 func (m *SimpleRequest) GetResponseType() PayloadType {
 	if m != nil {
@@ -196,18 +272,40 @@ func (m *SimpleRequest) GetResponseStatus() *EchoStatus {
 // Unary response, as configured by the request.
 type SimpleResponse struct {
 	// Payload to increase message size.
-	Payload *Payload `protobuf:"bytes,1,opt,name=payload" json:"payload,omitempty"`
+	Payload *Payload `protobuf:"bytes,1,opt,name=payload,proto3" json:"payload,omitempty"`
 	// The user the request came from, for verifying authentication was
 	// successful when the client expected it.
-	Username string `protobuf:"bytes,2,opt,name=username" json:"username,omitempty"`
+	Username string `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
 	// OAuth scope.
-	OauthScope string `protobuf:"bytes,3,opt,name=oauth_scope,json=oauthScope" json:"oauth_scope,omitempty"`
+	OauthScope           string   `protobuf:"bytes,3,opt,name=oauth_scope,json=oauthScope,proto3" json:"oauth_scope,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *SimpleResponse) Reset()                    { *m = SimpleResponse{} }
-func (m *SimpleResponse) String() string            { return proto.CompactTextString(m) }
-func (*SimpleResponse) ProtoMessage()               {}
-func (*SimpleResponse) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{3} }
+func (m *SimpleResponse) Reset()         { *m = SimpleResponse{} }
+func (m *SimpleResponse) String() string { return proto.CompactTextString(m) }
+func (*SimpleResponse) ProtoMessage()    {}
+func (*SimpleResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_messages_5c70222ad96bf232, []int{3}
+}
+func (m *SimpleResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SimpleResponse.Unmarshal(m, b)
+}
+func (m *SimpleResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SimpleResponse.Marshal(b, m, deterministic)
+}
+func (dst *SimpleResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SimpleResponse.Merge(dst, src)
+}
+func (m *SimpleResponse) XXX_Size() int {
+	return xxx_messageInfo_SimpleResponse.Size(m)
+}
+func (m *SimpleResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_SimpleResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SimpleResponse proto.InternalMessageInfo
 
 func (m *SimpleResponse) GetPayload() *Payload {
 	if m != nil {
@@ -233,13 +331,35 @@ func (m *SimpleResponse) GetOauthScope() string {
 // Client-streaming request.
 type StreamingInputCallRequest struct {
 	// Optional input payload sent along with the request.
-	Payload *Payload `protobuf:"bytes,1,opt,name=payload" json:"payload,omitempty"`
+	Payload              *Payload `protobuf:"bytes,1,opt,name=payload,proto3" json:"payload,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *StreamingInputCallRequest) Reset()                    { *m = StreamingInputCallRequest{} }
-func (m *StreamingInputCallRequest) String() string            { return proto.CompactTextString(m) }
-func (*StreamingInputCallRequest) ProtoMessage()               {}
-func (*StreamingInputCallRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{4} }
+func (m *StreamingInputCallRequest) Reset()         { *m = StreamingInputCallRequest{} }
+func (m *StreamingInputCallRequest) String() string { return proto.CompactTextString(m) }
+func (*StreamingInputCallRequest) ProtoMessage()    {}
+func (*StreamingInputCallRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_messages_5c70222ad96bf232, []int{4}
+}
+func (m *StreamingInputCallRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_StreamingInputCallRequest.Unmarshal(m, b)
+}
+func (m *StreamingInputCallRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_StreamingInputCallRequest.Marshal(b, m, deterministic)
+}
+func (dst *StreamingInputCallRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StreamingInputCallRequest.Merge(dst, src)
+}
+func (m *StreamingInputCallRequest) XXX_Size() int {
+	return xxx_messageInfo_StreamingInputCallRequest.Size(m)
+}
+func (m *StreamingInputCallRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_StreamingInputCallRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StreamingInputCallRequest proto.InternalMessageInfo
 
 func (m *StreamingInputCallRequest) GetPayload() *Payload {
 	if m != nil {
@@ -251,13 +371,35 @@ func (m *StreamingInputCallRequest) GetPayload() *Payload {
 // Client-streaming response.
 type StreamingInputCallResponse struct {
 	// Aggregated size of payloads received from the client.
-	AggregatedPayloadSize int32 `protobuf:"varint,1,opt,name=aggregated_payload_size,json=aggregatedPayloadSize" json:"aggregated_payload_size,omitempty"`
+	AggregatedPayloadSize int32    `protobuf:"varint,1,opt,name=aggregated_payload_size,json=aggregatedPayloadSize,proto3" json:"aggregated_payload_size,omitempty"`
+	XXX_NoUnkeyedLiteral  struct{} `json:"-"`
+	XXX_unrecognized      []byte   `json:"-"`
+	XXX_sizecache         int32    `json:"-"`
 }
 
-func (m *StreamingInputCallResponse) Reset()                    { *m = StreamingInputCallResponse{} }
-func (m *StreamingInputCallResponse) String() string            { return proto.CompactTextString(m) }
-func (*StreamingInputCallResponse) ProtoMessage()               {}
-func (*StreamingInputCallResponse) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{5} }
+func (m *StreamingInputCallResponse) Reset()         { *m = StreamingInputCallResponse{} }
+func (m *StreamingInputCallResponse) String() string { return proto.CompactTextString(m) }
+func (*StreamingInputCallResponse) ProtoMessage()    {}
+func (*StreamingInputCallResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_messages_5c70222ad96bf232, []int{5}
+}
+func (m *StreamingInputCallResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_StreamingInputCallResponse.Unmarshal(m, b)
+}
+func (m *StreamingInputCallResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_StreamingInputCallResponse.Marshal(b, m, deterministic)
+}
+func (dst *StreamingInputCallResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StreamingInputCallResponse.Merge(dst, src)
+}
+func (m *StreamingInputCallResponse) XXX_Size() int {
+	return xxx_messageInfo_StreamingInputCallResponse.Size(m)
+}
+func (m *StreamingInputCallResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_StreamingInputCallResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StreamingInputCallResponse proto.InternalMessageInfo
 
 func (m *StreamingInputCallResponse) GetAggregatedPayloadSize() int32 {
 	if m != nil {
@@ -270,16 +412,38 @@ func (m *StreamingInputCallResponse) GetAggregatedPayloadSize() int32 {
 type ResponseParameters struct {
 	// Desired payload sizes in responses from the server.
 	// If response_type is COMPRESSABLE, this denotes the size before compression.
-	Size int32 `protobuf:"varint,1,opt,name=size" json:"size,omitempty"`
+	Size int32 `protobuf:"varint,1,opt,name=size,proto3" json:"size,omitempty"`
 	// Desired interval between consecutive responses in the response stream in
 	// microseconds.
-	IntervalUs int32 `protobuf:"varint,2,opt,name=interval_us,json=intervalUs" json:"interval_us,omitempty"`
+	IntervalUs           int32    `protobuf:"varint,2,opt,name=interval_us,json=intervalUs,proto3" json:"interval_us,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ResponseParameters) Reset()                    { *m = ResponseParameters{} }
-func (m *ResponseParameters) String() string            { return proto.CompactTextString(m) }
-func (*ResponseParameters) ProtoMessage()               {}
-func (*ResponseParameters) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{6} }
+func (m *ResponseParameters) Reset()         { *m = ResponseParameters{} }
+func (m *ResponseParameters) String() string { return proto.CompactTextString(m) }
+func (*ResponseParameters) ProtoMessage()    {}
+func (*ResponseParameters) Descriptor() ([]byte, []int) {
+	return fileDescriptor_messages_5c70222ad96bf232, []int{6}
+}
+func (m *ResponseParameters) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ResponseParameters.Unmarshal(m, b)
+}
+func (m *ResponseParameters) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ResponseParameters.Marshal(b, m, deterministic)
+}
+func (dst *ResponseParameters) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ResponseParameters.Merge(dst, src)
+}
+func (m *ResponseParameters) XXX_Size() int {
+	return xxx_messageInfo_ResponseParameters.Size(m)
+}
+func (m *ResponseParameters) XXX_DiscardUnknown() {
+	xxx_messageInfo_ResponseParameters.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ResponseParameters proto.InternalMessageInfo
 
 func (m *ResponseParameters) GetSize() int32 {
 	if m != nil {
@@ -301,21 +465,43 @@ type StreamingOutputCallRequest struct {
 	// If response_type is RANDOM, the payload from each response in the stream
 	// might be of different types. This is to simulate a mixed type of payload
 	// stream.
-	ResponseType PayloadType `protobuf:"varint,1,opt,name=response_type,json=responseType,enum=grpc.testing.PayloadType" json:"response_type,omitempty"`
+	ResponseType PayloadType `protobuf:"varint,1,opt,name=response_type,json=responseType,proto3,enum=grpc.testing.PayloadType" json:"response_type,omitempty"`
 	// Configuration for each expected response message.
-	ResponseParameters []*ResponseParameters `protobuf:"bytes,2,rep,name=response_parameters,json=responseParameters" json:"response_parameters,omitempty"`
+	ResponseParameters []*ResponseParameters `protobuf:"bytes,2,rep,name=response_parameters,json=responseParameters,proto3" json:"response_parameters,omitempty"`
 	// Optional input payload sent along with the request.
-	Payload *Payload `protobuf:"bytes,3,opt,name=payload" json:"payload,omitempty"`
+	Payload *Payload `protobuf:"bytes,3,opt,name=payload,proto3" json:"payload,omitempty"`
 	// Compression algorithm to be used by the server for the response (stream)
-	ResponseCompression CompressionType `protobuf:"varint,6,opt,name=response_compression,json=responseCompression,enum=grpc.testing.CompressionType" json:"response_compression,omitempty"`
+	ResponseCompression CompressionType `protobuf:"varint,6,opt,name=response_compression,json=responseCompression,proto3,enum=grpc.testing.CompressionType" json:"response_compression,omitempty"`
 	// Whether server should return a given status
-	ResponseStatus *EchoStatus `protobuf:"bytes,7,opt,name=response_status,json=responseStatus" json:"response_status,omitempty"`
+	ResponseStatus       *EchoStatus `protobuf:"bytes,7,opt,name=response_status,json=responseStatus,proto3" json:"response_status,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
-func (m *StreamingOutputCallRequest) Reset()                    { *m = StreamingOutputCallRequest{} }
-func (m *StreamingOutputCallRequest) String() string            { return proto.CompactTextString(m) }
-func (*StreamingOutputCallRequest) ProtoMessage()               {}
-func (*StreamingOutputCallRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{7} }
+func (m *StreamingOutputCallRequest) Reset()         { *m = StreamingOutputCallRequest{} }
+func (m *StreamingOutputCallRequest) String() string { return proto.CompactTextString(m) }
+func (*StreamingOutputCallRequest) ProtoMessage()    {}
+func (*StreamingOutputCallRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_messages_5c70222ad96bf232, []int{7}
+}
+func (m *StreamingOutputCallRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_StreamingOutputCallRequest.Unmarshal(m, b)
+}
+func (m *StreamingOutputCallRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_StreamingOutputCallRequest.Marshal(b, m, deterministic)
+}
+func (dst *StreamingOutputCallRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StreamingOutputCallRequest.Merge(dst, src)
+}
+func (m *StreamingOutputCallRequest) XXX_Size() int {
+	return xxx_messageInfo_StreamingOutputCallRequest.Size(m)
+}
+func (m *StreamingOutputCallRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_StreamingOutputCallRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StreamingOutputCallRequest proto.InternalMessageInfo
 
 func (m *StreamingOutputCallRequest) GetResponseType() PayloadType {
 	if m != nil {
@@ -355,13 +541,35 @@ func (m *StreamingOutputCallRequest) GetResponseStatus() *EchoStatus {
 // Server-streaming response, as configured by the request and parameters.
 type StreamingOutputCallResponse struct {
 	// Payload to increase response size.
-	Payload *Payload `protobuf:"bytes,1,opt,name=payload" json:"payload,omitempty"`
+	Payload              *Payload `protobuf:"bytes,1,opt,name=payload,proto3" json:"payload,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *StreamingOutputCallResponse) Reset()                    { *m = StreamingOutputCallResponse{} }
-func (m *StreamingOutputCallResponse) String() string            { return proto.CompactTextString(m) }
-func (*StreamingOutputCallResponse) ProtoMessage()               {}
-func (*StreamingOutputCallResponse) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{8} }
+func (m *StreamingOutputCallResponse) Reset()         { *m = StreamingOutputCallResponse{} }
+func (m *StreamingOutputCallResponse) String() string { return proto.CompactTextString(m) }
+func (*StreamingOutputCallResponse) ProtoMessage()    {}
+func (*StreamingOutputCallResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_messages_5c70222ad96bf232, []int{8}
+}
+func (m *StreamingOutputCallResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_StreamingOutputCallResponse.Unmarshal(m, b)
+}
+func (m *StreamingOutputCallResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_StreamingOutputCallResponse.Marshal(b, m, deterministic)
+}
+func (dst *StreamingOutputCallResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StreamingOutputCallResponse.Merge(dst, src)
+}
+func (m *StreamingOutputCallResponse) XXX_Size() int {
+	return xxx_messageInfo_StreamingOutputCallResponse.Size(m)
+}
+func (m *StreamingOutputCallResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_StreamingOutputCallResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StreamingOutputCallResponse proto.InternalMessageInfo
 
 func (m *StreamingOutputCallResponse) GetPayload() *Payload {
 	if m != nil {
@@ -373,13 +581,35 @@ func (m *StreamingOutputCallResponse) GetPayload() *Payload {
 // For reconnect interop test only.
 // Client tells server what reconnection parameters it used.
 type ReconnectParams struct {
-	MaxReconnectBackoffMs int32 `protobuf:"varint,1,opt,name=max_reconnect_backoff_ms,json=maxReconnectBackoffMs" json:"max_reconnect_backoff_ms,omitempty"`
+	MaxReconnectBackoffMs int32    `protobuf:"varint,1,opt,name=max_reconnect_backoff_ms,json=maxReconnectBackoffMs,proto3" json:"max_reconnect_backoff_ms,omitempty"`
+	XXX_NoUnkeyedLiteral  struct{} `json:"-"`
+	XXX_unrecognized      []byte   `json:"-"`
+	XXX_sizecache         int32    `json:"-"`
 }
 
-func (m *ReconnectParams) Reset()                    { *m = ReconnectParams{} }
-func (m *ReconnectParams) String() string            { return proto.CompactTextString(m) }
-func (*ReconnectParams) ProtoMessage()               {}
-func (*ReconnectParams) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{9} }
+func (m *ReconnectParams) Reset()         { *m = ReconnectParams{} }
+func (m *ReconnectParams) String() string { return proto.CompactTextString(m) }
+func (*ReconnectParams) ProtoMessage()    {}
+func (*ReconnectParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_messages_5c70222ad96bf232, []int{9}
+}
+func (m *ReconnectParams) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ReconnectParams.Unmarshal(m, b)
+}
+func (m *ReconnectParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ReconnectParams.Marshal(b, m, deterministic)
+}
+func (dst *ReconnectParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReconnectParams.Merge(dst, src)
+}
+func (m *ReconnectParams) XXX_Size() int {
+	return xxx_messageInfo_ReconnectParams.Size(m)
+}
+func (m *ReconnectParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReconnectParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReconnectParams proto.InternalMessageInfo
 
 func (m *ReconnectParams) GetMaxReconnectBackoffMs() int32 {
 	if m != nil {
@@ -392,14 +622,36 @@ func (m *ReconnectParams) GetMaxReconnectBackoffMs() int32 {
 // Server tells client whether its reconnects are following the spec and the
 // reconnect backoffs it saw.
 type ReconnectInfo struct {
-	Passed    bool    `protobuf:"varint,1,opt,name=passed" json:"passed,omitempty"`
-	BackoffMs []int32 `protobuf:"varint,2,rep,packed,name=backoff_ms,json=backoffMs" json:"backoff_ms,omitempty"`
+	Passed               bool     `protobuf:"varint,1,opt,name=passed,proto3" json:"passed,omitempty"`
+	BackoffMs            []int32  `protobuf:"varint,2,rep,packed,name=backoff_ms,json=backoffMs,proto3" json:"backoff_ms,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ReconnectInfo) Reset()                    { *m = ReconnectInfo{} }
-func (m *ReconnectInfo) String() string            { return proto.CompactTextString(m) }
-func (*ReconnectInfo) ProtoMessage()               {}
-func (*ReconnectInfo) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{10} }
+func (m *ReconnectInfo) Reset()         { *m = ReconnectInfo{} }
+func (m *ReconnectInfo) String() string { return proto.CompactTextString(m) }
+func (*ReconnectInfo) ProtoMessage()    {}
+func (*ReconnectInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_messages_5c70222ad96bf232, []int{10}
+}
+func (m *ReconnectInfo) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ReconnectInfo.Unmarshal(m, b)
+}
+func (m *ReconnectInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ReconnectInfo.Marshal(b, m, deterministic)
+}
+func (dst *ReconnectInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReconnectInfo.Merge(dst, src)
+}
+func (m *ReconnectInfo) XXX_Size() int {
+	return xxx_messageInfo_ReconnectInfo.Size(m)
+}
+func (m *ReconnectInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReconnectInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReconnectInfo proto.InternalMessageInfo
 
 func (m *ReconnectInfo) GetPassed() bool {
 	if m != nil {
@@ -431,9 +683,9 @@ func init() {
 	proto.RegisterEnum("grpc.testing.CompressionType", CompressionType_name, CompressionType_value)
 }
 
-func init() { proto.RegisterFile("messages.proto", fileDescriptor1) }
+func init() { proto.RegisterFile("messages.proto", fileDescriptor_messages_5c70222ad96bf232) }
 
-var fileDescriptor1 = []byte{
+var fileDescriptor_messages_5c70222ad96bf232 = []byte{
 	// 652 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x55, 0x4d, 0x6f, 0xd3, 0x40,
 	0x10, 0xc5, 0xf9, 0xee, 0x24, 0x4d, 0xa3, 0x85, 0x82, 0x5b, 0x54, 0x11, 0x99, 0x4b, 0x54, 0x89,

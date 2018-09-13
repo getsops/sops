@@ -63,11 +63,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -87,12 +82,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -121,8 +110,8 @@
     "folders": {
       "methods": {
         "create": {
-          "description": "Creates a Folder in the resource hierarchy.\nReturns an Operation which can be used to track the progress of the\nfolder creation workflow.\nUpon success the Operation.response field will be populated with the\ncreated Folder.\n\nIn order to succeed, the addition of this new Folder must not violate\nthe Folder naming, height or fanout constraints.\n\n+ The Folder's display_name must be distinct from all other Folder's that\nshare its parent.\n+ The addition of the Folder must not cause the active Folder hierarchy\nto exceed a height of 4. Note, the full active + deleted Folder hierarchy\nis allowed to reach a height of 8; this provides additional headroom when\nmoving folders that contain deleted folders.\n+ The addition of the Folder must not cause the total number of Folders\nunder its parent to exceed 100.\n\nIf the operation fails due to a folder constraint violation,\na PreconditionFailure explaining the violation will be returned.\nIf the failure occurs synchronously then the PreconditionFailure\nwill be returned via the Status.details field and if it occurs\nasynchronously then the PreconditionFailure will be returned\nvia the the Operation.error field.\n\nThe caller must have `resourcemanager.folders.create` permission on the\nidentified parent.",
-          "flatPath": "v2beta1/folders",
+          "description": "Creates a Folder in the resource hierarchy.\nReturns an Operation which can be used to track the progress of the\nfolder creation workflow.\nUpon success the Operation.response field will be populated with the\ncreated Folder.\n\nIn order to succeed, the addition of this new Folder must not violate\nthe Folder naming, height or fanout constraints.\n\n+ The Folder's display_name must be distinct from all other Folder's that\nshare its parent.\n+ The addition of the Folder must not cause the active Folder hierarchy\nto exceed a height of 4. Note, the full active + deleted Folder hierarchy\nis allowed to reach a height of 8; this provides additional headroom when\nmoving folders that contain deleted folders.\n+ The addition of the Folder must not cause the total number of Folders\nunder its parent to exceed 100.\n\nIf the operation fails due to a folder constraint violation, some errors\nmay be returned by the CreateFolder request, with status code\nFAILED_PRECONDITION and an error description. Other folder constraint\nviolations will be communicated in the Operation, with the specific\nPreconditionFailure returned via the details list in the Operation.error\nfield.\n\nThe caller must have `resourcemanager.folders.create` permission on the\nidentified parent.",
+          "flatPath": "v2/folders",
           "httpMethod": "POST",
           "id": "cloudresourcemanager.folders.create",
           "parameterOrder": [],
@@ -133,7 +122,7 @@
               "type": "string"
             }
           },
-          "path": "v2beta1/folders",
+          "path": "v2/folders",
           "request": {
             "$ref": "Folder"
           },
@@ -146,7 +135,7 @@
         },
         "delete": {
           "description": "Requests deletion of a Folder. The Folder is moved into the\nDELETE_REQUESTED state\nimmediately, and is deleted approximately 30 days later. This method may\nonly be called on an empty Folder in the\nACTIVE state, where a Folder is empty if\nit doesn't contain any Folders or Projects in the\nACTIVE state.\nThe caller must have `resourcemanager.folders.delete` permission on the\nidentified folder.",
-          "flatPath": "v2beta1/folders/{foldersId}",
+          "flatPath": "v2/folders/{foldersId}",
           "httpMethod": "DELETE",
           "id": "cloudresourcemanager.folders.delete",
           "parameterOrder": [
@@ -161,7 +150,7 @@
               "type": "string"
             }
           },
-          "path": "v2beta1/{+name}",
+          "path": "v2/{+name}",
           "response": {
             "$ref": "Folder"
           },
@@ -171,7 +160,7 @@
         },
         "get": {
           "description": "Retrieves a Folder identified by the supplied resource name.\nValid Folder resource names have the format `folders/{folder_id}`\n(for example, `folders/1234`).\nThe caller must have `resourcemanager.folders.get` permission on the\nidentified folder.",
-          "flatPath": "v2beta1/folders/{foldersId}",
+          "flatPath": "v2/folders/{foldersId}",
           "httpMethod": "GET",
           "id": "cloudresourcemanager.folders.get",
           "parameterOrder": [
@@ -186,7 +175,7 @@
               "type": "string"
             }
           },
-          "path": "v2beta1/{+name}",
+          "path": "v2/{+name}",
           "response": {
             "$ref": "Folder"
           },
@@ -197,7 +186,7 @@
         },
         "getIamPolicy": {
           "description": "Gets the access control policy for a Folder. The returned policy may be\nempty if no such policy or resource exists. The `resource` field should\nbe the Folder's resource name, e.g. \"folders/1234\".\nThe caller must have `resourcemanager.folders.getIamPolicy` permission\non the identified folder.",
-          "flatPath": "v2beta1/folders/{foldersId}:getIamPolicy",
+          "flatPath": "v2/folders/{foldersId}:getIamPolicy",
           "httpMethod": "POST",
           "id": "cloudresourcemanager.folders.getIamPolicy",
           "parameterOrder": [
@@ -212,7 +201,7 @@
               "type": "string"
             }
           },
-          "path": "v2beta1/{+resource}:getIamPolicy",
+          "path": "v2/{+resource}:getIamPolicy",
           "request": {
             "$ref": "GetIamPolicyRequest"
           },
@@ -226,7 +215,7 @@
         },
         "list": {
           "description": "Lists the Folders that are direct descendants of supplied parent resource.\nList provides a strongly consistent view of the Folders underneath\nthe specified parent resource.\nList returns Folders sorted based upon the (ascending) lexical ordering\nof their display_name.\nThe caller must have `resourcemanager.folders.list` permission on the\nidentified parent.",
-          "flatPath": "v2beta1/folders",
+          "flatPath": "v2/folders",
           "httpMethod": "GET",
           "id": "cloudresourcemanager.folders.list",
           "parameterOrder": [],
@@ -253,7 +242,7 @@
               "type": "boolean"
             }
           },
-          "path": "v2beta1/folders",
+          "path": "v2/folders",
           "response": {
             "$ref": "ListFoldersResponse"
           },
@@ -264,7 +253,7 @@
         },
         "move": {
           "description": "Moves a Folder under a new resource parent.\nReturns an Operation which can be used to track the progress of the\nfolder move workflow.\nUpon success the Operation.response field will be populated with the\nmoved Folder.\nUpon failure, a FolderOperationError categorizing the failure cause will\nbe returned - if the failure occurs synchronously then the\nFolderOperationError will be returned via the Status.details field\nand if it occurs asynchronously then the FolderOperation will be returned\nvia the the Operation.error field.\nIn addition, the Operation.metadata field will be populated with a\nFolderOperation message as an aid to stateless clients.\nFolder moves will be rejected if they violate either the naming, height\nor fanout constraints described in the\nCreateFolder documentation.\nThe caller must have `resourcemanager.folders.move` permission on the\nfolder's current and proposed new parent.",
-          "flatPath": "v2beta1/folders/{foldersId}:move",
+          "flatPath": "v2/folders/{foldersId}:move",
           "httpMethod": "POST",
           "id": "cloudresourcemanager.folders.move",
           "parameterOrder": [
@@ -279,7 +268,7 @@
               "type": "string"
             }
           },
-          "path": "v2beta1/{+name}:move",
+          "path": "v2/{+name}:move",
           "request": {
             "$ref": "MoveFolderRequest"
           },
@@ -291,8 +280,8 @@
           ]
         },
         "patch": {
-          "description": "Updates a Folder, changing its display_name.\nChanges to the folder display_name will be rejected if they violate either\nthe display_name formatting rules or naming constraints described in the\nCreateFolder documentation.\n\nThe Folder's display name must start and end with a letter or digit,\nmay contain letters, digits, spaces, hyphens and underscores and can be\nno longer than 30 characters. This is captured by the regular expression:\n[\\p{L}\\p{N}]({\\p{L}\\p{N}_- ]{0,28}[\\p{L}\\p{N}])?.\nThe caller must have `resourcemanager.folders.update` permission on the\nidentified folder.\n\nIf the update fails due to the unique name constraint then a\nPreconditionFailure explaining this violation will be returned\nin the Status.details field.",
-          "flatPath": "v2beta1/folders/{foldersId}",
+          "description": "Updates a Folder, changing its display_name.\nChanges to the folder display_name will be rejected if they violate either\nthe display_name formatting rules or naming constraints described in\nthe CreateFolder documentation.\n\nThe Folder's display name must start and end with a letter or digit,\nmay contain letters, digits, spaces, hyphens and underscores and can be\nno longer than 30 characters. This is captured by the regular expression:\n[\\p{L}\\p{N}]([\\p{L}\\p{N}_- ]{0,28}[\\p{L}\\p{N}])?.\nThe caller must have `resourcemanager.folders.update` permission on the\nidentified folder.\n\nIf the update fails due to the unique name constraint then a\nPreconditionFailure explaining this violation will be returned\nin the Status.details field.",
+          "flatPath": "v2/folders/{foldersId}",
           "httpMethod": "PATCH",
           "id": "cloudresourcemanager.folders.patch",
           "parameterOrder": [
@@ -313,7 +302,7 @@
               "type": "string"
             }
           },
-          "path": "v2beta1/{+name}",
+          "path": "v2/{+name}",
           "request": {
             "$ref": "Folder"
           },
@@ -326,12 +315,12 @@
         },
         "search": {
           "description": "Search for folders that match specific filter criteria.\nSearch provides an eventually consistent view of the folders a user has\naccess to which meet the specified filter criteria.\n\nThis will only return folders on which the caller has the\npermission `resourcemanager.folders.get`.",
-          "flatPath": "v2beta1/folders:search",
+          "flatPath": "v2/folders:search",
           "httpMethod": "POST",
           "id": "cloudresourcemanager.folders.search",
           "parameterOrder": [],
           "parameters": {},
-          "path": "v2beta1/folders:search",
+          "path": "v2/folders:search",
           "request": {
             "$ref": "SearchFoldersRequest"
           },
@@ -345,7 +334,7 @@
         },
         "setIamPolicy": {
           "description": "Sets the access control policy on a Folder, replacing any existing policy.\nThe `resource` field should be the Folder's resource name, e.g.\n\"folders/1234\".\nThe caller must have `resourcemanager.folders.setIamPolicy` permission\non the identified folder.",
-          "flatPath": "v2beta1/folders/{foldersId}:setIamPolicy",
+          "flatPath": "v2/folders/{foldersId}:setIamPolicy",
           "httpMethod": "POST",
           "id": "cloudresourcemanager.folders.setIamPolicy",
           "parameterOrder": [
@@ -360,7 +349,7 @@
               "type": "string"
             }
           },
-          "path": "v2beta1/{+resource}:setIamPolicy",
+          "path": "v2/{+resource}:setIamPolicy",
           "request": {
             "$ref": "SetIamPolicyRequest"
           },
@@ -373,7 +362,7 @@
         },
         "testIamPermissions": {
           "description": "Returns permissions that a caller has on the specified Folder.\nThe `resource` field should be the Folder's resource name,\ne.g. \"folders/1234\".\n\nThere are no permissions required for making this API call.",
-          "flatPath": "v2beta1/folders/{foldersId}:testIamPermissions",
+          "flatPath": "v2/folders/{foldersId}:testIamPermissions",
           "httpMethod": "POST",
           "id": "cloudresourcemanager.folders.testIamPermissions",
           "parameterOrder": [
@@ -388,7 +377,7 @@
               "type": "string"
             }
           },
-          "path": "v2beta1/{+resource}:testIamPermissions",
+          "path": "v2/{+resource}:testIamPermissions",
           "request": {
             "$ref": "TestIamPermissionsRequest"
           },
@@ -401,7 +390,7 @@
         },
         "undelete": {
           "description": "Cancels the deletion request for a Folder. This method may only be\ncalled on a Folder in the\nDELETE_REQUESTED state.\nIn order to succeed, the Folder's parent must be in the\nACTIVE state.\nIn addition, reintroducing the folder into the tree must not violate\nfolder naming, height and fanout constraints described in the\nCreateFolder documentation.\nThe caller must have `resourcemanager.folders.undelete` permission on the\nidentified folder.",
-          "flatPath": "v2beta1/folders/{foldersId}:undelete",
+          "flatPath": "v2/folders/{foldersId}:undelete",
           "httpMethod": "POST",
           "id": "cloudresourcemanager.folders.undelete",
           "parameterOrder": [
@@ -416,7 +405,7 @@
               "type": "string"
             }
           },
-          "path": "v2beta1/{+name}:undelete",
+          "path": "v2/{+name}:undelete",
           "request": {
             "$ref": "UndeleteFolderRequest"
           },
@@ -428,9 +417,39 @@
           ]
         }
       }
+    },
+    "operations": {
+      "methods": {
+        "get": {
+          "description": "Gets the latest state of a long-running operation.  Clients can use this\nmethod to poll the operation result at intervals as recommended by the API\nservice.",
+          "flatPath": "v1/operations/{operationsId}",
+          "httpMethod": "GET",
+          "id": "cloudresourcemanager.operations.get",
+          "parameterOrder": [
+            "name"
+          ],
+          "parameters": {
+            "name": {
+              "description": "The name of the operation resource.",
+              "location": "path",
+              "pattern": "^operations/.+$",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "v1/{+name}",
+          "response": {
+            "$ref": "Operation"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/cloud-platform",
+            "https://www.googleapis.com/auth/cloud-platform.read-only"
+          ]
+        }
+      }
     }
   },
-  "revision": "20180315",
+  "revision": "20180815",
   "rootUrl": "https://cloudresourcemanager.googleapis.com/",
   "schemas": {
     "AuditConfig": {
@@ -438,7 +457,7 @@
       "id": "AuditConfig",
       "properties": {
         "auditLogConfigs": {
-          "description": "The configuration for logging of each type of permission.\nNext ID: 4",
+          "description": "The configuration for logging of each type of permission.",
           "items": {
             "$ref": "AuditLogConfig"
           },
@@ -485,15 +504,42 @@
       "description": "Associates `members` with a `role`.",
       "id": "Binding",
       "properties": {
+        "condition": {
+          "$ref": "Expr",
+          "description": "Unimplemented. The condition that is associated with this binding.\nNOTE: an unsatisfied condition will not allow user access via current\nbinding. Different bindings, including their conditions, are examined\nindependently."
+        },
         "members": {
-          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` or `joe@example.com`.\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: A Google Apps domain name that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
+          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` .\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: A Google Apps domain name that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "role": {
-          "description": "Role that is assigned to `members`.\nFor example, `roles/viewer`, `roles/editor`, or `roles/owner`.\nRequired",
+          "description": "Role that is assigned to `members`.\nFor example, `roles/viewer`, `roles/editor`, or `roles/owner`.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Expr": {
+      "description": "Represents an expression text. Example:\n\n    title: \"User account presence\"\n    description: \"Determines whether the request has a user account\"\n    expression: \"size(request.user) \u003e 0\"",
+      "id": "Expr",
+      "properties": {
+        "description": {
+          "description": "An optional description of the expression. This is a longer text which\ndescribes the expression, e.g. when hovered over it in a UI.",
+          "type": "string"
+        },
+        "expression": {
+          "description": "Textual representation of an expression in\nCommon Expression Language syntax.\n\nThe application context of the containing message determines which\nwell-known feature set of CEL is supported.",
+          "type": "string"
+        },
+        "location": {
+          "description": "An optional string indicating the location of the expression for error\nreporting, e.g. a file name and a position in the file.",
+          "type": "string"
+        },
+        "title": {
+          "description": "An optional title for the expression, i.e. a short string describing\nits purpose. This can be used e.g. in UIs which allow to enter the\nexpression.",
           "type": "string"
         }
       },
@@ -509,7 +555,7 @@
           "type": "string"
         },
         "displayName": {
-          "description": "The folder’s display name.\nA folder’s display name must be unique amongst its siblings, e.g.\nno two folders with the same parent can share the same display name.\nThe display name must start and end with a letter or digit, may contain\nletters, digits, spaces, hyphens and underscores and can be no longer\nthan 30 characters. This is captured by the regular expression:\n[\\p{L}\\p{N}]({\\p{L}\\p{N}_- ]{0,28}[\\p{L}\\p{N}])?.",
+          "description": "The folder’s display name.\nA folder’s display name must be unique amongst its siblings, e.g.\nno two folders with the same parent can share the same display name.\nThe display name must start and end with a letter or digit, may contain\nletters, digits, spaces, hyphens and underscores and can be no longer\nthan 30 characters. This is captured by the regular expression:\n[\\p{L}\\p{N}]([\\p{L}\\p{N}_- ]{0,28}[\\p{L}\\p{N}])?.",
           "type": "string"
         },
         "lifecycleState": {
@@ -676,7 +722,7 @@
       "type": "object"
     },
     "Policy": {
-      "description": "Defines an Identity and Access Management (IAM) policy. It is used to\nspecify access control policies for Cloud Platform resources.\n\n\nA `Policy` consists of a list of `bindings`. A `Binding` binds a list of\n`members` to a `role`, where the members can be user accounts, Google groups,\nGoogle domains, and service accounts. A `role` is a named list of permissions\ndefined by IAM.\n\n**Example**\n\n    {\n      \"bindings\": [\n        {\n          \"role\": \"roles/owner\",\n          \"members\": [\n            \"user:mike@example.com\",\n            \"group:admins@example.com\",\n            \"domain:google.com\",\n            \"serviceAccount:my-other-app@appspot.gserviceaccount.com\",\n          ]\n        },\n        {\n          \"role\": \"roles/viewer\",\n          \"members\": [\"user:sean@example.com\"]\n        }\n      ]\n    }\n\nFor a description of IAM and its features, see the\n[IAM developer's guide](https://cloud.google.com/iam/docs).",
+      "description": "Defines an Identity and Access Management (IAM) policy. It is used to\nspecify access control policies for Cloud Platform resources.\n\n\nA `Policy` consists of a list of `bindings`. A `binding` binds a list of\n`members` to a `role`, where the members can be user accounts, Google groups,\nGoogle domains, and service accounts. A `role` is a named list of permissions\ndefined by IAM.\n\n**JSON Example**\n\n    {\n      \"bindings\": [\n        {\n          \"role\": \"roles/owner\",\n          \"members\": [\n            \"user:mike@example.com\",\n            \"group:admins@example.com\",\n            \"domain:google.com\",\n            \"serviceAccount:my-other-app@appspot.gserviceaccount.com\"\n          ]\n        },\n        {\n          \"role\": \"roles/viewer\",\n          \"members\": [\"user:sean@example.com\"]\n        }\n      ]\n    }\n\n**YAML Example**\n\n    bindings:\n    - members:\n      - user:mike@example.com\n      - group:admins@example.com\n      - domain:google.com\n      - serviceAccount:my-other-app@appspot.gserviceaccount.com\n      role: roles/owner\n    - members:\n      - user:sean@example.com\n      role: roles/viewer\n\n\nFor a description of IAM and its features, see the\n[IAM developer's guide](https://cloud.google.com/iam/docs).",
       "id": "Policy",
       "properties": {
         "auditConfigs": {
@@ -740,7 +786,7 @@
           "type": "string"
         },
         "query": {
-          "description": "Search criteria used to select the Folders to return.\nIf no search criteria is specified then all accessible folders will be\nreturned.\n\nQuery expressions can be used to restrict results based upon displayName,\nlifecycleState and parent, where the operators `=`, `NOT`, `AND` and `OR`\ncan be used along with the suffix wildcard symbol `*`.\n\nSome example queries are:\n\n|Query | Description|\n|----- | -----------|\n|displayName=Test*|Folders whose display name starts with \"Test\".|\n|lifecycleState=ACTIVE|Folders whose lifecycleState is ACTIVE.|\n|parent=folders/123|Folders whose parent is \"folders/123\".|\n|parent=folders/123 AND lifecycleState=ACTIVE|Active folders whose parent is \"folders/123\".|",
+          "description": "Search criteria used to select the Folders to return.\nIf no search criteria is specified then all accessible folders will be\nreturned.\n\nQuery expressions can be used to restrict results based upon displayName,\nlifecycleState and parent, where the operators `=`, `NOT`, `AND` and `OR`\ncan be used along with the suffix wildcard symbol `*`.\n\nThe displayName field in a query expression should use escaped quotes\nfor values that include whitespace to prevent unexpected behavior.\n\nSome example queries are:\n\n|Query | Description|\n|----- | -----------|\n|displayName=Test* | Folders whose display name starts with \"Test\".|\n|lifecycleState=ACTIVE | Folders whose lifecycleState is ACTIVE.|\n|parent=folders/123 | Folders whose parent is \"folders/123\".|\n|parent=folders/123 AND lifecycleState=ACTIVE | Active folders whose parent is \"folders/123\".|\n|displayName=\\\\\"Test String\\\\\"|Folders whose display name includes both \"Test\" and \"String\".|",
           "type": "string"
         }
       },

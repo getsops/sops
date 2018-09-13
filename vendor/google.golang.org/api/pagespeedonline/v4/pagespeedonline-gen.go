@@ -946,6 +946,7 @@ func (c *PagespeedapiRunpagespeedCall) doRequest(alt string) (*http.Response, er
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "runPagespeed")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1045,7 +1046,7 @@ func (c *PagespeedapiRunpagespeedCall) Do(opts ...googleapi.CallOption) (*Pagesp
 	//     "url": {
 	//       "description": "The URL to fetch and analyze",
 	//       "location": "query",
-	//       "pattern": "(?i)http(s)?://.*",
+	//       "pattern": "(?i)(site:|origin:)?http(s)?://.*",
 	//       "required": true,
 	//       "type": "string"
 	//     },

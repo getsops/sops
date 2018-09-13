@@ -1,4 +1,4 @@
-// Copyright 2014 Google Inc. All Rights Reserved.
+// Copyright 2014 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -167,7 +167,7 @@ func (c *Client) RunInTransaction(ctx context.Context, f func(tx *Transaction) e
 			return nil, err
 		}
 		if err := f(tx); err != nil {
-			tx.Rollback()
+			_ = tx.Rollback()
 			return nil, err
 		}
 		if cmt, err := tx.Commit(); err != ErrConcurrentTransaction {
@@ -196,12 +196,12 @@ func (t *Transaction) Commit() (c *Commit, err error) {
 		Mutations:           t.mutations,
 		Mode:                pb.CommitRequest_TRANSACTIONAL,
 	}
-	t.id = nil
 	resp, err := t.client.client.Commit(t.ctx, req)
+	if grpc.Code(err) == codes.Aborted {
+		return nil, ErrConcurrentTransaction
+	}
+	t.id = nil // mark the transaction as expired
 	if err != nil {
-		if grpc.Code(err) == codes.Aborted {
-			return nil, ErrConcurrentTransaction
-		}
 		return nil, err
 	}
 

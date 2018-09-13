@@ -30,81 +30,81 @@ import (
 
 func BenchmarkClientStreamc1(b *testing.B) {
 	grpc.EnableTracing = true
-	runStream(b, stats.Features{"", true, 0, 0, 0, 1, 1, 1, false})
+	runStream(b, stats.Features{"", true, 0, 0, 0, 1, 1, 1, false, false})
 }
 
 func BenchmarkClientStreamc8(b *testing.B) {
 	grpc.EnableTracing = true
-	runStream(b, stats.Features{"", true, 0, 0, 0, 8, 1, 1, false})
+	runStream(b, stats.Features{"", true, 0, 0, 0, 8, 1, 1, false, false})
 }
 
 func BenchmarkClientStreamc64(b *testing.B) {
 	grpc.EnableTracing = true
-	runStream(b, stats.Features{"", true, 0, 0, 0, 64, 1, 1, false})
+	runStream(b, stats.Features{"", true, 0, 0, 0, 64, 1, 1, false, false})
 }
 
 func BenchmarkClientStreamc512(b *testing.B) {
 	grpc.EnableTracing = true
-	runStream(b, stats.Features{"", true, 0, 0, 0, 512, 1, 1, false})
+	runStream(b, stats.Features{"", true, 0, 0, 0, 512, 1, 1, false, false})
 }
 func BenchmarkClientUnaryc1(b *testing.B) {
 	grpc.EnableTracing = true
-	runStream(b, stats.Features{"", true, 0, 0, 0, 1, 1, 1, false})
+	runStream(b, stats.Features{"", true, 0, 0, 0, 1, 1, 1, false, false})
 }
 
 func BenchmarkClientUnaryc8(b *testing.B) {
 	grpc.EnableTracing = true
-	runStream(b, stats.Features{"", true, 0, 0, 0, 8, 1, 1, false})
+	runStream(b, stats.Features{"", true, 0, 0, 0, 8, 1, 1, false, false})
 }
 
 func BenchmarkClientUnaryc64(b *testing.B) {
 	grpc.EnableTracing = true
-	runStream(b, stats.Features{"", true, 0, 0, 0, 64, 1, 1, false})
+	runStream(b, stats.Features{"", true, 0, 0, 0, 64, 1, 1, false, false})
 }
 
 func BenchmarkClientUnaryc512(b *testing.B) {
 	grpc.EnableTracing = true
-	runStream(b, stats.Features{"", true, 0, 0, 0, 512, 1, 1, false})
+	runStream(b, stats.Features{"", true, 0, 0, 0, 512, 1, 1, false, false})
 }
 
 func BenchmarkClientStreamNoTracec1(b *testing.B) {
 	grpc.EnableTracing = false
-	runStream(b, stats.Features{"", false, 0, 0, 0, 1, 1, 1, false})
+	runStream(b, stats.Features{"", false, 0, 0, 0, 1, 1, 1, false, false})
 }
 
 func BenchmarkClientStreamNoTracec8(b *testing.B) {
 	grpc.EnableTracing = false
-	runStream(b, stats.Features{"", false, 0, 0, 0, 8, 1, 1, false})
+	runStream(b, stats.Features{"", false, 0, 0, 0, 8, 1, 1, false, false})
 }
 
 func BenchmarkClientStreamNoTracec64(b *testing.B) {
 	grpc.EnableTracing = false
-	runStream(b, stats.Features{"", false, 0, 0, 0, 64, 1, 1, false})
+	runStream(b, stats.Features{"", false, 0, 0, 0, 64, 1, 1, false, false})
 }
 
 func BenchmarkClientStreamNoTracec512(b *testing.B) {
 	grpc.EnableTracing = false
-	runStream(b, stats.Features{"", false, 0, 0, 0, 512, 1, 1, false})
+	runStream(b, stats.Features{"", false, 0, 0, 0, 512, 1, 1, false, false})
 }
 func BenchmarkClientUnaryNoTracec1(b *testing.B) {
 	grpc.EnableTracing = false
-	runStream(b, stats.Features{"", false, 0, 0, 0, 1, 1, 1, false})
+	runStream(b, stats.Features{"", false, 0, 0, 0, 1, 1, 1, false, false})
 }
 
 func BenchmarkClientUnaryNoTracec8(b *testing.B) {
 	grpc.EnableTracing = false
-	runStream(b, stats.Features{"", false, 0, 0, 0, 8, 1, 1, false})
+	runStream(b, stats.Features{"", false, 0, 0, 0, 8, 1, 1, false, false})
 }
 
 func BenchmarkClientUnaryNoTracec64(b *testing.B) {
 	grpc.EnableTracing = false
-	runStream(b, stats.Features{"", false, 0, 0, 0, 64, 1, 1, false})
+	runStream(b, stats.Features{"", false, 0, 0, 0, 64, 1, 1, false, false})
 }
 
 func BenchmarkClientUnaryNoTracec512(b *testing.B) {
 	grpc.EnableTracing = false
-	runStream(b, stats.Features{"", false, 0, 0, 0, 512, 1, 1, false})
-	runStream(b, stats.Features{"", false, 0, 0, 0, 512, 1, 1, false})
+	runStream(b, stats.Features{"", false, 0, 0, 0, 512, 1, 1, false, false})
+	runStream(b, stats.Features{"", false, 0, 0, 0, 512, 1, 1, false, false})
 }
 
 func TestMain(m *testing.M) {

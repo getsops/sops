@@ -1,19 +1,22 @@
 machine:
   node:
-    version: 6.2.2
+    version: 10.0.0
   environment:
     SOURCE_MAP_SUPPORT: false
 
 dependencies:
   pre:
-    - cd /usr/local && sudo rm -rf go && curl https://storage.googleapis.com/golang/go1.10.linux-amd64.tar.gz | sudo tar -xz && sudo chmod a+w go/src/path/filepath
+    - cd /usr/local && sudo rm -rf go && curl https://storage.googleapis.com/golang/go1.11.linux-amd64.tar.gz | sudo tar -xz && sudo chmod a+w go/src/path/filepath
   post:
     - mv ./gopherjs $HOME/bin
     - npm install --global node-gyp
+    - npm install # install our (dev) dependencies from package.json
     - cd node-syscall && node-gyp rebuild && mkdir -p ~/.node_libraries/ && cp build/Release/syscall.node ~/.node_libraries/syscall.node
 
 test:
   override:
+    - go generate github.com/gopherjs/gopherjs/compiler/prelude
+    - diff -u <(echo -n) <(git status --porcelain)
     - diff -u <(echo -n) <(gofmt -d .)
     - go tool vet *.go                                                   # Go package in root directory.
     - for d in */; do echo $d; done | grep -v tests/ | grep -v third_party/ | xargs go tool vet # All subdirectories except "tests", "third_party".

@@ -1,4 +1,5 @@
-// Copyright 2014 Google Inc. All Rights Reserved.
+// Copyright 2014 Google LLC
+// Modified 2018 by Jonathan Amsterdam (jbamsterdam@gmail.com)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"sort"
 	"sync"
 	"testing"
 	"time"
@@ -98,8 +100,12 @@ func TestBTree(t *testing.T) {
 			}
 		}
 		for _, m := range perm(treeSize) {
-			if _, ok := tr.Set(m.Key, m.Value); !ok {
+			_, ok, idx := tr.SetWithIndex(m.Key, m.Value)
+			if !ok {
 				t.Fatal("set didn't find item", m)
+			}
+			if idx != m.Index {
+				t.Fatalf("got index %d, want %d", idx, m.Index)
 			}
 		}
 		mink, minv := tr.Min()
@@ -156,6 +162,26 @@ func TestGetWithIndex(t *testing.T) {
 	_, got := tr.GetWithIndex(100)
 	if want := -1; got != want {
 		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
+func TestSetWithIndex(t *testing.T) {
+	tr := New(4, less) // use a small degree to cover more cases
+	var contents []int
+	for _, m := range perm(100) {
+		_, _, idx := tr.SetWithIndex(m.Key, m.Value)
+		contents = append(contents, m.Index)
+		sort.Ints(contents)
+		want := -1
+		for i, c := range contents {
+			if c == m.Index {
+				want = i
+				break
+			}
+		}
+		if idx != want {
+			t.Fatalf("got %d, want %d", idx, want)
+		}
 	}
 }
 

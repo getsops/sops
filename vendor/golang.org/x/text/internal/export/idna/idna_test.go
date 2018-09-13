@@ -62,7 +62,7 @@ func TestProfiles(t *testing.T) {
 // doTest performs a single test f(input) and verifies that the output matches
 // out and that the returned error is expected. The errors string contains
 // all allowed error codes as categorized in
-// http://www.unicode.org/Public/idna/9.0.0/IdnaTest.txt:
+// https://www.unicode.org/Public/idna/9.0.0/IdnaTest.txt:
 // P: Processing
 // V: Validity
 // A: to ASCII

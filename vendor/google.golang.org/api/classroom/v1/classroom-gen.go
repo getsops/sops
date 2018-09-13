@@ -147,7 +147,6 @@ func NewCoursesService(s *Service) *CoursesService {
 	rs.CourseWork = NewCoursesCourseWorkService(s)
 	rs.Students = NewCoursesStudentsService(s)
 	rs.Teachers = NewCoursesTeachersService(s)
-	rs.Topics = NewCoursesTopicsService(s)
 	return rs
 }
 
@@ -163,8 +162,6 @@ type CoursesService struct {
 	Students *CoursesStudentsService
 
 	Teachers *CoursesTeachersService
-
-	Topics *CoursesTopicsService
 }
 
 func NewCoursesAliasesService(s *Service) *CoursesAliasesService {
@@ -221,15 +218,6 @@ func NewCoursesTeachersService(s *Service) *CoursesTeachersService {
 }
 
 type CoursesTeachersService struct {
-	s *Service
-}
-
-func NewCoursesTopicsService(s *Service) *CoursesTopicsService {
-	rs := &CoursesTopicsService{s: s}
-	return rs
-}
-
-type CoursesTopicsService struct {
 	s *Service
 }
 
@@ -1134,6 +1122,36 @@ func (s *CourseWork) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// CourseWorkChangesInfo: Information about a `Feed` with a `feed_type`
+// of `COURSE_WORK_CHANGES`.
+type CourseWorkChangesInfo struct {
+	// CourseId: The `course_id` of the course to subscribe to work changes
+	// for.
+	CourseId string `json:"courseId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "CourseId") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "CourseId") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *CourseWorkChangesInfo) MarshalJSON() ([]byte, error) {
+	type NoMethod CourseWorkChangesInfo
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // Date: Represents a whole calendar date, e.g. date of birth. The time
 // of day and
 // time zone are either specified elsewhere or are not significant. The
@@ -1153,7 +1171,9 @@ type Date struct {
 	// if specifying a year/month where the day is not significant.
 	Day int64 `json:"day,omitempty"`
 
-	// Month: Month of year. Must be from 1 to 12.
+	// Month: Month of year. Must be from 1 to 12, or 0 if specifying a date
+	// without a
+	// month.
 	Month int64 `json:"month,omitempty"`
 
 	// Year: Year of date. Must be from 1 to 9999, or 0 if specifying a date
@@ -1295,6 +1315,11 @@ type Feed struct {
 	// `COURSE_ROSTER_CHANGES`.
 	CourseRosterChangesInfo *CourseRosterChangesInfo `json:"courseRosterChangesInfo,omitempty"`
 
+	// CourseWorkChangesInfo: Information about a `Feed` with a `feed_type`
+	// of `COURSE_WORK_CHANGES`.
+	// This field must be specified if `feed_type` is `COURSE_WORK_CHANGES`.
+	CourseWorkChangesInfo *CourseWorkChangesInfo `json:"courseWorkChangesInfo,omitempty"`
+
 	// FeedType: The type of feed.
 	//
 	// Possible values:
@@ -1321,6 +1346,20 @@ type Feed struct {
 	// deleted, but notifications will be generated when a user joins a
 	// course
 	// by accepting an invitation.
+	//   "COURSE_WORK_CHANGES" - All course work activity for a particular
+	// course.
+	//
+	// Notifications will be generated when a CourseWork
+	// or
+	// StudentSubmission object is created or modified. No notification will
+	// be
+	// generated when a StudentSubmission object is created in connection
+	// with
+	// the creation or modification of its parent CourseWork object (but
+	// a
+	// notification will be generated for that CourseWork object's creation
+	// or
+	// modification).
 	FeedType string `json:"feedType,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g.
@@ -2109,43 +2148,6 @@ func (s *ListTeachersResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// ListTopicResponse: Response when listing topics.
-type ListTopicResponse struct {
-	// NextPageToken: Token identifying the next page of results to return.
-	// If empty, no further
-	// results are available.
-	NextPageToken string `json:"nextPageToken,omitempty"`
-
-	// Topic: Topic items that match the request.
-	Topic []*Topic `json:"topic,omitempty"`
-
-	// ServerResponse contains the HTTP response code and headers from the
-	// server.
-	googleapi.ServerResponse `json:"-"`
-
-	// ForceSendFields is a list of field names (e.g. "NextPageToken") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-
-	// NullFields is a list of field names (e.g. "NextPageToken") to include
-	// in API requests with the JSON null value. By default, fields with
-	// empty values are omitted from API requests. However, any field with
-	// an empty value appearing in NullFields will be sent to the server as
-	// null. It is an error if a field in this list has a non-empty value.
-	// This may be used to include null fields in Patch requests.
-	NullFields []string `json:"-"`
-}
-
-func (s *ListTopicResponse) MarshalJSON() ([]byte, error) {
-	type NoMethod ListTopicResponse
-	raw := NoMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
-}
-
 // Material: Material attached to course work.
 //
 // When creating attachments, setting the `form` field is not supported.
@@ -2450,7 +2452,7 @@ type ReclaimStudentSubmissionRequest struct {
 
 // Registration: An instruction to Classroom to send notifications from
 // the `feed` to the
-// provided `destination`.
+// provided destination.
 type Registration struct {
 	// CloudPubsubTopic: The Cloud Pub/Sub topic that notifications are to
 	// be sent to.
@@ -2464,7 +2466,7 @@ type Registration struct {
 
 	// Feed: Specification for the class of notifications that Classroom
 	// should deliver
-	// to the `destination`.
+	// to the destination.
 	Feed *Feed `json:"feed,omitempty"`
 
 	// RegistrationId: A server-generated unique identifier for this
@@ -2994,60 +2996,6 @@ func (s *TimeOfDay) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// Topic: Topic created by a teacher for the course
-type Topic struct {
-	// CourseId: Identifier of the course.
-	//
-	// Read-only.
-	CourseId string `json:"courseId,omitempty"`
-
-	// Name: The name of the topic, generated by the user.
-	// Leading and trailing whitespaces, if any, will be trimmed. Also,
-	// multiple
-	// consecutive whitespaces will be collapsed into one inside the
-	// name.
-	// Topic names are case sensitive, and must be no longer than 100
-	// characters.
-	Name string `json:"name,omitempty"`
-
-	// TopicId: Unique identifier for the topic.
-	//
-	// Read-only.
-	TopicId string `json:"topicId,omitempty"`
-
-	// UpdateTime: The time the topic was last updated by the
-	// system.
-	//
-	// Read-only.
-	UpdateTime string `json:"updateTime,omitempty"`
-
-	// ServerResponse contains the HTTP response code and headers from the
-	// server.
-	googleapi.ServerResponse `json:"-"`
-
-	// ForceSendFields is a list of field names (e.g. "CourseId") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-
-	// NullFields is a list of field names (e.g. "CourseId") to include in
-	// API requests with the JSON null value. By default, fields with empty
-	// values are omitted from API requests. However, any field with an
-	// empty value appearing in NullFields will be sent to the server as
-	// null. It is an error if a field in this list has a non-empty value.
-	// This may be used to include null fields in Patch requests.
-	NullFields []string `json:"-"`
-}
-
-func (s *Topic) MarshalJSON() ([]byte, error) {
-	type NoMethod Topic
-	raw := NoMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
-}
-
 // TurnInStudentSubmissionRequest: Request to turn in a student
 // submission.
 type TurnInStudentSubmissionRequest struct {
@@ -3234,6 +3182,7 @@ func (c *CoursesCreateCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3356,6 +3305,7 @@ func (c *CoursesDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{id}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -3501,6 +3451,7 @@ func (c *CoursesGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{id}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3713,6 +3664,7 @@ func (c *CoursesListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3931,6 +3883,7 @@ func (c *CoursesPatchCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{id}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -4080,6 +4033,7 @@ func (c *CoursesUpdateCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{id}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
@@ -4226,6 +4180,7 @@ func (c *CoursesAliasesCreateCall) doRequest(alt string) (*http.Response, error)
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/aliases")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4366,6 +4321,7 @@ func (c *CoursesAliasesDeleteCall) doRequest(alt string) (*http.Response, error)
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/aliases/{alias}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -4543,6 +4499,7 @@ func (c *CoursesAliasesListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/aliases")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4719,6 +4676,7 @@ func (c *CoursesAnnouncementsCreateCall) doRequest(alt string) (*http.Response, 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/announcements")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4866,6 +4824,7 @@ func (c *CoursesAnnouncementsDeleteCall) doRequest(alt string) (*http.Response, 
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/announcements/{id}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -5022,6 +4981,7 @@ func (c *CoursesAnnouncementsGetCall) doRequest(alt string) (*http.Response, err
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/announcements/{id}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -5234,6 +5194,7 @@ func (c *CoursesAnnouncementsListCall) doRequest(alt string) (*http.Response, er
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/announcements")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -5429,6 +5390,7 @@ func (c *CoursesAnnouncementsModifyAssigneesCall) doRequest(alt string) (*http.R
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/announcements/{id}:modifyAssignees")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5608,6 +5570,7 @@ func (c *CoursesAnnouncementsPatchCall) doRequest(alt string) (*http.Response, e
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/announcements/{id}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -5779,6 +5742,7 @@ func (c *CoursesCourseWorkCreateCall) doRequest(alt string) (*http.Response, err
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/courseWork")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5926,6 +5890,7 @@ func (c *CoursesCourseWorkDeleteCall) doRequest(alt string) (*http.Response, err
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/courseWork/{id}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -6082,6 +6047,7 @@ func (c *CoursesCourseWorkGetCall) doRequest(alt string) (*http.Response, error)
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/courseWork/{id}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -6298,6 +6264,7 @@ func (c *CoursesCourseWorkListCall) doRequest(alt string) (*http.Response, error
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/courseWork")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -6495,6 +6462,7 @@ func (c *CoursesCourseWorkModifyAssigneesCall) doRequest(alt string) (*http.Resp
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/courseWork/{id}:modifyAssignees")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -6693,6 +6661,7 @@ func (c *CoursesCourseWorkPatchCall) doRequest(alt string) (*http.Response, erro
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/courseWork/{id}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -6861,6 +6830,7 @@ func (c *CoursesCourseWorkStudentSubmissionsGetCall) doRequest(alt string) (*htt
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7106,6 +7076,7 @@ func (c *CoursesCourseWorkStudentSubmissionsListCall) doRequest(alt string) (*ht
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7339,6 +7310,7 @@ func (c *CoursesCourseWorkStudentSubmissionsModifyAttachmentsCall) doRequest(alt
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:modifyAttachments")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -7531,6 +7503,7 @@ func (c *CoursesCourseWorkStudentSubmissionsPatchCall) doRequest(alt string) (*h
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -7722,6 +7695,7 @@ func (c *CoursesCourseWorkStudentSubmissionsReclaimCall) doRequest(alt string) (
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:reclaim")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -7905,6 +7879,7 @@ func (c *CoursesCourseWorkStudentSubmissionsReturnCall) doRequest(alt string) (*
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:return")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -8085,6 +8060,7 @@ func (c *CoursesCourseWorkStudentSubmissionsTurnInCall) doRequest(alt string) (*
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:turnIn")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -8262,6 +8238,7 @@ func (c *CoursesStudentsCreateCall) doRequest(alt string) (*http.Response, error
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/students")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -8407,6 +8384,7 @@ func (c *CoursesStudentsDeleteCall) doRequest(alt string) (*http.Response, error
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/students/{userId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -8564,6 +8542,7 @@ func (c *CoursesStudentsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/students/{userId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8741,6 +8720,7 @@ func (c *CoursesStudentsListCall) doRequest(alt string) (*http.Response, error) 
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/students")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8924,6 +8904,7 @@ func (c *CoursesTeachersCreateCall) doRequest(alt string) (*http.Response, error
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/teachers")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -9067,6 +9048,7 @@ func (c *CoursesTeachersDeleteCall) doRequest(alt string) (*http.Response, error
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/teachers/{userId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -9224,6 +9206,7 @@ func (c *CoursesTeachersGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/teachers/{userId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -9401,6 +9384,7 @@ func (c *CoursesTeachersListCall) doRequest(alt string) (*http.Response, error) 
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/teachers")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -9510,371 +9494,6 @@ func (c *CoursesTeachersListCall) Pages(ctx context.Context, f func(*ListTeacher
 	}
 }
 
-// method id "classroom.courses.topics.get":
-
-type CoursesTopicsGetCall struct {
-	s            *Service
-	courseId     string
-	id           string
-	urlParams_   gensupport.URLParams
-	ifNoneMatch_ string
-	ctx_         context.Context
-	header_      http.Header
-}
-
-// Get: Returns a topic.
-//
-// This method returns the following error codes:
-//
-// * `PERMISSION_DENIED` if the requesting user is not permitted to
-// access the
-// requested course or topic, or for access errors.
-// * `INVALID_ARGUMENT` if the request is malformed.
-// * `NOT_FOUND` if the requested course or topic does not exist.
-func (r *CoursesTopicsService) Get(courseId string, id string) *CoursesTopicsGetCall {
-	c := &CoursesTopicsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.courseId = courseId
-	c.id = id
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *CoursesTopicsGetCall) Fields(s ...googleapi.Field) *CoursesTopicsGetCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// IfNoneMatch sets the optional parameter which makes the operation
-// fail if the object's ETag matches the given value. This is useful for
-// getting updates only after the object has changed since the last
-// request. Use googleapi.IsNotModified to check whether the response
-// error from Do is the result of In-None-Match.
-func (c *CoursesTopicsGetCall) IfNoneMatch(entityTag string) *CoursesTopicsGetCall {
-	c.ifNoneMatch_ = entityTag
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *CoursesTopicsGetCall) Context(ctx context.Context) *CoursesTopicsGetCall {
-	c.ctx_ = ctx
-	return c
-}
-
-// Header returns an http.Header that can be modified by the caller to
-// add HTTP headers to the request.
-func (c *CoursesTopicsGetCall) Header() http.Header {
-	if c.header_ == nil {
-		c.header_ = make(http.Header)
-	}
-	return c.header_
-}
-
-func (c *CoursesTopicsGetCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	for k, v := range c.header_ {
-		reqHeaders[k] = v
-	}
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	if c.ifNoneMatch_ != "" {
-		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
-	}
-	var body io.Reader = nil
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/topics/{id}")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("GET", urls, body)
-	req.Header = reqHeaders
-	googleapi.Expand(req.URL, map[string]string{
-		"courseId": c.courseId,
-		"id":       c.id,
-	})
-	return gensupport.SendRequest(c.ctx_, c.s.client, req)
-}
-
-// Do executes the "classroom.courses.topics.get" call.
-// Exactly one of *Topic or error will be non-nil. Any non-2xx status
-// code is an error. Response headers are in either
-// *Topic.ServerResponse.Header or (if a response was returned at all)
-// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
-// check whether the returned error was because http.StatusNotModified
-// was returned.
-func (c *CoursesTopicsGetCall) Do(opts ...googleapi.CallOption) (*Topic, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &Topic{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := gensupport.DecodeResponse(target, res); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Returns a topic.\n\nThis method returns the following error codes:\n\n* `PERMISSION_DENIED` if the requesting user is not permitted to access the\nrequested course or topic, or for access errors.\n* `INVALID_ARGUMENT` if the request is malformed.\n* `NOT_FOUND` if the requested course or topic does not exist.",
-	//   "flatPath": "v1/courses/{courseId}/topics/{id}",
-	//   "httpMethod": "GET",
-	//   "id": "classroom.courses.topics.get",
-	//   "parameterOrder": [
-	//     "courseId",
-	//     "id"
-	//   ],
-	//   "parameters": {
-	//     "courseId": {
-	//       "description": "Identifier of the course.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "id": {
-	//       "description": "Identifier of the topic.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v1/courses/{courseId}/topics/{id}",
-	//   "response": {
-	//     "$ref": "Topic"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/classroom.coursework.me",
-	//     "https://www.googleapis.com/auth/classroom.coursework.me.readonly",
-	//     "https://www.googleapis.com/auth/classroom.coursework.students",
-	//     "https://www.googleapis.com/auth/classroom.coursework.students.readonly"
-	//   ]
-	// }
-
-}
-
-// method id "classroom.courses.topics.list":
-
-type CoursesTopicsListCall struct {
-	s            *Service
-	courseId     string
-	urlParams_   gensupport.URLParams
-	ifNoneMatch_ string
-	ctx_         context.Context
-	header_      http.Header
-}
-
-// List: Returns the list of topics that the requester is permitted to
-// view.
-//
-// This method returns the following error codes:
-//
-// * `PERMISSION_DENIED` if the requesting user is not permitted to
-// access
-// the requested course or for access errors.
-// * `INVALID_ARGUMENT` if the request is malformed.
-// * `NOT_FOUND` if the requested course does not exist.
-func (r *CoursesTopicsService) List(courseId string) *CoursesTopicsListCall {
-	c := &CoursesTopicsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.courseId = courseId
-	return c
-}
-
-// PageSize sets the optional parameter "pageSize": Maximum number of
-// items to return. Zero or unspecified indicates that the
-// server may assign a maximum.
-//
-// The server may return fewer than the specified number of results.
-func (c *CoursesTopicsListCall) PageSize(pageSize int64) *CoursesTopicsListCall {
-	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
-	return c
-}
-
-// PageToken sets the optional parameter "pageToken":
-// nextPageToken
-// value returned from a previous
-// list call,
-// indicating that the subsequent page of results should be
-// returned.
-//
-// The list request
-// must be otherwise identical to the one that resulted in this token.
-func (c *CoursesTopicsListCall) PageToken(pageToken string) *CoursesTopicsListCall {
-	c.urlParams_.Set("pageToken", pageToken)
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *CoursesTopicsListCall) Fields(s ...googleapi.Field) *CoursesTopicsListCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// IfNoneMatch sets the optional parameter which makes the operation
-// fail if the object's ETag matches the given value. This is useful for
-// getting updates only after the object has changed since the last
-// request. Use googleapi.IsNotModified to check whether the response
-// error from Do is the result of In-None-Match.
-func (c *CoursesTopicsListCall) IfNoneMatch(entityTag string) *CoursesTopicsListCall {
-	c.ifNoneMatch_ = entityTag
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *CoursesTopicsListCall) Context(ctx context.Context) *CoursesTopicsListCall {
-	c.ctx_ = ctx
-	return c
-}
-
-// Header returns an http.Header that can be modified by the caller to
-// add HTTP headers to the request.
-func (c *CoursesTopicsListCall) Header() http.Header {
-	if c.header_ == nil {
-		c.header_ = make(http.Header)
-	}
-	return c.header_
-}
-
-func (c *CoursesTopicsListCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	for k, v := range c.header_ {
-		reqHeaders[k] = v
-	}
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	if c.ifNoneMatch_ != "" {
-		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
-	}
-	var body io.Reader = nil
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/courses/{courseId}/topics")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("GET", urls, body)
-	req.Header = reqHeaders
-	googleapi.Expand(req.URL, map[string]string{
-		"courseId": c.courseId,
-	})
-	return gensupport.SendRequest(c.ctx_, c.s.client, req)
-}
-
-// Do executes the "classroom.courses.topics.list" call.
-// Exactly one of *ListTopicResponse or error will be non-nil. Any
-// non-2xx status code is an error. Response headers are in either
-// *ListTopicResponse.ServerResponse.Header or (if a response was
-// returned at all) in error.(*googleapi.Error).Header. Use
-// googleapi.IsNotModified to check whether the returned error was
-// because http.StatusNotModified was returned.
-func (c *CoursesTopicsListCall) Do(opts ...googleapi.CallOption) (*ListTopicResponse, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &ListTopicResponse{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := gensupport.DecodeResponse(target, res); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Returns the list of topics that the requester is permitted to view.\n\nThis method returns the following error codes:\n\n* `PERMISSION_DENIED` if the requesting user is not permitted to access\nthe requested course or for access errors.\n* `INVALID_ARGUMENT` if the request is malformed.\n* `NOT_FOUND` if the requested course does not exist.",
-	//   "flatPath": "v1/courses/{courseId}/topics",
-	//   "httpMethod": "GET",
-	//   "id": "classroom.courses.topics.list",
-	//   "parameterOrder": [
-	//     "courseId"
-	//   ],
-	//   "parameters": {
-	//     "courseId": {
-	//       "description": "Identifier of the course.\nThis identifier can be either the Classroom-assigned identifier or an\nalias.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "pageSize": {
-	//       "description": "Maximum number of items to return. Zero or unspecified indicates that the\nserver may assign a maximum.\n\nThe server may return fewer than the specified number of results.",
-	//       "format": "int32",
-	//       "location": "query",
-	//       "type": "integer"
-	//     },
-	//     "pageToken": {
-	//       "description": "nextPageToken\nvalue returned from a previous\nlist call,\nindicating that the subsequent page of results should be returned.\n\nThe list request\nmust be otherwise identical to the one that resulted in this token.",
-	//       "location": "query",
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v1/courses/{courseId}/topics",
-	//   "response": {
-	//     "$ref": "ListTopicResponse"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/classroom.coursework.me",
-	//     "https://www.googleapis.com/auth/classroom.coursework.me.readonly",
-	//     "https://www.googleapis.com/auth/classroom.coursework.students",
-	//     "https://www.googleapis.com/auth/classroom.coursework.students.readonly"
-	//   ]
-	// }
-
-}
-
-// Pages invokes f for each page of results.
-// A non-nil error returned from f will halt the iteration.
-// The provided context supersedes any context provided to the Context method.
-func (c *CoursesTopicsListCall) Pages(ctx context.Context, f func(*ListTopicResponse) error) error {
-	c.ctx_ = ctx
-	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
-	for {
-		x, err := c.Do()
-		if err != nil {
-			return err
-		}
-		if err := f(x); err != nil {
-			return err
-		}
-		if x.NextPageToken == "" {
-			return nil
-		}
-		c.PageToken(x.NextPageToken)
-	}
-}
-
 // method id "classroom.invitations.accept":
 
 type InvitationsAcceptCall struct {
@@ -9941,6 +9560,7 @@ func (c *InvitationsAcceptCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/invitations/{id}:accept")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -10085,6 +9705,7 @@ func (c *InvitationsCreateCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/invitations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -10207,6 +9828,7 @@ func (c *InvitationsDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/invitations/{id}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -10352,6 +9974,7 @@ func (c *InvitationsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/invitations/{id}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -10541,6 +10164,7 @@ func (c *InvitationsListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/invitations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -10659,7 +10283,8 @@ type RegistrationsCreateCall struct {
 
 // Create: Creates a `Registration`, causing Classroom to start sending
 // notifications
-// from the provided `feed` to the provided `destination`.
+// from the provided `feed` to the destination provided in
+// `cloudPubSubTopic`.
 //
 // Returns the created `Registration`. Currently, this will be the same
 // as
@@ -10671,11 +10296,11 @@ type RegistrationsCreateCall struct {
 // will be
 // ignored.
 //
-// While Classroom may validate the `destination` and return errors on a
-// best
-// effort basis, it is the caller's responsibility to ensure that it
-// exists
-// and that Classroom has permission to publish to it.
+// While Classroom may validate the `cloudPubSubTopic` and return errors
+// on a
+// best effort basis, it is the caller's responsibility to ensure that
+// it
+// exists and that Classroom has permission to publish to it.
 //
 // This method may return the following error codes:
 //
@@ -10683,21 +10308,20 @@ type RegistrationsCreateCall struct {
 //     * the authenticated user does not have permission to receive
 //       notifications from the requested field; or
 //     * the credential provided does not include the appropriate scope
-// for the
-//       requested feed.
+// for
+//       the requested feed.
 //     * another access error is encountered.
 // * `INVALID_ARGUMENT` if:
-//     * no `destination` is specified, or the specified `destination`
-// is not
-//       valid; or
+//     * no `cloudPubsubTopic` is specified, or the specified
+//       `cloudPubsubTopic` is not valid; or
 //     * no `feed` is specified, or the specified `feed` is not valid.
 // * `NOT_FOUND` if:
 //     * the specified `feed` cannot be located, or the requesting user
-// does not
-//       have permission to determine whether or not it exists; or
-//     * the specified `destination` cannot be located, or Classroom has
-// not
-//       been granted permission to publish to it.
+// does
+//       not have permission to determine whether or not it exists; or
+//     * the specified `cloudPubsubTopic` cannot be located, or
+// Classroom has
+//       not been granted permission to publish to it.
 func (r *RegistrationsService) Create(registration *Registration) *RegistrationsCreateCall {
 	c := &RegistrationsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.registration = registration
@@ -10742,6 +10366,7 @@ func (c *RegistrationsCreateCall) doRequest(alt string) (*http.Response, error) 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/registrations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -10787,7 +10412,7 @@ func (c *RegistrationsCreateCall) Do(opts ...googleapi.CallOption) (*Registratio
 	}
 	return ret, nil
 	// {
-	//   "description": "Creates a `Registration`, causing Classroom to start sending notifications\nfrom the provided `feed` to the provided `destination`.\n\nReturns the created `Registration`. Currently, this will be the same as\nthe argument, but with server-assigned fields such as `expiry_time` and\n`id` filled in.\n\nNote that any value specified for the `expiry_time` or `id` fields will be\nignored.\n\nWhile Classroom may validate the `destination` and return errors on a best\neffort basis, it is the caller's responsibility to ensure that it exists\nand that Classroom has permission to publish to it.\n\nThis method may return the following error codes:\n\n* `PERMISSION_DENIED` if:\n    * the authenticated user does not have permission to receive\n      notifications from the requested field; or\n    * the credential provided does not include the appropriate scope for the\n      requested feed.\n    * another access error is encountered.\n* `INVALID_ARGUMENT` if:\n    * no `destination` is specified, or the specified `destination` is not\n      valid; or\n    * no `feed` is specified, or the specified `feed` is not valid.\n* `NOT_FOUND` if:\n    * the specified `feed` cannot be located, or the requesting user does not\n      have permission to determine whether or not it exists; or\n    * the specified `destination` cannot be located, or Classroom has not\n      been granted permission to publish to it.",
+	//   "description": "Creates a `Registration`, causing Classroom to start sending notifications\nfrom the provided `feed` to the destination provided in `cloudPubSubTopic`.\n\nReturns the created `Registration`. Currently, this will be the same as\nthe argument, but with server-assigned fields such as `expiry_time` and\n`id` filled in.\n\nNote that any value specified for the `expiry_time` or `id` fields will be\nignored.\n\nWhile Classroom may validate the `cloudPubSubTopic` and return errors on a\nbest effort basis, it is the caller's responsibility to ensure that it\nexists and that Classroom has permission to publish to it.\n\nThis method may return the following error codes:\n\n* `PERMISSION_DENIED` if:\n    * the authenticated user does not have permission to receive\n      notifications from the requested field; or\n    * the credential provided does not include the appropriate scope for\n      the requested feed.\n    * another access error is encountered.\n* `INVALID_ARGUMENT` if:\n    * no `cloudPubsubTopic` is specified, or the specified\n      `cloudPubsubTopic` is not valid; or\n    * no `feed` is specified, or the specified `feed` is not valid.\n* `NOT_FOUND` if:\n    * the specified `feed` cannot be located, or the requesting user does\n      not have permission to determine whether or not it exists; or\n    * the specified `cloudPubsubTopic` cannot be located, or Classroom has\n      not been granted permission to publish to it.",
 	//   "flatPath": "v1/registrations",
 	//   "httpMethod": "POST",
 	//   "id": "classroom.registrations.create",
@@ -10801,9 +10426,7 @@ func (c *RegistrationsCreateCall) Do(opts ...googleapi.CallOption) (*Registratio
 	//     "$ref": "Registration"
 	//   },
 	//   "scopes": [
-	//     "https://www.googleapis.com/auth/classroom.push-notifications",
-	//     "https://www.googleapis.com/auth/classroom.rosters",
-	//     "https://www.googleapis.com/auth/classroom.rosters.readonly"
+	//     "https://www.googleapis.com/auth/classroom.push-notifications"
 	//   ]
 	// }
 
@@ -10861,6 +10484,7 @@ func (c *RegistrationsDeleteCall) doRequest(alt string) (*http.Response, error) 
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/registrations/{registrationId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -10929,9 +10553,7 @@ func (c *RegistrationsDeleteCall) Do(opts ...googleapi.CallOption) (*Empty, erro
 	//     "$ref": "Empty"
 	//   },
 	//   "scopes": [
-	//     "https://www.googleapis.com/auth/classroom.push-notifications",
-	//     "https://www.googleapis.com/auth/classroom.rosters",
-	//     "https://www.googleapis.com/auth/classroom.rosters.readonly"
+	//     "https://www.googleapis.com/auth/classroom.push-notifications"
 	//   ]
 	// }
 
@@ -11009,6 +10631,7 @@ func (c *UserProfilesGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/userProfiles/{userId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -11188,6 +10811,7 @@ func (c *UserProfilesGuardianInvitationsCreateCall) doRequest(alt string) (*http
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/userProfiles/{studentId}/guardianInvitations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -11350,6 +10974,7 @@ func (c *UserProfilesGuardianInvitationsGetCall) doRequest(alt string) (*http.Re
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/userProfiles/{studentId}/guardianInvitations/{invitationId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -11567,6 +11192,7 @@ func (c *UserProfilesGuardianInvitationsListCall) doRequest(alt string) (*http.R
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/userProfiles/{studentId}/guardianInvitations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -11791,6 +11417,7 @@ func (c *UserProfilesGuardianInvitationsPatchCall) doRequest(alt string) (*http.
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/userProfiles/{studentId}/guardianInvitations/{invitationId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -11958,6 +11585,7 @@ func (c *UserProfilesGuardiansDeleteCall) doRequest(alt string) (*http.Response,
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/userProfiles/{studentId}/guardians/{guardianId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -12127,6 +11755,7 @@ func (c *UserProfilesGuardiansGetCall) doRequest(alt string) (*http.Response, er
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/userProfiles/{studentId}/guardians/{guardianId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -12339,6 +11968,7 @@ func (c *UserProfilesGuardiansListCall) doRequest(alt string) (*http.Response, e
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/userProfiles/{studentId}/guardians")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)

@@ -18,7 +18,7 @@
   "description": "Accesses AdSense publishers' inventory and generates performance reports.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/adsense/management/",
-  "etag": "\"-iA1DTNe4s-I6JZXPt1t1Ypy8IU/8_GH3r5fzMK8tmgovIuz_n7J2kU\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/dfix3ZHBvAnIueNNH7PxNzmvJeE\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/adsense-16.png",
     "x32": "https://www.google.com/images/icons/product/adsense-32.png"
@@ -65,12 +65,12 @@
       "type": "boolean"
     },
     "quotaUser": {
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+      "description": "An opaque string that represents a user for quota purposes. Must not exceed 40 characters.",
       "location": "query",
       "type": "string"
     },
     "userIp": {
-      "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+      "description": "Deprecated. Please use quotaUser instead.",
       "location": "query",
       "type": "string"
     }
@@ -140,6 +140,37 @@
       "resources": {
         "adclients": {
           "methods": {
+            "getAdCode": {
+              "description": "Get Auto ad code for a given ad client.",
+              "httpMethod": "GET",
+              "id": "adsense.accounts.adclients.getAdCode",
+              "parameterOrder": [
+                "accountId",
+                "adClientId"
+              ],
+              "parameters": {
+                "accountId": {
+                  "description": "Account which contains the ad client.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                },
+                "adClientId": {
+                  "description": "Ad client to get the code for.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "accounts/{accountId}/adclients/{adClientId}/adcode",
+              "response": {
+                "$ref": "AdCode"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/adsense",
+                "https://www.googleapis.com/auth/adsense.readonly"
+              ]
+            },
             "list": {
               "description": "List all ad clients in the specified account.",
               "httpMethod": "GET",
@@ -1624,7 +1655,6 @@
       }
     }
   },
-  "revision": "20180204",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Account": {
@@ -1748,7 +1778,15 @@
       "id": "AdCode",
       "properties": {
         "adCode": {
-          "description": "The ad code snippet.",
+          "description": "The Auto ad code snippet. The ad code snippet.",
+          "type": "string"
+        },
+        "ampBody": {
+          "description": "The AMP Auto ad code snippet that goes in the body of an AMP page.",
+          "type": "string"
+        },
+        "ampHead": {
+          "description": "The AMP Auto ad code snippet that goes in the head of an AMP page.",
           "type": "string"
         },
         "kind": {

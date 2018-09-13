@@ -1,5 +1,7 @@
 // Package spanner provides access to the Cloud Spanner API.
 //
+// This package is DEPRECATED. Use package cloud.google.com/go/spanner instead.
+//
 // See https://cloud.google.com/spanner/
 //
 // Usage example:
@@ -192,6 +194,15 @@ func (s *BeginTransactionRequest) MarshalJSON() ([]byte, error) {
 
 // Binding: Associates `members` with a `role`.
 type Binding struct {
+	// Condition: Unimplemented. The condition that is associated with this
+	// binding.
+	// NOTE: an unsatisfied condition will not allow user access via
+	// current
+	// binding. Different bindings, including their conditions, are
+	// examined
+	// independently.
+	Condition *Expr `json:"condition,omitempty"`
+
 	// Members: Specifies the identities requesting access for a Cloud
 	// Platform resource.
 	// `members` can have the following values:
@@ -206,7 +217,7 @@ type Binding struct {
 	//
 	// * `user:{emailid}`: An email address that represents a specific
 	// Google
-	//    account. For example, `alice@gmail.com` or `joe@example.com`.
+	//    account. For example, `alice@gmail.com` .
 	//
 	//
 	// * `serviceAccount:{emailid}`: An email address that represents a
@@ -228,12 +239,10 @@ type Binding struct {
 	Members []string `json:"members,omitempty"`
 
 	// Role: Role that is assigned to `members`.
-	// For example, `roles/viewer`, `roles/editor`, or
-	// `roles/owner`.
-	// Required
+	// For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
 	Role string `json:"role,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "Members") to
+	// ForceSendFields is a list of field names (e.g. "Condition") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -241,7 +250,7 @@ type Binding struct {
 	// used to include empty fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "Members") to include in
+	// NullFields is a list of field names (e.g. "Condition") to include in
 	// API requests with the JSON null value. By default, fields with empty
 	// values are omitted from API requests. However, any field with an
 	// empty value appearing in NullFields will be sent to the server as
@@ -688,13 +697,13 @@ type ExecuteSqlRequest struct {
 	// of type `STRING` both appear in params as JSON strings.
 	//
 	// In these cases, `param_types` can be used to specify the exact
-	// SQL type for some or all of the SQL query parameters. See
+	// SQL type for some or all of the SQL statement parameters. See
 	// the
 	// definition of Type for more information
 	// about SQL types.
 	ParamTypes map[string]Type `json:"paramTypes,omitempty"`
 
-	// Params: The SQL query string can contain parameter placeholders. A
+	// Params: The SQL string can contain parameter placeholders. A
 	// parameter
 	// placeholder consists of `'@'` followed by the parameter
 	// name. Parameter names consist of any combination of letters,
@@ -705,7 +714,7 @@ type ExecuteSqlRequest struct {
 	// parameter name can be used more than once, for example:
 	//   "WHERE id > @msg_id AND id < @msg_id + 100"
 	//
-	// It is an error to execute an SQL query with unbound
+	// It is an error to execute an SQL statement with unbound
 	// parameters.
 	//
 	// Parameter values are specified using `params`, which is a JSON
@@ -729,30 +738,29 @@ type ExecuteSqlRequest struct {
 	// be set to QueryMode.NORMAL.
 	//
 	// Possible values:
-	//   "NORMAL" - The default mode where only the query result, without
-	// any information
-	// about the query plan is returned.
-	//   "PLAN" - This mode returns only the query plan, without any result
-	// rows or
+	//   "NORMAL" - The default mode. Only the statement results are
+	// returned.
+	//   "PLAN" - This mode returns only the query plan, without any results
+	// or
 	// execution statistics information.
 	//   "PROFILE" - This mode returns both the query plan and the execution
 	// statistics along
-	// with the result rows.
+	// with the results.
 	QueryMode string `json:"queryMode,omitempty"`
 
 	// ResumeToken: If this request is resuming a previously interrupted SQL
-	// query
+	// statement
 	// execution, `resume_token` should be copied from the
 	// last
 	// PartialResultSet yielded before the interruption. Doing this
-	// enables the new SQL query execution to resume where the last one
+	// enables the new SQL statement execution to resume where the last one
 	// left
 	// off. The rest of the request parameters must exactly match
 	// the
 	// request that yielded this token.
 	ResumeToken string `json:"resumeToken,omitempty"`
 
-	// Sql: Required. The SQL query string.
+	// Sql: Required. The SQL string.
 	Sql string `json:"sql,omitempty"`
 
 	// Transaction: The transaction to use. If none is provided, the default
@@ -779,6 +787,60 @@ type ExecuteSqlRequest struct {
 
 func (s *ExecuteSqlRequest) MarshalJSON() ([]byte, error) {
 	type NoMethod ExecuteSqlRequest
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// Expr: Represents an expression text. Example:
+//
+//     title: "User account presence"
+//     description: "Determines whether the request has a user account"
+//     expression: "size(request.user) > 0"
+type Expr struct {
+	// Description: An optional description of the expression. This is a
+	// longer text which
+	// describes the expression, e.g. when hovered over it in a UI.
+	Description string `json:"description,omitempty"`
+
+	// Expression: Textual representation of an expression in
+	// Common Expression Language syntax.
+	//
+	// The application context of the containing message determines
+	// which
+	// well-known feature set of CEL is supported.
+	Expression string `json:"expression,omitempty"`
+
+	// Location: An optional string indicating the location of the
+	// expression for error
+	// reporting, e.g. a file name and a position in the file.
+	Location string `json:"location,omitempty"`
+
+	// Title: An optional title for the expression, i.e. a short string
+	// describing
+	// its purpose. This can be used e.g. in UIs which allow to enter
+	// the
+	// expression.
+	Title string `json:"title,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Description") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Description") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *Expr) MarshalJSON() ([]byte, error) {
+	type NoMethod Expr
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -1561,7 +1623,7 @@ type PartialResultSet struct {
 	// same session invalidates the token.
 	ResumeToken string `json:"resumeToken,omitempty"`
 
-	// Stats: Query plan and execution statistics for the query that
+	// Stats: Query plan and execution statistics for the statement that
 	// produced this
 	// streaming result set. These can be requested by
 	// setting
@@ -2033,7 +2095,7 @@ func (s *PlanNode) MarshalJSON() ([]byte, error) {
 // specify access control policies for Cloud Platform resources.
 //
 //
-// A `Policy` consists of a list of `bindings`. A `Binding` binds a list
+// A `Policy` consists of a list of `bindings`. A `binding` binds a list
 // of
 // `members` to a `role`, where the members can be user accounts, Google
 // groups,
@@ -2041,7 +2103,7 @@ func (s *PlanNode) MarshalJSON() ([]byte, error) {
 // permissions
 // defined by IAM.
 //
-// **Example**
+// **JSON Example**
 //
 //     {
 //       "bindings": [
@@ -2052,7 +2114,7 @@ func (s *PlanNode) MarshalJSON() ([]byte, error) {
 //             "group:admins@example.com",
 //             "domain:google.com",
 //
-// "serviceAccount:my-other-app@appspot.gserviceaccount.com",
+// "serviceAccount:my-other-app@appspot.gserviceaccount.com"
 //           ]
 //         },
 //         {
@@ -2061,6 +2123,20 @@ func (s *PlanNode) MarshalJSON() ([]byte, error) {
 //         }
 //       ]
 //     }
+//
+// **YAML Example**
+//
+//     bindings:
+//     - members:
+//       - user:mike@example.com
+//       - group:admins@example.com
+//       - domain:google.com
+//       - serviceAccount:my-other-app@appspot.gserviceaccount.com
+//       role: roles/owner
+//     - members:
+//       - user:sean@example.com
+//       role: roles/viewer
+//
 //
 // For a description of IAM and its features, see the
 // [IAM developer's guide](https://cloud.google.com/iam/docs).
@@ -2365,9 +2441,9 @@ type ResultSet struct {
 	// here.
 	Rows [][]interface{} `json:"rows,omitempty"`
 
-	// Stats: Query plan and execution statistics for the query that
-	// produced this
-	// result set. These can be requested by
+	// Stats: Query plan and execution statistics for the SQL statement
+	// that
+	// produced this result set. These can be requested by
 	// setting
 	// ExecuteSqlRequest.query_mode.
 	Stats *ResultSetStats `json:"stats,omitempty"`
@@ -2944,6 +3020,7 @@ func (s *Transaction) MarshalJSON() ([]byte, error) {
 //      read at timestamps in the past. Snapshot read-only
 //      transactions do not need to be committed.
 //
+//
 // For transactions that only read, snapshot read-only
 // transactions
 // provide simpler semantics and are almost always faster.
@@ -3209,7 +3286,10 @@ func (s *Transaction) MarshalJSON() ([]byte, error) {
 // whose
 // timestamp become too old while executing. Reads and SQL queries
 // with
-// too-old read timestamps fail with the error `FAILED_PRECONDITION`.
+// too-old read timestamps fail with the error
+// `FAILED_PRECONDITION`.
+//
+// ##
 type TransactionOptions struct {
 	// ReadOnly: Transaction will not write.
 	//
@@ -3317,6 +3397,14 @@ type Type struct {
 	//   "TIMESTAMP" - Encoded as `string` in RFC 3339 timestamp format. The
 	// time zone
 	// must be present, and must be "Z".
+	//
+	// If the schema has the column option
+	// `allow_commit_timestamp=true`, the placeholder
+	// string
+	// "spanner.commit_timestamp()" can be used to instruct the system
+	// to insert the commit timestamp associated with the
+	// transaction
+	// commit.
 	//   "DATE" - Encoded as `string` in RFC 3339 date format.
 	//   "STRING" - Encoded as `string`.
 	//   "BYTES" - Encoded as a base64-encoded `string`, as described in RFC
@@ -3677,6 +3765,7 @@ func (c *ProjectsInstanceConfigsGetCall) doRequest(alt string) (*http.Response, 
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3835,6 +3924,7 @@ func (c *ProjectsInstanceConfigsListCall) doRequest(alt string) (*http.Response,
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/instanceConfigs")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4040,6 +4130,7 @@ func (c *ProjectsInstancesCreateCall) doRequest(alt string) (*http.Response, err
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/instances")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4180,6 +4271,7 @@ func (c *ProjectsInstancesDeleteCall) doRequest(alt string) (*http.Response, err
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -4320,6 +4412,7 @@ func (c *ProjectsInstancesGetCall) doRequest(alt string) (*http.Response, error)
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4459,6 +4552,7 @@ func (c *ProjectsInstancesGetIamPolicyCall) doRequest(alt string) (*http.Respons
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+resource}:getIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4647,6 +4741,7 @@ func (c *ProjectsInstancesListCall) doRequest(alt string) (*http.Response, error
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/instances")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4865,6 +4960,7 @@ func (c *ProjectsInstancesPatchCall) doRequest(alt string) (*http.Response, erro
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -5006,6 +5102,7 @@ func (c *ProjectsInstancesSetIamPolicyCall) doRequest(alt string) (*http.Respons
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+resource}:setIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5151,6 +5248,7 @@ func (c *ProjectsInstancesTestIamPermissionsCall) doRequest(alt string) (*http.R
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+resource}:testIamPermissions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5296,6 +5394,7 @@ func (c *ProjectsInstancesDatabasesCreateCall) doRequest(alt string) (*http.Resp
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/databases")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5425,6 +5524,7 @@ func (c *ProjectsInstancesDatabasesDropDatabaseCall) doRequest(alt string) (*htt
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+database}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -5565,6 +5665,7 @@ func (c *ProjectsInstancesDatabasesGetCall) doRequest(alt string) (*http.Respons
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -5709,6 +5810,7 @@ func (c *ProjectsInstancesDatabasesGetDdlCall) doRequest(alt string) (*http.Resp
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+database}/ddl")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -5849,6 +5951,7 @@ func (c *ProjectsInstancesDatabasesGetIamPolicyCall) doRequest(alt string) (*htt
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+resource}:getIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -6009,6 +6112,7 @@ func (c *ProjectsInstancesDatabasesListCall) doRequest(alt string) (*http.Respon
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/databases")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -6180,6 +6284,7 @@ func (c *ProjectsInstancesDatabasesSetIamPolicyCall) doRequest(alt string) (*htt
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+resource}:setIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -6325,6 +6430,7 @@ func (c *ProjectsInstancesDatabasesTestIamPermissionsCall) doRequest(alt string)
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+resource}:testIamPermissions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -6470,6 +6576,7 @@ func (c *ProjectsInstancesDatabasesUpdateDdlCall) doRequest(alt string) (*http.R
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+database}/ddl")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -6616,6 +6723,7 @@ func (c *ProjectsInstancesDatabasesOperationsCancelCall) doRequest(alt string) (
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:cancel")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -6748,6 +6856,7 @@ func (c *ProjectsInstancesDatabasesOperationsDeleteCall) doRequest(alt string) (
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -6892,6 +7001,7 @@ func (c *ProjectsInstancesDatabasesOperationsGetCall) doRequest(alt string) (*ht
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7069,6 +7179,7 @@ func (c *ProjectsInstancesDatabasesOperationsListCall) doRequest(alt string) (*h
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7243,6 +7354,7 @@ func (c *ProjectsInstancesDatabasesSessionsBeginTransactionCall) doRequest(alt s
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+session}:beginTransaction")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -7390,6 +7502,7 @@ func (c *ProjectsInstancesDatabasesSessionsCommitCall) doRequest(alt string) (*h
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+session}:commit")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -7556,6 +7669,7 @@ func (c *ProjectsInstancesDatabasesSessionsCreateCall) doRequest(alt string) (*h
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+database}/sessions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -7686,6 +7800,7 @@ func (c *ProjectsInstancesDatabasesSessionsDeleteCall) doRequest(alt string) (*h
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -7773,13 +7888,13 @@ type ProjectsInstancesDatabasesSessionsExecuteSqlCall struct {
 	header_           http.Header
 }
 
-// ExecuteSql: Executes an SQL query, returning all rows in a single
-// reply. This
+// ExecuteSql: Executes an SQL statement, returning all results in a
+// single reply. This
 // method cannot be used to return a result set larger than 10 MiB;
 // if the query yields more data than that, the query fails with
 // a `FAILED_PRECONDITION` error.
 //
-// Queries inside read-write transactions might return `ABORTED`.
+// Operations inside read-write transactions might return `ABORTED`.
 // If
 // this occurs, the application should restart the transaction from
 // the beginning. See Transaction for more details.
@@ -7832,6 +7947,7 @@ func (c *ProjectsInstancesDatabasesSessionsExecuteSqlCall) doRequest(alt string)
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+session}:executeSql")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -7880,7 +7996,7 @@ func (c *ProjectsInstancesDatabasesSessionsExecuteSqlCall) Do(opts ...googleapi.
 	}
 	return ret, nil
 	// {
-	//   "description": "Executes an SQL query, returning all rows in a single reply. This\nmethod cannot be used to return a result set larger than 10 MiB;\nif the query yields more data than that, the query fails with\na `FAILED_PRECONDITION` error.\n\nQueries inside read-write transactions might return `ABORTED`. If\nthis occurs, the application should restart the transaction from\nthe beginning. See Transaction for more details.\n\nLarger result sets can be fetched in streaming fashion by calling\nExecuteStreamingSql instead.",
+	//   "description": "Executes an SQL statement, returning all results in a single reply. This\nmethod cannot be used to return a result set larger than 10 MiB;\nif the query yields more data than that, the query fails with\na `FAILED_PRECONDITION` error.\n\nOperations inside read-write transactions might return `ABORTED`. If\nthis occurs, the application should restart the transaction from\nthe beginning. See Transaction for more details.\n\nLarger result sets can be fetched in streaming fashion by calling\nExecuteStreamingSql instead.",
 	//   "flatPath": "v1/projects/{projectsId}/instances/{instancesId}/databases/{databasesId}/sessions/{sessionsId}:executeSql",
 	//   "httpMethod": "POST",
 	//   "id": "spanner.projects.instances.databases.sessions.executeSql",
@@ -7973,6 +8089,7 @@ func (c *ProjectsInstancesDatabasesSessionsExecuteStreamingSqlCall) doRequest(al
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+session}:executeStreamingSql")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -8120,6 +8237,7 @@ func (c *ProjectsInstancesDatabasesSessionsGetCall) doRequest(alt string) (*http
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8294,6 +8412,7 @@ func (c *ProjectsInstancesDatabasesSessionsListCall) doRequest(alt string) (*htt
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+database}/sessions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8429,9 +8548,14 @@ type ProjectsInstancesDatabasesSessionsPartitionQueryCall struct {
 // the
 // partition tokens and the ExecuteSqlRequests that use the partition
 // tokens.
+//
 // Partition tokens become invalid when the session used to create
 // them
-// is deleted or begins a new transaction.
+// is deleted, is idle for too long, begins a new transaction, or
+// becomes too
+// old.  When any of these happen, it is not possible to resume the
+// query, and
+// the whole operation must be restarted from the beginning.
 func (r *ProjectsInstancesDatabasesSessionsService) PartitionQuery(session string, partitionqueryrequest *PartitionQueryRequest) *ProjectsInstancesDatabasesSessionsPartitionQueryCall {
 	c := &ProjectsInstancesDatabasesSessionsPartitionQueryCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.session = session
@@ -8477,6 +8601,7 @@ func (c *ProjectsInstancesDatabasesSessionsPartitionQueryCall) doRequest(alt str
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+session}:partitionQuery")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -8525,7 +8650,7 @@ func (c *ProjectsInstancesDatabasesSessionsPartitionQueryCall) Do(opts ...google
 	}
 	return ret, nil
 	// {
-	//   "description": "Creates a set of partition tokens that can be used to execute a query\noperation in parallel.  Each of the returned partition tokens can be used\nby ExecuteStreamingSql to specify a subset\nof the query result to read.  The same session and read-only transaction\nmust be used by the PartitionQueryRequest used to create the\npartition tokens and the ExecuteSqlRequests that use the partition tokens.\nPartition tokens become invalid when the session used to create them\nis deleted or begins a new transaction.",
+	//   "description": "Creates a set of partition tokens that can be used to execute a query\noperation in parallel.  Each of the returned partition tokens can be used\nby ExecuteStreamingSql to specify a subset\nof the query result to read.  The same session and read-only transaction\nmust be used by the PartitionQueryRequest used to create the\npartition tokens and the ExecuteSqlRequests that use the partition tokens.\n\nPartition tokens become invalid when the session used to create them\nis deleted, is idle for too long, begins a new transaction, or becomes too\nold.  When any of these happen, it is not possible to resume the query, and\nthe whole operation must be restarted from the beginning.",
 	//   "flatPath": "v1/projects/{projectsId}/instances/{instancesId}/databases/{databasesId}/sessions/{sessionsId}:partitionQuery",
 	//   "httpMethod": "POST",
 	//   "id": "spanner.projects.instances.databases.sessions.partitionQuery",
@@ -8576,10 +8701,20 @@ type ProjectsInstancesDatabasesSessionsPartitionReadCall struct {
 // used by
 // the PartitionReadRequest used to create the partition tokens and
 // the
-// ReadRequests that use the partition tokens.
+// ReadRequests that use the partition tokens.  There are no
+// ordering
+// guarantees on rows returned among the returned partition tokens, or
+// even
+// within each individual StreamingRead call issued with a
+// partition_token.
+//
 // Partition tokens become invalid when the session used to create
 // them
-// is deleted or begins a new transaction.
+// is deleted, is idle for too long, begins a new transaction, or
+// becomes too
+// old.  When any of these happen, it is not possible to resume the
+// read, and
+// the whole operation must be restarted from the beginning.
 func (r *ProjectsInstancesDatabasesSessionsService) PartitionRead(session string, partitionreadrequest *PartitionReadRequest) *ProjectsInstancesDatabasesSessionsPartitionReadCall {
 	c := &ProjectsInstancesDatabasesSessionsPartitionReadCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.session = session
@@ -8625,6 +8760,7 @@ func (c *ProjectsInstancesDatabasesSessionsPartitionReadCall) doRequest(alt stri
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+session}:partitionRead")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -8673,7 +8809,7 @@ func (c *ProjectsInstancesDatabasesSessionsPartitionReadCall) Do(opts ...googlea
 	}
 	return ret, nil
 	// {
-	//   "description": "Creates a set of partition tokens that can be used to execute a read\noperation in parallel.  Each of the returned partition tokens can be used\nby StreamingRead to specify a subset of the read\nresult to read.  The same session and read-only transaction must be used by\nthe PartitionReadRequest used to create the partition tokens and the\nReadRequests that use the partition tokens.\nPartition tokens become invalid when the session used to create them\nis deleted or begins a new transaction.",
+	//   "description": "Creates a set of partition tokens that can be used to execute a read\noperation in parallel.  Each of the returned partition tokens can be used\nby StreamingRead to specify a subset of the read\nresult to read.  The same session and read-only transaction must be used by\nthe PartitionReadRequest used to create the partition tokens and the\nReadRequests that use the partition tokens.  There are no ordering\nguarantees on rows returned among the returned partition tokens, or even\nwithin each individual StreamingRead call issued with a partition_token.\n\nPartition tokens become invalid when the session used to create them\nis deleted, is idle for too long, begins a new transaction, or becomes too\nold.  When any of these happen, it is not possible to resume the read, and\nthe whole operation must be restarted from the beginning.",
 	//   "flatPath": "v1/projects/{projectsId}/instances/{instancesId}/databases/{databasesId}/sessions/{sessionsId}:partitionRead",
 	//   "httpMethod": "POST",
 	//   "id": "spanner.projects.instances.databases.sessions.partitionRead",
@@ -8776,6 +8912,7 @@ func (c *ProjectsInstancesDatabasesSessionsReadCall) doRequest(alt string) (*htt
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+session}:read")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -8921,6 +9058,7 @@ func (c *ProjectsInstancesDatabasesSessionsRollbackCall) doRequest(alt string) (
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+session}:rollback")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -9061,6 +9199,7 @@ func (c *ProjectsInstancesDatabasesSessionsStreamingReadCall) doRequest(alt stri
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+session}:streamingRead")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -9207,6 +9346,7 @@ func (c *ProjectsInstancesOperationsCancelCall) doRequest(alt string) (*http.Res
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:cancel")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -9339,6 +9479,7 @@ func (c *ProjectsInstancesOperationsDeleteCall) doRequest(alt string) (*http.Res
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -9483,6 +9624,7 @@ func (c *ProjectsInstancesOperationsGetCall) doRequest(alt string) (*http.Respon
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -9660,6 +9802,7 @@ func (c *ProjectsInstancesOperationsListCall) doRequest(alt string) (*http.Respo
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)

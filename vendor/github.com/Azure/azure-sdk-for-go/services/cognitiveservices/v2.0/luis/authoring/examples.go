@@ -32,8 +32,8 @@ type ExamplesClient struct {
 }
 
 // NewExamplesClient creates an instance of the ExamplesClient client.
-func NewExamplesClient(azureRegion AzureRegions) ExamplesClient {
-	return ExamplesClient{New(azureRegion)}
+func NewExamplesClient(endpoint string) ExamplesClient {
+	return ExamplesClient{New(endpoint)}
 }
 
 // Add adds a labeled example to the application.
@@ -66,7 +66,7 @@ func (client ExamplesClient) Add(ctx context.Context, appID uuid.UUID, versionID
 // AddPreparer prepares the Add request.
 func (client ExamplesClient) AddPreparer(ctx context.Context, appID uuid.UUID, versionID string, exampleLabelObject ExampleLabelObject) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
-		"AzureRegion": client.AzureRegion,
+		"Endpoint": client.Endpoint,
 	}
 
 	pathParameters := map[string]interface{}{
@@ -77,7 +77,7 @@ func (client ExamplesClient) AddPreparer(ctx context.Context, appID uuid.UUID, v
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPost(),
-		autorest.WithCustomBaseURL("https://{AzureRegion}.api.cognitive.microsoft.com/luis/api/v2.0", urlParameters),
+		autorest.WithCustomBaseURL("{Endpoint}/luis/api/v2.0", urlParameters),
 		autorest.WithPathParameters("/apps/{appId}/versions/{versionId}/example", pathParameters),
 		autorest.WithJSON(exampleLabelObject))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
@@ -139,7 +139,7 @@ func (client ExamplesClient) Batch(ctx context.Context, appID uuid.UUID, version
 // BatchPreparer prepares the Batch request.
 func (client ExamplesClient) BatchPreparer(ctx context.Context, appID uuid.UUID, versionID string, exampleLabelObjectArray []ExampleLabelObject) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
-		"AzureRegion": client.AzureRegion,
+		"Endpoint": client.Endpoint,
 	}
 
 	pathParameters := map[string]interface{}{
@@ -150,7 +150,7 @@ func (client ExamplesClient) BatchPreparer(ctx context.Context, appID uuid.UUID,
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPost(),
-		autorest.WithCustomBaseURL("https://{AzureRegion}.api.cognitive.microsoft.com/luis/api/v2.0", urlParameters),
+		autorest.WithCustomBaseURL("{Endpoint}/luis/api/v2.0", urlParameters),
 		autorest.WithPathParameters("/apps/{appId}/versions/{versionId}/examples", pathParameters),
 		autorest.WithJSON(exampleLabelObjectArray))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
@@ -206,7 +206,7 @@ func (client ExamplesClient) Delete(ctx context.Context, appID uuid.UUID, versio
 // DeletePreparer prepares the Delete request.
 func (client ExamplesClient) DeletePreparer(ctx context.Context, appID uuid.UUID, versionID string, exampleID int32) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
-		"AzureRegion": client.AzureRegion,
+		"Endpoint": client.Endpoint,
 	}
 
 	pathParameters := map[string]interface{}{
@@ -217,7 +217,7 @@ func (client ExamplesClient) DeletePreparer(ctx context.Context, appID uuid.UUID
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsDelete(),
-		autorest.WithCustomBaseURL("https://{AzureRegion}.api.cognitive.microsoft.com/luis/api/v2.0", urlParameters),
+		autorest.WithCustomBaseURL("{Endpoint}/luis/api/v2.0", urlParameters),
 		autorest.WithPathParameters("/apps/{appId}/versions/{versionId}/examples/{exampleId}", pathParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -255,7 +255,7 @@ func (client ExamplesClient) List(ctx context.Context, appID uuid.UUID, versionI
 				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}},
 		{TargetValue: take,
 			Constraints: []validation.Constraint{{Target: "take", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "take", Name: validation.InclusiveMaximum, Rule: 500, Chain: nil},
+				Chain: []validation.Constraint{{Target: "take", Name: validation.InclusiveMaximum, Rule: int64(500), Chain: nil},
 					{Target: "take", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("authoring.ExamplesClient", "List", err.Error())
@@ -285,7 +285,7 @@ func (client ExamplesClient) List(ctx context.Context, appID uuid.UUID, versionI
 // ListPreparer prepares the List request.
 func (client ExamplesClient) ListPreparer(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
-		"AzureRegion": client.AzureRegion,
+		"Endpoint": client.Endpoint,
 	}
 
 	pathParameters := map[string]interface{}{
@@ -307,7 +307,7 @@ func (client ExamplesClient) ListPreparer(ctx context.Context, appID uuid.UUID, 
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
-		autorest.WithCustomBaseURL("https://{AzureRegion}.api.cognitive.microsoft.com/luis/api/v2.0", urlParameters),
+		autorest.WithCustomBaseURL("{Endpoint}/luis/api/v2.0", urlParameters),
 		autorest.WithPathParameters("/apps/{appId}/versions/{versionId}/examples", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))

@@ -1,4 +1,4 @@
-// Copyright 2014 Google Inc. All Rights Reserved.
+// Copyright 2014 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -57,13 +57,13 @@ func NewClient(ctx context.Context, projectID string, opts ...option.ClientOptio
 	var o []option.ClientOption
 	// Environment variables for gcd emulator:
 	// https://cloud.google.com/datastore/docs/tools/datastore-emulator
-	// If the emulator is available, dial it directly (and don't pass any credentials).
+	// If the emulator is available, dial it without passing any credentials.
 	if addr := os.Getenv("DATASTORE_EMULATOR_HOST"); addr != "" {
-		conn, err := grpc.Dial(addr, grpc.WithInsecure())
-		if err != nil {
-			return nil, fmt.Errorf("grpc.Dial: %v", err)
+		o = []option.ClientOption{
+			option.WithEndpoint(addr),
+			option.WithoutAuthentication(),
+			option.WithGRPCDialOption(grpc.WithInsecure()),
 		}
-		o = []option.ClientOption{option.WithGRPCConn(conn)}
 	} else {
 		o = []option.ClientOption{
 			option.WithEndpoint(prodAddr),

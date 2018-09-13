@@ -8,7 +8,7 @@
     "ComposeEnvironments": "<p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html\">Compose Environments</a> for details.</p>",
     "CreateApplication": "<p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>",
     "CreateApplicationVersion": "<p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note>",
-    "CreateConfigurationTemplate": "<p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul>",
+    "CreateConfigurationTemplate": "<p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Templates aren't associated with any environment. The <code>EnvironmentName</code> response element is always <code>null</code>.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul>",
     "CreateEnvironment": "<p>Launches an environment for the specified application using the specified configuration.</p>",
     "CreatePlatformVersion": "<p>Create a new version of your custom platform.</p>",
     "CreateStorageLocation": "<p>Creates a bucket in Amazon S3 to store application versions, logs, and other files used by Elastic Beanstalk environments. The Elastic Beanstalk console and EB CLI call this API the first time you create an environment in a region. If the storage location already exists, <code>CreateStorageLocation</code> still returns the bucket name but does not create a new bucket.</p>",
@@ -28,7 +28,7 @@
     "DescribeEnvironmentResources": "<p>Returns AWS resources for this environment.</p>",
     "DescribeEnvironments": "<p>Returns descriptions for existing environments.</p>",
     "DescribeEvents": "<p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note>",
-    "DescribeInstancesHealth": "<p>Retrives detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html\">enhanced health reporting</a>.</p>",
+    "DescribeInstancesHealth": "<p>Retrieves detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html\">enhanced health reporting</a>.</p>",
     "DescribePlatformVersion": "<p>Describes the version of the platform.</p>",
     "ListAvailableSolutionStacks": "<p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>",
     "ListPlatformVersions": "<p>Lists the available platforms.</p>",
@@ -84,6 +84,12 @@
         "ApplyEnvironmentManagedActionResult$ActionType": "<p>The type of managed action.</p>",
         "ManagedAction$ActionType": "<p>The type of managed action.</p>",
         "ManagedActionHistoryItem$ActionType": "<p>The type of the managed action.</p>"
+      }
+    },
+    "ApplicationArn": {
+      "base": null,
+      "refs": {
+        "ApplicationDescription$ApplicationArn": "<p>The Amazon Resource Name (ARN) of the application.</p>"
       }
     },
     "ApplicationDescription": {
@@ -169,6 +175,12 @@
       "refs": {
       }
     },
+    "ApplicationVersionArn": {
+      "base": null,
+      "refs": {
+        "ApplicationVersionDescription$ApplicationVersionArn": "<p>The Amazon Resource Name (ARN) of the application version.</p>"
+      }
+    },
     "ApplicationVersionDescription": {
       "base": "<p>Describes the properties of an application version.</p>",
       "refs": {
@@ -201,13 +213,13 @@
     "ApplicationVersionProccess": {
       "base": null,
       "refs": {
-        "CreateApplicationVersionMessage$Process": "<p>Preprocesses and validates the environment manifest (<code>env.yaml</code>) and configuration files (<code>*.config</code> files in the <code>.ebextensions</code> folder) in the source bundle. Validating configuration files can identify issues prior to deploying the application version to an environment.</p> <note> <p>The <code>Process</code> option validates Elastic Beanstalk configuration files. It doesn't validate your application's configuration files, like proxy server or Docker configuration.</p> </note>"
+        "CreateApplicationVersionMessage$Process": "<p>Pre-processes and validates the environment manifest (<code>env.yaml</code>) and configuration files (<code>*.config</code> files in the <code>.ebextensions</code> folder) in the source bundle. Validating configuration files can identify issues prior to deploying the application version to an environment.</p> <p>You must turn processing on for application versions that you create using AWS CodeBuild or AWS CodeCommit. For application versions built from a source bundle in Amazon S3, processing is optional.</p> <note> <p>The <code>Process</code> option validates Elastic Beanstalk configuration files. It doesn't validate your application's configuration files, like proxy server or Docker configuration.</p> </note>"
       }
     },
     "ApplicationVersionStatus": {
       "base": null,
       "refs": {
-        "ApplicationVersionDescription$Status": "<p>The processing status of the application version.</p>"
+        "ApplicationVersionDescription$Status": "<p>The processing status of the application version. Reflects the state of the application version during its creation. Many of the values are only applicable if you specified <code>True</code> for the <code>Process</code> parameter of the <code>CreateApplicationVersion</code> action. The following list describes the possible values.</p> <ul> <li> <p> <code>Unprocessed</code> – Application version wasn't pre-processed or validated. Elastic Beanstalk will validate configuration files during deployment of the application version to an environment.</p> </li> <li> <p> <code>Processing</code> – Elastic Beanstalk is currently processing the application version.</p> </li> <li> <p> <code>Building</code> – Application version is currently undergoing an AWS CodeBuild build.</p> </li> <li> <p> <code>Processed</code> – Elastic Beanstalk was successfully pre-processed and validated.</p> </li> <li> <p> <code>Failed</code> – Either the AWS CodeBuild build failed or configuration files didn't pass validation. This application version isn't usable.</p> </li> </ul>"
       }
     },
     "ApplyEnvironmentManagedActionRequest": {
@@ -711,7 +723,7 @@
     "EnvironmentArn": {
       "base": null,
       "refs": {
-        "EnvironmentDescription$EnvironmentArn": "<p>The environment's Amazon Resource Name (ARN), which can be used in other API reuqests that require an ARN.</p>"
+        "EnvironmentDescription$EnvironmentArn": "<p>The environment's Amazon Resource Name (ARN), which can be used in other API requests that require an ARN.</p>"
       }
     },
     "EnvironmentDescription": {
@@ -979,7 +991,7 @@
     "InstanceHealthList": {
       "base": null,
       "refs": {
-        "DescribeInstancesHealthResult$InstanceHealthList": "<p>Detailed health information about each instance.</p>"
+        "DescribeInstancesHealthResult$InstanceHealthList": "<p>Detailed health information about each instance.</p> <p>The output differs slightly between Linux and Windows environments. There is a difference in the members that are supported under the <code>&lt;CPUUtilization&gt;</code> type.</p>"
       }
     },
     "InstanceHealthSummary": {
@@ -1194,12 +1206,13 @@
       "base": null,
       "refs": {
         "CPUUtilization$User": "<p>Percentage of time that the CPU has spent in the <code>User</code> state over the last 10 seconds.</p>",
-        "CPUUtilization$Nice": "<p>Percentage of time that the CPU has spent in the <code>Nice</code> state over the last 10 seconds.</p>",
-        "CPUUtilization$System": "<p>Percentage of time that the CPU has spent in the <code>System</code> state over the last 10 seconds.</p>",
+        "CPUUtilization$Nice": "<p>Available on Linux environments only.</p> <p>Percentage of time that the CPU has spent in the <code>Nice</code> state over the last 10 seconds.</p>",
+        "CPUUtilization$System": "<p>Available on Linux environments only.</p> <p>Percentage of time that the CPU has spent in the <code>System</code> state over the last 10 seconds.</p>",
         "CPUUtilization$Idle": "<p>Percentage of time that the CPU has spent in the <code>Idle</code> state over the last 10 seconds.</p>",
-        "CPUUtilization$IOWait": "<p>Percentage of time that the CPU has spent in the <code>I/O Wait</code> state over the last 10 seconds.</p>",
-        "CPUUtilization$IRQ": "<p>Percentage of time that the CPU has spent in the <code>IRQ</code> state over the last 10 seconds.</p>",
-        "CPUUtilization$SoftIRQ": "<p>Percentage of time that the CPU has spent in the <code>SoftIRQ</code> state over the last 10 seconds.</p>",
+        "CPUUtilization$IOWait": "<p>Available on Linux environments only.</p> <p>Percentage of time that the CPU has spent in the <code>I/O Wait</code> state over the last 10 seconds.</p>",
+        "CPUUtilization$IRQ": "<p>Available on Linux environments only.</p> <p>Percentage of time that the CPU has spent in the <code>IRQ</code> state over the last 10 seconds.</p>",
+        "CPUUtilization$SoftIRQ": "<p>Available on Linux environments only.</p> <p>Percentage of time that the CPU has spent in the <code>SoftIRQ</code> state over the last 10 seconds.</p>",
+        "CPUUtilization$Privileged": "<p>Available on Windows environments only.</p> <p>Percentage of time that the CPU has spent in the <code>Privileged</code> state over the last 10 seconds.</p>",
         "Latency$P999": "<p>The average latency for the slowest 0.1 percent of requests over the last 10 seconds.</p>",
         "Latency$P99": "<p>The average latency for the slowest 1 percent of requests over the last 10 seconds.</p>",
         "Latency$P95": "<p>The average latency for the slowest 5 percent of requests over the last 10 seconds.</p>",
@@ -1632,7 +1645,7 @@
         "ConfigurationOptionsDescription$SolutionStackName": "<p>The name of the solution stack these configuration options belong to.</p>",
         "ConfigurationSettingsDescription$SolutionStackName": "<p>The name of the solution stack this configuration set uses.</p>",
         "CreateConfigurationTemplateMessage$SolutionStackName": "<p>The name of the solution stack used by this configuration. The solution stack specifies the operating system, architecture, and application server for a configuration template. It determines the set of configuration options as well as the possible and default values.</p> <p> Use <a>ListAvailableSolutionStacks</a> to obtain a list of available solution stacks. </p> <p> A solution stack name or a source configuration parameter must be specified, otherwise AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p> <p>If a solution stack name is not specified and the source configuration parameter is specified, AWS Elastic Beanstalk uses the same solution stack as the source configuration template.</p>",
-        "CreateEnvironmentMessage$SolutionStackName": "<p>This is an alternative to specifying a template name. If specified, AWS Elastic Beanstalk sets the configuration values to the default values associated with the specified solution stack.</p>",
+        "CreateEnvironmentMessage$SolutionStackName": "<p>This is an alternative to specifying a template name. If specified, AWS Elastic Beanstalk sets the configuration values to the default values associated with the specified solution stack.</p> <p>For a list of current solution stacks, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/concepts.platforms.html\">Elastic Beanstalk Supported Platforms</a>.</p>",
         "DescribeConfigurationOptionsMessage$SolutionStackName": "<p>The name of the solution stack whose configuration options you want to describe.</p>",
         "EnvironmentDescription$SolutionStackName": "<p> The name of the <code>SolutionStack</code> deployed with this environment. </p>",
         "PlatformDescription$SolutionStackName": "<p>The name of the solution stack used by the platform.</p>",
@@ -1685,7 +1698,7 @@
     "String": {
       "base": null,
       "refs": {
-        "ApplicationResourceLifecycleConfig$ServiceRole": "<p>The ARN of an IAM service role that Elastic Beanstalk has permission to assume.</p>",
+        "ApplicationResourceLifecycleConfig$ServiceRole": "<p>The ARN of an IAM service role that Elastic Beanstalk has permission to assume.</p> <p>The <code>ServiceRole</code> property is required the first time that you provide a <code>VersionLifecycleConfig</code> for the application in one of the supporting calls (<code>CreateApplication</code> or <code>UpdateApplicationResourceLifecycle</code>). After you provide it once, in either one of the calls, Elastic Beanstalk persists the Service Role with the application, and you don't need to specify it again in subsequent <code>UpdateApplicationResourceLifecycle</code> calls. You can, however, specify it in subsequent calls to change the Service Role to another value.</p>",
         "ApplicationVersionDescription$BuildArn": "<p>Reference to the artifact from the AWS CodeBuild build.</p>",
         "ApplyEnvironmentManagedActionRequest$EnvironmentName": "<p>The name of the target environment.</p>",
         "ApplyEnvironmentManagedActionRequest$EnvironmentId": "<p>The environment ID of the target environment.</p>",
@@ -1706,7 +1719,7 @@
         "EnvironmentLink$EnvironmentName": "<p>The name of the linked environment (the dependency).</p>",
         "EnvironmentTier$Name": "<p>The name of this environment tier.</p>",
         "EnvironmentTier$Type": "<p>The type of this environment tier.</p>",
-        "EnvironmentTier$Version": "<p>The version of this environment tier.</p>",
+        "EnvironmentTier$Version": "<p>The version of this environment tier. When you don't set a value to it, Elastic Beanstalk uses the latest compatible worker tier version.</p> <note> <p>This member is deprecated. Any specific version that you set may become out of date. We recommend leaving it unspecified.</p> </note>",
         "Listener$Protocol": "<p>The protocol that is used by the Listener.</p>",
         "LoadBalancerDescription$LoadBalancerName": "<p>The name of the LoadBalancer.</p>",
         "LoadBalancerDescription$Domain": "<p>The domain name of the LoadBalancer.</p>",

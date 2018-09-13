@@ -22,6 +22,7 @@ package migrate
 import original "github.com/Azure/azure-sdk-for-go/services/migrate/mgmt/2018-02-02/migrate"
 
 type AssessedMachinesClient = original.AssessedMachinesClient
+type AssessmentOptionsClient = original.AssessmentOptionsClient
 type AssessmentsClient = original.AssessmentsClient
 
 const (
@@ -30,6 +31,7 @@ const (
 
 type BaseClient = original.BaseClient
 type GroupsClient = original.GroupsClient
+type LocationClient = original.LocationClient
 type MachinesClient = original.MachinesClient
 type AssessmentSizingCriterion = original.AssessmentSizingCriterion
 
@@ -404,6 +406,14 @@ const (
 	MachineBootTypeUnknown MachineBootType = original.MachineBootTypeUnknown
 )
 
+type NameAvailabilityReason = original.NameAvailabilityReason
+
+const (
+	NameAvailabilityReasonAlreadyExists NameAvailabilityReason = original.NameAvailabilityReasonAlreadyExists
+	NameAvailabilityReasonAvailable     NameAvailabilityReason = original.NameAvailabilityReasonAvailable
+	NameAvailabilityReasonInvalid       NameAvailabilityReason = original.NameAvailabilityReasonInvalid
+)
+
 type Percentile = original.Percentile
 
 const (
@@ -438,8 +448,13 @@ type AssessedMachineProperties = original.AssessedMachineProperties
 type AssessedMachineResultList = original.AssessedMachineResultList
 type AssessedNetworkAdapter = original.AssessedNetworkAdapter
 type Assessment = original.Assessment
+type AssessmentOptionsResultList = original.AssessmentOptionsResultList
 type AssessmentProperties = original.AssessmentProperties
 type AssessmentResultList = original.AssessmentResultList
+type CheckNameAvailabilityParameters = original.CheckNameAvailabilityParameters
+type CheckNameAvailabilityResult = original.CheckNameAvailabilityResult
+type CloudError = original.CloudError
+type CloudErrorBody = original.CloudErrorBody
 type Disk = original.Disk
 type DownloadURL = original.DownloadURL
 type Group = original.Group
@@ -456,6 +471,7 @@ type Project = original.Project
 type ProjectKey = original.ProjectKey
 type ProjectProperties = original.ProjectProperties
 type ProjectResultList = original.ProjectResultList
+type VMFamily = original.VMFamily
 type OperationsClient = original.OperationsClient
 type ProjectsClient = original.ProjectsClient
 
@@ -464,6 +480,12 @@ func NewAssessedMachinesClient(subscriptionID string, acceptLanguage string) Ass
 }
 func NewAssessedMachinesClientWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) AssessedMachinesClient {
 	return original.NewAssessedMachinesClientWithBaseURI(baseURI, subscriptionID, acceptLanguage)
+}
+func NewAssessmentOptionsClient(subscriptionID string, acceptLanguage string) AssessmentOptionsClient {
+	return original.NewAssessmentOptionsClient(subscriptionID, acceptLanguage)
+}
+func NewAssessmentOptionsClientWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) AssessmentOptionsClient {
+	return original.NewAssessmentOptionsClientWithBaseURI(baseURI, subscriptionID, acceptLanguage)
 }
 func NewAssessmentsClient(subscriptionID string, acceptLanguage string) AssessmentsClient {
 	return original.NewAssessmentsClient(subscriptionID, acceptLanguage)
@@ -482,6 +504,12 @@ func NewGroupsClient(subscriptionID string, acceptLanguage string) GroupsClient 
 }
 func NewGroupsClientWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) GroupsClient {
 	return original.NewGroupsClientWithBaseURI(baseURI, subscriptionID, acceptLanguage)
+}
+func NewLocationClient(subscriptionID string, acceptLanguage string) LocationClient {
+	return original.NewLocationClient(subscriptionID, acceptLanguage)
+}
+func NewLocationClientWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) LocationClient {
+	return original.NewLocationClientWithBaseURI(baseURI, subscriptionID, acceptLanguage)
 }
 func NewMachinesClient(subscriptionID string, acceptLanguage string) MachinesClient {
 	return original.NewMachinesClient(subscriptionID, acceptLanguage)
@@ -542,6 +570,9 @@ func PossibleDiscoveryStatusValues() []DiscoveryStatus {
 }
 func PossibleMachineBootTypeValues() []MachineBootType {
 	return original.PossibleMachineBootTypeValues()
+}
+func PossibleNameAvailabilityReasonValues() []NameAvailabilityReason {
+	return original.PossibleNameAvailabilityReasonValues()
 }
 func PossiblePercentileValues() []Percentile {
 	return original.PossiblePercentileValues()

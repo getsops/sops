@@ -64,11 +64,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -88,12 +83,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -1333,7 +1322,7 @@
                   ]
                 },
                 "patch": {
-                  "description": "Updates the specified Version resource. You can specify the following fields depending on the App Engine environment and type of scaling that the version resource uses:\nserving_status (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.serving_status):  For Version resources that use basic scaling, manual scaling, or run in  the App Engine flexible environment.\ninstance_class (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.instance_class):  For Version resources that run in the App Engine standard environment.\nautomatic_scaling.min_idle_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling):  For Version resources that use automatic scaling and run in the App  Engine standard environment.\nautomatic_scaling.max_idle_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling):  For Version resources that use automatic scaling and run in the App  Engine standard environment.\nautomatic_scaling.min_total_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling):  For Version resources that use automatic scaling and run in the App  Engine flexible environment.\nautomatic_scaling.max_total_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling):  For Version resources that use automatic scaling and run in the App  Engine flexible environment.\nautomatic_scaling.cool_down_period_sec (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling):  For Version resources that use automatic scaling and run in the App  Engine flexible environment.\nautomatic_scaling.cpu_utilization.target_utilization (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling):  For Version resources that use automatic scaling and run in the App  Engine flexible environment.",
+                  "description": "Updates the specified Version resource. You can specify the following fields depending on the App Engine environment and type of scaling that the version resource uses:Standard environment\ninstance_class (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.instance_class)automatic scaling in the standard environment:\nautomatic_scaling.min_idle_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling)\nautomatic_scaling.max_idle_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling)\nautomaticScaling.standard_scheduler_settings.max_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#StandardSchedulerSettings)\nautomaticScaling.standard_scheduler_settings.min_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#StandardSchedulerSettings)\nautomaticScaling.standard_scheduler_settings.target_cpu_utilization (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#StandardSchedulerSettings)\nautomaticScaling.standard_scheduler_settings.target_throughput_utilization (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#StandardSchedulerSettings)basic scaling or manual scaling in the standard environment:\nserving_status (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.serving_status)Flexible environment\nserving_status (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.serving_status)automatic scaling in the flexible environment:\nautomatic_scaling.min_total_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling)\nautomatic_scaling.max_total_instances (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling)\nautomatic_scaling.cool_down_period_sec (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling)\nautomatic_scaling.cpu_utilization.target_utilization (https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1beta/apps.services.versions#Version.FIELDS.automatic_scaling)",
                   "flatPath": "v1beta/apps/{appsId}/services/{servicesId}/versions/{versionsId}",
                   "httpMethod": "PATCH",
                   "id": "appengine.apps.services.versions.patch",
@@ -1583,7 +1572,7 @@
       }
     }
   },
-  "revision": "20180320",
+  "revision": "20180831",
   "rootUrl": "https://appengine.googleapis.com/",
   "schemas": {
     "ApiConfigHandler": {
@@ -1805,7 +1794,7 @@
       "id": "AutomaticScaling",
       "properties": {
         "coolDownPeriod": {
-          "description": "Amount of time that the Autoscaler (https://cloud.google.com/compute/docs/autoscaler/) should wait between changes to the number of virtual machines. Only applicable in the App Engine flexible environment.",
+          "description": "The time period that the Autoscaler (https://cloud.google.com/compute/docs/autoscaler/) should wait before it starts collecting information from a new instance. This prevents the autoscaler from collecting information when the instance is initializing, during which the collected usage would not be reliable. Only applicable in the App Engine flexible environment.",
           "format": "google-duration",
           "type": "string"
         },
@@ -1920,11 +1909,11 @@
       "type": "object"
     },
     "BuildInfo": {
-      "description": "Google Cloud Container Builder build information.",
+      "description": "Google Cloud Build information.",
       "id": "BuildInfo",
       "properties": {
         "cloudBuildId": {
-          "description": "The Google Cloud Container Builder build id. Example: \"f966068f-08b2-42c8-bdfe-74137dff2bf9\"",
+          "description": "The Google Cloud Build id. Example: \"f966068f-08b2-42c8-bdfe-74137dff2bf9\"",
           "type": "string"
         }
       },
@@ -2068,11 +2057,11 @@
       "properties": {
         "build": {
           "$ref": "BuildInfo",
-          "description": "Google Cloud Container Builder build information. Only applicable for instances running in the App Engine flexible environment."
+          "description": "Google Cloud Build build information. Only applicable for instances running in the App Engine flexible environment."
         },
         "cloudBuildOptions": {
           "$ref": "CloudBuildOptions",
-          "description": "Options for any Google Cloud Container Builder builds created as a part of this deployment.Note that this is orthogonal to the build parameter, where the deployment depends on an already existing cloud build. These options will only be used if a new build is created, such as when deploying to the App Engine flexible environment using files or zip."
+          "description": "Options for any Google Cloud Build builds created as a part of this deployment.Note that this is orthogonal to the build parameter, where the deployment depends on an already existing cloud build. These options will only be used if a new build is created, such as when deploying to the App Engine flexible environment using files or zip."
         },
         "container": {
           "$ref": "ContainerInfo",
@@ -2152,12 +2141,16 @@
       "type": "object"
     },
     "EndpointsApiService": {
-      "description": "Cloud Endpoints (https://cloud.google.com/endpoints) configuration. The Endpoints API Service provides tooling for serving Open API and gRPC endpoints via an NGINX proxy. Only valid for App Engine Flexible environment deployments.The fields here refer to the name and configuration id of a \"service\" resource in the Service Management API (https://cloud.google.com/service-management/overview).",
+      "description": "Cloud Endpoints (https://cloud.google.com/endpoints) configuration. The Endpoints API Service provides tooling for serving Open API and gRPC endpoints via an NGINX proxy. Only valid for App Engine Flexible environment deployments.The fields here refer to the name and configuration ID of a \"service\" resource in the Service Management API (https://cloud.google.com/service-management/overview).",
       "id": "EndpointsApiService",
       "properties": {
         "configId": {
-          "description": "Endpoints service configuration id as specified by the Service Management API. For example \"2016-09-19r1\"By default, the Endpoints service configuration id is fixed and config_id must be specified. To keep the Endpoints service configuration id updated with each rollout, specify RolloutStrategy.MANAGED and omit config_id.",
+          "description": "Endpoints service configuration ID as specified by the Service Management API. For example \"2016-09-19r1\".By default, the rollout strategy for Endpoints is RolloutStrategy.FIXED. This means that Endpoints starts up with a particular configuration ID. When a new configuration is rolled out, Endpoints must be given the new configuration ID. The config_id field is used to give the configuration ID and is required in this case.Endpoints also has a rollout strategy called RolloutStrategy.MANAGED. When using this, Endpoints fetches the latest configuration and does not need the configuration ID. In this case, config_id must be omitted.",
           "type": "string"
+        },
+        "disableTraceSampling": {
+          "description": "Enable or disable trace sampling. By default, this is set to false for enabled.",
+          "type": "boolean"
         },
         "name": {
           "description": "Endpoints service name which is the name of the \"service\" resource in the Service Management API. For example \"myapi.endpoints.myproject.cloud.goog\"",
@@ -2172,9 +2165,20 @@
           ],
           "enumDescriptions": [
             "Not specified. Defaults to FIXED.",
-            "Endpoints service configuration id will be fixed to the configuration id specified by config_id.",
-            "Endpoints service configuration id will be updated with each rollout."
+            "Endpoints service configuration ID will be fixed to the configuration ID specified by config_id.",
+            "Endpoints service configuration ID will be updated with each rollout."
           ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Entrypoint": {
+      "description": "The entrypoint for the application.",
+      "id": "Entrypoint",
+      "properties": {
+        "shell": {
+          "description": "The format should be a shell command that can be fed to bash -c.",
           "type": "string"
         }
       },
@@ -2332,6 +2336,10 @@
         "oauth2ClientId": {
           "description": "OAuth2 client ID to use for the authentication flow.",
           "type": "string"
+        },
+        "oauth2ClientInfo": {
+          "$ref": "OAuth2ClientInfo",
+          "description": "InputOnly OAuth client info required to generate client id to be used for IAP."
         },
         "oauth2ClientSecret": {
           "description": "OAuth2 client secret to use for the authentication flow.For security reasons, this value cannot be retrieved via the API. Instead, the SHA-256 hash of the value is returned in the oauth2_client_secret_sha256 field.@InputOnly",
@@ -2796,6 +2804,24 @@
           "description": "Target packets sent per second.",
           "format": "int32",
           "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "OAuth2ClientInfo": {
+      "id": "OAuth2ClientInfo",
+      "properties": {
+        "applicationName": {
+          "description": "Application name to be used in OAuth consent screen.",
+          "type": "string"
+        },
+        "clientName": {
+          "description": "Nameof the client to be generated. Optional - If not provided, the name will be autogenerated by the backend.",
+          "type": "string"
+        },
+        "developerEmailAddress": {
+          "description": "Developer's information to be used in OAuth consent screen.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -3370,7 +3396,7 @@
           "type": "string"
         },
         "login": {
-          "description": "Level of login required to access this resource.",
+          "description": "Level of login required to access this resource. Not supported for Node.js in the App Engine standard environment.",
           "enum": [
             "LOGIN_UNSPECIFIED",
             "LOGIN_OPTIONAL",
@@ -3405,7 +3431,7 @@
         },
         "script": {
           "$ref": "ScriptHandler",
-          "description": "Executes a script to handle the request that matches this URL pattern."
+          "description": "Executes a script to handle the requests that match this URL pattern. Only the auto value is supported for Node.js in the App Engine standard environment, for example \"script\": \"auto\"."
         },
         "securityLevel": {
           "description": "Security (HTTPS) enforcement for this URL.",
@@ -3485,6 +3511,10 @@
         "endpointsApiService": {
           "$ref": "EndpointsApiService",
           "description": "Cloud Endpoints configuration.If endpoints_api_service is set, the Cloud Endpoints Extensible Service Proxy will be provided to serve the API implemented by the app."
+        },
+        "entrypoint": {
+          "$ref": "Entrypoint",
+          "description": "The entrypoint for the application."
         },
         "env": {
           "description": "App Engine execution environment for this version.Defaults to standard.",
@@ -3625,6 +3655,10 @@
           "description": "Whether to deploy this version in a container on a virtual machine.",
           "type": "boolean"
         },
+        "vpcAccessConnector": {
+          "$ref": "VpcAccessConnector",
+          "description": "Enables VPC connectivity for standard apps."
+        },
         "zones": {
           "description": "The Google Compute Engine zones that are supported by this version in the App Engine flexible environment.",
           "items": {
@@ -3650,6 +3684,17 @@
         },
         "volumeType": {
           "description": "Underlying volume type, e.g. 'tmpfs'.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "VpcAccessConnector": {
+      "description": "VPC access connector specification.",
+      "id": "VpcAccessConnector",
+      "properties": {
+        "name": {
+          "description": "Full Serverless VPC Access Connector name e.g. /projects/my-project/locations/us-central1/connectors/c1.",
           "type": "string"
         }
       },

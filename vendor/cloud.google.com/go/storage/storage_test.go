@@ -1,4 +1,4 @@
-// Copyright 2014 Google Inc. All Rights Reserved.
+// Copyright 2014 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -34,7 +34,6 @@ import (
 	"cloud.google.com/go/internal/testutil"
 
 	"golang.org/x/net/context"
-	"google.golang.org/api/googleapi"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	raw "google.golang.org/api/storage/v1"
@@ -264,44 +263,6 @@ func dummyKey(kind string) []byte {
 	return slurp
 }
 
-func TestCopyToMissingFields(t *testing.T) {
-	t.Parallel()
-	var tests = []struct {
-		srcBucket, srcName, destBucket, destName string
-		errMsg                                   string
-	}{
-		{
-			"mybucket", "", "mybucket", "destname",
-			"name is empty",
-		},
-		{
-			"mybucket", "srcname", "mybucket", "",
-			"name is empty",
-		},
-		{
-			"", "srcfile", "mybucket", "destname",
-			"name is empty",
-		},
-		{
-			"mybucket", "srcfile", "", "destname",
-			"name is empty",
-		},
-	}
-	ctx := context.Background()
-	client, err := NewClient(ctx, option.WithHTTPClient(&http.Client{Transport: &fakeTransport{}}))
-	if err != nil {
-		panic(err)
-	}
-	for i, test := range tests {
-		src := client.Bucket(test.srcBucket).Object(test.srcName)
-		dst := client.Bucket(test.destBucket).Object(test.destName)
-		_, err := dst.CopierFrom(src).Run(ctx)
-		if !strings.Contains(err.Error(), test.errMsg) {
-			t.Errorf("CopyTo test #%v:\ngot err  %q\nwant err %q", i, err, test.errMsg)
-		}
-	}
-}
-
 func TestObjectNames(t *testing.T) {
 	t.Parallel()
 	// Naming requirements: https://cloud.google.com/storage/docs/bucket-naming
@@ -429,16 +390,16 @@ func TestCondition(t *testing.T) {
 		},
 		{
 			func() { obj.If(Conditions{MetagenerationNotMatch: 1234}).Attrs(ctx) },
-			"GET /storage/v1/b/buck/o/obj?alt=json&ifMetagenerationNotMatch=1234&projection=full",
+			"GET /storage/v1/b/buck/o/obj?alt=json&ifMetagenerationNotMatch=1234&prettyPrint=false&projection=full",
 		},
 
 		{
 			func() { obj.If(Conditions{MetagenerationMatch: 1234}).Update(ctx, ObjectAttrsToUpdate{}) },
-			"PATCH /storage/v1/b/buck/o/obj?alt=json&ifMetagenerationMatch=1234&projection=full",
+			"PATCH /storage/v1/b/buck/o/obj?alt=json&ifMetagenerationMatch=1234&prettyPrint=false&projection=full",
 		},
 		{
 			func() { obj.Generation(1234).Delete(ctx) },
-			"DELETE /storage/v1/b/buck/o/obj?alt=json&generation=1234",
+			"DELETE /storage/v1/b/buck/o/obj?alt=json&generation=1234&prettyPrint=false",
 		},
 		{
 			func() {
@@ -446,7 +407,7 @@ func TestCondition(t *testing.T) {
 				w.ContentType = "text/plain"
 				w.Close()
 			},
-			"POST /upload/storage/v1/b/buck/o?alt=json&ifGenerationMatch=1234&projection=full&uploadType=multipart",
+			"POST /upload/storage/v1/b/buck/o?alt=json&ifGenerationMatch=1234&prettyPrint=false&projection=full&uploadType=multipart",
 		},
 		{
 			func() {
@@ -454,13 +415,13 @@ func TestCondition(t *testing.T) {
 				w.ContentType = "text/plain"
 				w.Close()
 			},
-			"POST /upload/storage/v1/b/buck/o?alt=json&ifGenerationMatch=0&projection=full&uploadType=multipart",
+			"POST /upload/storage/v1/b/buck/o?alt=json&ifGenerationMatch=0&prettyPrint=false&projection=full&uploadType=multipart",
 		},
 		{
 			func() {
 				dst.If(Conditions{MetagenerationMatch: 5678}).CopierFrom(obj.If(Conditions{GenerationMatch: 1234})).Run(ctx)
 			},
-			"POST /storage/v1/b/buck/o/obj/rewriteTo/b/dstbuck/o/dst?alt=json&ifMetagenerationMatch=5678&ifSourceGenerationMatch=1234&projection=full",
+			"POST /storage/v1/b/buck/o/obj/rewriteTo/b/dstbuck/o/dst?alt=json&ifMetagenerationMatch=5678&ifSourceGenerationMatch=1234&prettyPrint=false&projection=full",
 		},
 	}
 
@@ -536,7 +497,7 @@ func TestObjectCompose(t *testing.T) {
 				c.Bucket("foo").Object("baz"),
 				c.Bucket("foo").Object("quux"),
 			},
-			wantURL: "/storage/v1/b/foo/o/bar/compose?alt=json",
+			wantURL: "/storage/v1/b/foo/o/bar/compose?alt=json&prettyPrint=false",
 			wantReq: raw.ComposeRequest{
 				Destination: &raw.Object{Bucket: "foo"},
 				SourceObjects: []*raw.ComposeRequestSourceObjects{
@@ -556,7 +517,7 @@ func TestObjectCompose(t *testing.T) {
 				Name:        "not-bar",
 				ContentType: "application/json",
 			},
-			wantURL: "/storage/v1/b/foo/o/bar/compose?alt=json",
+			wantURL: "/storage/v1/b/foo/o/bar/compose?alt=json&prettyPrint=false",
 			wantReq: raw.ComposeRequest{
 				Destination: &raw.Object{
 					Bucket:      "foo",
@@ -579,7 +540,7 @@ func TestObjectCompose(t *testing.T) {
 				c.Bucket("foo").Object("baz").Generation(56),
 				c.Bucket("foo").Object("quux").If(Conditions{GenerationMatch: 78}),
 			},
-			wantURL: "/storage/v1/b/foo/o/bar/compose?alt=json&ifGenerationMatch=12&ifMetagenerationMatch=34",
+			wantURL: "/storage/v1/b/foo/o/bar/compose?alt=json&ifGenerationMatch=12&ifMetagenerationMatch=34&prettyPrint=false",
 			wantReq: raw.ComposeRequest{
 				Destination: &raw.Object{Bucket: "foo"},
 				SourceObjects: []*raw.ComposeRequestSourceObjects{
@@ -733,88 +694,6 @@ func TestCodecUint32(t *testing.T) {
 		}
 		if d != u {
 			t.Errorf("got %d, want input %d", d, u)
-		}
-	}
-}
-
-func TestBucketAttrs(t *testing.T) {
-	for _, c := range []struct {
-		attrs BucketAttrs
-		raw   raw.Bucket
-	}{{
-		attrs: BucketAttrs{
-			Lifecycle: Lifecycle{
-				Rules: []LifecycleRule{{
-					Action: LifecycleAction{
-						Type:         SetStorageClassAction,
-						StorageClass: "NEARLINE",
-					},
-					Condition: LifecycleCondition{
-						AgeInDays:             10,
-						Liveness:              Live,
-						CreatedBefore:         time.Date(2017, 1, 2, 3, 4, 5, 6, time.UTC),
-						MatchesStorageClasses: []string{"MULTI_REGIONAL", "REGIONAL", "STANDARD"},
-						NumNewerVersions:      3,
-					},
-				}, {
-					Action: LifecycleAction{
-						Type: DeleteAction,
-					},
-					Condition: LifecycleCondition{
-						AgeInDays:             30,
-						Liveness:              Live,
-						CreatedBefore:         time.Date(2017, 1, 2, 3, 4, 5, 6, time.UTC),
-						MatchesStorageClasses: []string{"NEARLINE"},
-						NumNewerVersions:      10,
-					},
-				}, {
-					Action: LifecycleAction{
-						Type: DeleteAction,
-					},
-					Condition: LifecycleCondition{
-						Liveness: Archived,
-					},
-				}},
-			},
-		},
-		raw: raw.Bucket{
-			Lifecycle: &raw.BucketLifecycle{
-				Rule: []*raw.BucketLifecycleRule{{
-					Action: &raw.BucketLifecycleRuleAction{
-						Type:         SetStorageClassAction,
-						StorageClass: "NEARLINE",
-					},
-					Condition: &raw.BucketLifecycleRuleCondition{
-						Age:                 10,
-						IsLive:              googleapi.Bool(true),
-						CreatedBefore:       "2017-01-02",
-						MatchesStorageClass: []string{"MULTI_REGIONAL", "REGIONAL", "STANDARD"},
-						NumNewerVersions:    3,
-					},
-				}, {
-					Action: &raw.BucketLifecycleRuleAction{
-						Type: DeleteAction,
-					},
-					Condition: &raw.BucketLifecycleRuleCondition{
-						Age:                 30,
-						IsLive:              googleapi.Bool(true),
-						CreatedBefore:       "2017-01-02",
-						MatchesStorageClass: []string{"NEARLINE"},
-						NumNewerVersions:    10,
-					},
-				}, {
-					Action: &raw.BucketLifecycleRuleAction{
-						Type: DeleteAction,
-					},
-					Condition: &raw.BucketLifecycleRuleCondition{
-						IsLive: googleapi.Bool(false),
-					},
-				}},
-			},
-		},
-	}} {
-		if got := c.attrs.toRawBucket(); !testutil.Equal(*got, c.raw) {
-			t.Errorf("toRawBucket: got %v, want %v", *got, c.raw)
 		}
 	}
 }

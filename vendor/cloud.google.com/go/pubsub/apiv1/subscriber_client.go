@@ -20,8 +20,8 @@ import (
 	"math"
 	"time"
 
-	"cloud.google.com/go/iam"
 	"cloud.google.com/go/internal/version"
+	"github.com/golang/protobuf/proto"
 	gax "github.com/googleapis/gax-go"
 	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
@@ -124,6 +124,8 @@ func defaultSubscriberCallOptions() *SubscriberCallOptions {
 }
 
 // SubscriberClient is a client for interacting with Google Cloud Pub/Sub API.
+//
+// Methods, except Close, may be called concurrently. However, fields must not be modified concurrently with method calls.
 type SubscriberClient struct {
 	// The connection to the service.
 	conn *grpc.ClientConn
@@ -141,7 +143,8 @@ type SubscriberClient struct {
 // NewSubscriberClient creates a new subscriber client.
 //
 // The service that an application uses to manipulate subscriptions and to
-// consume messages from a subscription via the Pull method.
+// consume messages from a subscription via the Pull method or by
+// establishing a bi-directional stream using the StreamingPull method.
 func NewSubscriberClient(ctx context.Context, opts ...option.ClientOption) (*SubscriberClient, error) {
 	conn, err := transport.DialGRPC(ctx, append(defaultSubscriberClientOptions(), opts...)...)
 	if err != nil {
@@ -177,15 +180,8 @@ func (c *SubscriberClient) SetGoogleClientInfo(keyval ...string) {
 	c.xGoogMetadata = metadata.Pairs("x-goog-api-client", gax.XGoogHeader(kv...))
 }
 
-func (c *SubscriberClient) SubscriptionIAM(subscription *pubsubpb.Subscription) *iam.Handle {
-	return iam.InternalNewHandle(c.Connection(), subscription.Name)
-}
-
-func (c *SubscriberClient) TopicIAM(topic *pubsubpb.Topic) *iam.Handle {
-	return iam.InternalNewHandle(c.Connection(), topic.Name)
-}
-
-// CreateSubscription creates a subscription to a given topic.
+// CreateSubscription creates a subscription to a given topic. See the
+// <a href="/pubsub/docs/admin#resource_names"> resource name rules</a>.
 // If the subscription already exists, returns ALREADY_EXISTS.
 // If the corresponding topic doesn't exist, returns NOT_FOUND.
 //
@@ -228,10 +224,6 @@ func (c *SubscriberClient) GetSubscription(ctx context.Context, req *pubsubpb.Ge
 
 // UpdateSubscription updates an existing subscription. Note that certain properties of a
 // subscription, such as its topic, are not modifiable.
-// NOTE:  The style guide requires body: "subscription" instead of body: "*".
-// Keeping the latter for internal consistency in V1, however it should be
-// corrected in V2.  See
-// https://cloud.google.com/apis/design/standard_methods#update for details.
 func (c *SubscriberClient) UpdateSubscription(ctx context.Context, req *pubsubpb.UpdateSubscriptionRequest, opts ...gax.CallOption) (*pubsubpb.Subscription, error) {
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.UpdateSubscription[0:len(c.CallOptions.UpdateSubscription):len(c.CallOptions.UpdateSubscription)], opts...)
@@ -252,6 +244,7 @@ func (c *SubscriberClient) ListSubscriptions(ctx context.Context, req *pubsubpb.
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.ListSubscriptions[0:len(c.CallOptions.ListSubscriptions):len(c.CallOptions.ListSubscriptions)], opts...)
 	it := &SubscriptionIterator{}
+	req = proto.Clone(req).(*pubsubpb.ListSubscriptionsRequest)
 	it.InternalFetch = func(pageSize int, pageToken string) ([]*pubsubpb.Subscription, string, error) {
 		var resp *pubsubpb.ListSubscriptionsResponse
 		req.PageToken = pageToken
@@ -279,6 +272,7 @@ func (c *SubscriberClient) ListSubscriptions(ctx context.Context, req *pubsubpb.
 		return nextPageToken, nil
 	}
 	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.PageSize)
 	return it
 }
 
@@ -351,18 +345,13 @@ func (c *SubscriberClient) Pull(ctx context.Context, req *pubsubpb.PullRequest, 
 	return resp, nil
 }
 
-// StreamingPull (EXPERIMENTAL) StreamingPull is an experimental feature. This RPC will
-// respond with UNIMPLEMENTED errors unless you have been invited to test
-// this feature. Contact cloud-pubsub@google.com with any questions.
-//
-// Establishes a stream with the server, which sends messages down to the
+// StreamingPull establishes a stream with the server, which sends messages down to the
 // client. The client streams acknowledgements and ack deadline modifications
 // back to the server. The server will close the stream and return the status
-// on any error. The server may close the stream with status OK to reassign
-// server-side resources, in which case, the client should re-establish the
-// stream. UNAVAILABLE may also be returned in the case of a transient error
-// (e.g., a server restart). These should also be retried by the client. Flow
-// control can be achieved by configuring the underlying RPC channel.
+// on any error. The server may close the stream with status UNAVAILABLE to
+// reassign server-side resources, in which case, the client should
+// re-establish the stream. Flow control can be achieved by configuring the
+// underlying RPC channel.
 func (c *SubscriberClient) StreamingPull(ctx context.Context, opts ...gax.CallOption) (pubsubpb.Subscriber_StreamingPullClient, error) {
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.StreamingPull[0:len(c.CallOptions.StreamingPull):len(c.CallOptions.StreamingPull)], opts...)
@@ -395,11 +384,15 @@ func (c *SubscriberClient) ModifyPushConfig(ctx context.Context, req *pubsubpb.M
 	return err
 }
 
-// ListSnapshots lists the existing snapshots.
+// ListSnapshots lists the existing snapshots.<br><br>
+// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+// changed in backward-incompatible ways and is not recommended for production
+// use. It is not subject to any SLA or deprecation policy.
 func (c *SubscriberClient) ListSnapshots(ctx context.Context, req *pubsubpb.ListSnapshotsRequest, opts ...gax.CallOption) *SnapshotIterator {
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.ListSnapshots[0:len(c.CallOptions.ListSnapshots):len(c.CallOptions.ListSnapshots)], opts...)
 	it := &SnapshotIterator{}
+	req = proto.Clone(req).(*pubsubpb.ListSnapshotsRequest)
 	it.InternalFetch = func(pageSize int, pageToken string) ([]*pubsubpb.Snapshot, string, error) {
 		var resp *pubsubpb.ListSnapshotsResponse
 		req.PageToken = pageToken
@@ -427,19 +420,25 @@ func (c *SubscriberClient) ListSnapshots(ctx context.Context, req *pubsubpb.List
 		return nextPageToken, nil
 	}
 	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.PageSize)
 	return it
 }
 
-// CreateSnapshot creates a snapshot from the requested subscription.
+// CreateSnapshot creates a snapshot from the requested subscription.<br><br>
+// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+// changed in backward-incompatible ways and is not recommended for production
+// use. It is not subject to any SLA or deprecation policy.
 // If the snapshot already exists, returns ALREADY_EXISTS.
 // If the requested subscription doesn't exist, returns NOT_FOUND.
-//
-// If the name is not provided in the request, the server will assign a random
+// If the backlog in the subscription is too old -- and the resulting snapshot
+// would expire in less than 1 hour -- then FAILED_PRECONDITION is returned.
+// See also the Snapshot.expire_time field. If the name is not provided in
+// the request, the server will assign a random
 // name for this snapshot on the same project as the subscription, conforming
-// to the
-// resource name format (at https://cloud.google.com/pubsub/docs/overview#names).
-// The generated name is populated in the returned Snapshot object.
-// Note that for REST API requests, you must specify a name in the request.
+// to the resource name format (at https://cloud.google.com/pubsub/docs/overview#names).
+// The generated
+// name is populated in the returned Snapshot object. Note that for REST API
+// requests, you must specify a name in the request.
 func (c *SubscriberClient) CreateSnapshot(ctx context.Context, req *pubsubpb.CreateSnapshotRequest, opts ...gax.CallOption) (*pubsubpb.Snapshot, error) {
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.CreateSnapshot[0:len(c.CallOptions.CreateSnapshot):len(c.CallOptions.CreateSnapshot)], opts...)
@@ -455,12 +454,11 @@ func (c *SubscriberClient) CreateSnapshot(ctx context.Context, req *pubsubpb.Cre
 	return resp, nil
 }
 
-// UpdateSnapshot updates an existing snapshot. Note that certain properties of a snapshot
-// are not modifiable.
-// NOTE:  The style guide requires body: "snapshot" instead of body: "*".
-// Keeping the latter for internal consistency in V1, however it should be
-// corrected in V2.  See
-// https://cloud.google.com/apis/design/standard_methods#update for details.
+// UpdateSnapshot updates an existing snapshot.<br><br>
+// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+// changed in backward-incompatible ways and is not recommended for production
+// use. It is not subject to any SLA or deprecation policy.
+// Note that certain properties of a snapshot are not modifiable.
 func (c *SubscriberClient) UpdateSnapshot(ctx context.Context, req *pubsubpb.UpdateSnapshotRequest, opts ...gax.CallOption) (*pubsubpb.Snapshot, error) {
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.UpdateSnapshot[0:len(c.CallOptions.UpdateSnapshot):len(c.CallOptions.UpdateSnapshot)], opts...)
@@ -476,7 +474,11 @@ func (c *SubscriberClient) UpdateSnapshot(ctx context.Context, req *pubsubpb.Upd
 	return resp, nil
 }
 
-// DeleteSnapshot removes an existing snapshot. All messages retained in the snapshot
+// DeleteSnapshot removes an existing snapshot. <br><br>
+// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+// changed in backward-incompatible ways and is not recommended for production
+// use. It is not subject to any SLA or deprecation policy.
+// When the snapshot is deleted, all messages retained in the snapshot
 // are immediately dropped. After a snapshot is deleted, a new one may be
 // created with the same name, but the new one has no association with the old
 // snapshot or its subscription, unless the same subscription is specified.
@@ -492,7 +494,10 @@ func (c *SubscriberClient) DeleteSnapshot(ctx context.Context, req *pubsubpb.Del
 }
 
 // Seek seeks an existing subscription to a point in time or to a given snapshot,
-// whichever is provided in the request.
+// whichever is provided in the request.<br><br>
+// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+// changed in backward-incompatible ways and is not recommended for production
+// use. It is not subject to any SLA or deprecation policy.
 func (c *SubscriberClient) Seek(ctx context.Context, req *pubsubpb.SeekRequest, opts ...gax.CallOption) (*pubsubpb.SeekResponse, error) {
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.Seek[0:len(c.CallOptions.Seek):len(c.CallOptions.Seek)], opts...)

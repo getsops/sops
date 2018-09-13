@@ -313,9 +313,10 @@ func (client BaseClient) GetSubscriptionDeploymentLocationsResponder(resp *http.
 // ListBillingMeters gets a list of meters for a given location.
 // Parameters:
 // billingLocation - azure Location of billable resource
-func (client BaseClient) ListBillingMeters(ctx context.Context, billingLocation string) (result BillingMeterCollectionPage, err error) {
+// osType - app Service OS type meters used for
+func (client BaseClient) ListBillingMeters(ctx context.Context, billingLocation string, osType string) (result BillingMeterCollectionPage, err error) {
 	result.fn = client.listBillingMetersNextResults
-	req, err := client.ListBillingMetersPreparer(ctx, billingLocation)
+	req, err := client.ListBillingMetersPreparer(ctx, billingLocation, osType)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.BaseClient", "ListBillingMeters", nil, "Failure preparing request")
 		return
@@ -337,7 +338,7 @@ func (client BaseClient) ListBillingMeters(ctx context.Context, billingLocation 
 }
 
 // ListBillingMetersPreparer prepares the ListBillingMeters request.
-func (client BaseClient) ListBillingMetersPreparer(ctx context.Context, billingLocation string) (*http.Request, error) {
+func (client BaseClient) ListBillingMetersPreparer(ctx context.Context, billingLocation string, osType string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"subscriptionId": autorest.Encode("path", client.SubscriptionID),
 	}
@@ -348,6 +349,9 @@ func (client BaseClient) ListBillingMetersPreparer(ctx context.Context, billingL
 	}
 	if len(billingLocation) > 0 {
 		queryParameters["billingLocation"] = autorest.Encode("query", billingLocation)
+	}
+	if len(osType) > 0 {
+		queryParameters["osType"] = autorest.Encode("query", osType)
 	}
 
 	preparer := autorest.CreatePreparer(
@@ -400,8 +404,8 @@ func (client BaseClient) listBillingMetersNextResults(lastResults BillingMeterCo
 }
 
 // ListBillingMetersComplete enumerates all values, automatically crossing page boundaries as required.
-func (client BaseClient) ListBillingMetersComplete(ctx context.Context, billingLocation string) (result BillingMeterCollectionIterator, err error) {
-	result.page, err = client.ListBillingMeters(ctx, billingLocation)
+func (client BaseClient) ListBillingMetersComplete(ctx context.Context, billingLocation string, osType string) (result BillingMeterCollectionIterator, err error) {
+	result.page, err = client.ListBillingMeters(ctx, billingLocation, osType)
 	return
 }
 
@@ -410,9 +414,11 @@ func (client BaseClient) ListBillingMetersComplete(ctx context.Context, billingL
 // sku - name of SKU used to filter the regions.
 // linuxWorkersEnabled - specify <code>true</code> if you want to filter to only regions that support Linux
 // workers.
-func (client BaseClient) ListGeoRegions(ctx context.Context, sku SkuName, linuxWorkersEnabled *bool) (result GeoRegionCollectionPage, err error) {
+// xenonWorkersEnabled - specify <code>true</code> if you want to filter to only regions that support Xenon
+// workers.
+func (client BaseClient) ListGeoRegions(ctx context.Context, sku SkuName, linuxWorkersEnabled *bool, xenonWorkersEnabled *bool) (result GeoRegionCollectionPage, err error) {
 	result.fn = client.listGeoRegionsNextResults
-	req, err := client.ListGeoRegionsPreparer(ctx, sku, linuxWorkersEnabled)
+	req, err := client.ListGeoRegionsPreparer(ctx, sku, linuxWorkersEnabled, xenonWorkersEnabled)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.BaseClient", "ListGeoRegions", nil, "Failure preparing request")
 		return
@@ -434,7 +440,7 @@ func (client BaseClient) ListGeoRegions(ctx context.Context, sku SkuName, linuxW
 }
 
 // ListGeoRegionsPreparer prepares the ListGeoRegions request.
-func (client BaseClient) ListGeoRegionsPreparer(ctx context.Context, sku SkuName, linuxWorkersEnabled *bool) (*http.Request, error) {
+func (client BaseClient) ListGeoRegionsPreparer(ctx context.Context, sku SkuName, linuxWorkersEnabled *bool, xenonWorkersEnabled *bool) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"subscriptionId": autorest.Encode("path", client.SubscriptionID),
 	}
@@ -448,6 +454,9 @@ func (client BaseClient) ListGeoRegionsPreparer(ctx context.Context, sku SkuName
 	}
 	if linuxWorkersEnabled != nil {
 		queryParameters["linuxWorkersEnabled"] = autorest.Encode("query", *linuxWorkersEnabled)
+	}
+	if xenonWorkersEnabled != nil {
+		queryParameters["xenonWorkersEnabled"] = autorest.Encode("query", *xenonWorkersEnabled)
 	}
 
 	preparer := autorest.CreatePreparer(
@@ -500,8 +509,8 @@ func (client BaseClient) listGeoRegionsNextResults(lastResults GeoRegionCollecti
 }
 
 // ListGeoRegionsComplete enumerates all values, automatically crossing page boundaries as required.
-func (client BaseClient) ListGeoRegionsComplete(ctx context.Context, sku SkuName, linuxWorkersEnabled *bool) (result GeoRegionCollectionIterator, err error) {
-	result.page, err = client.ListGeoRegions(ctx, sku, linuxWorkersEnabled)
+func (client BaseClient) ListGeoRegionsComplete(ctx context.Context, sku SkuName, linuxWorkersEnabled *bool, xenonWorkersEnabled *bool) (result GeoRegionCollectionIterator, err error) {
+	result.page, err = client.ListGeoRegions(ctx, sku, linuxWorkersEnabled, xenonWorkersEnabled)
 	return
 }
 

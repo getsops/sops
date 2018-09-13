@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,17 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Busybench is a tool that runs a benchmark with the profiler enabled.
 package main
 
 import (
 	"bytes"
-	"cloud.google.com/go/profiler"
 	"compress/gzip"
 	"flag"
 	"log"
 	"math/rand"
 	"sync"
 	"time"
+
+	"cloud.google.com/go/profiler"
 )
 
 var (
@@ -30,6 +32,7 @@ var (
 	mutexProfiling = flag.Bool("mutex_profiling", false, "enable mutex profiling")
 	duration       = flag.Int("duration", 600, "duration of the benchmark in seconds")
 	apiAddr        = flag.String("api_address", "", "API address of the profiler (e.g. 'cloudprofiler.googleapis.com:443')")
+	projectID      = flag.String("project_id", "", "cloud project ID")
 )
 
 // busywork continuously generates 1MiB of random data and compresses it
@@ -71,31 +74,28 @@ func busyworkOnce() {
 
 func main() {
 	flag.Parse()
+	defer log.Printf("busybench finished profiling.")
 
 	if *service == "" {
 		log.Print("Service name must be configured using --service flag.")
-	} else if err := profiler.Start(
-		profiler.Config{
-			Service:        *service,
-			MutexProfiling: *mutexProfiling,
-			DebugLogging:   true,
-			APIAddr:        *apiAddr,
-		}); err != nil {
-		log.Printf("Failed to start the profiler: %v", err)
-	} else {
-		mu := new(sync.Mutex)
-		var wg sync.WaitGroup
-		wg.Add(5)
-		for i := 0; i < 5; i++ {
-			go func() {
-				defer wg.Done()
-				busywork(mu)
-			}()
-		}
-		wg.Wait()
+		return
 	}
-
-	log.Printf("busybench finished profiling.")
-	// Do not exit, since the pod in the GKE test is set to always restart.
-	select {}
+	if err := profiler.Start(profiler.Config{Service: *service,
+		MutexProfiling: *mutexProfiling,
+		DebugLogging:   true,
+		APIAddr:        *apiAddr,
+		ProjectID:      *projectID}); err != nil {
+		log.Printf("Failed to start the profiler: %v", err)
+		return
+	}
+	mu := new(sync.Mutex)
+	var wg sync.WaitGroup
+	wg.Add(5)
+	for i := 0; i < 5; i++ {
+		go func() {
+			defer wg.Done()
+			busywork(mu)
+		}()
+	}
+	wg.Wait()
 }

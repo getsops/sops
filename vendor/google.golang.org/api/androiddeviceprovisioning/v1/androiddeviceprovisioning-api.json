@@ -6,6 +6,7 @@
   "description": "Automates Android zero-touch enrollment for device resellers, customers, and EMMs.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/zero-touch/",
+  "fullyEncodeReservedExpansion": true,
   "icons": {
     "x16": "http://www.google.com/images/icons/product/search-16.gif",
     "x32": "http://www.google.com/images/icons/product/search-32.gif"
@@ -50,11 +51,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -74,12 +70,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -743,11 +733,87 @@
               }
             }
           }
+        },
+        "vendors": {
+          "methods": {
+            "list": {
+              "description": "Lists the vendors of the partner.",
+              "flatPath": "v1/partners/{partnersId}/vendors",
+              "httpMethod": "GET",
+              "id": "androiddeviceprovisioning.partners.vendors.list",
+              "parameterOrder": [
+                "parent"
+              ],
+              "parameters": {
+                "pageSize": {
+                  "description": "The maximum number of results to be returned.",
+                  "format": "int32",
+                  "location": "query",
+                  "type": "integer"
+                },
+                "pageToken": {
+                  "description": "A token identifying a page of results returned by the server.",
+                  "location": "query",
+                  "type": "string"
+                },
+                "parent": {
+                  "description": "Required. The resource name in the format `partners/[PARTNER_ID]`.",
+                  "location": "path",
+                  "pattern": "^partners/[^/]+$",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1/{+parent}/vendors",
+              "response": {
+                "$ref": "ListVendorsResponse"
+              }
+            }
+          },
+          "resources": {
+            "customers": {
+              "methods": {
+                "list": {
+                  "description": "Lists the customers of the vendor.",
+                  "flatPath": "v1/partners/{partnersId}/vendors/{vendorsId}/customers",
+                  "httpMethod": "GET",
+                  "id": "androiddeviceprovisioning.partners.vendors.customers.list",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "parameters": {
+                    "pageSize": {
+                      "description": "The maximum number of results to be returned.",
+                      "format": "int32",
+                      "location": "query",
+                      "type": "integer"
+                    },
+                    "pageToken": {
+                      "description": "A token identifying a page of results returned by the server.",
+                      "location": "query",
+                      "type": "string"
+                    },
+                    "parent": {
+                      "description": "Required. The resource name in the format\n`partners/[PARTNER_ID]/vendors/[VENDOR_ID]`.",
+                      "location": "path",
+                      "pattern": "^partners/[^/]+/vendors/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+parent}/customers",
+                  "response": {
+                    "$ref": "ListVendorCustomersResponse"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
   },
-  "revision": "20180317",
+  "revision": "20180804",
   "rootUrl": "https://androiddeviceprovisioning.googleapis.com/",
   "schemas": {
     "ClaimDeviceRequest": {
@@ -767,10 +833,12 @@
           "description": "Required. The section type of the device's provisioning record.",
           "enum": [
             "SECTION_TYPE_UNSPECIFIED",
+            "SECTION_TYPE_SIM_LOCK",
             "SECTION_TYPE_ZERO_TOUCH"
           ],
           "enumDescriptions": [
             "Unspecified section type.",
+            "SIM-lock section type.",
             "Zero-touch enrollment section type."
           ],
           "type": "string"
@@ -809,7 +877,7 @@
       "type": "object"
     },
     "Company": {
-      "description": "A customer resource in the zero-touch enrollment API.",
+      "description": "A reseller, vendor, or customer in the zero-touch reseller and customer APIs.",
       "id": "Company",
       "properties": {
         "adminEmails": {
@@ -825,11 +893,11 @@
           "type": "string"
         },
         "companyName": {
-          "description": "Required. The name of the company. For example _XYZ Corp_. Characters\nallowed are: Latin letters, numerals, hyphens, and spaces. Displayed to the\ncustomer's employees in the zero-touch enrollment portal.",
+          "description": "Required. The name of the company. For example _XYZ Corp_. Displayed to the\ncompany's employees in the zero-touch enrollment portal.",
           "type": "string"
         },
         "name": {
-          "description": "Output only. The API resource name of the company in the format\n`partners/[PARTNER_ID]/customers/[CUSTOMER_ID]`. Assigned by the server.",
+          "description": "Output only. The API resource name of the company. The resource name is one\nof the following formats:\n\n* `partners/[PARTNER_ID]/customers/[CUSTOMER_ID]`\n* `partners/[PARTNER_ID]/vendors/[VENDOR_ID]`\n* `partners/[PARTNER_ID]/vendors/[VENDOR_ID]/customers/[CUSTOMER_ID]`\n\nAssigned by the server.",
           "type": "string"
         },
         "ownerEmails": {
@@ -838,6 +906,22 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "termsStatus": {
+          "description": "Output only. Whether any user from the company has accepted the latest\nTerms of Service (ToS). See\nTermsStatus.",
+          "enum": [
+            "TERMS_STATUS_UNSPECIFIED",
+            "TERMS_STATUS_NOT_ACCEPTED",
+            "TERMS_STATUS_ACCEPTED",
+            "TERMS_STATUS_STALE"
+          ],
+          "enumDescriptions": [
+            "Default value. This value should never be set if the enum is present.",
+            "None of the company's users have accepted the ToS.",
+            "One (or more) of the company's users has accepted the ToS.",
+            "None of the company's users has accepted the current ToS but at least one\nuser accepted a previous ToS."
+          ],
+          "type": "string"
         }
       },
       "type": "object"
@@ -1046,14 +1130,21 @@
           "format": "int64",
           "type": "string"
         },
+        "resellerId": {
+          "description": "The ID of the reseller that claimed the device.",
+          "format": "int64",
+          "type": "string"
+        },
         "sectionType": {
           "description": "Output only. The type of claim made on the device.",
           "enum": [
             "SECTION_TYPE_UNSPECIFIED",
+            "SECTION_TYPE_SIM_LOCK",
             "SECTION_TYPE_ZERO_TOUCH"
           ],
           "enumDescriptions": [
             "Unspecified section type.",
+            "SIM-lock section type.",
             "Zero-touch enrollment section type."
           ],
           "type": "string"
@@ -1062,7 +1153,7 @@
       "type": "object"
     },
     "DeviceIdentifier": {
-      "description": "Encapsulates hardware and product IDs to identify a manufactured device. To\nlearn more, read [Identifiers](/zero-touch/guides/identifiers).",
+      "description": "Encapsulates hardware and product IDs to identify a manufactured device.\nTo understand requirements on identifier sets, read\n[Identifiers](/zero-touch/guides/identifiers).",
       "id": "DeviceIdentifier",
       "properties": {
         "imei": {
@@ -1070,15 +1161,19 @@
           "type": "string"
         },
         "manufacturer": {
-          "description": "Required. The device manufacturer’s name. Matches the device's built-in\nvalue returned from `android.os.Build.MANUFACTURER`. Allowed values are\nlisted in [manufacturer names](/zero-touch/resources/manufacturer-names).",
+          "description": "The device manufacturer’s name. Matches the device's built-in\nvalue returned from `android.os.Build.MANUFACTURER`. Allowed values are\nlisted in\n[manufacturers](/zero-touch/resources/manufacturer-names#manufacturers-names).",
           "type": "string"
         },
         "meid": {
           "description": "The device’s MEID number.",
           "type": "string"
         },
+        "model": {
+          "description": "The device model's name. Matches the device's built-in value returned from\n`android.os.Build.MODEL`. Allowed values are listed in\n[models](/zero-touch/resources/manufacturer-names#model-names).",
+          "type": "string"
+        },
         "serialNumber": {
-          "description": "The manufacturer's serial number for the device. This value might not be\nunique.",
+          "description": "The manufacturer's serial number for the device. This value might not be\nunique across different device models.",
           "type": "string"
         }
       },
@@ -1135,7 +1230,7 @@
             "Invalid code. Shouldn't be used.",
             "Pending.",
             "In progress.",
-            "Processed.\nThis doesn't mean all items were processed sucessfully, you should\ncheck the `response` field for the result of every item."
+            "Processed.\nThis doesn't mean all items were processed successfully, you should\ncheck the `response` field for the result of every item."
           ],
           "type": "string"
         },
@@ -1167,7 +1262,7 @@
       "type": "object"
     },
     "Dpc": {
-      "description": "An EMM's DPC ([device policy controller](/android/work/dpc/build-dpc)).\nZero-touch enrollment installs a DPC (listed in the `Configuration`) on a\ndevice to maintain the customer's mobile policies. All the DPCs listed by the\nAPI support zero-touch enrollment and are available in Google Play.",
+      "description": "An EMM's DPC ([device policy\ncontroller](http://developer.android.com/work/dpc/build-dpc.html)).\nZero-touch enrollment installs a DPC (listed in the `Configuration`) on a\ndevice to maintain the customer's mobile policies. All the DPCs listed by the\nAPI support zero-touch enrollment and are available in Google Play.",
       "id": "Dpc",
       "properties": {
         "dpcName": {
@@ -1254,10 +1349,12 @@
           "description": "Required. The section type of the device's provisioning record.",
           "enum": [
             "SECTION_TYPE_UNSPECIFIED",
+            "SECTION_TYPE_SIM_LOCK",
             "SECTION_TYPE_ZERO_TOUCH"
           ],
           "enumDescriptions": [
             "Unspecified section type.",
+            "SIM-lock section type.",
             "Zero-touch enrollment section type."
           ],
           "type": "string"
@@ -1289,6 +1386,42 @@
       "properties": {
         "customers": {
           "description": "List of customers related to this reseller partner.",
+          "items": {
+            "$ref": "Company"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ListVendorCustomersResponse": {
+      "description": "Response message to list customers of the vendor.",
+      "id": "ListVendorCustomersResponse",
+      "properties": {
+        "customers": {
+          "description": "List of customers of the vendor.",
+          "items": {
+            "$ref": "Company"
+          },
+          "type": "array"
+        },
+        "nextPageToken": {
+          "description": "A token to retrieve the next page of results. Omitted if no further results\nare available.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ListVendorsResponse": {
+      "description": "Response message to list vendors of the partner.",
+      "id": "ListVendorsResponse",
+      "properties": {
+        "nextPageToken": {
+          "description": "A token to retrieve the next page of results. Omitted if no further results\nare available.",
+          "type": "string"
+        },
+        "vendors": {
+          "description": "List of vendors of the reseller partner. Fields `name`, `companyId` and\n`companyName` are populated to the Company object.",
           "items": {
             "$ref": "Company"
           },
@@ -1376,10 +1509,12 @@
           "description": "Required. The section type of the device's provisioning record.",
           "enum": [
             "SECTION_TYPE_UNSPECIFIED",
+            "SECTION_TYPE_SIM_LOCK",
             "SECTION_TYPE_ZERO_TOUCH"
           ],
           "enumDescriptions": [
             "Unspecified section type.",
+            "SIM-lock section type.",
             "Zero-touch enrollment section type."
           ],
           "type": "string"
@@ -1404,10 +1539,12 @@
           "description": "Required. The section type of the device's provisioning record.",
           "enum": [
             "SECTION_TYPE_UNSPECIFIED",
+            "SECTION_TYPE_SIM_LOCK",
             "SECTION_TYPE_ZERO_TOUCH"
           ],
           "enumDescriptions": [
             "Unspecified section type.",
+            "SIM-lock section type.",
             "Zero-touch enrollment section type."
           ],
           "type": "string"
@@ -1503,10 +1640,12 @@
           "description": "Required. The section type of the device's provisioning record.",
           "enum": [
             "SECTION_TYPE_UNSPECIFIED",
+            "SECTION_TYPE_SIM_LOCK",
             "SECTION_TYPE_ZERO_TOUCH"
           ],
           "enumDescriptions": [
             "Unspecified section type.",
+            "SIM-lock section type.",
             "Zero-touch enrollment section type."
           ],
           "type": "string"

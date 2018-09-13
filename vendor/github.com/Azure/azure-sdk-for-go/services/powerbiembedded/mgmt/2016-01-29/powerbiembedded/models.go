@@ -105,9 +105,9 @@ func (cwcr CreateWorkspaceCollectionRequest) MarshalJSON() ([]byte, error) {
 
 // Display ...
 type Display struct {
-	// Provider - The localized friendly form of the resource provider name. This form is also expected to include the publisher/company responsible. Use Title Casing. Begin with “Microsoft” for 1st party services.
+	// Provider - The localized friendly form of the resource provider name. This form is also expected to include the publisher/company responsible. Use Title Casing. Begin with "Microsoft" for 1st party services.
 	Provider *string `json:"provider,omitempty"`
-	// Resource - The localized friendly form of the resource type related to this action/operation. This form should match the public documentation for the resource provider. Use Title Casing. For examples, refer to the “name” section.
+	// Resource - The localized friendly form of the resource type related to this action/operation. This form should match the public documentation for the resource provider. Use Title Casing. For examples, refer to the "name" section.
 	Resource *string `json:"resource,omitempty"`
 	// Operation - The localized friendly name for the operation as shown to the user. This name should be concise (to fit in drop downs), but clear (self-documenting). Use Title Casing and include the entity/resource to which it applies.
 	Operation *string `json:"operation,omitempty"`

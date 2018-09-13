@@ -155,11 +155,12 @@ const (
 type SkuName = original.SkuName
 
 const (
-	CustomVerizon    SkuName = original.CustomVerizon
-	PremiumVerizon   SkuName = original.PremiumVerizon
-	StandardAkamai   SkuName = original.StandardAkamai
-	StandardChinaCdn SkuName = original.StandardChinaCdn
-	StandardVerizon  SkuName = original.StandardVerizon
+	CustomVerizon     SkuName = original.CustomVerizon
+	PremiumVerizon    SkuName = original.PremiumVerizon
+	StandardAkamai    SkuName = original.StandardAkamai
+	StandardChinaCdn  SkuName = original.StandardChinaCdn
+	StandardMicrosoft SkuName = original.StandardMicrosoft
+	StandardVerizon   SkuName = original.StandardVerizon
 )
 
 type CacheExpirationActionParameters = original.CacheExpirationActionParameters

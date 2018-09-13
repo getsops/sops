@@ -14,6 +14,22 @@
     "uid":"cloudhsmv2-2017-04-28"
   },
   "operations":{
+    "CopyBackupToRegion":{
+      "name":"CopyBackupToRegion",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CopyBackupToRegionRequest"},
+      "output":{"shape":"CopyBackupToRegionResponse"},
+      "errors":[
+        {"shape":"CloudHsmInternalFailureException"},
+        {"shape":"CloudHsmServiceException"},
+        {"shape":"CloudHsmResourceNotFoundException"},
+        {"shape":"CloudHsmInvalidRequestException"},
+        {"shape":"CloudHsmAccessDeniedException"}
+      ]
+    },
     "CreateCluster":{
       "name":"CreateCluster",
       "http":{
@@ -43,6 +59,22 @@
         {"shape":"CloudHsmServiceException"},
         {"shape":"CloudHsmInvalidRequestException"},
         {"shape":"CloudHsmResourceNotFoundException"},
+        {"shape":"CloudHsmAccessDeniedException"}
+      ]
+    },
+    "DeleteBackup":{
+      "name":"DeleteBackup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteBackupRequest"},
+      "output":{"shape":"DeleteBackupResponse"},
+      "errors":[
+        {"shape":"CloudHsmInternalFailureException"},
+        {"shape":"CloudHsmServiceException"},
+        {"shape":"CloudHsmResourceNotFoundException"},
+        {"shape":"CloudHsmInvalidRequestException"},
         {"shape":"CloudHsmAccessDeniedException"}
       ]
     },
@@ -141,6 +173,22 @@
         {"shape":"CloudHsmAccessDeniedException"}
       ]
     },
+    "RestoreBackup":{
+      "name":"RestoreBackup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"RestoreBackupRequest"},
+      "output":{"shape":"RestoreBackupResponse"},
+      "errors":[
+        {"shape":"CloudHsmInternalFailureException"},
+        {"shape":"CloudHsmServiceException"},
+        {"shape":"CloudHsmResourceNotFoundException"},
+        {"shape":"CloudHsmInvalidRequestException"},
+        {"shape":"CloudHsmAccessDeniedException"}
+      ]
+    },
     "TagResource":{
       "name":"TagResource",
       "http":{
@@ -182,7 +230,12 @@
         "BackupId":{"shape":"BackupId"},
         "BackupState":{"shape":"BackupState"},
         "ClusterId":{"shape":"ClusterId"},
-        "CreateTimestamp":{"shape":"Timestamp"}
+        "CreateTimestamp":{"shape":"Timestamp"},
+        "CopyTimestamp":{"shape":"Timestamp"},
+        "SourceRegion":{"shape":"Region"},
+        "SourceBackup":{"shape":"BackupId"},
+        "SourceCluster":{"shape":"ClusterId"},
+        "DeleteTimestamp":{"shape":"Timestamp"}
       }
     },
     "BackupId":{
@@ -198,13 +251,15 @@
       "enum":[
         "CREATE_IN_PROGRESS",
         "READY",
-        "DELETED"
+        "DELETED",
+        "PENDING_DELETION"
       ]
     },
     "Backups":{
       "type":"list",
       "member":{"shape":"Backup"}
     },
+    "Boolean":{"type":"boolean"},
     "Cert":{
       "type":"string",
       "max":5000,
@@ -296,6 +351,23 @@
       "type":"list",
       "member":{"shape":"Cluster"}
     },
+    "CopyBackupToRegionRequest":{
+      "type":"structure",
+      "required":[
+        "DestinationRegion",
+        "BackupId"
+      ],
+      "members":{
+        "DestinationRegion":{"shape":"Region"},
+        "BackupId":{"shape":"BackupId"}
+      }
+    },
+    "CopyBackupToRegionResponse":{
+      "type":"structure",
+      "members":{
+        "DestinationBackup":{"shape":"DestinationBackup"}
+      }
+    },
     "CreateClusterRequest":{
       "type":"structure",
       "required":[
@@ -332,6 +404,19 @@
         "Hsm":{"shape":"Hsm"}
       }
     },
+    "DeleteBackupRequest":{
+      "type":"structure",
+      "required":["BackupId"],
+      "members":{
+        "BackupId":{"shape":"BackupId"}
+      }
+    },
+    "DeleteBackupResponse":{
+      "type":"structure",
+      "members":{
+        "Backup":{"shape":"Backup"}
+      }
+    },
     "DeleteClusterRequest":{
       "type":"structure",
       "required":["ClusterId"],
@@ -366,7 +451,8 @@
       "members":{
         "NextToken":{"shape":"NextToken"},
         "MaxResults":{"shape":"MaxSize"},
-        "Filters":{"shape":"Filters"}
+        "Filters":{"shape":"Filters"},
+        "SortAscending":{"shape":"Boolean"}
       }
     },
     "DescribeBackupsResponse":{
@@ -391,13 +477,22 @@
         "NextToken":{"shape":"NextToken"}
       }
     },
+    "DestinationBackup":{
+      "type":"structure",
+      "members":{
+        "CreateTimestamp":{"shape":"Timestamp"},
+        "SourceRegion":{"shape":"Region"},
+        "SourceBackup":{"shape":"BackupId"},
+        "SourceCluster":{"shape":"ClusterId"}
+      }
+    },
     "EniId":{
       "type":"string",
       "pattern":"eni-[0-9a-fA-F]{8,17}"
     },
     "ExternalAz":{
       "type":"string",
-      "pattern":"[a-z]{2}(-(gov|isob|iso))?-(east|west|north|south|central){1,2}-\\d[a-z]"
+      "pattern":"[a-z]{2}(-(gov))?-(east|west|north|south|central){1,2}-\\d[a-z]"
     },
     "ExternalSubnetMapping":{
       "type":"map",
@@ -504,6 +599,23 @@
       "type":"string",
       "max":32,
       "min":7
+    },
+    "Region":{
+      "type":"string",
+      "pattern":"[a-z]{2}(-(gov))?-(east|west|north|south|central){1,2}-\\d"
+    },
+    "RestoreBackupRequest":{
+      "type":"structure",
+      "required":["BackupId"],
+      "members":{
+        "BackupId":{"shape":"BackupId"}
+      }
+    },
+    "RestoreBackupResponse":{
+      "type":"structure",
+      "members":{
+        "Backup":{"shape":"Backup"}
+      }
     },
     "SecurityGroup":{
       "type":"string",

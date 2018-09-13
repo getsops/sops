@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,10 +18,12 @@ messages, hiding the the details of the underlying server RPCs.  Google Cloud
 Pub/Sub is a many-to-many, asynchronous messaging system that decouples senders
 and receivers.
 
-Note: This package is in beta. Some backwards-incompatible changes may occur.
-
 More information about Google Cloud Pub/Sub is available at
 https://cloud.google.com/pubsub/docs
+
+See https://godoc.org/cloud.google.com/go for authentication, timeouts,
+connection pooling and similar aspects of this package.
+
 
 Publishing
 
@@ -79,6 +81,11 @@ speed redelivery. For more information and configuration options, see
 Note: It is possible for Messages to be redelivered, even if Message.Ack has
 been called. Client code must be robust to multiple deliveries of messages.
 
+Note: This uses pubsub's streaming pull feature. This feature properties that
+may be surprising. Please take a look at https://cloud.google.com/pubsub/docs/pull#streamingpull
+for more details on how streaming pull behaves compared to the synchronous
+pull method.
+
 Deadlines
 
 The default pubsub deadlines are suitable for most use cases, but may be
@@ -111,11 +118,6 @@ process messages, and the redelivery delay if messages fail to be acknowledged
 increases the available time for client code to process messages. However, if
 the client code neglects to call Message.Ack/Nack, a large MaxExtension will
 increase the delay before the message is redelivered.
-
-Authentication
-
-See examples of authorization and authentication at
-https://godoc.org/cloud.google.com/go#pkg-examples.
 
 Slow Message Processing
 

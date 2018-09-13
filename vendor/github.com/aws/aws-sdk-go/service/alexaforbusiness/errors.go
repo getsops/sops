@@ -10,6 +10,13 @@ const (
 	// The resource being created already exists. HTTP Status Code: 400
 	ErrCodeAlreadyExistsException = "AlreadyExistsException"
 
+	// ErrCodeDeviceNotRegisteredException for service response error code
+	// "DeviceNotRegisteredException".
+	//
+	// The request failed because this device is no longer registered and therefore
+	// no longer managed by this account.
+	ErrCodeDeviceNotRegisteredException = "DeviceNotRegisteredException"
+
 	// ErrCodeInvalidUserStatusException for service response error code
 	// "InvalidUserStatusException".
 	//

@@ -1,4 +1,4 @@
-// Package vault provides access to the Google Vault API.
+// Package vault provides access to the G Suite Vault API.
 //
 // See https://developers.google.com/vault
 //
@@ -80,6 +80,7 @@ func (s *Service) userAgent() string {
 
 func NewMattersService(s *Service) *MattersService {
 	rs := &MattersService{s: s}
+	rs.Exports = NewMattersExportsService(s)
 	rs.Holds = NewMattersHoldsService(s)
 	return rs
 }
@@ -87,7 +88,18 @@ func NewMattersService(s *Service) *MattersService {
 type MattersService struct {
 	s *Service
 
+	Exports *MattersExportsService
+
 	Holds *MattersHoldsService
+}
+
+func NewMattersExportsService(s *Service) *MattersExportsService {
+	rs := &MattersExportsService{s: s}
+	return rs
+}
+
+type MattersExportsService struct {
+	s *Service
 }
 
 func NewMattersHoldsService(s *Service) *MattersHoldsService {
@@ -109,6 +121,135 @@ func NewMattersHoldsAccountsService(s *Service) *MattersHoldsAccountsService {
 
 type MattersHoldsAccountsService struct {
 	s *Service
+}
+
+// AccountInfo: Accounts to search
+type AccountInfo struct {
+	// Emails: A set of accounts to search.
+	Emails []string `json:"emails,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Emails") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Emails") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *AccountInfo) MarshalJSON() ([]byte, error) {
+	type NoMethod AccountInfo
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// AddHeldAccountResult: A status detailing the status of each account
+// creation, and the
+// HeldAccount, if successful.
+type AddHeldAccountResult struct {
+	// Account: If present, this account was successfully created.
+	Account *HeldAccount `json:"account,omitempty"`
+
+	// Status: This represents the success status. If failed, check message.
+	Status *Status `json:"status,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Account") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Account") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *AddHeldAccountResult) MarshalJSON() ([]byte, error) {
+	type NoMethod AddHeldAccountResult
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// AddHeldAccountsRequest: Add a list of accounts to a hold.
+type AddHeldAccountsRequest struct {
+	// AccountIds: Account ids to identify which accounts to add. Only
+	// account_ids or only
+	// emails should be specified, but not both.
+	AccountIds []string `json:"accountIds,omitempty"`
+
+	// Emails: Emails to identify which accounts to add. Only emails or only
+	// account_ids
+	// should be specified, but not both.
+	Emails []string `json:"emails,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "AccountIds") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "AccountIds") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *AddHeldAccountsRequest) MarshalJSON() ([]byte, error) {
+	type NoMethod AddHeldAccountsRequest
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// AddHeldAccountsResponse: Response for batch create held accounts.
+type AddHeldAccountsResponse struct {
+	// Responses: The list of responses, in the same order as the batch
+	// request.
+	Responses []*AddHeldAccountResult `json:"responses,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Responses") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Responses") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *AddHeldAccountsResponse) MarshalJSON() ([]byte, error) {
+	type NoMethod AddHeldAccountsResponse
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 // AddMatterPermissionsRequest: Add an account with the permission
@@ -189,6 +330,73 @@ func (s *CloseMatterResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// CloudStorageFile: An export file on cloud storage
+type CloudStorageFile struct {
+	// BucketName: The cloud storage bucket name of this export file.
+	// Can be used in cloud storage JSON/XML API.
+	BucketName string `json:"bucketName,omitempty"`
+
+	// Md5Hash: The md5 hash of the file.
+	Md5Hash string `json:"md5Hash,omitempty"`
+
+	// ObjectName: The cloud storage object name of this export file.
+	// Can be used in cloud storage JSON/XML API.
+	ObjectName string `json:"objectName,omitempty"`
+
+	// Size: The size of the export file.
+	Size int64 `json:"size,omitempty,string"`
+
+	// ForceSendFields is a list of field names (e.g. "BucketName") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "BucketName") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *CloudStorageFile) MarshalJSON() ([]byte, error) {
+	type NoMethod CloudStorageFile
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// CloudStorageSink: Export sink for cloud storage files.
+type CloudStorageSink struct {
+	// Files: Output only. The exported files on cloud storage.
+	Files []*CloudStorageFile `json:"files,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Files") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Files") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *CloudStorageSink) MarshalJSON() ([]byte, error) {
+	type NoMethod CloudStorageSink
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // CorpusQuery: Corpus specific queries.
 type CorpusQuery struct {
 	// DriveQuery: Details pertaining to Drive holds. If set, corpus must be
@@ -231,6 +439,74 @@ func (s *CorpusQuery) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// DriveExportOptions: The options for Drive export.
+type DriveExportOptions struct {
+	// IncludeAccessInfo: Set to true to include access level information
+	// for users
+	// with <a
+	// href="https://support.google.com/vault/answer/6099459#metadata">indire
+	// ct access</a>
+	// to files.
+	IncludeAccessInfo bool `json:"includeAccessInfo,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "IncludeAccessInfo")
+	// to unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "IncludeAccessInfo") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *DriveExportOptions) MarshalJSON() ([]byte, error) {
+	type NoMethod DriveExportOptions
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// DriveOptions: Drive search advanced options
+type DriveOptions struct {
+	// IncludeTeamDrives: Set to true to include Team Drive.
+	IncludeTeamDrives bool `json:"includeTeamDrives,omitempty"`
+
+	// VersionDate: Search the versions of the Drive file
+	// as of the reference date. These timestamps are in GMT and
+	// rounded down to the given date.
+	VersionDate string `json:"versionDate,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "IncludeTeamDrives")
+	// to unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "IncludeTeamDrives") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *DriveOptions) MarshalJSON() ([]byte, error) {
+	type NoMethod DriveOptions
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // Empty: A generic empty message that you can re-use to avoid defining
 // duplicated
 // empty messages in your APIs. A typical example is to use it as the
@@ -247,6 +523,268 @@ type Empty struct {
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
 	googleapi.ServerResponse `json:"-"`
+}
+
+// Export: An export
+type Export struct {
+	// CloudStorageSink: Output only. Export sink for cloud storage files.
+	CloudStorageSink *CloudStorageSink `json:"cloudStorageSink,omitempty"`
+
+	// CreateTime: Output only. The time when the export was created.
+	CreateTime string `json:"createTime,omitempty"`
+
+	// ExportOptions: Advanced options of the export.
+	ExportOptions *ExportOptions `json:"exportOptions,omitempty"`
+
+	// Id: Output only. The generated export ID.
+	Id string `json:"id,omitempty"`
+
+	// MatterId: Output only. The matter ID.
+	MatterId string `json:"matterId,omitempty"`
+
+	// Name: The export name.
+	Name string `json:"name,omitempty"`
+
+	// Query: The search query being exported.
+	Query *Query `json:"query,omitempty"`
+
+	// Requester: Output only. The requester of the export.
+	Requester *UserInfo `json:"requester,omitempty"`
+
+	// Stats: Output only. Export statistics.
+	Stats *ExportStats `json:"stats,omitempty"`
+
+	// Status: Output only. The export status.
+	//
+	// Possible values:
+	//   "EXPORT_STATUS_UNSPECIFIED" - The status is unspecified.
+	//   "COMPLETED" - The export completed.
+	//   "FAILED" - The export failed.
+	//   "IN_PROGRESS" - The export is still being executed.
+	Status string `json:"status,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "CloudStorageSink") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "CloudStorageSink") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *Export) MarshalJSON() ([]byte, error) {
+	type NoMethod Export
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// ExportOptions: Export advanced options
+type ExportOptions struct {
+	// DriveOptions: Option available for Drive export.
+	DriveOptions *DriveExportOptions `json:"driveOptions,omitempty"`
+
+	// GroupsOptions: Option available for groups export.
+	GroupsOptions *GroupsExportOptions `json:"groupsOptions,omitempty"`
+
+	// HangoutsChatOptions: Option available for hangouts chat export.
+	HangoutsChatOptions *HangoutsChatExportOptions `json:"hangoutsChatOptions,omitempty"`
+
+	// MailOptions: Option available for mail export.
+	MailOptions *MailExportOptions `json:"mailOptions,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "DriveOptions") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "DriveOptions") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *ExportOptions) MarshalJSON() ([]byte, error) {
+	type NoMethod ExportOptions
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// ExportStats: Stats of an export.
+type ExportStats struct {
+	// ExportedArtifactCount: The number of documents already processed by
+	// the export.
+	ExportedArtifactCount int64 `json:"exportedArtifactCount,omitempty,string"`
+
+	// SizeInBytes: The size of export in bytes.
+	SizeInBytes int64 `json:"sizeInBytes,omitempty,string"`
+
+	// TotalArtifactCount: The number of documents to be exported.
+	TotalArtifactCount int64 `json:"totalArtifactCount,omitempty,string"`
+
+	// ForceSendFields is a list of field names (e.g.
+	// "ExportedArtifactCount") to unconditionally include in API requests.
+	// By default, fields with empty values are omitted from API requests.
+	// However, any non-pointer, non-interface field appearing in
+	// ForceSendFields will be sent to the server regardless of whether the
+	// field is empty or not. This may be used to include empty fields in
+	// Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "ExportedArtifactCount") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *ExportStats) MarshalJSON() ([]byte, error) {
+	type NoMethod ExportStats
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// GroupsExportOptions: The options for groups export.
+type GroupsExportOptions struct {
+	// ExportFormat: The export format for groups export.
+	//
+	// Possible values:
+	//   "EXPORT_FORMAT_UNSPECIFIED" - No export format specified.
+	//   "MBOX" - MBOX as export format.
+	//   "PST" - PST as export format
+	ExportFormat string `json:"exportFormat,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ExportFormat") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "ExportFormat") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *GroupsExportOptions) MarshalJSON() ([]byte, error) {
+	type NoMethod GroupsExportOptions
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// HangoutsChatExportOptions: The options for hangouts chat export.
+type HangoutsChatExportOptions struct {
+	// ExportFormat: The export format for hangouts chat export.
+	//
+	// Possible values:
+	//   "EXPORT_FORMAT_UNSPECIFIED" - No export format specified.
+	//   "MBOX" - MBOX as export format.
+	//   "PST" - PST as export format
+	ExportFormat string `json:"exportFormat,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ExportFormat") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "ExportFormat") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *HangoutsChatExportOptions) MarshalJSON() ([]byte, error) {
+	type NoMethod HangoutsChatExportOptions
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// HangoutsChatInfo: Accounts to search
+type HangoutsChatInfo struct {
+	// RoomId: A set of rooms to search.
+	RoomId []string `json:"roomId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "RoomId") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "RoomId") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *HangoutsChatInfo) MarshalJSON() ([]byte, error) {
+	type NoMethod HangoutsChatInfo
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// HangoutsChatOptions: Hangouts chat search advanced options
+type HangoutsChatOptions struct {
+	// IncludeRooms: Set to true to include rooms.
+	IncludeRooms bool `json:"includeRooms,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "IncludeRooms") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "IncludeRooms") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *HangoutsChatOptions) MarshalJSON() ([]byte, error) {
+	type NoMethod HangoutsChatOptions
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 // HeldAccount: An account being held in a particular hold. This
@@ -530,6 +1068,42 @@ func (s *Hold) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// ListExportsResponse: The holds for a matter.
+type ListExportsResponse struct {
+	// Exports: The list of exports.
+	Exports []*Export `json:"exports,omitempty"`
+
+	// NextPageToken: Page token to retrieve the next page of results in the
+	// list.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Exports") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Exports") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *ListExportsResponse) MarshalJSON() ([]byte, error) {
+	type NoMethod ListExportsResponse
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // ListHeldAccountsResponse: Returns a list of held accounts for a hold.
 type ListHeldAccountsResponse struct {
 	// Accounts: The held accounts on a hold.
@@ -635,6 +1209,67 @@ func (s *ListMattersResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// MailExportOptions: The options for mail export.
+type MailExportOptions struct {
+	// ExportFormat: The export file format.
+	//
+	// Possible values:
+	//   "EXPORT_FORMAT_UNSPECIFIED" - No export format specified.
+	//   "MBOX" - MBOX as export format.
+	//   "PST" - PST as export format
+	ExportFormat string `json:"exportFormat,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ExportFormat") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "ExportFormat") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *MailExportOptions) MarshalJSON() ([]byte, error) {
+	type NoMethod MailExportOptions
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// MailOptions: Mail search advanced options
+type MailOptions struct {
+	// ExcludeDrafts: Set to true to exclude drafts.
+	ExcludeDrafts bool `json:"excludeDrafts,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ExcludeDrafts") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "ExcludeDrafts") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *MailOptions) MarshalJSON() ([]byte, error) {
+	type NoMethod MailOptions
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // Matter: Represents a matter.
 type Matter struct {
 	// Description: The description of the matter.
@@ -733,6 +1368,214 @@ func (s *MatterPermission) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// OrgUnitInfo: Org Unit to search
+type OrgUnitInfo struct {
+	// OrgUnitId: Org unit to search, as provided by the
+	// <a href="https://developers.google.com/admin-sdk/directory/">Admin
+	// SDK Directory API</a>.
+	OrgUnitId string `json:"orgUnitId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "OrgUnitId") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "OrgUnitId") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *OrgUnitInfo) MarshalJSON() ([]byte, error) {
+	type NoMethod OrgUnitInfo
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// Query: A query definition relevant for search & export.
+type Query struct {
+	// AccountInfo: When 'ACCOUNT' is chosen as search method,
+	// account_info needs to be specified.
+	AccountInfo *AccountInfo `json:"accountInfo,omitempty"`
+
+	// Corpus: The corpus to search.
+	//
+	// Possible values:
+	//   "CORPUS_TYPE_UNSPECIFIED" - No corpus specified.
+	//   "DRIVE" - Drive.
+	//   "MAIL" - Mail.
+	//   "GROUPS" - Groups.
+	//   "HANGOUTS_CHAT" - Hangouts Chat.
+	Corpus string `json:"corpus,omitempty"`
+
+	// DataScope: The data source to search from.
+	//
+	// Possible values:
+	//   "DATA_SCOPE_UNSPECIFIED" - No data scope specified.
+	//   "ALL_DATA" - All available data.
+	//   "HELD_DATA" - Data on hold.
+	//   "UNPROCESSED_DATA" - Data not processed.
+	DataScope string `json:"dataScope,omitempty"`
+
+	// DriveOptions: For Drive search, specify more options in this field.
+	DriveOptions *DriveOptions `json:"driveOptions,omitempty"`
+
+	// EndTime: The end time range for the search query. These timestamps
+	// are in GMT and
+	// rounded down to the start of the given date.
+	EndTime string `json:"endTime,omitempty"`
+
+	// HangoutsChatInfo: When 'ROOM' is chosen as search method,
+	// hangout_chats_info needs to be
+	// specified. (read-only)
+	HangoutsChatInfo *HangoutsChatInfo `json:"hangoutsChatInfo,omitempty"`
+
+	// HangoutsChatOptions: For hangouts chat search, specify more options
+	// in this field. (read-only)
+	HangoutsChatOptions *HangoutsChatOptions `json:"hangoutsChatOptions,omitempty"`
+
+	// MailOptions: For mail search, specify more options in this field.
+	MailOptions *MailOptions `json:"mailOptions,omitempty"`
+
+	// OrgUnitInfo: When 'ORG_UNIT' is chosen as as search method,
+	// org_unit_info needs
+	// to be specified.
+	OrgUnitInfo *OrgUnitInfo `json:"orgUnitInfo,omitempty"`
+
+	// SearchMethod: The search method to use.
+	//
+	// Possible values:
+	//   "SEARCH_METHOD_UNSPECIFIED" - A search method must be specified. If
+	// a request does not specify a
+	// search method, it will be rejected.
+	//   "ACCOUNT" - Will search all accounts provided in account_info.
+	//   "ORG_UNIT" - Will search all accounts in the OU specified in
+	// org_unit_info.
+	//   "TEAM_DRIVE" - Will search for all accounts in the Team Drive
+	// specified in
+	// team_drive_info.
+	//   "ENTIRE_ORG" - Will search for all accounts in the organization.
+	// No need to set account_info or org_unit_info.
+	//   "ROOM" - Will search in the Room specified in
+	// hangout_chats_info. (read-only)
+	SearchMethod string `json:"searchMethod,omitempty"`
+
+	// StartTime: The start time range for the search query. These
+	// timestamps are in GMT and
+	// rounded down to the start of the given date.
+	StartTime string `json:"startTime,omitempty"`
+
+	// TeamDriveInfo: When 'TEAM_DRIVE' is chosen as search method,
+	// team_drive_info needs to be
+	// specified.
+	TeamDriveInfo *TeamDriveInfo `json:"teamDriveInfo,omitempty"`
+
+	// Terms: The corpus-specific
+	// <a href="https://support.google.com/vault/answer/2474474">search
+	// operators</a>
+	// used to generate search results.
+	Terms string `json:"terms,omitempty"`
+
+	// TimeZone: The time zone name.
+	// It should be an IANA TZ name, such as "America/Los_Angeles".
+	// For more information, see
+	// <a
+	// href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">Ti
+	// me
+	// Zone</a>.
+	TimeZone string `json:"timeZone,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "AccountInfo") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "AccountInfo") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *Query) MarshalJSON() ([]byte, error) {
+	type NoMethod Query
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// RemoveHeldAccountsRequest: Remove a list of accounts from a hold.
+type RemoveHeldAccountsRequest struct {
+	// AccountIds: Account ids to identify HeldAccounts to remove.
+	AccountIds []string `json:"accountIds,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "AccountIds") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "AccountIds") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *RemoveHeldAccountsRequest) MarshalJSON() ([]byte, error) {
+	type NoMethod RemoveHeldAccountsRequest
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// RemoveHeldAccountsResponse: Response for batch delete held accounts.
+type RemoveHeldAccountsResponse struct {
+	// Statuses: A list of statuses for deleted accounts. Results have
+	// the
+	// same order as the request.
+	Statuses []*Status `json:"statuses,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Statuses") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Statuses") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *RemoveHeldAccountsResponse) MarshalJSON() ([]byte, error) {
+	type NoMethod RemoveHeldAccountsResponse
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // RemoveMatterPermissionsRequest: Remove an account as a matter
 // collaborator.
 type RemoveMatterPermissionsRequest struct {
@@ -798,8 +1641,188 @@ func (s *ReopenMatterResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// Status: The `Status` type defines a logical error model that is
+// suitable for different
+// programming environments, including REST APIs and RPC APIs. It is
+// used by
+// [gRPC](https://github.com/grpc). The error model is designed to
+// be:
+//
+// - Simple to use and understand for most users
+// - Flexible enough to meet unexpected needs
+//
+// # Overview
+//
+// The `Status` message contains three pieces of data: error code, error
+// message,
+// and error details. The error code should be an enum value
+// of
+// google.rpc.Code, but it may accept additional error codes if needed.
+// The
+// error message should be a developer-facing English message that
+// helps
+// developers *understand* and *resolve* the error. If a localized
+// user-facing
+// error message is needed, put the localized message in the error
+// details or
+// localize it in the client. The optional error details may contain
+// arbitrary
+// information about the error. There is a predefined set of error
+// detail types
+// in the package `google.rpc` that can be used for common error
+// conditions.
+//
+// # Language mapping
+//
+// The `Status` message is the logical representation of the error
+// model, but it
+// is not necessarily the actual wire format. When the `Status` message
+// is
+// exposed in different client libraries and different wire protocols,
+// it can be
+// mapped differently. For example, it will likely be mapped to some
+// exceptions
+// in Java, but more likely mapped to some error codes in C.
+//
+// # Other uses
+//
+// The error model and the `Status` message can be used in a variety
+// of
+// environments, either with or without APIs, to provide a
+// consistent developer experience across different
+// environments.
+//
+// Example uses of this error model include:
+//
+// - Partial errors. If a service needs to return partial errors to the
+// client,
+//     it may embed the `Status` in the normal response to indicate the
+// partial
+//     errors.
+//
+// - Workflow errors. A typical workflow has multiple steps. Each step
+// may
+//     have a `Status` message for error reporting.
+//
+// - Batch operations. If a client uses batch request and batch
+// response, the
+//     `Status` message should be used directly inside batch response,
+// one for
+//     each error sub-response.
+//
+// - Asynchronous operations. If an API call embeds asynchronous
+// operation
+//     results in its response, the status of those operations should
+// be
+//     represented directly using the `Status` message.
+//
+// - Logging. If some API errors are stored in logs, the message
+// `Status` could
+//     be used directly after any stripping needed for security/privacy
+// reasons.
+type Status struct {
+	// Code: The status code, which should be an enum value of
+	// google.rpc.Code.
+	Code int64 `json:"code,omitempty"`
+
+	// Details: A list of messages that carry the error details.  There is a
+	// common set of
+	// message types for APIs to use.
+	Details []googleapi.RawMessage `json:"details,omitempty"`
+
+	// Message: A developer-facing error message, which should be in
+	// English. Any
+	// user-facing error message should be localized and sent in
+	// the
+	// google.rpc.Status.details field, or localized by the client.
+	Message string `json:"message,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Code") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Code") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *Status) MarshalJSON() ([]byte, error) {
+	type NoMethod Status
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// TeamDriveInfo: Team Drives to search
+type TeamDriveInfo struct {
+	// TeamDriveIds: List of Team Drive ids, as provided by
+	// <a
+	// href="https://developers.google.com/drive">Drive API</a>.
+	TeamDriveIds []string `json:"teamDriveIds,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "TeamDriveIds") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "TeamDriveIds") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *TeamDriveInfo) MarshalJSON() ([]byte, error) {
+	type NoMethod TeamDriveInfo
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // UndeleteMatterRequest: Undelete a matter by ID.
 type UndeleteMatterRequest struct {
+}
+
+// UserInfo: User's information.
+type UserInfo struct {
+	// DisplayName: The displayed name of the user.
+	DisplayName string `json:"displayName,omitempty"`
+
+	// Email: The email address of the user.
+	Email string `json:"email,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "DisplayName") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "DisplayName") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *UserInfo) MarshalJSON() ([]byte, error) {
+	type NoMethod UserInfo
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 // method id "vault.matters.addPermissions":
@@ -859,6 +1882,7 @@ func (c *MattersAddPermissionsCall) doRequest(alt string) (*http.Response, error
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}:addPermissions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -994,6 +2018,7 @@ func (c *MattersCloseCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}:close")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1130,6 +2155,7 @@ func (c *MattersCreateCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1246,6 +2272,7 @@ func (c *MattersDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -1396,6 +2423,7 @@ func (c *MattersGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1584,6 +2612,7 @@ func (c *MattersListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1758,6 +2787,7 @@ func (c *MattersRemovePermissionsCall) doRequest(alt string) (*http.Response, er
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}:removePermissions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1893,6 +2923,7 @@ func (c *MattersReopenCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}:reopen")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2028,6 +3059,7 @@ func (c *MattersUndeleteCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}:undelete")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2166,6 +3198,7 @@ func (c *MattersUpdateCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
@@ -2243,6 +3276,761 @@ func (c *MattersUpdateCall) Do(opts ...googleapi.CallOption) (*Matter, error) {
 
 }
 
+// method id "vault.matters.exports.create":
+
+type MattersExportsCreateCall struct {
+	s          *Service
+	matterId   string
+	export     *Export
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
+	header_    http.Header
+}
+
+// Create: Creates an Export.
+func (r *MattersExportsService) Create(matterId string, export *Export) *MattersExportsCreateCall {
+	c := &MattersExportsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.matterId = matterId
+	c.export = export
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *MattersExportsCreateCall) Fields(s ...googleapi.Field) *MattersExportsCreateCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *MattersExportsCreateCall) Context(ctx context.Context) *MattersExportsCreateCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *MattersExportsCreateCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *MattersExportsCreateCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.export)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}/exports")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"matterId": c.matterId,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "vault.matters.exports.create" call.
+// Exactly one of *Export or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Export.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *MattersExportsCreateCall) Do(opts ...googleapi.CallOption) (*Export, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Export{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Creates an Export.",
+	//   "flatPath": "v1/matters/{matterId}/exports",
+	//   "httpMethod": "POST",
+	//   "id": "vault.matters.exports.create",
+	//   "parameterOrder": [
+	//     "matterId"
+	//   ],
+	//   "parameters": {
+	//     "matterId": {
+	//       "description": "The matter ID.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/matters/{matterId}/exports",
+	//   "request": {
+	//     "$ref": "Export"
+	//   },
+	//   "response": {
+	//     "$ref": "Export"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/ediscovery"
+	//   ]
+	// }
+
+}
+
+// method id "vault.matters.exports.delete":
+
+type MattersExportsDeleteCall struct {
+	s          *Service
+	matterId   string
+	exportId   string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
+	header_    http.Header
+}
+
+// Delete: Deletes an Export.
+func (r *MattersExportsService) Delete(matterId string, exportId string) *MattersExportsDeleteCall {
+	c := &MattersExportsDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.matterId = matterId
+	c.exportId = exportId
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *MattersExportsDeleteCall) Fields(s ...googleapi.Field) *MattersExportsDeleteCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *MattersExportsDeleteCall) Context(ctx context.Context) *MattersExportsDeleteCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *MattersExportsDeleteCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *MattersExportsDeleteCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}/exports/{exportId}")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("DELETE", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"matterId": c.matterId,
+		"exportId": c.exportId,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "vault.matters.exports.delete" call.
+// Exactly one of *Empty or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Empty.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *MattersExportsDeleteCall) Do(opts ...googleapi.CallOption) (*Empty, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Empty{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Deletes an Export.",
+	//   "flatPath": "v1/matters/{matterId}/exports/{exportId}",
+	//   "httpMethod": "DELETE",
+	//   "id": "vault.matters.exports.delete",
+	//   "parameterOrder": [
+	//     "matterId",
+	//     "exportId"
+	//   ],
+	//   "parameters": {
+	//     "exportId": {
+	//       "description": "The export ID.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "matterId": {
+	//       "description": "The matter ID.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/matters/{matterId}/exports/{exportId}",
+	//   "response": {
+	//     "$ref": "Empty"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/ediscovery"
+	//   ]
+	// }
+
+}
+
+// method id "vault.matters.exports.get":
+
+type MattersExportsGetCall struct {
+	s            *Service
+	matterId     string
+	exportId     string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
+	header_      http.Header
+}
+
+// Get: Gets an Export.
+func (r *MattersExportsService) Get(matterId string, exportId string) *MattersExportsGetCall {
+	c := &MattersExportsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.matterId = matterId
+	c.exportId = exportId
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *MattersExportsGetCall) Fields(s ...googleapi.Field) *MattersExportsGetCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *MattersExportsGetCall) IfNoneMatch(entityTag string) *MattersExportsGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *MattersExportsGetCall) Context(ctx context.Context) *MattersExportsGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *MattersExportsGetCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *MattersExportsGetCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}/exports/{exportId}")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"matterId": c.matterId,
+		"exportId": c.exportId,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "vault.matters.exports.get" call.
+// Exactly one of *Export or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Export.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *MattersExportsGetCall) Do(opts ...googleapi.CallOption) (*Export, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Export{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Gets an Export.",
+	//   "flatPath": "v1/matters/{matterId}/exports/{exportId}",
+	//   "httpMethod": "GET",
+	//   "id": "vault.matters.exports.get",
+	//   "parameterOrder": [
+	//     "matterId",
+	//     "exportId"
+	//   ],
+	//   "parameters": {
+	//     "exportId": {
+	//       "description": "The export ID.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "matterId": {
+	//       "description": "The matter ID.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/matters/{matterId}/exports/{exportId}",
+	//   "response": {
+	//     "$ref": "Export"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/ediscovery",
+	//     "https://www.googleapis.com/auth/ediscovery.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "vault.matters.exports.list":
+
+type MattersExportsListCall struct {
+	s            *Service
+	matterId     string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
+	header_      http.Header
+}
+
+// List: Lists Exports.
+func (r *MattersExportsService) List(matterId string) *MattersExportsListCall {
+	c := &MattersExportsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.matterId = matterId
+	return c
+}
+
+// PageSize sets the optional parameter "pageSize": The number of
+// exports to return in the response.
+func (c *MattersExportsListCall) PageSize(pageSize int64) *MattersExportsListCall {
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": The pagination
+// token as returned in the response.
+func (c *MattersExportsListCall) PageToken(pageToken string) *MattersExportsListCall {
+	c.urlParams_.Set("pageToken", pageToken)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *MattersExportsListCall) Fields(s ...googleapi.Field) *MattersExportsListCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *MattersExportsListCall) IfNoneMatch(entityTag string) *MattersExportsListCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *MattersExportsListCall) Context(ctx context.Context) *MattersExportsListCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *MattersExportsListCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *MattersExportsListCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}/exports")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"matterId": c.matterId,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "vault.matters.exports.list" call.
+// Exactly one of *ListExportsResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *ListExportsResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *MattersExportsListCall) Do(opts ...googleapi.CallOption) (*ListExportsResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &ListExportsResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Lists Exports.",
+	//   "flatPath": "v1/matters/{matterId}/exports",
+	//   "httpMethod": "GET",
+	//   "id": "vault.matters.exports.list",
+	//   "parameterOrder": [
+	//     "matterId"
+	//   ],
+	//   "parameters": {
+	//     "matterId": {
+	//       "description": "The matter ID.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "pageSize": {
+	//       "description": "The number of exports to return in the response.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "The pagination token as returned in the response.",
+	//       "location": "query",
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/matters/{matterId}/exports",
+	//   "response": {
+	//     "$ref": "ListExportsResponse"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/ediscovery",
+	//     "https://www.googleapis.com/auth/ediscovery.readonly"
+	//   ]
+	// }
+
+}
+
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *MattersExportsListCall) Pages(ctx context.Context, f func(*ListExportsResponse) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
+}
+
+// method id "vault.matters.holds.addHeldAccounts":
+
+type MattersHoldsAddHeldAccountsCall struct {
+	s                      *Service
+	matterId               string
+	holdId                 string
+	addheldaccountsrequest *AddHeldAccountsRequest
+	urlParams_             gensupport.URLParams
+	ctx_                   context.Context
+	header_                http.Header
+}
+
+// AddHeldAccounts: Adds HeldAccounts to a hold. Returns a list of
+// accounts that have been
+// successfully added. Accounts can only be added to an existing
+// account-based
+// hold.
+func (r *MattersHoldsService) AddHeldAccounts(matterId string, holdId string, addheldaccountsrequest *AddHeldAccountsRequest) *MattersHoldsAddHeldAccountsCall {
+	c := &MattersHoldsAddHeldAccountsCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.matterId = matterId
+	c.holdId = holdId
+	c.addheldaccountsrequest = addheldaccountsrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *MattersHoldsAddHeldAccountsCall) Fields(s ...googleapi.Field) *MattersHoldsAddHeldAccountsCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *MattersHoldsAddHeldAccountsCall) Context(ctx context.Context) *MattersHoldsAddHeldAccountsCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *MattersHoldsAddHeldAccountsCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *MattersHoldsAddHeldAccountsCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.addheldaccountsrequest)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}/holds/{holdId}:addHeldAccounts")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"matterId": c.matterId,
+		"holdId":   c.holdId,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "vault.matters.holds.addHeldAccounts" call.
+// Exactly one of *AddHeldAccountsResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *AddHeldAccountsResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *MattersHoldsAddHeldAccountsCall) Do(opts ...googleapi.CallOption) (*AddHeldAccountsResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &AddHeldAccountsResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Adds HeldAccounts to a hold. Returns a list of accounts that have been\nsuccessfully added. Accounts can only be added to an existing account-based\nhold.",
+	//   "flatPath": "v1/matters/{matterId}/holds/{holdId}:addHeldAccounts",
+	//   "httpMethod": "POST",
+	//   "id": "vault.matters.holds.addHeldAccounts",
+	//   "parameterOrder": [
+	//     "matterId",
+	//     "holdId"
+	//   ],
+	//   "parameters": {
+	//     "holdId": {
+	//       "description": "The hold ID.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "matterId": {
+	//       "description": "The matter ID.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/matters/{matterId}/holds/{holdId}:addHeldAccounts",
+	//   "request": {
+	//     "$ref": "AddHeldAccountsRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "AddHeldAccountsResponse"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/ediscovery"
+	//   ]
+	// }
+
+}
+
 // method id "vault.matters.holds.create":
 
 type MattersHoldsCreateCall struct {
@@ -2300,6 +4088,7 @@ func (c *MattersHoldsCreateCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}/holds")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2430,6 +4219,7 @@ func (c *MattersHoldsDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}/holds/{holdId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -2590,6 +4380,7 @@ func (c *MattersHoldsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}/holds/{holdId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2777,6 +4568,7 @@ func (c *MattersHoldsListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}/holds")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2894,6 +4686,155 @@ func (c *MattersHoldsListCall) Pages(ctx context.Context, f func(*ListHoldsRespo
 	}
 }
 
+// method id "vault.matters.holds.removeHeldAccounts":
+
+type MattersHoldsRemoveHeldAccountsCall struct {
+	s                         *Service
+	matterId                  string
+	holdId                    string
+	removeheldaccountsrequest *RemoveHeldAccountsRequest
+	urlParams_                gensupport.URLParams
+	ctx_                      context.Context
+	header_                   http.Header
+}
+
+// RemoveHeldAccounts: Removes HeldAccounts from a hold. Returns a list
+// of statuses in the same
+// order as the request. If this request leaves the hold with no
+// held
+// accounts, the hold will not apply to any accounts.
+func (r *MattersHoldsService) RemoveHeldAccounts(matterId string, holdId string, removeheldaccountsrequest *RemoveHeldAccountsRequest) *MattersHoldsRemoveHeldAccountsCall {
+	c := &MattersHoldsRemoveHeldAccountsCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.matterId = matterId
+	c.holdId = holdId
+	c.removeheldaccountsrequest = removeheldaccountsrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *MattersHoldsRemoveHeldAccountsCall) Fields(s ...googleapi.Field) *MattersHoldsRemoveHeldAccountsCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *MattersHoldsRemoveHeldAccountsCall) Context(ctx context.Context) *MattersHoldsRemoveHeldAccountsCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *MattersHoldsRemoveHeldAccountsCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *MattersHoldsRemoveHeldAccountsCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.removeheldaccountsrequest)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}/holds/{holdId}:removeHeldAccounts")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"matterId": c.matterId,
+		"holdId":   c.holdId,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "vault.matters.holds.removeHeldAccounts" call.
+// Exactly one of *RemoveHeldAccountsResponse or error will be non-nil.
+// Any non-2xx status code is an error. Response headers are in either
+// *RemoveHeldAccountsResponse.ServerResponse.Header or (if a response
+// was returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *MattersHoldsRemoveHeldAccountsCall) Do(opts ...googleapi.CallOption) (*RemoveHeldAccountsResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &RemoveHeldAccountsResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Removes HeldAccounts from a hold. Returns a list of statuses in the same\norder as the request. If this request leaves the hold with no held\naccounts, the hold will not apply to any accounts.",
+	//   "flatPath": "v1/matters/{matterId}/holds/{holdId}:removeHeldAccounts",
+	//   "httpMethod": "POST",
+	//   "id": "vault.matters.holds.removeHeldAccounts",
+	//   "parameterOrder": [
+	//     "matterId",
+	//     "holdId"
+	//   ],
+	//   "parameters": {
+	//     "holdId": {
+	//       "description": "The hold ID.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "matterId": {
+	//       "description": "The matter ID.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/matters/{matterId}/holds/{holdId}:removeHeldAccounts",
+	//   "request": {
+	//     "$ref": "RemoveHeldAccountsRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "RemoveHeldAccountsResponse"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/ediscovery"
+	//   ]
+	// }
+
+}
+
 // method id "vault.matters.holds.update":
 
 type MattersHoldsUpdateCall struct {
@@ -2957,6 +4898,7 @@ func (c *MattersHoldsUpdateCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}/holds/{holdId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
@@ -3105,6 +5047,7 @@ func (c *MattersHoldsAccountsCreateCall) doRequest(alt string) (*http.Response, 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}/holds/{holdId}/accounts")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3246,6 +5189,7 @@ func (c *MattersHoldsAccountsDeleteCall) doRequest(alt string) (*http.Response, 
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}/holds/{holdId}/accounts/{accountId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -3406,6 +5350,7 @@ func (c *MattersHoldsAccountsListCall) doRequest(alt string) (*http.Response, er
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/matters/{matterId}/holds/{holdId}/accounts")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)

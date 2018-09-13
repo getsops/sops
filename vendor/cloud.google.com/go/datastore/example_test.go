@@ -1,4 +1,4 @@
-// Copyright 2014 Google Inc. All Rights Reserved.
+// Copyright 2014 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -218,7 +218,7 @@ func ExampleNewQuery() {
 }
 
 func ExampleNewQuery_options() {
-	// Query to order the posts by the number of comments they have recieved.
+	// Query to order the posts by the number of comments they have received.
 	q := datastore.NewQuery("Post").Order("-Comments")
 	// Start listing from an offset and limit the results.
 	q = q.Offset(20).Limit(10)
@@ -390,6 +390,9 @@ func ExampleClient_GetAll() {
 	}
 	var posts []*Post
 	keys, err := client.GetAll(ctx, datastore.NewQuery("Post"), &posts)
+	if err != nil {
+		// TODO: Handle error.
+	}
 	for i, key := range keys {
 		fmt.Println(key)
 		fmt.Println(posts[i])

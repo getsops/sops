@@ -34,6 +34,17 @@ const (
 	HPE      HanaHardwareTypeNamesEnum = original.HPE
 )
 
+type HanaInstancePowerStateEnum = original.HanaInstancePowerStateEnum
+
+const (
+	Restarting HanaInstancePowerStateEnum = original.Restarting
+	Started    HanaInstancePowerStateEnum = original.Started
+	Starting   HanaInstancePowerStateEnum = original.Starting
+	Stopped    HanaInstancePowerStateEnum = original.Stopped
+	Stopping   HanaInstancePowerStateEnum = original.Stopping
+	Unknown    HanaInstancePowerStateEnum = original.Unknown
+)
+
 type HanaInstanceSizeNamesEnum = original.HanaInstanceSizeNamesEnum
 
 const (
@@ -88,6 +99,9 @@ func NewHanaInstancesClientWithBaseURI(baseURI string, subscriptionID string) Ha
 }
 func PossibleHanaHardwareTypeNamesEnumValues() []HanaHardwareTypeNamesEnum {
 	return original.PossibleHanaHardwareTypeNamesEnumValues()
+}
+func PossibleHanaInstancePowerStateEnumValues() []HanaInstancePowerStateEnum {
+	return original.PossibleHanaInstancePowerStateEnumValues()
 }
 func PossibleHanaInstanceSizeNamesEnumValues() []HanaInstanceSizeNamesEnum {
 	return original.PossibleHanaInstanceSizeNamesEnumValues()

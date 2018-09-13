@@ -64,6 +64,49 @@ func (u CommentUnmarshaler) Unmarshal(in []byte, out interface{}) (err error) {
 	return nil
 }
 
+func (u CommentUnmarshaler) UnmarshalDocuments(in []byte, out interface{}) (err error) {
+	return unmarshalDocuments(in, out, true)
+}
+
+func unmarshalDocuments(in []byte, out interface{}, withComments bool) (err error) {
+	defer handleErr(&err)
+	d := newDecoder()
+	sv := reflect.ValueOf(out)
+	if sv.Kind() == reflect.Ptr && !sv.IsNil() {
+		sv = sv.Elem()
+	}
+	if sv.Kind() != reflect.Slice {
+		return errors.New("Must provide slice of the type to hold multiple docs")
+	}
+	svt := sv.Type().Elem()
+	var p *parser
+	for {
+		p = newParser(in)
+		if withComments {
+			p.parser.parse_comments = true
+		}
+		node := p.parse()
+		if node != nil {
+			v := reflect.New(svt).Elem()
+			if v.Kind() == reflect.Ptr && !v.IsNil() {
+				v = v.Elem()
+			}
+			d.unmarshal(node, v)
+			sv.Set(reflect.Append(sv, v))
+		}
+		if len(d.terrors) > 0 {
+			p.destroy()
+			return &TypeError{d.terrors}
+		}
+		in = yaml_parser_remaining_buffer(&p.parser)
+		p.destroy()
+		if len(in) == 0 {
+			break
+		}
+	}
+	return nil
+}
+
 // Unmarshal decodes the first document found within the in byte slice
 // and assigns decoded values into the out value.
 //
@@ -115,6 +158,25 @@ func Unmarshal(in []byte, out interface{}) (err error) {
 		return &TypeError{d.terrors}
 	}
 	return nil
+}
+
+// UnmarshalDocuments decodes all documents found within the in byte slice
+// and assigns decoded values into the out value. The out value must be a slice
+// of the type to which unmarshalling is intended.  For example, given the
+// type T from the example in the Unmarshal comments above, you would need
+//
+//    var t []T
+//
+// to pass to UnmarshalDocuments. All other comments regarding Unmarshal would
+// still apply here.
+//
+// TODO Consider making a function to parse each document out of the stream and
+// return a slice of []byte so the user can specify different unmarshal types
+// per document. You can do this currently if you use the MapSlice type as the
+// out parameter.
+
+func UnmarshalDocuments(in []byte, out interface{}) (err error) {
+	return unmarshalDocuments(in, out, false)
 }
 
 type YAMLMarshaler struct {

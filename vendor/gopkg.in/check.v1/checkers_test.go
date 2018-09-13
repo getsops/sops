@@ -2,9 +2,10 @@ package check_test
 
 import (
 	"errors"
-	"gopkg.in/check.v1"
 	"reflect"
 	"runtime"
+
+	"gopkg.in/check.v1"
 )
 
 type CheckersS struct{}
@@ -77,6 +78,7 @@ func (s *CheckersS) TestNot(c *check.C) {
 
 	testCheck(c, check.Not(check.IsNil), false, "", nil)
 	testCheck(c, check.Not(check.IsNil), true, "", "a")
+	testCheck(c, check.Not(check.Equals), true, "", 42, 43)
 }
 
 type simpleStruct struct {
@@ -101,11 +103,16 @@ func (s *CheckersS) TestEquals(c *check.C) {
 
 	// Struct values
 	testCheck(c, check.Equals, true, "", simpleStruct{1}, simpleStruct{1})
-	testCheck(c, check.Equals, false, "", simpleStruct{1}, simpleStruct{2})
+	testCheck(c, check.Equals, false, `Difference:
+...     i: 1 != 2
+`, simpleStruct{1}, simpleStruct{2})
 
-	// Struct pointers
+	// Struct pointers, no difference in values, just pointer
 	testCheck(c, check.Equals, false, "", &simpleStruct{1}, &simpleStruct{1})
-	testCheck(c, check.Equals, false, "", &simpleStruct{1}, &simpleStruct{2})
+	// Struct pointers, different pointers and different values
+	testCheck(c, check.Equals, false, `Difference:
+...     i: 1 != 2
+`, &simpleStruct{1}, &simpleStruct{2})
 }
 
 func (s *CheckersS) TestDeepEquals(c *check.C) {
@@ -123,15 +130,23 @@ func (s *CheckersS) TestDeepEquals(c *check.C) {
 
 	// Slices
 	testCheck(c, check.DeepEquals, true, "", []byte{1, 2}, []byte{1, 2})
-	testCheck(c, check.DeepEquals, false, "", []byte{1, 2}, []byte{1, 3})
+	testCheck(c, check.DeepEquals, false, `Difference:
+...     [1]: 2 != 3
+`, []byte{1, 2}, []byte{1, 3})
 
 	// Struct values
 	testCheck(c, check.DeepEquals, true, "", simpleStruct{1}, simpleStruct{1})
-	testCheck(c, check.DeepEquals, false, "", simpleStruct{1}, simpleStruct{2})
+	testCheck(c, check.DeepEquals, false, `Difference:
+...     i: 1 != 2
+`, simpleStruct{1}, simpleStruct{2})
 
 	// Struct pointers
 	testCheck(c, check.DeepEquals, true, "", &simpleStruct{1}, &simpleStruct{1})
-	testCheck(c, check.DeepEquals, false, "", &simpleStruct{1}, &simpleStruct{2})
+	s1 := &simpleStruct{1}
+	s2 := &simpleStruct{2}
+	testCheck(c, check.DeepEquals, false, `Difference:
+...     i: 1 != 2
+`, s1, s2)
 }
 
 func (s *CheckersS) TestHasLen(c *check.C) {

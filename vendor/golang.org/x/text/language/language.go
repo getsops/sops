@@ -142,8 +142,8 @@ func canonicalize(c CanonType, t language.Tag) (language.Tag, bool) {
 						// for legacy reasons, CLDR maps "no", the macro language
 						// code for Norwegian, to the dominant variant "nb". This
 						// change is currently under consideration for CLDR as well.
-						// See http://unicode.org/cldr/trac/ticket/2698 and also
-						// http://unicode.org/cldr/trac/ticket/1790 for some of the
+						// See https://unicode.org/cldr/trac/ticket/2698 and also
+						// https://unicode.org/cldr/trac/ticket/1790 for some of the
 						// practical implications. TODO: this check could be removed
 						// if CLDR adopts this change.
 						if c&CLDR == 0 || t.LangID != _nb {
@@ -266,7 +266,7 @@ func (t Tag) Base() (Base, Confidence) {
 // If a script cannot be inferred (Zzzz, No) is returned. We do not use Zyyy (undetermined)
 // as one would suspect from the IANA registry for BCP 47. In a Unicode context Zyyy marks
 // common characters (like 1, 2, 3, '.', etc.) and is therefore more like multiple scripts.
-// See http://www.unicode.org/reports/tr24/#Values for more details. Zzzz is also used for
+// See https://www.unicode.org/reports/tr24/#Values for more details. Zzzz is also used for
 // unknown value in CLDR.  (Zzzz, Exact) is returned if Zzzz was explicitly specified.
 // Note that an inferred script is never guaranteed to be the correct one. Latin is
 // almost exclusively used for Afrikaans, but Arabic has been used for some texts
@@ -405,7 +405,7 @@ func (t Tag) Extensions() []Extension {
 
 // TypeForKey returns the type associated with the given key, where key and type
 // are of the allowed values defined for the Unicode locale extension ('u') in
-// http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers.
+// https://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers.
 // TypeForKey will traverse the inheritance chain to get the correct value.
 func (t Tag) TypeForKey(key string) string {
 	if !compact.Tag(t).MayHaveExtensions() {
@@ -418,7 +418,7 @@ func (t Tag) TypeForKey(key string) string {
 
 // SetTypeForKey returns a new Tag with the key set to type, where key and type
 // are of the allowed values defined for the Unicode locale extension ('u') in
-// http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers.
+// https://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers.
 // An empty value removes an existing pair with the same key.
 func (t Tag) SetTypeForKey(key, value string) (Tag, error) {
 	tt, err := t.tag().SetTypeForKey(key, value)

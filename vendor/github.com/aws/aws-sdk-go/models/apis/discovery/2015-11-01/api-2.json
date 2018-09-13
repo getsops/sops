@@ -119,6 +119,23 @@
         {"shape":"ServerInternalErrorException"}
       ]
     },
+    "DescribeContinuousExports":{
+      "name":"DescribeContinuousExports",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeContinuousExportsRequest"},
+      "output":{"shape":"DescribeContinuousExportsResponse"},
+      "errors":[
+        {"shape":"AuthorizationErrorException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"ServerInternalErrorException"},
+        {"shape":"OperationNotPermittedException"},
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
     "DescribeExportConfigurations":{
       "name":"DescribeExportConfigurations",
       "http":{
@@ -244,6 +261,24 @@
         {"shape":"ServerInternalErrorException"}
       ]
     },
+    "StartContinuousExport":{
+      "name":"StartContinuousExport",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StartContinuousExportRequest"},
+      "output":{"shape":"StartContinuousExportResponse"},
+      "errors":[
+        {"shape":"ConflictErrorException"},
+        {"shape":"AuthorizationErrorException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"ServerInternalErrorException"},
+        {"shape":"OperationNotPermittedException"},
+        {"shape":"ResourceInUseException"}
+      ]
+    },
     "StartDataCollectionByAgentIds":{
       "name":"StartDataCollectionByAgentIds",
       "http":{
@@ -273,6 +308,24 @@
         {"shape":"InvalidParameterValueException"},
         {"shape":"ServerInternalErrorException"},
         {"shape":"OperationNotPermittedException"}
+      ]
+    },
+    "StopContinuousExport":{
+      "name":"StopContinuousExport",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StopContinuousExportRequest"},
+      "output":{"shape":"StopContinuousExportResponse"},
+      "errors":[
+        {"shape":"AuthorizationErrorException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"ServerInternalErrorException"},
+        {"shape":"OperationNotPermittedException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ResourceInUseException"}
       ]
     },
     "StopDataCollectionByAgentIds":{
@@ -438,6 +491,46 @@
     },
     "ConfigurationsDownloadUrl":{"type":"string"},
     "ConfigurationsExportId":{"type":"string"},
+    "ConflictErrorException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"Message"}
+      },
+      "exception":true
+    },
+    "ContinuousExportDescription":{
+      "type":"structure",
+      "members":{
+        "exportId":{"shape":"ConfigurationsExportId"},
+        "status":{"shape":"ContinuousExportStatus"},
+        "statusDetail":{"shape":"StringMax255"},
+        "s3Bucket":{"shape":"S3Bucket"},
+        "startTime":{"shape":"TimeStamp"},
+        "stopTime":{"shape":"TimeStamp"},
+        "dataSource":{"shape":"DataSource"},
+        "schemaStorageConfig":{"shape":"SchemaStorageConfig"}
+      }
+    },
+    "ContinuousExportDescriptions":{
+      "type":"list",
+      "member":{"shape":"ContinuousExportDescription"}
+    },
+    "ContinuousExportIds":{
+      "type":"list",
+      "member":{"shape":"ConfigurationsExportId"}
+    },
+    "ContinuousExportStatus":{
+      "type":"string",
+      "enum":[
+        "START_IN_PROGRESS",
+        "START_FAILED",
+        "ACTIVE",
+        "ERROR",
+        "STOP_IN_PROGRESS",
+        "STOP_FAILED",
+        "INACTIVE"
+      ]
+    },
     "CreateApplicationRequest":{
       "type":"structure",
       "required":["name"],
@@ -510,6 +603,15 @@
         "unknownConnectors":{"shape":"Integer"}
       }
     },
+    "DataSource":{
+      "type":"string",
+      "enum":["AGENT"]
+    },
+    "DatabaseName":{
+      "type":"string",
+      "max":252,
+      "min":1
+    },
     "DeleteApplicationsRequest":{
       "type":"structure",
       "required":["configurationIds"],
@@ -571,6 +673,27 @@
       "type":"structure",
       "members":{
         "configurations":{"shape":"DescribeConfigurationsAttributes"}
+      }
+    },
+    "DescribeContinuousExportsMaxResults":{
+      "type":"integer",
+      "box":true,
+      "max":100,
+      "min":1
+    },
+    "DescribeContinuousExportsRequest":{
+      "type":"structure",
+      "members":{
+        "exportIds":{"shape":"ContinuousExportIds"},
+        "maxResults":{"shape":"DescribeContinuousExportsMaxResults"},
+        "nextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribeContinuousExportsResponse":{
+      "type":"structure",
+      "members":{
+        "descriptions":{"shape":"ContinuousExportDescriptions"},
+        "nextToken":{"shape":"NextToken"}
       }
     },
     "DescribeExportConfigurationsRequest":{
@@ -839,12 +962,25 @@
       "type":"list",
       "member":{"shape":"OrderByElement"}
     },
+    "ResourceInUseException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"Message"}
+      },
+      "exception":true
+    },
     "ResourceNotFoundException":{
       "type":"structure",
       "members":{
         "message":{"shape":"Message"}
       },
       "exception":true
+    },
+    "S3Bucket":{"type":"string"},
+    "SchemaStorageConfig":{
+      "type":"map",
+      "key":{"shape":"DatabaseName"},
+      "value":{"shape":"String"}
     },
     "ServerInternalErrorException":{
       "type":"structure",
@@ -853,6 +989,21 @@
       },
       "exception":true,
       "fault":true
+    },
+    "StartContinuousExportRequest":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "StartContinuousExportResponse":{
+      "type":"structure",
+      "members":{
+        "exportId":{"shape":"ConfigurationsExportId"},
+        "s3Bucket":{"shape":"S3Bucket"},
+        "startTime":{"shape":"TimeStamp"},
+        "dataSource":{"shape":"DataSource"},
+        "schemaStorageConfig":{"shape":"SchemaStorageConfig"}
+      }
     },
     "StartDataCollectionByAgentIdsRequest":{
       "type":"structure",
@@ -882,6 +1033,20 @@
         "exportId":{"shape":"ConfigurationsExportId"}
       }
     },
+    "StopContinuousExportRequest":{
+      "type":"structure",
+      "required":["exportId"],
+      "members":{
+        "exportId":{"shape":"ConfigurationsExportId"}
+      }
+    },
+    "StopContinuousExportResponse":{
+      "type":"structure",
+      "members":{
+        "startTime":{"shape":"TimeStamp"},
+        "stopTime":{"shape":"TimeStamp"}
+      }
+    },
     "StopDataCollectionByAgentIdsRequest":{
       "type":"structure",
       "required":["agentIds"],
@@ -896,6 +1061,11 @@
       }
     },
     "String":{"type":"string"},
+    "StringMax255":{
+      "type":"string",
+      "max":255,
+      "min":1
+    },
     "Tag":{
       "type":"structure",
       "required":[

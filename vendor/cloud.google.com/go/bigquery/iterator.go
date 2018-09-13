@@ -1,4 +1,4 @@
-// Copyright 2015 Google Inc. All Rights Reserved.
+// Copyright 2015 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,16 +23,20 @@ import (
 	"google.golang.org/api/iterator"
 )
 
+// Construct a RowIterator.
+// If pf is nil, there are no rows in the result set.
 func newRowIterator(ctx context.Context, t *Table, pf pageFetcher) *RowIterator {
 	it := &RowIterator{
 		ctx:   ctx,
 		table: t,
 		pf:    pf,
 	}
-	it.pageInfo, it.nextFunc = iterator.NewPageInfo(
-		it.fetch,
-		func() int { return len(it.rows) },
-		func() interface{} { r := it.rows; it.rows = nil; return r })
+	if pf != nil {
+		it.pageInfo, it.nextFunc = iterator.NewPageInfo(
+			it.fetch,
+			func() int { return len(it.rows) },
+			func() interface{} { r := it.rows; it.rows = nil; return r })
+	}
 	return it
 }
 
@@ -99,6 +103,9 @@ type RowIterator struct {
 // NullDateTime. You can also use a *[]Value or *map[string]Value to read from a
 // table with NULLs.
 func (it *RowIterator) Next(dst interface{}) error {
+	if it.pf == nil { // There are no rows in the result set.
+		return iterator.Done
+	}
 	var vl ValueLoader
 	switch dst := dst.(type) {
 	case ValueLoader:

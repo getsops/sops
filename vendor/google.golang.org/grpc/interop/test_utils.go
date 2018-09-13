@@ -153,7 +153,7 @@ func DoServerStreaming(tc testpb.TestServiceClient, args ...grpc.CallOption) {
 			grpclog.Fatalf("Got the reply of type %d, want %d", t, testpb.PayloadType_COMPRESSABLE)
 		}
 		size := len(reply.GetPayload().GetBody())
-		if size != int(respSizes[index]) {
+		if size != respSizes[index] {
 			grpclog.Fatalf("Got reply body of length %d, want %d", size, respSizes[index])
 		}
 		index++
@@ -198,7 +198,7 @@ func DoPingPong(tc testpb.TestServiceClient, args ...grpc.CallOption) {
 			grpclog.Fatalf("Got the reply of type %d, want %d", t, testpb.PayloadType_COMPRESSABLE)
 		}
 		size := len(reply.GetPayload().GetBody())
-		if size != int(respSizes[index]) {
+		if size != respSizes[index] {
 			grpclog.Fatalf("Got reply body of length %d, want %d", size, respSizes[index])
 		}
 		index++
@@ -563,6 +563,27 @@ func DoStatusCodeAndMessage(tc testpb.TestServiceClient, args ...grpc.CallOption
 	}
 }
 
+// DoSpecialStatusMessage verifies Unicode and whitespace is correctly processed
+// in status message.
+func DoSpecialStatusMessage(tc testpb.TestServiceClient, args ...grpc.CallOption) {
+	const (
+		code int32  = 2
+		msg  string = "\t\ntest with whitespace\r\nand Unicode BMP ☺ and non-BMP 😈\t\n"
+	)
+	expectedErr := status.Error(codes.Code(code), msg)
+	req := &testpb.SimpleRequest{
+		ResponseStatus: &testpb.EchoStatus{
+			Code:    code,
+			Message: msg,
+		},
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if _, err := tc.UnaryCall(ctx, req, args...); err == nil || err.Error() != expectedErr.Error() {
+		grpclog.Fatalf("%v.UnaryCall(_, %v) = _, %v, want _, %v", tc, req, err, expectedErr)
+	}
+}
+
 // DoUnimplementedService attempts to call a method from an unimplemented service.
 func DoUnimplementedService(tc testpb.UnimplementedServiceClient) {
 	_, err := tc.UnimplementedCall(context.Background(), &testpb.Empty{})
@@ -574,8 +595,8 @@ func DoUnimplementedService(tc testpb.UnimplementedServiceClient) {
 // DoUnimplementedMethod attempts to call an unimplemented method.
 func DoUnimplementedMethod(cc *grpc.ClientConn) {
 	var req, reply proto.Message
-	if err := grpc.Invoke(context.Background(), "/grpc.testing.TestService/UnimplementedCall", req, reply, cc); err == nil || status.Code(err) != codes.Unimplemented {
-		grpclog.Fatalf("grpc.Invoke(_, _, _, _, _) = %v, want error code %s", err, codes.Unimplemented)
+	if err := cc.Invoke(context.Background(), "/grpc.testing.TestService/UnimplementedCall", req, reply); err == nil || status.Code(err) != codes.Unimplemented {
+		grpclog.Fatalf("ClientConn.Invoke(_, _, _, _, _) = %v, want error code %s", err, codes.Unimplemented)
 	}
 }
 

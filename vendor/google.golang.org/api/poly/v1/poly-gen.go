@@ -179,6 +179,9 @@ type Asset struct {
 	// immutable; the author of an asset may change them post-publication.
 	PresentationParams *PresentationParams `json:"presentationParams,omitempty"`
 
+	// RemixInfo: The remix info for the asset.
+	RemixInfo *RemixInfo `json:"remixInfo,omitempty"`
+
 	// Thumbnail: The thumbnail image for the asset.
 	Thumbnail *File `json:"thumbnail,omitempty"`
 
@@ -722,6 +725,17 @@ func (s *ObjParseError) MarshalJSON() ([]byte, error) {
 // information available when the asset
 // was uploaded.
 type PresentationParams struct {
+	// BackgroundColor: A background color which could be used for
+	// displaying the 3D asset in a
+	// 'thumbnail' or 'palette' style view. Authors have the option to set
+	// this
+	// background color when publishing or editing their asset.
+	//
+	// This is represented as a six-digit hexademical triplet specifying
+	// the
+	// RGB components of the background color, e.g. #FF0000 for Red.
+	BackgroundColor string `json:"backgroundColor,omitempty"`
+
 	// ColorSpace: The materials' diffuse/albedo color. This does not apply
 	// to vertex colors
 	// or texture maps.
@@ -762,7 +776,7 @@ type PresentationParams struct {
 	// Please note: this is applicable only to the gLTF.
 	OrientingRotation *Quaternion `json:"orientingRotation,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "ColorSpace") to
+	// ForceSendFields is a list of field names (e.g. "BackgroundColor") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -770,12 +784,13 @@ type PresentationParams struct {
 	// used to include empty fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "ColorSpace") to include in
-	// API requests with the JSON null value. By default, fields with empty
-	// values are omitted from API requests. However, any field with an
-	// empty value appearing in NullFields will be sent to the server as
-	// null. It is an error if a field in this list has a non-empty value.
-	// This may be used to include null fields in Patch requests.
+	// NullFields is a list of field names (e.g. "BackgroundColor") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
 	NullFields []string `json:"-"`
 }
 
@@ -846,15 +861,47 @@ func (s *Quaternion) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// RemixInfo: Info about the sources of this asset (i.e. assets that
+// were remixed to
+// create this asset).
+type RemixInfo struct {
+	// SourceAsset: Resource ids for the sources of this remix, of the
+	// form:
+	// `assets/{ASSET_ID}`
+	SourceAsset []string `json:"sourceAsset,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "SourceAsset") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "SourceAsset") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *RemixInfo) MarshalJSON() ([]byte, error) {
+	type NoMethod RemixInfo
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // StartAssetImportResponse: A response message from a request to
-// list.
+// startImport.
 // This is returned in the response field of the Operation.
 type StartAssetImportResponse struct {
 	// AssetId: The id of newly created asset. If this is empty when the
 	// operation is
 	// complete it means the import failed. Please refer to
 	// the
-	// asset_import_message field to understand what went wrong.
+	// assetImportMessages field to understand what went wrong.
 	AssetId string `json:"assetId,omitempty"`
 
 	// AssetImportId: The id of the asset import.
@@ -987,6 +1034,7 @@ func (c *AssetsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1204,6 +1252,7 @@ func (c *AssetsListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/assets")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1453,6 +1502,7 @@ func (c *UsersAssetsListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}/assets")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1682,6 +1732,7 @@ func (c *UsersLikedassetsListCall) doRequest(alt string) (*http.Response, error)
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}/likedassets")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)

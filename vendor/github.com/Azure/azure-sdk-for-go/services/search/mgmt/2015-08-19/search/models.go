@@ -176,6 +176,16 @@ type CloudErrorBody struct {
 	Details *[]CloudErrorBody `json:"details,omitempty"`
 }
 
+// Identity identity for the resource.
+type Identity struct {
+	// PrincipalID - The principal ID of resource identity.
+	PrincipalID *string `json:"principalId,omitempty"`
+	// TenantID - The tenant ID of resource.
+	TenantID *string `json:"tenantId,omitempty"`
+	// Type - The identity type.
+	Type *string `json:"type,omitempty"`
+}
+
 // ListQueryKeysResult response containing the query API keys for a given Azure Search service.
 type ListQueryKeysResult struct {
 	autorest.Response `json:"-"`
@@ -234,6 +244,8 @@ type Resource struct {
 	Location *string `json:"location,omitempty"`
 	// Tags - Tags to help categorize the resource in the Azure portal.
 	Tags map[string]*string `json:"tags"`
+	// Identity - The identity of the resource.
+	Identity *Identity `json:"identity,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for Resource.
@@ -253,6 +265,9 @@ func (r Resource) MarshalJSON() ([]byte, error) {
 	}
 	if r.Tags != nil {
 		objectMap["tags"] = r.Tags
+	}
+	if r.Identity != nil {
+		objectMap["identity"] = r.Identity
 	}
 	return json.Marshal(objectMap)
 }
@@ -274,6 +289,8 @@ type Service struct {
 	Location *string `json:"location,omitempty"`
 	// Tags - Tags to help categorize the resource in the Azure portal.
 	Tags map[string]*string `json:"tags"`
+	// Identity - The identity of the resource.
+	Identity *Identity `json:"identity,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for Service.
@@ -299,6 +316,9 @@ func (s Service) MarshalJSON() ([]byte, error) {
 	}
 	if s.Tags != nil {
 		objectMap["tags"] = s.Tags
+	}
+	if s.Identity != nil {
+		objectMap["identity"] = s.Identity
 	}
 	return json.Marshal(objectMap)
 }
@@ -374,6 +394,15 @@ func (s *Service) UnmarshalJSON(body []byte) error {
 					return err
 				}
 				s.Tags = tags
+			}
+		case "identity":
+			if v != nil {
+				var identity Identity
+				err = json.Unmarshal(*v, &identity)
+				if err != nil {
+					return err
+				}
+				s.Identity = &identity
 			}
 		}
 	}

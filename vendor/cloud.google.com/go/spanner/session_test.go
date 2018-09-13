@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Google Inc. All Rights Reserved.
+Copyright 2017 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -52,6 +52,35 @@ func setup(t *testing.T, spc SessionPoolConfig) (sp *sessionPool, sc *testutil.M
 		sp.close()
 	}
 	return
+}
+
+// TestSessionPoolConfigValidation tests session pool config validation.
+func TestSessionPoolConfigValidation(t *testing.T) {
+	t.Parallel()
+	sc := testutil.NewMockCloudSpannerClient(t)
+	for _, test := range []struct {
+		spc SessionPoolConfig
+		err error
+	}{
+		{
+			SessionPoolConfig{},
+			errNoRPCGetter(),
+		},
+		{
+			SessionPoolConfig{
+				getRPCClient: func() (sppb.SpannerClient, error) {
+					return sc, nil
+				},
+				MinOpened: 10,
+				MaxOpened: 5,
+			},
+			errMinOpenedGTMaxOpened(5, 10),
+		},
+	} {
+		if _, err := newSessionPool("mockdb", test.spc, nil); !testEqual(err, test.err) {
+			t.Errorf("want %v, got %v", test.err, err)
+		}
+	}
 }
 
 // TestSessionCreation tests session creation during sessionPool.Take().
@@ -451,18 +480,18 @@ func TestSessionDestroy(t *testing.T) {
 // TestHcHeap tests heap operation on top of hcHeap.
 func TestHcHeap(t *testing.T) {
 	in := []*session{
-		&session{nextCheck: time.Unix(10, 0)},
-		&session{nextCheck: time.Unix(0, 5)},
-		&session{nextCheck: time.Unix(1, 8)},
-		&session{nextCheck: time.Unix(11, 7)},
-		&session{nextCheck: time.Unix(6, 3)},
+		{nextCheck: time.Unix(10, 0)},
+		{nextCheck: time.Unix(0, 5)},
+		{nextCheck: time.Unix(1, 8)},
+		{nextCheck: time.Unix(11, 7)},
+		{nextCheck: time.Unix(6, 3)},
 	}
 	want := []*session{
-		&session{nextCheck: time.Unix(1, 8), hcIndex: 0},
-		&session{nextCheck: time.Unix(6, 3), hcIndex: 1},
-		&session{nextCheck: time.Unix(8, 2), hcIndex: 2},
-		&session{nextCheck: time.Unix(10, 0), hcIndex: 3},
-		&session{nextCheck: time.Unix(11, 7), hcIndex: 4},
+		{nextCheck: time.Unix(1, 8), hcIndex: 0},
+		{nextCheck: time.Unix(6, 3), hcIndex: 1},
+		{nextCheck: time.Unix(8, 2), hcIndex: 2},
+		{nextCheck: time.Unix(10, 0), hcIndex: 3},
+		{nextCheck: time.Unix(11, 7), hcIndex: 4},
 	}
 	hh := hcHeap{}
 	for _, s := range in {
@@ -657,11 +686,11 @@ func TestStressSessionPool(t *testing.T) {
 		t.SkipNow()
 	}
 	for ti, cfg := range []SessionPoolConfig{
-		SessionPoolConfig{},
-		SessionPoolConfig{MinOpened: 10, MaxOpened: 100},
-		SessionPoolConfig{MaxBurst: 50},
-		SessionPoolConfig{MinOpened: 10, MaxOpened: 200, MaxBurst: 5},
-		SessionPoolConfig{MinOpened: 10, MaxOpened: 200, MaxBurst: 5, WriteSessions: 0.2},
+		{},
+		{MinOpened: 10, MaxOpened: 100},
+		{MaxBurst: 50},
+		{MinOpened: 10, MaxOpened: 200, MaxBurst: 5},
+		{MinOpened: 10, MaxOpened: 200, MaxBurst: 5, WriteSessions: 0.2},
 	} {
 		var wg sync.WaitGroup
 		// Create a more aggressive session healthchecker to increase test concurrency.

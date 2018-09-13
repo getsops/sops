@@ -17,14 +17,42 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
+
 type SearchResponse struct {
-	Results []*SearchResponse_Result `protobuf:"bytes,1,rep,name=results" json:"results,omitempty"`
+	Results              []*SearchResponse_Result `protobuf:"bytes,1,rep,name=results,proto3" json:"results,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
+	XXX_unrecognized     []byte                   `json:"-"`
+	XXX_sizecache        int32                    `json:"-"`
 }
 
-func (m *SearchResponse) Reset()                    { *m = SearchResponse{} }
-func (m *SearchResponse) String() string            { return proto.CompactTextString(m) }
-func (*SearchResponse) ProtoMessage()               {}
-func (*SearchResponse) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0} }
+func (m *SearchResponse) Reset()         { *m = SearchResponse{} }
+func (m *SearchResponse) String() string { return proto.CompactTextString(m) }
+func (*SearchResponse) ProtoMessage()    {}
+func (*SearchResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_test_a0c753075da50dd4, []int{0}
+}
+func (m *SearchResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SearchResponse.Unmarshal(m, b)
+}
+func (m *SearchResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SearchResponse.Marshal(b, m, deterministic)
+}
+func (dst *SearchResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SearchResponse.Merge(dst, src)
+}
+func (m *SearchResponse) XXX_Size() int {
+	return xxx_messageInfo_SearchResponse.Size(m)
+}
+func (m *SearchResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_SearchResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SearchResponse proto.InternalMessageInfo
 
 func (m *SearchResponse) GetResults() []*SearchResponse_Result {
 	if m != nil {
@@ -34,15 +62,37 @@ func (m *SearchResponse) GetResults() []*SearchResponse_Result {
 }
 
 type SearchResponse_Result struct {
-	Url      string   `protobuf:"bytes,1,opt,name=url" json:"url,omitempty"`
-	Title    string   `protobuf:"bytes,2,opt,name=title" json:"title,omitempty"`
-	Snippets []string `protobuf:"bytes,3,rep,name=snippets" json:"snippets,omitempty"`
+	Url                  string   `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
+	Title                string   `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	Snippets             []string `protobuf:"bytes,3,rep,name=snippets,proto3" json:"snippets,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *SearchResponse_Result) Reset()                    { *m = SearchResponse_Result{} }
-func (m *SearchResponse_Result) String() string            { return proto.CompactTextString(m) }
-func (*SearchResponse_Result) ProtoMessage()               {}
-func (*SearchResponse_Result) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0, 0} }
+func (m *SearchResponse_Result) Reset()         { *m = SearchResponse_Result{} }
+func (m *SearchResponse_Result) String() string { return proto.CompactTextString(m) }
+func (*SearchResponse_Result) ProtoMessage()    {}
+func (*SearchResponse_Result) Descriptor() ([]byte, []int) {
+	return fileDescriptor_test_a0c753075da50dd4, []int{0, 0}
+}
+func (m *SearchResponse_Result) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SearchResponse_Result.Unmarshal(m, b)
+}
+func (m *SearchResponse_Result) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SearchResponse_Result.Marshal(b, m, deterministic)
+}
+func (dst *SearchResponse_Result) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SearchResponse_Result.Merge(dst, src)
+}
+func (m *SearchResponse_Result) XXX_Size() int {
+	return xxx_messageInfo_SearchResponse_Result.Size(m)
+}
+func (m *SearchResponse_Result) XXX_DiscardUnknown() {
+	xxx_messageInfo_SearchResponse_Result.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SearchResponse_Result proto.InternalMessageInfo
 
 func (m *SearchResponse_Result) GetUrl() string {
 	if m != nil {
@@ -66,13 +116,35 @@ func (m *SearchResponse_Result) GetSnippets() []string {
 }
 
 type SearchRequest struct {
-	Query string `protobuf:"bytes,1,opt,name=query" json:"query,omitempty"`
+	Query                string   `protobuf:"bytes,1,opt,name=query,proto3" json:"query,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *SearchRequest) Reset()                    { *m = SearchRequest{} }
-func (m *SearchRequest) String() string            { return proto.CompactTextString(m) }
-func (*SearchRequest) ProtoMessage()               {}
-func (*SearchRequest) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{1} }
+func (m *SearchRequest) Reset()         { *m = SearchRequest{} }
+func (m *SearchRequest) String() string { return proto.CompactTextString(m) }
+func (*SearchRequest) ProtoMessage()    {}
+func (*SearchRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_test_a0c753075da50dd4, []int{1}
+}
+func (m *SearchRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SearchRequest.Unmarshal(m, b)
+}
+func (m *SearchRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SearchRequest.Marshal(b, m, deterministic)
+}
+func (dst *SearchRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SearchRequest.Merge(dst, src)
+}
+func (m *SearchRequest) XXX_Size() int {
+	return xxx_messageInfo_SearchRequest.Size(m)
+}
+func (m *SearchRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SearchRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SearchRequest proto.InternalMessageInfo
 
 func (m *SearchRequest) GetQuery() string {
 	if m != nil {
@@ -95,8 +167,9 @@ var _ grpc.ClientConn
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
-// Client API for SearchService service
-
+// SearchServiceClient is the client API for SearchService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type SearchServiceClient interface {
 	Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error)
 	StreamingSearch(ctx context.Context, opts ...grpc.CallOption) (SearchService_StreamingSearchClient, error)
@@ -112,7 +185,7 @@ func NewSearchServiceClient(cc *grpc.ClientConn) SearchServiceClient {
 
 func (c *searchServiceClient) Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error) {
 	out := new(SearchResponse)
-	err := grpc.Invoke(ctx, "/grpc.testing.SearchService/Search", in, out, c.cc, opts...)
+	err := c.cc.Invoke(ctx, "/grpc.testing.SearchService/Search", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -120,7 +193,7 @@ func (c *searchServiceClient) Search(ctx context.Context, in *SearchRequest, opt
 }
 
 func (c *searchServiceClient) StreamingSearch(ctx context.Context, opts ...grpc.CallOption) (SearchService_StreamingSearchClient, error) {
-	stream, err := grpc.NewClientStream(ctx, &_SearchService_serviceDesc.Streams[0], c.cc, "/grpc.testing.SearchService/StreamingSearch", opts...)
+	stream, err := c.cc.NewStream(ctx, &_SearchService_serviceDesc.Streams[0], "/grpc.testing.SearchService/StreamingSearch", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -150,8 +223,7 @@ func (x *searchServiceStreamingSearchClient) Recv() (*SearchResponse, error) {
 	return m, nil
 }
 
-// Server API for SearchService service
-
+// SearchServiceServer is the server API for SearchService service.
 type SearchServiceServer interface {
 	Search(context.Context, *SearchRequest) (*SearchResponse, error)
 	StreamingSearch(SearchService_StreamingSearchServer) error
@@ -225,9 +297,9 @@ var _SearchService_serviceDesc = grpc.ServiceDesc{
 	Metadata: "test.proto",
 }
 
-func init() { proto.RegisterFile("test.proto", fileDescriptor3) }
+func init() { proto.RegisterFile("test.proto", fileDescriptor_test_a0c753075da50dd4) }
 
-var fileDescriptor3 = []byte{
+var fileDescriptor_test_a0c753075da50dd4 = []byte{
 	// 231 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x91, 0xbd, 0x4a, 0xc5, 0x40,
 	0x10, 0x85, 0x59, 0x83, 0xd1, 0x3b, 0xfe, 0x32, 0x58, 0x84, 0x68, 0x11, 0xae, 0x08, 0xa9, 0x16,

@@ -19,7 +19,7 @@
 
 package batch
 
-import original "github.com/Azure/azure-sdk-for-go/services/batch/2018-03-01.6.1/batch"
+import original "github.com/Azure/azure-sdk-for-go/services/batch/2018-08-01.7.0/batch"
 
 type AccountClient = original.AccountClient
 type ApplicationClient = original.ApplicationClient
@@ -321,13 +321,6 @@ const (
 	TaskAddStatusSuccess     TaskAddStatus = original.TaskAddStatusSuccess
 )
 
-type TaskCountValidationStatus = original.TaskCountValidationStatus
-
-const (
-	Unvalidated TaskCountValidationStatus = original.Unvalidated
-	Validated   TaskCountValidationStatus = original.Validated
-)
-
 type TaskExecutionResult = original.TaskExecutionResult
 
 const (
@@ -437,6 +430,7 @@ type MultiInstanceSettings = original.MultiInstanceSettings
 type NameValuePair = original.NameValuePair
 type NetworkConfiguration = original.NetworkConfiguration
 type NetworkSecurityGroupRule = original.NetworkSecurityGroupRule
+type NodeAgentInformation = original.NodeAgentInformation
 type NodeAgentSku = original.NodeAgentSku
 type NodeCounts = original.NodeCounts
 type NodeDisableSchedulingParameter = original.NodeDisableSchedulingParameter
@@ -662,9 +656,6 @@ func PossibleSubtaskStateValues() []SubtaskState {
 }
 func PossibleTaskAddStatusValues() []TaskAddStatus {
 	return original.PossibleTaskAddStatusValues()
-}
-func PossibleTaskCountValidationStatusValues() []TaskCountValidationStatus {
-	return original.PossibleTaskCountValidationStatusValues()
 }
 func PossibleTaskExecutionResultValues() []TaskExecutionResult {
 	return original.PossibleTaskExecutionResultValues()

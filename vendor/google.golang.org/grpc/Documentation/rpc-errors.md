@@ -38,7 +38,7 @@ To run the example, first start the server:
 $ go run examples/rpc_errors/server/main.go
 ```
 
-In a separate sesssion, run the client:
+In a separate session, run the client:
 
 ```
 $ go run examples/rpc_errors/client/main.go

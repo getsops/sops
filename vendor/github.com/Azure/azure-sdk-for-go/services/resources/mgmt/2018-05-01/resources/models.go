@@ -960,6 +960,34 @@ type Identity struct {
 	TenantID *string `json:"tenantId,omitempty"`
 	// Type - The identity type. Possible values include: 'SystemAssigned', 'UserAssigned', 'SystemAssignedUserAssigned', 'None'
 	Type ResourceIdentityType `json:"type,omitempty"`
+	// UserAssignedIdentities - The list of user identities associated with the resource. The user identity dictionary key references will be ARM resource ids in the form: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}'.
+	UserAssignedIdentities map[string]*IdentityUserAssignedIdentitiesValue `json:"userAssignedIdentities"`
+}
+
+// MarshalJSON is the custom marshaler for Identity.
+func (i Identity) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if i.PrincipalID != nil {
+		objectMap["principalId"] = i.PrincipalID
+	}
+	if i.TenantID != nil {
+		objectMap["tenantId"] = i.TenantID
+	}
+	if i.Type != "" {
+		objectMap["type"] = i.Type
+	}
+	if i.UserAssignedIdentities != nil {
+		objectMap["userAssignedIdentities"] = i.UserAssignedIdentities
+	}
+	return json.Marshal(objectMap)
+}
+
+// IdentityUserAssignedIdentitiesValue ...
+type IdentityUserAssignedIdentitiesValue struct {
+	// PrincipalID - The principal id of user assigned identity.
+	PrincipalID *string `json:"principalId,omitempty"`
+	// ClientID - The client id of user assigned identity.
+	ClientID *string `json:"clientId,omitempty"`
 }
 
 // ListResult list of resource groups.

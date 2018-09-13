@@ -127,7 +127,7 @@
     "GroupName": {
       "base": null,
       "refs": {
-        "CreateGroupInput$Name": "<p>The name of the group, which is the identifier of the group in other operations. A resource group name cannot be updated after it is created. A resource group name can have a maximum of 127 characters, including letters, numbers, hyphens, dots, and underscores. The name cannot start with <code>AWS</code> or <code>aws</code>; these are reserved. A resource group name must be unique within your account.</p>",
+        "CreateGroupInput$Name": "<p>The name of the group, which is the identifier of the group in other operations. A resource group name cannot be updated after it is created. A resource group name can have a maximum of 128 characters, including letters, numbers, hyphens, dots, and underscores. The name cannot start with <code>AWS</code> or <code>aws</code>; these are reserved. A resource group name must be unique within your account.</p>",
         "DeleteGroupInput$GroupName": "<p>The name of the resource group to delete.</p>",
         "GetGroupInput$GroupName": "<p>The name of the resource group.</p>",
         "GetGroupQueryInput$GroupName": "<p>The name of the resource group.</p>",
@@ -217,6 +217,36 @@
         "ResourceIdentifier$ResourceArn": "<p>The ARN of a resource.</p>"
       }
     },
+    "ResourceFilter": {
+      "base": "<p>A filter name and value pair that is used to obtain more specific results from a list of resources.</p>",
+      "refs": {
+        "ResourceFilterList$member": null
+      }
+    },
+    "ResourceFilterList": {
+      "base": null,
+      "refs": {
+        "ListGroupResourcesInput$Filters": "<p>Filters, formatted as ResourceFilter objects, that you want to apply to a ListGroupResources operation.</p> <ul> <li> <p> <code>resource-type</code> - Filter resources by their type. Specify up to five resource types in the format AWS::ServiceCode::ResourceType. For example, AWS::EC2::Instance, or AWS::S3::Bucket.</p> </li> </ul>"
+      }
+    },
+    "ResourceFilterName": {
+      "base": null,
+      "refs": {
+        "ResourceFilter$Name": "<p>The name of the filter. Filter names are case-sensitive.</p>"
+      }
+    },
+    "ResourceFilterValue": {
+      "base": null,
+      "refs": {
+        "ResourceFilterValues$member": null
+      }
+    },
+    "ResourceFilterValues": {
+      "base": null,
+      "refs": {
+        "ResourceFilter$Values": "<p>One or more filter values. Allowed filter values vary by resource filter name, and are case-sensitive.</p>"
+      }
+    },
     "ResourceIdentifier": {
       "base": "<p>The ARN of a resource, and its resource type.</p>",
       "refs": {
@@ -289,10 +319,10 @@
     "Tags": {
       "base": null,
       "refs": {
-        "CreateGroupInput$Tags": "<p>The tags to add to the group. A tag is a string-to-string map of key-value pairs. Tag keys can have a maximum character length of 127 characters, and tag values can have a maximum length of 255 characters.</p>",
+        "CreateGroupInput$Tags": "<p>The tags to add to the group. A tag is a string-to-string map of key-value pairs. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>",
         "CreateGroupOutput$Tags": "<p>The tags associated with the group.</p>",
         "GetTagsOutput$Tags": "<p>The tags associated with the specified resource.</p>",
-        "TagInput$Tags": "<p>The tags to add to the specified resource. A tag is a string-to-string map of key-value pairs. Tag keys can have a maximum character length of 127 characters, and tag values can have a maximum length of 255 characters.</p>",
+        "TagInput$Tags": "<p>The tags to add to the specified resource. A tag is a string-to-string map of key-value pairs. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>",
         "TagOutput$Tags": "<p>The tags that have been added to the specified resource.</p>"
       }
     },

@@ -12,7 +12,8 @@
     "DescribeMountTargetSecurityGroups": "<p>Returns the security groups currently in effect for a mount target. This operation requires that the network interface of the mount target has been created and the lifecycle state of the mount target is not <code>deleted</code>.</p> <p>This operation requires permissions for the following actions:</p> <ul> <li> <p> <code>elasticfilesystem:DescribeMountTargetSecurityGroups</code> action on the mount target's file system. </p> </li> <li> <p> <code>ec2:DescribeNetworkInterfaceAttribute</code> action on the mount target's network interface. </p> </li> </ul>",
     "DescribeMountTargets": "<p>Returns the descriptions of all the current mount targets, or a specific mount target, for a file system. When requesting all of the current mount targets, the order of mount targets returned in the response is unspecified.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeMountTargets</code> action, on either the file system ID that you specify in <code>FileSystemId</code>, or on the file system of the mount target that you specify in <code>MountTargetId</code>.</p>",
     "DescribeTags": "<p>Returns the tags associated with a file system. The order of tags returned in the response of one <code>DescribeTags</code> call and the order of tags returned across the responses of a multi-call iteration (when using pagination) is unspecified. </p> <p> This operation requires permissions for the <code>elasticfilesystem:DescribeTags</code> action. </p>",
-    "ModifyMountTargetSecurityGroups": "<p>Modifies the set of security groups in effect for a mount target.</p> <p>When you create a mount target, Amazon EFS also creates a new network interface. For more information, see <a>CreateMountTarget</a>. This operation replaces the security groups in effect for the network interface associated with a mount target, with the <code>SecurityGroups</code> provided in the request. This operation requires that the network interface of the mount target has been created and the lifecycle state of the mount target is not <code>deleted</code>. </p> <p>The operation requires permissions for the following actions:</p> <ul> <li> <p> <code>elasticfilesystem:ModifyMountTargetSecurityGroups</code> action on the mount target's file system. </p> </li> <li> <p> <code>ec2:ModifyNetworkInterfaceAttribute</code> action on the mount target's network interface. </p> </li> </ul>"
+    "ModifyMountTargetSecurityGroups": "<p>Modifies the set of security groups in effect for a mount target.</p> <p>When you create a mount target, Amazon EFS also creates a new network interface. For more information, see <a>CreateMountTarget</a>. This operation replaces the security groups in effect for the network interface associated with a mount target, with the <code>SecurityGroups</code> provided in the request. This operation requires that the network interface of the mount target has been created and the lifecycle state of the mount target is not <code>deleted</code>. </p> <p>The operation requires permissions for the following actions:</p> <ul> <li> <p> <code>elasticfilesystem:ModifyMountTargetSecurityGroups</code> action on the mount target's file system. </p> </li> <li> <p> <code>ec2:ModifyNetworkInterfaceAttribute</code> action on the mount target's network interface. </p> </li> </ul>",
+    "UpdateFileSystem": "<p>Updates the throughput mode or the amount of provisioned throughput of an existing file system.</p>"
   },
   "shapes": {
     "AwsAccountId": {
@@ -113,8 +114,8 @@
     "Encrypted": {
       "base": null,
       "refs": {
-        "CreateFileSystemRequest$Encrypted": "<p>A boolean value that, if true, creates an encrypted file system. When creating an encrypted file system, you have the option of specifying a <a>CreateFileSystemRequest$KmsKeyId</a> for an existing AWS Key Management Service (AWS KMS) customer master key (CMK). If you don't specify a CMK, then the default CMK for Amazon EFS, <code>/aws/elasticfilesystem</code>, is used to protect the encrypted file system. </p>",
-        "FileSystemDescription$Encrypted": "<p>A boolean value that, if true, indicates that the file system is encrypted.</p>"
+        "CreateFileSystemRequest$Encrypted": "<p>A Boolean value that, if true, creates an encrypted file system. When creating an encrypted file system, you have the option of specifying a <a>CreateFileSystemRequest$KmsKeyId</a> for an existing AWS Key Management Service (AWS KMS) customer master key (CMK). If you don't specify a CMK, then the default CMK for Amazon EFS, <code>/aws/elasticfilesystem</code>, is used to protect the encrypted file system. </p>",
+        "FileSystemDescription$Encrypted": "<p>A Boolean value that, if true, indicates that the file system is encrypted.</p>"
       }
     },
     "ErrorCode": {
@@ -128,6 +129,7 @@
         "FileSystemNotFound$ErrorCode": null,
         "IncorrectFileSystemLifeCycleState$ErrorCode": null,
         "IncorrectMountTargetState$ErrorCode": null,
+        "InsufficientThroughputCapacity$ErrorCode": null,
         "InternalServerError$ErrorCode": null,
         "IpAddressInUse$ErrorCode": null,
         "MountTargetConflict$ErrorCode": null,
@@ -137,6 +139,8 @@
         "SecurityGroupLimitExceeded$ErrorCode": null,
         "SecurityGroupNotFound$ErrorCode": null,
         "SubnetNotFound$ErrorCode": null,
+        "ThroughputLimitExceeded$ErrorCode": null,
+        "TooManyRequests$ErrorCode": null,
         "UnsupportedAvailabilityZone$ErrorCode": null
       }
     },
@@ -151,6 +155,7 @@
         "FileSystemNotFound$Message": null,
         "IncorrectFileSystemLifeCycleState$Message": null,
         "IncorrectMountTargetState$Message": null,
+        "InsufficientThroughputCapacity$Message": null,
         "InternalServerError$Message": null,
         "IpAddressInUse$Message": null,
         "MountTargetConflict$Message": null,
@@ -160,6 +165,8 @@
         "SecurityGroupLimitExceeded$Message": null,
         "SecurityGroupNotFound$Message": null,
         "SubnetNotFound$Message": null,
+        "ThroughputLimitExceeded$Message": null,
+        "TooManyRequests$Message": null,
         "UnsupportedAvailabilityZone$Message": null
       }
     },
@@ -192,7 +199,8 @@
         "DescribeTagsRequest$FileSystemId": "<p>ID of the file system whose tag set you want to retrieve.</p>",
         "FileSystemAlreadyExists$FileSystemId": null,
         "FileSystemDescription$FileSystemId": "<p>ID of the file system, assigned by Amazon EFS.</p>",
-        "MountTargetDescription$FileSystemId": "<p>ID of the file system for which the mount target is intended.</p>"
+        "MountTargetDescription$FileSystemId": "<p>ID of the file system for which the mount target is intended.</p>",
+        "UpdateFileSystemRequest$FileSystemId": "<p>The ID of the file system that you want to update.</p>"
       }
     },
     "FileSystemInUse": {
@@ -201,19 +209,19 @@
       }
     },
     "FileSystemLimitExceeded": {
-      "base": "<p>Returned if the AWS account has already created maximum number of file systems allowed per account.</p>",
+      "base": "<p>Returned if the AWS account has already created the maximum number of file systems allowed per account.</p>",
       "refs": {
       }
     },
     "FileSystemNotFound": {
-      "base": "<p>Returned if the specified <code>FileSystemId</code> does not exist in the requester's AWS account.</p>",
+      "base": "<p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>",
       "refs": {
       }
     },
     "FileSystemSize": {
       "base": "<p>Latest known metered size (in bytes) of data stored in the file system, in its <code>Value</code> field, and the time at which that size was determined in its <code>Timestamp</code> field. Note that the value does not represent the size of a consistent snapshot of the file system, but it is eventually consistent when there are no writes to the file system. That is, the value will represent the actual size only if the file system is not modified for a period longer than a couple of hours. Otherwise, the value is not necessarily the exact size the file system was at any instant in time.</p>",
       "refs": {
-        "FileSystemDescription$SizeInBytes": "<p>Latest known metered size (in bytes) of data stored in the file system, in bytes, in its <code>Value</code> field, and the time at which that size was determined in its <code>Timestamp</code> field. The <code>Timestamp</code> value is the integer number of seconds since 1970-01-01T00:00:00Z. Note that the value does not represent the size of a consistent snapshot of the file system, but it is eventually consistent when there are no writes to the file system. That is, the value will represent actual size only if the file system is not modified for a period longer than a couple of hours. Otherwise, the value is not the exact size the file system was at any instant in time. </p>"
+        "FileSystemDescription$SizeInBytes": "<p>Latest known metered size (in bytes) of data stored in the file system, in its <code>Value</code> field, and the time at which that size was determined in its <code>Timestamp</code> field. The <code>Timestamp</code> value is the integer number of seconds since 1970-01-01T00:00:00Z. The <code>SizeInBytes</code> value doesn't represent the size of a consistent snapshot of the file system, but it is eventually consistent when there are no writes to the file system. That is, <code>SizeInBytes</code> represents actual size only if the file system is not modified for a period longer than a couple of hours. Otherwise, the value is not the exact size that the file system was at any point in time. </p>"
       }
     },
     "FileSystemSizeValue": {
@@ -223,12 +231,17 @@
       }
     },
     "IncorrectFileSystemLifeCycleState": {
-      "base": "<p>Returned if the file system's life cycle state is not \"created\".</p>",
+      "base": "<p>Returned if the file system's lifecycle state is not \"available\".</p>",
       "refs": {
       }
     },
     "IncorrectMountTargetState": {
       "base": "<p>Returned if the mount target is not in the correct state for the operation.</p>",
+      "refs": {
+      }
+    },
+    "InsufficientThroughputCapacity": {
+      "base": "<p>Returned if there's not enough capacity to provision additional throughput. This value might be returned when you try to create a file system in provisioned throughput mode, when you attempt to increase the provisioned throughput of an existing file system, or when you attempt to change an existing file system from bursting to provisioned throughput mode.</p>",
       "refs": {
       }
     },
@@ -252,8 +265,8 @@
     "KmsKeyId": {
       "base": null,
       "refs": {
-        "CreateFileSystemRequest$KmsKeyId": "<p>The id of the AWS KMS CMK that will be used to protect the encrypted file system. This parameter is only required if you want to use a non-default CMK. If this parameter is not specified, the default CMK for Amazon EFS is used. This id can be in one of the following formats:</p> <ul> <li> <p>Key ID - A unique identifier of the key. For example, <code>1234abcd-12ab-34cd-56ef-1234567890ab</code>.</p> </li> <li> <p>ARN - An Amazon Resource Name for the key. For example, <code>arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code>.</p> </li> <li> <p>Key alias - A previously created display name for a key. For example, <code>alias/projectKey1</code>.</p> </li> <li> <p>Key alias ARN - An Amazon Resource Name for a key alias. For example, <code>arn:aws:kms:us-west-2:444455556666:alias/projectKey1</code>.</p> </li> </ul> <p>Note that if the KmsKeyId is specified, the <a>CreateFileSystemRequest$Encrypted</a> parameter must be set to true.</p>",
-        "FileSystemDescription$KmsKeyId": "<p>The id of an AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the encrypted file system.</p>"
+        "CreateFileSystemRequest$KmsKeyId": "<p>The ID of the AWS KMS CMK to be used to protect the encrypted file system. This parameter is only required if you want to use a non-default CMK. If this parameter is not specified, the default CMK for Amazon EFS is used. This ID can be in one of the following formats:</p> <ul> <li> <p>Key ID - A unique identifier of the key, for example, <code>1234abcd-12ab-34cd-56ef-1234567890ab</code>.</p> </li> <li> <p>ARN - An Amazon Resource Name (ARN) for the key, for example, <code>arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code>.</p> </li> <li> <p>Key alias - A previously created display name for a key. For example, <code>alias/projectKey1</code>.</p> </li> <li> <p>Key alias ARN - An ARN for a key alias, for example, <code>arn:aws:kms:us-west-2:444455556666:alias/projectKey1</code>.</p> </li> </ul> <p>If KmsKeyId is specified, the <a>CreateFileSystemRequest$Encrypted</a> parameter must be set to true.</p>",
+        "FileSystemDescription$KmsKeyId": "<p>The ID of an AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the encrypted file system.</p>"
       }
     },
     "LifeCycleState": {
@@ -335,7 +348,7 @@
       }
     },
     "NetworkInterfaceLimitExceeded": {
-      "base": "<p> The calling account has reached the ENI limit for the specific AWS region. Client should try to delete some ENIs or get its account limit raised. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html\">Amazon VPC Limits</a> in the Amazon Virtual Private Cloud User Guide (see the Network interfaces per VPC entry in the table). </p>",
+      "base": "<p>The calling account has reached the limit for elastic network interfaces for the specific AWS Region. The client should try to delete some elastic network interfaces or get the account limit raised. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html\">Amazon VPC Limits</a> in the <i>Amazon VPC User Guide </i> (see the Network interfaces per VPC entry in the table). </p>",
       "refs": {
       }
     },
@@ -351,6 +364,14 @@
         "FileSystemDescription$PerformanceMode": "<p>The <code>PerformanceMode</code> of the file system.</p>"
       }
     },
+    "ProvisionedThroughputInMibps": {
+      "base": null,
+      "refs": {
+        "CreateFileSystemRequest$ProvisionedThroughputInMibps": "<p>The throughput, measured in MiB/s, that you want to provision for a file system that you're creating. The limit on throughput is 1024 MiB/s. You can get these limits increased by contacting AWS Support. For more information, see <a href=\"http://docs.aws.amazon.com/efs/latest/ug/limits.html#soft-limits\">Amazon EFS Limits That You Can Increase</a> in the <i>Amazon EFS User Guide.</i> </p>",
+        "FileSystemDescription$ProvisionedThroughputInMibps": "<p>The throughput, measured in MiB/s, that you want to provision for a file system. The limit on throughput is 1024 MiB/s. You can get these limits increased by contacting AWS Support. For more information, see <a href=\"http://docs.aws.amazon.com/efs/latest/ug/limits.html#soft-limits\">Amazon EFS Limits That You Can Increase</a> in the <i>Amazon EFS User Guide.</i> </p>",
+        "UpdateFileSystemRequest$ProvisionedThroughputInMibps": "<p>(Optional) The amount of throughput, in MiB/s, that you want to provision for your file system. If you're not updating the amount of provisioned throughput for your file system, you don't need to provide this value in your request.</p>"
+      }
+    },
     "SecurityGroup": {
       "base": null,
       "refs": {
@@ -363,7 +384,7 @@
       }
     },
     "SecurityGroupNotFound": {
-      "base": "<p>Returned if one of the specified security groups does not exist in the subnet's VPC.</p>",
+      "base": "<p>Returned if one of the specified security groups doesn't exist in the subnet's VPC.</p>",
       "refs": {
       }
     },
@@ -420,6 +441,19 @@
         "DescribeTagsResponse$Tags": "<p>Returns tags associated with the file system as an array of <code>Tag</code> objects. </p>"
       }
     },
+    "ThroughputLimitExceeded": {
+      "base": "<p>Returned if the throughput mode or amount of provisioned throughput can't be changed because the throughput limit of 1024 MiB/s has been reached.</p>",
+      "refs": {
+      }
+    },
+    "ThroughputMode": {
+      "base": null,
+      "refs": {
+        "CreateFileSystemRequest$ThroughputMode": "<p>The throughput mode for the file system to be created. There are two throughput modes to choose from for your file system: bursting and provisioned. You can decrease your file system's throughput in Provisioned Throughput mode or change between the throughput modes as long as it’s been more than 24 hours since the last decrease or throughput mode change.</p>",
+        "FileSystemDescription$ThroughputMode": "<p>The throughput mode for a file system. There are two throughput modes to choose from for your file system: bursting and provisioned. You can decrease your file system's throughput in Provisioned Throughput mode or change between the throughput modes as long as it’s been more than 24 hours since the last decrease or throughput mode change.</p>",
+        "UpdateFileSystemRequest$ThroughputMode": "<p>(Optional) The throughput mode that you want your file system to use. If you're not updating your throughput mode, you don't need to provide this value in your request.</p>"
+      }
+    },
     "Timestamp": {
       "base": null,
       "refs": {
@@ -427,8 +461,18 @@
         "FileSystemSize$Timestamp": "<p>Time at which the size of data, returned in the <code>Value</code> field, was determined. The value is the integer number of seconds since 1970-01-01T00:00:00Z.</p>"
       }
     },
+    "TooManyRequests": {
+      "base": "<p>Returned if you don’t wait at least 24 hours before changing the throughput mode, or decreasing the Provisioned Throughput value.</p>",
+      "refs": {
+      }
+    },
     "UnsupportedAvailabilityZone": {
       "base": "<p/>",
+      "refs": {
+      }
+    },
+    "UpdateFileSystemRequest": {
+      "base": null,
       "refs": {
       }
     }

@@ -59,11 +59,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -83,12 +78,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -612,7 +601,7 @@
                   "type": "string"
                 },
                 "query": {
-                  "description": "An optional query string to filter creatives. If no filter is specified,\nall active creatives will be returned.\nSupported queries are:\n\u003cul\u003e\n\u003cli\u003eaccountId=\u003ci\u003eaccount_id_string\u003c/i\u003e\n\u003cli\u003ecreativeId=\u003ci\u003ecreative_id_string\u003c/i\u003e\n\u003cli\u003edealsStatus: {approved, conditionally_approved, disapproved,\n                   not_checked}\n\u003cli\u003eopenAuctionStatus: {approved, conditionally_approved, disapproved,\n                          not_checked}\n\u003cli\u003eattribute: {a numeric attribute from the list of attributes}\n\u003cli\u003edisapprovalReason: {a reason from\nDisapprovalReason}\n\u003c/ul\u003e\nExample: 'accountId=12345 AND (dealsStatus:disapproved AND\ndisapprovalReason:unacceptable_content) OR attribute:47'",
+                  "description": "An optional query string to filter creatives. If no filter is specified,\nall active creatives will be returned.\n\u003cp\u003eSupported queries are:\n\u003cul\u003e\n\u003cli\u003eaccountId=\u003ci\u003eaccount_id_string\u003c/i\u003e\n\u003cli\u003ecreativeId=\u003ci\u003ecreative_id_string\u003c/i\u003e\n\u003cli\u003edealsStatus: {approved, conditionally_approved, disapproved,\n                   not_checked}\n\u003cli\u003eopenAuctionStatus: {approved, conditionally_approved, disapproved,\n                          not_checked}\n\u003cli\u003eattribute: {a numeric attribute from the list of attributes}\n\u003cli\u003edisapprovalReason: {a reason from\nDisapprovalReason}\n\u003c/ul\u003e\nExample: 'accountId=12345 AND (dealsStatus:disapproved AND\ndisapprovalReason:unacceptable_content) OR attribute:47'",
                   "location": "query",
                   "type": "string"
                 }
@@ -1947,7 +1936,7 @@
       }
     }
   },
-  "revision": "20180326",
+  "revision": "20180908",
   "rootUrl": "https://adexchangebuyer.googleapis.com/",
   "schemas": {
     "AbsoluteDateRange": {
@@ -2297,7 +2286,7 @@
       "type": "object"
     },
     "Creative": {
-      "description": "A creative and its classification data.\n\nNext ID: 31",
+      "description": "A creative and its classification data.\n\nNext ID: 38",
       "id": "Creative",
       "properties": {
         "accountId": {
@@ -2416,6 +2405,13 @@
             "The creative has been disapproved."
           ],
           "type": "string"
+        },
+        "declaredClickThroughUrls": {
+          "description": "The set of declared destination URLs for the creative.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "detectedAdvertiserIds": {
           "description": "@OutputOnly Detected advertiser IDs, if any.",
@@ -2574,7 +2570,7 @@
       "type": "object"
     },
     "Date": {
-      "description": "Represents a whole calendar date, e.g. date of birth. The time of day and\ntime zone are either specified elsewhere or are not significant. The date\nis relative to the Proleptic Gregorian Calendar. The day may be 0 to\nrepresent a year and month where the day is not significant, e.g. credit card\nexpiration date. The year may be 0 to represent a month and day independent\nof year, e.g. anniversary date. Related types are google.type.TimeOfDay\nand `google.protobuf.Timestamp`.",
+      "description": "Represents a whole calendar date, for example date of birth. The time of day\nand time zone are either specified elsewhere or are not significant. The date\nis relative to the Proleptic Gregorian Calendar. The day can be 0 to\nrepresent a year and month where the day is not significant, for example\ncredit card expiration date. The year can be 0 to represent a month and day\nindependent of year, for example anniversary date. Related types are\ngoogle.type.TimeOfDay and `google.protobuf.Timestamp`.",
       "id": "Date",
       "properties": {
         "day": {
@@ -2583,7 +2579,7 @@
           "type": "integer"
         },
         "month": {
-          "description": "Month of year. Must be from 1 to 12.",
+          "description": "Month of year. Must be from 1 to 12, or 0 if specifying a date without a\nmonth.",
           "format": "int32",
           "type": "integer"
         },
@@ -2702,7 +2698,13 @@
             "MAXIMUM_NUMBER_OF_HTTP_CALLS_EXCEEDED",
             "MAXIMUM_NUMBER_OF_COOKIES_EXCEEDED",
             "PERSONAL_LOANS",
-            "UNSUPPORTED_FLASH_CONTENT"
+            "UNSUPPORTED_FLASH_CONTENT",
+            "MISUSE_BY_OMID_SCRIPT",
+            "NON_WHITELISTED_OMID_VENDOR",
+            "DESTINATION_EXPERIENCE",
+            "UNSUPPORTED_LANGUAGE",
+            "NON_SSL_COMPLIANT",
+            "TEMPORARY_PAUSE"
           ],
           "enumDescriptions": [
             "The length of the image animation is longer than allowed.",
@@ -2798,7 +2800,13 @@
             "Maximum number of HTTP calls exceeded.",
             "Maximum number of cookies exceeded.",
             "Financial service ad does not adhere to specifications.",
-            "Flash content was found in an unsupported context."
+            "Flash content was found in an unsupported context.",
+            "Misuse by an Open Measurement SDK script.",
+            "Use of an Open Measurement SDK vendor not on approved whitelist.",
+            "Unacceptable landing page.",
+            "Unsupported language.",
+            "Non-SSL compliant.",
+            "Temporary pausing of creative."
           ],
           "type": "string"
         }
@@ -2886,6 +2894,13 @@
           },
           "type": "array"
         },
+        "publisherIdentifiers": {
+          "description": "For Exchange Bidding buyers only.\nThe list of publisher identifiers on which to filter; may be empty.\nThe filters represented by multiple publisher identifiers are ORed\ntogether.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "realtimeTimeRange": {
           "$ref": "RealtimeTimeRange",
           "description": "An open-ended realtime time range, defined by the aggregation start\ntimestamp."
@@ -2895,7 +2910,7 @@
           "description": "A relative date range, defined by an offset from today and a duration.\nInterpreted relative to Pacific time zone."
         },
         "sellerNetworkIds": {
-          "description": "The list of IDs of the seller (publisher) networks on which to filter;\nmay be empty. The filters represented by multiple seller network IDs are\nORed together (i.e. if non-empty, results must match any one of the\npublisher networks).\nSee [seller-network-ids](https://developers.google.com/ad-exchange/rtb/downloads/seller-network-ids)\nfile for the set of existing seller network IDs.",
+          "description": "For Ad Exchange buyers only.\nThe list of IDs of the seller (publisher) networks on which to filter;\nmay be empty. The filters represented by multiple seller network IDs are\nORed together (i.e. if non-empty, results must match any one of the\npublisher networks).\nSee [seller-network-ids](https://developers.google.com/ad-exchange/rtb/downloads/seller-network-ids)\nfile for the set of existing seller network IDs.",
           "items": {
             "format": "int32",
             "type": "integer"
@@ -3637,8 +3652,12 @@
           },
           "type": "array"
         },
+        "disapproval": {
+          "$ref": "Disapproval",
+          "description": "Disapproval bound to this restriction.\nOnly present if status=DISAPPROVED.\nCan be used to filter the response of the\ncreatives.list\nmethod."
+        },
         "disapprovalReasons": {
-          "description": "Any disapprovals bound to this restriction.\nOnly present if status=DISAPPROVED.\nCan be used to filter the response of the\ncreatives.list\nmethod.",
+          "description": "Any disapprovals bound to this restriction.\nOnly present if status=DISAPPROVED.\nCan be used to filter the response of the\ncreatives.list\nmethod.\nDeprecated; please use\ndisapproval\nfield instead.",
           "items": {
             "$ref": "Disapproval"
           },

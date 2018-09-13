@@ -30,18 +30,19 @@ import (
 	testpb "google.golang.org/grpc/interop/grpc_testing"
 )
 
-const (
-	value = "test_value"
-)
-
 var (
+	hsAddr     = flag.String("alts_handshaker_service_address", "", "ALTS handshaker gRPC service address")
 	serverAddr = flag.String("server_address", ":8080", "The port on which the server is listening")
 )
 
 func main() {
 	flag.Parse()
 
-	altsTC := alts.NewClientCreds(&alts.ClientOptions{})
+	opts := alts.DefaultClientOptions()
+	if *hsAddr != "" {
+		opts.HandshakerServiceAddress = *hsAddr
+	}
+	altsTC := alts.NewClientCreds(opts)
 	// Block until the server is ready.
 	conn, err := grpc.Dial(*serverAddr, grpc.WithTransportCredentials(altsTC), grpc.WithBlock())
 	if err != nil {

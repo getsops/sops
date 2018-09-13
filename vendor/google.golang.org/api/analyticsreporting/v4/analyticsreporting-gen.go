@@ -1,4 +1,4 @@
-// Package analyticsreporting provides access to the Google Analytics Reporting API.
+// Package analyticsreporting provides access to the Analytics Reporting API.
 //
 // See https://developers.google.com/analytics/devguides/reporting/core/v4/
 //
@@ -1461,7 +1461,7 @@ type ReportRequest struct {
 	// returned rows.
 	// Page size should be >= 0. A query returns the default of 1,000
 	// rows.
-	// The Analytics Core Reporting API returns a maximum of 10,000 rows
+	// The Analytics Core Reporting API returns a maximum of 100,000 rows
 	// per
 	// request, no matter how many you ask for. It can also return fewer
 	// rows
@@ -2137,6 +2137,7 @@ func (c *ReportsBatchGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v4/reports:batchGet")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)

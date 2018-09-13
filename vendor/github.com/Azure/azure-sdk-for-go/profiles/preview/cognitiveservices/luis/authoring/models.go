@@ -26,23 +26,6 @@ type BaseClient = original.BaseClient
 type ExamplesClient = original.ExamplesClient
 type FeaturesClient = original.FeaturesClient
 type ModelClient = original.ModelClient
-type AzureRegions = original.AzureRegions
-
-const (
-	Australiaeast  AzureRegions = original.Australiaeast
-	Brazilsouth    AzureRegions = original.Brazilsouth
-	Eastasia       AzureRegions = original.Eastasia
-	Eastus         AzureRegions = original.Eastus
-	Eastus2        AzureRegions = original.Eastus2
-	Northeurope    AzureRegions = original.Northeurope
-	Southcentralus AzureRegions = original.Southcentralus
-	Southeastasia  AzureRegions = original.Southeastasia
-	Westcentralus  AzureRegions = original.Westcentralus
-	Westeurope     AzureRegions = original.Westeurope
-	Westus         AzureRegions = original.Westus
-	Westus2        AzureRegions = original.Westus2
-)
-
 type OperationStatusType = original.OperationStatusType
 
 const (
@@ -371,26 +354,23 @@ type PermissionsClient = original.PermissionsClient
 type TrainClient = original.TrainClient
 type VersionsClient = original.VersionsClient
 
-func NewAppsClient(azureRegion AzureRegions) AppsClient {
-	return original.NewAppsClient(azureRegion)
+func NewAppsClient(endpoint string) AppsClient {
+	return original.NewAppsClient(endpoint)
 }
-func New(azureRegion AzureRegions) BaseClient {
-	return original.New(azureRegion)
+func New(endpoint string) BaseClient {
+	return original.New(endpoint)
 }
-func NewWithoutDefaults(azureRegion AzureRegions) BaseClient {
-	return original.NewWithoutDefaults(azureRegion)
+func NewWithoutDefaults(endpoint string) BaseClient {
+	return original.NewWithoutDefaults(endpoint)
 }
-func NewExamplesClient(azureRegion AzureRegions) ExamplesClient {
-	return original.NewExamplesClient(azureRegion)
+func NewExamplesClient(endpoint string) ExamplesClient {
+	return original.NewExamplesClient(endpoint)
 }
-func NewFeaturesClient(azureRegion AzureRegions) FeaturesClient {
-	return original.NewFeaturesClient(azureRegion)
+func NewFeaturesClient(endpoint string) FeaturesClient {
+	return original.NewFeaturesClient(endpoint)
 }
-func NewModelClient(azureRegion AzureRegions) ModelClient {
-	return original.NewModelClient(azureRegion)
-}
-func PossibleAzureRegionsValues() []AzureRegions {
-	return original.PossibleAzureRegionsValues()
+func NewModelClient(endpoint string) ModelClient {
+	return original.NewModelClient(endpoint)
 }
 func PossibleOperationStatusTypeValues() []OperationStatusType {
 	return original.PossibleOperationStatusTypeValues()
@@ -437,14 +417,14 @@ func PossibleStatus1Values() []Status1 {
 func PossibleTrainingStatusValues() []TrainingStatus {
 	return original.PossibleTrainingStatusValues()
 }
-func NewPatternClient(azureRegion AzureRegions) PatternClient {
-	return original.NewPatternClient(azureRegion)
+func NewPatternClient(endpoint string) PatternClient {
+	return original.NewPatternClient(endpoint)
 }
-func NewPermissionsClient(azureRegion AzureRegions) PermissionsClient {
-	return original.NewPermissionsClient(azureRegion)
+func NewPermissionsClient(endpoint string) PermissionsClient {
+	return original.NewPermissionsClient(endpoint)
 }
-func NewTrainClient(azureRegion AzureRegions) TrainClient {
-	return original.NewTrainClient(azureRegion)
+func NewTrainClient(endpoint string) TrainClient {
+	return original.NewTrainClient(endpoint)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"
@@ -452,6 +432,6 @@ func UserAgent() string {
 func Version() string {
 	return original.Version()
 }
-func NewVersionsClient(azureRegion AzureRegions) VersionsClient {
-	return original.NewVersionsClient(azureRegion)
+func NewVersionsClient(endpoint string) VersionsClient {
+	return original.NewVersionsClient(endpoint)
 }

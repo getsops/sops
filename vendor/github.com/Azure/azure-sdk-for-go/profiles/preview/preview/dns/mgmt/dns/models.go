@@ -50,12 +50,14 @@ const (
 
 type AaaaRecord = original.AaaaRecord
 type ARecord = original.ARecord
+type AzureEntityResource = original.AzureEntityResource
 type CaaRecord = original.CaaRecord
 type CloudError = original.CloudError
 type CloudErrorBody = original.CloudErrorBody
 type CnameRecord = original.CnameRecord
 type MxRecord = original.MxRecord
 type NsRecord = original.NsRecord
+type ProxyResource = original.ProxyResource
 type PtrRecord = original.PtrRecord
 type RecordSet = original.RecordSet
 type RecordSetListResult = original.RecordSetListResult
@@ -67,6 +69,7 @@ type Resource = original.Resource
 type SoaRecord = original.SoaRecord
 type SrvRecord = original.SrvRecord
 type SubResource = original.SubResource
+type TrackedResource = original.TrackedResource
 type TxtRecord = original.TxtRecord
 type Zone = original.Zone
 type ZoneListResult = original.ZoneListResult

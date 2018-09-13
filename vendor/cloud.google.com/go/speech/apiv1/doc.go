@@ -15,10 +15,10 @@
 // AUTO-GENERATED CODE. DO NOT EDIT.
 
 // Package speech is an auto-generated package for the
-// Google Cloud Speech API.
+// Cloud Speech API.
 
 //
-// Google Cloud Speech API.
+// Converts audio to text by applying powerful neural network models.
 package speech // import "cloud.google.com/go/speech/apiv1"
 
 import (

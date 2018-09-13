@@ -380,8 +380,7 @@ func TestAPICallAllocations(t *testing.T) {
 	}
 
 	// Lots of room for improvement...
-	// TODO(djd): Reduce maximum to 85 once the App Engine SDK is based on 1.6.
-	const min, max float64 = 70, 100
+	const min, max float64 = 60, 85
 	if avg < min || max < avg {
 		t.Errorf("Allocations per API call = %g, want in [%g,%g]", avg, min, max)
 	}

@@ -1,4 +1,4 @@
-// Copyright 2015 Google Inc. All Rights Reserved.
+// Copyright 2015 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,9 +17,6 @@ package bigquery
 import (
 	"errors"
 	"fmt"
-	"math/rand"
-	"os"
-	"sync"
 	"time"
 
 	"cloud.google.com/go/internal"
@@ -33,11 +30,11 @@ import (
 
 // A Job represents an operation which has been submitted to BigQuery for processing.
 type Job struct {
-	c         *Client
-	projectID string
-	jobID     string
-	location  string
-
+	c          *Client
+	projectID  string
+	jobID      string
+	location   string
+	email      string
 	config     *bq.JobConfiguration
 	lastStatus *JobStatus
 }
@@ -74,6 +71,11 @@ func (j *Job) ID() string {
 // Location returns the job's location.
 func (j *Job) Location() string {
 	return j.location
+}
+
+// Email returns the email of the job's creator.
+func (j *Job) Email() string {
+	return j.email
 }
 
 // State is one of a sequence of states that a Job progresses through as it is processed.
@@ -164,38 +166,13 @@ func (j *JobIDConfig) createJobRef(c *Client) *bq.JobReference {
 	return jr
 }
 
-const alphanum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-
-var (
-	rngMu sync.Mutex
-	rng   = rand.New(rand.NewSource(time.Now().UnixNano() ^ int64(os.Getpid())))
-)
-
-// For testing.
-var randomIDFn = randomID
-
-// As of August 2017, the BigQuery service uses 27 alphanumeric characters for
-// suffixes.
-const randomIDLen = 27
-
-func randomID() string {
-	// This is used for both job IDs and insert IDs.
-	var b [randomIDLen]byte
-	rngMu.Lock()
-	for i := 0; i < len(b); i++ {
-		b[i] = alphanum[rng.Intn(len(alphanum))]
-	}
-	rngMu.Unlock()
-	return string(b[:])
-}
-
 // Done reports whether the job has completed.
-// After Done returns true, the Err method will return an error if the job completed unsuccesfully.
+// After Done returns true, the Err method will return an error if the job completed unsuccessfully.
 func (s *JobStatus) Done() bool {
 	return s.State == Done
 }
 
-// Err returns the error that caused the job to complete unsuccesfully (if any).
+// Err returns the error that caused the job to complete unsuccessfully (if any).
 func (s *JobStatus) Err() error {
 	return s.err
 }
@@ -254,7 +231,7 @@ func (j *Job) Wait(ctx context.Context) (js *JobStatus, err error) {
 
 	if j.isQuery() {
 		// We can avoid polling for query jobs.
-		if _, err := j.waitForQuery(ctx, j.projectID); err != nil {
+		if _, _, err := j.waitForQuery(ctx, j.projectID); err != nil {
 			return nil, err
 		}
 		// Note: extra RPC even if you just want to wait for the query to finish.
@@ -290,7 +267,7 @@ func (j *Job) Read(ctx context.Context) (ri *RowIterator, err error) {
 	return j.read(ctx, j.waitForQuery, fetchPage)
 }
 
-func (j *Job) read(ctx context.Context, waitForQuery func(context.Context, string) (Schema, error), pf pageFetcher) (*RowIterator, error) {
+func (j *Job) read(ctx context.Context, waitForQuery func(context.Context, string) (Schema, uint64, error), pf pageFetcher) (*RowIterator, error) {
 	if !j.isQuery() {
 		return nil, errors.New("bigquery: cannot read from a non-query job")
 	}
@@ -300,7 +277,7 @@ func (j *Job) read(ctx context.Context, waitForQuery func(context.Context, strin
 	if destTable != nil && projectID != destTable.ProjectId {
 		return nil, fmt.Errorf("bigquery: job project ID is %q, but destination table's is %q", projectID, destTable.ProjectId)
 	}
-	schema, err := waitForQuery(ctx, projectID)
+	schema, totalRows, err := waitForQuery(ctx, projectID)
 	if err != nil {
 		return nil, err
 	}
@@ -308,13 +285,18 @@ func (j *Job) read(ctx context.Context, waitForQuery func(context.Context, strin
 		return nil, errors.New("bigquery: query job missing destination table")
 	}
 	dt := bqToTable(destTable, j.c)
+	if totalRows == 0 {
+		pf = nil
+	}
 	it := newRowIterator(ctx, dt, pf)
 	it.Schema = schema
+	it.TotalRows = totalRows
 	return it, nil
 }
 
-// waitForQuery waits for the query job to complete and returns its schema.
-func (j *Job) waitForQuery(ctx context.Context, projectID string) (Schema, error) {
+// waitForQuery waits for the query job to complete and returns its schema. It also
+// returns the total number of rows in the result set.
+func (j *Job) waitForQuery(ctx context.Context, projectID string) (Schema, uint64, error) {
 	// Use GetQueryResults only to wait for completion, not to read results.
 	call := j.c.bqs.Jobs.GetQueryResults(projectID, j.jobID).Location(j.location).Context(ctx).MaxResults(0)
 	setClientHeader(call.Header())
@@ -335,9 +317,9 @@ func (j *Job) waitForQuery(ctx context.Context, projectID string) (Schema, error
 		return true, nil
 	})
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
-	return bqToSchema(res.Schema), nil
+	return bqToSchema(res.Schema), res.TotalRows, nil
 }
 
 // JobStatistics contains statistics about a job.
@@ -404,6 +386,9 @@ type QueryStatistics struct {
 	// statements INSERT, UPDATE or DELETE.
 	NumDMLAffectedRows int64
 
+	// Describes a timeline of job execution.
+	Timeline []*QueryTimelineSample
+
 	// ReferencedTables: [Output-only, Experimental] Referenced tables for
 	// the job. Queries that reference more than 50 tables will not have a
 	// complete list.
@@ -413,24 +398,58 @@ type QueryStatistics struct {
 	// non-legacy SQL queries.
 	Schema Schema
 
+	// Slot-milliseconds consumed by this query job.
+	SlotMillis int64
+
 	// Standard SQL: list of undeclared query parameter names detected during a
 	// dry run validation.
 	UndeclaredQueryParameterNames []string
+
+	// DDL target table.
+	DDLTargetTable *Table
+
+	// DDL Operation performed on the target table.  Used to report how the
+	// query impacted the DDL target table.
+	DDLOperationPerformed string
 }
 
 // ExplainQueryStage describes one stage of a query.
 type ExplainQueryStage struct {
+	// CompletedParallelInputs: Number of parallel input segments completed.
+	CompletedParallelInputs int64
+
+	// ComputeAvg: Duration the average shard spent on CPU-bound tasks.
+	ComputeAvg time.Duration
+
+	// ComputeMax: Duration the slowest shard spent on CPU-bound tasks.
+	ComputeMax time.Duration
+
 	// Relative amount of the total time the average shard spent on CPU-bound tasks.
 	ComputeRatioAvg float64
 
 	// Relative amount of the total time the slowest shard spent on CPU-bound tasks.
 	ComputeRatioMax float64
 
+	// EndTime: Stage end time.
+	EndTime time.Time
+
 	// Unique ID for stage within plan.
 	ID int64
 
+	// InputStages: IDs for stages that are inputs to this stage.
+	InputStages []int64
+
 	// Human-readable name for stage.
 	Name string
+
+	// ParallelInputs: Number of parallel input segments to be processed.
+	ParallelInputs int64
+
+	// ReadAvg: Duration the average shard spent reading input.
+	ReadAvg time.Duration
+
+	// ReadMax: Duration the slowest shard spent reading input.
+	ReadMax time.Duration
 
 	// Relative amount of the total time the average shard spent reading input.
 	ReadRatioAvg float64
@@ -444,6 +463,16 @@ type ExplainQueryStage struct {
 	// Number of records written by the stage.
 	RecordsWritten int64
 
+	// ShuffleOutputBytes: Total number of bytes written to shuffle.
+	ShuffleOutputBytes int64
+
+	// ShuffleOutputBytesSpilled: Total number of bytes written to shuffle
+	// and spilled to disk.
+	ShuffleOutputBytesSpilled int64
+
+	// StartTime: Stage start time.
+	StartTime time.Time
+
 	// Current status for the stage.
 	Status string
 
@@ -451,11 +480,23 @@ type ExplainQueryStage struct {
 	// chronological).
 	Steps []*ExplainQueryStep
 
+	// WaitAvg: Duration the average shard spent waiting to be scheduled.
+	WaitAvg time.Duration
+
+	// WaitMax: Duration the slowest shard spent waiting to be scheduled.
+	WaitMax time.Duration
+
 	// Relative amount of the total time the average shard spent waiting to be scheduled.
 	WaitRatioAvg float64
 
 	// Relative amount of the total time the slowest shard spent waiting to be scheduled.
 	WaitRatioMax float64
+
+	// WriteAvg: Duration the average shard spent on writing output.
+	WriteAvg time.Duration
+
+	// WriteMax: Duration the slowest shard spent on writing output.
+	WriteMax time.Duration
 
 	// Relative amount of the total time the average shard spent on writing output.
 	WriteRatioAvg float64
@@ -471,6 +512,25 @@ type ExplainQueryStep struct {
 
 	// Human-readable stage descriptions.
 	Substeps []string
+}
+
+// QueryTimelineSample represents a sample of execution statistics at a point in time.
+type QueryTimelineSample struct {
+
+	// Total number of units currently being processed by workers, represented as largest value since last sample.
+	ActiveUnits int64
+
+	// Total parallel units of work completed by this query.
+	CompletedUnits int64
+
+	// Time elapsed since start of query execution.
+	Elapsed time.Duration
+
+	// Total parallel units of work remaining for the active stages.
+	PendingUnits int64
+
+	// Cumulative slot-milliseconds consumed by the query.
+	SlotMillis int64
 }
 
 func (*ExtractStatistics) implementsStatistics() {}
@@ -493,9 +553,11 @@ func (c *Client) Jobs(ctx context.Context) *JobIterator {
 
 // JobIterator iterates over jobs in a project.
 type JobIterator struct {
-	ProjectID string // Project ID of the jobs to list. Default is the client's project.
-	AllUsers  bool   // Whether to list jobs owned by all users in the project, or just the current caller.
-	State     State  // List only jobs in the given state. Defaults to all states.
+	ProjectID       string    // Project ID of the jobs to list. Default is the client's project.
+	AllUsers        bool      // Whether to list jobs owned by all users in the project, or just the current caller.
+	State           State     // List only jobs in the given state. Defaults to all states.
+	MinCreationTime time.Time // List only jobs created after this time.
+	MaxCreationTime time.Time // List only jobs created before this time.
 
 	ctx      context.Context
 	c        *Client
@@ -538,6 +600,12 @@ func (it *JobIterator) fetch(pageSize int, pageToken string) (string, error) {
 	if st != "" {
 		req.StateFilter(st)
 	}
+	if !it.MinCreationTime.IsZero() {
+		req.MinCreationTime(uint64(it.MinCreationTime.UnixNano() / 1e6))
+	}
+	if !it.MaxCreationTime.IsZero() {
+		req.MaxCreationTime(uint64(it.MaxCreationTime.UnixNano() / 1e6))
+	}
 	setClientHeader(req.Header())
 	if pageSize > 0 {
 		req.MaxResults(int64(pageSize))
@@ -557,7 +625,7 @@ func (it *JobIterator) fetch(pageSize int, pageToken string) (string, error) {
 }
 
 func convertListedJob(j *bq.JobListJobs, c *Client) (*Job, error) {
-	return bqToJob2(j.JobReference, j.Configuration, j.Status, j.Statistics, c)
+	return bqToJob2(j.JobReference, j.Configuration, j.Status, j.Statistics, j.UserEmail, c)
 }
 
 func (c *Client) getJobInternal(ctx context.Context, jobID, location string, fields ...googleapi.Field) (*bq.Job, error) {
@@ -581,15 +649,16 @@ func (c *Client) getJobInternal(ctx context.Context, jobID, location string, fie
 }
 
 func bqToJob(q *bq.Job, c *Client) (*Job, error) {
-	return bqToJob2(q.JobReference, q.Configuration, q.Status, q.Statistics, c)
+	return bqToJob2(q.JobReference, q.Configuration, q.Status, q.Statistics, q.UserEmail, c)
 }
 
-func bqToJob2(qr *bq.JobReference, qc *bq.JobConfiguration, qs *bq.JobStatus, qt *bq.JobStatistics, c *Client) (*Job, error) {
+func bqToJob2(qr *bq.JobReference, qc *bq.JobConfiguration, qs *bq.JobStatus, qt *bq.JobStatistics, email string, c *Client) (*Job, error) {
 	j := &Job{
 		projectID: qr.ProjectId,
 		jobID:     qr.JobId,
 		location:  qr.Location,
 		c:         c,
+		email:     email,
 	}
 	j.setConfig(qc)
 	if err := j.setStatus(qs); err != nil {
@@ -667,12 +736,16 @@ func (j *Job) setStatistics(s *bq.JobStatistics, c *Client) {
 		js.Details = &QueryStatistics{
 			BillingTier:                   s.Query.BillingTier,
 			CacheHit:                      s.Query.CacheHit,
+			DDLTargetTable:                bqToTable(s.Query.DdlTargetTable, c),
+			DDLOperationPerformed:         s.Query.DdlOperationPerformed,
 			StatementType:                 s.Query.StatementType,
 			TotalBytesBilled:              s.Query.TotalBytesBilled,
 			TotalBytesProcessed:           s.Query.TotalBytesProcessed,
 			NumDMLAffectedRows:            s.Query.NumDmlAffectedRows,
 			QueryPlan:                     queryPlanFromProto(s.Query.QueryPlan),
 			Schema:                        bqToSchema(s.Query.Schema),
+			SlotMillis:                    s.Query.TotalSlotMs,
+			Timeline:                      timelineFromProto(s.Query.Timeline),
 			ReferencedTables:              tables,
 			UndeclaredQueryParameterNames: names,
 		}
@@ -691,20 +764,49 @@ func queryPlanFromProto(stages []*bq.ExplainQueryStage) []*ExplainQueryStage {
 			})
 		}
 		res = append(res, &ExplainQueryStage{
-			ComputeRatioAvg: s.ComputeRatioAvg,
-			ComputeRatioMax: s.ComputeRatioMax,
-			ID:              s.Id,
-			Name:            s.Name,
-			ReadRatioAvg:    s.ReadRatioAvg,
-			ReadRatioMax:    s.ReadRatioMax,
-			RecordsRead:     s.RecordsRead,
-			RecordsWritten:  s.RecordsWritten,
-			Status:          s.Status,
-			Steps:           steps,
-			WaitRatioAvg:    s.WaitRatioAvg,
-			WaitRatioMax:    s.WaitRatioMax,
-			WriteRatioAvg:   s.WriteRatioAvg,
-			WriteRatioMax:   s.WriteRatioMax,
+			CompletedParallelInputs:   s.CompletedParallelInputs,
+			ComputeAvg:                time.Duration(s.ComputeMsAvg) * time.Millisecond,
+			ComputeMax:                time.Duration(s.ComputeMsMax) * time.Millisecond,
+			ComputeRatioAvg:           s.ComputeRatioAvg,
+			ComputeRatioMax:           s.ComputeRatioMax,
+			EndTime:                   time.Unix(0, s.EndMs*1e6),
+			ID:                        s.Id,
+			InputStages:               s.InputStages,
+			Name:                      s.Name,
+			ParallelInputs:            s.ParallelInputs,
+			ReadAvg:                   time.Duration(s.ReadMsAvg) * time.Millisecond,
+			ReadMax:                   time.Duration(s.ReadMsMax) * time.Millisecond,
+			ReadRatioAvg:              s.ReadRatioAvg,
+			ReadRatioMax:              s.ReadRatioMax,
+			RecordsRead:               s.RecordsRead,
+			RecordsWritten:            s.RecordsWritten,
+			ShuffleOutputBytes:        s.ShuffleOutputBytes,
+			ShuffleOutputBytesSpilled: s.ShuffleOutputBytesSpilled,
+			StartTime:                 time.Unix(0, s.StartMs*1e6),
+			Status:                    s.Status,
+			Steps:                     steps,
+			WaitAvg:                   time.Duration(s.WaitMsAvg) * time.Millisecond,
+			WaitMax:                   time.Duration(s.WaitMsMax) * time.Millisecond,
+			WaitRatioAvg:              s.WaitRatioAvg,
+			WaitRatioMax:              s.WaitRatioMax,
+			WriteAvg:                  time.Duration(s.WriteMsAvg) * time.Millisecond,
+			WriteMax:                  time.Duration(s.WriteMsMax) * time.Millisecond,
+			WriteRatioAvg:             s.WriteRatioAvg,
+			WriteRatioMax:             s.WriteRatioMax,
+		})
+	}
+	return res
+}
+
+func timelineFromProto(timeline []*bq.QueryTimelineSample) []*QueryTimelineSample {
+	var res []*QueryTimelineSample
+	for _, s := range timeline {
+		res = append(res, &QueryTimelineSample{
+			ActiveUnits:    s.ActiveUnits,
+			CompletedUnits: s.CompletedUnits,
+			Elapsed:        time.Duration(s.ElapsedMs) * time.Millisecond,
+			PendingUnits:   s.PendingUnits,
+			SlotMillis:     s.TotalSlotMs,
 		})
 	}
 	return res

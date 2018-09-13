@@ -69,11 +69,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -93,12 +88,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -1236,7 +1225,7 @@
                   "type": "string"
                 },
                 "pageSize": {
-                  "description": "A positive number that is the maximum number of results to return. When view field sets to FULL, it limits the number of Points server will return; if view field is HEADERS, it limits the number of TimeSeries server will return.",
+                  "description": "A positive number that is the maximum number of results to return. If page_size is empty or more than 100,000 results, the effective page_size is 100,000 results. If view is set to FULL, this is the maximum number of Points returned. If view is set to HEADERS, this is the maximum number of TimeSeries returned.",
                   "format": "int32",
                   "location": "query",
                   "type": "integer"
@@ -1463,7 +1452,7 @@
       }
     }
   },
-  "revision": "20180303",
+  "revision": "20180729",
   "rootUrl": "https://monitoring.googleapis.com/",
   "schemas": {
     "Aggregation": {
@@ -1893,6 +1882,13 @@
           "format": "int64",
           "type": "string"
         },
+        "exemplars": {
+          "description": "Must be in increasing order of value field.",
+          "items": {
+            "$ref": "Exemplar"
+          },
+          "type": "array"
+        },
         "mean": {
           "description": "The arithmetic mean of the values in the population. If count is zero then this field must be zero.",
           "format": "double",
@@ -1925,10 +1921,52 @@
       },
       "type": "object"
     },
+    "DroppedLabels": {
+      "description": "A set of (label, value) pairs which were dropped during aggregation, attached to google.api.Distribution.Exemplars in google.api.Distribution values during aggregation.These values are used in combination with the label values that remain on the aggregated Distribution timeseries to construct the full label set for the exemplar values. The resulting full label set may be used to identify the specific task/job/instance (for example) which may be contributing to a long-tail, while allowing the storage savings of only storing aggregated distribution values for a large group.Note that there are no guarantees on ordering of the labels from exemplar-to-exemplar and from distribution-to-distribution in the same stream, and there may be duplicates. It is up to clients to resolve any ambiguities.",
+      "id": "DroppedLabels",
+      "properties": {
+        "label": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Map from label to its value, for all labels dropped in any aggregation.",
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
     "Empty": {
       "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance:\nservice Foo {\n  rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n}\nThe JSON representation for Empty is empty JSON object {}.",
       "id": "Empty",
       "properties": {},
+      "type": "object"
+    },
+    "Exemplar": {
+      "description": "Exemplars are example points that may be used to annotate aggregated distribution values. They are metadata that gives information about a particular value added to a Distribution bucket, such as a trace ID that was active when a value was added. They may contain further information, such as a example values and timestamps, origin, etc.",
+      "id": "Exemplar",
+      "properties": {
+        "attachments": {
+          "description": "Contextual information about the example value. Examples are:Trace ID: type.googleapis.com/google.devtools.cloudtrace.v1.TraceLiteral string: type.googleapis.com/google.protobuf.StringValueLabels dropped during aggregation:  type.googleapis.com/google.monitoring.v3.DroppedLabelsThere may be only a single attachment of any given message type in a single exemplar, and this is enforced by the system.",
+          "items": {
+            "additionalProperties": {
+              "description": "Properties of the object. Contains field @type with type URL.",
+              "type": "any"
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "timestamp": {
+          "description": "The observation (sampling) time of the above value.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "value": {
+          "description": "Value of the exemplar point. This value determines to which bucket the exemplar belongs.",
+          "format": "double",
+          "type": "number"
+        }
+      },
       "type": "object"
     },
     "Explicit": {
@@ -2377,6 +2415,13 @@
       "description": "The ListTimeSeries response.",
       "id": "ListTimeSeriesResponse",
       "properties": {
+        "executionErrors": {
+          "description": "Query execution errors that may have caused the time series data returned to be incomplete.",
+          "items": {
+            "$ref": "Status"
+          },
+          "type": "array"
+        },
         "nextPageToken": {
           "description": "If there are more results than have been returned, then this field is set to a non-empty value. To see the additional results, use that value as pageToken in the next call to this method.",
           "type": "string"
@@ -2496,6 +2541,10 @@
           },
           "type": "array"
         },
+        "metadata": {
+          "$ref": "MetricDescriptorMetadata",
+          "description": "Optional. Metadata which can be used to guide usage of the metric."
+        },
         "metricKind": {
           "description": "Whether the metric records instantaneous values, changes to a value, etc. Some combinations of metric_kind and value_type might not be supported.",
           "enum": [
@@ -2517,11 +2566,11 @@
           "type": "string"
         },
         "type": {
-          "description": "The metric type, including its DNS name prefix. The type is not URL-encoded. All user-defined custom metric types have the DNS name custom.googleapis.com. Metric types should use a natural hierarchical grouping. For example:\n\"custom.googleapis.com/invoice/paid/amount\"\n\"appengine.googleapis.com/http/server/response_latencies\"\n",
+          "description": "The metric type, including its DNS name prefix. The type is not URL-encoded. All user-defined metric types have the DNS name custom.googleapis.com or external.googleapis.com. Metric types should use a natural hierarchical grouping. For example:\n\"custom.googleapis.com/invoice/paid/amount\"\n\"external.googleapis.com/prometheus/up\"\n\"appengine.googleapis.com/http/server/response_latencies\"\n",
           "type": "string"
         },
         "unit": {
-          "description": "Optional. The unit in which the metric value is reported. For example, kBy/s means kilobytes/sec, and 1 is the dimensionless unit. The supported units are a subset of The Unified Code for Units of Measure standard (http://unitsofmeasure.org/ucum.html).\u003cbr\u003e\u003cbr\u003e This field is part of the metric's documentation, but it is ignored by Stackdriver.",
+          "description": "The unit in which the metric value is reported. It is only applicable if the value_type is INT64, DOUBLE, or DISTRIBUTION. The supported units are a subset of The Unified Code for Units of Measure (http://unitsofmeasure.org/ucum.html) standard:Basic units (UNIT)\nbit bit\nBy byte\ns second\nmin minute\nh hour\nd dayPrefixes (PREFIX)\nk kilo (10**3)\nM mega (10**6)\nG giga (10**9)\nT tera (10**12)\nP peta (10**15)\nE exa (10**18)\nZ zetta (10**21)\nY yotta (10**24)\nm milli (10**-3)\nu micro (10**-6)\nn nano (10**-9)\np pico (10**-12)\nf femto (10**-15)\na atto (10**-18)\nz zepto (10**-21)\ny yocto (10**-24)\nKi kibi (2**10)\nMi mebi (2**20)\nGi gibi (2**30)\nTi tebi (2**40)GrammarThe grammar also includes these connectors:\n/ division (as an infix operator, e.g. 1/s).\n. multiplication (as an infix operator, e.g. GBy.d)The grammar for a unit is as follows:\nExpression = Component { \".\" Component } { \"/\" Component } ;\n\nComponent = ( [ PREFIX ] UNIT | \"%\" ) [ Annotation ]\n          | Annotation\n          | \"1\"\n          ;\n\nAnnotation = \"{\" NAME \"}\" ;\nNotes:\nAnnotation is just a comment if it follows a UNIT and is  equivalent to 1 if it is used alone. For examples,  {requests}/s == 1/s, By{transmitted}/s == By/s.\nNAME is a sequence of non-blank printable ASCII characters not  containing '{' or '}'.\n1 represents dimensionless value 1, such as in 1/s.\n% represents dimensionless value 1/100, and annotates values giving  a percentage.",
           "type": "string"
         },
         "valueType": {
@@ -2544,6 +2593,43 @@
             "The value is a Distribution.",
             "The value is money."
           ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "MetricDescriptorMetadata": {
+      "description": "Additional annotations that can be used to guide the usage of a metric.",
+      "id": "MetricDescriptorMetadata",
+      "properties": {
+        "ingestDelay": {
+          "description": "The delay of data points caused by ingestion. Data points older than this age are guaranteed to be ingested and available to be read, excluding data loss due to errors.",
+          "format": "google-duration",
+          "type": "string"
+        },
+        "launchStage": {
+          "description": "The launch stage of the metric definition.",
+          "enum": [
+            "LAUNCH_STAGE_UNSPECIFIED",
+            "EARLY_ACCESS",
+            "ALPHA",
+            "BETA",
+            "GA",
+            "DEPRECATED"
+          ],
+          "enumDescriptions": [
+            "Do not use this default value.",
+            "Early Access features are limited to a closed group of testers. To use these features, you must sign up in advance and sign a Trusted Tester agreement (which includes confidentiality provisions). These features may be unstable, changed in backward-incompatible ways, and are not guaranteed to be released.",
+            "Alpha is a limited availability test for releases before they are cleared for widespread use. By Alpha, all significant design issues are resolved and we are in the process of verifying functionality. Alpha customers need to apply for access, agree to applicable terms, and have their projects whitelisted. Alpha releases don’t have to be feature complete, no SLAs are provided, and there are no technical support obligations, but they will be far enough along that customers can actually use them in test environments or for limited-use tests -- just like they would in normal production cases.",
+            "Beta is the point at which we are ready to open a release for any customer to use. There are no SLA or technical support obligations in a Beta release. Products will be complete from a feature perspective, but may have some open outstanding issues. Beta releases are suitable for limited production use cases.",
+            "GA features are open to all developers and are considered stable and fully qualified for production use.",
+            "Deprecated features are scheduled to be shut down and removed. For more information, see the “Deprecation Policy” section of our Terms of Service (https://cloud.google.com/terms/) and the Google Cloud Platform Subject to the Deprecation Policy (https://cloud.google.com/terms/deprecation) documentation."
+          ],
+          "type": "string"
+        },
+        "samplePeriod": {
+          "description": "The sampling period of metric data points. For metrics which are written periodically, consecutive data points are stored at this time interval, excluding data loss due to errors. Metrics with a higher granularity have a smaller sampling period.",
+          "format": "google-duration",
           "type": "string"
         }
       },
@@ -2594,7 +2680,7 @@
           "type": "string"
         },
         "duration": {
-          "description": "The amount of time that a time series must violate the threshold to be considered failing. Currently, only values that are a multiple of a minute--e.g. 60, 120, or 300 seconds--are supported. If an invalid value is given, an error will be returned. The Duration.nanos field is ignored. When choosing a duration, it is useful to keep in mind the frequency of the underlying time series data (which may also be affected by any alignments specified in the aggregation field); a good duration is long enough so that a single outlier does not generate spurious alerts, but short enough that unhealthy states are detected and alerted on quickly.",
+          "description": "The amount of time that a time series must violate the threshold to be considered failing. Currently, only values that are a multiple of a minute--e.g., 0, 60, 120, or 300 seconds--are supported. If an invalid value is given, an error will be returned. When choosing a duration, it is useful to keep in mind the frequency of the underlying time series data (which may also be affected by any alignments specified in the aggregations field); a good duration is long enough so that a single outlier does not generate spurious alerts, but short enough that unhealthy states are detected and alerted on quickly.",
           "format": "google-duration",
           "type": "string"
         },
@@ -2663,7 +2749,7 @@
       "type": "object"
     },
     "MonitoredResourceMetadata": {
-      "description": "Auxiliary metadata for a MonitoredResource object. MonitoredResource objects contain the minimum set of information to uniquely identify a monitored resource instance. There is some other useful auxiliary metadata. Google Stackdriver Monitoring \u0026 Logging uses an ingestion pipeline to extract metadata for cloud resources of all types , and stores the metadata in this message.",
+      "description": "Auxiliary metadata for a MonitoredResource object. MonitoredResource objects contain the minimum set of information to uniquely identify a monitored resource instance. There is some other useful auxiliary metadata. Monitoring and Logging use an ingestion pipeline to extract metadata for cloud resources of all types, and store the metadata in this message.",
       "id": "MonitoredResourceMetadata",
       "properties": {
         "systemLabels": {
@@ -2671,7 +2757,7 @@
             "description": "Properties of the object.",
             "type": "any"
           },
-          "description": "Output only. Values for predefined system metadata labels. System labels are a kind of metadata extracted by Google Stackdriver. Stackdriver determines what system labels are useful and how to obtain their values. Some examples: \"machine_image\", \"vpc\", \"subnet_id\", \"security_group\", \"name\", etc. System label values can be only strings, Boolean values, or a list of strings. For example:\n{ \"name\": \"my-test-instance\",\n  \"security_group\": [\"a\", \"b\", \"c\"],\n  \"spot_instance\": false }\n",
+          "description": "Output only. Values for predefined system metadata labels. System labels are a kind of metadata extracted by Google, including \"machine_image\", \"vpc\", \"subnet_id\", \"security_group\", \"name\", etc. System label values can be only strings, Boolean values, or a list of strings. For example:\n{ \"name\": \"my-test-instance\",\n  \"security_group\": [\"a\", \"b\", \"c\"],\n  \"spot_instance\": false }\n",
           "type": "object"
         },
         "userLabels": {
@@ -2890,6 +2976,17 @@
       "properties": {
         "fileName": {
           "description": "The path-qualified name of the .proto file that contained the associated protobuf element. For example: \"google/protobuf/source_context.proto\".",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SpanContext": {
+      "description": "The context of a span, attached to google.api.Distribution.Exemplars in google.api.Distribution values during aggregation.It contains the name of a span with format:  projects/PROJECT_ID/traces/TRACE_ID/spans/SPAN_ID",
+      "id": "SpanContext",
+      "properties": {
+        "spanName": {
+          "description": "The resource name of the span in the following format:\nprojects/[PROJECT_ID]/traces/[TRACE_ID]/spans/[SPAN_ID]\nTRACE_ID is a unique identifier for a trace within a project; it is a 32-character hexadecimal encoding of a 16-byte array.SPAN_ID is a unique identifier for a span within a trace; it is a 16-character hexadecimal encoding of an 8-byte array.",
           "type": "string"
         }
       },

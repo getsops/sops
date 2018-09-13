@@ -129,7 +129,7 @@ type ListTracesResponse struct {
 	// retrieving additional traces.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// Traces: List of trace records returned.
+	// Traces: List of trace records as specified by the view parameter.
 	Traces []*Trace `json:"traces,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -277,7 +277,7 @@ type TraceSpan struct {
 	// Name: Name of the span. Must be less than 128 bytes. The span name is
 	// sanitized
 	// and displayed in the Stackdriver Trace tool in the
-	// {% dynamic print site_values.console_name %}.
+	// Google Cloud Platform Console.
 	// The name may be a method name or some other per-call site name.
 	// For the same executable and the same call point, a best practice
 	// is
@@ -413,6 +413,7 @@ func (c *ProjectsPatchTracesCall) doRequest(alt string) (*http.Response, error) 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/traces")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -557,6 +558,7 @@ func (c *ProjectsTracesGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/traces/{traceId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -819,6 +821,7 @@ func (c *ProjectsTracesListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/traces")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)

@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,6 +32,8 @@ const (
 	DatastoreBackup DataFormat = "DATASTORE_BACKUP"
 	GoogleSheets    DataFormat = "GOOGLE_SHEETS"
 	Bigtable        DataFormat = "BIGTABLE"
+	Parquet         DataFormat = "PARQUET"
+	ORC             DataFormat = "ORC"
 )
 
 // ExternalData is a table which is stored outside of BigQuery. It is implemented by

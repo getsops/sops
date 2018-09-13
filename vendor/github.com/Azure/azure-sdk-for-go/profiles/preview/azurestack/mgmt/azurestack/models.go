@@ -35,6 +35,12 @@ const (
 	PaaS ComputeRole = original.PaaS
 )
 
+type Location = original.Location
+
+const (
+	Global Location = original.Global
+)
+
 type OperatingSystem = original.OperatingSystem
 
 const (
@@ -60,6 +66,8 @@ type CustomerSubscriptionListPage = original.CustomerSubscriptionListPage
 type CustomerSubscriptionProperties = original.CustomerSubscriptionProperties
 type DataDiskImage = original.DataDiskImage
 type Display = original.Display
+type ErrorDetails = original.ErrorDetails
+type ErrorResponse = original.ErrorResponse
 type ExtendedProduct = original.ExtendedProduct
 type ExtendedProductProperties = original.ExtendedProductProperties
 type IconUris = original.IconUris
@@ -83,6 +91,7 @@ type RegistrationParameter = original.RegistrationParameter
 type RegistrationParameterProperties = original.RegistrationParameterProperties
 type RegistrationProperties = original.RegistrationProperties
 type Resource = original.Resource
+type TrackedResource = original.TrackedResource
 type URI = original.URI
 type VirtualMachineExtensionProductProperties = original.VirtualMachineExtensionProductProperties
 type VirtualMachineProductProperties = original.VirtualMachineProductProperties
@@ -104,6 +113,9 @@ func NewCustomerSubscriptionsClientWithBaseURI(baseURI string, subscriptionID st
 }
 func PossibleComputeRoleValues() []ComputeRole {
 	return original.PossibleComputeRoleValues()
+}
+func PossibleLocationValues() []Location {
+	return original.PossibleLocationValues()
 }
 func PossibleOperatingSystemValues() []OperatingSystem {
 	return original.PossibleOperatingSystemValues()

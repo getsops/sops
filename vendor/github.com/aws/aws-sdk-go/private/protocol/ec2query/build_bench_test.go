@@ -49,7 +49,7 @@ func BenchmarkEC2QueryBuild_Complex_ec2AuthorizeSecurityGroupEgress(b *testing.B
 		IpProtocol:                 aws.String("String"),
 		SourceSecurityGroupName:    aws.String("String"),
 		SourceSecurityGroupOwnerId: aws.String("String"),
-		ToPort: aws.Int64(1),
+		ToPort:                     aws.Int64(1),
 	}
 
 	benchEC2QueryBuild(b, "AuthorizeSecurityGroupEgress", params)

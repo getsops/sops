@@ -32,21 +32,13 @@ import (
 // Text can be at most 1024 characters long.
 // If the content passed to the text API or the image API exceeds the size limits, the API will return an error code
 // that informs about the issue.
-//
-// This API is currently available in:
-//
-// * West US - westus.api.cognitive.microsoft.com
-// * East US 2 - eastus2.api.cognitive.microsoft.com
-// * West Central US - westcentralus.api.cognitive.microsoft.com
-// * West Europe - westeurope.api.cognitive.microsoft.com
-// * Southeast Asia - southeastasia.api.cognitive.microsoft.com .
 type ListManagementTermClient struct {
 	BaseClient
 }
 
 // NewListManagementTermClient creates an instance of the ListManagementTermClient client.
-func NewListManagementTermClient(baseURL AzureRegionBaseURL) ListManagementTermClient {
-	return ListManagementTermClient{New(baseURL)}
+func NewListManagementTermClient(endpoint string) ListManagementTermClient {
+	return ListManagementTermClient{New(endpoint)}
 }
 
 // AddTerm add a term to the term list with list Id equal to list Id passed.
@@ -79,7 +71,7 @@ func (client ListManagementTermClient) AddTerm(ctx context.Context, listID strin
 // AddTermPreparer prepares the AddTerm request.
 func (client ListManagementTermClient) AddTermPreparer(ctx context.Context, listID string, term string, language string) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
-		"baseUrl": client.BaseURL,
+		"Endpoint": client.Endpoint,
 	}
 
 	pathParameters := map[string]interface{}{
@@ -93,7 +85,7 @@ func (client ListManagementTermClient) AddTermPreparer(ctx context.Context, list
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsPost(),
-		autorest.WithCustomBaseURL("https://{baseUrl}", urlParameters),
+		autorest.WithCustomBaseURL("{Endpoint}", urlParameters),
 		autorest.WithPathParameters("/contentmoderator/lists/v1.0/termlists/{listId}/terms/{term}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
@@ -148,7 +140,7 @@ func (client ListManagementTermClient) DeleteAllTerms(ctx context.Context, listI
 // DeleteAllTermsPreparer prepares the DeleteAllTerms request.
 func (client ListManagementTermClient) DeleteAllTermsPreparer(ctx context.Context, listID string, language string) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
-		"baseUrl": client.BaseURL,
+		"Endpoint": client.Endpoint,
 	}
 
 	pathParameters := map[string]interface{}{
@@ -161,7 +153,7 @@ func (client ListManagementTermClient) DeleteAllTermsPreparer(ctx context.Contex
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsDelete(),
-		autorest.WithCustomBaseURL("https://{baseUrl}", urlParameters),
+		autorest.WithCustomBaseURL("{Endpoint}", urlParameters),
 		autorest.WithPathParameters("/contentmoderator/lists/v1.0/termlists/{listId}/terms", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
@@ -217,7 +209,7 @@ func (client ListManagementTermClient) DeleteTerm(ctx context.Context, listID st
 // DeleteTermPreparer prepares the DeleteTerm request.
 func (client ListManagementTermClient) DeleteTermPreparer(ctx context.Context, listID string, term string, language string) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
-		"baseUrl": client.BaseURL,
+		"Endpoint": client.Endpoint,
 	}
 
 	pathParameters := map[string]interface{}{
@@ -231,7 +223,7 @@ func (client ListManagementTermClient) DeleteTermPreparer(ctx context.Context, l
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsDelete(),
-		autorest.WithCustomBaseURL("https://{baseUrl}", urlParameters),
+		autorest.WithCustomBaseURL("{Endpoint}", urlParameters),
 		autorest.WithPathParameters("/contentmoderator/lists/v1.0/termlists/{listId}/terms/{term}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
@@ -288,7 +280,7 @@ func (client ListManagementTermClient) GetAllTerms(ctx context.Context, listID s
 // GetAllTermsPreparer prepares the GetAllTerms request.
 func (client ListManagementTermClient) GetAllTermsPreparer(ctx context.Context, listID string, language string, offset *int32, limit *int32) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
-		"baseUrl": client.BaseURL,
+		"Endpoint": client.Endpoint,
 	}
 
 	pathParameters := map[string]interface{}{
@@ -307,7 +299,7 @@ func (client ListManagementTermClient) GetAllTermsPreparer(ctx context.Context, 
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
-		autorest.WithCustomBaseURL("https://{baseUrl}", urlParameters),
+		autorest.WithCustomBaseURL("{Endpoint}", urlParameters),
 		autorest.WithPathParameters("/contentmoderator/lists/v1.0/termlists/{listId}/terms", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))

@@ -272,24 +272,26 @@ func TestSection_KeyStrings(t *testing.T) {
 
 func TestSection_KeyHash(t *testing.T) {
 	Convey("Get clone of key hash", t, func() {
-		f := ini.Empty()
+		f, err := ini.Load([]byte(`
+key = one
+[log]
+name = app
+file = a.log
+`), []byte(`
+key = two
+[log]
+name = app2
+file = b.log
+`))
+		So(err, ShouldBeNil)
 		So(f, ShouldNotBeNil)
 
-		k, err := f.Section("").NewKey("NAME", "ini")
-		So(err, ShouldBeNil)
-		So(k, ShouldNotBeNil)
-		k, err = f.Section("").NewKey("VERSION", "v1")
-		So(err, ShouldBeNil)
-		So(k, ShouldNotBeNil)
-		k, err = f.Section("").NewKey("IMPORT_PATH", "gopkg.in/ini.v1")
-		So(err, ShouldBeNil)
-		So(k, ShouldNotBeNil)
+		So(f.Section("").Key("key").String(), ShouldEqual, "two")
 
-		hash := f.Section("").KeysHash()
+		hash := f.Section("log").KeysHash()
 		relation := map[string]string{
-			"NAME":        "ini",
-			"VERSION":     "v1",
-			"IMPORT_PATH": "gopkg.in/ini.v1",
+			"name": "app2",
+			"file": "b.log",
 		}
 		for k, v := range hash {
 			So(v, ShouldEqual, relation[k])

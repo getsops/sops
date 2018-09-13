@@ -15,7 +15,7 @@
   "description": "Lets Android application developers access their Google Play accounts.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/android-publisher",
-  "etag": "\"-iA1DTNe4s-I6JZXPt1t1Ypy8IU/eJTlhAFjCoKr6Jd4MPFAfd8JyPA\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/sOzpDxeoqeSYI7pE0XzyOUls9Ts\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/android-16.png",
     "x32": "https://www.google.com/images/icons/product/android-32.png"
@@ -60,12 +60,12 @@
       "type": "boolean"
     },
     "quotaUser": {
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+      "description": "An opaque string that represents a user for quota purposes. Must not exceed 40 characters.",
       "location": "query",
       "type": "string"
     },
     "userIp": {
-      "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+      "description": "Deprecated. Please use quotaUser instead.",
       "location": "query",
       "type": "string"
     }
@@ -584,6 +584,86 @@
               "path": "{packageName}/edits/{editId}/apks",
               "response": {
                 "$ref": "Apk"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/androidpublisher"
+              ],
+              "supportsMediaUpload": true
+            }
+          }
+        },
+        "bundles": {
+          "methods": {
+            "list": {
+              "httpMethod": "GET",
+              "id": "androidpublisher.edits.bundles.list",
+              "parameterOrder": [
+                "packageName",
+                "editId"
+              ],
+              "parameters": {
+                "editId": {
+                  "description": "Unique identifier for this edit.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                },
+                "packageName": {
+                  "description": "Unique identifier for the Android app that is being updated; for example, \"com.spiffygame\".",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "{packageName}/edits/{editId}/bundles",
+              "response": {
+                "$ref": "BundlesListResponse"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/androidpublisher"
+              ]
+            },
+            "upload": {
+              "description": "Uploads a new Android App Bundle to this edit. If you are using the Google API client libraries, please increase the timeout of the http request before calling this endpoint (a timeout of 2 minutes is recommended). See: https://developers.google.com/api-client-library/java/google-api-java-client/errors for an example in java.",
+              "httpMethod": "POST",
+              "id": "androidpublisher.edits.bundles.upload",
+              "mediaUpload": {
+                "accept": [
+                  "application/octet-stream"
+                ],
+                "maxSize": "2GB",
+                "protocols": {
+                  "resumable": {
+                    "multipart": true,
+                    "path": "/resumable/upload/androidpublisher/v2/applications/{packageName}/edits/{editId}/bundles"
+                  },
+                  "simple": {
+                    "multipart": true,
+                    "path": "/upload/androidpublisher/v2/applications/{packageName}/edits/{editId}/bundles"
+                  }
+                }
+              },
+              "parameterOrder": [
+                "packageName",
+                "editId"
+              ],
+              "parameters": {
+                "editId": {
+                  "description": "Unique identifier for this edit.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                },
+                "packageName": {
+                  "description": "Unique identifier for the Android app that is being updated; for example, \"com.spiffygame\".",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "{packageName}/edits/{editId}/bundles",
+              "response": {
+                "$ref": "Bundle"
               },
               "scopes": [
                 "https://www.googleapis.com/auth/androidpublisher"
@@ -1641,9 +1721,8 @@
                   "type": "string"
                 },
                 "track": {
-                  "description": "The track to read or modify. Acceptable values are: \"alpha\", \"beta\", \"production\", \"rollout\" or \"internal\".",
+                  "description": "The track to read or modify.",
                   "location": "path",
-                  "pattern": "(alpha|beta|production|rollout|internal)",
                   "required": true,
                   "type": "string"
                 }
@@ -1709,9 +1788,8 @@
                   "type": "string"
                 },
                 "track": {
-                  "description": "The track to read or modify. Acceptable values are: \"alpha\", \"beta\", \"production\", \"rollout\" or \"internal\".",
+                  "description": "The track to read or modify.",
                   "location": "path",
-                  "pattern": "(alpha|beta|production|rollout|internal)",
                   "required": true,
                   "type": "string"
                 }
@@ -1750,9 +1828,8 @@
                   "type": "string"
                 },
                 "track": {
-                  "description": "The track to read or modify. Acceptable values are: \"alpha\", \"beta\", \"production\", \"rollout\" or \"internal\".",
+                  "description": "The track to read or modify.",
                   "location": "path",
-                  "pattern": "(alpha|beta|production|rollout|internal)",
                   "required": true,
                   "type": "string"
                 }
@@ -1970,6 +2047,42 @@
           "response": {
             "$ref": "InAppProduct"
           },
+          "scopes": [
+            "https://www.googleapis.com/auth/androidpublisher"
+          ]
+        }
+      }
+    },
+    "orders": {
+      "methods": {
+        "refund": {
+          "description": "Refund a user's subscription or in-app purchase order.",
+          "httpMethod": "POST",
+          "id": "androidpublisher.orders.refund",
+          "parameterOrder": [
+            "packageName",
+            "orderId"
+          ],
+          "parameters": {
+            "orderId": {
+              "description": "The order ID provided to the user when the subscription or in-app order was purchased.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "packageName": {
+              "description": "The package name of the application for which this subscription or in-app item was purchased (for example, 'com.some.thing').",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "revoke": {
+              "description": "Whether to revoke the purchased item. If set to true, access to the subscription or in-app item will be terminated immediately. If the item is a recurring subscription, all future payments will also be terminated. Consumed in-app items need to be handled by developer's app. (optional)",
+              "location": "query",
+              "type": "boolean"
+            }
+          },
+          "path": "{packageName}/orders/{orderId}:refund",
           "scopes": [
             "https://www.googleapis.com/auth/androidpublisher"
           ]
@@ -2368,7 +2481,7 @@
       }
     }
   },
-  "revision": "20180327",
+  "revision": "20180827",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Apk": {
@@ -2501,6 +2614,42 @@
         },
         "id": {
           "description": "The ID of the edit that can be used in subsequent API calls.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Bundle": {
+      "id": "Bundle",
+      "properties": {
+        "sha1": {
+          "description": "A sha1 hash of the upload payload, encoded as a hex string and matching the output of the sha1sum command.",
+          "type": "string"
+        },
+        "sha256": {
+          "description": "A sha256 hash of the upload payload, encoded as a hex string and matching the output of the sha256sum command.",
+          "type": "string"
+        },
+        "versionCode": {
+          "description": "The version code of the Android App Bundle. As specified in the Android App Bundle's base module APK manifest file.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "BundlesListResponse": {
+      "id": "BundlesListResponse",
+      "properties": {
+        "bundles": {
+          "items": {
+            "$ref": "Bundle"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "default": "androidpublisher#bundlesListResponse",
+          "description": "Identifies what kind of resource this is. Value: the fixed string \"androidpublisher#bundlesListResponse\".",
           "type": "string"
         }
       },
@@ -2794,6 +2943,10 @@
         "defaultPrice": {
           "$ref": "Price",
           "description": "Default price cannot be zero. In-app products can never be free. Default price is always in the developer's Checkout merchant currency."
+        },
+        "gracePeriod": {
+          "description": "Grace period of the subscription, specified in ISO 8601 format. It will allow developers to give their subscribers a grace period when the payment for the new recurrence period is declined. Acceptable values = \"P3D\" (three days) and \"P7D\" (seven days)",
+          "type": "string"
         },
         "listings": {
           "additionalProperties": {
@@ -3114,6 +3267,22 @@
       },
       "type": "object"
     },
+    "SubscriptionCancelSurveyResult": {
+      "description": "Information provided by the user when they complete the subscription cancellation flow (cancellation reason survey).",
+      "id": "SubscriptionCancelSurveyResult",
+      "properties": {
+        "cancelSurveyReason": {
+          "description": "The cancellation reason the user chose in the survey. Possible values are:  \n- Other \n- I don't use this service enough \n- Technical issues \n- Cost-related reasons \n- I found a better app",
+          "format": "int32",
+          "type": "integer"
+        },
+        "userInputCancelReason": {
+          "description": "The customized input cancel reason from the user. Only present when cancelReason is 0.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "SubscriptionDeferralInfo": {
       "description": "A SubscriptionDeferralInfo contains the data needed to defer a subscription purchase to a future expiry time.",
       "id": "SubscriptionDeferralInfo",
@@ -3131,6 +3300,22 @@
       },
       "type": "object"
     },
+    "SubscriptionPriceChange": {
+      "description": "Contains the price change information for a subscription that can be used to control the user journey for the price change in the app. This can be in the form of seeking confirmation from the user or tailoring the experience for a successful conversion.",
+      "id": "SubscriptionPriceChange",
+      "properties": {
+        "newPrice": {
+          "$ref": "Price",
+          "description": "The new price the subscription will renew with if the price change is accepted by the user."
+        },
+        "state": {
+          "description": "The current state of the price change. Possible values are:  \n- Outstanding: State for a pending price change waiting for the user to agree. In this state, you can optionally seek confirmation from the user using the In-App API. \n- Accepted: State for an accepted price change that the subscription will renew with unless it's canceled. The price change takes effect on a future date when the subscription renews. Note that the change might not occur when the subscription is renewed next.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
     "SubscriptionPurchase": {
       "description": "A SubscriptionPurchase resource indicates the status of a user's subscription purchase.",
       "id": "SubscriptionPurchase",
@@ -3143,6 +3328,10 @@
           "description": "The reason why a subscription was canceled or is not auto-renewing. Possible values are:  \n- User canceled the subscription \n- Subscription was canceled by the system, for example because of a billing problem \n- Subscription was replaced with a new subscription \n- Subscription was canceled by the developer",
           "format": "int32",
           "type": "integer"
+        },
+        "cancelSurveyResult": {
+          "$ref": "SubscriptionCancelSurveyResult",
+          "description": "Information provided by the user when they complete the subscription cancellation flow (cancellation reason survey)."
         },
         "countryCode": {
           "description": "ISO 3166-1 alpha-2 billing country/region code of the user at the time the subscription was granted.",
@@ -3183,7 +3372,7 @@
           "type": "string"
         },
         "paymentState": {
-          "description": "The payment state of the subscription. Possible values are:  \n- Payment pending \n- Payment received \n- Free trial",
+          "description": "The payment state of the subscription. Possible values are:  \n- Payment pending \n- Payment received \n- Free trial \n- Pending deferred upgrade/downgrade",
           "format": "int32",
           "type": "integer"
         },
@@ -3191,6 +3380,10 @@
           "description": "Price of the subscription, not including tax. Price is expressed in micro-units, where 1,000,000 micro-units represents one unit of the currency. For example, if the subscription price is €1.99, price_amount_micros is 1990000.",
           "format": "int64",
           "type": "string"
+        },
+        "priceChange": {
+          "$ref": "SubscriptionPriceChange",
+          "description": "The latest price change information available. This is present only when there is an upcoming price change for the subscription yet to be applied.\n\nOnce the subscription renews with the new price or the subscription is canceled, no price change information will be returned."
         },
         "priceCurrencyCode": {
           "description": "ISO 4217 currency code for the subscription price. For example, if the price is specified in British pounds sterling, price_currency_code is \"GBP\".",
@@ -3291,7 +3484,7 @@
       "id": "Track",
       "properties": {
         "track": {
-          "description": "Identifier for this track. One of \"alpha\", \"beta\", \"production\", \"rollout\" or \"internal\".",
+          "description": "Identifier for this track.",
           "type": "string"
         },
         "userFraction": {
@@ -3299,6 +3492,7 @@
           "type": "number"
         },
         "versionCodes": {
+          "description": "Version codes to make active on this track. Note that this list should contain all versions you wish to be active, including those you wish to retain from previous releases.",
           "items": {
             "format": "int32",
             "type": "integer"

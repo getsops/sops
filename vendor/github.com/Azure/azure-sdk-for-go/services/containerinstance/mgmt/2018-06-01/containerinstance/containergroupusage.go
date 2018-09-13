@@ -71,7 +71,7 @@ func (client ContainerGroupUsageClient) ListPreparer(ctx context.Context, locati
 		"subscriptionId": autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-04-01"
+	const APIVersion = "2018-06-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}

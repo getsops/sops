@@ -79,41 +79,6 @@ func PossibleAttributeTypeValues() []AttributeType {
 	return []AttributeType{AttributeTypeAccessories, AttributeTypeAge, AttributeTypeBlur, AttributeTypeEmotion, AttributeTypeExposure, AttributeTypeFacialHair, AttributeTypeGender, AttributeTypeGlasses, AttributeTypeHair, AttributeTypeHeadPose, AttributeTypeMakeup, AttributeTypeNoise, AttributeTypeOcclusion, AttributeTypeSmile}
 }
 
-// AzureRegions enumerates the values for azure regions.
-type AzureRegions string
-
-const (
-	// Australiaeast ...
-	Australiaeast AzureRegions = "australiaeast"
-	// Brazilsouth ...
-	Brazilsouth AzureRegions = "brazilsouth"
-	// Eastasia ...
-	Eastasia AzureRegions = "eastasia"
-	// Eastus ...
-	Eastus AzureRegions = "eastus"
-	// Eastus2 ...
-	Eastus2 AzureRegions = "eastus2"
-	// Northeurope ...
-	Northeurope AzureRegions = "northeurope"
-	// Southcentralus ...
-	Southcentralus AzureRegions = "southcentralus"
-	// Southeastasia ...
-	Southeastasia AzureRegions = "southeastasia"
-	// Westcentralus ...
-	Westcentralus AzureRegions = "westcentralus"
-	// Westeurope ...
-	Westeurope AzureRegions = "westeurope"
-	// Westus ...
-	Westus AzureRegions = "westus"
-	// Westus2 ...
-	Westus2 AzureRegions = "westus2"
-)
-
-// PossibleAzureRegionsValues returns an array of possible values for the AzureRegions const type.
-func PossibleAzureRegionsValues() []AzureRegions {
-	return []AzureRegions{Australiaeast, Brazilsouth, Eastasia, Eastus, Eastus2, Northeurope, Southcentralus, Southeastasia, Westcentralus, Westeurope, Westus, Westus2}
-}
-
 // BlurLevel enumerates the values for blur level.
 type BlurLevel string
 
@@ -368,9 +333,11 @@ type FacialHair struct {
 type FindSimilarRequest struct {
 	// FaceID - FaceId of the query face. User needs to call Face - Detect first to get a valid faceId. Note that this faceId is not persisted and will expire 24 hours after the detection call
 	FaceID *uuid.UUID `json:"faceId,omitempty"`
-	// FaceListID - An existing user-specified unique candidate face list, created in Face List - Create a Face List. Face list contains a set of persistedFaceIds which are persisted and will never expire. Parameter faceListId and faceIds should not be provided at the same time
+	// FaceListID - An existing user-specified unique candidate face list, created in Face List - Create a Face List. Face list contains a set of persistedFaceIds which are persisted and will never expire. Parameter faceListId, largeFaceListId and faceIds should not be provided at the same time。
 	FaceListID *string `json:"faceListId,omitempty"`
-	// FaceIds - An array of candidate faceIds. All of them are created by Face - Detect and the faceIds will expire 24 hours after the detection call.
+	// LargeFaceListID - An existing user-specified unique candidate large face list, created in LargeFaceList - Create. Large face list contains a set of persistedFaceIds which are persisted and will never expire. Parameter faceListId, largeFaceListId and faceIds should not be provided at the same time.
+	LargeFaceListID *string `json:"largeFaceListId,omitempty"`
+	// FaceIds - An array of candidate faceIds. All of them are created by Face - Detect and the faceIds will expire 24 hours after the detection call. The number of faceIds is limited to 1000. Parameter faceListId, largeFaceListId and faceIds should not be provided at the same time.
 	FaceIds *[]uuid.UUID `json:"faceIds,omitempty"`
 	// MaxNumOfCandidatesReturned - The number of top similar faces returned. The valid range is [1, 1000].
 	MaxNumOfCandidatesReturned *int32 `json:"maxNumOfCandidatesReturned,omitempty"`
@@ -428,10 +395,12 @@ type IdentifyCandidate struct {
 
 // IdentifyRequest request body for identify face operation.
 type IdentifyRequest struct {
-	// PersonGroupID - PersonGroupId of the target person group, created by PersonGroups.Create
-	PersonGroupID *string `json:"personGroupId,omitempty"`
 	// FaceIds - Array of query faces faceIds, created by the Face - Detect. Each of the faces are identified independently. The valid number of faceIds is between [1, 10].
 	FaceIds *[]uuid.UUID `json:"faceIds,omitempty"`
+	// PersonGroupID - PersonGroupId of the target person group, created by PersonGroup - Create. Parameter personGroupId and largePersonGroupId should not be provided at the same time.
+	PersonGroupID *string `json:"personGroupId,omitempty"`
+	// LargePersonGroupID - LargePersonGroupId of the target large person group, created by LargePersonGroup - Create. Parameter personGroupId and largePersonGroupId should not be provided at the same time.
+	LargePersonGroupID *string `json:"largePersonGroupId,omitempty"`
 	// MaxNumOfCandidatesReturned - The range of maxNumOfCandidatesReturned is between 1 and 5 (default is 1).
 	MaxNumOfCandidatesReturned *int32 `json:"maxNumOfCandidatesReturned,omitempty"`
 	// ConfidenceThreshold - Confidence threshold of identification, used to judge whether one face belong to one person. The range of confidenceThreshold is [0, 1] (default specified by algorithm).
@@ -483,6 +452,28 @@ type Landmarks struct {
 	UnderLipBottom      *Coordinate `json:"underLipBottom,omitempty"`
 }
 
+// LargeFaceList large face list object.
+type LargeFaceList struct {
+	autorest.Response `json:"-"`
+	// LargeFaceListID - LargeFaceListId of the target large face list.
+	LargeFaceListID *string `json:"largeFaceListId,omitempty"`
+	// Name - User defined name, maximum length is 128.
+	Name *string `json:"name,omitempty"`
+	// UserData - User specified data. Length should not exceed 16KB.
+	UserData *string `json:"userData,omitempty"`
+}
+
+// LargePersonGroup large person group object.
+type LargePersonGroup struct {
+	autorest.Response `json:"-"`
+	// LargePersonGroupID - LargePersonGroupId of the target large person groups
+	LargePersonGroupID *string `json:"largePersonGroupId,omitempty"`
+	// Name - User defined name, maximum length is 128.
+	Name *string `json:"name,omitempty"`
+	// UserData - User specified data. Length should not exceed 16KB.
+	UserData *string `json:"userData,omitempty"`
+}
+
 // List face list object.
 type List struct {
 	autorest.Response `json:"-"`
@@ -508,10 +499,28 @@ type ListIdentifyResult struct {
 	Value             *[]IdentifyResult `json:"value,omitempty"`
 }
 
+// ListLargeFaceList ...
+type ListLargeFaceList struct {
+	autorest.Response `json:"-"`
+	Value             *[]LargeFaceList `json:"value,omitempty"`
+}
+
+// ListLargePersonGroup ...
+type ListLargePersonGroup struct {
+	autorest.Response `json:"-"`
+	Value             *[]LargePersonGroup `json:"value,omitempty"`
+}
+
 // ListList ...
 type ListList struct {
 	autorest.Response `json:"-"`
 	Value             *[]List `json:"value,omitempty"`
+}
+
+// ListPersistedFace ...
+type ListPersistedFace struct {
+	autorest.Response `json:"-"`
+	Value             *[]PersistedFace `json:"value,omitempty"`
 }
 
 // ListPerson ...
@@ -540,8 +549,8 @@ type Makeup struct {
 	LipMakeup *bool `json:"lipMakeup,omitempty"`
 }
 
-// NameAndUserDataContract a combination of user defined name and user specified data for the person, personGroup,
-// and faceList
+// NameAndUserDataContract a combination of user defined name and user specified data for the person,
+// largePersonGroup/personGroup, and largeFaceList/faceList.
 type NameAndUserDataContract struct {
 	// Name - User defined name, maximum length is 128.
 	Name *string `json:"name,omitempty"`
@@ -592,7 +601,7 @@ type Person struct {
 // PersonGroup person group object.
 type PersonGroup struct {
 	autorest.Response `json:"-"`
-	// PersonGroupID - PersonGroupId of the existing person groups.
+	// PersonGroupID - PersonGroupId of the target person group.
 	PersonGroupID *string `json:"personGroupId,omitempty"`
 	// Name - User defined name, maximum length is 128.
 	Name *string `json:"name,omitempty"`
@@ -625,23 +634,25 @@ type SimilarFace struct {
 // TrainingStatus training status object.
 type TrainingStatus struct {
 	autorest.Response `json:"-"`
-	// Status - Training status: notstarted, running, succeeded, failed. If the training process is waiting to perform, the status is notstarted. If the training is ongoing, the status is running. Status succeed means this person group is ready for Face - Identify. Status failed is often caused by no person or no persisted face exist in the person group. Possible values include: 'Nonstarted', 'Running', 'Succeeded', 'Failed'
+	// Status - Training status: notstarted, running, succeeded, failed. If the training process is waiting to perform, the status is notstarted. If the training is ongoing, the status is running. Status succeed means this person group or large person group is ready for Face - Identify, or this large face list is ready for Face - Find Similar. Status failed is often caused by no person or no persisted face exist in the person group or large person group, or no persisted face exist in the large face list. Possible values include: 'Nonstarted', 'Running', 'Succeeded', 'Failed'
 	Status TrainingStatusType `json:"status,omitempty"`
-	// Created - A combined UTC date and time string that describes person group created time.
+	// Created - A combined UTC date and time string that describes the created time of the person group, large person group or large face list.
 	Created *date.Time `json:"createdDateTime,omitempty"`
-	// LastAction - Person group last modify time in the UTC, could be null value when the person group is not successfully trained.
+	// LastAction - A combined UTC date and time string that describes the last modify time of the person group, large person group or large face list, could be null value when the group is not successfully trained.
 	LastAction *date.Time `json:"lastActionDateTime,omitempty"`
+	// LastSuccessfulTraining - A combined UTC date and time string that describes the last successful training time of the person group, large person group or large face list.
+	LastSuccessfulTraining *date.Time `json:"lastSuccessfulTrainingDateTime,omitempty"`
 	// Message - Show failure message when training failed (omitted when training succeed).
 	Message *string `json:"message,omitempty"`
 }
 
-// UpdatePersonFaceRequest request to update person face data.
-type UpdatePersonFaceRequest struct {
+// UpdateFaceRequest request to update face data.
+type UpdateFaceRequest struct {
 	// UserData - User-provided data attached to the face. The size limit is 1KB.
 	UserData *string `json:"userData,omitempty"`
 }
 
-// VerifyFaceToFaceRequest request body for verify operation.
+// VerifyFaceToFaceRequest request body for face to face verification.
 type VerifyFaceToFaceRequest struct {
 	// FaceID1 - FaceId of the first face, comes from Face - Detect
 	FaceID1 *uuid.UUID `json:"faceId1,omitempty"`
@@ -649,13 +660,15 @@ type VerifyFaceToFaceRequest struct {
 	FaceID2 *uuid.UUID `json:"faceId2,omitempty"`
 }
 
-// VerifyFaceToPersonRequest request body for verify operation.
+// VerifyFaceToPersonRequest request body for face to person verification.
 type VerifyFaceToPersonRequest struct {
-	// FaceID - FaceId the face, comes from Face - Detect
+	// FaceID - FaceId of the face, comes from Face - Detect
 	FaceID *uuid.UUID `json:"faceId,omitempty"`
-	// PersonGroupID - Using existing personGroupId and personId for fast loading a specified person. personGroupId is created in Person Groups.Create.
+	// PersonGroupID - Using existing personGroupId and personId for fast loading a specified person. personGroupId is created in PersonGroup - Create. Parameter personGroupId and largePersonGroupId should not be provided at the same time.
 	PersonGroupID *string `json:"personGroupId,omitempty"`
-	// PersonID - Specify a certain person in a person group. personId is created in Persons.Create.
+	// LargePersonGroupID - Using existing largePersonGroupId and personId for fast loading a specified person. largePersonGroupId is created in LargePersonGroup - Create. Parameter personGroupId and largePersonGroupId should not be provided at the same time.
+	LargePersonGroupID *string `json:"largePersonGroupId,omitempty"`
+	// PersonID - Specify a certain person in a person group or a large person group. personId is created in PersonGroup Person - Create or LargePersonGroup Person - Create.
 	PersonID *uuid.UUID `json:"personId,omitempty"`
 }
 

@@ -187,8 +187,8 @@ func checkState(c *check.C, result interface{}, expected *expectedState) {
 	log := c.GetTestLog()
 	matched, matchError := regexp.MatchString("^"+expected.log+"$", log)
 	if matchError != nil {
-		c.Errorf("Error in matching expression used in testing %s",
-			expected.name)
+		c.Errorf("Error in matching expression used in testing %s: %v",
+			expected.name, matchError)
 	} else if !matched {
 		c.Errorf("%s logged:\n----------\n%s----------\n\nExpected:\n----------\n%s\n----------",
 			expected.name, log, expected.log)

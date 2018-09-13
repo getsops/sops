@@ -751,6 +751,19 @@
       "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTObjectRestore.html",
       "alias":"PostObjectRestore"
     },
+    "SelectObjectContent":{
+      "name":"SelectObjectContent",
+      "http":{
+        "method":"POST",
+        "requestUri":"/{Bucket}/{Key+}?select&select-type=2"
+      },
+      "input":{
+        "shape":"SelectObjectContentRequest",
+        "locationName":"SelectObjectContentRequest",
+        "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+      },
+      "output":{"shape":"SelectObjectContentOutput"}
+    },
     "UploadPart":{
       "name":"UploadPart",
       "http":{
@@ -846,6 +859,7 @@
       }
     },
     "AccountId":{"type":"string"},
+    "AllowQuotedRecordDelimiter":{"type":"boolean"},
     "AllowedHeader":{"type":"string"},
     "AllowedHeaders":{
       "type":"list",
@@ -1016,6 +1030,9 @@
         "locationName":"Bucket"
       }
     },
+    "BytesProcessed":{"type":"long"},
+    "BytesReturned":{"type":"long"},
+    "BytesScanned":{"type":"long"},
     "CORSConfiguration":{
       "type":"structure",
       "required":["CORSRules"],
@@ -1065,7 +1082,8 @@
         "QuoteEscapeCharacter":{"shape":"QuoteEscapeCharacter"},
         "RecordDelimiter":{"shape":"RecordDelimiter"},
         "FieldDelimiter":{"shape":"FieldDelimiter"},
-        "QuoteCharacter":{"shape":"QuoteCharacter"}
+        "QuoteCharacter":{"shape":"QuoteCharacter"},
+        "AllowQuotedRecordDelimiter":{"shape":"AllowQuotedRecordDelimiter"}
       }
     },
     "CSVOutput":{
@@ -1201,6 +1219,14 @@
       "member":{"shape":"CompletedPart"},
       "flattened":true
     },
+    "CompressionType":{
+      "type":"string",
+      "enum":[
+        "NONE",
+        "GZIP",
+        "BZIP2"
+      ]
+    },
     "Condition":{
       "type":"structure",
       "members":{
@@ -1216,6 +1242,12 @@
     "ContentMD5":{"type":"string"},
     "ContentRange":{"type":"string"},
     "ContentType":{"type":"string"},
+    "ContinuationEvent":{
+      "type":"structure",
+      "members":{
+      },
+      "event":true
+    },
     "CopyObjectOutput":{
       "type":"structure",
       "members":{
@@ -2044,6 +2076,7 @@
     "DisplayName":{"type":"string"},
     "ETag":{"type":"string"},
     "EmailAddress":{"type":"string"},
+    "EnableRequestProgress":{"type":"boolean"},
     "EncodingType":{
       "type":"string",
       "enum":["url"]
@@ -2062,6 +2095,12 @@
       "members":{
         "ReplicaKmsKeyID":{"shape":"ReplicaKmsKeyID"}
       }
+    },
+    "EndEvent":{
+      "type":"structure",
+      "members":{
+      },
+      "event":true
     },
     "Error":{
       "type":"structure",
@@ -3159,7 +3198,10 @@
     "InputSerialization":{
       "type":"structure",
       "members":{
-        "CSV":{"shape":"CSVInput"}
+        "CSV":{"shape":"CSVInput"},
+        "CompressionType":{"shape":"CompressionType"},
+        "JSON":{"shape":"JSONInput"},
+        "Parquet":{"shape":"ParquetInput"}
       }
     },
     "InventoryConfiguration":{
@@ -3278,6 +3320,25 @@
     "IsEnabled":{"type":"boolean"},
     "IsLatest":{"type":"boolean"},
     "IsTruncated":{"type":"boolean"},
+    "JSONInput":{
+      "type":"structure",
+      "members":{
+        "Type":{"shape":"JSONType"}
+      }
+    },
+    "JSONOutput":{
+      "type":"structure",
+      "members":{
+        "RecordDelimiter":{"shape":"RecordDelimiter"}
+      }
+    },
+    "JSONType":{
+      "type":"string",
+      "enum":[
+        "DOCUMENT",
+        "LINES"
+      ]
+    },
     "KMSContext":{"type":"string"},
     "KeyCount":{"type":"integer"},
     "KeyMarker":{"type":"string"},
@@ -3793,6 +3854,10 @@
     "LocationPrefix":{"type":"string"},
     "LoggingEnabled":{
       "type":"structure",
+      "required":[
+        "TargetBucket",
+        "TargetPrefix"
+      ],
       "members":{
         "TargetBucket":{"shape":"TargetBucket"},
         "TargetGrants":{"shape":"TargetGrants"},
@@ -4031,7 +4096,9 @@
       "enum":[
         "STANDARD",
         "REDUCED_REDUNDANCY",
-        "GLACIER"
+        "GLACIER",
+        "STANDARD_IA",
+        "ONEZONE_IA"
       ]
     },
     "ObjectVersion":{
@@ -4066,7 +4133,8 @@
     "OutputSerialization":{
       "type":"structure",
       "members":{
-        "CSV":{"shape":"CSVOutput"}
+        "CSV":{"shape":"CSVOutput"},
+        "JSON":{"shape":"JSONOutput"}
       }
     },
     "Owner":{
@@ -4079,6 +4147,11 @@
     "OwnerOverride":{
       "type":"string",
       "enum":["Destination"]
+    },
+    "ParquetInput":{
+      "type":"structure",
+      "members":{
+      }
     },
     "Part":{
       "type":"structure",
@@ -4116,6 +4189,24 @@
     },
     "Policy":{"type":"string"},
     "Prefix":{"type":"string"},
+    "Progress":{
+      "type":"structure",
+      "members":{
+        "BytesScanned":{"shape":"BytesScanned"},
+        "BytesProcessed":{"shape":"BytesProcessed"},
+        "BytesReturned":{"shape":"BytesReturned"}
+      }
+    },
+    "ProgressEvent":{
+      "type":"structure",
+      "members":{
+        "Details":{
+          "shape":"Progress",
+          "eventpayload":true
+        }
+      },
+      "event":true
+    },
     "Protocol":{
       "type":"string",
       "enum":[
@@ -4950,6 +5041,16 @@
     },
     "Range":{"type":"string"},
     "RecordDelimiter":{"type":"string"},
+    "RecordsEvent":{
+      "type":"structure",
+      "members":{
+        "Payload":{
+          "shape":"Body",
+          "eventpayload":true
+        }
+      },
+      "event":true
+    },
     "Redirect":{
       "type":"structure",
       "members":{
@@ -5034,6 +5135,12 @@
       "required":["Payer"],
       "members":{
         "Payer":{"shape":"Payer"}
+      }
+    },
+    "RequestProgress":{
+      "type":"structure",
+      "members":{
+        "Enabled":{"shape":"EnableRequestProgress"}
       }
     },
     "ResponseCacheControl":{"type":"string"},
@@ -5198,6 +5305,67 @@
       },
       "locationName":"SSE-S3"
     },
+    "SelectObjectContentEventStream":{
+      "type":"structure",
+      "members":{
+        "Records":{"shape":"RecordsEvent"},
+        "Stats":{"shape":"StatsEvent"},
+        "Progress":{"shape":"ProgressEvent"},
+        "Cont":{"shape":"ContinuationEvent"},
+        "End":{"shape":"EndEvent"}
+      },
+      "eventstream":true
+    },
+    "SelectObjectContentOutput":{
+      "type":"structure",
+      "members":{
+        "Payload":{"shape":"SelectObjectContentEventStream"}
+      },
+      "payload":"Payload"
+    },
+    "SelectObjectContentRequest":{
+      "type":"structure",
+      "required":[
+        "Bucket",
+        "Key",
+        "Expression",
+        "ExpressionType",
+        "InputSerialization",
+        "OutputSerialization"
+      ],
+      "members":{
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"Bucket"
+        },
+        "Key":{
+          "shape":"ObjectKey",
+          "location":"uri",
+          "locationName":"Key"
+        },
+        "SSECustomerAlgorithm":{
+          "shape":"SSECustomerAlgorithm",
+          "location":"header",
+          "locationName":"x-amz-server-side-encryption-customer-algorithm"
+        },
+        "SSECustomerKey":{
+          "shape":"SSECustomerKey",
+          "location":"header",
+          "locationName":"x-amz-server-side-encryption-customer-key"
+        },
+        "SSECustomerKeyMD5":{
+          "shape":"SSECustomerKeyMD5",
+          "location":"header",
+          "locationName":"x-amz-server-side-encryption-customer-key-MD5"
+        },
+        "Expression":{"shape":"Expression"},
+        "ExpressionType":{"shape":"ExpressionType"},
+        "RequestProgress":{"shape":"RequestProgress"},
+        "InputSerialization":{"shape":"InputSerialization"},
+        "OutputSerialization":{"shape":"OutputSerialization"}
+      }
+    },
     "SelectParameters":{
       "type":"structure",
       "required":[
@@ -5271,12 +5439,31 @@
       ]
     },
     "StartAfter":{"type":"string"},
+    "Stats":{
+      "type":"structure",
+      "members":{
+        "BytesScanned":{"shape":"BytesScanned"},
+        "BytesProcessed":{"shape":"BytesProcessed"},
+        "BytesReturned":{"shape":"BytesReturned"}
+      }
+    },
+    "StatsEvent":{
+      "type":"structure",
+      "members":{
+        "Details":{
+          "shape":"Stats",
+          "eventpayload":true
+        }
+      },
+      "event":true
+    },
     "StorageClass":{
       "type":"string",
       "enum":[
         "STANDARD",
         "REDUCED_REDUNDANCY",
-        "STANDARD_IA"
+        "STANDARD_IA",
+        "ONEZONE_IA"
       ]
     },
     "StorageClassAnalysis":{
@@ -5417,7 +5604,8 @@
       "type":"string",
       "enum":[
         "GLACIER",
-        "STANDARD_IA"
+        "STANDARD_IA",
+        "ONEZONE_IA"
       ]
     },
     "Type":{

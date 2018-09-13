@@ -1,4 +1,4 @@
-// Package container provides access to the Google Kubernetes Engine API.
+// Package container provides access to the Kubernetes Engine API.
 //
 // See https://cloud.google.com/container-engine/
 //
@@ -450,11 +450,15 @@ type Cluster struct {
 	// cluster.
 	CurrentNodeCount int64 `json:"currentNodeCount,omitempty"`
 
-	// CurrentNodeVersion: [Output only] The current version of the node
-	// software components.
-	// If they are currently at multiple versions because they're in the
-	// process
-	// of being upgraded, this reflects the minimum version of all nodes.
+	// CurrentNodeVersion: [Output only] Deprecated,
+	// use
+	// [NodePool.version](/kubernetes-engine/docs/reference/rest/v1/proje
+	// cts.zones.clusters.nodePool)
+	// instead. The current version of the node software components. If they
+	// are
+	// currently at multiple versions because they're in the process of
+	// being
+	// upgraded, this reflects the minimum version of all nodes.
 	CurrentNodeVersion string `json:"currentNodeVersion,omitempty"`
 
 	// Description: An optional description of this cluster.
@@ -570,9 +574,8 @@ type Cluster struct {
 	// endpoint.
 	MasterAuth *MasterAuth `json:"masterAuth,omitempty"`
 
-	// MasterAuthorizedNetworksConfig: Master authorized networks is a Beta
-	// feature.
-	// The configuration options for master authorized networks feature.
+	// MasterAuthorizedNetworksConfig: The configuration options for master
+	// authorized networks feature.
 	MasterAuthorizedNetworksConfig *MasterAuthorizedNetworksConfig `json:"masterAuthorizedNetworksConfig,omitempty"`
 
 	// MonitoringService: The monitoring service the cluster should use to
@@ -603,6 +606,9 @@ type Cluster struct {
 	// cluster is connected. If left unspecified, the `default` network
 	// will be used.
 	Network string `json:"network,omitempty"`
+
+	// NetworkConfig: Configuration for cluster networking.
+	NetworkConfig *NetworkConfig `json:"networkConfig,omitempty"`
 
 	// NetworkPolicy: Configuration options for the NetworkPolicy feature.
 	NetworkPolicy *NetworkPolicy `json:"networkPolicy,omitempty"`
@@ -752,10 +758,8 @@ type ClusterUpdate struct {
 	// This list must always include the cluster's primary zone.
 	DesiredLocations []string `json:"desiredLocations,omitempty"`
 
-	// DesiredMasterAuthorizedNetworksConfig: Master authorized networks is
-	// a Beta feature.
-	// The desired configuration options for master authorized networks
-	// feature.
+	// DesiredMasterAuthorizedNetworksConfig: The desired configuration
+	// options for master authorized networks feature.
 	DesiredMasterAuthorizedNetworksConfig *MasterAuthorizedNetworksConfig `json:"desiredMasterAuthorizedNetworksConfig,omitempty"`
 
 	// DesiredMasterVersion: The Kubernetes version to change the master
@@ -845,8 +849,9 @@ type CompleteIPRotationRequest struct {
 	ClusterId string `json:"clusterId,omitempty"`
 
 	// Name: The name (project, location, cluster id) of the cluster to
-	// complete IP rotation.
-	// Specified in the format 'projects/*/locations/*/clusters/*'.
+	// complete IP
+	// rotation. Specified in the format
+	// 'projects/*/locations/*/clusters/*'.
 	Name string `json:"name,omitempty"`
 
 	// ProjectId: Deprecated. The Google Developers Console [project ID or
@@ -949,9 +954,9 @@ type CreateNodePoolRequest struct {
 	NodePool *NodePool `json:"nodePool,omitempty"`
 
 	// Parent: The parent (project, location, cluster id) where the node
-	// pool will be created.
-	// Specified in the format
-	// 'projects/*/locations/*/clusters/*/nodePools/*'.
+	// pool will be
+	// created. Specified in the format
+	// 'projects/*/locations/*/clusters/*'.
 	Parent string `json:"parent,omitempty"`
 
 	// ProjectId: Deprecated. The Google Developers Console [project ID or
@@ -1518,8 +1523,10 @@ type MasterAuth struct {
 	ClientCertificate string `json:"clientCertificate,omitempty"`
 
 	// ClientCertificateConfig: Configuration for client certificate
-	// authentication on the cluster.  If no
-	// configuration is specified, a client certificate is issued.
+	// authentication on the cluster. For
+	// clusters before v1.12, if no configuration is specified, a
+	// client
+	// certificate is issued.
 	ClientCertificateConfig *ClientCertificateConfig `json:"clientCertificateConfig,omitempty"`
 
 	// ClientKey: [Output only] Base64-encoded private key used by clients
@@ -1572,10 +1579,8 @@ func (s *MasterAuth) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// MasterAuthorizedNetworksConfig: Master authorized networks is a Beta
-// feature.
-// Configuration options for the master authorized networks feature.
-// Enabled
+// MasterAuthorizedNetworksConfig: Configuration options for the master
+// authorized networks feature. Enabled
 // master authorized networks will disallow all external traffic to
 // access
 // Kubernetes master through HTTPS except traffic from the given CIDR
@@ -1609,6 +1614,47 @@ type MasterAuthorizedNetworksConfig struct {
 
 func (s *MasterAuthorizedNetworksConfig) MarshalJSON() ([]byte, error) {
 	type NoMethod MasterAuthorizedNetworksConfig
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// NetworkConfig: NetworkConfig reports the relative names of network &
+// subnetwork.
+type NetworkConfig struct {
+	// Network: Output only. The relative name of the Google Compute
+	// Engine
+	// network(/compute/docs/networks-and-firewalls#networks) to which
+	// the cluster is connected.
+	// Example: projects/my-project/global/networks/my-network
+	Network string `json:"network,omitempty"`
+
+	// Subnetwork: Output only. The relative name of the Google Compute
+	// Engine
+	// [subnetwork](/compute/docs/vpc) to which the cluster is
+	// connected.
+	// Example:
+	// projects/my-project/regions/us-central1/subnetworks/my-subnet
+	Subnetwork string `json:"subnetwork,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Network") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Network") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *NetworkConfig) MarshalJSON() ([]byte, error) {
+	type NoMethod NetworkConfig
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -1699,6 +1745,12 @@ type NodeConfig struct {
 	// If unspecified, the default disk size is 100GB.
 	DiskSizeGb int64 `json:"diskSizeGb,omitempty"`
 
+	// DiskType: Type of the disk attached to each node (e.g. 'pd-standard'
+	// or 'pd-ssd')
+	//
+	// If unspecified, the default disk type is 'pd-standard'
+	DiskType string `json:"diskType,omitempty"`
+
 	// ImageType: The image type to use for this node. Note that for a given
 	// image type,
 	// the latest version of it will be used.
@@ -1779,9 +1831,10 @@ type NodeConfig struct {
 	// or
 	// <code>minCpuPlatform: &quot;Intel Sandy Bridge&quot;</code>. For
 	// more
-	// information, read [how to specify min CPU
-	// platform](https://cloud.google.com/compute/docs/instances/specify-min-
-	// cpu-platform)
+	// information, read [how to specify min
+	// CPU
+	// platform](https://cloud.google.com/compute/docs/instances/specify-
+	// min-cpu-platform)
 	MinCpuPlatform string `json:"minCpuPlatform,omitempty"`
 
 	// OauthScopes: The set of Google API scopes to be made available on all
@@ -2740,8 +2793,8 @@ type SetNetworkPolicyRequest struct {
 	ClusterId string `json:"clusterId,omitempty"`
 
 	// Name: The name (project, location, cluster id) of the cluster to set
-	// networking policy.
-	// Specified in the format 'projects/*/locations/*/clusters/*'.
+	// networking
+	// policy. Specified in the format 'projects/*/locations/*/clusters/*'.
 	Name string `json:"name,omitempty"`
 
 	// NetworkPolicy: Configuration options for the NetworkPolicy feature.
@@ -2973,8 +3026,9 @@ type StartIPRotationRequest struct {
 	ClusterId string `json:"clusterId,omitempty"`
 
 	// Name: The name (project, location, cluster id) of the cluster to
-	// start IP rotation.
-	// Specified in the format 'projects/*/locations/*/clusters/*'.
+	// start IP
+	// rotation. Specified in the format
+	// 'projects/*/locations/*/clusters/*'.
 	Name string `json:"name,omitempty"`
 
 	// ProjectId: Deprecated. The Google Developers Console [project ID or
@@ -2983,6 +3037,9 @@ type StartIPRotationRequest struct {
 	// tnumber).
 	// This field has been deprecated and replaced by the name field.
 	ProjectId string `json:"projectId,omitempty"`
+
+	// RotateCredentials: Whether to rotate credentials during IP rotation.
+	RotateCredentials bool `json:"rotateCredentials,omitempty"`
 
 	// Zone: Deprecated. The name of the Google Compute
 	// Engine
@@ -3143,8 +3200,9 @@ type UpdateNodePoolRequest struct {
 	ImageType string `json:"imageType,omitempty"`
 
 	// Name: The name (project, location, cluster, node pool) of the node
-	// pool to update.
-	// Specified in the format
+	// pool to
+	// update. Specified in the
+	// format
 	// 'projects/*/locations/*/clusters/*/nodePools/*'.
 	Name string `json:"name,omitempty"`
 
@@ -3291,6 +3349,7 @@ func (c *ProjectsLocationsGetServerConfigCall) doRequest(alt string) (*http.Resp
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}/serverConfig")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3433,6 +3492,7 @@ func (c *ProjectsLocationsClustersCompleteIpRotationCall) doRequest(alt string) 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:completeIpRotation")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3490,7 +3550,7 @@ func (c *ProjectsLocationsClustersCompleteIpRotationCall) Do(opts ...googleapi.C
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The name (project, location, cluster id) of the cluster to complete IP rotation.\nSpecified in the format 'projects/*/locations/*/clusters/*'.",
+	//       "description": "The name (project, location, cluster id) of the cluster to complete IP\nrotation. Specified in the format 'projects/*/locations/*/clusters/*'.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+/locations/[^/]+/clusters/[^/]+$",
 	//       "required": true,
@@ -3584,6 +3644,7 @@ func (c *ProjectsLocationsClustersCreateCall) doRequest(alt string) (*http.Respo
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/clusters")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3753,6 +3814,7 @@ func (c *ProjectsLocationsClustersDeleteCall) doRequest(alt string) (*http.Respo
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -3937,6 +3999,7 @@ func (c *ProjectsLocationsClustersGetCall) doRequest(alt string) (*http.Response
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4114,6 +4177,7 @@ func (c *ProjectsLocationsClustersListCall) doRequest(alt string) (*http.Respons
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/clusters")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4210,7 +4274,7 @@ type ProjectsLocationsClustersSetAddonsCall struct {
 	header_                http.Header
 }
 
-// SetAddons: Sets the addons of a specific cluster.
+// SetAddons: Sets the addons for a specific cluster.
 func (r *ProjectsLocationsClustersService) SetAddons(name string, setaddonsconfigrequest *SetAddonsConfigRequest) *ProjectsLocationsClustersSetAddonsCall {
 	c := &ProjectsLocationsClustersSetAddonsCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -4256,6 +4320,7 @@ func (c *ProjectsLocationsClustersSetAddonsCall) doRequest(alt string) (*http.Re
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:setAddons")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4304,7 +4369,7 @@ func (c *ProjectsLocationsClustersSetAddonsCall) Do(opts ...googleapi.CallOption
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the addons of a specific cluster.",
+	//   "description": "Sets the addons for a specific cluster.",
 	//   "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/clusters/{clustersId}:setAddons",
 	//   "httpMethod": "POST",
 	//   "id": "container.projects.locations.clusters.setAddons",
@@ -4392,6 +4457,7 @@ func (c *ProjectsLocationsClustersSetLegacyAbacCall) doRequest(alt string) (*htt
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:setLegacyAbac")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4481,7 +4547,7 @@ type ProjectsLocationsClustersSetLocationsCall struct {
 	header_             http.Header
 }
 
-// SetLocations: Sets the locations of a specific cluster.
+// SetLocations: Sets the locations for a specific cluster.
 func (r *ProjectsLocationsClustersService) SetLocations(name string, setlocationsrequest *SetLocationsRequest) *ProjectsLocationsClustersSetLocationsCall {
 	c := &ProjectsLocationsClustersSetLocationsCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -4527,6 +4593,7 @@ func (c *ProjectsLocationsClustersSetLocationsCall) doRequest(alt string) (*http
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:setLocations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4575,7 +4642,7 @@ func (c *ProjectsLocationsClustersSetLocationsCall) Do(opts ...googleapi.CallOpt
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the locations of a specific cluster.",
+	//   "description": "Sets the locations for a specific cluster.",
 	//   "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/clusters/{clustersId}:setLocations",
 	//   "httpMethod": "POST",
 	//   "id": "container.projects.locations.clusters.setLocations",
@@ -4616,7 +4683,7 @@ type ProjectsLocationsClustersSetLoggingCall struct {
 	header_                  http.Header
 }
 
-// SetLogging: Sets the logging service of a specific cluster.
+// SetLogging: Sets the logging service for a specific cluster.
 func (r *ProjectsLocationsClustersService) SetLogging(name string, setloggingservicerequest *SetLoggingServiceRequest) *ProjectsLocationsClustersSetLoggingCall {
 	c := &ProjectsLocationsClustersSetLoggingCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -4662,6 +4729,7 @@ func (c *ProjectsLocationsClustersSetLoggingCall) doRequest(alt string) (*http.R
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:setLogging")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4710,7 +4778,7 @@ func (c *ProjectsLocationsClustersSetLoggingCall) Do(opts ...googleapi.CallOptio
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the logging service of a specific cluster.",
+	//   "description": "Sets the logging service for a specific cluster.",
 	//   "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/clusters/{clustersId}:setLogging",
 	//   "httpMethod": "POST",
 	//   "id": "container.projects.locations.clusters.setLogging",
@@ -4797,6 +4865,7 @@ func (c *ProjectsLocationsClustersSetMaintenancePolicyCall) doRequest(alt string
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:setMaintenancePolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4888,7 +4957,7 @@ type ProjectsLocationsClustersSetMasterAuthCall struct {
 
 // SetMasterAuth: Used to set master auth materials. Currently supports
 // :-
-// Changing the admin password of a specific cluster.
+// Changing the admin password for a specific cluster.
 // This can be either via password generation or explicitly set the
 // password.
 func (r *ProjectsLocationsClustersService) SetMasterAuth(name string, setmasterauthrequest *SetMasterAuthRequest) *ProjectsLocationsClustersSetMasterAuthCall {
@@ -4936,6 +5005,7 @@ func (c *ProjectsLocationsClustersSetMasterAuthCall) doRequest(alt string) (*htt
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:setMasterAuth")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4984,7 +5054,7 @@ func (c *ProjectsLocationsClustersSetMasterAuthCall) Do(opts ...googleapi.CallOp
 	}
 	return ret, nil
 	// {
-	//   "description": "Used to set master auth materials. Currently supports :-\nChanging the admin password of a specific cluster.\nThis can be either via password generation or explicitly set the password.",
+	//   "description": "Used to set master auth materials. Currently supports :-\nChanging the admin password for a specific cluster.\nThis can be either via password generation or explicitly set the password.",
 	//   "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/clusters/{clustersId}:setMasterAuth",
 	//   "httpMethod": "POST",
 	//   "id": "container.projects.locations.clusters.setMasterAuth",
@@ -5025,7 +5095,7 @@ type ProjectsLocationsClustersSetMonitoringCall struct {
 	header_                     http.Header
 }
 
-// SetMonitoring: Sets the monitoring service of a specific cluster.
+// SetMonitoring: Sets the monitoring service for a specific cluster.
 func (r *ProjectsLocationsClustersService) SetMonitoring(name string, setmonitoringservicerequest *SetMonitoringServiceRequest) *ProjectsLocationsClustersSetMonitoringCall {
 	c := &ProjectsLocationsClustersSetMonitoringCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -5071,6 +5141,7 @@ func (c *ProjectsLocationsClustersSetMonitoringCall) doRequest(alt string) (*htt
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:setMonitoring")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5119,7 +5190,7 @@ func (c *ProjectsLocationsClustersSetMonitoringCall) Do(opts ...googleapi.CallOp
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the monitoring service of a specific cluster.",
+	//   "description": "Sets the monitoring service for a specific cluster.",
 	//   "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/clusters/{clustersId}:setMonitoring",
 	//   "httpMethod": "POST",
 	//   "id": "container.projects.locations.clusters.setMonitoring",
@@ -5206,6 +5277,7 @@ func (c *ProjectsLocationsClustersSetNetworkPolicyCall) doRequest(alt string) (*
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:setNetworkPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5263,7 +5335,7 @@ func (c *ProjectsLocationsClustersSetNetworkPolicyCall) Do(opts ...googleapi.Cal
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The name (project, location, cluster id) of the cluster to set networking policy.\nSpecified in the format 'projects/*/locations/*/clusters/*'.",
+	//       "description": "The name (project, location, cluster id) of the cluster to set networking\npolicy. Specified in the format 'projects/*/locations/*/clusters/*'.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+/locations/[^/]+/clusters/[^/]+$",
 	//       "required": true,
@@ -5341,6 +5413,7 @@ func (c *ProjectsLocationsClustersSetResourceLabelsCall) doRequest(alt string) (
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:setResourceLabels")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5476,6 +5549,7 @@ func (c *ProjectsLocationsClustersStartIpRotationCall) doRequest(alt string) (*h
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:startIpRotation")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5533,7 +5607,7 @@ func (c *ProjectsLocationsClustersStartIpRotationCall) Do(opts ...googleapi.Call
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The name (project, location, cluster id) of the cluster to start IP rotation.\nSpecified in the format 'projects/*/locations/*/clusters/*'.",
+	//       "description": "The name (project, location, cluster id) of the cluster to start IP\nrotation. Specified in the format 'projects/*/locations/*/clusters/*'.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+/locations/[^/]+/clusters/[^/]+$",
 	//       "required": true,
@@ -5611,6 +5685,7 @@ func (c *ProjectsLocationsClustersUpdateCall) doRequest(alt string) (*http.Respo
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
@@ -5700,7 +5775,7 @@ type ProjectsLocationsClustersUpdateMasterCall struct {
 	header_             http.Header
 }
 
-// UpdateMaster: Updates the master of a specific cluster.
+// UpdateMaster: Updates the master for a specific cluster.
 func (r *ProjectsLocationsClustersService) UpdateMaster(name string, updatemasterrequest *UpdateMasterRequest) *ProjectsLocationsClustersUpdateMasterCall {
 	c := &ProjectsLocationsClustersUpdateMasterCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -5746,6 +5821,7 @@ func (c *ProjectsLocationsClustersUpdateMasterCall) doRequest(alt string) (*http
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:updateMaster")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5794,7 +5870,7 @@ func (c *ProjectsLocationsClustersUpdateMasterCall) Do(opts ...googleapi.CallOpt
 	}
 	return ret, nil
 	// {
-	//   "description": "Updates the master of a specific cluster.",
+	//   "description": "Updates the master for a specific cluster.",
 	//   "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/clusters/{clustersId}:updateMaster",
 	//   "httpMethod": "POST",
 	//   "id": "container.projects.locations.clusters.updateMaster",
@@ -5881,6 +5957,7 @@ func (c *ProjectsLocationsClustersNodePoolsCreateCall) doRequest(alt string) (*h
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/nodePools")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5938,7 +6015,7 @@ func (c *ProjectsLocationsClustersNodePoolsCreateCall) Do(opts ...googleapi.Call
 	//   ],
 	//   "parameters": {
 	//     "parent": {
-	//       "description": "The parent (project, location, cluster id) where the node pool will be created.\nSpecified in the format 'projects/*/locations/*/clusters/*/nodePools/*'.",
+	//       "description": "The parent (project, location, cluster id) where the node pool will be\ncreated. Specified in the format\n'projects/*/locations/*/clusters/*'.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+/locations/[^/]+/clusters/[^/]+$",
 	//       "required": true,
@@ -6047,6 +6124,7 @@ func (c *ProjectsLocationsClustersNodePoolsDeleteCall) doRequest(alt string) (*h
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -6109,7 +6187,7 @@ func (c *ProjectsLocationsClustersNodePoolsDeleteCall) Do(opts ...googleapi.Call
 	//       "type": "string"
 	//     },
 	//     "name": {
-	//       "description": "The name (project, location, cluster, node pool id) of the node pool to delete.\nSpecified in the format 'projects/*/locations/*/clusters/*/nodePools/*'.",
+	//       "description": "The name (project, location, cluster, node pool id) of the node pool to\ndelete. Specified in the format\n'projects/*/locations/*/clusters/*/nodePools/*'.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+/locations/[^/]+/clusters/[^/]+/nodePools/[^/]+$",
 	//       "required": true,
@@ -6244,6 +6322,7 @@ func (c *ProjectsLocationsClustersNodePoolsGetCall) doRequest(alt string) (*http
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -6306,7 +6385,7 @@ func (c *ProjectsLocationsClustersNodePoolsGetCall) Do(opts ...googleapi.CallOpt
 	//       "type": "string"
 	//     },
 	//     "name": {
-	//       "description": "The name (project, location, cluster, node pool id) of the node pool to get.\nSpecified in the format 'projects/*/locations/*/clusters/*/nodePools/*'.",
+	//       "description": "The name (project, location, cluster, node pool id) of the node pool to\nget. Specified in the format\n'projects/*/locations/*/clusters/*/nodePools/*'.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+/locations/[^/]+/clusters/[^/]+/nodePools/[^/]+$",
 	//       "required": true,
@@ -6433,6 +6512,7 @@ func (c *ProjectsLocationsClustersNodePoolsListCall) doRequest(alt string) (*htt
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/nodePools")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -6495,7 +6575,7 @@ func (c *ProjectsLocationsClustersNodePoolsListCall) Do(opts ...googleapi.CallOp
 	//       "type": "string"
 	//     },
 	//     "parent": {
-	//       "description": "The parent (project, location, cluster id) where the node pools will be listed.\nSpecified in the format 'projects/*/locations/*/clusters/*'.",
+	//       "description": "The parent (project, location, cluster id) where the node pools will be\nlisted. Specified in the format 'projects/*/locations/*/clusters/*'.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+/locations/[^/]+/clusters/[^/]+$",
 	//       "required": true,
@@ -6582,6 +6662,7 @@ func (c *ProjectsLocationsClustersNodePoolsRollbackCall) doRequest(alt string) (
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:rollback")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -6671,7 +6752,7 @@ type ProjectsLocationsClustersNodePoolsSetAutoscalingCall struct {
 	header_                       http.Header
 }
 
-// SetAutoscaling: Sets the autoscaling settings of a specific node
+// SetAutoscaling: Sets the autoscaling settings for a specific node
 // pool.
 func (r *ProjectsLocationsClustersNodePoolsService) SetAutoscaling(name string, setnodepoolautoscalingrequest *SetNodePoolAutoscalingRequest) *ProjectsLocationsClustersNodePoolsSetAutoscalingCall {
 	c := &ProjectsLocationsClustersNodePoolsSetAutoscalingCall{s: r.s, urlParams_: make(gensupport.URLParams)}
@@ -6718,6 +6799,7 @@ func (c *ProjectsLocationsClustersNodePoolsSetAutoscalingCall) doRequest(alt str
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:setAutoscaling")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -6766,7 +6848,7 @@ func (c *ProjectsLocationsClustersNodePoolsSetAutoscalingCall) Do(opts ...google
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the autoscaling settings of a specific node pool.",
+	//   "description": "Sets the autoscaling settings for a specific node pool.",
 	//   "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/clusters/{clustersId}/nodePools/{nodePoolsId}:setAutoscaling",
 	//   "httpMethod": "POST",
 	//   "id": "container.projects.locations.clusters.nodePools.setAutoscaling",
@@ -6853,6 +6935,7 @@ func (c *ProjectsLocationsClustersNodePoolsSetManagementCall) doRequest(alt stri
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:setManagement")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -6942,7 +7025,7 @@ type ProjectsLocationsClustersNodePoolsSetSizeCall struct {
 	header_                http.Header
 }
 
-// SetSize: Sets the size of a specific node pool.
+// SetSize: Sets the size for a specific node pool.
 func (r *ProjectsLocationsClustersNodePoolsService) SetSize(name string, setnodepoolsizerequest *SetNodePoolSizeRequest) *ProjectsLocationsClustersNodePoolsSetSizeCall {
 	c := &ProjectsLocationsClustersNodePoolsSetSizeCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -6988,6 +7071,7 @@ func (c *ProjectsLocationsClustersNodePoolsSetSizeCall) doRequest(alt string) (*
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:setSize")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -7036,7 +7120,7 @@ func (c *ProjectsLocationsClustersNodePoolsSetSizeCall) Do(opts ...googleapi.Cal
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the size of a specific node pool.",
+	//   "description": "Sets the size for a specific node pool.",
 	//   "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/clusters/{clustersId}/nodePools/{nodePoolsId}:setSize",
 	//   "httpMethod": "POST",
 	//   "id": "container.projects.locations.clusters.nodePools.setSize",
@@ -7077,7 +7161,7 @@ type ProjectsLocationsClustersNodePoolsUpdateCall struct {
 	header_               http.Header
 }
 
-// Update: Updates the version and/or image type of a specific node
+// Update: Updates the version and/or image type for a specific node
 // pool.
 func (r *ProjectsLocationsClustersNodePoolsService) Update(name string, updatenodepoolrequest *UpdateNodePoolRequest) *ProjectsLocationsClustersNodePoolsUpdateCall {
 	c := &ProjectsLocationsClustersNodePoolsUpdateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
@@ -7124,6 +7208,7 @@ func (c *ProjectsLocationsClustersNodePoolsUpdateCall) doRequest(alt string) (*h
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
@@ -7172,7 +7257,7 @@ func (c *ProjectsLocationsClustersNodePoolsUpdateCall) Do(opts ...googleapi.Call
 	}
 	return ret, nil
 	// {
-	//   "description": "Updates the version and/or image type of a specific node pool.",
+	//   "description": "Updates the version and/or image type for a specific node pool.",
 	//   "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/clusters/{clustersId}/nodePools/{nodePoolsId}",
 	//   "httpMethod": "PUT",
 	//   "id": "container.projects.locations.clusters.nodePools.update",
@@ -7181,7 +7266,7 @@ func (c *ProjectsLocationsClustersNodePoolsUpdateCall) Do(opts ...googleapi.Call
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The name (project, location, cluster, node pool) of the node pool to update.\nSpecified in the format 'projects/*/locations/*/clusters/*/nodePools/*'.",
+	//       "description": "The name (project, location, cluster, node pool) of the node pool to\nupdate. Specified in the format\n'projects/*/locations/*/clusters/*/nodePools/*'.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+/locations/[^/]+/clusters/[^/]+/nodePools/[^/]+$",
 	//       "required": true,
@@ -7259,6 +7344,7 @@ func (c *ProjectsLocationsOperationsCancelCall) doRequest(alt string) (*http.Res
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:cancel")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -7431,6 +7517,7 @@ func (c *ProjectsLocationsOperationsGetCall) doRequest(alt string) (*http.Respon
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7552,9 +7639,11 @@ func (c *ProjectsLocationsOperationsListCall) ProjectId(projectId string) *Proje
 }
 
 // Zone sets the optional parameter "zone": Deprecated. The name of the
-// Google Compute Engine [zone](/compute/docs/zones#available)
-// to return operations for, or `-` for all zones.
-// This field has been deprecated and replaced by the parent field.
+// Google Compute Engine
+// [zone](/compute/docs/zones#available) to return operations for, or
+// `-` for
+// all zones. This field has been deprecated and replaced by the parent
+// field.
 func (c *ProjectsLocationsOperationsListCall) Zone(zone string) *ProjectsLocationsOperationsListCall {
 	c.urlParams_.Set("zone", zone)
 	return c
@@ -7606,6 +7695,7 @@ func (c *ProjectsLocationsOperationsListCall) doRequest(alt string) (*http.Respo
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/operations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7675,7 +7765,7 @@ func (c *ProjectsLocationsOperationsListCall) Do(opts ...googleapi.CallOption) (
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Deprecated. The name of the Google Compute Engine [zone](/compute/docs/zones#available)\nto return operations for, or `-` for all zones.\nThis field has been deprecated and replaced by the parent field.",
+	//       "description": "Deprecated. The name of the Google Compute Engine\n[zone](/compute/docs/zones#available) to return operations for, or `-` for\nall zones. This field has been deprecated and replaced by the parent field.",
 	//       "location": "query",
 	//       "type": "string"
 	//     }
@@ -7766,6 +7856,7 @@ func (c *ProjectsZonesGetServerconfigCall) doRequest(alt string) (*http.Response
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/serverconfig")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7866,7 +7957,7 @@ type ProjectsZonesClustersAddonsCall struct {
 	header_                http.Header
 }
 
-// Addons: Sets the addons of a specific cluster.
+// Addons: Sets the addons for a specific cluster.
 func (r *ProjectsZonesClustersService) Addons(projectId string, zone string, clusterId string, setaddonsconfigrequest *SetAddonsConfigRequest) *ProjectsZonesClustersAddonsCall {
 	c := &ProjectsZonesClustersAddonsCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
@@ -7914,6 +8005,7 @@ func (c *ProjectsZonesClustersAddonsCall) doRequest(alt string) (*http.Response,
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/addons")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -7964,7 +8056,7 @@ func (c *ProjectsZonesClustersAddonsCall) Do(opts ...googleapi.CallOption) (*Ope
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the addons of a specific cluster.",
+	//   "description": "Sets the addons for a specific cluster.",
 	//   "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/addons",
 	//   "httpMethod": "POST",
 	//   "id": "container.projects.zones.clusters.addons",
@@ -8068,6 +8160,7 @@ func (c *ProjectsZonesClustersCompleteIpRotationCall) doRequest(alt string) (*ht
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}:completeIpRotation")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -8236,6 +8329,7 @@ func (c *ProjectsZonesClustersCreateCall) doRequest(alt string) (*http.Response,
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -8394,6 +8488,7 @@ func (c *ProjectsZonesClustersDeleteCall) doRequest(alt string) (*http.Response,
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -8565,6 +8660,7 @@ func (c *ProjectsZonesClustersGetCall) doRequest(alt string) (*http.Response, er
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8722,6 +8818,7 @@ func (c *ProjectsZonesClustersLegacyAbacCall) doRequest(alt string) (*http.Respo
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/legacyAbac")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -8892,6 +8989,7 @@ func (c *ProjectsZonesClustersListCall) doRequest(alt string) (*http.Response, e
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8992,7 +9090,7 @@ type ProjectsZonesClustersLocationsCall struct {
 	header_             http.Header
 }
 
-// Locations: Sets the locations of a specific cluster.
+// Locations: Sets the locations for a specific cluster.
 func (r *ProjectsZonesClustersService) Locations(projectId string, zone string, clusterId string, setlocationsrequest *SetLocationsRequest) *ProjectsZonesClustersLocationsCall {
 	c := &ProjectsZonesClustersLocationsCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
@@ -9040,6 +9138,7 @@ func (c *ProjectsZonesClustersLocationsCall) doRequest(alt string) (*http.Respon
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/locations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -9090,7 +9189,7 @@ func (c *ProjectsZonesClustersLocationsCall) Do(opts ...googleapi.CallOption) (*
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the locations of a specific cluster.",
+	//   "description": "Sets the locations for a specific cluster.",
 	//   "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/locations",
 	//   "httpMethod": "POST",
 	//   "id": "container.projects.zones.clusters.locations",
@@ -9146,7 +9245,7 @@ type ProjectsZonesClustersLoggingCall struct {
 	header_                  http.Header
 }
 
-// Logging: Sets the logging service of a specific cluster.
+// Logging: Sets the logging service for a specific cluster.
 func (r *ProjectsZonesClustersService) Logging(projectId string, zone string, clusterId string, setloggingservicerequest *SetLoggingServiceRequest) *ProjectsZonesClustersLoggingCall {
 	c := &ProjectsZonesClustersLoggingCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
@@ -9194,6 +9293,7 @@ func (c *ProjectsZonesClustersLoggingCall) doRequest(alt string) (*http.Response
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/logging")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -9244,7 +9344,7 @@ func (c *ProjectsZonesClustersLoggingCall) Do(opts ...googleapi.CallOption) (*Op
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the logging service of a specific cluster.",
+	//   "description": "Sets the logging service for a specific cluster.",
 	//   "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/logging",
 	//   "httpMethod": "POST",
 	//   "id": "container.projects.zones.clusters.logging",
@@ -9300,7 +9400,7 @@ type ProjectsZonesClustersMasterCall struct {
 	header_             http.Header
 }
 
-// Master: Updates the master of a specific cluster.
+// Master: Updates the master for a specific cluster.
 func (r *ProjectsZonesClustersService) Master(projectId string, zone string, clusterId string, updatemasterrequest *UpdateMasterRequest) *ProjectsZonesClustersMasterCall {
 	c := &ProjectsZonesClustersMasterCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
@@ -9348,6 +9448,7 @@ func (c *ProjectsZonesClustersMasterCall) doRequest(alt string) (*http.Response,
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/master")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -9398,7 +9499,7 @@ func (c *ProjectsZonesClustersMasterCall) Do(opts ...googleapi.CallOption) (*Ope
 	}
 	return ret, nil
 	// {
-	//   "description": "Updates the master of a specific cluster.",
+	//   "description": "Updates the master for a specific cluster.",
 	//   "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/master",
 	//   "httpMethod": "POST",
 	//   "id": "container.projects.zones.clusters.master",
@@ -9454,7 +9555,7 @@ type ProjectsZonesClustersMonitoringCall struct {
 	header_                     http.Header
 }
 
-// Monitoring: Sets the monitoring service of a specific cluster.
+// Monitoring: Sets the monitoring service for a specific cluster.
 func (r *ProjectsZonesClustersService) Monitoring(projectId string, zone string, clusterId string, setmonitoringservicerequest *SetMonitoringServiceRequest) *ProjectsZonesClustersMonitoringCall {
 	c := &ProjectsZonesClustersMonitoringCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
@@ -9502,6 +9603,7 @@ func (c *ProjectsZonesClustersMonitoringCall) doRequest(alt string) (*http.Respo
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/monitoring")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -9552,7 +9654,7 @@ func (c *ProjectsZonesClustersMonitoringCall) Do(opts ...googleapi.CallOption) (
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the monitoring service of a specific cluster.",
+	//   "description": "Sets the monitoring service for a specific cluster.",
 	//   "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/monitoring",
 	//   "httpMethod": "POST",
 	//   "id": "container.projects.zones.clusters.monitoring",
@@ -9656,6 +9758,7 @@ func (c *ProjectsZonesClustersResourceLabelsCall) doRequest(alt string) (*http.R
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/resourceLabels")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -9810,6 +9913,7 @@ func (c *ProjectsZonesClustersSetMaintenancePolicyCall) doRequest(alt string) (*
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}:setMaintenancePolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -9918,7 +10022,7 @@ type ProjectsZonesClustersSetMasterAuthCall struct {
 
 // SetMasterAuth: Used to set master auth materials. Currently supports
 // :-
-// Changing the admin password of a specific cluster.
+// Changing the admin password for a specific cluster.
 // This can be either via password generation or explicitly set the
 // password.
 func (r *ProjectsZonesClustersService) SetMasterAuth(projectId string, zone string, clusterId string, setmasterauthrequest *SetMasterAuthRequest) *ProjectsZonesClustersSetMasterAuthCall {
@@ -9968,6 +10072,7 @@ func (c *ProjectsZonesClustersSetMasterAuthCall) doRequest(alt string) (*http.Re
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}:setMasterAuth")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -10018,7 +10123,7 @@ func (c *ProjectsZonesClustersSetMasterAuthCall) Do(opts ...googleapi.CallOption
 	}
 	return ret, nil
 	// {
-	//   "description": "Used to set master auth materials. Currently supports :-\nChanging the admin password of a specific cluster.\nThis can be either via password generation or explicitly set the password.",
+	//   "description": "Used to set master auth materials. Currently supports :-\nChanging the admin password for a specific cluster.\nThis can be either via password generation or explicitly set the password.",
 	//   "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}:setMasterAuth",
 	//   "httpMethod": "POST",
 	//   "id": "container.projects.zones.clusters.setMasterAuth",
@@ -10122,6 +10227,7 @@ func (c *ProjectsZonesClustersSetNetworkPolicyCall) doRequest(alt string) (*http
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}:setNetworkPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -10276,6 +10382,7 @@ func (c *ProjectsZonesClustersStartIpRotationCall) doRequest(alt string) (*http.
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}:startIpRotation")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -10430,6 +10537,7 @@ func (c *ProjectsZonesClustersUpdateCall) doRequest(alt string) (*http.Response,
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
@@ -10537,7 +10645,7 @@ type ProjectsZonesClustersNodePoolsAutoscalingCall struct {
 	header_                       http.Header
 }
 
-// Autoscaling: Sets the autoscaling settings of a specific node pool.
+// Autoscaling: Sets the autoscaling settings for a specific node pool.
 func (r *ProjectsZonesClustersNodePoolsService) Autoscaling(projectId string, zone string, clusterId string, nodePoolId string, setnodepoolautoscalingrequest *SetNodePoolAutoscalingRequest) *ProjectsZonesClustersNodePoolsAutoscalingCall {
 	c := &ProjectsZonesClustersNodePoolsAutoscalingCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
@@ -10586,6 +10694,7 @@ func (c *ProjectsZonesClustersNodePoolsAutoscalingCall) doRequest(alt string) (*
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}/autoscaling")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -10637,7 +10746,7 @@ func (c *ProjectsZonesClustersNodePoolsAutoscalingCall) Do(opts ...googleapi.Cal
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the autoscaling settings of a specific node pool.",
+	//   "description": "Sets the autoscaling settings for a specific node pool.",
 	//   "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}/autoscaling",
 	//   "httpMethod": "POST",
 	//   "id": "container.projects.zones.clusters.nodePools.autoscaling",
@@ -10748,6 +10857,7 @@ func (c *ProjectsZonesClustersNodePoolsCreateCall) doRequest(alt string) (*http.
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -10865,8 +10975,9 @@ func (r *ProjectsZonesClustersNodePoolsService) Delete(projectId string, zone st
 }
 
 // Name sets the optional parameter "name": The name (project, location,
-// cluster, node pool id) of the node pool to delete.
-// Specified in the format
+// cluster, node pool id) of the node pool to
+// delete. Specified in the
+// format
 // 'projects/*/locations/*/clusters/*/nodePools/*'.
 func (c *ProjectsZonesClustersNodePoolsDeleteCall) Name(name string) *ProjectsZonesClustersNodePoolsDeleteCall {
 	c.urlParams_.Set("name", name)
@@ -10906,6 +11017,7 @@ func (c *ProjectsZonesClustersNodePoolsDeleteCall) doRequest(alt string) (*http.
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -10975,7 +11087,7 @@ func (c *ProjectsZonesClustersNodePoolsDeleteCall) Do(opts ...googleapi.CallOpti
 	//       "type": "string"
 	//     },
 	//     "name": {
-	//       "description": "The name (project, location, cluster, node pool id) of the node pool to delete.\nSpecified in the format 'projects/*/locations/*/clusters/*/nodePools/*'.",
+	//       "description": "The name (project, location, cluster, node pool id) of the node pool to\ndelete. Specified in the format\n'projects/*/locations/*/clusters/*/nodePools/*'.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -11034,8 +11146,9 @@ func (r *ProjectsZonesClustersNodePoolsService) Get(projectId string, zone strin
 }
 
 // Name sets the optional parameter "name": The name (project, location,
-// cluster, node pool id) of the node pool to get.
-// Specified in the format
+// cluster, node pool id) of the node pool to
+// get. Specified in the
+// format
 // 'projects/*/locations/*/clusters/*/nodePools/*'.
 func (c *ProjectsZonesClustersNodePoolsGetCall) Name(name string) *ProjectsZonesClustersNodePoolsGetCall {
 	c.urlParams_.Set("name", name)
@@ -11088,6 +11201,7 @@ func (c *ProjectsZonesClustersNodePoolsGetCall) doRequest(alt string) (*http.Res
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -11157,7 +11271,7 @@ func (c *ProjectsZonesClustersNodePoolsGetCall) Do(opts ...googleapi.CallOption)
 	//       "type": "string"
 	//     },
 	//     "name": {
-	//       "description": "The name (project, location, cluster, node pool id) of the node pool to get.\nSpecified in the format 'projects/*/locations/*/clusters/*/nodePools/*'.",
+	//       "description": "The name (project, location, cluster, node pool id) of the node pool to\nget. Specified in the format\n'projects/*/locations/*/clusters/*/nodePools/*'.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -11214,8 +11328,8 @@ func (r *ProjectsZonesClustersNodePoolsService) List(projectId string, zone stri
 }
 
 // Parent sets the optional parameter "parent": The parent (project,
-// location, cluster id) where the node pools will be listed.
-// Specified in the format 'projects/*/locations/*/clusters/*'.
+// location, cluster id) where the node pools will be
+// listed. Specified in the format 'projects/*/locations/*/clusters/*'.
 func (c *ProjectsZonesClustersNodePoolsListCall) Parent(parent string) *ProjectsZonesClustersNodePoolsListCall {
 	c.urlParams_.Set("parent", parent)
 	return c
@@ -11267,6 +11381,7 @@ func (c *ProjectsZonesClustersNodePoolsListCall) doRequest(alt string) (*http.Re
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -11334,7 +11449,7 @@ func (c *ProjectsZonesClustersNodePoolsListCall) Do(opts ...googleapi.CallOption
 	//       "type": "string"
 	//     },
 	//     "parent": {
-	//       "description": "The parent (project, location, cluster id) where the node pools will be listed.\nSpecified in the format 'projects/*/locations/*/clusters/*'.",
+	//       "description": "The parent (project, location, cluster id) where the node pools will be\nlisted. Specified in the format 'projects/*/locations/*/clusters/*'.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -11427,6 +11542,7 @@ func (c *ProjectsZonesClustersNodePoolsRollbackCall) doRequest(alt string) (*htt
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}:rollback")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -11591,6 +11707,7 @@ func (c *ProjectsZonesClustersNodePoolsSetManagementCall) doRequest(alt string) 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}/setManagement")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -11706,7 +11823,7 @@ type ProjectsZonesClustersNodePoolsSetSizeCall struct {
 	header_                http.Header
 }
 
-// SetSize: Sets the size of a specific node pool.
+// SetSize: Sets the size for a specific node pool.
 func (r *ProjectsZonesClustersNodePoolsService) SetSize(projectId string, zone string, clusterId string, nodePoolId string, setnodepoolsizerequest *SetNodePoolSizeRequest) *ProjectsZonesClustersNodePoolsSetSizeCall {
 	c := &ProjectsZonesClustersNodePoolsSetSizeCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
@@ -11755,6 +11872,7 @@ func (c *ProjectsZonesClustersNodePoolsSetSizeCall) doRequest(alt string) (*http
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}/setSize")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -11806,7 +11924,7 @@ func (c *ProjectsZonesClustersNodePoolsSetSizeCall) Do(opts ...googleapi.CallOpt
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the size of a specific node pool.",
+	//   "description": "Sets the size for a specific node pool.",
 	//   "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}/setSize",
 	//   "httpMethod": "POST",
 	//   "id": "container.projects.zones.clusters.nodePools.setSize",
@@ -11870,7 +11988,7 @@ type ProjectsZonesClustersNodePoolsUpdateCall struct {
 	header_               http.Header
 }
 
-// Update: Updates the version and/or image type of a specific node
+// Update: Updates the version and/or image type for a specific node
 // pool.
 func (r *ProjectsZonesClustersNodePoolsService) Update(projectId string, zone string, clusterId string, nodePoolId string, updatenodepoolrequest *UpdateNodePoolRequest) *ProjectsZonesClustersNodePoolsUpdateCall {
 	c := &ProjectsZonesClustersNodePoolsUpdateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
@@ -11920,6 +12038,7 @@ func (c *ProjectsZonesClustersNodePoolsUpdateCall) doRequest(alt string) (*http.
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}/update")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -11971,7 +12090,7 @@ func (c *ProjectsZonesClustersNodePoolsUpdateCall) Do(opts ...googleapi.CallOpti
 	}
 	return ret, nil
 	// {
-	//   "description": "Updates the version and/or image type of a specific node pool.",
+	//   "description": "Updates the version and/or image type for a specific node pool.",
 	//   "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}/update",
 	//   "httpMethod": "POST",
 	//   "id": "container.projects.zones.clusters.nodePools.update",
@@ -12082,6 +12201,7 @@ func (c *ProjectsZonesOperationsCancelCall) doRequest(alt string) (*http.Respons
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/operations/{operationId}:cancel")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -12251,6 +12371,7 @@ func (c *ProjectsZonesOperationsGetCall) doRequest(alt string) (*http.Response, 
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/operations/{operationId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -12422,6 +12543,7 @@ func (c *ProjectsZonesOperationsListCall) doRequest(alt string) (*http.Response,
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/operations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -12492,7 +12614,7 @@ func (c *ProjectsZonesOperationsListCall) Do(opts ...googleapi.CallOption) (*Lis
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Deprecated. The name of the Google Compute Engine [zone](/compute/docs/zones#available)\nto return operations for, or `-` for all zones.\nThis field has been deprecated and replaced by the parent field.",
+	//       "description": "Deprecated. The name of the Google Compute Engine\n[zone](/compute/docs/zones#available) to return operations for, or `-` for\nall zones. This field has been deprecated and replaced by the parent field.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"

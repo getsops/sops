@@ -9,7 +9,7 @@ $GOPATH/bin/google-api-go-generator \
 	-output translate-nov2016-gen.nolicense
 
 cat - translate-nov2016-gen.nolicense > translate-nov2016-gen.go <<EOF
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.

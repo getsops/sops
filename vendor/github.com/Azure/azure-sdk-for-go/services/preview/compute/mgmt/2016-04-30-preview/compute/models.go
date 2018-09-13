@@ -673,6 +673,101 @@ type AvailabilitySetListResult struct {
 	autorest.Response `json:"-"`
 	// Value - The list of availability sets
 	Value *[]AvailabilitySet `json:"value,omitempty"`
+	// NextLink - The URI to fetch the next page of AvailabilitySets. Call ListNext() with this URI to fetch the next page of AvailabilitySets.
+	NextLink *string `json:"nextLink,omitempty"`
+}
+
+// AvailabilitySetListResultIterator provides access to a complete listing of AvailabilitySet values.
+type AvailabilitySetListResultIterator struct {
+	i    int
+	page AvailabilitySetListResultPage
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+func (iter *AvailabilitySetListResultIterator) Next() error {
+	iter.i++
+	if iter.i < len(iter.page.Values()) {
+		return nil
+	}
+	err := iter.page.Next()
+	if err != nil {
+		iter.i--
+		return err
+	}
+	iter.i = 0
+	return nil
+}
+
+// NotDone returns true if the enumeration should be started or is not yet complete.
+func (iter AvailabilitySetListResultIterator) NotDone() bool {
+	return iter.page.NotDone() && iter.i < len(iter.page.Values())
+}
+
+// Response returns the raw server response from the last page request.
+func (iter AvailabilitySetListResultIterator) Response() AvailabilitySetListResult {
+	return iter.page.Response()
+}
+
+// Value returns the current value or a zero-initialized value if the
+// iterator has advanced beyond the end of the collection.
+func (iter AvailabilitySetListResultIterator) Value() AvailabilitySet {
+	if !iter.page.NotDone() {
+		return AvailabilitySet{}
+	}
+	return iter.page.Values()[iter.i]
+}
+
+// IsEmpty returns true if the ListResult contains no values.
+func (aslr AvailabilitySetListResult) IsEmpty() bool {
+	return aslr.Value == nil || len(*aslr.Value) == 0
+}
+
+// availabilitySetListResultPreparer prepares a request to retrieve the next set of results.
+// It returns nil if no more results exist.
+func (aslr AvailabilitySetListResult) availabilitySetListResultPreparer() (*http.Request, error) {
+	if aslr.NextLink == nil || len(to.String(aslr.NextLink)) < 1 {
+		return nil, nil
+	}
+	return autorest.Prepare(&http.Request{},
+		autorest.AsJSON(),
+		autorest.AsGet(),
+		autorest.WithBaseURL(to.String(aslr.NextLink)))
+}
+
+// AvailabilitySetListResultPage contains a page of AvailabilitySet values.
+type AvailabilitySetListResultPage struct {
+	fn   func(AvailabilitySetListResult) (AvailabilitySetListResult, error)
+	aslr AvailabilitySetListResult
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+func (page *AvailabilitySetListResultPage) Next() error {
+	next, err := page.fn(page.aslr)
+	if err != nil {
+		return err
+	}
+	page.aslr = next
+	return nil
+}
+
+// NotDone returns true if the page enumeration should be started or is not yet complete.
+func (page AvailabilitySetListResultPage) NotDone() bool {
+	return !page.aslr.IsEmpty()
+}
+
+// Response returns the raw server response from the last page request.
+func (page AvailabilitySetListResultPage) Response() AvailabilitySetListResult {
+	return page.aslr
+}
+
+// Values returns the slice of values for the current page or nil if there are no values.
+func (page AvailabilitySetListResultPage) Values() []AvailabilitySet {
+	if page.aslr.IsEmpty() {
+		return nil
+	}
+	return *page.aslr.Value
 }
 
 // AvailabilitySetProperties the instance view of a resource.
@@ -4921,7 +5016,7 @@ type VirtualMachineScaleSetVMProperties struct {
 	// VMID - Azure VM unique ID.
 	VMID *string `json:"vmId,omitempty"`
 	// InstanceView - The virtual machine instance view.
-	InstanceView *VirtualMachineInstanceView `json:"instanceView,omitempty"`
+	InstanceView *VirtualMachineScaleSetVMInstanceView `json:"instanceView,omitempty"`
 	// HardwareProfile - Specifies the hardware settings for the virtual machine.
 	HardwareProfile *HardwareProfile `json:"hardwareProfile,omitempty"`
 	// StorageProfile - Specifies the storage settings for the virtual machine disks.

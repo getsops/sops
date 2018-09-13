@@ -18,11 +18,32 @@ const (
 	// again.
 	ErrCodeInvalidNextTokenException = "InvalidNextTokenException"
 
+	// ErrCodeInvalidS3BucketException for service response error code
+	// "InvalidS3BucketException".
+	//
+	// The provided Amazon S3 bucket name is invalid. Please check your input with
+	// S3 bucket naming requirements and try again.
+	ErrCodeInvalidS3BucketException = "InvalidS3BucketException"
+
+	// ErrCodeInvalidS3KeyException for service response error code
+	// "InvalidS3KeyException".
+	//
+	// The provided Amazon S3 key prefix is invalid. Please provide a valid S3 object
+	// key name.
+	ErrCodeInvalidS3KeyException = "InvalidS3KeyException"
+
 	// ErrCodeInvalidSampleRateException for service response error code
 	// "InvalidSampleRateException".
 	//
 	// The specified sample rate is not valid.
 	ErrCodeInvalidSampleRateException = "InvalidSampleRateException"
+
+	// ErrCodeInvalidSnsTopicArnException for service response error code
+	// "InvalidSnsTopicArnException".
+	//
+	// The provided SNS topic ARN is invalid. Please provide a valid SNS topic ARN
+	// and try again.
+	ErrCodeInvalidSnsTopicArnException = "InvalidSnsTopicArnException"
 
 	// ErrCodeInvalidSsmlException for service response error code
 	// "InvalidSsmlException".
@@ -30,6 +51,20 @@ const (
 	// The SSML you provided is invalid. Verify the SSML syntax, spelling of tags
 	// and values, and then try again.
 	ErrCodeInvalidSsmlException = "InvalidSsmlException"
+
+	// ErrCodeInvalidTaskIdException for service response error code
+	// "InvalidTaskIdException".
+	//
+	// The provided Task ID is not valid. Please provide a valid Task ID and try
+	// again.
+	ErrCodeInvalidTaskIdException = "InvalidTaskIdException"
+
+	// ErrCodeLanguageNotSupportedException for service response error code
+	// "LanguageNotSupportedException".
+	//
+	// The language specified is not currently supported by Amazon Polly in this
+	// capacity.
+	ErrCodeLanguageNotSupportedException = "LanguageNotSupportedException"
 
 	// ErrCodeLexiconNotFoundException for service response error code
 	// "LexiconNotFoundException".
@@ -79,12 +114,20 @@ const (
 	// SSML speech marks are not supported for plain text-type input.
 	ErrCodeSsmlMarksNotSupportedForTextTypeException = "SsmlMarksNotSupportedForTextTypeException"
 
+	// ErrCodeSynthesisTaskNotFoundException for service response error code
+	// "SynthesisTaskNotFoundException".
+	//
+	// The Speech Synthesis task with requested Task ID cannot be found.
+	ErrCodeSynthesisTaskNotFoundException = "SynthesisTaskNotFoundException"
+
 	// ErrCodeTextLengthExceededException for service response error code
 	// "TextLengthExceededException".
 	//
-	// The value of the "Text" parameter is longer than the accepted limits. The
-	// limit for input text is a maximum of 3000 characters total, of which no more
-	// than 1500 can be billed characters. SSML tags are not counted as billed characters.
+	// The value of the "Text" parameter is longer than the accepted limits. For
+	// the SynthesizeSpeech API, the limit for input text is a maximum of 6000 characters
+	// total, of which no more than 3000 can be billed characters. For the StartSpeechSynthesisTask
+	// API, the maximum is 200,000 characters, of which no more than 100,000 can
+	// be billed characters. SSML tags are not counted as billed characters.
 	ErrCodeTextLengthExceededException = "TextLengthExceededException"
 
 	// ErrCodeUnsupportedPlsAlphabetException for service response error code

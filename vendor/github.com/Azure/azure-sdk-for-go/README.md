@@ -20,9 +20,9 @@ using [Azure/autorest.go][] and [Azure/autorest][]. These generated packages
 depend on the HTTP client implemented at [Azure/go-autorest][].
 
 [azure_rest_specs]: https://github.com/Azure/azure-rest-api-specs
-[Azure/autorest]: https://github.com/Azure/autorest
-[Azure/autorest.go]: https://github.com/Azure/autorest.go
-[Azure/go-autorest]: https://github.com/Azure/go-autorest
+[azure/autorest]: https://github.com/Azure/autorest
+[azure/autorest.go]: https://github.com/Azure/autorest.go
+[azure/go-autorest]: https://github.com/Azure/go-autorest
 
 The SDK codebase adheres to [semantic versioning](https://semver.org) and thus
 avoids breaking changes other than at major (x.0.0) releases. Because Azure's
@@ -33,17 +33,22 @@ Practices](https://github.com/Azure/azure-sdk-for-go/wiki/SDK-Update-Practices).
 To more reliably manage dependencies like the Azure SDK in your applications we
 recommend [golang/dep](https://github.com/golang/dep).
 
+Packages that are still in public preview can be found under the ./services/preview
+directory.  Please be aware that since these packages are in preview they are subject
+to change, including breaking changes outside of a major semver bump.
+
 ## Other Azure Go Packages
 
 Azure provides several other packages for using services from Go, listed below.
 If a package you need isn't available please open an issue and let us know.
 
-| Service | Import Path/Repo |
-|---------|------------------|
-| Storage - Blobs | [github.com/Azure/azure-storage-blob-go](https://github.com/Azure/azure-storage-blob-go) |
-| Storage - Files | [github.com/Azure/azure-storage-file-go](https://github.com/Azure/azure-storage-file-go) |
-| Storage - Queues | [github.com/Azure/azure-storage-queue-go](https://github.com/Azure/azure-storage-queue-go) |
-| Event Hubs | [github.com/Azure/azure-event-hubs-go](https://github.com/Azure/azure-event-hubs-go) |
+| Service              | Import Path/Repo                                                                                   |
+| -------------------- | -------------------------------------------------------------------------------------------------- |
+| Storage - Blobs      | [github.com/Azure/azure-storage-blob-go](https://github.com/Azure/azure-storage-blob-go)           |
+| Storage - Files      | [github.com/Azure/azure-storage-file-go](https://github.com/Azure/azure-storage-file-go)           |
+| Storage - Queues     | [github.com/Azure/azure-storage-queue-go](https://github.com/Azure/azure-storage-queue-go)         |
+| Service Bus          | [github.com/Azure/azure-service-bus-go](https://github.com/Azure/azure-service-bus-go)             |
+| Event Hubs           | [github.com/Azure/azure-event-hubs-go](https://github.com/Azure/azure-event-hubs-go)               |
 | Application Insights | [github.com/Microsoft/ApplicationInsights-go](https://github.com/Microsoft/ApplicationInsights-go) |
 
 # Install and Use:
@@ -71,12 +76,12 @@ Apply the following general steps to use packages in this repo. For more on
 authentication and the `Authorizer` interface see [the next
 section](#authentication).
 
-1. Import a package from the [services][services_dir] directory.
-2. Create and authenticate a client with a `New*Client` func, e.g.
-   `c := compute.NewVirtualMachinesClient(...)`.
-3. Invoke API methods using the client, e.g.
-   `res, err := c.CreateOrUpdate(...)`.
-4. Handle responses and errors.
+1.  Import a package from the [services][services_dir] directory.
+2.  Create and authenticate a client with a `New*Client` func, e.g.
+    `c := compute.NewVirtualMachinesClient(...)`.
+3.  Invoke API methods using the client, e.g.
+    `res, err := c.CreateOrUpdate(...)`.
+4.  Handle responses and errors.
 
 [services_dir]: https://github.com/Azure/azure-sdk-for-go/tree/master/services
 
@@ -135,7 +140,7 @@ func main() {
 
 ## Authentication
 
-Typical SDK operations must be authenticated and authorized. The *Authorizer*
+Typical SDK operations must be authenticated and authorized. The _Authorizer_
 interface allows use of any auth style in requests, such as inserting an OAuth2
 Authorization header and bearer token received from Azure AD.
 
@@ -170,8 +175,7 @@ The following environment variables help determine authentication configuration:
 - `AZURE_AD_RESOURCE`: Specifies the AAD resource ID to use. If not set, it
   defaults to `ResourceManagerEndpoint` for operations with Azure Resource
   Manager. You can also choose an alternate resource programatically with
-  `auth.NewAuthorizerFromEnvironmentWithResource(resource
-  string)`.
+  `auth.NewAuthorizerFromEnvironmentWithResource(resource string)`.
 
 ### More Authentication Details
 
@@ -180,67 +184,65 @@ options offered by the SDK because it allows seamless use of both service
 principals and [Azure Managed Service Identity][]. Other options are listed
 below.
 
-> Note: If you need to create a new service principal, run `az ad sp
-> create-for-rbac -n "<app_name>"` in the
+> Note: If you need to create a new service principal, run `az ad sp create-for-rbac -n "<app_name>"` in the
 > [azure-cli](https://github.com/Azure/azure-cli). See [these
 > docs](https://docs.microsoft.com/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest)
 > for more info. Copy the new principal's ID, secret, and tenant ID for use in
 > your app, or consider the `--sdk-auth` parameter for serialized output.
 
-[Azure Managed Service Identity]: https://docs.microsoft.com/en-us/azure/active-directory/msi-overview
+[azure managed service identity]: https://docs.microsoft.com/en-us/azure/active-directory/msi-overview
 
-* The `auth.NewAuthorizerFromEnvironment()` described above creates an authorizer
-from the first available of the following configuration:
+- The `auth.NewAuthorizerFromEnvironment()` described above creates an authorizer
+  from the first available of the following configuration:
 
-    1. **Client Credentials**: Azure AD Application ID and Secret.
+      1. **Client Credentials**: Azure AD Application ID and Secret.
 
-        - `AZURE_TENANT_ID`: Specifies the Tenant to which to authenticate.
-        - `AZURE_CLIENT_ID`: Specifies the app client ID to use.
-        - `AZURE_CLIENT_SECRET`: Specifies the app secret to use.
+          - `AZURE_TENANT_ID`: Specifies the Tenant to which to authenticate.
+          - `AZURE_CLIENT_ID`: Specifies the app client ID to use.
+          - `AZURE_CLIENT_SECRET`: Specifies the app secret to use.
 
-    2. **Client Certificate**: Azure AD Application ID and X.509 Certificate.
+      2. **Client Certificate**: Azure AD Application ID and X.509 Certificate.
 
-        - `AZURE_TENANT_ID`: Specifies the Tenant to which to authenticate.
-        - `AZURE_CLIENT_ID`: Specifies the app client ID to use.
-        - `AZURE_CERTIFICATE_PATH`: Specifies the certificate Path to use.
-        - `AZURE_CERTIFICATE_PASSWORD`: Specifies the certificate password to use.
+          - `AZURE_TENANT_ID`: Specifies the Tenant to which to authenticate.
+          - `AZURE_CLIENT_ID`: Specifies the app client ID to use.
+          - `AZURE_CERTIFICATE_PATH`: Specifies the certificate Path to use.
+          - `AZURE_CERTIFICATE_PASSWORD`: Specifies the certificate password to use.
 
-    3. **Resource Owner Password**: Azure AD User and Password. This grant type is *not
-       recommended*, use device login instead if you need interactive login.
+      3. **Resource Owner Password**: Azure AD User and Password. This grant type is *not
+         recommended*, use device login instead if you need interactive login.
 
-        - `AZURE_TENANT_ID`: Specifies the Tenant to which to authenticate.
-        - `AZURE_CLIENT_ID`: Specifies the app client ID to use.
-        - `AZURE_USERNAME`: Specifies the username to use.
-        - `AZURE_PASSWORD`: Specifies the password to use.
+          - `AZURE_TENANT_ID`: Specifies the Tenant to which to authenticate.
+          - `AZURE_CLIENT_ID`: Specifies the app client ID to use.
+          - `AZURE_USERNAME`: Specifies the username to use.
+          - `AZURE_PASSWORD`: Specifies the password to use.
 
-    4. **Azure Managed Service Identity**: Delegate credential management to the
-       platform. Requires that code is running in Azure, e.g. on a VM. All
-       configuration is handled by Azure. See [Azure Managed Service
-       Identity](https://docs.microsoft.com/en-us/azure/active-directory/msi-overview)
-       for more details.
+      4. **Azure Managed Service Identity**: Delegate credential management to the
+         platform. Requires that code is running in Azure, e.g. on a VM. All
+         configuration is handled by Azure. See [Azure Managed Service
+         Identity](https://docs.microsoft.com/en-us/azure/active-directory/msi-overview)
+         for more details.
 
-* The `auth.NewAuthorizerFromFile()` method creates an authorizer using
+- The `auth.NewAuthorizerFromFile()` method creates an authorizer using
   credentials from an auth file created by the [Azure CLI][]. Follow these
   steps to utilize:
 
-    1. Create a service principal and output an auth file using `az ad sp
-       create-for-rbac --sdk-auth > client_credentials.json`.
-    2. Set environment variable `AZURE_AUTH_LOCATION` to the path of the saved
-       output file.
-    3. Use the authorizer returned by `auth.NewAuthorizerFromFile()` in your
-       client as described above.
+  1.  Create a service principal and output an auth file using `az ad sp create-for-rbac --sdk-auth > client_credentials.json`.
+  2.  Set environment variable `AZURE_AUTH_LOCATION` to the path of the saved
+      output file.
+  3.  Use the authorizer returned by `auth.NewAuthorizerFromFile()` in your
+      client as described above.
 
-[Azure CLI]: https://github.com/Azure/azure-cli
+[azure cli]: https://github.com/Azure/azure-cli
 
-* Finally, you can use OAuth's [Device Flow][] by calling
+- Finally, you can use OAuth's [Device Flow][] by calling
   `auth.NewDeviceFlowConfig()` and extracting the Authorizer as follows:
 
-    ```go
-    config := auth.NewDeviceFlowConfig(clientID, tenantID)
-    a, err = config.Authorizer()
-    ```
+  ```go
+  config := auth.NewDeviceFlowConfig(clientID, tenantID)
+  a, err = config.Authorizer()
+  ```
 
-[Device Flow]: https://oauth.net/2/device-flow/
+[device flow]: https://oauth.net/2/device-flow/
 
 # Versioning
 
@@ -268,18 +270,18 @@ import (
 Occasionally service-side changes require major changes to existing versions.
 These cases are noted in the changelog.
 
-All avilable services and versions are listed under the `services/` path in
+All available services and versions are listed under the `services/` path in
 this repo and in [GoDoc][services_godoc].  Run `find ./services -type d
 -mindepth 3` to list all available service packages.
 
-[services_godoc]:       https://godoc.org/github.com/Azure/azure-sdk-for-go/services
+[services_godoc]: https://godoc.org/github.com/Azure/azure-sdk-for-go/services
 
 ### Profiles
 
 Azure **API profiles** specify subsets of Azure APIs and versions. Profiles can provide:
 
-* **stability** for your application by locking to specific API versions; and/or
-* **compatibility** for your application with Azure Stack and regional Azure datacenters.
+- **stability** for your application by locking to specific API versions; and/or
+- **compatibility** for your application with Azure Stack and regional Azure datacenters.
 
 In the Go SDK, profiles are available under the `profiles/` path and their
 component API versions are aliases to the true service package under
@@ -295,9 +297,9 @@ The 2017-03-09 profile is the only one currently available and is for use in
 hybrid Azure and Azure Stack environments. More profiles are under development.
 
 In addition to versioned profiles, we also provide two special profiles
-`latest` and `preview`. These *always* include the most recent respective stable or
+`latest` and `preview`. These _always_ include the most recent respective stable or
 preview API versions for each service, even when updating them to do so causes
-breaking changes. That is, these do *not* adhere to semantic versioning rules.
+breaking changes. That is, these do _not_ adhere to semantic versioning rules.
 
 The `latest` and `preview` profiles can help you stay up to date with API
 updates as you build applications. Since they are by definition not stable,
@@ -323,7 +325,6 @@ All clients implement some handy hooks to help inspect the underlying requests b
 Here is an example of how these can be used with `net/http/httputil` to see requests and responses.
 
 ```go
-
 vnetClient := network.NewVirtualNetworksClient("<subscriptionID>")
 vnetClient.RequestInspector = LogRequest()
 vnetClient.ResponseInspector = LogResponse()

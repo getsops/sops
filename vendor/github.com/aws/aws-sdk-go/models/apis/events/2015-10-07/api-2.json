@@ -222,6 +222,22 @@
       "max":1600,
       "min":1
     },
+    "AssignPublicIp":{
+      "type":"string",
+      "enum":[
+        "ENABLED",
+        "DISABLED"
+      ]
+    },
+    "AwsVpcConfiguration":{
+      "type":"structure",
+      "required":["Subnets"],
+      "members":{
+        "Subnets":{"shape":"StringList"},
+        "SecurityGroups":{"shape":"StringList"},
+        "AssignPublicIp":{"shape":"AssignPublicIp"}
+      }
+    },
     "BatchArrayProperties":{
       "type":"structure",
       "members":{
@@ -305,7 +321,11 @@
       "required":["TaskDefinitionArn"],
       "members":{
         "TaskDefinitionArn":{"shape":"Arn"},
-        "TaskCount":{"shape":"LimitMin1"}
+        "TaskCount":{"shape":"LimitMin1"},
+        "LaunchType":{"shape":"LaunchType"},
+        "NetworkConfiguration":{"shape":"NetworkConfiguration"},
+        "PlatformVersion":{"shape":"String"},
+        "Group":{"shape":"String"}
       }
     },
     "EnableRuleRequest":{
@@ -359,6 +379,13 @@
       "members":{
         "PartitionKeyPath":{"shape":"TargetPartitionKeyPath"}
       }
+    },
+    "LaunchType":{
+      "type":"string",
+      "enum":[
+        "EC2",
+        "FARGATE"
+      ]
     },
     "LimitExceededException":{
       "type":"structure",
@@ -423,6 +450,12 @@
       }
     },
     "MessageGroupId":{"type":"string"},
+    "NetworkConfiguration":{
+      "type":"structure",
+      "members":{
+        "awsvpcConfiguration":{"shape":"AwsVpcConfiguration"}
+      }
+    },
     "NextToken":{
       "type":"string",
       "max":2048,
@@ -691,6 +724,10 @@
       "pattern":"[a-zA-Z0-9-_]+"
     },
     "String":{"type":"string"},
+    "StringList":{
+      "type":"list",
+      "member":{"shape":"String"}
+    },
     "Target":{
       "type":"structure",
       "required":[

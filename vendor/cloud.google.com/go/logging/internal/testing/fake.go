@@ -1,5 +1,5 @@
 /*
-Copyright 2016 Google Inc. All Rights Reserved.
+Copyright 2016 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -92,6 +92,8 @@ func (h *loggingHandler) DeleteLog(_ context.Context, req *logpb.DeleteLogReques
 const (
 	validProjectID = "PROJECT_ID"
 	validOrgID     = "433637338589"
+
+	SharedServiceAccount = "serviceAccount:cloud-logs@system.gserviceaccount.com"
 )
 
 // WriteLogEntries writes log entries to Stackdriver Logging. All log entries in
@@ -274,17 +276,59 @@ func (h *configHandler) CreateSink(_ context.Context, req *logpb.CreateSinkReque
 	if _, ok := h.sinks[fullName]; ok {
 		return nil, fmt.Errorf("sink with name %q already exists", fullName)
 	}
-	h.sinks[fullName] = req.Sink
+	h.setSink(fullName, req.Sink, req.UniqueWriterIdentity)
 	return req.Sink, nil
+}
+
+func (h *configHandler) setSink(name string, s *logpb.LogSink, uniqueWriterIdentity bool) {
+	if uniqueWriterIdentity {
+		s.WriterIdentity = "serviceAccount:" + name + "@gmail.com"
+	} else {
+		s.WriterIdentity = SharedServiceAccount
+	}
+	h.sinks[name] = s
 }
 
 // Creates or updates a sink.
 func (h *configHandler) UpdateSink(_ context.Context, req *logpb.UpdateSinkRequest) (*logpb.LogSink, error) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
+	sink := h.sinks[req.SinkName]
 	// Update of a non-existent sink will create it.
-	h.sinks[req.SinkName] = req.Sink
-	return req.Sink, nil
+	if sink == nil {
+		h.setSink(req.SinkName, req.Sink, req.UniqueWriterIdentity)
+		sink = req.Sink
+	} else {
+		// sink is the existing sink named req.SinkName.
+		// Update all and only the fields of sink that are specified in the update mask.
+		paths := req.UpdateMask.GetPaths()
+		if len(paths) == 0 {
+			// An empty update mask is considered to have these fields by default.
+			paths = []string{"destination", "filter", "include_children"}
+		}
+		for _, p := range paths {
+			switch p {
+			case "destination":
+				sink.Destination = req.Sink.Destination
+			case "filter":
+				sink.Filter = req.Sink.Filter
+			case "include_children":
+				sink.IncludeChildren = req.Sink.IncludeChildren
+			case "output_version_format":
+				// noop
+			default:
+				return nil, fmt.Errorf("unknown path in mask: %q", p)
+			}
+		}
+		if req.UniqueWriterIdentity {
+			if sink.WriterIdentity != SharedServiceAccount {
+				return nil, invalidArgument("cannot change unique writer identity")
+			}
+			sink.WriterIdentity = "serviceAccount:" + req.SinkName + "@gmail.com"
+		}
+	}
+	return sink, nil
+
 }
 
 // Deletes a sink.

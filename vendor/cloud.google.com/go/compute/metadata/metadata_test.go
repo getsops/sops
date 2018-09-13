@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,6 +15,9 @@
 package metadata
 
 import (
+	"bytes"
+	"io/ioutil"
+	"net/http"
 	"os"
 	"sync"
 	"testing"
@@ -45,4 +48,33 @@ func TestOnGCE_Force(t *testing.T) {
 	if !OnGCE() {
 		t.Error("OnGCE() = false; want true")
 	}
+}
+
+func TestOverrideUserAgent(t *testing.T) {
+	const userAgent = "my-user-agent"
+	rt := &rrt{}
+	c := NewClient(&http.Client{Transport: userAgentTransport{userAgent, rt}})
+	c.Get("foo")
+	if got, want := rt.gotUserAgent, userAgent; got != want {
+		t.Errorf("got %q, want %q", got, want)
+	}
+}
+
+type userAgentTransport struct {
+	userAgent string
+	base      http.RoundTripper
+}
+
+func (t userAgentTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	req.Header.Set("User-Agent", t.userAgent)
+	return t.base.RoundTrip(req)
+}
+
+type rrt struct {
+	gotUserAgent string
+}
+
+func (r *rrt) RoundTrip(req *http.Request) (*http.Response, error) {
+	r.gotUserAgent = req.Header.Get("User-Agent")
+	return &http.Response{Body: ioutil.NopCloser(bytes.NewReader(nil))}, nil
 }

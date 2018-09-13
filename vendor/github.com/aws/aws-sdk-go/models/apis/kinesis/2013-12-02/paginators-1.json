@@ -7,6 +7,11 @@
       "output_token": "StreamDescription.Shards[-1].ShardId",
       "result_key": "StreamDescription.Shards"
     },
+    "ListStreamConsumers": {
+      "input_token": "NextToken",
+      "limit_key": "MaxResults",
+      "output_token": "NextToken"
+    },
     "ListStreams": {
       "input_token": "ExclusiveStartStreamName",
       "limit_key": "Limit",

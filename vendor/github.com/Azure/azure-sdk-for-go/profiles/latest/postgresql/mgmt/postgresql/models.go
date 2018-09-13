@@ -75,8 +75,11 @@ const (
 type ServerVersion = original.ServerVersion
 
 const (
-	NineFullStopFive ServerVersion = original.NineFullStopFive
-	NineFullStopSix  ServerVersion = original.NineFullStopSix
+	NineFullStopFive    ServerVersion = original.NineFullStopFive
+	NineFullStopSix     ServerVersion = original.NineFullStopSix
+	OneZero             ServerVersion = original.OneZero
+	OneZeroFullStopTwo  ServerVersion = original.OneZeroFullStopTwo
+	OneZeroFullStopZero ServerVersion = original.OneZeroFullStopZero
 )
 
 type SkuTier = original.SkuTier

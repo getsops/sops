@@ -177,7 +177,7 @@ func (client RegistrationsClient) DeleteResponder(resp *http.Response) (result a
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
-		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent, http.StatusNotFound),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
 	return
@@ -243,7 +243,7 @@ func (client RegistrationsClient) GetResponder(resp *http.Response) (result Regi
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
-		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNotFound),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
@@ -376,7 +376,7 @@ func (client RegistrationsClient) ListResponder(resp *http.Response) (result Reg
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
-		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNotFound),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
@@ -407,5 +407,75 @@ func (client RegistrationsClient) listNextResults(lastResults RegistrationList) 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client RegistrationsClient) ListComplete(ctx context.Context, resourceGroup string) (result RegistrationListIterator, err error) {
 	result.page, err = client.List(ctx, resourceGroup)
+	return
+}
+
+// Update patch an Azure Stack registration.
+// Parameters:
+// resourceGroup - name of the resource group.
+// registrationName - name of the Azure Stack registration.
+// tokenParameter - registration token
+func (client RegistrationsClient) Update(ctx context.Context, resourceGroup string, registrationName string, tokenParameter RegistrationParameter) (result Registration, err error) {
+	req, err := client.UpdatePreparer(ctx, resourceGroup, registrationName, tokenParameter)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "azurestack.RegistrationsClient", "Update", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.UpdateSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "azurestack.RegistrationsClient", "Update", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.UpdateResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "azurestack.RegistrationsClient", "Update", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// UpdatePreparer prepares the Update request.
+func (client RegistrationsClient) UpdatePreparer(ctx context.Context, resourceGroup string, registrationName string, tokenParameter RegistrationParameter) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"registrationName": autorest.Encode("path", registrationName),
+		"resourceGroup":    autorest.Encode("path", resourceGroup),
+		"subscriptionId":   autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2017-06-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPatch(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AzureStack/registrations/{registrationName}", pathParameters),
+		autorest.WithJSON(tokenParameter),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// UpdateSender sends the Update request. The method will close the
+// http.Response Body if it receives an error.
+func (client RegistrationsClient) UpdateSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// UpdateResponder handles the response to the Update request. The method always
+// closes the http.Response Body.
+func (client RegistrationsClient) UpdateResponder(resp *http.Response) (result Registration, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
 	return
 }

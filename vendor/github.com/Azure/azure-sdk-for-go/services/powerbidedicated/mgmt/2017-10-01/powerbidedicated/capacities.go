@@ -41,6 +41,84 @@ func NewCapacitiesClientWithBaseURI(baseURI string, subscriptionID string) Capac
 	return CapacitiesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// CheckNameAvailability check the name availability in the target location.
+// Parameters:
+// location - the region name which the operation will lookup into.
+// capacityParameters - the name of the capacity.
+func (client CapacitiesClient) CheckNameAvailability(ctx context.Context, location string, capacityParameters CheckCapacityNameAvailabilityParameters) (result CheckCapacityNameAvailabilityResult, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: capacityParameters,
+			Constraints: []validation.Constraint{{Target: "capacityParameters.Name", Name: validation.Null, Rule: false,
+				Chain: []validation.Constraint{{Target: "capacityParameters.Name", Name: validation.MaxLength, Rule: 63, Chain: nil},
+					{Target: "capacityParameters.Name", Name: validation.MinLength, Rule: 3, Chain: nil},
+					{Target: "capacityParameters.Name", Name: validation.Pattern, Rule: `^[a-z][a-z0-9]*$`, Chain: nil},
+				}}}}}); err != nil {
+		return result, validation.NewError("powerbidedicated.CapacitiesClient", "CheckNameAvailability", err.Error())
+	}
+
+	req, err := client.CheckNameAvailabilityPreparer(ctx, location, capacityParameters)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "powerbidedicated.CapacitiesClient", "CheckNameAvailability", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.CheckNameAvailabilitySender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "powerbidedicated.CapacitiesClient", "CheckNameAvailability", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.CheckNameAvailabilityResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "powerbidedicated.CapacitiesClient", "CheckNameAvailability", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// CheckNameAvailabilityPreparer prepares the CheckNameAvailability request.
+func (client CapacitiesClient) CheckNameAvailabilityPreparer(ctx context.Context, location string, capacityParameters CheckCapacityNameAvailabilityParameters) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"location":       autorest.Encode("path", location),
+		"subscriptionId": autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2017-10-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/providers/Microsoft.PowerBIDedicated/locations/{location}/checkNameAvailability", pathParameters),
+		autorest.WithJSON(capacityParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// CheckNameAvailabilitySender sends the CheckNameAvailability request. The method will close the
+// http.Response Body if it receives an error.
+func (client CapacitiesClient) CheckNameAvailabilitySender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// CheckNameAvailabilityResponder handles the response to the CheckNameAvailability request. The method always
+// closes the http.Response Body.
+func (client CapacitiesClient) CheckNameAvailabilityResponder(resp *http.Response) (result CheckCapacityNameAvailabilityResult, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
 // Create provisions the specified Dedicated capacity based on the configuration specified in the request.
 // Parameters:
 // resourceGroupName - the name of the Azure Resource group of which a given PowerBIDedicated capacity is part.

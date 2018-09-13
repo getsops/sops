@@ -81,7 +81,7 @@ func TestCaseProperties(t *testing.T) {
 		}
 		// New letters may change case types, but existing case pairings should
 		// not change. See Case Pair Stability in
-		// http://unicode.org/policies/stability_policy.html.
+		// https://unicode.org/policies/stability_policy.html.
 		if rf := unicode.SimpleFold(r); rf != r && unicode.In(rf, assigned) {
 			if got, want := c.info.isCased(), propCased(r); got != want {
 				t.Errorf("cased(%U): got %v; want %v (%x)", r, got, want, c.info)

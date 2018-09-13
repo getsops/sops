@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import (
 
 	"cloud.google.com/go/internal/testutil"
 	"cloud.google.com/go/profiler/mocks"
+	"cloud.google.com/go/profiler/testdata"
 	"github.com/golang/mock/gomock"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
@@ -49,7 +50,6 @@ const (
 	testProjectID       = "test-project-ID"
 	testInstance        = "test-instance"
 	testZone            = "test-zone"
-	testTarget          = "test-target"
 	testService         = "test-service"
 	testSvcVersion      = "test-service-version"
 	testProfileDuration = time.Second * 10
@@ -117,6 +117,22 @@ func TestProfileAndUpload(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
+	var heapCollected1, heapCollected2, heapUploaded, allocUploaded bytes.Buffer
+	testdata.HeapProfileCollected1.Write(&heapCollected1)
+	testdata.HeapProfileCollected2.Write(&heapCollected2)
+	testdata.HeapProfileUploaded.Write(&heapUploaded)
+	testdata.AllocProfileUploaded.Write(&allocUploaded)
+	callCount := 0
+	writeTwoHeapFunc := func(w io.Writer) error {
+		callCount++
+		if callCount%2 == 1 {
+			w.Write(heapCollected1.Bytes())
+			return nil
+		}
+		w.Write(heapCollected2.Bytes())
+		return nil
+	}
+
 	errFunc := func(io.Writer) error { return errors.New("") }
 	testDuration := time.Second * 5
 	tests := []struct {
@@ -158,10 +174,17 @@ func TestProfileAndUpload(t *testing.T) {
 			profileType:         pb.ProfileType_HEAP,
 			startCPUProfileFunc: errFunc,
 			writeHeapProfileFunc: func(w io.Writer) error {
-				w.Write([]byte{4})
+				w.Write(heapCollected1.Bytes())
 				return nil
 			},
-			wantBytes: []byte{4},
+			wantBytes: heapUploaded.Bytes(),
+		},
+		{
+			profileType:          pb.ProfileType_HEAP_ALLOC,
+			startCPUProfileFunc:  errFunc,
+			writeHeapProfileFunc: writeTwoHeapFunc,
+			duration:             &testDuration,
+			wantBytes:            allocUploaded.Bytes(),
 		},
 		{
 			profileType:          pb.ProfileType_HEAP,
@@ -175,10 +198,10 @@ func TestProfileAndUpload(t *testing.T) {
 				return nil
 			},
 			writeHeapProfileFunc: func(w io.Writer) error {
-				w.Write([]byte{6})
+				w.Write(heapCollected1.Bytes())
 				return nil
 			},
-			wantBytes: []byte{6},
+			wantBytes: heapUploaded.Bytes(),
 		},
 		{
 			profileType: pb.ProfileType_PROFILE_TYPE_UNSPECIFIED,
@@ -187,7 +210,7 @@ func TestProfileAndUpload(t *testing.T) {
 				return nil
 			},
 			writeHeapProfileFunc: func(w io.Writer) error {
-				w.Write([]byte{8})
+				w.Write(heapCollected1.Bytes())
 				return nil
 			},
 		},
@@ -351,58 +374,58 @@ func TestInitializeAgent(t *testing.T) {
 	}{
 		{
 			config:               Config{ServiceVersion: testSvcVersion, zone: testZone},
-			wantProfileTypes:     []pb.ProfileType{pb.ProfileType_CPU, pb.ProfileType_HEAP, pb.ProfileType_THREADS},
-			wantDeploymentLabels: map[string]string{zoneNameLabel: testZone, versionLabel: testSvcVersion},
+			wantProfileTypes:     []pb.ProfileType{pb.ProfileType_CPU, pb.ProfileType_HEAP, pb.ProfileType_THREADS, pb.ProfileType_HEAP_ALLOC},
+			wantDeploymentLabels: map[string]string{zoneNameLabel: testZone, versionLabel: testSvcVersion, languageLabel: "go"},
 			wantProfileLabels:    map[string]string{},
 		},
 		{
 			config:               Config{zone: testZone},
-			wantProfileTypes:     []pb.ProfileType{pb.ProfileType_CPU, pb.ProfileType_HEAP, pb.ProfileType_THREADS},
-			wantDeploymentLabels: map[string]string{zoneNameLabel: testZone},
+			wantProfileTypes:     []pb.ProfileType{pb.ProfileType_CPU, pb.ProfileType_HEAP, pb.ProfileType_THREADS, pb.ProfileType_HEAP_ALLOC},
+			wantDeploymentLabels: map[string]string{zoneNameLabel: testZone, languageLabel: "go"},
 			wantProfileLabels:    map[string]string{},
 		},
 		{
 			config:               Config{ServiceVersion: testSvcVersion},
-			wantProfileTypes:     []pb.ProfileType{pb.ProfileType_CPU, pb.ProfileType_HEAP, pb.ProfileType_THREADS},
-			wantDeploymentLabels: map[string]string{versionLabel: testSvcVersion},
+			wantProfileTypes:     []pb.ProfileType{pb.ProfileType_CPU, pb.ProfileType_HEAP, pb.ProfileType_THREADS, pb.ProfileType_HEAP_ALLOC},
+			wantDeploymentLabels: map[string]string{versionLabel: testSvcVersion, languageLabel: "go"},
 			wantProfileLabels:    map[string]string{},
 		},
 		{
 			config:               Config{instance: testInstance},
-			wantProfileTypes:     []pb.ProfileType{pb.ProfileType_CPU, pb.ProfileType_HEAP, pb.ProfileType_THREADS},
-			wantDeploymentLabels: map[string]string{},
+			wantProfileTypes:     []pb.ProfileType{pb.ProfileType_CPU, pb.ProfileType_HEAP, pb.ProfileType_THREADS, pb.ProfileType_HEAP_ALLOC},
+			wantDeploymentLabels: map[string]string{languageLabel: "go"},
 			wantProfileLabels:    map[string]string{instanceLabel: testInstance},
 		},
 		{
 			config:               Config{instance: testInstance},
 			enableMutex:          true,
-			wantProfileTypes:     []pb.ProfileType{pb.ProfileType_CPU, pb.ProfileType_HEAP, pb.ProfileType_THREADS, pb.ProfileType_CONTENTION},
-			wantDeploymentLabels: map[string]string{},
+			wantProfileTypes:     []pb.ProfileType{pb.ProfileType_CPU, pb.ProfileType_HEAP, pb.ProfileType_THREADS, pb.ProfileType_HEAP_ALLOC, pb.ProfileType_CONTENTION},
+			wantDeploymentLabels: map[string]string{languageLabel: "go"},
 			wantProfileLabels:    map[string]string{instanceLabel: testInstance},
 		},
 		{
 			config:               Config{NoHeapProfiling: true},
-			wantProfileTypes:     []pb.ProfileType{pb.ProfileType_CPU, pb.ProfileType_THREADS},
-			wantDeploymentLabels: map[string]string{},
+			wantProfileTypes:     []pb.ProfileType{pb.ProfileType_CPU, pb.ProfileType_THREADS, pb.ProfileType_HEAP_ALLOC},
+			wantDeploymentLabels: map[string]string{languageLabel: "go"},
 			wantProfileLabels:    map[string]string{},
 		},
 		{
-			config:               Config{NoHeapProfiling: true, NoGoroutineProfiling: true},
+			config:               Config{NoHeapProfiling: true, NoGoroutineProfiling: true, NoAllocProfiling: true},
 			wantProfileTypes:     []pb.ProfileType{pb.ProfileType_CPU},
-			wantDeploymentLabels: map[string]string{},
+			wantDeploymentLabels: map[string]string{languageLabel: "go"},
 			wantProfileLabels:    map[string]string{},
 		},
 	} {
 
 		config = tt.config
 		config.ProjectID = testProjectID
-		config.Target = testTarget
+		config.Service = testService
 		mutexEnabled = tt.enableMutex
 		a := initializeAgent(nil)
 
 		wantDeployment := &pb.Deployment{
 			ProjectId: testProjectID,
-			Target:    testTarget,
+			Target:    testService,
 			Labels:    tt.wantDeploymentLabels,
 		}
 		if !testutil.Equal(a.deployment, wantDeployment) {
@@ -449,16 +472,7 @@ func TestInitializeConfig(t *testing.T) {
 		{
 			"accepts service name",
 			Config{Service: testService},
-			Config{Target: testService, ProjectID: testGCEProjectID, zone: testZone, instance: testInstance},
-			"",
-			false,
-			true,
-			false,
-		},
-		{
-			"accepts target name",
-			Config{Target: testTarget},
-			Config{Target: testTarget, ProjectID: testGCEProjectID, zone: testZone, instance: testInstance},
+			Config{Service: testService, ProjectID: testGCEProjectID, zone: testZone, instance: testInstance},
 			"",
 			false,
 			true,
@@ -467,7 +481,7 @@ func TestInitializeConfig(t *testing.T) {
 		{
 			"env project overrides GCE project",
 			Config{Service: testService},
-			Config{Target: testService, ProjectID: testEnvProjectID, zone: testZone, instance: testInstance},
+			Config{Service: testService, ProjectID: testEnvProjectID, zone: testZone, instance: testInstance},
 			"",
 			false,
 			true,
@@ -477,7 +491,7 @@ func TestInitializeConfig(t *testing.T) {
 			"requires service name",
 			Config{},
 			Config{},
-			"service name must be specified in the configuration",
+			"service name must be configured",
 			false,
 			true,
 			false,
@@ -485,16 +499,7 @@ func TestInitializeConfig(t *testing.T) {
 		{
 			"accepts service name from config and service version from GAE",
 			Config{Service: testService},
-			Config{Target: testService, ServiceVersion: testGAEVersion, ProjectID: testGCEProjectID, zone: testZone, instance: testInstance},
-			"",
-			true,
-			true,
-			false,
-		},
-		{
-			"accepts target name from config and service version from GAE",
-			Config{Target: testTarget},
-			Config{Target: testTarget, ServiceVersion: testGAEVersion, ProjectID: testGCEProjectID, zone: testZone, instance: testInstance},
+			Config{Service: testService, ServiceVersion: testGAEVersion, ProjectID: testGCEProjectID, zone: testZone, instance: testInstance},
 			"",
 			true,
 			true,
@@ -503,7 +508,7 @@ func TestInitializeConfig(t *testing.T) {
 		{
 			"reads both service name and version from GAE env vars",
 			Config{},
-			Config{Target: testGAEService, ServiceVersion: testGAEVersion, ProjectID: testGCEProjectID, zone: testZone, instance: testInstance},
+			Config{Service: testGAEService, ServiceVersion: testGAEVersion, ProjectID: testGCEProjectID, zone: testZone, instance: testInstance},
 			"",
 			true,
 			true,
@@ -512,7 +517,7 @@ func TestInitializeConfig(t *testing.T) {
 		{
 			"accepts service version from config",
 			Config{Service: testService, ServiceVersion: testSvcVersion},
-			Config{Target: testService, ServiceVersion: testSvcVersion, ProjectID: testGCEProjectID, zone: testZone, instance: testInstance},
+			Config{Service: testService, ServiceVersion: testSvcVersion, ProjectID: testGCEProjectID, zone: testZone, instance: testInstance},
 			"",
 			false,
 			true,
@@ -521,7 +526,7 @@ func TestInitializeConfig(t *testing.T) {
 		{
 			"configured version has priority over GAE-provided version",
 			Config{Service: testService, ServiceVersion: testSvcVersion},
-			Config{Target: testService, ServiceVersion: testSvcVersion, ProjectID: testGCEProjectID, zone: testZone, instance: testInstance},
+			Config{Service: testService, ServiceVersion: testSvcVersion, ProjectID: testGCEProjectID, zone: testZone, instance: testInstance},
 			"",
 			true,
 			true,
@@ -530,7 +535,7 @@ func TestInitializeConfig(t *testing.T) {
 		{
 			"configured project ID has priority over metadata-provided project ID",
 			Config{Service: testService, ProjectID: testProjectID},
-			Config{Target: testService, ProjectID: testProjectID, zone: testZone, instance: testInstance},
+			Config{Service: testService, ProjectID: testProjectID, zone: testZone, instance: testInstance},
 			"",
 			false,
 			true,
@@ -539,7 +544,7 @@ func TestInitializeConfig(t *testing.T) {
 		{
 			"configured project ID has priority over environment project ID",
 			Config{Service: testService, ProjectID: testProjectID},
-			Config{Target: testService, ProjectID: testProjectID},
+			Config{Service: testService, ProjectID: testProjectID},
 			"",
 			false,
 			false,
@@ -548,7 +553,7 @@ func TestInitializeConfig(t *testing.T) {
 		{
 			"requires project ID if not on GCE",
 			Config{Service: testService},
-			Config{Target: testService},
+			Config{Service: testService},
 			"project ID must be specified in the configuration if running outside of GCP",
 			false,
 			false,
@@ -596,7 +601,6 @@ func TestInitializeConfig(t *testing.T) {
 		if tt.wantErrorString == "" {
 			tt.wantConfig.APIAddr = apiAddress
 		}
-		tt.wantConfig.Service = tt.config.Service
 		if config != tt.wantConfig {
 			t.Errorf("initializeConfig(%v) got: %v, want %v", tt.config, config, tt.wantConfig)
 		}
@@ -651,7 +655,6 @@ func TestInitializeConfig(t *testing.T) {
 }
 
 type fakeProfilerServer struct {
-	pb.ProfilerServiceServer
 	count       int
 	gotProfiles map[string][]byte
 	done        chan bool
@@ -679,6 +682,10 @@ func (fs *fakeProfilerServer) UpdateProfile(ctx context.Context, in *pb.UpdatePr
 	}
 
 	return in.Profile, nil
+}
+
+func (fs *fakeProfilerServer) CreateOfflineProfile(_ context.Context, _ *pb.CreateOfflineProfileRequest) (*pb.Profile, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }
 
 func profileeLoop(quit chan bool) {
@@ -847,7 +854,7 @@ func TestAgentWithServer(t *testing.T) {
 
 	dialGRPC = gtransport.DialInsecure
 	if err := Start(Config{
-		Target:    testTarget,
+		Service:   testService,
 		ProjectID: testProjectID,
 		APIAddr:   srv.Addr,
 		instance:  testInstance,

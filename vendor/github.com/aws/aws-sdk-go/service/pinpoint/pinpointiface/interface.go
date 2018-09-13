@@ -136,6 +136,10 @@ type PinpointAPI interface {
 	DeleteSmsChannelWithContext(aws.Context, *pinpoint.DeleteSmsChannelInput, ...request.Option) (*pinpoint.DeleteSmsChannelOutput, error)
 	DeleteSmsChannelRequest(*pinpoint.DeleteSmsChannelInput) (*request.Request, *pinpoint.DeleteSmsChannelOutput)
 
+	DeleteUserEndpoints(*pinpoint.DeleteUserEndpointsInput) (*pinpoint.DeleteUserEndpointsOutput, error)
+	DeleteUserEndpointsWithContext(aws.Context, *pinpoint.DeleteUserEndpointsInput, ...request.Option) (*pinpoint.DeleteUserEndpointsOutput, error)
+	DeleteUserEndpointsRequest(*pinpoint.DeleteUserEndpointsInput) (*request.Request, *pinpoint.DeleteUserEndpointsOutput)
+
 	GetAdmChannel(*pinpoint.GetAdmChannelInput) (*pinpoint.GetAdmChannelOutput, error)
 	GetAdmChannelWithContext(aws.Context, *pinpoint.GetAdmChannelInput, ...request.Option) (*pinpoint.GetAdmChannelOutput, error)
 	GetAdmChannelRequest(*pinpoint.GetAdmChannelInput) (*request.Request, *pinpoint.GetAdmChannelOutput)
@@ -191,6 +195,10 @@ type PinpointAPI interface {
 	GetCampaigns(*pinpoint.GetCampaignsInput) (*pinpoint.GetCampaignsOutput, error)
 	GetCampaignsWithContext(aws.Context, *pinpoint.GetCampaignsInput, ...request.Option) (*pinpoint.GetCampaignsOutput, error)
 	GetCampaignsRequest(*pinpoint.GetCampaignsInput) (*request.Request, *pinpoint.GetCampaignsOutput)
+
+	GetChannels(*pinpoint.GetChannelsInput) (*pinpoint.GetChannelsOutput, error)
+	GetChannelsWithContext(aws.Context, *pinpoint.GetChannelsInput, ...request.Option) (*pinpoint.GetChannelsOutput, error)
+	GetChannelsRequest(*pinpoint.GetChannelsInput) (*request.Request, *pinpoint.GetChannelsOutput)
 
 	GetEmailChannel(*pinpoint.GetEmailChannelInput) (*pinpoint.GetEmailChannelOutput, error)
 	GetEmailChannelWithContext(aws.Context, *pinpoint.GetEmailChannelInput, ...request.Option) (*pinpoint.GetEmailChannelOutput, error)
@@ -252,9 +260,25 @@ type PinpointAPI interface {
 	GetSmsChannelWithContext(aws.Context, *pinpoint.GetSmsChannelInput, ...request.Option) (*pinpoint.GetSmsChannelOutput, error)
 	GetSmsChannelRequest(*pinpoint.GetSmsChannelInput) (*request.Request, *pinpoint.GetSmsChannelOutput)
 
+	GetUserEndpoints(*pinpoint.GetUserEndpointsInput) (*pinpoint.GetUserEndpointsOutput, error)
+	GetUserEndpointsWithContext(aws.Context, *pinpoint.GetUserEndpointsInput, ...request.Option) (*pinpoint.GetUserEndpointsOutput, error)
+	GetUserEndpointsRequest(*pinpoint.GetUserEndpointsInput) (*request.Request, *pinpoint.GetUserEndpointsOutput)
+
+	PhoneNumberValidate(*pinpoint.PhoneNumberValidateInput) (*pinpoint.PhoneNumberValidateOutput, error)
+	PhoneNumberValidateWithContext(aws.Context, *pinpoint.PhoneNumberValidateInput, ...request.Option) (*pinpoint.PhoneNumberValidateOutput, error)
+	PhoneNumberValidateRequest(*pinpoint.PhoneNumberValidateInput) (*request.Request, *pinpoint.PhoneNumberValidateOutput)
+
 	PutEventStream(*pinpoint.PutEventStreamInput) (*pinpoint.PutEventStreamOutput, error)
 	PutEventStreamWithContext(aws.Context, *pinpoint.PutEventStreamInput, ...request.Option) (*pinpoint.PutEventStreamOutput, error)
 	PutEventStreamRequest(*pinpoint.PutEventStreamInput) (*request.Request, *pinpoint.PutEventStreamOutput)
+
+	PutEvents(*pinpoint.PutEventsInput) (*pinpoint.PutEventsOutput, error)
+	PutEventsWithContext(aws.Context, *pinpoint.PutEventsInput, ...request.Option) (*pinpoint.PutEventsOutput, error)
+	PutEventsRequest(*pinpoint.PutEventsInput) (*request.Request, *pinpoint.PutEventsOutput)
+
+	RemoveAttributes(*pinpoint.RemoveAttributesInput) (*pinpoint.RemoveAttributesOutput, error)
+	RemoveAttributesWithContext(aws.Context, *pinpoint.RemoveAttributesInput, ...request.Option) (*pinpoint.RemoveAttributesOutput, error)
+	RemoveAttributesRequest(*pinpoint.RemoveAttributesInput) (*request.Request, *pinpoint.RemoveAttributesOutput)
 
 	SendMessages(*pinpoint.SendMessagesInput) (*pinpoint.SendMessagesOutput, error)
 	SendMessagesWithContext(aws.Context, *pinpoint.SendMessagesInput, ...request.Option) (*pinpoint.SendMessagesOutput, error)

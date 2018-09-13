@@ -37,6 +37,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/tools/go/buildutil"
 )
 
 var currentDirectory string
@@ -331,17 +332,17 @@ func main() {
 				}
 				s := gbuild.NewSession(options)
 
-				tests := &testFuncs{Package: pkg.Package}
+				tests := &testFuncs{BuildContext: s.BuildContext(), Package: pkg.Package}
 				collectTests := func(testPkg *gbuild.PackageData, testPkgName string, needVar *bool) error {
 					if testPkgName == "_test" {
 						for _, file := range pkg.TestGoFiles {
-							if err := tests.load(filepath.Join(pkg.Package.Dir, file), testPkgName, &tests.ImportTest, &tests.NeedTest); err != nil {
+							if err := tests.load(pkg.Package.Dir, file, testPkgName, &tests.ImportTest, &tests.NeedTest); err != nil {
 								return err
 							}
 						}
 					} else {
 						for _, file := range pkg.XTestGoFiles {
-							if err := tests.load(filepath.Join(pkg.Package.Dir, file), "_xtest", &tests.ImportXtest, &tests.NeedXtest); err != nil {
+							if err := tests.load(pkg.Package.Dir, file, "_xtest", &tests.ImportXtest, &tests.NeedXtest); err != nil {
 								return err
 							}
 						}
@@ -453,7 +454,7 @@ func main() {
 				}
 				status := "ok  "
 				start := time.Now()
-				if err := runNode(outfile.Name(), args, pkg.Dir, options.Quiet); err != nil {
+				if err := runNode(outfile.Name(), args, runTestDir(pkg), options.Quiet); err != nil {
 					if _, ok := err.(*exec.ExitError); !ok {
 						return err
 					}
@@ -740,6 +741,8 @@ func sprintError(err error) string {
 	}
 }
 
+// runNode runs script with args using Node.js in directory dir.
+// If dir is empty string, current directory is used.
 func runNode(script string, args []string, dir string, quiet bool) error {
 	var allArgs []string
 	if b, _ := strconv.ParseBool(os.Getenv("SOURCE_MAP_SUPPORT")); os.Getenv("SOURCE_MAP_SUPPORT") == "" || b {
@@ -790,16 +793,28 @@ func runNode(script string, args []string, dir string, quiet bool) error {
 	return err
 }
 
+// runTestDir returns the directory for Node.js to use when running tests for package p.
+// Empty string means current directory.
+func runTestDir(p *gbuild.PackageData) string {
+	if p.IsVirtual {
+		// The package is virtual and doesn't have a physical directory. Use current directory.
+		return ""
+	}
+	// Run tests in the package directory.
+	return p.Dir
+}
+
 type testFuncs struct {
-	Tests       []testFunc
-	Benchmarks  []testFunc
-	Examples    []testFunc
-	TestMain    *testFunc
-	Package     *build.Package
-	ImportTest  bool
-	NeedTest    bool
-	ImportXtest bool
-	NeedXtest   bool
+	BuildContext *build.Context
+	Tests        []testFunc
+	Benchmarks   []testFunc
+	Examples     []testFunc
+	TestMain     *testFunc
+	Package      *build.Package
+	ImportTest   bool
+	NeedTest     bool
+	ImportXtest  bool
+	NeedXtest    bool
 }
 
 type testFunc struct {
@@ -811,8 +826,8 @@ type testFunc struct {
 
 var testFileSet = token.NewFileSet()
 
-func (t *testFuncs) load(filename, pkg string, doImport, seen *bool) error {
-	f, err := parser.ParseFile(testFileSet, filename, nil, parser.ParseComments)
+func (t *testFuncs) load(dir, file, pkg string, doImport, seen *bool) error {
+	f, err := buildutil.ParseFile(testFileSet, t.BuildContext, nil, dir, file, parser.ParseComments)
 	if err != nil {
 		return err
 	}

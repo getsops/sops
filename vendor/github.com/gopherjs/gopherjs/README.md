@@ -10,7 +10,7 @@ GopherJS compiles Go code ([golang.org](https://golang.org/)) to pure JavaScript
 Give GopherJS a try on the [GopherJS Playground](http://gopherjs.github.io/playground/).
 
 ### What is supported?
-Nearly everything, including Goroutines ([compatibility table](https://github.com/gopherjs/gopherjs/blob/master/doc/packages.md)). Performance is quite good in most cases, see [HTML5 game engine benchmark](https://ajhager.github.io/engi/demos/botmark.html). Cgo is not supported. Using a vendored copy of GopherJS is currently not supported, see [#415](https://github.com/gopherjs/gopherjs/issues/415).
+Nearly everything, including Goroutines ([compatibility table](https://github.com/gopherjs/gopherjs/blob/master/doc/packages.md)). Performance is quite good in most cases, see [HTML5 game engine benchmark](https://ajhager.github.io/engi/demos/botmark.html). Cgo is not supported.
 
 ### Installation and Usage
 Get or update GopherJS and dependencies with:
@@ -27,7 +27,7 @@ Now you can use `gopherjs build [package]`, `gopherjs build [files]` or `gopherj
 
 #### gopherjs run, gopherjs test
 
-If you want to use `gopherjs run` or `gopherjs test` to run the generated code locally, install Node.js 4.x (or newer), and the `source-map-support` module:
+If you want to use `gopherjs run` or `gopherjs test` to run the generated code locally, install Node.js 10.0.0 (or newer), and the `source-map-support` module:
 
 ```
 npm install --global source-map-support

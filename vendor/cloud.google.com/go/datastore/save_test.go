@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -214,12 +214,12 @@ func TestSavePointers(t *testing.T) {
 			desc: "nil pointers save as nil-valued properties",
 			in:   &Pointers{},
 			want: []Property{
-				Property{Name: "Pi", Value: nil},
-				Property{Name: "Ps", Value: nil},
-				Property{Name: "Pb", Value: nil},
-				Property{Name: "Pf", Value: nil},
-				Property{Name: "Pg", Value: nil},
-				Property{Name: "Pt", Value: nil},
+				{Name: "Pi", Value: nil},
+				{Name: "Ps", Value: nil},
+				{Name: "Pb", Value: nil},
+				{Name: "Pf", Value: nil},
+				{Name: "Pg", Value: nil},
+				{Name: "Pt", Value: nil},
 			},
 		},
 		{
@@ -228,15 +228,20 @@ func TestSavePointers(t *testing.T) {
 			want: []Property(nil),
 		},
 		{
+			desc: "non-nil omitempty zero-valued pointers are saved",
+			in:   func() *PointersOmitEmpty { pi := 0; return &PointersOmitEmpty{Pi: &pi} }(),
+			want: []Property{{Name: "Pi", Value: int64(0)}},
+		},
+		{
 			desc: "non-nil zero-valued pointers save as zero values",
 			in:   populatedPointers(),
 			want: []Property{
-				Property{Name: "Pi", Value: int64(0)},
-				Property{Name: "Ps", Value: ""},
-				Property{Name: "Pb", Value: false},
-				Property{Name: "Pf", Value: 0.0},
-				Property{Name: "Pg", Value: GeoPoint{}},
-				Property{Name: "Pt", Value: time.Time{}},
+				{Name: "Pi", Value: int64(0)},
+				{Name: "Ps", Value: ""},
+				{Name: "Pb", Value: false},
+				{Name: "Pf", Value: 0.0},
+				{Name: "Pg", Value: GeoPoint{}},
+				{Name: "Pt", Value: time.Time{}},
 			},
 		},
 		{
@@ -252,12 +257,12 @@ func TestSavePointers(t *testing.T) {
 				return p
 			}(),
 			want: []Property{
-				Property{Name: "Pi", Value: int64(1)},
-				Property{Name: "Ps", Value: "x"},
-				Property{Name: "Pb", Value: true},
-				Property{Name: "Pf", Value: 3.14},
-				Property{Name: "Pg", Value: GeoPoint{Lat: 1, Lng: 2}},
-				Property{Name: "Pt", Value: time.Unix(100, 0)},
+				{Name: "Pi", Value: int64(1)},
+				{Name: "Ps", Value: "x"},
+				{Name: "Pb", Value: true},
+				{Name: "Pf", Value: 3.14},
+				{Name: "Pg", Value: GeoPoint{Lat: 1, Lng: 2}},
+				{Name: "Pt", Value: time.Unix(100, 0)},
 			},
 		},
 	} {

@@ -103,6 +103,10 @@ type EFSAPI interface {
 	ModifyMountTargetSecurityGroups(*efs.ModifyMountTargetSecurityGroupsInput) (*efs.ModifyMountTargetSecurityGroupsOutput, error)
 	ModifyMountTargetSecurityGroupsWithContext(aws.Context, *efs.ModifyMountTargetSecurityGroupsInput, ...request.Option) (*efs.ModifyMountTargetSecurityGroupsOutput, error)
 	ModifyMountTargetSecurityGroupsRequest(*efs.ModifyMountTargetSecurityGroupsInput) (*request.Request, *efs.ModifyMountTargetSecurityGroupsOutput)
+
+	UpdateFileSystem(*efs.UpdateFileSystemInput) (*efs.UpdateFileSystemOutput, error)
+	UpdateFileSystemWithContext(aws.Context, *efs.UpdateFileSystemInput, ...request.Option) (*efs.UpdateFileSystemOutput, error)
+	UpdateFileSystemRequest(*efs.UpdateFileSystemInput) (*request.Request, *efs.UpdateFileSystemOutput)
 }
 
 var _ EFSAPI = (*efs.EFS)(nil)

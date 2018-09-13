@@ -616,6 +616,7 @@ type ReportRequest struct {
 	// columns, only the columnName parameter is required. For saved columns
 	// only the savedColumnName parameter is required. Both columnName and
 	// savedColumnName cannot be set in the same stanza.
+	// The maximum number of columns per request is 300.
 	Columns []*ReportApiColumnSpec `json:"columns,omitempty"`
 
 	// DownloadFormat: Format that the report should be returned in.
@@ -623,6 +624,7 @@ type ReportRequest struct {
 	DownloadFormat string `json:"downloadFormat,omitempty"`
 
 	// Filters: A list of filters to be applied to the report.
+	// The maximum number of filters per request is 300.
 	Filters []*ReportRequestFilters `json:"filters,omitempty"`
 
 	// IncludeDeletedEntities: Determines if removed entities should be
@@ -641,6 +643,7 @@ type ReportRequest struct {
 
 	// OrderBy: Synchronous report only. A list of columns and directions
 	// defining sorting to be performed on the report rows.
+	// The maximum number of orderings per request is 300.
 	OrderBy []*ReportRequestOrderBy `json:"orderBy,omitempty"`
 
 	// ReportScope: The reportScope is a set of IDs that are used to
@@ -716,6 +719,7 @@ type ReportRequestFilters struct {
 	Operator string `json:"operator,omitempty"`
 
 	// Values: A list of values to filter the column value against.
+	// The maximum number of filter values per request is 300.
 	Values []interface{} `json:"values,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Column") to
@@ -1104,6 +1108,7 @@ func (c *ConversionGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "agency/{agencyId}/advertiser/{advertiserId}/engine/{engineAccountId}/conversion")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1313,6 +1318,7 @@ func (c *ConversionInsertCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "conversion")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1438,6 +1444,7 @@ func (c *ConversionPatchCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "conversion")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -1621,6 +1628,7 @@ func (c *ConversionUpdateCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "conversion")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
@@ -1739,6 +1747,7 @@ func (c *ConversionUpdateAvailabilityCall) doRequest(alt string) (*http.Response
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "conversion/updateAvailability")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1857,6 +1866,7 @@ func (c *ReportsGenerateCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "reports/generate")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1984,6 +1994,7 @@ func (c *ReportsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "reports/{reportId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2123,6 +2134,7 @@ func (c *ReportsGetFileCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "reports/{reportId}/files/{reportFragment}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2251,6 +2263,7 @@ func (c *ReportsRequestCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "reports")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2380,6 +2393,7 @@ func (c *SavedColumnsListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "agency/{agencyId}/advertiser/{advertiserId}/savedcolumns")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)

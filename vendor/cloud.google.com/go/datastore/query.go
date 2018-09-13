@@ -1,4 +1,4 @@
-// Copyright 2014 Google Inc. All Rights Reserved.
+// Copyright 2014 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -443,7 +443,7 @@ func (q *Query) toProto(req *pb.RunQueryRequest) error {
 // Count returns the number of results for the given query.
 //
 // The running time and number of API calls made by Count scale linearly with
-// with the sum of the query's offset and limit. Unless the result count is
+// the sum of the query's offset and limit. Unless the result count is
 // expected to be small, it is best to specify a limit; otherwise Count will
 // continue until it finishes counting or the provided context expires.
 func (c *Client) Count(ctx context.Context, q *Query) (n int, err error) {

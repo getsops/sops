@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -73,9 +73,9 @@ func TestNotificationsToMap(t *testing.T) {
 	}
 	got = notificationsToMap(in)
 	want = map[string]*Notification{
-		"a": &Notification{ID: "a", TopicProjectID: "P1", TopicID: "T1"},
-		"b": &Notification{ID: "b", TopicProjectID: "P2", TopicID: "T2"},
-		"c": &Notification{ID: "c", TopicProjectID: "P3", TopicID: "T3"},
+		"a": {ID: "a", TopicProjectID: "P1", TopicID: "T1"},
+		"b": {ID: "b", TopicProjectID: "P2", TopicID: "T2"},
+		"c": {ID: "c", TopicProjectID: "P3", TopicID: "T3"},
 	}
 	if diff := testutil.Diff(got, want); diff != "" {
 		t.Errorf("got=-, want=+:\n%s", diff)

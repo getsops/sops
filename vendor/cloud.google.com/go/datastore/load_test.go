@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -310,7 +310,7 @@ func TestLoadEntityNested(t *testing.T) {
 			},
 
 			want: &NestedSliceOfSimple{
-				A: []Simple{Simple{I: 3}, Simple{I: 4}},
+				A: []Simple{{I: 3}, {I: 4}},
 			},
 		},
 		{
@@ -626,6 +626,11 @@ func (p *NotKeyLoader) Save() (props []Property, err error) {
 	return []Property{{Name: "A", Value: p.A}}, nil
 }
 
+type NotPLSKeyLoader struct {
+	A string
+	K *Key `datastore:"__key__"`
+}
+
 type NestedKeyLoaders struct {
 	Two   *KeyLoader2
 	Three []*KeyLoader3
@@ -650,6 +655,21 @@ func TestKeyLoader(t *testing.T) {
 			},
 			dst: &KeyLoader1{},
 			want: &KeyLoader1{
+				A: "hello",
+				K: testKey0,
+			},
+		},
+		{
+			desc: "simple key loader with unmatched properties",
+			src: &pb.Entity{
+				Key: keyToProto(testKey0),
+				Properties: map[string]*pb.Value{
+					"A": {ValueType: &pb.Value_StringValue{StringValue: "hello"}},
+					"B": {ValueType: &pb.Value_StringValue{StringValue: "unmatched"}},
+				},
+			},
+			dst: &NotPLSKeyLoader{},
+			want: &NotPLSKeyLoader{
 				A: "hello",
 				K: testKey0,
 			},
@@ -747,8 +767,12 @@ func TestKeyLoader(t *testing.T) {
 	for _, tc := range testCases {
 		err := loadEntityProto(tc.dst, tc.src)
 		if err != nil {
-			t.Errorf("loadEntityProto: %s: %v", tc.desc, err)
-			continue
+			// While loadEntityProto may return an error, if that error is
+			// ErrFieldMismatch, then there is still data in tc.dst to compare.
+			if _, ok := err.(*ErrFieldMismatch); !ok {
+				t.Errorf("loadEntityProto: %s: %v", tc.desc, err)
+				continue
+			}
 		}
 
 		if !testutil.Equal(tc.want, tc.dst) {
@@ -766,12 +790,12 @@ func TestLoadPointers(t *testing.T) {
 		{
 			desc: "nil properties load as nil pointers",
 			in: []Property{
-				Property{Name: "Pi", Value: nil},
-				Property{Name: "Ps", Value: nil},
-				Property{Name: "Pb", Value: nil},
-				Property{Name: "Pf", Value: nil},
-				Property{Name: "Pg", Value: nil},
-				Property{Name: "Pt", Value: nil},
+				{Name: "Pi", Value: nil},
+				{Name: "Ps", Value: nil},
+				{Name: "Pb", Value: nil},
+				{Name: "Pf", Value: nil},
+				{Name: "Pg", Value: nil},
+				{Name: "Pt", Value: nil},
 			},
 			want: Pointers{},
 		},
@@ -783,12 +807,12 @@ func TestLoadPointers(t *testing.T) {
 		{
 			desc: "non-nil properties load as the appropriate values",
 			in: []Property{
-				Property{Name: "Pi", Value: int64(1)},
-				Property{Name: "Ps", Value: "x"},
-				Property{Name: "Pb", Value: true},
-				Property{Name: "Pf", Value: 3.14},
-				Property{Name: "Pg", Value: GeoPoint{Lat: 1, Lng: 2}},
-				Property{Name: "Pt", Value: time.Unix(100, 0)},
+				{Name: "Pi", Value: int64(1)},
+				{Name: "Ps", Value: "x"},
+				{Name: "Pb", Value: true},
+				{Name: "Pf", Value: 3.14},
+				{Name: "Pg", Value: GeoPoint{Lat: 1, Lng: 2}},
+				{Name: "Pt", Value: time.Unix(100, 0)},
 			},
 			want: func() Pointers {
 				p := populatedPointers()
