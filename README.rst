@@ -1217,7 +1217,7 @@ Threat Model
 
 The security of the data stored using sops is as strong as the weakest
 cryptographic mechanism. Values are encrypted using AES256_GCM which is the
-strongest symetric encryption algorithm known today. Data keys are encrypted
+strongest symmetric encryption algorithm known today. Data keys are encrypted
 in either KMS, which also uses AES256_GCM, or PGP which uses either RSA or
 ECDSA keys.
 
