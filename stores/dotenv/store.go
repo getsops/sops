@@ -17,14 +17,14 @@ type Store struct {
 }
 
 func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
-	branch, err := store.LoadPlainFile(in)
+	branches, err := store.LoadPlainFile(in)
 	if err != nil {
 		return sops.Tree{}, err
 	}
 
 	var resultBranch sops.TreeBranch
 	mdMap := make(map[string]interface{})
-	for _, item := range branch {
+	for _, item := range branches[0] {
 		s := item.Key.(string)
 		if strings.HasPrefix(s, SopsPrefix) {
 			s = s[len(SopsPrefix):]
@@ -44,12 +44,15 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	}
 
 	return sops.Tree{
-		Branch:   resultBranch,
+		Branches: sops.TreeBranches{
+			resultBranch,
+		},
 		Metadata: internalMetadata,
 	}, nil
 }
 
-func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranch, error) {
+func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
+	var branches sops.TreeBranches
 	var branch sops.TreeBranch
 
 	for _, line := range bytes.Split(in, []byte("\n")) {
@@ -65,7 +68,9 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranch, error) {
 			Value: string(line[pos+1:]),
 		})
 	}
-	return branch, nil
+
+	branches = append(branches, branch)
+	return branches, nil
 }
 
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
@@ -78,14 +83,14 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 		if value == nil {
 			continue
 		}
-		in.Branch = append(in.Branch, sops.TreeItem{Key: SopsPrefix + key, Value: value})
+		in.Branches[0] = append(in.Branches[0], sops.TreeItem{Key: SopsPrefix + key, Value: value})
 	}
-	return store.EmitPlainFile(in.Branch)
+	return store.EmitPlainFile(in.Branches)
 }
 
-func (store *Store) EmitPlainFile(in sops.TreeBranch) ([]byte, error) {
+func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 	buffer := bytes.Buffer{}
-	for _, item := range in {
+	for _, item := range in[0] {
 		if isComplexValue(item.Value) {
 			return nil, fmt.Errorf("cannot use complex value in dotenv file: %s", item.Value)
 		}

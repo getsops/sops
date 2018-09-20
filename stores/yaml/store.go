@@ -102,6 +102,10 @@ func (store Store) treeBranchToYamlMap(in sops.TreeBranch) yaml.MapSlice {
 }
 
 func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
+	var data []yaml.MapSlice
+	if err := (yaml.CommentUnmarshaler{}).UnmarshalDocuments(in, &data); err != nil {
+		return sops.Tree{}, fmt.Errorf("Error unmarshaling input YAML: %s", err)
+	}
 	// Because we don't know what fields the input file will have, we have to
 	// load the file in two steps.
 	// First, we load the file's metadata, the structure of which is known.
@@ -117,46 +121,63 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	if err != nil {
 		return sops.Tree{}, err
 	}
-	// After that, we load the whole file into a map.
-	var data yaml.MapSlice
-	if err := (yaml.CommentUnmarshaler{}).Unmarshal(in, &data); err != nil {
-		return sops.Tree{}, fmt.Errorf("Error unmarshaling input YAML: %s", err)
-	}
-	// Discard metadata, as we already loaded it.
-	for i, item := range data {
-		if item.Key == "sops" {
-			data = append(data[:i], data[i+1:]...)
+	var branches sops.TreeBranches
+	for _, doc := range data {
+		for i, item := range doc {
+			if item.Key == "sops" { // Erase
+				doc = append(doc[:i], doc[i+1:]...)
+			}
 		}
+		branches = append(branches, store.mapSliceToTreeBranch(doc))
 	}
 	return sops.Tree{
-		Branch:   store.mapSliceToTreeBranch(data),
+		Branches: branches,
 		Metadata: metadata,
 	}, nil
 }
 
-func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranch, error) {
-	var data yaml.MapSlice
-	if err := (yaml.CommentUnmarshaler{}).Unmarshal(in, &data); err != nil {
+func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
+	var data []yaml.MapSlice
+	if err := (yaml.CommentUnmarshaler{}).UnmarshalDocuments(in, &data); err != nil {
 		return nil, fmt.Errorf("Error unmarshaling input YAML: %s", err)
 	}
-	return store.mapSliceToTreeBranch(data), nil
+
+	var branches sops.TreeBranches
+	for _, doc := range data {
+		branches = append(branches, store.mapSliceToTreeBranch(doc))
+	}
+	return branches, nil
 }
 
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
-	yamlMap := store.treeBranchToYamlMap(in.Branch)
-	yamlMap = append(yamlMap, yaml.MapItem{Key: "sops", Value: stores.MetadataFromInternal(in.Metadata)})
-	out, err := (&yaml.YAMLMarshaler{Indent: 4}).Marshal(yamlMap)
-	if err != nil {
-		return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
+	out := []byte{}
+	for i, branch := range in.Branches {
+		if i > 0 {
+			out = append(out, "---\n"...)
+		}
+		yamlMap := store.treeBranchToYamlMap(branch)
+		yamlMap = append(yamlMap, yaml.MapItem{Key: "sops", Value: stores.MetadataFromInternal(in.Metadata)})
+		tout, err := (&yaml.YAMLMarshaler{Indent: 4}).Marshal(yamlMap)
+		if err != nil {
+			return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
+		}
+		out = append(out, tout...)
 	}
 	return out, nil
 }
 
-func (store *Store) EmitPlainFile(in sops.TreeBranch) ([]byte, error) {
-	yamlMap := store.treeBranchToYamlMap(in)
-	out, err := (&yaml.YAMLMarshaler{Indent: 4}).Marshal(yamlMap)
-	if err != nil {
-		return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
+func (store *Store) EmitPlainFile(branches sops.TreeBranches) ([]byte, error) {
+	var out []byte
+	for i, branch := range branches {
+		if i > 0 {
+			out = append(out, "---\n"...)
+		}
+		yamlMap := store.treeBranchToYamlMap(branch)
+		tmpout, err := (&yaml.YAMLMarshaler{Indent: 4}).Marshal(yamlMap)
+		if err != nil {
+			return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
+		}
+		out = append(out[:], tmpout[:]...)
 	}
 	return out, nil
 }

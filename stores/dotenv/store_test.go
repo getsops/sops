@@ -30,12 +30,15 @@ var BRANCH = sops.TreeBranch{
 }
 
 func TestLoadPlainFile(t *testing.T) {
-	branch, err := (&Store{}).LoadPlainFile(PLAIN)
+	branches, err := (&Store{}).LoadPlainFile(PLAIN)
 	assert.Nil(t, err)
-	assert.Equal(t, BRANCH, branch)
+	assert.Equal(t, BRANCH, branches[0])
 }
 func TestEmitPlainFile(t *testing.T) {
-	bytes, err := (&Store{}).EmitPlainFile(BRANCH)
+	branches := sops.TreeBranches{
+		BRANCH,
+	}
+	bytes, err := (&Store{}).EmitPlainFile(branches)
 	assert.Nil(t, err)
 	assert.Equal(t, PLAIN, bytes)
 }

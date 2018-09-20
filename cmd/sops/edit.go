@@ -43,29 +43,33 @@ type editExampleOpts struct {
 	GroupThreshold    int
 }
 
-var exampleTree = sops.TreeBranch{
-	sops.TreeItem{
-		Key:   "hello",
-		Value: `Welcome to SOPS! Edit this file as you please!`,
-	},
-	sops.TreeItem{
-		Key:   "example_key",
-		Value: "example_value",
-	},
-	sops.TreeItem{
-		Key: "example_array",
-		Value: []interface{}{
-			"example_value1",
-			"example_value2",
+var exampleTree = sops.Tree{
+	Branches: sops.TreeBranches{
+		sops.TreeBranch{
+			sops.TreeItem{
+				Key:   "hello",
+				Value: `Welcome to SOPS! Edit this file as you please!`,
+			},
+			sops.TreeItem{
+				Key:   "example_key",
+				Value: "example_value",
+			},
+			sops.TreeItem{
+				Key: "example_array",
+				Value: []interface{}{
+					"example_value1",
+					"example_value2",
+				},
+			},
+			sops.TreeItem{
+				Key:   "example_number",
+				Value: 1234.56789,
+			},
+			sops.TreeItem{
+				Key:   "example_booleans",
+				Value: []interface{}{true, false},
+			},
 		},
-	},
-	sops.TreeItem{
-		Key:   "example_number",
-		Value: 1234.56789,
-	},
-	sops.TreeItem{
-		Key:   "example_booleans",
-		Value: []interface{}{true, false},
 	},
 }
 
@@ -81,16 +85,16 @@ func editExample(opts editExampleOpts) ([]byte, error) {
 	// Load the example file
 	var fileBytes []byte
 	if _, ok := opts.InputStore.(*json.BinaryStore); ok {
-		// Get the value under the first key
-		fileBytes = []byte(exampleTree[0].Value.(string))
+		// Get the value under the first key of the first (possibly only) doc
+		fileBytes = []byte(exampleTree.Branches[0][0].Value.(string))
 	} else {
 		var err error
-		fileBytes, err = opts.InputStore.EmitPlainFile(exampleTree)
+		fileBytes, err = opts.InputStore.EmitPlainFile(exampleTree.Branches)
 		if err != nil {
 			return nil, err
 		}
 	}
-	branch, err := opts.InputStore.LoadPlainFile(fileBytes)
+	branches, err := opts.InputStore.LoadPlainFile(fileBytes)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
 	}
@@ -99,7 +103,7 @@ func editExample(opts editExampleOpts) ([]byte, error) {
 		return nil, err
 	}
 	tree := sops.Tree{
-		Branch: branch,
+		Branches: branches,
 		Metadata: sops.Metadata{
 			KeyGroups:         opts.KeyGroups,
 			UnencryptedSuffix: opts.UnencryptedSuffix,
@@ -153,7 +157,7 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	if opts.ShowMasterKeys {
 		out, err = opts.OutputStore.EmitEncryptedFile(*tree)
 	} else {
-		out, err = opts.OutputStore.EmitPlainFile(tree.Branch)
+		out, err = opts.OutputStore.EmitPlainFile(tree.Branches)
 	}
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
@@ -210,7 +214,7 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 		if err != nil {
 			return common.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), codes.CouldNotReadInputFile)
 		}
-		newBranch, err := opts.InputStore.LoadPlainFile(edited)
+		newBranches, err := opts.InputStore.LoadPlainFile(edited)
 		if err != nil {
 			log.WithField(
 				"error",
@@ -234,11 +238,11 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 				bufio.NewReader(os.Stdin).ReadByte()
 				continue
 			}
-			// Replace the whole tree, because otherwise newBranch would
+			// Replace the whole tree, because otherwise newBranches would
 			// contain the SOPS metadata
 			opts.Tree = &t
 		}
-		opts.Tree.Branch = newBranch
+		opts.Tree.Branches = newBranches
 		needVersionUpdated, err := AIsNewerThanB(version, opts.Tree.Metadata.Version)
 		if err != nil {
 			return common.NewExitError(fmt.Sprintf("Failed to compare document version %q with program version %q: %v", opts.Tree.Metadata.Version, version, err), codes.FailedToCompareVersions)

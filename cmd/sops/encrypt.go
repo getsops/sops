@@ -58,11 +58,11 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
 	}
-	branch, err := opts.InputStore.LoadPlainFile(fileBytes)
+	branches, err := opts.InputStore.LoadPlainFile(fileBytes)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
 	}
-	if err := ensureNoMetadata(opts, branch); err != nil {
+	if err := ensureNoMetadata(opts, branches[0]); err != nil {
 		return nil, common.NewExitError(err, codes.FileAlreadyEncrypted)
 	}
 	path, err := filepath.Abs(opts.InputPath)
@@ -70,7 +70,7 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 		return nil, err
 	}
 	tree := sops.Tree{
-		Branch: branch,
+		Branches: branches,
 		Metadata: sops.Metadata{
 			KeyGroups:         opts.KeyGroups,
 			UnencryptedSuffix: opts.UnencryptedSuffix,
