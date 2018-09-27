@@ -1,6 +1,11 @@
 Changelog
 =========
 
+3.1.1
+-----
+
+* Fix incorrect version number from previous release
+
 3.1.0
 -----
 
