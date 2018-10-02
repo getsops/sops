@@ -88,15 +88,14 @@ Note: you can use both PGP and KMS simultaneously.
 Then simply call ``sops`` with a file path as argument. It will handle the
 encryption/decryption transparently and open the cleartext file in an editor
 
-.. code:: bash
+.. code:: shell
 
 	$ sops mynewtestfile.yaml
 	mynewtestfile.yaml doesn't exist, creating it.
 	please wait while an encryption key is being generated and stored in a secure fashion
 	file written to mynewtestfile.yaml
 
-.
-Editing will happen in whatever $EDITOR is set to, or, if it's not set, in vim.
+Editing will happen in whatever ``$EDITOR`` is set to, or, if it's not set, in vim.
 Keep in mind that sops will wait for the editor to exit, and then try to reencrypt
 the file. Some GUI editors (atom, sublime) spawn a child process and then exit
 immediately. They usually have an option to wait for the main editor window to be
@@ -998,7 +997,7 @@ This is very handy for reviewing changes or visualizing history.
 To configure sops to decrypt files during diff, create a ``.gitattributes`` file
 at the root of your repository that contains a filter and a command.
 
-... code::
+.. code:: 
 
 	*.yaml diff=sopsdiffer
 
@@ -1088,7 +1087,7 @@ For PGP:
                 =oJgS
                 -----END PGP MESSAGE-----
 
-sops then opens a text editor on the newly created file. The user adds data to the
+``sops`` then opens a text editor on the newly created file. The user adds data to the
 file and saves it when done.
 
 Upon save, sops browses the entire file as a key/value tree. Every time sops
