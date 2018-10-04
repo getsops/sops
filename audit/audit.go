@@ -48,10 +48,7 @@ func init() {
 	if len(auditErrors) > 0 {
 		log.Errorf("connecting to audit database, defined in %s", configFile)
 		for i, err := range auditErrors {
-			if i == len(auditErrors)-1 {
-				log.Fatal(err)
-			}
-			log.Error(err)
+			log.Fatal(err)
 		}
 	}
 }
