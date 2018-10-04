@@ -6,6 +6,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os/user"
+	"regexp"
+
+	"github.com/pkg/errors"
 
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
@@ -34,8 +37,24 @@ func init() {
 	if flag.Lookup("test.v") != nil {
 		return
 	}
+	var auditErrors []error
+	re := regexp.MustCompile("postgres://(.*?):(.*?)@(.*)/(.*)")
+
 	for _, pgConf := range conf.Backends.Postgres {
-		auditors = append(auditors, NewPostgresAuditor(pgConf.ConnStr))
+		auditDb, err := NewPostgresAuditor(pgConf.ConnStr)
+		if err != nil {
+			auditErrors = append(auditErrors, errors.Wrap(err, fmt.Sprintf("connectStr: %s, err", re.ReplaceAllString(pgConf.ConnStr, "postgres://${1}:******@${3}/${4}"))))
+		}
+		auditors = append(auditors, auditDb)
+	}
+	if len(auditErrors) > 0 {
+		log.Errorf("connecting to audit database, defined in %s", configFile)
+		for i, err := range auditErrors {
+			if i == len(auditErrors)-1 {
+				log.Fatal(err)
+			}
+			log.Error(err)
+		}
 	}
 }
 
@@ -82,21 +101,20 @@ type PostgresAuditor struct {
 	DB *sql.DB
 }
 
-func NewPostgresAuditor(connStr string) *PostgresAuditor {
+func NewPostgresAuditor(connStr string) (*PostgresAuditor, error) {
 	db, err := sql.Open("postgres", connStr)
+	pg := &PostgresAuditor{DB: db}
 	if err != nil {
-		log.Fatal(err)
+		return pg, err
 	}
 	var result int
-	err = db.QueryRow("SELECT 1").Scan(&result)
+	err = pg.DB.QueryRow("SELECT 1").Scan(&result)
 	if err != nil {
-		log.Fatalf("Pinging audit database failed: %s", err)
+		return pg, fmt.Errorf("Pinging audit database failed: %s", err)
 	} else if result != 1 {
-		log.Fatalf("Database malfunction: SELECT 1 should return 1, but returned %d", result)
+		return pg, fmt.Errorf("Database malfunction: SELECT 1 should return 1, but returned %d", result)
 	}
-	return &PostgresAuditor{
-		DB: db,
-	}
+	return pg, nil
 }
 
 func (p *PostgresAuditor) Handle(event interface{}) {
