@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os/user"
-	"regexp"
 
 	"github.com/pkg/errors"
 
@@ -38,12 +37,11 @@ func init() {
 		return
 	}
 	var auditErrors []error
-	re := regexp.MustCompile("postgres://(.*?):(.*?)@(.*)/(.*)")
 
 	for _, pgConf := range conf.Backends.Postgres {
 		auditDb, err := NewPostgresAuditor(pgConf.ConnStr)
 		if err != nil {
-			auditErrors = append(auditErrors, errors.Wrap(err, fmt.Sprintf("connectStr: %s, err", re.ReplaceAllString(pgConf.ConnStr, "postgres://${1}:******@${3}/${4}"))))
+			auditErrors = append(auditErrors, errors.Wrap(err, fmt.Sprintf("connectStr: %s, err", pgConf.ConnStr)))
 		}
 		auditors = append(auditors, auditDb)
 	}
