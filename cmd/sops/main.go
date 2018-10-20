@@ -429,6 +429,7 @@ func main() {
 
 		unencryptedSuffix := c.String("unencrypted-suffix")
 		encryptedSuffix := c.String("encrypted-suffix")
+		encryptedSelector := c.String("encrypted-selector")
 		conf, err := loadConfig(c, fileName, nil)
 		if err != nil {
 			return toExitError(err)
@@ -440,6 +441,9 @@ func main() {
 			}
 			if encryptedSuffix == "" {
 				encryptedSuffix = conf.EncryptedSuffix
+			}
+			if encryptedSelector == "" {
+				encryptedSelector = conf.EncryptedSelector
 			}
 		}
 		if unencryptedSuffix != "" && encryptedSuffix != "" {
@@ -473,6 +477,7 @@ func main() {
 				Cipher:            aes.NewCipher(),
 				UnencryptedSuffix: unencryptedSuffix,
 				EncryptedSuffix:   encryptedSuffix,
+				EncryptedSelector:   encryptedSelector,
 				KeyServices:       svcs,
 				KeyGroups:         groups,
 				GroupThreshold:    threshold,
@@ -594,6 +599,7 @@ func main() {
 					editOpts:          opts,
 					UnencryptedSuffix: unencryptedSuffix,
 					EncryptedSuffix:   encryptedSuffix,
+					EncryptedSelector: encryptedSelector,
 					KeyGroups:         groups,
 					GroupThreshold:    threshold,
 				})

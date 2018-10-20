@@ -39,6 +39,7 @@ type editExampleOpts struct {
 	editOpts
 	UnencryptedSuffix string
 	EncryptedSuffix   string
+	EncryptedSelector string
 	KeyGroups         []sops.KeyGroup
 	GroupThreshold    int
 }
@@ -104,6 +105,7 @@ func editExample(opts editExampleOpts) ([]byte, error) {
 			KeyGroups:         opts.KeyGroups,
 			UnencryptedSuffix: opts.UnencryptedSuffix,
 			EncryptedSuffix:   opts.EncryptedSuffix,
+			EncryptedSelector: opts.EncryptedSelector,
 			Version:           version,
 			ShamirThreshold:   opts.GroupThreshold,
 		},

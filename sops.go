@@ -318,6 +318,14 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 				}
 			}
 		}
+		if tree.Metadata.EncryptedSelector != "" {
+			encrypted = false
+			pathString := strings.Join(path, ".")
+
+			if strings.HasPrefix(pathString, tree.Metadata.EncryptedSelector) {
+				encrypted = true
+			}
+		}
 		if encrypted {
 			var err error
 			pathString := strings.Join(path, ":") + ":"
@@ -359,6 +367,14 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 					encrypted = true
 					break
 				}
+			}
+		}
+		if tree.Metadata.EncryptedSelector != "" {
+			encrypted = false
+			pathString := strings.Join(path, ".")
+
+			if strings.HasPrefix(pathString, tree.Metadata.EncryptedSelector) {
+				encrypted = true
 			}
 		}
 		var v interface{}
@@ -426,6 +442,7 @@ type Metadata struct {
 	LastModified              time.Time
 	UnencryptedSuffix         string
 	EncryptedSuffix           string
+	EncryptedSelector         string
 	MessageAuthenticationCode string
 	Version                   string
 	KeyGroups                 []KeyGroup

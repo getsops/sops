@@ -97,6 +97,7 @@ type creationRule struct {
 	ShamirThreshold   int        `yaml:"shamir_threshold"`
 	UnencryptedSuffix string     `yaml:"unencrypted_suffix"`
 	EncryptedSuffix   string     `yaml:"encrypted_suffix"`
+	EncryptedSelector string     `yaml:"encrypted_selector"`
 }
 
 // Load loads a sops config file into a temporary struct
@@ -114,6 +115,7 @@ type Config struct {
 	ShamirThreshold   int
 	UnencryptedSuffix string
 	EncryptedSuffix   string
+	EncryptedSelector   string
 }
 
 func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
@@ -195,6 +197,7 @@ func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContex
 		ShamirThreshold:   rule.ShamirThreshold,
 		UnencryptedSuffix: rule.UnencryptedSuffix,
 		EncryptedSuffix:   rule.EncryptedSuffix,
+		EncryptedSelector:   rule.EncryptedSelector,
 	}, nil
 }
 
