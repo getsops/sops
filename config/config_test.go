@@ -100,6 +100,7 @@ creation_rules:
     unencrypted_suffix: _unencrypted
   - path_regex: bar?foo$
     encrypted_suffix: _enc
+    encrypted_selector: data.foo
     key_groups:
       - kms:
           - arn: baz
@@ -232,6 +233,12 @@ func TestLoadConfigFileWithEncryptedSuffix(t *testing.T) {
 	conf, err := loadForFileFromBytes(sampleConfigWithSuffixParameters, "barfoo", nil)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, "_enc", conf.EncryptedSuffix)
+}
+
+func TestLoadConfigFileWithEncryptedSelector(t *testing.T) {
+	conf, err := loadForFileFromBytes(sampleConfigWithSuffixParameters, "barfoo", nil)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, "data.foo", conf.EncryptedSelector)
 }
 
 func TestLoadConfigFileWithInvalidParameters(t *testing.T) {
