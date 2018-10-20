@@ -320,9 +320,8 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 		}
 		if tree.Metadata.EncryptedSelector != "" {
 			encrypted = false
-			pathString := strings.Join(path, ".")
-
-			if strings.HasPrefix(pathString, tree.Metadata.EncryptedSelector) {
+			pathString := strings.Join(path, ".") + "."
+			if strings.HasPrefix(pathString, tree.Metadata.EncryptedSelector + ".") {
 				encrypted = true
 			}
 		}
@@ -371,9 +370,8 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 		}
 		if tree.Metadata.EncryptedSelector != "" {
 			encrypted = false
-			pathString := strings.Join(path, ".")
-
-			if strings.HasPrefix(pathString, tree.Metadata.EncryptedSelector) {
+			pathString := strings.Join(path, ".") + "."
+			if strings.HasPrefix(pathString, tree.Metadata.EncryptedSelector + ".") {
 				encrypted = true
 			}
 		}

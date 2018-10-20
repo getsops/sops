@@ -147,6 +147,10 @@ func TestEncryptedSelector(t *testing.T) {
 					Key:   "foo",
 					Value: "bar",
 				},
+				TreeItem{
+					Key:   "foo2",
+					Value: "bar",
+				},
 			},
 		},
 	}
@@ -162,6 +166,10 @@ func TestEncryptedSelector(t *testing.T) {
 				TreeItem{
 					Key:   "foo",
 					Value: "rab",
+				},
+				TreeItem{
+					Key:   "foo2",
+					Value: "bar",
 				},
 			},
 		},
