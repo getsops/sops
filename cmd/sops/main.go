@@ -1,24 +1,18 @@
 package main //import "go.mozilla.org/sops/cmd/sops"
 
 import (
+	encodingjson "encoding/json"
+	"fmt"
 	"net"
 	"net/url"
-
-	"google.golang.org/grpc"
-
-	"go.mozilla.org/sops"
-
-	"fmt"
 	"os"
+	"reflect"
+	"strconv"
 	"strings"
 	"time"
 
-	encodingjson "encoding/json"
-	"reflect"
-
-	"strconv"
-
 	"github.com/sirupsen/logrus"
+	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/aes"
 	_ "go.mozilla.org/sops/audit"
 	"go.mozilla.org/sops/azkv"
@@ -36,6 +30,7 @@ import (
 	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/stores/json"
 	yamlstores "go.mozilla.org/sops/stores/yaml"
+	"google.golang.org/grpc"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -407,6 +402,10 @@ func main() {
 			Name:  "verbose",
 			Usage: "Enable verbose logging output",
 		},
+		cli.StringFlag{
+			Name:  "output",
+			Usage: "Save the output after encryption or decryption to the file specified",
+		},
 	}, keyserviceFlags...)
 
 	app.Action = func(c *cli.Context) error {
@@ -419,7 +418,7 @@ func main() {
 		fileName := c.Args()[0]
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
 			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-azure-kv") != "" ||
-				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-azure-kv") != "" {
+				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-azure-kv") != "" || c.String("output") != "" {
 				return common.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") {
@@ -618,6 +617,19 @@ func main() {
 			}
 			log.Info("File written successfully")
 			return nil
+		}
+
+		if c.String("output") != "" {
+			file, err := os.Create(c.String("output"))
+			if err != nil {
+				return common.NewExitError(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
+			}
+			defer file.Close()
+			_, err = file.Write(output)
+			if err != nil {
+				return toExitError(err)
+			}
+			log.Info("Output File written successfully")
 		}
 		_, err = os.Stdout.Write(output)
 		return toExitError(err)
