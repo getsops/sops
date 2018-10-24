@@ -720,6 +720,12 @@ provide more than one backend, and SOPS will log to all of them:
             - connection_string: "postgres://sops:sops@localhost/sops?sslmode=verify-full"
             - connection_string: "postgres://sops:sops@remotehost/sops?sslmode=verify-full"
 
+Saving Output to a File
+~~~~~~~~~~~~~~~~~~~~~~~
+By default ``sops`` just dumps all the output to the standard output. We can use the
+``--output`` flag followed by a filename to save the output to the file specified.
+Beware using both ``--in-place`` and ``--output`` flags will result in an error.
+
 
 Important information on types
 ------------------------------
