@@ -415,6 +415,9 @@ func main() {
 		if c.NArg() < 1 {
 			return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
 		}
+		if c.Bool("in-place") && c.String("output") != "" {
+			return common.NewExitError("Error: cannot operate on both --output and --in-file", codes.ErrorConflictingParameters)
+		}
 		fileName := c.Args()[0]
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
 			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-azure-kv") != "" ||
