@@ -418,7 +418,7 @@ func main() {
 		fileName := c.Args()[0]
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
 			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-azure-kv") != "" ||
-				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-azure-kv") != "" || c.String("output") != "" {
+				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-azure-kv") != "" {
 				return common.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") {
@@ -619,19 +619,16 @@ func main() {
 			return nil
 		}
 
+		outputFile := os.Stdout
 		if c.String("output") != "" {
 			file, err := os.Create(c.String("output"))
 			if err != nil {
 				return common.NewExitError(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
 			}
 			defer file.Close()
-			_, err = file.Write(output)
-			if err != nil {
-				return toExitError(err)
-			}
-			log.Info("Output File written successfully")
+			outputFile = file
 		}
-		_, err = os.Stdout.Write(output)
+		_, err = outputFile.Write(output)
 		return toExitError(err)
 	}
 	app.Run(os.Args)
