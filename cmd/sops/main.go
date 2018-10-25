@@ -415,8 +415,8 @@ func main() {
 		if c.NArg() < 1 {
 			return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
 		}
-		if c.Bool("in-file") && c.String("output") != "" {
-			return common.NewExitError("Error: cannot operate on both --output and --in-file", codes.ErrorConflictingParameters)
+		if c.Bool("in-place") && c.String("output") != "" {
+			return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 		}
 		fileName := c.Args()[0]
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
