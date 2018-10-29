@@ -13,6 +13,7 @@ import (
 	"go.mozilla.org/sops/aes"
 	sopsjson "go.mozilla.org/sops/stores/json"
 	sopsyaml "go.mozilla.org/sops/stores/yaml"
+	sopsenv "go.mozilla.org/sops/stores/env"
 )
 
 // File is a wrapper around Data that reads a local encrypted
@@ -38,6 +39,8 @@ func Data(data []byte, format string) (cleartext []byte, err error) {
 		store = &sopsjson.Store{}
 	case "yaml":
 		store = &sopsyaml.Store{}
+	case "env":
+		store = &sopsenv.Store{}
 	default:
 		store = &sopsjson.BinaryStore{}
 	}

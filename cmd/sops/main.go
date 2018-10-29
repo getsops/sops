@@ -36,6 +36,7 @@ import (
 	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/stores/json"
 	yamlstores "go.mozilla.org/sops/stores/yaml"
+	"go.mozilla.org/sops/stores/env"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -675,6 +676,8 @@ func inputStore(context *cli.Context, path string) sops.Store {
 		return &yamlstores.Store{}
 	case "json":
 		return &json.Store{}
+	case "env":
+		return &env.Store{}
 	case "binary":
 		return &json.BinaryStore{}
 	default:
@@ -688,6 +691,8 @@ func outputStore(context *cli.Context, path string) sops.Store {
 		return &yamlstores.Store{}
 	case "json":
 		return &json.Store{}
+	case "env":
+		return &env.Store{}
 	case "binary":
 		return &json.BinaryStore{}
 	default:

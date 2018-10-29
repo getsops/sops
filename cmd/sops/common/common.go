@@ -12,6 +12,7 @@ import (
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/stores/json"
 	"go.mozilla.org/sops/stores/yaml"
+	"go.mozilla.org/sops/stores/env"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -104,11 +105,17 @@ func IsJSONFile(path string) bool {
 	return strings.HasSuffix(path, ".json")
 }
 
+func IsEnvFile(path string) bool {
+	return strings.HasSuffix(path, ".env")
+}
+
 func DefaultStoreForPath(path string) sops.Store {
 	if IsYAMLFile(path) {
 		return &yaml.Store{}
 	} else if IsJSONFile(path) {
 		return &json.Store{}
+	} else if IsEnvFile(path) {
+		return &env.Store{}
 	}
 	return &json.BinaryStore{}
 }
