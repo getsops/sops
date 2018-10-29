@@ -11,6 +11,8 @@ import (
 	"strings"
 )
 
+const SopsPrefix = "sops_"
+
 // Store handles storage of dotenv data
 type Store struct {
 }
@@ -19,23 +21,29 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	branch, err := store.LoadPlainFile(in)
 	if err != nil { return sops.Tree{}, err }
 
-	storeMetadata := stores.Metadata{}
-	index := -1
-	for i, item := range branch {
-		if item.Key == "_metadata" {
-			storeMetadata, err = FromGOB64(fmt.Sprint(item.Value))
-			if err != nil { return sops.Tree{}, err }
-			index = i
-			break
+	resultBranch := make(sops.TreeBranch, 0)
+	metadata := stores.Metadata{}
+	md_found := false
+	for _, item := range branch {
+		// FIXME: use sops_* items instead
+		if strings.HasPrefix(item.Key.(string), SopsPrefix) {
+			if item.Key == SopsPrefix + "metadata" {
+				metadata, err = FromGOB64(fmt.Sprint(item.Value))
+				if err != nil { return sops.Tree{}, err }
+				md_found = true
+				break
+			}
+		} else {
+			resultBranch = append(resultBranch, item)
 		}
 	}
-	if index == -1 { return sops.Tree{}, sops.MetadataNotFound }
+	if !md_found { return sops.Tree{}, sops.MetadataNotFound }
 
-	internalMetadata, err := storeMetadata.ToInternal()
+	internalMetadata, err := metadata.ToInternal()
 	if err != nil { return sops.Tree{}, err }
 
 	return sops.Tree{
-		Branch:   append(branch[:index], branch[index+1:]...),
+		Branch:   resultBranch,
 		Metadata: internalMetadata,
 	}, nil
 }
@@ -49,35 +57,35 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranch, error) {
 		if line == "" { continue }
 		pos := strings.Index(line, "=")
 		if pos == -1 {
-			// FIXME: Print line number
-			return nil, fmt.Errorf("could not parse line: %s", line)
+			return nil, fmt.Errorf("invalid dotenv input line: %s", line)
 		}
-		// FIXME: Trim key and value? Remove quotation marks?
 		branch = append(branch, sops.TreeItem{
 			Key:   line[:pos],
 			Value: line[pos+1:],
 		})
 	}
+	if err := scanner.Err(); err != nil {
+		return nil, fmt.Errorf("invalid dotenv input: %s", err)
+	}
 	return branch, nil
 }
 
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
-	plain, err := store.EmitPlainFile(in.Branch)
-	if err != nil { return nil, err }
-	buffer := bytes.NewBuffer(plain)
 	metadata := stores.MetadataFromInternal(in.Metadata)
-	str, err := ToGOB64(metadata)
+	mdItems, err := metadataToTreeItems(metadata)
 	if err != nil { return nil, err }
-	line := fmt.Sprintf("_metadata=%s\n", str)
-	buffer.WriteString(line)
-	return buffer.Bytes(), nil
+	for key, value := range mdItems {
+		if value == "" { continue }
+		in.Branch = append(in.Branch, sops.TreeItem{Key: SopsPrefix + key, Value: value})
+	}
+	return store.EmitPlainFile(in.Branch)
 }
-
 func (store *Store) EmitPlainFile(in sops.TreeBranch) ([]byte, error) {
 	buffer := bytes.Buffer{}
 	for _, item := range in {
-		// FIXME: Check that item.Value is a scalar.
-		// FIXME: Does Go know how to print the OS-specific EOL string? Do we care?
+		if isComplexValue(item.Value) {
+			return nil, fmt.Errorf( "cannot use complex value in dotenv file: %s", item.Value)
+		}
 		line := fmt.Sprintf("%s=%s\n", item.Key, item.Value)
 		buffer.WriteString(line)
 	}
@@ -85,8 +93,32 @@ func (store *Store) EmitPlainFile(in sops.TreeBranch) ([]byte, error) {
 }
 
 func (Store) EmitValue(v interface{}) ([]byte, error) {
-	// FIXME: Whot should this function do?
+	// FIXME: What should this function do?
 	panic("implement me")
+}
+
+func metadataToTreeItems(md stores.Metadata) (map[string] string, error) {
+	// FIXME: encode all metadata in sops_* items
+	mdGob, err := ToGOB64(md)
+	if err != nil { return nil, err }
+	return map[string] string {
+		"version":                     md.Version,
+		"last_modified":               md.LastModified,
+		"unencrypted_suffix":          md.UnencryptedSuffix,
+		"encrypted_suffix":            md.EncryptedSuffix,
+		"message_authentication_code": md.MessageAuthenticationCode,
+		"metadata":                    mdGob,
+	}, nil
+}
+
+func isComplexValue(v interface{}) bool {
+	switch v.(type) {
+	case []interface{}:
+		return true
+	case sops.TreeBranch:
+		return true
+	}
+	return false
 }
 
 func init() {
