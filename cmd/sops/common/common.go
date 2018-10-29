@@ -12,7 +12,7 @@ import (
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/stores/json"
 	"go.mozilla.org/sops/stores/yaml"
-	"go.mozilla.org/sops/stores/env"
+	"go.mozilla.org/sops/stores/dotenv"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -115,7 +115,7 @@ func DefaultStoreForPath(path string) sops.Store {
 	} else if IsJSONFile(path) {
 		return &json.Store{}
 	} else if IsEnvFile(path) {
-		return &env.Store{}
+		return &dotenv.Store{}
 	}
 	return &json.BinaryStore{}
 }

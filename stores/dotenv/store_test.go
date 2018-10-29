@@ -1,4 +1,4 @@
-package env
+package dotenv
 
 import (
 	"github.com/stretchr/testify/assert"

@@ -1,4 +1,5 @@
-package env //import "go.mozilla.org/sops/stores/env"
+package dotenv //import "go.mozilla.org/sops/stores/dotenv"
+
 import (
 	"bufio"
 	"bytes"
@@ -10,7 +11,7 @@ import (
 	"strings"
 )
 
-// Store handles storage of env data
+// Store handles storage of dotenv data
 type Store struct {
 }
 
