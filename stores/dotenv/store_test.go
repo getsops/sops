@@ -1,10 +1,11 @@
 package dotenv
 
 import (
-	"github.com/stretchr/testify/assert"
-	"go.mozilla.org/sops"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"go.mozilla.org/sops"
 )
 
 var PLAIN = []byte(strings.TrimLeft(`
@@ -27,7 +28,6 @@ var BRANCH = sops.TreeBranch{
 		Value: "val3",
 	},
 }
-
 
 func TestLoadEncryptedFile(t *testing.T) {
 	// FIXME: Implementation?
