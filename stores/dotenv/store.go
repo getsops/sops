@@ -102,8 +102,10 @@ func (store *Store) EmitPlainFile(in sops.TreeBranch) ([]byte, error) {
 }
 
 func (Store) EmitValue(v interface{}) ([]byte, error) {
-	// FIXME: What should this function do?
-	panic("implement me")
+	if s, ok := v.(string); ok {
+		return []byte(s), nil
+	}
+	return nil, fmt.Errorf("the dotenv store only supports emitting strings, got %T", v)
 }
 
 func metadataToTreeItems(md stores.Metadata) (map[string]string, error) {
