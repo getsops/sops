@@ -68,8 +68,8 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranch, error) {
 			return nil, fmt.Errorf("invalid dotenv input line: %s", line)
 		}
 		branch = append(branch, sops.TreeItem{
-			Key:   line[:pos],
-			Value: line[pos+1:],
+			Key:   string(line[:pos]),
+			Value: string(line[pos+1:]),
 		})
 	}
 	return branch, nil
