@@ -2,8 +2,7 @@ package dotenv //import "go.mozilla.org/sops/stores/dotenv"
 
 import (
 	"bytes"
-	"encoding/base64"
-	"encoding/gob"
+	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -24,27 +23,21 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	}
 
 	var resultBranch sops.TreeBranch
-	metadata := stores.Metadata{}
-	metadataFound := false
+	mdMap := make(map[string]interface{})
 	for _, item := range branch {
-		// FIXME: use sops_* items instead
-		if strings.HasPrefix(item.Key.(string), SopsPrefix) {
-			if item.Key == SopsPrefix+"metadata" {
-				metadata, err = FromGOB64(fmt.Sprint(item.Value))
-				if err != nil {
-					return sops.Tree{}, err
-				}
-				metadataFound = true
-				break
-			}
+		s := item.Key.(string)
+		if strings.HasPrefix(s, SopsPrefix) {
+			s = s[len(SopsPrefix):]
+			mdMap[s] = item.Value
 		} else {
 			resultBranch = append(resultBranch, item)
 		}
 	}
-	if !metadataFound {
-		return sops.Tree{}, sops.MetadataNotFound
-	}
 
+	metadata, err := mapToMetadata(mdMap)
+	if err != nil {
+		return sops.Tree{}, err
+	}
 	internalMetadata, err := metadata.ToInternal()
 	if err != nil {
 		return sops.Tree{}, err
@@ -77,18 +70,19 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranch, error) {
 
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	metadata := stores.MetadataFromInternal(in.Metadata)
-	mdItems, err := metadataToTreeItems(metadata)
+	mdItems, err := metadataToMap(metadata)
 	if err != nil {
 		return nil, err
 	}
 	for key, value := range mdItems {
-		if value == "" {
+		if value == nil {
 			continue
 		}
 		in.Branch = append(in.Branch, sops.TreeItem{Key: SopsPrefix + key, Value: value})
 	}
 	return store.EmitPlainFile(in.Branch)
 }
+
 func (store *Store) EmitPlainFile(in sops.TreeBranch) ([]byte, error) {
 	buffer := bytes.Buffer{}
 	for _, item := range in {
@@ -108,20 +102,28 @@ func (Store) EmitValue(v interface{}) ([]byte, error) {
 	return nil, fmt.Errorf("the dotenv store only supports emitting strings, got %T", v)
 }
 
-func metadataToTreeItems(md stores.Metadata) (map[string]string, error) {
-	// FIXME: encode all metadata in sops_* items
-	mdGob, err := ToGOB64(md)
+func metadataToMap(md stores.Metadata) (map[string]interface{}, error) {
+	var mdMap map[string]interface{}
+	inrec, err := json.Marshal(md)
 	if err != nil {
 		return nil, err
 	}
-	return map[string]string{
-		"version":                     md.Version,
-		"last_modified":               md.LastModified,
-		"unencrypted_suffix":          md.UnencryptedSuffix,
-		"encrypted_suffix":            md.EncryptedSuffix,
-		"message_authentication_code": md.MessageAuthenticationCode,
-		"metadata":                    mdGob,
-	}, nil
+	err = json.Unmarshal(inrec, &mdMap)
+	if err != nil {
+		return nil, err
+	}
+	return flatten(mdMap), nil
+}
+
+func mapToMetadata(m map[string]interface{}) (stores.Metadata, error) {
+	m = unflatten(m)
+	var md stores.Metadata
+	inrec, err := json.Marshal(m)
+	if err != nil {
+		return md, err
+	}
+	err = json.Unmarshal(inrec, &md)
+	return md, err
 }
 
 func isComplexValue(v interface{}) bool {
@@ -134,32 +136,56 @@ func isComplexValue(v interface{}) bool {
 	return false
 }
 
-func init() {
-	gob.Register(stores.Metadata{})
+func flatten(m map[string]interface{}) map[string]interface{} {
+	r := make(map[string]interface{})
+	flattenRecursive(m, []string{}, func(ks []string, v interface{}) {
+		if s, ok := v.(string); ok {
+			v = strings.Replace(s, "\n", "\\n", -1)
+			v = fmt.Sprintf(`"%s"`, v)
+		}
+		r[strings.Join(ks, "_")] = v
+	})
+	return r
 }
 
-func ToGOB64(m stores.Metadata) (string, error) {
-	buf := bytes.Buffer{}
-	encoder := gob.NewEncoder(&buf)
-	err := encoder.Encode(m)
-	if err != nil {
-		return "", fmt.Errorf("could not base64-encode metadata: %s", err)
+func flattenRecursive(v interface{}, ks []string, cb func([]string, interface{})) {
+	if m, ok := v.(map[string]interface{}); ok {
+		for k, v := range m {
+			newks := append(ks, k)
+			flattenRecursive(v, newks, cb)
+		}
+	} else if s, ok := v.([]interface{}); ok {
+		for i, e := range s {
+			newks := append(ks, fmt.Sprint(i))
+			flattenRecursive(e, newks, cb)
+		}
+	} else {
+		cb(ks, v)
 	}
-	return base64.StdEncoding.EncodeToString(buf.Bytes()), nil
 }
 
-func FromGOB64(str string) (stores.Metadata, error) {
-	metadata := stores.Metadata{}
-	data, err := base64.StdEncoding.DecodeString(str)
-	if err != nil {
-		return metadata, fmt.Errorf("could not base64-decode metadata: %s", err)
+type TokenizerFunc func(string) []string
+
+func unflatten(m map[string]interface{}) map[string]interface{} {
+	var tree = make(map[string]interface{})
+	for k, v := range m {
+		ks := strings.Split(k, "_")
+		tr := tree
+		for _, tk := range ks[:len(ks)-1] {
+			trnew, ok := tr[tk]
+			if !ok {
+				trnew = make(map[string]interface{})
+				tr[tk] = trnew
+			}
+			tr = trnew.(map[string]interface{})
+		}
+		if s, ok := v.(string); ok {
+			if len(s) > 0 && s[0] == '"' && s[len(s)-1] == '"' {
+				s = s[1 : len(s)-1]
+				v = strings.Replace(s, "\\n", "\n", -1)
+			}
+		}
+		tr[ks[len(ks)-1]] = v
 	}
-	buffer := bytes.Buffer{}
-	buffer.Write(data)
-	decoder := gob.NewDecoder(&buffer)
-	err = decoder.Decode(&metadata)
-	if err != nil {
-		return stores.Metadata{}, fmt.Errorf("could not parse metadata: %s", err)
-	}
-	return metadata, nil
+	return tree
 }
