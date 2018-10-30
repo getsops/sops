@@ -34,9 +34,9 @@ import (
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/logging"
 	"go.mozilla.org/sops/pgp"
+	"go.mozilla.org/sops/stores/dotenv"
 	"go.mozilla.org/sops/stores/json"
 	yamlstores "go.mozilla.org/sops/stores/yaml"
-	"go.mozilla.org/sops/stores/dotenv"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -398,7 +398,6 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "set",
-			// FIXME: Warn about complex value types and dotenv files?
 			Usage: `set a specific key or branch in the input document. value must be a json encoded string. (edit mode only). eg. --set '["somekey"][0] {"somevalue":true}'`,
 		},
 		cli.IntFlag{
