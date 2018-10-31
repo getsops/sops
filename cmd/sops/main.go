@@ -34,6 +34,7 @@ import (
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/logging"
 	"go.mozilla.org/sops/pgp"
+	"go.mozilla.org/sops/stores/dotenv"
 	"go.mozilla.org/sops/stores/json"
 	yamlstores "go.mozilla.org/sops/stores/yaml"
 	"gopkg.in/urfave/cli.v1"
@@ -333,11 +334,11 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "input-type",
-			Usage: "currently json, yaml and binary are supported. If not set, sops will use the file's extension to determine the type",
+			Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
 		},
 		cli.StringFlag{
 			Name:  "output-type",
-			Usage: "currently json, yaml and binary are supported. If not set, sops will use the input file's extension to determine the output format",
+			Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
 		},
 		cli.BoolFlag{
 			Name:  "show-master-keys, s",
@@ -397,7 +398,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "set",
-			Usage: `set a specific key or branch in the input JSON or YAML document. value must be a json encoded string. (edit mode only). eg. --set '["somekey"][0] {"somevalue":true}'`,
+			Usage: `set a specific key or branch in the input document. value must be a json encoded string. (edit mode only). eg. --set '["somekey"][0] {"somevalue":true}'`,
 		},
 		cli.IntFlag{
 			Name:  "shamir-secret-sharing-threshold",
@@ -675,6 +676,8 @@ func inputStore(context *cli.Context, path string) sops.Store {
 		return &yamlstores.Store{}
 	case "json":
 		return &json.Store{}
+	case "dotenv":
+		return &dotenv.Store{}
 	case "binary":
 		return &json.BinaryStore{}
 	default:
@@ -688,6 +691,8 @@ func outputStore(context *cli.Context, path string) sops.Store {
 		return &yamlstores.Store{}
 	case "json":
 		return &json.Store{}
+	case "dotenv":
+		return &dotenv.Store{}
 	case "binary":
 		return &json.BinaryStore{}
 	default:
