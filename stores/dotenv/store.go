@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"strconv"
 	"strings"
 
 	"go.mozilla.org/sops"
@@ -113,11 +112,22 @@ func metadataToMap(md stores.Metadata) (map[string]interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	return flatten(mdMap), nil
+	flat := stores.Flatten(mdMap)
+	for k, v := range flat {
+		if s, ok := v.(string); ok {
+			flat[k] = strings.Replace(s, "\n", "\\n", -1)
+		}
+	}
+	return flat, nil
 }
 
 func mapToMetadata(m map[string]interface{}) (stores.Metadata, error) {
-	m = unflatten(m)
+	for k, v := range m {
+		if s, ok := v.(string); ok {
+			m[k] = strings.Replace(s, "\\n", "\n", -1)
+		}
+	}
+	m = stores.Unflatten(m)
 	var md stores.Metadata
 	inrec, err := json.Marshal(m)
 	if err != nil {
@@ -135,117 +145,4 @@ func isComplexValue(v interface{}) bool {
 		return true
 	}
 	return false
-}
-
-const flattenSep = "__"
-
-func encodeValue(v interface{}) interface{} {
-	if s, ok := v.(string); ok {
-		v = strings.Replace(s, "\n", "\\n", -1)
-		v = fmt.Sprintf(`"%s"`, v)
-	}
-	return v
-}
-
-func decodeValue(v interface{}) interface{} {
-	if s, ok := v.(string); ok {
-		if len(s) > 0 && s[0] == '"' && s[len(s)-1] == '"' {
-			s = s[1 : len(s)-1]
-			v = strings.Replace(s, "\\n", "\n", -1)
-		}
-	}
-	return v
-}
-
-func flatten(m map[string]interface{}) map[string]interface{} {
-	r := make(map[string]interface{})
-	flattenRecursive(m, []string{}, func(ks []string, v interface{}) {
-		r[strings.Join(ks, flattenSep)] = encodeValue(v)
-	})
-	return r
-}
-
-func flattenRecursive(v interface{}, ks []string, cb func([]string, interface{})) {
-	if m, ok := v.(map[string]interface{}); ok {
-		for k, v := range m {
-			newks := append(ks, k)
-			flattenRecursive(v, newks, cb)
-		}
-	} else if s, ok := v.([]interface{}); ok {
-		for i, e := range s {
-			newks := append(ks, fmt.Sprint(i))
-			flattenRecursive(e, newks, cb)
-		}
-	} else {
-		cb(ks, v)
-	}
-}
-
-func unflatten(m map[string]interface{}) map[string]interface{} {
-	tree := make(map[string]interface{})
-
-	for keyPath, value := range m {
-		getValue := getSliceValueFunc([]interface{}{tree}, 0)
-		setValue := setSliceValueFunc([]interface{}{tree}, 0)
-
-		keys := strings.Split(keyPath, flattenSep)
-		for _, key := range keys {
-			if index, err := strconv.Atoi(key); err == nil {
-				// node should be a slice
-				var node []interface{}
-				length := index + 1
-				if getValue() == nil {
-					node = make([]interface{}, length)
-					setValue(node)
-				} else {
-					node = getValue().([]interface{})
-					if len(node) < length {
-						newNode := make([]interface{}, length)
-						copy(newNode, node)
-						node = newNode
-						setValue(node)
-					}
-				}
-				getValue = getSliceValueFunc(node, index)
-				setValue = setSliceValueFunc(node, index)
-			} else {
-				// node should be a map
-				var node map[string]interface{}
-				if getValue() == nil {
-					node = make(map[string]interface{})
-					setValue(node)
-				} else {
-					node = getValue().(map[string]interface{})
-				}
-				getValue = getMapValueFunc(node, key)
-				setValue = setMapValueFunc(node, key)
-			}
-		}
-		setValue(decodeValue(value))
-	}
-	return tree
-}
-
-func getMapValueFunc(node map[string]interface{}, key string) func() interface{} {
-	return func() interface{} {
-		return node[key]
-	}
-}
-
-func setMapValueFunc(node map[string]interface{}, key string) func(interface{}) {
-	return func(value interface{}) {
-		node[key] = value
-	}
-}
-
-func getSliceValueFunc(node []interface{}, index int) func() interface{} {
-	return func() interface{} {
-		return node[index]
-	}
-}
-
-func setSliceValueFunc(node []interface{}, index int) func(interface{}) {
-	return func(value interface{}) {
-		node[index] = value
-	}
 }
