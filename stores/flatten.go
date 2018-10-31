@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-const flattenMapSeparator = "__flattenmap__"
-const flattenListSeparator = "__flattenlist__"
+const mapSeparator = "__map_"
+const listSeparator = "__list_"
 
 // flattenAndMerge flattens the provided value and merges into the
 // into map using prefix
@@ -28,13 +28,13 @@ func flattenValue(value interface{}) interface{} {
 	case map[string]interface{}:
 		newMap := make(map[string]interface{})
 		for k, v := range value {
-			flattenAndMerge(newMap, flattenMapSeparator+k, v)
+			flattenAndMerge(newMap, mapSeparator+k, v)
 		}
 		output = newMap
 	case []interface{}:
 		newMap := make(map[string]interface{})
 		for i, v := range value {
-			flattenAndMerge(newMap, flattenListSeparator+fmt.Sprintf("%d", i), v)
+			flattenAndMerge(newMap, listSeparator+fmt.Sprintf("%d", i), v)
 		}
 		output = newMap
 	default:
@@ -74,37 +74,37 @@ type listToken struct {
 // in the flattened map, and converts it to a slice of tokens
 func tokenize(path string) []token {
 	const (
-		STATE_NORMAL = 0
-		STATE_MAP    = iota
-		STATE_LIST   = iota
+		StateNormal = 0
+		StateMap    = iota
+		StateList   = iota
 	)
 	var tokens []token
-	state := STATE_NORMAL
+	state := StateNormal
 	lastTokenEnd := 0
 	i := 0
 	finishPrevToken := func() {
 		var t token
 		switch state {
-		case STATE_NORMAL:
+		case StateNormal:
 			t = mapToken{path[lastTokenEnd:i]}
-		case STATE_MAP:
-			t = mapToken{path[lastTokenEnd+len(flattenMapSeparator) : i]}
-		case STATE_LIST:
-			pos, _ := strconv.Atoi(path[lastTokenEnd+len(flattenListSeparator) : i])
+		case StateMap:
+			t = mapToken{path[lastTokenEnd+len(mapSeparator) : i]}
+		case StateList:
+			pos, _ := strconv.Atoi(path[lastTokenEnd+len(listSeparator) : i])
 			t = listToken{pos}
 		}
 		lastTokenEnd = i
 		tokens = append(tokens, t)
 	}
 	for i < len(path) {
-		if strings.HasPrefix(path[i:], flattenMapSeparator) {
+		if strings.HasPrefix(path[i:], mapSeparator) {
 			finishPrevToken()
-			state = STATE_MAP
-			i += len(flattenMapSeparator)
-		} else if strings.HasPrefix(path[i:], flattenListSeparator) {
+			state = StateMap
+			i += len(mapSeparator)
+		} else if strings.HasPrefix(path[i:], listSeparator) {
 			finishPrevToken()
-			state = STATE_LIST
-			i += len(flattenListSeparator)
+			state = StateList
+			i += len(listSeparator)
 		} else {
 			i += 1
 		}
@@ -177,14 +177,10 @@ func unflatten(currentNode interface{}, currentToken, nextToken token, value int
 func Unflatten(in map[string]interface{}) map[string]interface{} {
 	newMap := make(map[string]interface{})
 	for k, v := range in {
-		tokens := tokenize(k)
 		var current interface{} = newMap
-		for i := range tokens {
-			if i+1 >= len(tokens) {
-				current = unflatten(current, tokens[i], nil, v)
-			} else {
-				current = unflatten(current, tokens[i], tokens[i+1], v)
-			}
+		tokens := append(tokenize(k), nil)
+		for i := 0; i < len(tokens)-1; i++ {
+			current = unflatten(current, tokens[i], tokens[i+1], v)
 		}
 	}
 	return newMap
