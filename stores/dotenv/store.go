@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"go.mozilla.org/sops"
@@ -136,14 +137,30 @@ func isComplexValue(v interface{}) bool {
 	return false
 }
 
+const flattenSep = "__"
+
+func encodeValue(v interface{}) interface{} {
+	if s, ok := v.(string); ok {
+		v = strings.Replace(s, "\n", "\\n", -1)
+		v = fmt.Sprintf(`"%s"`, v)
+	}
+	return v
+}
+
+func decodeValue(v interface{}) interface{} {
+	if s, ok := v.(string); ok {
+		if len(s) > 0 && s[0] == '"' && s[len(s)-1] == '"' {
+			s = s[1 : len(s)-1]
+			v = strings.Replace(s, "\\n", "\n", -1)
+		}
+	}
+	return v
+}
+
 func flatten(m map[string]interface{}) map[string]interface{} {
 	r := make(map[string]interface{})
 	flattenRecursive(m, []string{}, func(ks []string, v interface{}) {
-		if s, ok := v.(string); ok {
-			v = strings.Replace(s, "\n", "\\n", -1)
-			v = fmt.Sprintf(`"%s"`, v)
-		}
-		r[strings.Join(ks, "_")] = v
+		r[strings.Join(ks, flattenSep)] = encodeValue(v)
 	})
 	return r
 }
@@ -164,28 +181,71 @@ func flattenRecursive(v interface{}, ks []string, cb func([]string, interface{})
 	}
 }
 
-type TokenizerFunc func(string) []string
-
 func unflatten(m map[string]interface{}) map[string]interface{} {
-	var tree = make(map[string]interface{})
-	for k, v := range m {
-		ks := strings.Split(k, "_")
-		tr := tree
-		for _, tk := range ks[:len(ks)-1] {
-			trnew, ok := tr[tk]
-			if !ok {
-				trnew = make(map[string]interface{})
-				tr[tk] = trnew
+	tree := make(map[string]interface{})
+
+	for keyPath, value := range m {
+		getValue := getSliceValueFunc([]interface{}{tree}, 0)
+		setValue := setSliceValueFunc([]interface{}{tree}, 0)
+
+		keys := strings.Split(keyPath, flattenSep)
+		for _, key := range keys {
+			if index, err := strconv.Atoi(key); err == nil {
+				// node should be a slice
+				var node []interface{}
+				length := index + 1
+				if getValue() == nil {
+					node = make([]interface{}, length)
+					setValue(node)
+				} else {
+					node = getValue().([]interface{})
+					if len(node) < length {
+						newNode := make([]interface{}, length)
+						copy(newNode, node)
+						node = newNode
+						setValue(node)
+					}
+				}
+				getValue = getSliceValueFunc(node, index)
+				setValue = setSliceValueFunc(node, index)
+			} else {
+				// node should be a map
+				var node map[string]interface{}
+				if getValue() == nil {
+					node = make(map[string]interface{})
+					setValue(node)
+				} else {
+					node = getValue().(map[string]interface{})
+				}
+				getValue = getMapValueFunc(node, key)
+				setValue = setMapValueFunc(node, key)
 			}
-			tr = trnew.(map[string]interface{})
 		}
-		if s, ok := v.(string); ok {
-			if len(s) > 0 && s[0] == '"' && s[len(s)-1] == '"' {
-				s = s[1 : len(s)-1]
-				v = strings.Replace(s, "\\n", "\n", -1)
-			}
-		}
-		tr[ks[len(ks)-1]] = v
+		setValue(decodeValue(value))
 	}
 	return tree
+}
+
+func getMapValueFunc(node map[string]interface{}, key string) func() interface{} {
+	return func() interface{} {
+		return node[key]
+	}
+}
+
+func setMapValueFunc(node map[string]interface{}, key string) func(interface{}) {
+	return func(value interface{}) {
+		node[key] = value
+	}
+}
+
+func getSliceValueFunc(node []interface{}, index int) func() interface{} {
+	return func() interface{} {
+		return node[index]
+	}
+}
+
+func setSliceValueFunc(node []interface{}, index int) func(interface{}) {
+	return func(value interface{}) {
+		node[index] = value
+	}
 }
