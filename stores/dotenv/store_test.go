@@ -29,26 +29,24 @@ var BRANCH = sops.TreeBranch{
 	},
 }
 
-func TestLoadEncryptedFile(t *testing.T) {
-	// FIXME: Implementation?
-}
-
 func TestLoadPlainFile(t *testing.T) {
 	branch, err := (&Store{}).LoadPlainFile(PLAIN)
 	assert.Nil(t, err)
 	assert.Equal(t, BRANCH, branch)
 }
-
-func TestEmitEncryptedFile(t *testing.T) {
-	// FIXME: Implementation?
-}
-
 func TestEmitPlainFile(t *testing.T) {
 	bytes, err := (&Store{}).EmitPlainFile(BRANCH)
 	assert.Nil(t, err)
 	assert.Equal(t, PLAIN, bytes)
 }
 
-func TestEmitValue(t *testing.T) {
-	// FIXME: Implementation?
+func TestEmitValueString(t *testing.T) {
+	bytes, err := (&Store{}).EmitValue("hello")
+	assert.Nil(t, err)
+	assert.Equal(t, []byte("hello"), bytes)
+}
+
+func TestEmitValueNonstring(t *testing.T) {
+	_, err := (&Store{}).EmitValue(BRANCH)
+	assert.NotNil(t, err)
 }
