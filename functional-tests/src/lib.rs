@@ -18,6 +18,7 @@ mod tests {
     use tempdir::TempDir;
     use std::process::Command;
     use serde_yaml::Value;
+    use std::path::Path;
     const SOPS_BINARY_PATH: &'static str = "./sops";
 
     macro_rules! assert_encrypted {
@@ -409,4 +410,26 @@ b: ba"#
         assert_eq!(output.stdout, data);
     }
 
+    #[test]
+    fn output_flag() {
+        let input_path = prepare_temp_file("test_output_flag.binary", b"foo");
+        let output_path = Path::join(TMP_DIR.path(), "output_flag.txt");
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("--output")
+            .arg(&output_path)
+            .arg("-e")
+            .arg(input_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status
+                    .success(),
+                "SOPS failed to decrypt a binary file");
+        assert_eq!(output.stdout, &[]);
+        let mut f = File::open(&output_path).expect("output file not found");
+
+        let mut contents = String::new();
+        f.read_to_string(&mut contents)
+            .expect("couldn't read output file contents");
+        assert_ne!(contents, "", "Output file is empty");
+    }
 }

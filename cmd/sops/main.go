@@ -1,24 +1,18 @@
 package main //import "go.mozilla.org/sops/cmd/sops"
 
 import (
+	encodingjson "encoding/json"
+	"fmt"
 	"net"
 	"net/url"
-
-	"google.golang.org/grpc"
-
-	"go.mozilla.org/sops"
-
-	"fmt"
 	"os"
+	"reflect"
+	"strconv"
 	"strings"
 	"time"
 
-	encodingjson "encoding/json"
-	"reflect"
-
-	"strconv"
-
 	"github.com/sirupsen/logrus"
+	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/aes"
 	_ "go.mozilla.org/sops/audit"
 	"go.mozilla.org/sops/azkv"
@@ -37,6 +31,7 @@ import (
 	"go.mozilla.org/sops/stores/dotenv"
 	"go.mozilla.org/sops/stores/json"
 	yamlstores "go.mozilla.org/sops/stores/yaml"
+	"google.golang.org/grpc"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -408,6 +403,10 @@ func main() {
 			Name:  "verbose",
 			Usage: "Enable verbose logging output",
 		},
+		cli.StringFlag{
+			Name:  "output",
+			Usage: "Save the output after encryption or decryption to the file specified",
+		},
 	}, keyserviceFlags...)
 
 	app.Action = func(c *cli.Context) error {
@@ -416,6 +415,9 @@ func main() {
 		}
 		if c.NArg() < 1 {
 			return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+		}
+		if c.Bool("in-place") && c.String("output") != "" {
+			return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 		}
 		fileName := c.Args()[0]
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
@@ -620,7 +622,17 @@ func main() {
 			log.Info("File written successfully")
 			return nil
 		}
-		_, err = os.Stdout.Write(output)
+
+		outputFile := os.Stdout
+		if c.String("output") != "" {
+			file, err := os.Create(c.String("output"))
+			if err != nil {
+				return common.NewExitError(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
+			}
+			defer file.Close()
+			outputFile = file
+		}
+		_, err = outputFile.Write(output)
 		return toExitError(err)
 	}
 	app.Run(os.Args)
