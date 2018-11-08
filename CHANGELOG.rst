@@ -1,6 +1,13 @@
 Changelog
 =========
 
+3.2.0
+-----
+
+* Added --output flag to write output a file directly instead of
+  through stdout
+* Added support for dotenv files
+
 3.1.1
 -----
 
