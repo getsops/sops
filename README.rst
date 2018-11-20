@@ -995,7 +995,7 @@ You can import sops as a module and use it in your python program.
 
 Note: this uses the previous implemenation of `sops` written in python, 
 and so doesn't support newer features such as GCP-KMS. 
-To use the current version, call out to `sops` using `subprocess.getoutput`
+To use the current version, call out to `sops` using `subprocess.check_output`
 
 Showing diffs in cleartext in git
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
