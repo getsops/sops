@@ -40,7 +40,7 @@ func set(opts setOpts) ([]byte, error) {
 	}
 
 	// Set the value
-	tree.Branch = tree.Branch.Set(opts.TreePath, opts.Value)
+	tree.Branches[0] = tree.Branches[0].Set(opts.TreePath, opts.Value)
 
 	err = common.EncryptTree(common.EncryptTreeOpts{
 		DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,

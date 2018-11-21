@@ -241,21 +241,25 @@ func TestEncodeJSONWithEscaping(t *testing.T) {
 }
 
 func TestEncodeJSONArrayOfObjects(t *testing.T) {
-	branch := sops.TreeBranch{
-		sops.TreeItem{
-			Key: "foo",
-			Value: []interface{}{
-				sops.TreeBranch{
-					sops.TreeItem{
-						Key:   "foo",
-						Value: 3,
-					},
-					sops.TreeItem{
-						Key:   "bar",
-						Value: false,
+	tree := sops.Tree{
+		Branches: sops.TreeBranches{
+			sops.TreeBranch{
+				sops.TreeItem{
+					Key: "foo",
+					Value: []interface{}{
+						sops.TreeBranch{
+							sops.TreeItem{
+								Key:   "foo",
+								Value: 3,
+							},
+							sops.TreeItem{
+								Key:   "bar",
+								Value: false,
+							},
+						},
+						2,
 					},
 				},
-				2,
 			},
 		},
 	}
@@ -269,7 +273,7 @@ func TestEncodeJSONArrayOfObjects(t *testing.T) {
 	]
 }`
 	store := Store{}
-	out, err := store.EmitPlainFile(branch)
+	out, err := store.EmitPlainFile(tree.Branches)
 	assert.Nil(t, err)
 	assert.Equal(t, expected, string(out))
 }
@@ -286,7 +290,13 @@ func TestLoadJSONFormattedBinaryFile(t *testing.T) {
 	// e.g. because the --input-type binary flag was provided.
 	data := []byte(`{"hello": 2}`)
 	store := BinaryStore{}
-	branch, err := store.LoadPlainFile(data)
+	branches, err := store.LoadPlainFile(data)
 	assert.Nil(t, err)
-	assert.Equal(t, "data", branch[0].Key)
+	assert.Equal(t, "data", branches[0][0].Key)
+}
+
+func TestEmitValueString(t *testing.T) {
+	bytes, err := (&Store{}).EmitValue("hello")
+	assert.Nil(t, err)
+	assert.Equal(t, []byte("\"hello\""), bytes)
 }
