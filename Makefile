@@ -84,7 +84,7 @@ functional-tests-once:
 	fi;
 	echo "Testing --extract"
 	python sops/__init__.py -d --extract '["firstName"]' example.json
-	[ $$(python sops/__init__.py -d --extract '["firstName"]' example.json) == $$(python sops/__init__.py -d example.json | grep firstName | cut -d '"' -f 4) ]
+	[ $$(python sops/__init__.py -d --extract '["firstName"]' example.json) = $$(python sops/__init__.py -d example.json | grep firstName | cut -d '"' -f 4) ]
 
 pypi:
 	$(PYTHON) setup.py sdist check upload --sign
