@@ -894,11 +894,11 @@ def decrypt(value, key, aad=b'', stash=None, digest=None, unencrypted=False):
             digest.update(bvalue)
         return value
 
-    valre = b'^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+)'
+    valre = b'^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+)'  # noqa: W605
     # extract fields using a regex
     if A_is_newer_than_B(INPUT_VERSION, '0.8'):
         valre += b',type:(.+)'
-    valre += b'\]'
+    valre += b'\]'  # noqa: W605
     res = re.match(valre, value.encode('utf-8'))
     # if the value isn't in encrypted form, return it as is
     if res is None:
@@ -1422,7 +1422,7 @@ def tree_path_comp(comp, path):
     comp = comp[0:len(comp)-1]
     comp = comp.replace('"', '', 2)
     comp = comp.replace("'", "", 2)
-    if re.search(b'^\d+$', comp.encode('utf-8')):
+    if re.search(b'^\d+$', comp.encode('utf-8')):  # noqa: W605
         return int(comp)
     else:
         return comp
