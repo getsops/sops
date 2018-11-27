@@ -23,6 +23,9 @@ setup(
         'ruamel.yaml>=0.11.7,<0.12.0 ; python_version=="2.6"',
         'ruamel.yaml>=0.11.7 ; python_version>"2.6"',
         'boto3>=1.1.3',
+        # pycparser is a transitive dependency of cryptography. 2.18 is the
+        # last release with Python 2.6 support
+        'pycparser==2.18 ; python_version=="2.6"',
         'cryptography>=1.4',
         'setuptools>=18.8.1',
         'ordereddict>=1.1',

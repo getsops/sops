@@ -46,6 +46,8 @@ except ImportError:
 if sys.version_info[0] == 3:
     raw_input = input
 
+PY2 = sys.version_info[0] == 2
+
 VERSION = '1.17'
 
 DESC = """
@@ -892,11 +894,11 @@ def decrypt(value, key, aad=b'', stash=None, digest=None, unencrypted=False):
             digest.update(bvalue)
         return value
 
-    valre = b'^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+)'
+    valre = b'^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+)'  # noqa: W605
     # extract fields using a regex
     if A_is_newer_than_B(INPUT_VERSION, '0.8'):
         valre += b',type:(.+)'
-    valre += b'\]'
+    valre += b'\]'  # noqa: W605
     res = re.match(valre, value.encode('utf-8'))
     # if the value isn't in encrypted form, return it as is
     if res is None:
@@ -1028,8 +1030,7 @@ def encrypt(value, key, aad=b'', stash=None, digest=None, unencrypted=False):
     # save the original type
     # the order in which we do this matters. For example, a bool
     # is also an int, but an int isn't a bool, so we test for bool first
-    if isinstance(value, str) or \
-       (sys.version_info[0] == 2 and isinstance(value, unicode)):  # noqa
+    if isinstance(value, str) or (PY2 and isinstance(value, unicode)):  # noqa
         valtype = 'str'
     elif isinstance(value, bool):
         valtype = 'bool'
@@ -1318,7 +1319,10 @@ def write_file(tree, path=None, filetype=None):
         and not isinstance(tree, MutableSequence)
     ):
         if path == 'stdout':
-            sys.stdout.write(tree.encode('utf-8'))
+            if PY2:
+                sys.stdout.write(tree.encode('utf-8'))
+            else:
+                sys.stdout.buffer.write(tree.encode('utf-8'))
         else:
             # Write the entire tree to file descriptor
             fd.write(tree.encode('utf-8'))
@@ -1418,7 +1422,7 @@ def tree_path_comp(comp, path):
     comp = comp[0:len(comp)-1]
     comp = comp.replace('"', '', 2)
     comp = comp.replace("'", "", 2)
-    if re.search(b'^\d+$', comp.encode('utf-8')):
+    if re.search(b'^\d+$', comp.encode('utf-8')):  # noqa: W605
         return int(comp)
     else:
         return comp

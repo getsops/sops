@@ -82,6 +82,9 @@ functional-tests-once:
 	else \
 		echo "Binary file roundtrip succeeded"; \
 	fi;
+	echo "Testing --extract"
+	python sops/__init__.py -d --extract '["firstName"]' example.json
+	[ $$(python sops/__init__.py -d --extract '["firstName"]' example.json) = $$(python sops/__init__.py -d example.json | grep firstName | cut -d '"' -f 4) ]
 
 pypi:
 	$(PYTHON) setup.py sdist check upload --sign
