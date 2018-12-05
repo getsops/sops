@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -40,7 +41,17 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
+// Skips the unit test on travis environment.
+func skipTravisTest(t *testing.T) {
+	// Travis windows environment fails with TLS error when trying to run the unit test.
+	if ver, goos := os.Getenv("TRAVIS_GO_VERSION"), runtime.GOOS; len(ver) != 0 && goos == "windows" {
+		t.Skipf("skipping test, not functional with %s, %s", ver, goos)
+	}
+}
+
 func TestNewSession_WithCustomCABundle_Env(t *testing.T) {
+	skipTravisTest(t)
+
 	oldEnv := initSessionTestEnv()
 	defer awstesting.PopEnv(oldEnv)
 
@@ -93,6 +104,8 @@ func TestNewSession_WithCustomCABundle_EnvNotExists(t *testing.T) {
 }
 
 func TestNewSession_WithCustomCABundle_Option(t *testing.T) {
+	skipTravisTest(t)
+
 	oldEnv := initSessionTestEnv()
 	defer awstesting.PopEnv(oldEnv)
 
@@ -128,6 +141,8 @@ func TestNewSession_WithCustomCABundle_Option(t *testing.T) {
 }
 
 func TestNewSession_WithCustomCABundle_OptionPriority(t *testing.T) {
+	skipTravisTest(t)
+
 	oldEnv := initSessionTestEnv()
 	defer awstesting.PopEnv(oldEnv)
 
@@ -198,6 +213,8 @@ func TestNewSession_WithCustomCABundle_UnsupportedTransport(t *testing.T) {
 }
 
 func TestNewSession_WithCustomCABundle_TransportSet(t *testing.T) {
+	skipTravisTest(t)
+
 	oldEnv := initSessionTestEnv()
 	defer awstesting.PopEnv(oldEnv)
 

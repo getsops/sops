@@ -17,7 +17,7 @@ const opCancelSigningProfile = "CancelSigningProfile"
 // CancelSigningProfileRequest generates a "aws/request.Request" representing the
 // client's request for the CancelSigningProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -109,7 +109,7 @@ const opDescribeSigningJob = "DescribeSigningJob"
 // DescribeSigningJobRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeSigningJob operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -195,7 +195,7 @@ const opGetSigningPlatform = "GetSigningPlatform"
 // GetSigningPlatformRequest generates a "aws/request.Request" representing the
 // client's request for the GetSigningPlatform operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -280,7 +280,7 @@ const opGetSigningProfile = "GetSigningProfile"
 // GetSigningProfileRequest generates a "aws/request.Request" representing the
 // client's request for the GetSigningProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -368,7 +368,7 @@ const opListSigningJobs = "ListSigningJobs"
 // ListSigningJobsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSigningJobs operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -518,7 +518,7 @@ const opListSigningPlatforms = "ListSigningPlatforms"
 // ListSigningPlatformsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSigningPlatforms operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -667,7 +667,7 @@ const opListSigningProfiles = "ListSigningProfiles"
 // ListSigningProfilesRequest generates a "aws/request.Request" representing the
 // client's request for the ListSigningProfiles operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -814,7 +814,7 @@ const opPutSigningProfile = "PutSigningProfile"
 // PutSigningProfileRequest generates a "aws/request.Request" representing the
 // client's request for the PutSigningProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -908,7 +908,7 @@ const opStartSigningJob = "StartSigningJob"
 // StartSigningJobRequest generates a "aws/request.Request" representing the
 // client's request for the StartSigningJob operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1096,6 +1096,9 @@ func (s *DescribeSigningJobInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeSigningJobInput"}
 	if s.JobId == nil {
 		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1329,6 +1332,9 @@ func (s *GetSigningPlatformInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetSigningPlatformInput"}
 	if s.PlatformId == nil {
 		invalidParams.Add(request.NewErrParamRequired("PlatformId"))
+	}
+	if s.PlatformId != nil && len(*s.PlatformId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PlatformId", 1))
 	}
 
 	if invalidParams.Len() > 0 {

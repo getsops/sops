@@ -10,7 +10,6 @@
     "serviceId":"Organizations",
     "signatureVersion":"v4",
     "targetPrefix":"AWSOrganizationsV20161128",
-    "timestampFormat":"unixTimestamp",
     "uid":"organizations-2016-11-28"
   },
   "operations":{
@@ -450,6 +449,7 @@
       "errors":[
         {"shape":"AccessDeniedException"},
         {"shape":"AWSOrganizationsNotInUseException"},
+        {"shape":"AccountOwnerNotVerifiedException"},
         {"shape":"ConcurrentModificationException"},
         {"shape":"HandshakeConstraintViolationException"},
         {"shape":"DuplicateHandshakeException"},
@@ -844,9 +844,17 @@
       "type":"string",
       "max":50,
       "min":1,
+      "pattern":"[\\u0020-\\u007E]+",
       "sensitive":true
     },
     "AccountNotFoundException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ExceptionMessage"}
+      },
+      "exception":true
+    },
+    "AccountOwnerNotVerifiedException":{
       "type":"structure",
       "members":{
         "Message":{"shape":"ExceptionMessage"}
@@ -967,7 +975,9 @@
         "ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED",
         "MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE",
         "MASTER_ACCOUNT_MISSING_CONTACT_INFO",
-        "ORGANIZATION_NOT_IN_ALL_FEATURES_MODE"
+        "ORGANIZATION_NOT_IN_ALL_FEATURES_MODE",
+        "EMAIL_VERIFICATION_CODE_EXPIRED",
+        "WAIT_PERIOD_ACTIVE"
       ]
     },
     "CreateAccountFailureReason":{

@@ -851,7 +851,8 @@
       "errors":[
         {"shape":"WAFInternalErrorException"},
         {"shape":"WAFInvalidAccountException"},
-        {"shape":"WAFNonexistentItemException"}
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFInvalidParameterException"}
       ]
     },
     "ListRuleGroups":{
@@ -955,7 +956,8 @@
       "errors":[
         {"shape":"WAFInternalErrorException"},
         {"shape":"WAFNonexistentItemException"},
-        {"shape":"WAFStaleDataException"}
+        {"shape":"WAFStaleDataException"},
+        {"shape":"WAFServiceLinkedRoleErrorException"}
       ]
     },
     "PutPermissionPolicy":{
@@ -2604,7 +2606,8 @@
       "type":"structure",
       "required":["WebACLId"],
       "members":{
-        "WebACLId":{"shape":"ResourceId"}
+        "WebACLId":{"shape":"ResourceId"},
+        "ResourceType":{"shape":"ResourceType"}
       }
     },
     "ListResourcesForWebACLResponse":{
@@ -3022,6 +3025,13 @@
       "type":"string",
       "max":128,
       "min":1
+    },
+    "ResourceType":{
+      "type":"string",
+      "enum":[
+        "APPLICATION_LOAD_BALANCER",
+        "API_GATEWAY"
+      ]
     },
     "Rule":{
       "type":"structure",
@@ -3611,6 +3621,13 @@
       },
       "exception":true
     },
+    "WAFServiceLinkedRoleErrorException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true
+    },
     "WAFStaleDataException":{
       "type":"structure",
       "members":{
@@ -3681,7 +3698,8 @@
         "Name":{"shape":"ResourceName"},
         "MetricName":{"shape":"MetricName"},
         "DefaultAction":{"shape":"WafAction"},
-        "Rules":{"shape":"ActivatedRules"}
+        "Rules":{"shape":"ActivatedRules"},
+        "WebACLArn":{"shape":"ResourceArn"}
       }
     },
     "WebACLSummaries":{

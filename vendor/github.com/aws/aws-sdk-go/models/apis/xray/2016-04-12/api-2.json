@@ -23,6 +23,19 @@
         {"shape":"ThrottledException"}
       ]
     },
+    "CreateGroup":{
+      "name":"CreateGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/CreateGroup"
+      },
+      "input":{"shape":"CreateGroupRequest"},
+      "output":{"shape":"CreateGroupResult"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"ThrottledException"}
+      ]
+    },
     "CreateSamplingRule":{
       "name":"CreateSamplingRule",
       "http":{
@@ -35,6 +48,19 @@
         {"shape":"InvalidRequestException"},
         {"shape":"ThrottledException"},
         {"shape":"RuleLimitExceededException"}
+      ]
+    },
+    "DeleteGroup":{
+      "name":"DeleteGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/DeleteGroup"
+      },
+      "input":{"shape":"DeleteGroupRequest"},
+      "output":{"shape":"DeleteGroupResult"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"ThrottledException"}
       ]
     },
     "DeleteSamplingRule":{
@@ -58,6 +84,32 @@
       },
       "input":{"shape":"GetEncryptionConfigRequest"},
       "output":{"shape":"GetEncryptionConfigResult"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"ThrottledException"}
+      ]
+    },
+    "GetGroup":{
+      "name":"GetGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/GetGroup"
+      },
+      "input":{"shape":"GetGroupRequest"},
+      "output":{"shape":"GetGroupResult"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"ThrottledException"}
+      ]
+    },
+    "GetGroups":{
+      "name":"GetGroups",
+      "http":{
+        "method":"POST",
+        "requestUri":"/Groups"
+      },
+      "input":{"shape":"GetGroupsRequest"},
+      "output":{"shape":"GetGroupsResult"},
       "errors":[
         {"shape":"InvalidRequestException"},
         {"shape":"ThrottledException"}
@@ -180,6 +232,19 @@
         {"shape":"ThrottledException"}
       ]
     },
+    "UpdateGroup":{
+      "name":"UpdateGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/UpdateGroup"
+      },
+      "input":{"shape":"UpdateGroupRequest"},
+      "output":{"shape":"UpdateGroupResult"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"ThrottledException"}
+      ]
+    },
     "UpdateSamplingRule":{
       "name":"UpdateSamplingRule",
       "http":{
@@ -241,6 +306,12 @@
       "max":32,
       "min":1
     },
+    "AvailabilityZoneDetail":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"String"}
+      }
+    },
     "BackendConnectionErrors":{
       "type":"structure",
       "members":{
@@ -268,6 +339,7 @@
         "NextToken":{"shape":"String"}
       }
     },
+    "Boolean":{"type":"boolean"},
     "BorrowCount":{
       "type":"integer",
       "min":0
@@ -276,6 +348,20 @@
       "type":"string",
       "max":24,
       "min":24
+    },
+    "CreateGroupRequest":{
+      "type":"structure",
+      "required":["GroupName"],
+      "members":{
+        "GroupName":{"shape":"GroupName"},
+        "FilterExpression":{"shape":"FilterExpression"}
+      }
+    },
+    "CreateGroupResult":{
+      "type":"structure",
+      "members":{
+        "Group":{"shape":"Group"}
+      }
     },
     "CreateSamplingRuleRequest":{
       "type":"structure",
@@ -288,6 +374,18 @@
       "type":"structure",
       "members":{
         "SamplingRuleRecord":{"shape":"SamplingRuleRecord"}
+      }
+    },
+    "DeleteGroupRequest":{
+      "type":"structure",
+      "members":{
+        "GroupName":{"shape":"GroupName"},
+        "GroupARN":{"shape":"GroupARN"}
+      }
+    },
+    "DeleteGroupResult":{
+      "type":"structure",
+      "members":{
       }
     },
     "DeleteSamplingRuleRequest":{
@@ -361,6 +459,43 @@
       ]
     },
     "ErrorMessage":{"type":"string"},
+    "ErrorRootCause":{
+      "type":"structure",
+      "members":{
+        "Services":{"shape":"ErrorRootCauseServices"}
+      }
+    },
+    "ErrorRootCauseEntity":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"String"},
+        "Exceptions":{"shape":"RootCauseExceptions"},
+        "Remote":{"shape":"NullableBoolean"}
+      }
+    },
+    "ErrorRootCauseEntityPath":{
+      "type":"list",
+      "member":{"shape":"ErrorRootCauseEntity"}
+    },
+    "ErrorRootCauseService":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"String"},
+        "Names":{"shape":"ServiceNames"},
+        "Type":{"shape":"String"},
+        "AccountId":{"shape":"String"},
+        "EntityPath":{"shape":"ErrorRootCauseEntityPath"},
+        "Inferred":{"shape":"NullableBoolean"}
+      }
+    },
+    "ErrorRootCauseServices":{
+      "type":"list",
+      "member":{"shape":"ErrorRootCauseService"}
+    },
+    "ErrorRootCauses":{
+      "type":"list",
+      "member":{"shape":"ErrorRootCause"}
+    },
     "ErrorStatistics":{
       "type":"structure",
       "members":{
@@ -368,6 +503,43 @@
         "OtherCount":{"shape":"NullableLong"},
         "TotalCount":{"shape":"NullableLong"}
       }
+    },
+    "FaultRootCause":{
+      "type":"structure",
+      "members":{
+        "Services":{"shape":"FaultRootCauseServices"}
+      }
+    },
+    "FaultRootCauseEntity":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"String"},
+        "Exceptions":{"shape":"RootCauseExceptions"},
+        "Remote":{"shape":"NullableBoolean"}
+      }
+    },
+    "FaultRootCauseEntityPath":{
+      "type":"list",
+      "member":{"shape":"FaultRootCauseEntity"}
+    },
+    "FaultRootCauseService":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"String"},
+        "Names":{"shape":"ServiceNames"},
+        "Type":{"shape":"String"},
+        "AccountId":{"shape":"String"},
+        "EntityPath":{"shape":"FaultRootCauseEntityPath"},
+        "Inferred":{"shape":"NullableBoolean"}
+      }
+    },
+    "FaultRootCauseServices":{
+      "type":"list",
+      "member":{"shape":"FaultRootCauseService"}
+    },
+    "FaultRootCauses":{
+      "type":"list",
+      "member":{"shape":"FaultRootCause"}
     },
     "FaultStatistics":{
       "type":"structure",
@@ -395,6 +567,37 @@
       "type":"structure",
       "members":{
         "EncryptionConfig":{"shape":"EncryptionConfig"}
+      }
+    },
+    "GetGroupRequest":{
+      "type":"structure",
+      "members":{
+        "GroupName":{"shape":"GroupName"},
+        "GroupARN":{"shape":"GroupARN"}
+      }
+    },
+    "GetGroupResult":{
+      "type":"structure",
+      "members":{
+        "Group":{"shape":"Group"}
+      }
+    },
+    "GetGroupsNextToken":{
+      "type":"string",
+      "max":100,
+      "min":1
+    },
+    "GetGroupsRequest":{
+      "type":"structure",
+      "members":{
+        "NextToken":{"shape":"GetGroupsNextToken"}
+      }
+    },
+    "GetGroupsResult":{
+      "type":"structure",
+      "members":{
+        "Groups":{"shape":"GroupSummaryList"},
+        "NextToken":{"shape":"String"}
       }
     },
     "GetSamplingRulesRequest":{
@@ -447,6 +650,8 @@
       "members":{
         "StartTime":{"shape":"Timestamp"},
         "EndTime":{"shape":"Timestamp"},
+        "GroupName":{"shape":"GroupName"},
+        "GroupARN":{"shape":"GroupARN"},
         "NextToken":{"shape":"String"}
       }
     },
@@ -456,6 +661,7 @@
         "StartTime":{"shape":"Timestamp"},
         "EndTime":{"shape":"Timestamp"},
         "Services":{"shape":"ServiceList"},
+        "ContainsOldGroupVersions":{"shape":"Boolean"},
         "NextToken":{"shape":"String"}
       }
     },
@@ -497,6 +703,36 @@
         "NextToken":{"shape":"String"}
       }
     },
+    "Group":{
+      "type":"structure",
+      "members":{
+        "GroupName":{"shape":"String"},
+        "GroupARN":{"shape":"String"},
+        "FilterExpression":{"shape":"String"}
+      }
+    },
+    "GroupARN":{
+      "type":"string",
+      "max":400,
+      "min":1
+    },
+    "GroupName":{
+      "type":"string",
+      "max":32,
+      "min":1
+    },
+    "GroupSummary":{
+      "type":"structure",
+      "members":{
+        "GroupName":{"shape":"String"},
+        "GroupARN":{"shape":"String"},
+        "FilterExpression":{"shape":"String"}
+      }
+    },
+    "GroupSummaryList":{
+      "type":"list",
+      "member":{"shape":"GroupSummary"}
+    },
     "HTTPMethod":{
       "type":"string",
       "max":10
@@ -528,6 +764,12 @@
         "HttpMethod":{"shape":"String"},
         "UserAgent":{"shape":"String"},
         "ClientIp":{"shape":"String"}
+      }
+    },
+    "InstanceIdDetail":{
+      "type":"structure",
+      "members":{
+        "Id":{"shape":"String"}
       }
     },
     "Integer":{"type":"integer"},
@@ -600,6 +842,60 @@
     "ResourceARN":{
       "type":"string",
       "max":500
+    },
+    "ResourceARNDetail":{
+      "type":"structure",
+      "members":{
+        "ARN":{"shape":"String"}
+      }
+    },
+    "ResponseTimeRootCause":{
+      "type":"structure",
+      "members":{
+        "Services":{"shape":"ResponseTimeRootCauseServices"}
+      }
+    },
+    "ResponseTimeRootCauseEntity":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"String"},
+        "Coverage":{"shape":"NullableDouble"},
+        "Remote":{"shape":"NullableBoolean"}
+      }
+    },
+    "ResponseTimeRootCauseEntityPath":{
+      "type":"list",
+      "member":{"shape":"ResponseTimeRootCauseEntity"}
+    },
+    "ResponseTimeRootCauseService":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"String"},
+        "Names":{"shape":"ServiceNames"},
+        "Type":{"shape":"String"},
+        "AccountId":{"shape":"String"},
+        "EntityPath":{"shape":"ResponseTimeRootCauseEntityPath"},
+        "Inferred":{"shape":"NullableBoolean"}
+      }
+    },
+    "ResponseTimeRootCauseServices":{
+      "type":"list",
+      "member":{"shape":"ResponseTimeRootCauseService"}
+    },
+    "ResponseTimeRootCauses":{
+      "type":"list",
+      "member":{"shape":"ResponseTimeRootCause"}
+    },
+    "RootCauseException":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"String"},
+        "Message":{"shape":"String"}
+      }
+    },
+    "RootCauseExceptions":{
+      "type":"list",
+      "member":{"shape":"RootCauseException"}
     },
     "RuleLimitExceededException":{
       "type":"structure",
@@ -834,6 +1130,10 @@
         "Segments":{"shape":"SegmentList"}
       }
     },
+    "TraceAvailabilityZones":{
+      "type":"list",
+      "member":{"shape":"AvailabilityZoneDetail"}
+    },
     "TraceId":{
       "type":"string",
       "max":35,
@@ -843,9 +1143,17 @@
       "type":"list",
       "member":{"shape":"TraceId"}
     },
+    "TraceInstanceIds":{
+      "type":"list",
+      "member":{"shape":"InstanceIdDetail"}
+    },
     "TraceList":{
       "type":"list",
       "member":{"shape":"Trace"}
+    },
+    "TraceResourceARNs":{
+      "type":"list",
+      "member":{"shape":"ResourceARNDetail"}
     },
     "TraceSegmentDocument":{"type":"string"},
     "TraceSegmentDocumentList":{
@@ -865,7 +1173,15 @@
         "Http":{"shape":"Http"},
         "Annotations":{"shape":"Annotations"},
         "Users":{"shape":"TraceUsers"},
-        "ServiceIds":{"shape":"ServiceIds"}
+        "ServiceIds":{"shape":"ServiceIds"},
+        "ResourceARNs":{"shape":"TraceResourceARNs"},
+        "InstanceIds":{"shape":"TraceInstanceIds"},
+        "AvailabilityZones":{"shape":"TraceAvailabilityZones"},
+        "EntryPoint":{"shape":"ServiceId"},
+        "FaultRootCauses":{"shape":"FaultRootCauses"},
+        "ErrorRootCauses":{"shape":"ErrorRootCauses"},
+        "ResponseTimeRootCauses":{"shape":"ResponseTimeRootCauses"},
+        "Revision":{"shape":"Integer"}
       }
     },
     "TraceSummaryList":{
@@ -914,6 +1230,20 @@
     "UnprocessedTraceSegmentList":{
       "type":"list",
       "member":{"shape":"UnprocessedTraceSegment"}
+    },
+    "UpdateGroupRequest":{
+      "type":"structure",
+      "members":{
+        "GroupName":{"shape":"GroupName"},
+        "GroupARN":{"shape":"GroupARN"},
+        "FilterExpression":{"shape":"FilterExpression"}
+      }
+    },
+    "UpdateGroupResult":{
+      "type":"structure",
+      "members":{
+        "Group":{"shape":"Group"}
+      }
     },
     "UpdateSamplingRuleRequest":{
       "type":"structure",

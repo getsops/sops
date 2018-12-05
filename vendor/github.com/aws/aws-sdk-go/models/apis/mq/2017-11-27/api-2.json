@@ -353,6 +353,8 @@
       }, {
         "shape" : "InternalServerErrorException"
       }, {
+        "shape" : "ConflictException"
+      }, {
         "shape" : "ForbiddenException"
       } ]
     },
@@ -983,6 +985,10 @@
           "shape" : "WeeklyStartTime",
           "locationName" : "maintenanceWindowStartTime"
         },
+        "PendingEngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "pendingEngineVersion"
+        },
         "PubliclyAccessible" : {
           "shape" : "__boolean",
           "locationName" : "publiclyAccessible"
@@ -1070,6 +1076,10 @@
         "MaintenanceWindowStartTime" : {
           "shape" : "WeeklyStartTime",
           "locationName" : "maintenanceWindowStartTime"
+        },
+        "PendingEngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "pendingEngineVersion"
         },
         "PubliclyAccessible" : {
           "shape" : "__boolean",
@@ -1657,9 +1667,17 @@
     "UpdateBrokerInput" : {
       "type" : "structure",
       "members" : {
+        "AutoMinorVersionUpgrade" : {
+          "shape" : "__boolean",
+          "locationName" : "autoMinorVersionUpgrade"
+        },
         "Configuration" : {
           "shape" : "ConfigurationId",
           "locationName" : "configuration"
+        },
+        "EngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "engineVersion"
         },
         "Logs" : {
           "shape" : "Logs",
@@ -1670,6 +1688,10 @@
     "UpdateBrokerOutput" : {
       "type" : "structure",
       "members" : {
+        "AutoMinorVersionUpgrade" : {
+          "shape" : "__boolean",
+          "locationName" : "autoMinorVersionUpgrade"
+        },
         "BrokerId" : {
           "shape" : "__string",
           "locationName" : "brokerId"
@@ -1677,6 +1699,10 @@
         "Configuration" : {
           "shape" : "ConfigurationId",
           "locationName" : "configuration"
+        },
+        "EngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "engineVersion"
         },
         "Logs" : {
           "shape" : "Logs",
@@ -1687,6 +1713,10 @@
     "UpdateBrokerRequest" : {
       "type" : "structure",
       "members" : {
+        "AutoMinorVersionUpgrade" : {
+          "shape" : "__boolean",
+          "locationName" : "autoMinorVersionUpgrade"
+        },
         "BrokerId" : {
           "shape" : "__string",
           "location" : "uri",
@@ -1695,6 +1725,10 @@
         "Configuration" : {
           "shape" : "ConfigurationId",
           "locationName" : "configuration"
+        },
+        "EngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "engineVersion"
         },
         "Logs" : {
           "shape" : "Logs",
@@ -1706,6 +1740,10 @@
     "UpdateBrokerResponse" : {
       "type" : "structure",
       "members" : {
+        "AutoMinorVersionUpgrade" : {
+          "shape" : "__boolean",
+          "locationName" : "autoMinorVersionUpgrade"
+        },
         "BrokerId" : {
           "shape" : "__string",
           "locationName" : "brokerId"
@@ -1713,6 +1751,10 @@
         "Configuration" : {
           "shape" : "ConfigurationId",
           "locationName" : "configuration"
+        },
+        "EngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "engineVersion"
         },
         "Logs" : {
           "shape" : "Logs",

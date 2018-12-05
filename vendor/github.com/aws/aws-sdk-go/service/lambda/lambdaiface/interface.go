@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // AWS Lambda.
 //    func myFunc(svc lambdaiface.LambdaAPI) bool {
-//        // Make svc.AddPermission request
+//        // Make svc.AddLayerVersionPermission request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockLambdaClient struct {
 //        lambdaiface.LambdaAPI
 //    }
-//    func (m *mockLambdaClient) AddPermission(input *lambda.AddPermissionInput) (*lambda.AddPermissionOutput, error) {
+//    func (m *mockLambdaClient) AddLayerVersionPermission(input *lambda.AddLayerVersionPermissionInput) (*lambda.AddLayerVersionPermissionOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type LambdaAPI interface {
+	AddLayerVersionPermission(*lambda.AddLayerVersionPermissionInput) (*lambda.AddLayerVersionPermissionOutput, error)
+	AddLayerVersionPermissionWithContext(aws.Context, *lambda.AddLayerVersionPermissionInput, ...request.Option) (*lambda.AddLayerVersionPermissionOutput, error)
+	AddLayerVersionPermissionRequest(*lambda.AddLayerVersionPermissionInput) (*request.Request, *lambda.AddLayerVersionPermissionOutput)
+
 	AddPermission(*lambda.AddPermissionInput) (*lambda.AddPermissionOutput, error)
 	AddPermissionWithContext(aws.Context, *lambda.AddPermissionInput, ...request.Option) (*lambda.AddPermissionOutput, error)
 	AddPermissionRequest(*lambda.AddPermissionInput) (*request.Request, *lambda.AddPermissionOutput)
@@ -92,6 +96,10 @@ type LambdaAPI interface {
 	DeleteFunctionConcurrencyWithContext(aws.Context, *lambda.DeleteFunctionConcurrencyInput, ...request.Option) (*lambda.DeleteFunctionConcurrencyOutput, error)
 	DeleteFunctionConcurrencyRequest(*lambda.DeleteFunctionConcurrencyInput) (*request.Request, *lambda.DeleteFunctionConcurrencyOutput)
 
+	DeleteLayerVersion(*lambda.DeleteLayerVersionInput) (*lambda.DeleteLayerVersionOutput, error)
+	DeleteLayerVersionWithContext(aws.Context, *lambda.DeleteLayerVersionInput, ...request.Option) (*lambda.DeleteLayerVersionOutput, error)
+	DeleteLayerVersionRequest(*lambda.DeleteLayerVersionInput) (*request.Request, *lambda.DeleteLayerVersionOutput)
+
 	GetAccountSettings(*lambda.GetAccountSettingsInput) (*lambda.GetAccountSettingsOutput, error)
 	GetAccountSettingsWithContext(aws.Context, *lambda.GetAccountSettingsInput, ...request.Option) (*lambda.GetAccountSettingsOutput, error)
 	GetAccountSettingsRequest(*lambda.GetAccountSettingsInput) (*request.Request, *lambda.GetAccountSettingsOutput)
@@ -111,6 +119,14 @@ type LambdaAPI interface {
 	GetFunctionConfiguration(*lambda.GetFunctionConfigurationInput) (*lambda.FunctionConfiguration, error)
 	GetFunctionConfigurationWithContext(aws.Context, *lambda.GetFunctionConfigurationInput, ...request.Option) (*lambda.FunctionConfiguration, error)
 	GetFunctionConfigurationRequest(*lambda.GetFunctionConfigurationInput) (*request.Request, *lambda.FunctionConfiguration)
+
+	GetLayerVersion(*lambda.GetLayerVersionInput) (*lambda.GetLayerVersionOutput, error)
+	GetLayerVersionWithContext(aws.Context, *lambda.GetLayerVersionInput, ...request.Option) (*lambda.GetLayerVersionOutput, error)
+	GetLayerVersionRequest(*lambda.GetLayerVersionInput) (*request.Request, *lambda.GetLayerVersionOutput)
+
+	GetLayerVersionPolicy(*lambda.GetLayerVersionPolicyInput) (*lambda.GetLayerVersionPolicyOutput, error)
+	GetLayerVersionPolicyWithContext(aws.Context, *lambda.GetLayerVersionPolicyInput, ...request.Option) (*lambda.GetLayerVersionPolicyOutput, error)
+	GetLayerVersionPolicyRequest(*lambda.GetLayerVersionPolicyInput) (*request.Request, *lambda.GetLayerVersionPolicyOutput)
 
 	GetPolicy(*lambda.GetPolicyInput) (*lambda.GetPolicyOutput, error)
 	GetPolicyWithContext(aws.Context, *lambda.GetPolicyInput, ...request.Option) (*lambda.GetPolicyOutput, error)
@@ -142,6 +158,14 @@ type LambdaAPI interface {
 	ListFunctionsPages(*lambda.ListFunctionsInput, func(*lambda.ListFunctionsOutput, bool) bool) error
 	ListFunctionsPagesWithContext(aws.Context, *lambda.ListFunctionsInput, func(*lambda.ListFunctionsOutput, bool) bool, ...request.Option) error
 
+	ListLayerVersions(*lambda.ListLayerVersionsInput) (*lambda.ListLayerVersionsOutput, error)
+	ListLayerVersionsWithContext(aws.Context, *lambda.ListLayerVersionsInput, ...request.Option) (*lambda.ListLayerVersionsOutput, error)
+	ListLayerVersionsRequest(*lambda.ListLayerVersionsInput) (*request.Request, *lambda.ListLayerVersionsOutput)
+
+	ListLayers(*lambda.ListLayersInput) (*lambda.ListLayersOutput, error)
+	ListLayersWithContext(aws.Context, *lambda.ListLayersInput, ...request.Option) (*lambda.ListLayersOutput, error)
+	ListLayersRequest(*lambda.ListLayersInput) (*request.Request, *lambda.ListLayersOutput)
+
 	ListTags(*lambda.ListTagsInput) (*lambda.ListTagsOutput, error)
 	ListTagsWithContext(aws.Context, *lambda.ListTagsInput, ...request.Option) (*lambda.ListTagsOutput, error)
 	ListTagsRequest(*lambda.ListTagsInput) (*request.Request, *lambda.ListTagsOutput)
@@ -150,6 +174,10 @@ type LambdaAPI interface {
 	ListVersionsByFunctionWithContext(aws.Context, *lambda.ListVersionsByFunctionInput, ...request.Option) (*lambda.ListVersionsByFunctionOutput, error)
 	ListVersionsByFunctionRequest(*lambda.ListVersionsByFunctionInput) (*request.Request, *lambda.ListVersionsByFunctionOutput)
 
+	PublishLayerVersion(*lambda.PublishLayerVersionInput) (*lambda.PublishLayerVersionOutput, error)
+	PublishLayerVersionWithContext(aws.Context, *lambda.PublishLayerVersionInput, ...request.Option) (*lambda.PublishLayerVersionOutput, error)
+	PublishLayerVersionRequest(*lambda.PublishLayerVersionInput) (*request.Request, *lambda.PublishLayerVersionOutput)
+
 	PublishVersion(*lambda.PublishVersionInput) (*lambda.FunctionConfiguration, error)
 	PublishVersionWithContext(aws.Context, *lambda.PublishVersionInput, ...request.Option) (*lambda.FunctionConfiguration, error)
 	PublishVersionRequest(*lambda.PublishVersionInput) (*request.Request, *lambda.FunctionConfiguration)
@@ -157,6 +185,10 @@ type LambdaAPI interface {
 	PutFunctionConcurrency(*lambda.PutFunctionConcurrencyInput) (*lambda.PutFunctionConcurrencyOutput, error)
 	PutFunctionConcurrencyWithContext(aws.Context, *lambda.PutFunctionConcurrencyInput, ...request.Option) (*lambda.PutFunctionConcurrencyOutput, error)
 	PutFunctionConcurrencyRequest(*lambda.PutFunctionConcurrencyInput) (*request.Request, *lambda.PutFunctionConcurrencyOutput)
+
+	RemoveLayerVersionPermission(*lambda.RemoveLayerVersionPermissionInput) (*lambda.RemoveLayerVersionPermissionOutput, error)
+	RemoveLayerVersionPermissionWithContext(aws.Context, *lambda.RemoveLayerVersionPermissionInput, ...request.Option) (*lambda.RemoveLayerVersionPermissionOutput, error)
+	RemoveLayerVersionPermissionRequest(*lambda.RemoveLayerVersionPermissionInput) (*request.Request, *lambda.RemoveLayerVersionPermissionOutput)
 
 	RemovePermission(*lambda.RemovePermissionInput) (*lambda.RemovePermissionOutput, error)
 	RemovePermissionWithContext(aws.Context, *lambda.RemovePermissionInput, ...request.Option) (*lambda.RemovePermissionOutput, error)

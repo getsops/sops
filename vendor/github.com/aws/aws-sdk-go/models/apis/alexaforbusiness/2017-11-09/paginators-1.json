@@ -1,11 +1,31 @@
 {
   "pagination": {
+    "ListConferenceProviders": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults"
+    },
     "ListDeviceEvents": {
       "input_token": "NextToken",
       "output_token": "NextToken",
       "limit_key": "MaxResults"
     },
     "ListSkills": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults"
+    },
+    "ListSkillsStoreCategories": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults"
+    },
+    "ListSkillsStoreSkillsByCategory": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults"
+    },
+    "ListSmartHomeAppliances": {
       "input_token": "NextToken",
       "output_token": "NextToken",
       "limit_key": "MaxResults"

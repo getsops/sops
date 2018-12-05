@@ -75,6 +75,12 @@ type EKSAPI interface {
 	ListClusters(*eks.ListClustersInput) (*eks.ListClustersOutput, error)
 	ListClustersWithContext(aws.Context, *eks.ListClustersInput, ...request.Option) (*eks.ListClustersOutput, error)
 	ListClustersRequest(*eks.ListClustersInput) (*request.Request, *eks.ListClustersOutput)
+
+	WaitUntilClusterActive(*eks.DescribeClusterInput) error
+	WaitUntilClusterActiveWithContext(aws.Context, *eks.DescribeClusterInput, ...request.WaiterOption) error
+
+	WaitUntilClusterDeleted(*eks.DescribeClusterInput) error
+	WaitUntilClusterDeletedWithContext(aws.Context, *eks.DescribeClusterInput, ...request.WaiterOption) error
 }
 
 var _ EKSAPI = (*eks.EKS)(nil)

@@ -9,6 +9,9 @@
 // makes it easy to set up and manage a customer contact center and provide
 // reliable customer engagement at any scale.
 //
+// There is a throttling limit placed on usage of the Amazon Connect operations
+// that includes a RateLimit of 2 per second, and a BurstLimit of 5 per second.
+//
 // See https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08 for more information on this service.
 //
 // See connect package documentation for more information.

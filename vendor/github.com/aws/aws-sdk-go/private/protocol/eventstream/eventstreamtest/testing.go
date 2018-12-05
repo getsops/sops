@@ -2,7 +2,6 @@ package eventstreamtest
 
 import (
 	"bytes"
-	"crypto/tls"
 	"fmt"
 	"io"
 	"net/http"
@@ -15,7 +14,6 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol"
 	"github.com/aws/aws-sdk-go/private/protocol/eventstream"
 	"github.com/aws/aws-sdk-go/private/protocol/eventstream/eventstreamapi"
-	"golang.org/x/net/http2"
 )
 
 // ServeEventStream provides serving EventStream messages from a HTTP server to
@@ -41,31 +39,11 @@ func SetupEventStreamSession(
 	t *testing.T, handler http.Handler, h2 bool,
 ) (sess *session.Session, cleanupFn func(), err error) {
 	server := httptest.NewUnstartedServer(handler)
-	server.Config.TLSConfig = &tls.Config{
-		InsecureSkipVerify: true,
-	}
 
-	clientTrans := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			InsecureSkipVerify: true,
-		},
-	}
+	client := setupServer(server, h2)
 
-	if h2 {
-		http2.ConfigureServer(server.Config, nil)
-		http2.ConfigureTransport(clientTrans)
-		server.Config.TLSConfig.NextProtos = []string{http2.NextProtoTLS}
-		clientTrans.TLSClientConfig.NextProtos = []string{http2.NextProtoTLS}
-	}
-	server.TLS = server.Config.TLSConfig
-
-	server.StartTLS()
 	cleanupFn = func() {
 		server.Close()
-	}
-
-	client := &http.Client{
-		Transport: clientTrans,
 	}
 
 	sess, err = session.NewSession(unit.Session.Config, &aws.Config{

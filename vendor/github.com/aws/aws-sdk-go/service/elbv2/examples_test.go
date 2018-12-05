@@ -120,6 +120,8 @@ func ExampleELBV2_CreateListener_shared00() {
 				fmt.Println(elbv2.ErrCodeTooManyRegistrationsForTargetIdException, aerr.Error())
 			case elbv2.ErrCodeTooManyTargetsException:
 				fmt.Println(elbv2.ErrCodeTooManyTargetsException, aerr.Error())
+			case elbv2.ErrCodeUnsupportedCertificateException:
+				fmt.Println(elbv2.ErrCodeUnsupportedCertificateException, aerr.Error())
 			case elbv2.ErrCodeTooManyActionsException:
 				fmt.Println(elbv2.ErrCodeTooManyActionsException, aerr.Error())
 			case elbv2.ErrCodeInvalidLoadBalancerActionException:
@@ -196,6 +198,8 @@ func ExampleELBV2_CreateListener_shared01() {
 				fmt.Println(elbv2.ErrCodeTooManyRegistrationsForTargetIdException, aerr.Error())
 			case elbv2.ErrCodeTooManyTargetsException:
 				fmt.Println(elbv2.ErrCodeTooManyTargetsException, aerr.Error())
+			case elbv2.ErrCodeUnsupportedCertificateException:
+				fmt.Println(elbv2.ErrCodeUnsupportedCertificateException, aerr.Error())
 			case elbv2.ErrCodeTooManyActionsException:
 				fmt.Println(elbv2.ErrCodeTooManyActionsException, aerr.Error())
 			case elbv2.ErrCodeInvalidLoadBalancerActionException:
@@ -974,6 +978,8 @@ func ExampleELBV2_ModifyListener_shared00() {
 				fmt.Println(elbv2.ErrCodeTooManyRegistrationsForTargetIdException, aerr.Error())
 			case elbv2.ErrCodeTooManyTargetsException:
 				fmt.Println(elbv2.ErrCodeTooManyTargetsException, aerr.Error())
+			case elbv2.ErrCodeUnsupportedCertificateException:
+				fmt.Println(elbv2.ErrCodeUnsupportedCertificateException, aerr.Error())
 			case elbv2.ErrCodeTooManyActionsException:
 				fmt.Println(elbv2.ErrCodeTooManyActionsException, aerr.Error())
 			case elbv2.ErrCodeInvalidLoadBalancerActionException:
@@ -1036,6 +1042,8 @@ func ExampleELBV2_ModifyListener_shared01() {
 				fmt.Println(elbv2.ErrCodeTooManyRegistrationsForTargetIdException, aerr.Error())
 			case elbv2.ErrCodeTooManyTargetsException:
 				fmt.Println(elbv2.ErrCodeTooManyTargetsException, aerr.Error())
+			case elbv2.ErrCodeUnsupportedCertificateException:
+				fmt.Println(elbv2.ErrCodeUnsupportedCertificateException, aerr.Error())
 			case elbv2.ErrCodeTooManyActionsException:
 				fmt.Println(elbv2.ErrCodeTooManyActionsException, aerr.Error())
 			case elbv2.ErrCodeInvalidLoadBalancerActionException:

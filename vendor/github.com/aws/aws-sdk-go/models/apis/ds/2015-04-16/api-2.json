@@ -13,6 +13,22 @@
     "uid":"ds-2015-04-16"
   },
   "operations":{
+    "AcceptSharedDirectory":{
+      "name":"AcceptSharedDirectory",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"AcceptSharedDirectoryRequest"},
+      "output":{"shape":"AcceptSharedDirectoryResult"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"EntityDoesNotExistException"},
+        {"shape":"DirectoryAlreadySharedException"},
+        {"shape":"ClientException"},
+        {"shape":"ServiceException"}
+      ]
+    },
     "AddIpRoutes":{
       "name":"AddIpRoutes",
       "http":{
@@ -144,6 +160,23 @@
         {"shape":"ServiceException"}
       ]
     },
+    "CreateLogSubscription":{
+      "name":"CreateLogSubscription",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateLogSubscriptionRequest"},
+      "output":{"shape":"CreateLogSubscriptionResult"},
+      "errors":[
+        {"shape":"EntityAlreadyExistsException"},
+        {"shape":"EntityDoesNotExistException"},
+        {"shape":"UnsupportedOperationException"},
+        {"shape":"InsufficientPermissionsException"},
+        {"shape":"ClientException"},
+        {"shape":"ServiceException"}
+      ]
+    },
     "CreateMicrosoftAD":{
       "name":"CreateMicrosoftAD",
       "http":{
@@ -220,6 +253,21 @@
       "output":{"shape":"DeleteDirectoryResult"},
       "errors":[
         {"shape":"EntityDoesNotExistException"},
+        {"shape":"ClientException"},
+        {"shape":"ServiceException"}
+      ]
+    },
+    "DeleteLogSubscription":{
+      "name":"DeleteLogSubscription",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteLogSubscriptionRequest"},
+      "output":{"shape":"DeleteLogSubscriptionResult"},
+      "errors":[
+        {"shape":"EntityDoesNotExistException"},
+        {"shape":"UnsupportedOperationException"},
         {"shape":"ClientException"},
         {"shape":"ServiceException"}
       ]
@@ -331,6 +379,23 @@
       "errors":[
         {"shape":"EntityDoesNotExistException"},
         {"shape":"InvalidParameterException"},
+        {"shape":"ClientException"},
+        {"shape":"ServiceException"}
+      ]
+    },
+    "DescribeSharedDirectories":{
+      "name":"DescribeSharedDirectories",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeSharedDirectoriesRequest"},
+      "output":{"shape":"DescribeSharedDirectoriesResult"},
+      "errors":[
+        {"shape":"EntityDoesNotExistException"},
+        {"shape":"InvalidNextTokenException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"UnsupportedOperationException"},
         {"shape":"ClientException"},
         {"shape":"ServiceException"}
       ]
@@ -474,6 +539,21 @@
         {"shape":"ServiceException"}
       ]
     },
+    "ListLogSubscriptions":{
+      "name":"ListLogSubscriptions",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListLogSubscriptionsRequest"},
+      "output":{"shape":"ListLogSubscriptionsResult"},
+      "errors":[
+        {"shape":"EntityDoesNotExistException"},
+        {"shape":"InvalidNextTokenException"},
+        {"shape":"ClientException"},
+        {"shape":"ServiceException"}
+      ]
+    },
     "ListSchemaExtensions":{
       "name":"ListSchemaExtensions",
       "http":{
@@ -516,6 +596,22 @@
       "errors":[
         {"shape":"EntityDoesNotExistException"},
         {"shape":"InvalidParameterException"},
+        {"shape":"ClientException"},
+        {"shape":"ServiceException"}
+      ]
+    },
+    "RejectSharedDirectory":{
+      "name":"RejectSharedDirectory",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"RejectSharedDirectoryRequest"},
+      "output":{"shape":"RejectSharedDirectoryResult"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"EntityDoesNotExistException"},
+        {"shape":"DirectoryAlreadySharedException"},
         {"shape":"ClientException"},
         {"shape":"ServiceException"}
       ]
@@ -584,6 +680,27 @@
         {"shape":"ServiceException"}
       ]
     },
+    "ShareDirectory":{
+      "name":"ShareDirectory",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ShareDirectoryRequest"},
+      "output":{"shape":"ShareDirectoryResult"},
+      "errors":[
+        {"shape":"DirectoryAlreadySharedException"},
+        {"shape":"EntityDoesNotExistException"},
+        {"shape":"InvalidTargetException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"ClientException"},
+        {"shape":"ShareLimitExceededException"},
+        {"shape":"OrganizationsException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"UnsupportedOperationException"},
+        {"shape":"ServiceException"}
+      ]
+    },
     "StartSchemaExtension":{
       "name":"StartSchemaExtension",
       "http":{
@@ -597,6 +714,22 @@
         {"shape":"EntityDoesNotExistException"},
         {"shape":"InvalidParameterException"},
         {"shape":"SnapshotLimitExceededException"},
+        {"shape":"ClientException"},
+        {"shape":"ServiceException"}
+      ]
+    },
+    "UnshareDirectory":{
+      "name":"UnshareDirectory",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UnshareDirectoryRequest"},
+      "output":{"shape":"UnshareDirectoryResult"},
+      "errors":[
+        {"shape":"EntityDoesNotExistException"},
+        {"shape":"InvalidTargetException"},
+        {"shape":"DirectoryNotSharedException"},
         {"shape":"ClientException"},
         {"shape":"ServiceException"}
       ]
@@ -651,6 +784,21 @@
         {"shape":"ServiceException"}
       ]
     },
+    "UpdateTrust":{
+      "name":"UpdateTrust",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateTrustRequest"},
+      "output":{"shape":"UpdateTrustResult"},
+      "errors":[
+        {"shape":"EntityDoesNotExistException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"ClientException"},
+        {"shape":"ServiceException"}
+      ]
+    },
     "VerifyTrust":{
       "name":"VerifyTrust",
       "http":{
@@ -669,6 +817,27 @@
     }
   },
   "shapes":{
+    "AcceptSharedDirectoryRequest":{
+      "type":"structure",
+      "required":["SharedDirectoryId"],
+      "members":{
+        "SharedDirectoryId":{"shape":"DirectoryId"}
+      }
+    },
+    "AcceptSharedDirectoryResult":{
+      "type":"structure",
+      "members":{
+        "SharedDirectory":{"shape":"SharedDirectory"}
+      }
+    },
+    "AccessDeniedException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ExceptionMessage"},
+        "RequestId":{"shape":"RequestId"}
+      },
+      "exception":true
+    },
     "AccessUrl":{
       "type":"string",
       "max":128,
@@ -917,6 +1086,22 @@
         "DirectoryId":{"shape":"DirectoryId"}
       }
     },
+    "CreateLogSubscriptionRequest":{
+      "type":"structure",
+      "required":[
+        "DirectoryId",
+        "LogGroupName"
+      ],
+      "members":{
+        "DirectoryId":{"shape":"DirectoryId"},
+        "LogGroupName":{"shape":"LogGroupName"}
+      }
+    },
+    "CreateLogSubscriptionResult":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "CreateMicrosoftADRequest":{
       "type":"structure",
       "required":[
@@ -968,7 +1153,8 @@
         "TrustPassword":{"shape":"TrustPassword"},
         "TrustDirection":{"shape":"TrustDirection"},
         "TrustType":{"shape":"TrustType"},
-        "ConditionalForwarderIpAddrs":{"shape":"DnsIpAddrs"}
+        "ConditionalForwarderIpAddrs":{"shape":"DnsIpAddrs"},
+        "SelectiveAuth":{"shape":"SelectiveAuth"}
       }
     },
     "CreateTrustResult":{
@@ -978,6 +1164,10 @@
       }
     },
     "CreatedDateTime":{"type":"timestamp"},
+    "CustomerId":{
+      "type":"string",
+      "pattern":"^(\\d{12})$"
+    },
     "CustomerUserName":{
       "type":"string",
       "max":64,
@@ -1012,6 +1202,18 @@
       "type":"structure",
       "members":{
         "DirectoryId":{"shape":"DirectoryId"}
+      }
+    },
+    "DeleteLogSubscriptionRequest":{
+      "type":"structure",
+      "required":["DirectoryId"],
+      "members":{
+        "DirectoryId":{"shape":"DirectoryId"}
+      }
+    },
+    "DeleteLogSubscriptionResult":{
+      "type":"structure",
+      "members":{
       }
     },
     "DeleteSnapshotRequest":{
@@ -1116,6 +1318,23 @@
         "EventTopics":{"shape":"EventTopics"}
       }
     },
+    "DescribeSharedDirectoriesRequest":{
+      "type":"structure",
+      "required":["OwnerDirectoryId"],
+      "members":{
+        "OwnerDirectoryId":{"shape":"DirectoryId"},
+        "SharedDirectoryIds":{"shape":"DirectoryIds"},
+        "NextToken":{"shape":"NextToken"},
+        "Limit":{"shape":"Limit"}
+      }
+    },
+    "DescribeSharedDirectoriesResult":{
+      "type":"structure",
+      "members":{
+        "SharedDirectories":{"shape":"SharedDirectories"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
     "DescribeSnapshotsRequest":{
       "type":"structure",
       "members":{
@@ -1158,6 +1377,14 @@
       "type":"integer",
       "min":2
     },
+    "DirectoryAlreadySharedException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ExceptionMessage"},
+        "RequestId":{"shape":"RequestId"}
+      },
+      "exception":true
+    },
     "DirectoryConnectSettings":{
       "type":"structure",
       "required":[
@@ -1197,6 +1424,9 @@
         "Description":{"shape":"Description"},
         "DnsIpAddrs":{"shape":"DnsIpAddrs"},
         "Stage":{"shape":"DirectoryStage"},
+        "ShareStatus":{"shape":"ShareStatus"},
+        "ShareMethod":{"shape":"ShareMethod"},
+        "ShareNotes":{"shape":"Notes"},
         "LaunchTime":{"shape":"LaunchTime"},
         "StageLastUpdatedDateTime":{"shape":"LastUpdatedDateTime"},
         "Type":{"shape":"DirectoryType"},
@@ -1206,7 +1436,8 @@
         "RadiusStatus":{"shape":"RadiusStatus"},
         "StageReason":{"shape":"StageReason"},
         "SsoEnabled":{"shape":"SsoEnabled"},
-        "DesiredNumberOfDomainControllers":{"shape":"DesiredNumberOfDomainControllers"}
+        "DesiredNumberOfDomainControllers":{"shape":"DesiredNumberOfDomainControllers"},
+        "OwnerDirectoryDescription":{"shape":"OwnerDirectoryDescription"}
       }
     },
     "DirectoryDescriptions":{
@@ -1254,6 +1485,14 @@
       "type":"string",
       "pattern":"^([a-zA-Z0-9]+[\\\\.-])+([a-zA-Z0-9])+$"
     },
+    "DirectoryNotSharedException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ExceptionMessage"},
+        "RequestId":{"shape":"RequestId"}
+      },
+      "exception":true
+    },
     "DirectoryShortName":{
       "type":"string",
       "pattern":"^[^\\\\/:*?\\\"\\<\\>|.]+[^\\\\/:*?\\\"<>|]*$"
@@ -1286,7 +1525,8 @@
       "enum":[
         "SimpleAD",
         "ADConnector",
-        "MicrosoftAD"
+        "MicrosoftAD",
+        "SharedMicrosoftAD"
       ]
     },
     "DirectoryUnavailableException":{
@@ -1513,6 +1753,14 @@
       },
       "exception":true
     },
+    "InvalidTargetException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ExceptionMessage"},
+        "RequestId":{"shape":"RequestId"}
+      },
+      "exception":true
+    },
     "IpAddr":{
       "type":"string",
       "pattern":"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
@@ -1594,6 +1842,21 @@
         "NextToken":{"shape":"NextToken"}
       }
     },
+    "ListLogSubscriptionsRequest":{
+      "type":"structure",
+      "members":{
+        "DirectoryId":{"shape":"DirectoryId"},
+        "NextToken":{"shape":"NextToken"},
+        "Limit":{"shape":"Limit"}
+      }
+    },
+    "ListLogSubscriptionsResult":{
+      "type":"structure",
+      "members":{
+        "LogSubscriptions":{"shape":"LogSubscriptions"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
     "ListSchemaExtensionsRequest":{
       "type":"structure",
       "required":["DirectoryId"],
@@ -1626,12 +1889,54 @@
         "NextToken":{"shape":"NextToken"}
       }
     },
+    "LogGroupName":{
+      "type":"string",
+      "max":512,
+      "min":1,
+      "pattern":"[-._/#A-Za-z0-9]+"
+    },
+    "LogSubscription":{
+      "type":"structure",
+      "members":{
+        "DirectoryId":{"shape":"DirectoryId"},
+        "LogGroupName":{"shape":"LogGroupName"},
+        "SubscriptionCreatedDateTime":{"shape":"SubscriptionCreatedDateTime"}
+      }
+    },
+    "LogSubscriptions":{
+      "type":"list",
+      "member":{"shape":"LogSubscription"}
+    },
     "ManualSnapshotsLimitReached":{"type":"boolean"},
     "NextToken":{"type":"string"},
+    "Notes":{
+      "type":"string",
+      "max":1024,
+      "sensitive":true
+    },
     "OrganizationalUnitDN":{
       "type":"string",
       "max":2000,
       "min":1
+    },
+    "OrganizationsException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ExceptionMessage"},
+        "RequestId":{"shape":"RequestId"}
+      },
+      "exception":true
+    },
+    "OwnerDirectoryDescription":{
+      "type":"structure",
+      "members":{
+        "DirectoryId":{"shape":"DirectoryId"},
+        "AccountId":{"shape":"CustomerId"},
+        "DnsIpAddrs":{"shape":"DnsIpAddrs"},
+        "VpcSettings":{"shape":"DirectoryVpcSettingsDescription"},
+        "RadiusSettings":{"shape":"RadiusSettings"},
+        "RadiusStatus":{"shape":"RadiusStatus"}
+      }
     },
     "Password":{
       "type":"string",
@@ -1708,6 +2013,19 @@
     "RegisterEventTopicResult":{
       "type":"structure",
       "members":{
+      }
+    },
+    "RejectSharedDirectoryRequest":{
+      "type":"structure",
+      "required":["SharedDirectoryId"],
+      "members":{
+        "SharedDirectoryId":{"shape":"DirectoryId"}
+      }
+    },
+    "RejectSharedDirectoryResult":{
+      "type":"structure",
+      "members":{
+        "SharedDirectoryId":{"shape":"DirectoryId"}
       }
     },
     "RemoteDomainName":{
@@ -1837,6 +2155,13 @@
       "type":"string",
       "pattern":"^(sg-[0-9a-f]{8}|sg-[0-9a-f]{17})$"
     },
+    "SelectiveAuth":{
+      "type":"string",
+      "enum":[
+        "Enabled",
+        "Disabled"
+      ]
+    },
     "Server":{
       "type":"string",
       "max":256,
@@ -1854,6 +2179,84 @@
       },
       "exception":true,
       "fault":true
+    },
+    "ShareDirectoryRequest":{
+      "type":"structure",
+      "required":[
+        "DirectoryId",
+        "ShareTarget",
+        "ShareMethod"
+      ],
+      "members":{
+        "DirectoryId":{"shape":"DirectoryId"},
+        "ShareNotes":{"shape":"Notes"},
+        "ShareTarget":{"shape":"ShareTarget"},
+        "ShareMethod":{"shape":"ShareMethod"}
+      }
+    },
+    "ShareDirectoryResult":{
+      "type":"structure",
+      "members":{
+        "SharedDirectoryId":{"shape":"DirectoryId"}
+      }
+    },
+    "ShareLimitExceededException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ExceptionMessage"},
+        "RequestId":{"shape":"RequestId"}
+      },
+      "exception":true
+    },
+    "ShareMethod":{
+      "type":"string",
+      "enum":[
+        "ORGANIZATIONS",
+        "HANDSHAKE"
+      ]
+    },
+    "ShareStatus":{
+      "type":"string",
+      "enum":[
+        "Shared",
+        "PendingAcceptance",
+        "Rejected",
+        "Rejecting",
+        "RejectFailed",
+        "Sharing",
+        "ShareFailed",
+        "Deleted",
+        "Deleting"
+      ]
+    },
+    "ShareTarget":{
+      "type":"structure",
+      "required":[
+        "Id",
+        "Type"
+      ],
+      "members":{
+        "Id":{"shape":"TargetId"},
+        "Type":{"shape":"TargetType"}
+      }
+    },
+    "SharedDirectories":{
+      "type":"list",
+      "member":{"shape":"SharedDirectory"}
+    },
+    "SharedDirectory":{
+      "type":"structure",
+      "members":{
+        "OwnerAccountId":{"shape":"CustomerId"},
+        "OwnerDirectoryId":{"shape":"DirectoryId"},
+        "ShareMethod":{"shape":"ShareMethod"},
+        "SharedAccountId":{"shape":"CustomerId"},
+        "SharedDirectoryId":{"shape":"DirectoryId"},
+        "ShareStatus":{"shape":"ShareStatus"},
+        "ShareNotes":{"shape":"Notes"},
+        "CreatedDateTime":{"shape":"CreatedDateTime"},
+        "LastUpdatedDateTime":{"shape":"LastUpdatedDateTime"}
+      }
     },
     "Snapshot":{
       "type":"structure",
@@ -1949,6 +2352,7 @@
       "type":"list",
       "member":{"shape":"SubnetId"}
     },
+    "SubscriptionCreatedDateTime":{"type":"timestamp"},
     "Tag":{
       "type":"structure",
       "required":[
@@ -1988,6 +2392,15 @@
       "type":"list",
       "member":{"shape":"Tag"}
     },
+    "TargetId":{
+      "type":"string",
+      "max":64,
+      "min":1
+    },
+    "TargetType":{
+      "type":"string",
+      "enum":["ACCOUNT"]
+    },
     "TopicArn":{"type":"string"},
     "TopicName":{
       "type":"string",
@@ -2020,7 +2433,8 @@
         "CreatedDateTime":{"shape":"CreatedDateTime"},
         "LastUpdatedDateTime":{"shape":"LastUpdatedDateTime"},
         "StateLastUpdatedDateTime":{"shape":"StateLastUpdatedDateTime"},
-        "TrustStateReason":{"shape":"TrustStateReason"}
+        "TrustStateReason":{"shape":"TrustStateReason"},
+        "SelectiveAuth":{"shape":"SelectiveAuth"}
       }
     },
     "TrustDirection":{
@@ -2043,6 +2457,7 @@
       "type":"string",
       "max":128,
       "min":1,
+      "pattern":"(.|\\s)*\\S(.|\\s)*",
       "sensitive":true
     },
     "TrustState":{
@@ -2053,6 +2468,9 @@
         "Verifying",
         "VerifyFailed",
         "Verified",
+        "Updating",
+        "UpdateFailed",
+        "Updated",
         "Deleting",
         "Deleted",
         "Failed"
@@ -2061,11 +2479,42 @@
     "TrustStateReason":{"type":"string"},
     "TrustType":{
       "type":"string",
-      "enum":["Forest"]
+      "enum":[
+        "Forest",
+        "External"
+      ]
     },
     "Trusts":{
       "type":"list",
       "member":{"shape":"Trust"}
+    },
+    "UnshareDirectoryRequest":{
+      "type":"structure",
+      "required":[
+        "DirectoryId",
+        "UnshareTarget"
+      ],
+      "members":{
+        "DirectoryId":{"shape":"DirectoryId"},
+        "UnshareTarget":{"shape":"UnshareTarget"}
+      }
+    },
+    "UnshareDirectoryResult":{
+      "type":"structure",
+      "members":{
+        "SharedDirectoryId":{"shape":"DirectoryId"}
+      }
+    },
+    "UnshareTarget":{
+      "type":"structure",
+      "required":[
+        "Id",
+        "Type"
+      ],
+      "members":{
+        "Id":{"shape":"TargetId"},
+        "Type":{"shape":"TargetType"}
+      }
     },
     "UnsupportedOperationException":{
       "type":"structure",
@@ -2126,6 +2575,21 @@
       }
     },
     "UpdateSecurityGroupForDirectoryControllers":{"type":"boolean"},
+    "UpdateTrustRequest":{
+      "type":"structure",
+      "required":["TrustId"],
+      "members":{
+        "TrustId":{"shape":"TrustId"},
+        "SelectiveAuth":{"shape":"SelectiveAuth"}
+      }
+    },
+    "UpdateTrustResult":{
+      "type":"structure",
+      "members":{
+        "RequestId":{"shape":"RequestId"},
+        "TrustId":{"shape":"TrustId"}
+      }
+    },
     "UseSameUsername":{"type":"boolean"},
     "UserDoesNotExistException":{
       "type":"structure",

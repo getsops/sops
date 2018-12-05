@@ -16,7 +16,7 @@ const opPostContent = "PostContent"
 // PostContentRequest generates a "aws/request.Request" representing the
 // client's request for the PostContent operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -194,7 +194,7 @@ const opPostText = "PostText"
 // PostTextRequest generates a "aws/request.Request" representing the
 // client's request for the PostText operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -591,8 +591,14 @@ func (s *PostContentInput) Validate() error {
 	if s.BotAlias == nil {
 		invalidParams.Add(request.NewErrParamRequired("BotAlias"))
 	}
+	if s.BotAlias != nil && len(*s.BotAlias) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BotAlias", 1))
+	}
 	if s.BotName == nil {
 		invalidParams.Add(request.NewErrParamRequired("BotName"))
+	}
+	if s.BotName != nil && len(*s.BotName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BotName", 1))
 	}
 	if s.ContentType == nil {
 		invalidParams.Add(request.NewErrParamRequired("ContentType"))
@@ -748,7 +754,7 @@ type PostContentOutput struct {
 	//
 	// If the Lambda function returns a message, Amazon Lex passes it to the client
 	// in its response.
-	Message *string `location:"header" locationName:"x-amz-lex-message" min:"1" type:"string"`
+	Message *string `location:"header" locationName:"x-amz-lex-message" min:"1" type:"string" sensitive:"true"`
 
 	// The format of the response message. One of the following values:
 	//
@@ -870,7 +876,7 @@ type PostTextInput struct {
 	// The text that the user entered (Amazon Lex interprets this text).
 	//
 	// InputText is a required field
-	InputText *string `locationName:"inputText" min:"1" type:"string" required:"true"`
+	InputText *string `locationName:"inputText" min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// Request-specific information passed between Amazon Lex and a client application.
 	//
@@ -878,12 +884,12 @@ type PostTextInput struct {
 	// any request attributes with the prefix x-amz-lex:.
 	//
 	// For more information, see Setting Request Attributes (http://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html#context-mgmt-request-attribs).
-	RequestAttributes map[string]*string `locationName:"requestAttributes" type:"map"`
+	RequestAttributes map[string]*string `locationName:"requestAttributes" type:"map" sensitive:"true"`
 
 	// Application-specific information passed between Amazon Lex and a client application.
 	//
 	// For more information, see Setting Session Attributes (http://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html#context-mgmt-session-attribs).
-	SessionAttributes map[string]*string `locationName:"sessionAttributes" type:"map"`
+	SessionAttributes map[string]*string `locationName:"sessionAttributes" type:"map" sensitive:"true"`
 
 	// The ID of the client application user. Amazon Lex uses this to identify a
 	// user's conversation with your bot. At runtime, each request must contain
@@ -929,8 +935,14 @@ func (s *PostTextInput) Validate() error {
 	if s.BotAlias == nil {
 		invalidParams.Add(request.NewErrParamRequired("BotAlias"))
 	}
+	if s.BotAlias != nil && len(*s.BotAlias) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BotAlias", 1))
+	}
 	if s.BotName == nil {
 		invalidParams.Add(request.NewErrParamRequired("BotName"))
+	}
+	if s.BotName != nil && len(*s.BotName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BotName", 1))
 	}
 	if s.InputText == nil {
 		invalidParams.Add(request.NewErrParamRequired("InputText"))
@@ -1055,7 +1067,7 @@ type PostTextOutput struct {
 	//
 	// If the Lambda function returns a message, Amazon Lex passes it to the client
 	// in its response.
-	Message *string `locationName:"message" min:"1" type:"string"`
+	Message *string `locationName:"message" min:"1" type:"string" sensitive:"true"`
 
 	// The format of the response message. One of the following values:
 	//
@@ -1077,7 +1089,7 @@ type PostTextOutput struct {
 	ResponseCard *ResponseCard `locationName:"responseCard" type:"structure"`
 
 	// A map of key-value pairs representing the session-specific context information.
-	SessionAttributes map[string]*string `locationName:"sessionAttributes" type:"map"`
+	SessionAttributes map[string]*string `locationName:"sessionAttributes" type:"map" sensitive:"true"`
 
 	// If the dialogState value is ElicitSlot, returns the name of the slot for
 	// which Amazon Lex is eliciting a value.
@@ -1093,7 +1105,7 @@ type PostTextOutput struct {
 	// TOP_RESOLUTION Amazon Lex returns the first value in the resolution list
 	// or, if there is no resolution list, null. If you don't specify a valueSelectionStrategy,
 	// the default is ORIGINAL_VALUE.
-	Slots map[string]*string `locationName:"slots" type:"map"`
+	Slots map[string]*string `locationName:"slots" type:"map" sensitive:"true"`
 }
 
 // String returns the string representation

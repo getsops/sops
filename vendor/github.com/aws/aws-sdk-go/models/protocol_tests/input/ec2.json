@@ -147,19 +147,55 @@
       "InputShape": {
         "type": "structure",
         "members": {
-          "ListArg": {
-            "shape": "ListType"
+          "ListStrings": {
+            "shape": "ListStringType"
+          },
+          "ListBools": {
+            "shape": "ListBoolType"
+          },
+          "ListFloats": {
+            "shape": "ListFloatType"
+          },
+          "ListIntegers": {
+            "shape": "ListIntegerType"
           }
         }
       },
-      "ListType": {
+      "ListStringType": {
         "type": "list",
         "member": {
-          "shape": "Strings"
+          "shape": "StringType"
         }
       },
-      "Strings": {
+      "ListBoolType": {
+        "type": "list",
+        "member": {
+          "shape": "BoolType"
+        }
+      },
+      "ListFloatType": {
+        "type": "list",
+        "member": {
+          "shape": "FloatType"
+        }
+      },
+      "ListIntegerType": {
+        "type": "list",
+        "member": {
+          "shape": "IntegerType"
+        }
+      },
+      "StringType": {
         "type": "string"
+      },
+      "BoolType": {
+        "type": "boolean"
+      },
+      "FloatType": {
+        "type": "float"
+      },
+      "IntegerType": {
+        "type": "integer"
       }
     },
     "cases": [
@@ -171,15 +207,30 @@
           "name": "OperationName"
         },
         "params": {
-          "ListArg": [
+          "ListStrings": [
             "foo",
             "bar",
             "baz"
+          ],
+          "ListBools": [
+            true,
+            false,
+            false
+          ],
+          "ListFloats": [
+            1.1,
+            2.718,
+            3.14
+          ],
+          "ListIntegers": [
+            0,
+            1,
+            2
           ]
         },
         "serialized": {
           "uri": "/",
-          "body": "Action=OperationName&Version=2014-01-01&ListArg.1=foo&ListArg.2=bar&ListArg.3=baz"
+          "body": "Action=OperationName&Version=2014-01-01&ListStrings.1=foo&ListStrings.2=bar&ListStrings.3=baz&ListBools.1=true&ListBools.2=false&ListBools.3=false&ListFloats.1=1.1&ListFloats.2=2.718&ListFloats.3=3.14&ListIntegers.1=0&ListIntegers.2=1&ListIntegers.3=2"
         }
       }
     ]
@@ -484,6 +535,76 @@
           "uri": "/",
           "headers": {},
           "body": "Action=OperationName&Version=2014-01-01"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Endpoint host trait",
+    "metadata": {
+      "protocol": "ec2",
+      "apiVersion": "2014-01-01"
+    },
+    "clientEndpoint": "https://service.region.amazonaws.com",
+    "shapes": {
+      "StaticInputShape": {
+        "type": "structure",
+        "members": {
+          "Name": {
+            "shape": "StringType"
+          }
+        }
+      },
+      "MemberRefInputShape": {
+        "type": "structure",
+        "members": {
+          "Name": {
+            "shape": "StringType",
+            "hostLabel": true
+          }
+        }
+      },
+      "StringType": {
+        "type": "string"
+      }
+    },
+    "cases": [
+      {
+        "given": {
+          "name": "StaticOp",
+          "input": {
+            "shape": "StaticInputShape"
+          },
+          "endpoint":{
+              "hostPrefix": "data-"
+          }
+        },
+        "params": {
+          "Name": "myname"
+        },
+        "serialized": {
+          "uri": "/",
+          "body": "Action=StaticOp&Version=2014-01-01&Name=myname",
+          "host": "data-service.region.amazonaws.com"
+        }
+      },
+      {
+        "given": {
+          "name": "MemberRefOp",
+          "input": {
+            "shape": "MemberRefInputShape"
+          },
+          "endpoint":{
+              "hostPrefix": "foo-{Name}."
+          }
+        },
+        "params": {
+          "Name": "myname"
+        },
+        "serialized": {
+          "uri": "/",
+          "body": "Action=MemberRefOp&Version=2014-01-01&Name=myname",
+          "host": "foo-myname.service.region.amazonaws.com"
         }
       }
     ]

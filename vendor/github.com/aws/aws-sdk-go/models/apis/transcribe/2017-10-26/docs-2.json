@@ -2,18 +2,19 @@
   "version": "2.0",
   "service": "<p>Operations and objects for transcribing speech to text.</p>",
   "operations": {
-    "CreateVocabulary": "<p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file.</p>",
+    "CreateVocabulary": "<p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file. Note that vocabularies for en-AU, en-UK, and fr-CA languages that are in preview are not available. In the console, the vocabulary section will be greyed-out and SDK will return error message. </p>",
+    "DeleteTranscriptionJob": "<p>Deletes a previously submitted transcription job along with any other generated results such as the transcription, models, and so on.</p>",
     "DeleteVocabulary": "<p>Deletes a vocabulary from Amazon Transcribe. </p>",
     "GetTranscriptionJob": "<p>Returns information about a transcription job. To see the status of the job, check the <code>TranscriptionJobStatus</code> field. If the status is <code>COMPLETED</code>, the job is finished and you can find the results at the location specified in the <code>TranscriptionFileUri</code> field.</p>",
-    "GetVocabulary": "<p>Gets information about a vocabulary.</p>",
+    "GetVocabulary": "<p>Gets information about a vocabulary. Note that vocabularies for en-AU, en-UK, and fr-CA languages that are in preview are not available. In the console, the vocabulary section will be greyed-out and SDK will return error message.</p>",
     "ListTranscriptionJobs": "<p>Lists transcription jobs with the specified status.</p>",
     "ListVocabularies": "<p>Returns a list of vocabularies that match the specified criteria. If no criteria are specified, returns the entire list of vocabularies.</p>",
-    "StartTranscriptionJob": "<p>Starts an asynchronous job to transcribe speech to text.</p>",
-    "UpdateVocabulary": "<p>Updates an existing vocabulary with new values. The <code>UpdateVocabulary</code> operation overwrites all of the existing information with the values that you provide in the request.</p>"
+    "StartTranscriptionJob": "<p>Starts an asynchronous job to transcribe speech to text. Note that en-AU, en-UK, and fr-CA languages are in preview and are only available to whitelisted customers. </p>",
+    "UpdateVocabulary": "<p>Updates an existing vocabulary with new values. The <code>UpdateVocabulary</code> operation overwrites all of the existing information with the values that you provide in the request. Note that vocabularies for en-AU, en-UK, and fr-CA languages that are in preview are not available. In the console, the vocabulary section will be greyed-out and SDK will return error message.</p>"
   },
   "shapes": {
     "BadRequestException": {
-      "base": "<p>Your request didn't pass one or more validation tests. For example, a name already exists when creating a resource or a name may not exist when getting a transcription job or custom vocabulary. See the exception <code>Message</code> field for more information.</p>",
+      "base": "<p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's \"in progress\"). See the exception <code>Message</code> field for more information.</p>",
       "refs": {
       }
     },
@@ -50,6 +51,11 @@
         "TranscriptionJobSummary$CompletionTime": "<p>A timestamp that shows when the job was completed.</p>",
         "UpdateVocabularyResponse$LastModifiedTime": "<p>The date and time that the vocabulary was updated.</p>",
         "VocabularyInfo$LastModifiedTime": "<p>The date and time that the vocabulary was last modified.</p>"
+      }
+    },
+    "DeleteTranscriptionJobRequest": {
+      "base": null,
+      "refs": {
       }
     },
     "DeleteVocabularyRequest": {
@@ -237,7 +243,7 @@
       }
     },
     "TranscriptionJob": {
-      "base": "<p>Describes an asynchronous transcription job that was created with the <code>StartTranscriptionJob</code> operation.</p>",
+      "base": "<p>Describes an asynchronous transcription job that was created with the <code>StartTranscriptionJob</code> operation. Note that en-AU, en-UK, and fr-CA languages are in preview and are only available to whitelisted customers.</p>",
       "refs": {
         "GetTranscriptionJobResponse$TranscriptionJob": "<p>An object that contains the results of the transcription job.</p>",
         "StartTranscriptionJobResponse$TranscriptionJob": "<p>An object containing details of the asynchronous transcription job.</p>"
@@ -246,9 +252,10 @@
     "TranscriptionJobName": {
       "base": null,
       "refs": {
+        "DeleteTranscriptionJobRequest$TranscriptionJobName": "<p>The name of the transcription job to be deleted.</p>",
         "GetTranscriptionJobRequest$TranscriptionJobName": "<p>The name of the job.</p>",
         "ListTranscriptionJobsRequest$JobNameContains": "<p>When specified, the jobs returned in the list are limited to jobs whose name contains the specified string.</p>",
-        "StartTranscriptionJobRequest$TranscriptionJobName": "<p>The name of the job. You can't use the strings \".\" or \"..\" in the job name. The name must be unique within an AWS account.</p>",
+        "StartTranscriptionJobRequest$TranscriptionJobName": "<p>The name of the job. Note that you can't use the strings \".\" or \"..\" by themselves as the job name. The name must also be unique within an AWS account.</p>",
         "TranscriptionJob$TranscriptionJobName": "<p>The name of the transcription job.</p>",
         "TranscriptionJobSummary$TranscriptionJobName": "<p>The name of the transcription job.</p>"
       }
@@ -270,7 +277,7 @@
       }
     },
     "TranscriptionJobSummary": {
-      "base": "<p>Provides a summary of information about a transcription job.</p>",
+      "base": "<p>Provides a summary of information about a transcription job. Note that en-AU, en-UK, and fr-CA languages are in preview and are only available to whitelisted customers.</p>",
       "refs": {
         "TranscriptionJobSummaries$member": null
       }
@@ -300,7 +307,7 @@
       }
     },
     "VocabularyInfo": {
-      "base": "<p>Provides information about a custom vocabulary.</p>",
+      "base": "<p>Provides information about a custom vocabulary. Note that vocabularies for en-AU, en-UK, and fr-CA languages that are in preview are not available. In the console, the vocabulary section will be greyed-out and SDK will return error message.</p>",
       "refs": {
         "Vocabularies$member": null
       }

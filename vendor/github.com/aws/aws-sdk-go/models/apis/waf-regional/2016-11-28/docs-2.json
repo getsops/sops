@@ -65,7 +65,7 @@
     "ListSubscribedRuleGroups": "<p>Returns an array of <a>RuleGroup</a> objects that you are subscribed to.</p>",
     "ListWebACLs": "<p>Returns an array of <a>WebACLSummary</a> objects in the response.</p>",
     "ListXssMatchSets": "<p>Returns an array of <a>XssMatchSet</a> objects.</p>",
-    "PutLoggingConfiguration": "<p>Associates a <a>LoggingConfiguration</a> with a specified web ACL.</p> <p>You can access information about all traffic that AWS WAF inspects using the following steps:</p> <ol> <li> <p>Create an Amazon Kinesis Data Firehose delivery stream. For more information, see <a href=\"https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html\">Creating an Amazon Kinesis Data Firehose Delivery Stream</a>. </p> </li> <li> <p>Associate that delivery stream to your web ACL using a <code>PutLoggingConfiguration</code> request.</p> </li> </ol> <p>When you successfully enable logging using a <code>PutLoggingConfiguration</code> request, AWS WAF will create a service linked role with the necessary permissions to write logs to the Amazon Kinesis Data Firehose delivery stream. For more information, see <a href=\"http://docs.aws.amazon.com/waf/latest/developerguide/logging.html\">Logging Web ACL Traffic Information</a> in the <i>AWS WAF Developer Guide</i>.</p>",
+    "PutLoggingConfiguration": "<p>Associates a <a>LoggingConfiguration</a> with a specified web ACL.</p> <p>You can access information about all traffic that AWS WAF inspects using the following steps:</p> <ol> <li> <p>Create an Amazon Kinesis Data Firehose . </p> </li> <li> <p>Associate that firehose to your web ACL using a <code>PutLoggingConfiguration</code> request.</p> </li> </ol> <p>When you successfully enable logging using a <code>PutLoggingConfiguration</code> request, AWS WAF will create a service linked role with the necessary permissions to write logs to the Amazon Kinesis Data Firehose. For more information, see <a href=\"http://docs.aws.amazon.com/waf/latest/developerguide/logging.html\">Logging Web ACL Traffic Information</a> in the <i>AWS WAF Developer Guide</i>.</p>",
     "PutPermissionPolicy": "<p>Attaches a IAM policy to the specified resource. The only supported use for this action is to share a RuleGroup across accounts.</p> <p>The <code>PutPermissionPolicy</code> is subject to the following restrictions:</p> <ul> <li> <p>You can attach only one policy with each <code>PutPermissionPolicy</code> request.</p> </li> <li> <p>The policy must include an <code>Effect</code>, <code>Action</code> and <code>Principal</code>. </p> </li> <li> <p> <code>Effect</code> must specify <code>Allow</code>.</p> </li> <li> <p>The <code>Action</code> in the policy must be <code>waf:UpdateWebACL</code>, <code>waf-regional:UpdateWebACL</code>, <code>waf:GetRuleGroup</code> and <code>waf-regional:GetRuleGroup</code> . Any extra or wildcard actions in the policy will be rejected.</p> </li> <li> <p>The policy cannot include a <code>Resource</code> parameter.</p> </li> <li> <p>The ARN in the request must be a valid WAF RuleGroup ARN and the RuleGroup must exist in the same region.</p> </li> <li> <p>The user making the request must be the owner of the RuleGroup.</p> </li> <li> <p>Your policy must be composed using IAM Policy version 2012-10-17.</p> </li> </ul> <p>For more information, see <a href=\"https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html\">IAM Policies</a>. </p> <p>An example of a valid policy parameter is shown in the Examples section below.</p>",
     "UpdateByteMatchSet": "<p>Inserts or deletes <a>ByteMatchTuple</a> objects (filters) in a <a>ByteMatchSet</a>. For each <code>ByteMatchTuple</code> object, you specify the following values: </p> <ul> <li> <p>Whether to insert or delete the object from the array. If you want to change a <code>ByteMatchSetUpdate</code> object, you delete the existing object and add a new one.</p> </li> <li> <p>The part of a web request that you want AWS WAF to inspect, such as a query string or the value of the <code>User-Agent</code> header. </p> </li> <li> <p>The bytes (typically a string that corresponds with ASCII characters) that you want AWS WAF to look for. For more information, including how you specify the values for the AWS WAF API and the AWS CLI or SDKs, see <code>TargetString</code> in the <a>ByteMatchTuple</a> data type. </p> </li> <li> <p>Where to look, such as at the beginning or the end of a query string.</p> </li> <li> <p>Whether to perform any conversions on the request, such as converting it to lowercase, before inspecting it for the specified string.</p> </li> </ul> <p>For example, you can add a <code>ByteMatchSetUpdate</code> object that matches web requests in which <code>User-Agent</code> headers contain the string <code>BadBot</code>. You can then configure AWS WAF to block those requests.</p> <p>To create and configure a <code>ByteMatchSet</code>, perform the following steps:</p> <ol> <li> <p>Create a <code>ByteMatchSet.</code> For more information, see <a>CreateByteMatchSet</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <code>UpdateByteMatchSet</code> request.</p> </li> <li> <p>Submit an <code>UpdateByteMatchSet</code> request to specify the part of the request that you want AWS WAF to inspect (for example, the header or the URI) and the value that you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href=\"http://docs.aws.amazon.com/waf/latest/developerguide/\">AWS WAF Developer Guide</a>.</p>",
     "UpdateGeoMatchSet": "<p>Inserts or deletes <a>GeoMatchConstraint</a> objects in an <code>GeoMatchSet</code>. For each <code>GeoMatchConstraint</code> object, you specify the following values: </p> <ul> <li> <p>Whether to insert or delete the object from the array. If you want to change an <code>GeoMatchConstraint</code> object, you delete the existing object and add a new one.</p> </li> <li> <p>The <code>Type</code>. The only valid value for <code>Type</code> is <code>Country</code>.</p> </li> <li> <p>The <code>Value</code>, which is a two character code for the country to add to the <code>GeoMatchConstraint</code> object. Valid codes are listed in <a>GeoMatchConstraint$Value</a>.</p> </li> </ul> <p>To create and configure an <code>GeoMatchSet</code>, perform the following steps:</p> <ol> <li> <p>Submit a <a>CreateGeoMatchSet</a> request.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <a>UpdateGeoMatchSet</a> request.</p> </li> <li> <p>Submit an <code>UpdateGeoMatchSet</code> request to specify the country that you want AWS WAF to watch for.</p> </li> </ol> <p>When you update an <code>GeoMatchSet</code>, you specify the country that you want to add and/or the country that you want to delete. If you want to change a country, you delete the existing country and add the new one.</p> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href=\"http://docs.aws.amazon.com/waf/latest/developerguide/\">AWS WAF Developer Guide</a>.</p>",
@@ -1075,15 +1075,15 @@
     "LogDestinationConfigs": {
       "base": null,
       "refs": {
-        "LoggingConfiguration$LogDestinationConfigs": "<p>An array of Amazon Kinesis Data Firehose delivery stream ARNs.</p>"
+        "LoggingConfiguration$LogDestinationConfigs": "<p>An array of Amazon Kinesis Data Firehose ARNs.</p>"
       }
     },
     "LoggingConfiguration": {
-      "base": "<p>The Amazon Kinesis Data Firehose delivery streams, <code>RedactedFields</code> information, and the web ACL Amazon Resource Name (ARN).</p>",
+      "base": "<p>The Amazon Kinesis Data Firehose, <code>RedactedFields</code> information, and the web ACL Amazon Resource Name (ARN).</p>",
       "refs": {
         "GetLoggingConfigurationResponse$LoggingConfiguration": "<p>The <a>LoggingConfiguration</a> for the specified web ACL.</p>",
         "LoggingConfigurations$member": null,
-        "PutLoggingConfigurationRequest$LoggingConfiguration": "<p>The Amazon Kinesis Data Firehose delivery streams that contains the inspected traffic information, the redacted fields details, and the Amazon Resource Name (ARN) of the web ACL to monitor.</p>",
+        "PutLoggingConfigurationRequest$LoggingConfiguration": "<p>The Amazon Kinesis Data Firehose that contains the inspected traffic information, the redacted fields details, and the Amazon Resource Name (ARN) of the web ACL to monitor.</p>",
         "PutLoggingConfigurationResponse$LoggingConfiguration": "<p>The <a>LoggingConfiguration</a> that you submitted in the request.</p>"
       }
     },
@@ -1296,7 +1296,7 @@
     "RedactedFields": {
       "base": null,
       "refs": {
-        "LoggingConfiguration$RedactedFields": "<p>The parts of the request that you want redacted from the logs. For example, if you redact the cookie field, the cookie field in the delivery stream will be <code>xxx</code>. </p>"
+        "LoggingConfiguration$RedactedFields": "<p>The parts of the request that you want redacted from the logs. For example, if you redact the cookie field, the cookie field in the firehose will be <code>xxx</code>. </p>"
       }
     },
     "RegexMatchSet": {
@@ -1400,7 +1400,8 @@
         "LogDestinationConfigs$member": null,
         "LoggingConfiguration$ResourceArn": "<p>The Amazon Resource Name (ARN) of the web ACL that you want to associate with <code>LogDestinationConfigs</code>.</p>",
         "PutPermissionPolicyRequest$ResourceArn": "<p>The Amazon Resource Name (ARN) of the RuleGroup to which you want to attach the policy.</p>",
-        "ResourceArns$member": null
+        "ResourceArns$member": null,
+        "WebACL$WebACLArn": "<p>Tha Amazon Resource Name (ARN) of the web ACL.</p>"
       }
     },
     "ResourceArns": {
@@ -1523,6 +1524,12 @@
         "WebACLSummary$Name": "<p>A friendly name or description of the <a>WebACL</a>. You can't change the name of a <code>WebACL</code> after you create it.</p>",
         "XssMatchSet$Name": "<p>The name, if any, of the <code>XssMatchSet</code>.</p>",
         "XssMatchSetSummary$Name": "<p>The name of the <code>XssMatchSet</code>, if any, specified by <code>Id</code>.</p>"
+      }
+    },
+    "ResourceType": {
+      "base": null,
+      "refs": {
+        "ListResourcesForWebACLRequest$ResourceType": "<p>The type of resource to list, either and application load balancer or Amazon API Gateway.</p>"
       }
     },
     "Rule": {
@@ -1930,6 +1937,11 @@
       "refs": {
       }
     },
+    "WAFServiceLinkedRoleErrorException": {
+      "base": "<p>AWS WAF is not able to access the service linked role. This can be caused by a previous <code>PutLoggingConfiguration</code> request, which can lock the service linked role for about 20 seconds. Please try your request again. The service linked role can also be locked by a previous <code>DeleteServiceLinkedRole</code> request, which can lock the role for 15 minutes or more. If you recently made a <code>DeleteServiceLinkedRole</code>, wait at least 15 minutes and try the request again. If you receive this same exception again, you will have to wait additional time until the role is unlocked.</p>",
+      "refs": {
+      }
+    },
     "WAFStaleDataException": {
       "base": "<p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>",
       "refs": {
@@ -2067,6 +2079,7 @@
         "WAFNonexistentContainerException$message": null,
         "WAFNonexistentItemException$message": null,
         "WAFReferencedItemException$message": null,
+        "WAFServiceLinkedRoleErrorException$message": null,
         "WAFStaleDataException$message": null,
         "WAFSubscriptionNotFoundException$message": null,
         "WAFUnavailableEntityException$message": null

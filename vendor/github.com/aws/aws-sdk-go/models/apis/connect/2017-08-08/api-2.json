@@ -94,6 +94,22 @@
         {"shape":"InternalServiceException"}
       ]
     },
+    "GetCurrentMetricData":{
+      "name":"GetCurrentMetricData",
+      "http":{
+        "method":"POST",
+        "requestUri":"/metrics/current/{InstanceId}"
+      },
+      "input":{"shape":"GetCurrentMetricDataRequest"},
+      "output":{"shape":"GetCurrentMetricDataResponse"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"InternalServiceException"},
+        {"shape":"ThrottlingException"},
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
     "GetFederationToken":{
       "name":"GetFederationToken",
       "http":{
@@ -109,6 +125,22 @@
         {"shape":"UserNotFoundException"},
         {"shape":"InternalServiceException"},
         {"shape":"DuplicateResourceException"}
+      ]
+    },
+    "GetMetricData":{
+      "name":"GetMetricData",
+      "http":{
+        "method":"POST",
+        "requestUri":"/metrics/historical/{InstanceId}"
+      },
+      "input":{"shape":"GetMetricDataRequest"},
+      "output":{"shape":"GetMetricDataResponse"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"InternalServiceException"},
+        {"shape":"ThrottlingException"},
+        {"shape":"ResourceNotFoundException"}
       ]
     },
     "ListRoutingProfiles":{
@@ -338,9 +370,22 @@
       "value":{"shape":"AttributeValue"}
     },
     "AutoAccept":{"type":"boolean"},
+    "Channel":{
+      "type":"string",
+      "enum":["VOICE"]
+    },
+    "Channels":{
+      "type":"list",
+      "member":{"shape":"Channel"},
+      "max":1
+    },
     "ClientToken":{
       "type":"string",
       "max":500
+    },
+    "Comparison":{
+      "type":"string",
+      "enum":["LT"]
     },
     "ContactFlowId":{
       "type":"string",
@@ -399,6 +444,57 @@
         "RefreshToken":{"shape":"SecurityToken"},
         "RefreshTokenExpiration":{"shape":"timestamp"}
       }
+    },
+    "CurrentMetric":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"CurrentMetricName"},
+        "Unit":{"shape":"Unit"}
+      }
+    },
+    "CurrentMetricData":{
+      "type":"structure",
+      "members":{
+        "Metric":{"shape":"CurrentMetric"},
+        "Value":{
+          "shape":"Value",
+          "box":true
+        }
+      }
+    },
+    "CurrentMetricDataCollections":{
+      "type":"list",
+      "member":{"shape":"CurrentMetricData"}
+    },
+    "CurrentMetricName":{
+      "type":"string",
+      "enum":[
+        "AGENTS_ONLINE",
+        "AGENTS_AVAILABLE",
+        "AGENTS_ON_CALL",
+        "AGENTS_NON_PRODUCTIVE",
+        "AGENTS_AFTER_CONTACT_WORK",
+        "AGENTS_ERROR",
+        "AGENTS_STAFFED",
+        "CONTACTS_IN_QUEUE",
+        "OLDEST_CONTACT_AGE",
+        "CONTACTS_SCHEDULED"
+      ]
+    },
+    "CurrentMetricResult":{
+      "type":"structure",
+      "members":{
+        "Dimensions":{"shape":"Dimensions"},
+        "Collections":{"shape":"CurrentMetricDataCollections"}
+      }
+    },
+    "CurrentMetricResults":{
+      "type":"list",
+      "member":{"shape":"CurrentMetricResult"}
+    },
+    "CurrentMetrics":{
+      "type":"list",
+      "member":{"shape":"CurrentMetric"}
     },
     "DeleteUserRequest":{
       "type":"structure",
@@ -494,6 +590,13 @@
       "error":{"httpStatusCode":403},
       "exception":true
     },
+    "Dimensions":{
+      "type":"structure",
+      "members":{
+        "Queue":{"shape":"QueueReference"},
+        "Channel":{"shape":"Channel"}
+      }
+    },
     "DirectoryUserId":{"type":"string"},
     "DuplicateResourceException":{
       "type":"structure",
@@ -504,6 +607,44 @@
       "exception":true
     },
     "Email":{"type":"string"},
+    "Filters":{
+      "type":"structure",
+      "members":{
+        "Queues":{"shape":"Queues"},
+        "Channels":{"shape":"Channels"}
+      }
+    },
+    "GetCurrentMetricDataRequest":{
+      "type":"structure",
+      "required":[
+        "InstanceId",
+        "Filters",
+        "CurrentMetrics"
+      ],
+      "members":{
+        "InstanceId":{
+          "shape":"InstanceId",
+          "location":"uri",
+          "locationName":"InstanceId"
+        },
+        "Filters":{"shape":"Filters"},
+        "Groupings":{"shape":"Groupings"},
+        "CurrentMetrics":{"shape":"CurrentMetrics"},
+        "NextToken":{"shape":"NextToken"},
+        "MaxResults":{
+          "shape":"MaxResult100",
+          "box":true
+        }
+      }
+    },
+    "GetCurrentMetricDataResponse":{
+      "type":"structure",
+      "members":{
+        "NextToken":{"shape":"NextToken"},
+        "MetricResults":{"shape":"CurrentMetricResults"},
+        "DataSnapshotTime":{"shape":"timestamp"}
+      }
+    },
     "GetFederationTokenRequest":{
       "type":"structure",
       "required":["InstanceId"],
@@ -520,6 +661,52 @@
       "members":{
         "Credentials":{"shape":"Credentials"}
       }
+    },
+    "GetMetricDataRequest":{
+      "type":"structure",
+      "required":[
+        "InstanceId",
+        "StartTime",
+        "EndTime",
+        "Filters",
+        "HistoricalMetrics"
+      ],
+      "members":{
+        "InstanceId":{
+          "shape":"InstanceId",
+          "location":"uri",
+          "locationName":"InstanceId"
+        },
+        "StartTime":{"shape":"timestamp"},
+        "EndTime":{"shape":"timestamp"},
+        "Filters":{"shape":"Filters"},
+        "Groupings":{"shape":"Groupings"},
+        "HistoricalMetrics":{"shape":"HistoricalMetrics"},
+        "NextToken":{"shape":"NextToken"},
+        "MaxResults":{
+          "shape":"MaxResult100",
+          "box":true
+        }
+      }
+    },
+    "GetMetricDataResponse":{
+      "type":"structure",
+      "members":{
+        "NextToken":{"shape":"NextToken"},
+        "MetricResults":{"shape":"HistoricalMetricResults"}
+      }
+    },
+    "Grouping":{
+      "type":"string",
+      "enum":[
+        "QUEUE",
+        "CHANNEL"
+      ]
+    },
+    "Groupings":{
+      "type":"list",
+      "member":{"shape":"Grouping"},
+      "max":2
     },
     "HierarchyGroup":{
       "type":"structure",
@@ -574,6 +761,77 @@
         "LevelFour":{"shape":"HierarchyLevel"},
         "LevelFive":{"shape":"HierarchyLevel"}
       }
+    },
+    "HistoricalMetric":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"HistoricalMetricName"},
+        "Threshold":{
+          "shape":"Threshold",
+          "box":true
+        },
+        "Statistic":{"shape":"Statistic"},
+        "Unit":{"shape":"Unit"}
+      }
+    },
+    "HistoricalMetricData":{
+      "type":"structure",
+      "members":{
+        "Metric":{"shape":"HistoricalMetric"},
+        "Value":{
+          "shape":"Value",
+          "box":true
+        }
+      }
+    },
+    "HistoricalMetricDataCollections":{
+      "type":"list",
+      "member":{"shape":"HistoricalMetricData"}
+    },
+    "HistoricalMetricName":{
+      "type":"string",
+      "enum":[
+        "CONTACTS_QUEUED",
+        "CONTACTS_HANDLED",
+        "CONTACTS_ABANDONED",
+        "CONTACTS_CONSULTED",
+        "CONTACTS_AGENT_HUNG_UP_FIRST",
+        "CONTACTS_HANDLED_INCOMING",
+        "CONTACTS_HANDLED_OUTBOUND",
+        "CONTACTS_HOLD_ABANDONS",
+        "CONTACTS_TRANSFERRED_IN",
+        "CONTACTS_TRANSFERRED_OUT",
+        "CONTACTS_TRANSFERRED_IN_FROM_QUEUE",
+        "CONTACTS_TRANSFERRED_OUT_FROM_QUEUE",
+        "CONTACTS_MISSED",
+        "CALLBACK_CONTACTS_HANDLED",
+        "API_CONTACTS_HANDLED",
+        "OCCUPANCY",
+        "HANDLE_TIME",
+        "AFTER_CONTACT_WORK_TIME",
+        "QUEUED_TIME",
+        "ABANDON_TIME",
+        "QUEUE_ANSWER_TIME",
+        "HOLD_TIME",
+        "INTERACTION_TIME",
+        "INTERACTION_AND_HOLD_TIME",
+        "SERVICE_LEVEL"
+      ]
+    },
+    "HistoricalMetricResult":{
+      "type":"structure",
+      "members":{
+        "Dimensions":{"shape":"Dimensions"},
+        "Collections":{"shape":"HistoricalMetricDataCollections"}
+      }
+    },
+    "HistoricalMetricResults":{
+      "type":"list",
+      "member":{"shape":"HistoricalMetricResult"}
+    },
+    "HistoricalMetrics":{
+      "type":"list",
+      "member":{"shape":"HistoricalMetric"}
     },
     "InstanceId":{
       "type":"string",
@@ -728,6 +986,11 @@
         "NextToken":{"shape":"NextToken"}
       }
     },
+    "MaxResult100":{
+      "type":"integer",
+      "max":100,
+      "min":1
+    },
     "MaxResult1000":{
       "type":"integer",
       "max":1000,
@@ -745,7 +1008,7 @@
     },
     "Password":{
       "type":"string",
-      "pattern":"/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d\\S]{8,}$/"
+      "pattern":"/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d\\S]{8,64}$/"
     },
     "PhoneNumber":{"type":"string"},
     "PhoneType":{
@@ -756,6 +1019,19 @@
       ]
     },
     "QueueId":{"type":"string"},
+    "QueueReference":{
+      "type":"structure",
+      "members":{
+        "Id":{"shape":"QueueId"},
+        "Arn":{"shape":"ARN"}
+      }
+    },
+    "Queues":{
+      "type":"list",
+      "member":{"shape":"QueueId"},
+      "max":100,
+      "min":1
+    },
     "ResourceNotFoundException":{
       "type":"structure",
       "members":{
@@ -832,6 +1108,14 @@
         "ContactId":{"shape":"ContactId"}
       }
     },
+    "Statistic":{
+      "type":"string",
+      "enum":[
+        "SUM",
+        "MAX",
+        "AVG"
+      ]
+    },
     "StopContactRequest":{
       "type":"structure",
       "required":[
@@ -848,6 +1132,17 @@
       "members":{
       }
     },
+    "Threshold":{
+      "type":"structure",
+      "members":{
+        "Comparison":{"shape":"Comparison"},
+        "ThresholdValue":{
+          "shape":"ThresholdValue",
+          "box":true
+        }
+      }
+    },
+    "ThresholdValue":{"type":"double"},
     "ThrottlingException":{
       "type":"structure",
       "members":{
@@ -855,6 +1150,14 @@
       },
       "error":{"httpStatusCode":429},
       "exception":true
+    },
+    "Unit":{
+      "type":"string",
+      "enum":[
+        "SECONDS",
+        "COUNT",
+        "PERCENT"
+      ]
     },
     "UpdateContactAttributesRequest":{
       "type":"structure",
@@ -1031,6 +1334,7 @@
       "type":"list",
       "member":{"shape":"UserSummary"}
     },
+    "Value":{"type":"double"},
     "timestamp":{"type":"timestamp"}
   }
 }

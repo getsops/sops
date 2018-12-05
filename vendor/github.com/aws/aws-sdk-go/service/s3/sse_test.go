@@ -34,9 +34,9 @@ func TestSSECustomerKeyOverHTTPError(t *testing.T) {
 func TestCopySourceSSECustomerKeyOverHTTPError(t *testing.T) {
 	s := s3.New(unit.Session, &aws.Config{DisableSSL: aws.Bool(true)})
 	req, _ := s.CopyObjectRequest(&s3.CopyObjectInput{
-		Bucket:     aws.String("bucket"),
-		CopySource: aws.String("bucket/source"),
-		Key:        aws.String("dest"),
+		Bucket:                   aws.String("bucket"),
+		CopySource:               aws.String("bucket/source"),
+		Key:                      aws.String("dest"),
 		CopySourceSSECustomerKey: aws.String("key"),
 	})
 	err := req.Build()

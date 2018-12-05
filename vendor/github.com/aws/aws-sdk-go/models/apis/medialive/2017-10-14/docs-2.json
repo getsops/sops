@@ -291,13 +291,13 @@
       }
     },
     "BatchScheduleActionCreateRequest": {
-      "base": "A list of schedule actions to create.",
+      "base": "A list of schedule actions to create (in a request) or that have been created (in a response).",
       "refs": {
         "BatchUpdateScheduleRequest$Creates": "Schedule actions to create in the schedule."
       }
     },
     "BatchScheduleActionCreateResult": {
-      "base": "Returned list of created schedule actions.",
+      "base": "List of actions that have been created in the schedule.",
       "refs": {
         "BatchUpdateScheduleResult$Creates": "Schedule actions created in the schedule."
       }
@@ -309,13 +309,13 @@
       }
     },
     "BatchScheduleActionDeleteResult": {
-      "base": "Returned list of deleted schedule actions.",
+      "base": "List of actions that have been deleted from the schedule.",
       "refs": {
         "BatchUpdateScheduleResult$Deletes": "Schedule actions deleted from the schedule."
       }
     },
     "BatchUpdateScheduleRequest": {
-      "base": "A schedule update, including actions to insert, and action names to delete.",
+      "base": "A request to create actions (add actions to the schedule), delete actions (remove actions from the schedule), or both create and delete actions.",
       "refs": {
       }
     },
@@ -699,9 +699,21 @@
       }
     },
     "FixedModeScheduleActionStartSettings": {
-      "base": "Fixed mode schedule action start settings",
+      "base": "Start time for the action.",
       "refs": {
-        "ScheduleActionStartSettings$FixedModeScheduleActionStartSettings": "Fixed timestamp action start. Conforms to ISO-8601."
+        "ScheduleActionStartSettings$FixedModeScheduleActionStartSettings": "Holds the start time for the action."
+      }
+    },
+    "FollowModeScheduleActionStartSettings": {
+      "base": "Settings to specify if an action follows another.",
+      "refs": {
+        "ScheduleActionStartSettings$FollowModeScheduleActionStartSettings": "Specifies an action to follow for scheduling this action."
+      }
+    },
+    "FollowPoint": {
+      "base": "Follow reference point.",
+      "refs": {
+        "FollowModeScheduleActionStartSettings$FollowPoint": "Identifies whether this action starts relative to the start or relative to the end of the reference action."
       }
     },
     "ForbiddenException": {
@@ -723,7 +735,7 @@
     "GlobalConfigurationInputEndAction": {
       "base": null,
       "refs": {
-        "GlobalConfiguration$InputEndAction": "Indicates the action to take when an input completes (e.g. end-of-file.) Options include immediately switching to the next sequential input (via \"switchInput\"), switching to the next input and looping back to the first input when last input ends (via \"switchAndLoopInputs\") or not switching inputs and instead transcoding black / color / slate images per the \"Input Loss Behavior\" configuration until an activateInput REST command is received (via \"none\")."
+        "GlobalConfiguration$InputEndAction": "Indicates the action to take when the current input completes (e.g. end-of-file). When switchAndLoopInputs is configured the encoder will restart at the beginning of the first input.  When \"none\" is configured the encoder will transcode either black, a solid color, or a user specified slate images per the \"Input Loss Behavior\" configuration until the next input switch occurs (which is controlled through the Channel Schedule API)."
       }
     },
     "GlobalConfigurationLowFramerateInputs": {
@@ -807,7 +819,7 @@
     "H264RateControlMode": {
       "base": null,
       "refs": {
-        "H264Settings$RateControlMode": "Rate control mode."
+        "H264Settings$RateControlMode": "Rate control mode. \n\n- CBR: Constant Bit Rate\n- VBR: Variable Bit Rate\n- QVBR: Encoder dynamically controls the bitrate to meet the desired quality (specified\nthrough the qvbrQualityLevel field). The bitrate will not exceed the bitrate specified in\nthe maxBitrate field and will not fall below the bitrate required to meet the desired\nquality level."
       }
     },
     "H264ScanType": {
@@ -819,7 +831,7 @@
     "H264SceneChangeDetect": {
       "base": null,
       "refs": {
-        "H264Settings$SceneChangeDetect": "Scene change detection.  Inserts I-frames on scene changes when enabled."
+        "H264Settings$SceneChangeDetect": "Scene change detection.\n\n- On: inserts I-frames when scene change is detected.\n- Off: does not force an I-frame when scene change is detected."
       }
     },
     "H264Settings": {
@@ -984,6 +996,12 @@
         "HlsGroupSettings$ProgramDateTime": "Includes or excludes EXT-X-PROGRAM-DATE-TIME tag in .m3u8 manifest files. The value is calculated as follows: either the program date and time are initialized using the input timecode source, or the time is initialized using the input timecode source and the date is initialized using the timestampOffset."
       }
     },
+    "HlsRedundantManifest": {
+      "base": null,
+      "refs": {
+        "HlsGroupSettings$RedundantManifest": "When set to \"enabled\", includes the media playlists from both pipelines in the master manifest (.m3u8) file."
+      }
+    },
     "HlsSegmentationMode": {
       "base": null,
       "refs": {
@@ -1092,7 +1110,7 @@
         "BurnInDestinationSettings$Font": "External font file used for caption burn-in. File extension must be 'ttf' or 'tte'.  Although the user can select output fonts for many different types of input captions,  embedded, STL and teletext sources use a strict grid system. Using external fonts with these caption sources could cause unexpected display of proportional fonts.  All burn-in and DVB-Sub font settings must match.",
         "DvbSubDestinationSettings$Font": "External font file used for caption burn-in. File extension must be 'ttf' or 'tte'.  Although the user can select output fonts for many different types of input captions, embedded, STL and teletext sources use a strict grid system. Using external fonts with these caption sources could cause unexpected display of proportional fonts.  All burn-in and DVB-Sub font settings must match.",
         "InputLossBehavior$InputLossImageSlate": "When input loss image type is \"slate\" these fields specify the parameters for accessing the slate.",
-        "StaticImageActivateScheduleActionSettings$Image": "The image to overlay on the video.  Must be a 32 bit BMP, PNG, or TGA file.  Must not be larger than the input video.",
+        "StaticImageActivateScheduleActionSettings$Image": "The location and filename of the image file to overlay on the video. The file must be a 32-bit BMP, PNG, or TGA file, and must not be larger (in pixels) than the input video.",
         "StaticKeySettings$KeyProviderServer": "The URL of the license server used for protecting content."
       }
     },
@@ -1106,6 +1124,12 @@
       "base": null,
       "refs": {
         "MsSmoothGroupSettings$InputLossAction": "Parameter that control output group behavior on input loss."
+      }
+    },
+    "InputLossActionForRtmpOut": {
+      "base": null,
+      "refs": {
+        "RtmpGroupSettings$InputLossAction": "Controls the behavior of this RTMP group if input becomes unavailable.\n\n- emitOutput: Emit a slate until input returns.\n- pauseOutput: Stop transmitting data until input returns. This does not close the underlying RTMP connection."
       }
     },
     "InputLossActionForUdpOut": {
@@ -1196,6 +1220,12 @@
         "Input$State": null
       }
     },
+    "InputSwitchScheduleActionSettings": {
+      "base": "Settings for the action to switch an input.",
+      "refs": {
+        "ScheduleActionSettings$InputSwitchSettings": "Settings to switch an input"
+      }
+    },
     "InputType": {
       "base": null,
       "refs": {
@@ -1267,7 +1297,7 @@
       }
     },
     "LogLevel": {
-      "base": null,
+      "base": "The log level the user wants for their channel.",
       "refs": {
         "Channel$LogLevel": "The log level being written to CloudWatch Logs.",
         "ChannelSummary$LogLevel": "The log level being written to CloudWatch Logs.",
@@ -1652,25 +1682,25 @@
       }
     },
     "ScheduleAction": {
-      "base": "A single schedule action.",
+      "base": "Contains information on a single schedule action.",
       "refs": {
         "__listOfScheduleAction$member": null
       }
     },
     "ScheduleActionSettings": {
-      "base": "Settings for a single schedule action.",
+      "base": "Holds the settings for a single schedule action.",
       "refs": {
         "ScheduleAction$ScheduleActionSettings": "Settings for this schedule action."
       }
     },
     "ScheduleActionStartSettings": {
-      "base": "When the schedule action starts.",
+      "base": "Settings to specify the start time for an action.",
       "refs": {
-        "ScheduleAction$ScheduleActionStartSettings": "When the action takes effect."
+        "ScheduleAction$ScheduleActionStartSettings": "The time for the action to start in the channel."
       }
     },
     "ScheduleDescribeResultModel": {
-      "base": "A complete schedule description.",
+      "base": "Results of a schedule describe.",
       "refs": {
       }
     },
@@ -1717,19 +1747,19 @@
       }
     },
     "Scte35ArchiveAllowedFlag": {
-      "base": "SCTE-35 segmentation_descriptor archive_allowed_flag.",
+      "base": "Corresponds to the archive_allowed parameter. A value of ARCHIVE_NOT_ALLOWED corresponds to 0 (false) in the SCTE-35 specification. If you include one of the \"restriction\" flags then you must include all four of them.",
       "refs": {
-        "Scte35DeliveryRestrictions$ArchiveAllowedFlag": "SCTE-35 segmentation_descriptor archive_allowed_flag."
+        "Scte35DeliveryRestrictions$ArchiveAllowedFlag": "Corresponds to SCTE-35 archive_allowed_flag."
       }
     },
     "Scte35DeliveryRestrictions": {
-      "base": "SCTE-35 Delivery Restrictions.",
+      "base": "Corresponds to SCTE-35 delivery_not_restricted_flag parameter. To declare delivery restrictions, include this element and its four \"restriction\" flags. To declare that there are no restrictions, omit this element.",
       "refs": {
-        "Scte35SegmentationDescriptor$DeliveryRestrictions": "SCTE-35 delivery restrictions."
+        "Scte35SegmentationDescriptor$DeliveryRestrictions": "Holds the four SCTE-35 delivery restriction parameters."
       }
     },
     "Scte35Descriptor": {
-      "base": "SCTE-35 Descriptor.",
+      "base": "Holds one set of SCTE-35 Descriptor Settings.",
       "refs": {
         "__listOfScte35Descriptor$member": null
       }
@@ -1741,31 +1771,31 @@
       }
     },
     "Scte35DeviceRestrictions": {
-      "base": "SCTE-35 Device Restrictions.",
+      "base": "Corresponds to the device_restrictions parameter in a segmentation_descriptor. If you include one of the \"restriction\" flags then you must include all four of them.",
       "refs": {
-        "Scte35DeliveryRestrictions$DeviceRestrictions": "SCTE-35 segmentation_descriptor web_delivery_allowed_flag."
+        "Scte35DeliveryRestrictions$DeviceRestrictions": "Corresponds to SCTE-35 device_restrictions parameter."
       }
     },
     "Scte35NoRegionalBlackoutFlag": {
-      "base": "SCTE-35 segmentation_descriptor no_regional_blackout_flag.",
+      "base": "Corresponds to the no_regional_blackout_flag parameter. A value of REGIONAL_BLACKOUT corresponds to 0 (false) in the SCTE-35 specification. If you include one of the \"restriction\" flags then you must include all four of them.",
       "refs": {
-        "Scte35DeliveryRestrictions$NoRegionalBlackoutFlag": "SCTE-35 segmentation_descriptor no_regional_blackout_flag."
+        "Scte35DeliveryRestrictions$NoRegionalBlackoutFlag": "Corresponds to SCTE-35 no_regional_blackout_flag parameter."
       }
     },
     "Scte35ReturnToNetworkScheduleActionSettings": {
-      "base": "SCTE-35 Return to Network Settings.",
+      "base": "Settings for a SCTE-35 return_to_network message.",
       "refs": {
-        "ScheduleActionSettings$Scte35ReturnToNetworkSettings": "SCTE-35 Return to Network Settings"
+        "ScheduleActionSettings$Scte35ReturnToNetworkSettings": "Settings for SCTE-35 return_to_network message"
       }
     },
     "Scte35SegmentationCancelIndicator": {
-      "base": "SCTE-35 segmentation_descriptor segmentation_event_cancel_indicator.",
+      "base": "Corresponds to SCTE-35 segmentation_event_cancel_indicator. SEGMENTATION_EVENT_NOT_CANCELED corresponds to 0 in the SCTE-35 specification and indicates that this is an insertion request. SEGMENTATION_EVENT_CANCELED corresponds to 1 in the SCTE-35 specification and indicates that this is a cancelation request, in which case complete this field and the existing event ID to cancel.",
       "refs": {
-        "Scte35SegmentationDescriptor$SegmentationCancelIndicator": "SCTE-35 segmentation_descriptor segmentation_event_cancel_indicator."
+        "Scte35SegmentationDescriptor$SegmentationCancelIndicator": "Corresponds to SCTE-35 segmentation_event_cancel_indicator."
       }
     },
     "Scte35SegmentationDescriptor": {
-      "base": "SCTE-35 Segmentation Descriptor.",
+      "base": "Corresponds to SCTE-35 segmentation_descriptor.",
       "refs": {
         "Scte35DescriptorSettings$SegmentationDescriptorScte35DescriptorSettings": "SCTE-35 Segmentation Descriptor."
       }
@@ -1783,9 +1813,9 @@
       }
     },
     "Scte35SpliceInsertScheduleActionSettings": {
-      "base": "SCTE-35 Splice Insert Settings.",
+      "base": "Settings for a SCTE-35 splice_insert message.",
       "refs": {
-        "ScheduleActionSettings$Scte35SpliceInsertSettings": "SCTE-35 Splice Insert Settings"
+        "ScheduleActionSettings$Scte35SpliceInsertSettings": "Settings for SCTE-35 splice_insert message"
       }
     },
     "Scte35SpliceInsertWebDeliveryAllowedBehavior": {
@@ -1801,15 +1831,15 @@
       }
     },
     "Scte35TimeSignalScheduleActionSettings": {
-      "base": "SCTE-35 Time Signal Settings.",
+      "base": "Settings for a SCTE-35 time_signal.",
       "refs": {
-        "ScheduleActionSettings$Scte35TimeSignalSettings": "SCTE-35 Time Signal Settings"
+        "ScheduleActionSettings$Scte35TimeSignalSettings": "Settings for SCTE-35 time_signal message"
       }
     },
     "Scte35WebDeliveryAllowedFlag": {
-      "base": "SCTE-35 segmentation_descriptor web_delivery_allowed_flag.",
+      "base": "Corresponds to the web_delivery_allowed_flag parameter. A value of WEB_DELIVERY_NOT_ALLOWED corresponds to 0 (false) in the SCTE-35 specification. If you include one of the \"restriction\" flags then you must include all four of them.",
       "refs": {
-        "Scte35DeliveryRestrictions$WebDeliveryAllowedFlag": "SCTE-35 segmentation_descriptor web_delivery_allowed_flag."
+        "Scte35DeliveryRestrictions$WebDeliveryAllowedFlag": "Corresponds to SCTE-35 web_delivery_allowed_flag parameter."
       }
     },
     "SmoothGroupAudioOnlyTimecodeControl": {
@@ -1873,15 +1903,15 @@
       }
     },
     "StaticImageActivateScheduleActionSettings": {
-      "base": "Static image activate.",
+      "base": "Settings for the action to activate a static image.",
       "refs": {
-        "ScheduleActionSettings$StaticImageActivateSettings": "Static Image Activate"
+        "ScheduleActionSettings$StaticImageActivateSettings": "Settings to activate a static image overlay"
       }
     },
     "StaticImageDeactivateScheduleActionSettings": {
-      "base": "Static image deactivate.",
+      "base": "Settings for the action to deactivate the image in a specific layer.",
       "refs": {
-        "ScheduleActionSettings$StaticImageDeactivateSettings": "Static Image Deactivate"
+        "ScheduleActionSettings$StaticImageDeactivateSettings": "Settings to deactivate a static image overlay"
       }
     },
     "StaticKeySettings": {
@@ -2148,12 +2178,12 @@
         "MsSmoothGroupSettings$RestartDelay": "Number of seconds before initiating a restart due to output failure, due to exhausting the numRetries on one segment, or exceeding filecacheDuration.",
         "RtmpGroupSettings$RestartDelay": "If a streaming output fails, number of seconds to wait until a restart is initiated. A value of 0 means never restart.",
         "RtmpOutputSettings$NumRetries": "Number of retry attempts.",
-        "StaticImageActivateScheduleActionSettings$Duration": "The duration in milliseconds for the image to remain in the video. If omitted or set to 0, duration is infinite and image will remain until explicitly deactivated.",
-        "StaticImageActivateScheduleActionSettings$FadeIn": "The time in milliseconds for the image to fade in. Defaults to 0.",
-        "StaticImageActivateScheduleActionSettings$FadeOut": "The time in milliseconds for the image to fade out. Defaults to 0.",
-        "StaticImageActivateScheduleActionSettings$ImageX": "Placement of the left edge of the image on the horizontal axis in pixels. 0 is the left edge of the frame. Defaults to 0.",
-        "StaticImageActivateScheduleActionSettings$ImageY": "Placement of the top edge of the image on the vertical axis in pixels.  0 is the top edge of the frame. Defaults to 0.",
-        "StaticImageDeactivateScheduleActionSettings$FadeOut": "The time in milliseconds for the image to fade out. Defaults to 0.",
+        "StaticImageActivateScheduleActionSettings$Duration": "The duration in milliseconds for the image to remain on the video. If omitted or set to 0 the duration is unlimited and the image will remain until it is explicitly deactivated.",
+        "StaticImageActivateScheduleActionSettings$FadeIn": "The time in milliseconds for the image to fade in. The fade-in starts at the start time of the overlay. Default is 0 (no fade-in).",
+        "StaticImageActivateScheduleActionSettings$FadeOut": "Applies only if a duration is specified. The time in milliseconds for the image to fade out. The fade-out starts when the duration time is hit, so it effectively extends the duration. Default is 0 (no fade-out).",
+        "StaticImageActivateScheduleActionSettings$ImageX": "Placement of the left edge of the overlay relative to the left edge of the video frame, in pixels. 0 (the default) is the left edge of the frame. If the placement causes the overlay to extend beyond the right edge of the underlying video, then the overlay is cropped on the right.",
+        "StaticImageActivateScheduleActionSettings$ImageY": "Placement of the top edge of the overlay relative to the top edge of the video frame, in pixels. 0 (the default) is the top edge of the frame. If the placement causes the overlay to extend beyond the bottom edge of the underlying video, then the overlay is cropped on the bottom.",
+        "StaticImageDeactivateScheduleActionSettings$FadeOut": "The time in milliseconds for the image to fade out. Default is 0 (no fade-out).",
         "UdpGroupSettings$TimedMetadataId3Period": "Timed Metadata interval in seconds."
       }
     },
@@ -2168,7 +2198,7 @@
       "base": null,
       "refs": {
         "H264Settings$BufFillPct": "Percentage of the buffer that should initially be filled (HRD buffer model).",
-        "StaticImageActivateScheduleActionSettings$Opacity": "Opacity of image where 0 is transparent and 100 is fully opaque. Defaults to 100.",
+        "StaticImageActivateScheduleActionSettings$Opacity": "Opacity of image where 0 is transparent and 100 is fully opaque. Default is 100.",
         "VideoDescription$Sharpness": "Changes the width of the anti-alias filter kernel used for scaling. Only applies if scaling is being performed and antiAlias is set to true. 0 is the softest setting, 100 the sharpest, and 50 recommended for most content."
       }
     },
@@ -2185,7 +2215,7 @@
       "base": null,
       "refs": {
         "M2tsSettings$EbpLookaheadMs": "When set, enforces that Encoder Boundary Points do not come within the specified time interval of each other by looking ahead at input video. If another EBP is going to come in within the specified time interval, the current EBP is not emitted, and the segment is \"stretched\" to the next marker.  The lookahead value does not add latency to the system. The Live Event must be configured elsewhere to create sufficient latency to make the lookahead accurate.",
-        "MsSmoothGroupSettings$SendDelayMs": "Outputs that are \"output locked\" can use this delay. Assign a delay to the output that is \"secondary\".  Do not assign a delay to the \"primary\" output. The delay means that the primary output will always reach the downstream system before the secondary, which helps ensure that the downstream system always uses the primary output. (If there were no delay, the downstream system might flip-flop between whichever output happens to arrive first.) If the primary fails, the downstream system will switch to the secondary output. When the primary is restarted, the downstream system will switch back to the primary (because once again it is always arriving first)",
+        "MsSmoothGroupSettings$SendDelayMs": "Number of milliseconds to delay the output from the second pipeline.",
         "UdpOutputSettings$BufferMsec": "UDP output buffering in milliseconds. Larger values increase latency through the transcoder but simultaneously assist the transcoder in maintaining a constant, low-jitter UDP/RTP output while accommodating clock recovery, input switching, input disruptions, picture reordering, etc."
       }
     },
@@ -2199,7 +2229,7 @@
     "__integerMin0Max1099511627775": {
       "base": null,
       "refs": {
-        "Scte35SegmentationDescriptor$SegmentationDuration": "SCTE-35 segmentation_descriptor segmentation_duration specified in 90 KHz clock ticks."
+        "Scte35SegmentationDescriptor$SegmentationDuration": "Corresponds to SCTE-35 segmentation_duration. Optional. The duration for the time_signal, in 90 KHz ticks. To convert seconds to ticks, multiple the seconds by 90,000. Enter time in 90 KHz clock ticks. If you do not enter a duration, the time_signal will continue until you insert a cancellation message."
       }
     },
     "__integerMin0Max128": {
@@ -2227,12 +2257,12 @@
         "DvbSubDestinationSettings$BackgroundOpacity": "Specifies the opacity of the background rectangle. 255 is opaque; 0 is transparent. Leaving this parameter blank is equivalent to setting it to 0 (transparent).  All burn-in and DVB-Sub font settings must match.",
         "DvbSubDestinationSettings$FontOpacity": "Specifies the opacity of the burned-in captions. 255 is opaque; 0 is transparent.  All burn-in and DVB-Sub font settings must match.",
         "DvbSubDestinationSettings$ShadowOpacity": "Specifies the opacity of the shadow. 255 is opaque; 0 is transparent. Leaving this parameter blank is equivalent to setting it to 0 (transparent).  All burn-in and DVB-Sub font settings must match.",
-        "Scte35SegmentationDescriptor$SegmentNum": "SCTE-35 segmentation_descriptor segment_num.",
-        "Scte35SegmentationDescriptor$SegmentationTypeId": "SCTE-35 segmentation_descriptor segmentation_type_id.",
-        "Scte35SegmentationDescriptor$SegmentationUpidType": "SCTE-35 segmentation_descriptor segmentation_upid_type.",
-        "Scte35SegmentationDescriptor$SegmentsExpected": "SCTE-35 segmentation_descriptor segments_expected.",
-        "Scte35SegmentationDescriptor$SubSegmentNum": "SCTE-35 segmentation_descriptor sub_segment_num.",
-        "Scte35SegmentationDescriptor$SubSegmentsExpected": "SCTE-35 segmentation_descriptor sub_segments_expected."
+        "Scte35SegmentationDescriptor$SegmentNum": "Corresponds to SCTE-35 segment_num. A value that is valid for the specified segmentation_type_id.",
+        "Scte35SegmentationDescriptor$SegmentationTypeId": "Corresponds to SCTE-35 segmentation_type_id. One of the segmentation_type_id values listed in the SCTE-35 specification. On the console, enter the ID in decimal (for example, \"52\"). In the CLI, API, or an SDK, enter the ID in hex (for example, \"0x34\") or decimal (for example, \"52\").",
+        "Scte35SegmentationDescriptor$SegmentationUpidType": "Corresponds to SCTE-35 segmentation_upid_type. On the console, enter one of the types listed in the SCTE-35 specification, converted to a decimal. For example, \"0x0C\" hex from the specification is \"12\" in decimal. In the CLI, API, or an SDK, enter one of the types listed in the SCTE-35 specification, in either hex (for example, \"0x0C\" ) or in decimal (for example, \"12\").",
+        "Scte35SegmentationDescriptor$SegmentsExpected": "Corresponds to SCTE-35 segments_expected. A value that is valid for the specified segmentation_type_id.",
+        "Scte35SegmentationDescriptor$SubSegmentNum": "Corresponds to SCTE-35 sub_segment_num. A value that is valid for the specified segmentation_type_id.",
+        "Scte35SegmentationDescriptor$SubSegmentsExpected": "Corresponds to SCTE-35 sub_segments_expected. A value that is valid for the specified segmentation_type_id."
       }
     },
     "__integerMin0Max30": {
@@ -2251,7 +2281,7 @@
       "base": null,
       "refs": {
         "Scte35ReturnToNetworkScheduleActionSettings$SpliceEventId": "The splice_event_id for the SCTE-35 splice_insert, as defined in SCTE-35.",
-        "Scte35SegmentationDescriptor$SegmentationEventId": "SCTE-35 segmentation_descriptor segmentation_event_id.",
+        "Scte35SegmentationDescriptor$SegmentationEventId": "Corresponds to SCTE-35 segmentation_event_id. ",
         "Scte35SpliceInsertScheduleActionSettings$SpliceEventId": "The splice_event_id for the SCTE-35 splice_insert, as defined in SCTE-35."
       }
     },
@@ -2292,8 +2322,8 @@
       "refs": {
         "AudioChannelMapping$OutputChannel": "The index of the output channel being produced.",
         "H264Settings$GopNumBFrames": "Number of B-frames between reference frames.",
-        "StaticImageActivateScheduleActionSettings$Layer": "The Z order of the inserted image.  Images with higher layer values will be inserted on top of images with lower layer values. Permitted values are 0-7 inclusive. Defaults to 0.",
-        "StaticImageDeactivateScheduleActionSettings$Layer": "The Z order of the inserted image.  Images with higher layer values will be inserted on top of images with lower layer values. Permitted values are 0-7 inclusive. Defaults to 0."
+        "StaticImageActivateScheduleActionSettings$Layer": "The number of the layer, 0 to 7. There are 8 layers that can be overlaid on the video, each layer with a different image. The layers are in Z order, which means that overlays with higher values of layer are inserted on top of overlays with lower values of layer. Default is 0.",
+        "StaticImageDeactivateScheduleActionSettings$Layer": "The image overlay layer to deactivate, 0 to 7. Default is 0."
       }
     },
     "__integerMin0Max8191": {
@@ -2306,7 +2336,7 @@
     "__integerMin0Max8589934591": {
       "base": null,
       "refs": {
-        "Scte35SpliceInsertScheduleActionSettings$Duration": "The duration for the SCTE-35 splice_insert specified in 90KHz clock ticks. When duration is not specified the expectation is that a Scte35ReturnToNetwork action will be scheduled."
+        "Scte35SpliceInsertScheduleActionSettings$Duration": "Optional, the duration for the splice_insert, in 90 KHz ticks. To convert seconds to ticks, multiple the seconds by 90,000. If you enter a duration, there is an expectation that the downstream system can read the duration and cue in at that time. If you do not enter a duration, the splice_insert will continue indefinitely and there is an expectation that you will enter a return_to_network to end the splice_insert at the appropriate time."
       }
     },
     "__integerMin1": {
@@ -2322,21 +2352,27 @@
         "PurchaseOffering$Count": "Number of resources",
         "RtmpOutputSettings$ConnectionRetryInterval": "Number of seconds to wait before retrying a connection to the Flash Media server if the connection is lost.",
         "Scte27SourceSettings$Pid": "The pid field is used in conjunction with the caption selector languageCode field as follows:\n  - Specify PID and Language: Extracts captions from that PID; the language is \"informational\".\n  - Specify PID and omit Language: Extracts the specified PID.\n  - Omit PID and specify Language: Extracts the specified language, whichever PID that happens to be.\n  - Omit PID and omit Language: Valid only if source is DVB-Sub that is being passed through; all languages will be passed through.",
-        "StaticImageActivateScheduleActionSettings$Height": "The height of the image when inserted into the video.  Defaults to the native height of the image.",
-        "StaticImageActivateScheduleActionSettings$Width": "The width of the image when inserted into the video.  Defaults to the native width of the image."
+        "StaticImageActivateScheduleActionSettings$Height": "The height of the image when inserted into the video, in pixels. The overlay will be scaled up or down to the specified height. Leave blank to use the native height of the overlay.",
+        "StaticImageActivateScheduleActionSettings$Width": "The width of the image when inserted into the video, in pixels. The overlay will be scaled up or down to the specified width. Leave blank to use the native width of the overlay."
       }
     },
     "__integerMin1000": {
       "base": null,
       "refs": {
         "H264Settings$Bitrate": "Average bitrate in bits/second. Required for VBR, CBR, and ABR. For MS Smooth outputs, bitrates must be unique when rounded down to the nearest multiple of 1000.",
-        "H264Settings$MaxBitrate": "Maximum bitrate in bits/second (for VBR mode only)."
+        "H264Settings$MaxBitrate": "Maximum bitrate in bits/second (for VBR and QVBR modes only).\n\nRequired when rateControlMode is \"qvbr\"."
       }
     },
     "__integerMin1000Max30000": {
       "base": null,
       "refs": {
         "DvbTdtSettings$RepInterval": "The number of milliseconds between instances of this table in the output transport stream."
+      }
+    },
+    "__integerMin1Max10": {
+      "base": null,
+      "refs": {
+        "H264Settings$QvbrQualityLevel": "Target quality value. Applicable only to QVBR mode. 1 is the lowest quality and 10 is the\nhighest and approaches lossless. Typical levels for content distribution are between 6 and 8."
       }
     },
     "__integerMin1Max1000000": {
@@ -2616,9 +2652,9 @@
       "base": null,
       "refs": {
         "BatchScheduleActionCreateRequest$ScheduleActions": "A list of schedule actions to create.",
-        "BatchScheduleActionCreateResult$ScheduleActions": "Returned list of created schedule actions.",
-        "BatchScheduleActionDeleteResult$ScheduleActions": "Returned list of deleted schedule actions.",
-        "ScheduleDescribeResultModel$ScheduleActions": "The list of schedule actions."
+        "BatchScheduleActionCreateResult$ScheduleActions": "List of actions that have been created in the schedule.",
+        "BatchScheduleActionDeleteResult$ScheduleActions": "List of actions that have been deleted from the schedule.",
+        "ScheduleDescribeResultModel$ScheduleActions": "The list of actions in the schedule."
       }
     },
     "__listOfScte35Descriptor": {
@@ -2642,7 +2678,7 @@
     "__listOf__string": {
       "base": null,
       "refs": {
-        "BatchScheduleActionDeleteRequest$ActionNames": "A list of schedule actions to delete, identified by unique name.",
+        "BatchScheduleActionDeleteRequest$ActionNames": "A list of schedule actions to delete.",
         "CreateInput$InputSecurityGroups": "A list of security groups referenced by IDs to attach to the input.",
         "Input$AttachedChannels": "A list of channel IDs that that input is attached to (currently an input can only be attached to one channel).",
         "Input$SecurityGroups": "A list of IDs for all the security groups attached to the input.",
@@ -2663,7 +2699,6 @@
         "AudioDescription$StreamName": "Used for MS Smooth and Apple HLS outputs. Indicates the name displayed by the player (eg. English, or Director Commentary).",
         "AudioLanguageSelection$LanguageCode": "Selects a specific three-letter language code from within an audio source.",
         "AudioOnlyHlsSettings$AudioGroupId": "Specifies the group to which the audio Rendition belongs.",
-        "AudioSelector$Name": "The name of this AudioSelector. AudioDescriptions will use this name to uniquely identify this Selector.  Selector names should be unique per input.",
         "BadGatewayException$Message": null,
         "BurnInDestinationSettings$FontSize": "When set to 'auto' fontSize will scale depending on the size of the output.  Giving a positive integer will specify the exact font size in points.  All burn-in and DVB-Sub font settings must match.",
         "CaptionDescription$CaptionSelectorName": "Specifies which input caption selector to use as a caption source when generating output captions. This field should match a captionSelector name.",
@@ -2671,7 +2706,6 @@
         "CaptionDescription$LanguageDescription": "Human readable information to indicate captions available for players (eg. English, or Spanish).",
         "CaptionDescription$Name": "Name of the caption description.  Used to associate a caption description with an output.  Names must be unique within an event.",
         "CaptionSelector$LanguageCode": "When specified this field indicates the three letter language code of the caption track to extract from the source.",
-        "CaptionSelector$Name": "Name identifier for a caption selector.  This name is used to associate this caption selector with one or more caption descriptions.  Names must be unique within an event.",
         "Channel$Arn": "The unique arn of the channel.",
         "Channel$Id": "The unique id of the channel.",
         "Channel$Name": "The name of the channel. (user-mutable)",
@@ -2689,7 +2723,8 @@
         "CreateInput$Name": "Name of the input.",
         "CreateInput$RequestId": "Unique identifier of the request to ensure the request is handled\nexactly once in case of retries.\n",
         "DvbSubDestinationSettings$FontSize": "When set to auto fontSize will scale depending on the size of the output.  Giving a positive integer will specify the exact font size in points.  All burn-in and DVB-Sub font settings must match.",
-        "FixedModeScheduleActionStartSettings$Time": "Fixed timestamp action start. Conforms to ISO-8601.",
+        "FixedModeScheduleActionStartSettings$Time": "Start time for the action to start in the channel. (Not the time for the action to be added to the schedule: actions are always added to the schedule immediately.) UTC format: yyyy-mm-ddThh:mm:ss.nnnZ. All the letters are digits (for example, mm might be 01) except for the two constants \"T\" for time and \"Z\" for \"UTC format\".",
+        "FollowModeScheduleActionStartSettings$ReferenceActionName": "The action name of another action that this one refers to.",
         "GatewayTimeoutException$Message": null,
         "HlsAkamaiSettings$Salt": "Salt for authenticated Akamai.",
         "HlsAkamaiSettings$Token": "Token parameter for authenticated akamai. If not specified, _gda_ is used.",
@@ -2701,6 +2736,7 @@
         "Input$Arn": "The Unique ARN of the input (generated, immutable).",
         "Input$Id": "The generated ID of the input (unique for user account, immutable).",
         "Input$Name": "The user-assigned name (This is a mutable value).",
+        "InputAttachment$InputAttachmentName": "User-specified name for the attachment. This is required if the user wants to use this input in an input switch action.",
         "InputAttachment$InputId": "The ID of the input",
         "InputDestination$Ip": "The system-generated static IP address of endpoint.\nIt remains fixed for the lifetime of the input.\n",
         "InputDestination$Port": "The port number for the input.",
@@ -2717,6 +2753,7 @@
         "InputSourceRequest$PasswordParam": "The key used to extract the password from EC2 Parameter store.",
         "InputSourceRequest$Url": "This represents the customer's source URL where stream is\npulled from.\n",
         "InputSourceRequest$Username": "The username for the input source.",
+        "InputSwitchScheduleActionSettings$InputAttachmentNameReference": "The name of the input attachment that should be switched to by this action.",
         "InputWhitelistRule$Cidr": "The IPv4 CIDR that's whitelisted.",
         "InputWhitelistRuleCidr$Cidr": "The IPv4 CIDR to whitelist.",
         "InternalServiceError$Message": null,
@@ -2766,6 +2803,7 @@
         "OutputLocationRef$DestinationRefId": null,
         "PurchaseOffering$Name": "Name for the new reservation",
         "PurchaseOffering$RequestId": "Unique request ID to be specified. This is needed to prevent retries from creating multiple resources.",
+        "PurchaseOffering$Start": "Requested reservation start time (UTC) in ISO-8601 format. The specified time must be between the first day of the current month and one year from now. If no value is given, the default is now.",
         "Reservation$Arn": "Unique reservation ARN, e.g. 'arn:aws:medialive:us-west-2:123456789012:reservation:1234567'",
         "Reservation$CurrencyCode": "Currency code for usagePrice and fixedPrice in ISO-4217 format, e.g. 'USD'",
         "Reservation$End": "Reservation UTC end date and time in ISO-8601 format, e.g. '2019-03-01T00:00:00'",
@@ -2777,9 +2815,9 @@
         "Reservation$Start": "Reservation UTC start date and time in ISO-8601 format, e.g. '2018-03-01T00:00:00'",
         "ResourceConflict$Message": null,
         "ResourceNotFound$Message": null,
-        "ScheduleAction$ActionName": "The name of the action, must be unique within the schedule.",
+        "ScheduleAction$ActionName": "The name of the action, must be unique within the schedule. This name provides the main reference to an action once it is added to the schedule. A name is unique if it is no longer in the schedule. The schedule is automatically cleaned up to remove actions with a start time of more than 1 hour ago (approximately) so at that point a name can be reused.",
         "ScheduleDescribeResultModel$NextToken": "The next token; for use in pagination.",
-        "Scte35SegmentationDescriptor$SegmentationUpid": "SCTE-35 segmentation_descriptor segmentation_upid as a hex string.",
+        "Scte35SegmentationDescriptor$SegmentationUpid": "Corresponds to SCTE-35 segmentation_upid. Enter a string containing the hexadecimal representation of the characters that make up the SCTE-35 segmentation_upid value. Must contain an even number of hex characters. Do not include spaces between each hex pair. For example, the ASCII \"ADS Information\" becomes hex \"41445320496e666f726d6174696f6e.",
         "StandardHlsSettings$AudioRenditionSets": "List all the audio groups that are used with the video output stream. Input all the audio GROUP-IDs that are associated to the video, separate by ','.",
         "TeletextSourceSettings$PageNumber": "Specifies the teletext page number within the data stream from which to extract captions. Range of 0x100 (256) to 0x8FF (2303). Unused for passthrough. Should be specified as a hexadecimal string with no \"0x\" prefix.",
         "UpdateChannel$Name": "The name of the channel.",
@@ -2800,7 +2838,9 @@
     "__stringMin1": {
       "base": null,
       "refs": {
+        "AudioSelector$Name": "The name of this AudioSelector. AudioDescriptions will use this name to uniquely identify this Selector.  Selector names should be unique per input.",
         "CaptionLanguageMapping$LanguageDescription": "Textual description of language",
+        "CaptionSelector$Name": "Name identifier for a caption selector.  This name is used to associate this caption selector with one or more caption descriptions.  Names must be unique within an event.",
         "HlsOutputSettings$NameModifier": "String concatenated to the end of the destination filename. Accepts \\\"Format Identifiers\\\":#formatIdentifierParameters."
       }
     },

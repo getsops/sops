@@ -4,15 +4,18 @@
   "operations": {
     "CreateApiKey": "<p>Creates a unique key that you can distribute to clients who are executing your API.</p>",
     "CreateDataSource": "<p>Creates a <code>DataSource</code> object.</p>",
+    "CreateFunction": "<p>Creates a <code>Function</code> object.</p> <p>A function is a reusable entity. Multiple functions can be used to compose the resolver logic.</p>",
     "CreateGraphqlApi": "<p>Creates a <code>GraphqlApi</code> object.</p>",
     "CreateResolver": "<p>Creates a <code>Resolver</code> object.</p> <p>A resolver converts incoming requests into a format that a data source can understand and converts the data source's responses into GraphQL.</p>",
     "CreateType": "<p>Creates a <code>Type</code> object.</p>",
     "DeleteApiKey": "<p>Deletes an API key.</p>",
     "DeleteDataSource": "<p>Deletes a <code>DataSource</code> object.</p>",
+    "DeleteFunction": "<p>Deletes a <code>Function</code>.</p>",
     "DeleteGraphqlApi": "<p>Deletes a <code>GraphqlApi</code> object.</p>",
     "DeleteResolver": "<p>Deletes a <code>Resolver</code> object.</p>",
     "DeleteType": "<p>Deletes a <code>Type</code> object.</p>",
     "GetDataSource": "<p>Retrieves a <code>DataSource</code> object.</p>",
+    "GetFunction": "<p>Get a <code>Function</code>.</p>",
     "GetGraphqlApi": "<p>Retrieves a <code>GraphqlApi</code> object.</p>",
     "GetIntrospectionSchema": "<p>Retrieves the introspection schema for a GraphQL API.</p>",
     "GetResolver": "<p>Retrieves a <code>Resolver</code> object.</p>",
@@ -20,19 +23,22 @@
     "GetType": "<p>Retrieves a <code>Type</code> object.</p>",
     "ListApiKeys": "<p>Lists the API keys for a given API.</p> <note> <p>API keys are deleted automatically sometime after they expire. However, they may still be included in the response until they have actually been deleted. You can safely call <code>DeleteApiKey</code> to manually delete a key before it's automatically deleted.</p> </note>",
     "ListDataSources": "<p>Lists the data sources for a given API.</p>",
+    "ListFunctions": "<p>List multiple functions.</p>",
     "ListGraphqlApis": "<p>Lists your GraphQL APIs.</p>",
     "ListResolvers": "<p>Lists the resolvers for a given API and type.</p>",
+    "ListResolversByFunction": "<p>List the resolvers that are associated with a specific function.</p>",
     "ListTypes": "<p>Lists the types for a given API.</p>",
     "StartSchemaCreation": "<p>Adds a new schema to your GraphQL API.</p> <p>This operation is asynchronous. Use to determine when it has completed.</p>",
     "UpdateApiKey": "<p>Updates an API key.</p>",
     "UpdateDataSource": "<p>Updates a <code>DataSource</code> object.</p>",
+    "UpdateFunction": "<p>Updates a <code>Function</code> object.</p>",
     "UpdateGraphqlApi": "<p>Updates a <code>GraphqlApi</code> object.</p>",
     "UpdateResolver": "<p>Updates a <code>Resolver</code> object.</p>",
     "UpdateType": "<p>Updates a <code>Type</code> object.</p>"
   },
   "shapes": {
     "ApiKey": {
-      "base": "<p>Describes an API key.</p> <p>Customers invoke AWS AppSync GraphQL APIs with API keys as an identity mechanism. There are two key versions:</p> <p> <b>da1</b>: This version was introduced at launch in November 2017. These keys always expire after 7 days. Key expiration is managed by DynamoDB TTL. The keys will cease to be valid after Feb 21, 2018 and should not be used after that date.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>UpdateApiKey</code> is not available for this key version.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in DynamoDB as milliseconds. This results in a bug where keys are not automatically deleted because DynamoDB expects the TTL to be stored in seconds. As a one-time action, we will delete these keys from the table after Feb 21, 2018.</p> </li> </ul> <p> <b>da2</b>: This version was introduced in February 2018 when AppSync added support to extend key expiration.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in seconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in seconds and accepts a user-provided expiration time in seconds.</p> </li> <li> <p> <code>UpdateApiKey</code> returns the expiration time in seconds and accepts a user-provided expiration time in seconds. Key expiration can only be updated while the key has not expired.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in DynamoDB as seconds.</p> </li> </ul>",
+      "base": "<p>Describes an API key.</p> <p>Customers invoke AWS AppSync GraphQL API operations with API keys as an identity mechanism. There are two key versions:</p> <p> <b>da1</b>: This version was introduced at launch in November 2017. These keys always expire after 7 days. Key expiration is managed by Amazon DynamoDB TTL. The keys ceased to be valid after February 21, 2018 and should not be used after that date.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>UpdateApiKey</code> is not available for this key version.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in Amazon DynamoDB as milliseconds. This results in a bug where keys are not automatically deleted because DynamoDB expects the TTL to be stored in seconds. As a one-time action, we will delete these keys from the table after February 21, 2018.</p> </li> </ul> <p> <b>da2</b>: This version was introduced in February 2018 when AppSync added support to extend key expiration.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in seconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in seconds and accepts a user-provided expiration time in seconds.</p> </li> <li> <p> <code>UpdateApiKey</code> returns the expiration time in seconds and accepts a user-provided expiration time in seconds. Key expiration can only be updated while the key has not expired.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in Amazon DynamoDB as seconds.</p> </li> </ul>",
       "refs": {
         "ApiKeys$member": null,
         "CreateApiKeyResponse$apiKey": "<p>The API key.</p>",
@@ -63,13 +69,31 @@
     "AuthenticationType": {
       "base": null,
       "refs": {
-        "CreateGraphqlApiRequest$authenticationType": "<p>The authentication type: API key, IAM, or Amazon Cognito User Pools.</p>",
+        "CreateGraphqlApiRequest$authenticationType": "<p>The authentication type: API key, AWS IAM, or Amazon Cognito user pools.</p>",
         "GraphqlApi$authenticationType": "<p>The authentication type.</p>",
         "UpdateGraphqlApiRequest$authenticationType": "<p>The new authentication type for the <code>GraphqlApi</code> object.</p>"
       }
     },
+    "AuthorizationConfig": {
+      "base": "<p>The authorization config in case the HTTP endpoint requires authorization.</p>",
+      "refs": {
+        "HttpDataSourceConfig$authorizationConfig": "<p>The authorization config in case the HTTP endpoint requires authorization.</p>"
+      }
+    },
+    "AuthorizationType": {
+      "base": null,
+      "refs": {
+        "AuthorizationConfig$authorizationType": "<p>The authorization type required by the HTTP endpoint.</p> <ul> <li> <p> <b>AWS_IAM</b>: The authorization type is Sigv4.</p> </li> </ul>"
+      }
+    },
+    "AwsIamConfig": {
+      "base": "<p>The AWS IAM configuration.</p>",
+      "refs": {
+        "AuthorizationConfig$awsIamConfig": "<p>The AWS IAM settings.</p>"
+      }
+    },
     "BadRequestException": {
-      "base": "<p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>",
+      "base": "<p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>",
       "refs": {
       }
     },
@@ -87,7 +111,7 @@
       }
     },
     "ConcurrentModificationException": {
-      "base": "<p>Another modification is being made. That modification must complete before you can make your change. </p>",
+      "base": "<p>Another modification is in progress at this time and it must complete before you can make your change. </p>",
       "refs": {
       }
     },
@@ -107,6 +131,16 @@
       }
     },
     "CreateDataSourceResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateFunctionRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateFunctionResponse": {
       "base": null,
       "refs": {
       }
@@ -154,7 +188,7 @@
       "base": null,
       "refs": {
         "CreateDataSourceRequest$type": "<p>The type of the <code>DataSource</code>.</p>",
-        "DataSource$type": "<p>The type of the data source.</p> <ul> <li> <p> <b>AMAZON_DYNAMODB</b>: The data source is an Amazon DynamoDB table.</p> </li> <li> <p> <b>AMAZON_ELASTICSEARCH</b>: The data source is an Amazon Elasticsearch Service domain.</p> </li> <li> <p> <b>AWS_LAMBDA</b>: The data source is an AWS Lambda function.</p> </li> <li> <p> <b>NONE</b>: There is no data source. This type is used when when you wish to invoke a GraphQL operation without connecting to a data source, such as performing data transformation with resolvers or triggering a subscription to be invoked from a mutation.</p> </li> <li> <p> <b>HTTP</b>: The data source is an HTTP endpoint.</p> </li> </ul>",
+        "DataSource$type": "<p>The type of the data source.</p> <ul> <li> <p> <b>AMAZON_DYNAMODB</b>: The data source is an Amazon DynamoDB table.</p> </li> <li> <p> <b>AMAZON_ELASTICSEARCH</b>: The data source is an Amazon Elasticsearch Service domain.</p> </li> <li> <p> <b>AWS_LAMBDA</b>: The data source is an AWS Lambda function.</p> </li> <li> <p> <b>NONE</b>: There is no data source. This type is used when you wish to invoke a GraphQL operation without connecting to a data source, such as performing data transformation with resolvers or triggering a subscription to be invoked from a mutation.</p> </li> <li> <p> <b>HTTP</b>: The data source is an HTTP endpoint.</p> </li> <li> <p> <b>RELATIONAL_DATABASE</b>: The data source is a relational database.</p> </li> </ul>",
         "UpdateDataSourceRequest$type": "<p>The new data source type.</p>"
       }
     },
@@ -167,7 +201,7 @@
     "DefaultAction": {
       "base": null,
       "refs": {
-        "UserPoolConfig$defaultAction": "<p>The action that you want your GraphQL API to take when a request that uses Amazon Cognito User Pool authentication doesn't match the Amazon Cognito User Pool configuration.</p>"
+        "UserPoolConfig$defaultAction": "<p>The action that you want your GraphQL API to take when a request that uses Amazon Cognito user pool authentication doesn't match the Amazon Cognito user pool configuration.</p>"
       }
     },
     "DeleteApiKeyRequest": {
@@ -186,6 +220,16 @@
       }
     },
     "DeleteDataSourceResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteFunctionRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteFunctionResponse": {
       "base": null,
       "refs": {
       }
@@ -221,19 +265,19 @@
       }
     },
     "DynamodbDataSourceConfig": {
-      "base": "<p>Describes a DynamoDB data source configuration.</p>",
+      "base": "<p>Describes an Amazon DynamoDB data source configuration.</p>",
       "refs": {
-        "CreateDataSourceRequest$dynamodbConfig": "<p>DynamoDB settings.</p>",
-        "DataSource$dynamodbConfig": "<p>DynamoDB settings.</p>",
-        "UpdateDataSourceRequest$dynamodbConfig": "<p>The new DynamoDB configuration.</p>"
+        "CreateDataSourceRequest$dynamodbConfig": "<p>Amazon DynamoDB settings.</p>",
+        "DataSource$dynamodbConfig": "<p>Amazon DynamoDB settings.</p>",
+        "UpdateDataSourceRequest$dynamodbConfig": "<p>The new Amazon DynamoDB configuration.</p>"
       }
     },
     "ElasticsearchDataSourceConfig": {
       "base": "<p>Describes an Elasticsearch data source configuration.</p>",
       "refs": {
-        "CreateDataSourceRequest$elasticsearchConfig": "<p>Amazon Elasticsearch settings.</p>",
-        "DataSource$elasticsearchConfig": "<p>Amazon Elasticsearch settings.</p>",
-        "UpdateDataSourceRequest$elasticsearchConfig": "<p>The new Elasticsearch configuration.</p>"
+        "CreateDataSourceRequest$elasticsearchConfig": "<p>Amazon Elasticsearch Service settings.</p>",
+        "DataSource$elasticsearchConfig": "<p>Amazon Elasticsearch Service settings.</p>",
+        "UpdateDataSourceRequest$elasticsearchConfig": "<p>The new Elasticsearch Service configuration.</p>"
       }
     },
     "ErrorMessage": {
@@ -247,7 +291,28 @@
     "FieldLogLevel": {
       "base": null,
       "refs": {
-        "LogConfig$fieldLogLevel": "<p>The field logging level. Values can be NONE, ERROR, ALL. </p> <ul> <li> <p> <b>NONE</b>: No field-level logs are captured.</p> </li> <li> <p> <b>ERROR</b>: Logs the following information only for the fields that are in error:</p> <ul> <li> <p>The error section in the server response.</p> </li> <li> <p>Field-level errors.</p> </li> <li> <p>The generated request/response functions that got resolved for error fields.</p> </li> </ul> </li> <li> <p> <b>ALL</b>: The following information is logged for all fields in the query:</p> <ul> <li> <p>Field-level tracing information.</p> </li> <li> <p>The generated request/response functions that got resolved for each field.</p> </li> </ul> </li> </ul>"
+        "LogConfig$fieldLogLevel": "<p>The field logging level. Values can be NONE, ERROR, or ALL. </p> <ul> <li> <p> <b>NONE</b>: No field-level logs are captured.</p> </li> <li> <p> <b>ERROR</b>: Logs the following information only for the fields that are in error:</p> <ul> <li> <p>The error section in the server response.</p> </li> <li> <p>Field-level errors.</p> </li> <li> <p>The generated request/response functions that got resolved for error fields.</p> </li> </ul> </li> <li> <p> <b>ALL</b>: The following information is logged for all fields in the query:</p> <ul> <li> <p>Field-level tracing information.</p> </li> <li> <p>The generated request/response functions that got resolved for each field.</p> </li> </ul> </li> </ul>"
+      }
+    },
+    "FunctionConfiguration": {
+      "base": "<p>A function is a reusable entity. Multiple functions can be used to compose the resolver logic.</p>",
+      "refs": {
+        "CreateFunctionResponse$functionConfiguration": "<p>The <code>Function</code> object.</p>",
+        "Functions$member": null,
+        "GetFunctionResponse$functionConfiguration": "<p>The <code>Function</code> object.</p>",
+        "UpdateFunctionResponse$functionConfiguration": "<p>The <code>Function</code> object.</p>"
+      }
+    },
+    "Functions": {
+      "base": null,
+      "refs": {
+        "ListFunctionsResponse$functions": "<p>A list of <code>Function</code> objects.</p>"
+      }
+    },
+    "FunctionsIds": {
+      "base": null,
+      "refs": {
+        "PipelineConfig$functions": "<p>A list of <code>Function</code> objects.</p>"
       }
     },
     "GetDataSourceRequest": {
@@ -256,6 +321,16 @@
       }
     },
     "GetDataSourceResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetFunctionRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetFunctionResponse": {
       "base": null,
       "refs": {
       }
@@ -331,11 +406,11 @@
       }
     },
     "HttpDataSourceConfig": {
-      "base": "<p>Describes a Http data source configuration.</p>",
+      "base": "<p>Describes an HTTP data source configuration.</p>",
       "refs": {
-        "CreateDataSourceRequest$httpConfig": "<p>Http endpoint settings.</p>",
-        "DataSource$httpConfig": "<p>Http endpoint settings.</p>",
-        "UpdateDataSourceRequest$httpConfig": "<p>The new http endpoint configuration</p>"
+        "CreateDataSourceRequest$httpConfig": "<p>HTTP endpoint settings.</p>",
+        "DataSource$httpConfig": "<p>HTTP endpoint settings.</p>",
+        "UpdateDataSourceRequest$httpConfig": "<p>The new HTTP endpoint configuration.</p>"
       }
     },
     "InternalFailureException": {
@@ -344,11 +419,11 @@
       }
     },
     "LambdaDataSourceConfig": {
-      "base": "<p>Describes a Lambda data source configuration.</p>",
+      "base": "<p>Describes an AWS Lambda data source configuration.</p>",
       "refs": {
         "CreateDataSourceRequest$lambdaConfig": "<p>AWS Lambda settings.</p>",
-        "DataSource$lambdaConfig": "<p>Lambda settings.</p>",
-        "UpdateDataSourceRequest$lambdaConfig": "<p>The new Lambda configuration.</p>"
+        "DataSource$lambdaConfig": "<p>AWS Lambda settings.</p>",
+        "UpdateDataSourceRequest$lambdaConfig": "<p>The new AWS Lambda configuration.</p>"
       }
     },
     "LimitExceededException": {
@@ -376,12 +451,32 @@
       "refs": {
       }
     },
+    "ListFunctionsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListFunctionsResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "ListGraphqlApisRequest": {
       "base": null,
       "refs": {
       }
     },
     "ListGraphqlApisResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListResolversByFunctionRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListResolversByFunctionResponse": {
       "base": null,
       "refs": {
       }
@@ -409,9 +504,9 @@
     "LogConfig": {
       "base": "<p>The CloudWatch Logs configuration.</p>",
       "refs": {
-        "CreateGraphqlApiRequest$logConfig": "<p>The Amazon CloudWatch logs configuration.</p>",
+        "CreateGraphqlApiRequest$logConfig": "<p>The Amazon CloudWatch Logs configuration.</p>",
         "GraphqlApi$logConfig": "<p>The Amazon CloudWatch Logs configuration.</p>",
-        "UpdateGraphqlApiRequest$logConfig": "<p>The Amazon CloudWatch logs configuration for the <code>GraphqlApi</code> object.</p>"
+        "UpdateGraphqlApiRequest$logConfig": "<p>The Amazon CloudWatch Logs configuration for the <code>GraphqlApi</code> object.</p>"
       }
     },
     "Long": {
@@ -433,10 +528,16 @@
     "MappingTemplate": {
       "base": null,
       "refs": {
+        "CreateFunctionRequest$requestMappingTemplate": "<p>The <code>Function</code> request mapping template. Functions support only the 2018-05-29 version of the request mapping template.</p>",
+        "CreateFunctionRequest$responseMappingTemplate": "<p>The <code>Function</code> response mapping template. </p>",
         "CreateResolverRequest$requestMappingTemplate": "<p>The mapping template to be used for requests.</p> <p>A resolver uses a request mapping template to convert a GraphQL expression into a format that a data source can understand. Mapping templates are written in Apache Velocity Template Language (VTL).</p>",
         "CreateResolverRequest$responseMappingTemplate": "<p>The mapping template to be used for responses from the data source.</p>",
+        "FunctionConfiguration$requestMappingTemplate": "<p>The <code>Function</code> request mapping template. Functions support only the 2018-05-29 version of the request mapping template.</p>",
+        "FunctionConfiguration$responseMappingTemplate": "<p>The <code>Function</code> response mapping template.</p>",
         "Resolver$requestMappingTemplate": "<p>The request mapping template.</p>",
         "Resolver$responseMappingTemplate": "<p>The response mapping template.</p>",
+        "UpdateFunctionRequest$requestMappingTemplate": "<p>The <code>Function</code> request mapping template. Functions support only the 2018-05-29 version of the request mapping template.</p>",
+        "UpdateFunctionRequest$responseMappingTemplate": "<p>The <code>Function</code> request mapping template. </p>",
         "UpdateResolverRequest$requestMappingTemplate": "<p>The new request mapping template.</p>",
         "UpdateResolverRequest$responseMappingTemplate": "<p>The new response mapping template.</p>"
       }
@@ -446,22 +547,24 @@
       "refs": {
         "ListApiKeysRequest$maxResults": "<p>The maximum number of results you want the request to return.</p>",
         "ListDataSourcesRequest$maxResults": "<p>The maximum number of results you want the request to return.</p>",
+        "ListFunctionsRequest$maxResults": "<p>The maximum number of results you want the request to return.</p>",
         "ListGraphqlApisRequest$maxResults": "<p>The maximum number of results you want the request to return.</p>",
+        "ListResolversByFunctionRequest$maxResults": "<p>The maximum number of results you want the request to return.</p>",
         "ListResolversRequest$maxResults": "<p>The maximum number of results you want the request to return.</p>",
         "ListTypesRequest$maxResults": "<p>The maximum number of results you want the request to return.</p>"
       }
     },
     "NotFoundException": {
-      "base": "<p>The resource specified in the request was not found. Check the resource and try again.</p>",
+      "base": "<p>The resource specified in the request was not found. Check the resource, and then try again.</p>",
       "refs": {
       }
     },
     "OpenIDConnectConfig": {
-      "base": "<p>Describes an Open Id Connect configuration.</p>",
+      "base": "<p>Describes an OpenID Connect configuration.</p>",
       "refs": {
-        "CreateGraphqlApiRequest$openIDConnectConfig": "<p>The Open Id Connect configuration configuration.</p>",
-        "GraphqlApi$openIDConnectConfig": "<p>The Open Id Connect configuration.</p>",
-        "UpdateGraphqlApiRequest$openIDConnectConfig": "<p>The Open Id Connect configuration configuration for the <code>GraphqlApi</code> object.</p>"
+        "CreateGraphqlApiRequest$openIDConnectConfig": "<p>The OpenID Connect configuration.</p>",
+        "GraphqlApi$openIDConnectConfig": "<p>The OpenID Connect configuration.</p>",
+        "UpdateGraphqlApiRequest$openIDConnectConfig": "<p>The OpenID Connect configuration for the <code>GraphqlApi</code> object.</p>"
       }
     },
     "OutputType": {
@@ -477,12 +580,44 @@
         "ListApiKeysResponse$nextToken": "<p>An identifier to be passed in the next request to this operation to return the next set of items in the list.</p>",
         "ListDataSourcesRequest$nextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list. </p>",
         "ListDataSourcesResponse$nextToken": "<p>An identifier to be passed in the next request to this operation to return the next set of items in the list.</p>",
+        "ListFunctionsRequest$nextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
+        "ListFunctionsResponse$nextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
         "ListGraphqlApisRequest$nextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list. </p>",
         "ListGraphqlApisResponse$nextToken": "<p>An identifier to be passed in the next request to this operation to return the next set of items in the list.</p>",
+        "ListResolversByFunctionRequest$nextToken": "<p>An identifier that was returned from the previous call to this operation, which you can use to return the next set of items in the list.</p>",
+        "ListResolversByFunctionResponse$nextToken": "<p>An identifier that can be used to return the next set of items in the list.</p>",
         "ListResolversRequest$nextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list. </p>",
         "ListResolversResponse$nextToken": "<p>An identifier to be passed in the next request to this operation to return the next set of items in the list.</p>",
         "ListTypesRequest$nextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list. </p>",
         "ListTypesResponse$nextToken": "<p>An identifier to be passed in the next request to this operation to return the next set of items in the list.</p>"
+      }
+    },
+    "PipelineConfig": {
+      "base": "<p>The pipeline configuration for a resolver of kind <code>PIPELINE</code>.</p>",
+      "refs": {
+        "CreateResolverRequest$pipelineConfig": "<p>The <code>PipelineConfig</code>.</p>",
+        "Resolver$pipelineConfig": "<p>The <code>PipelineConfig</code>.</p>",
+        "UpdateResolverRequest$pipelineConfig": "<p>The <code>PipelineConfig</code>.</p>"
+      }
+    },
+    "RdsHttpEndpointConfig": {
+      "base": "<p>The Amazon RDS HTTP endpoint configuration.</p>",
+      "refs": {
+        "RelationalDatabaseDataSourceConfig$rdsHttpEndpointConfig": "<p>Amazon RDS HTTP endpoint settings.</p>"
+      }
+    },
+    "RelationalDatabaseDataSourceConfig": {
+      "base": "<p>Describes a relational database data source configuration.</p>",
+      "refs": {
+        "CreateDataSourceRequest$relationalDatabaseConfig": "<p>Relational database settings.</p>",
+        "DataSource$relationalDatabaseConfig": "<p>Relational database settings.</p>",
+        "UpdateDataSourceRequest$relationalDatabaseConfig": "<p>The new relational database configuration.</p>"
+      }
+    },
+    "RelationalDatabaseSourceType": {
+      "base": null,
+      "refs": {
+        "RelationalDatabaseDataSourceConfig$relationalDatabaseSourceType": "<p>Source type for the relational database.</p> <ul> <li> <p> <b>RDS_HTTP_ENDPOINT</b>: The relational database source type is an Amazon RDS HTTP endpoint.</p> </li> </ul>"
       }
     },
     "Resolver": {
@@ -494,9 +629,18 @@
         "UpdateResolverResponse$resolver": "<p>The updated <code>Resolver</code> object.</p>"
       }
     },
+    "ResolverKind": {
+      "base": null,
+      "refs": {
+        "CreateResolverRequest$kind": "<p>The resolver type.</p> <ul> <li> <p> <b>UNIT</b>: A UNIT resolver type. A UNIT resolver is the default resolver type. A UNIT resolver enables you to execute a GraphQL query against a single data source.</p> </li> <li> <p> <b>PIPELINE</b>: A PIPELINE resolver type. A PIPELINE resolver enables you to execute a series of <code>Function</code> in a serial manner. You can use a pipeline resolver to execute a GraphQL query against multiple data sources.</p> </li> </ul>",
+        "Resolver$kind": "<p>The resolver type.</p> <ul> <li> <p> <b>UNIT</b>: A UNIT resolver type. A UNIT resolver is the default resolver type. A UNIT resolver enables you to execute a GraphQL query against a single data source.</p> </li> <li> <p> <b>PIPELINE</b>: A PIPELINE resolver type. A PIPELINE resolver enables you to execute a series of <code>Function</code> in a serial manner. You can use a pipeline resolver to execute a GraphQL query against multiple data sources.</p> </li> </ul>",
+        "UpdateResolverRequest$kind": "<p>The resolver type.</p> <ul> <li> <p> <b>UNIT</b>: A UNIT resolver type. A UNIT resolver is the default resolver type. A UNIT resolver enables you to execute a GraphQL query against a single data source.</p> </li> <li> <p> <b>PIPELINE</b>: A PIPELINE resolver type. A PIPELINE resolver enables you to execute a series of <code>Function</code> in a serial manner. You can use a pipeline resolver to execute a GraphQL query against multiple data sources.</p> </li> </ul>"
+      }
+    },
     "Resolvers": {
       "base": null,
       "refs": {
+        "ListResolversByFunctionResponse$resolvers": "<p>The list of resolvers.</p>",
         "ListResolversResponse$resolvers": "<p>The <code>Resolver</code> objects.</p>"
       }
     },
@@ -504,15 +648,21 @@
       "base": null,
       "refs": {
         "CreateDataSourceRequest$name": "<p>A user-supplied name for the <code>DataSource</code>.</p>",
+        "CreateFunctionRequest$name": "<p>The <code>Function</code> name. The function name does not have to be unique.</p>",
+        "CreateFunctionRequest$dataSourceName": "<p>The <code>Function</code> <code>DataSource</code> name.</p>",
         "CreateResolverRequest$typeName": "<p>The name of the <code>Type</code>.</p>",
         "CreateResolverRequest$fieldName": "<p>The name of the field to attach the resolver to.</p>",
         "CreateResolverRequest$dataSourceName": "<p>The name of the data source for which the resolver is being created.</p>",
         "DataSource$name": "<p>The name of the data source.</p>",
         "DeleteDataSourceRequest$name": "<p>The name of the data source.</p>",
+        "DeleteFunctionRequest$functionId": "<p>The <code>Function</code> ID.</p>",
         "DeleteResolverRequest$typeName": "<p>The name of the resolver type.</p>",
         "DeleteResolverRequest$fieldName": "<p>The resolver field name.</p>",
         "DeleteTypeRequest$typeName": "<p>The type name.</p>",
+        "FunctionConfiguration$name": "<p>The name of the <code>Function</code> object.</p>",
+        "FunctionConfiguration$dataSourceName": "<p>The name of the <code>DataSource</code>.</p>",
         "GetDataSourceRequest$name": "<p>The name of the data source.</p>",
+        "GetFunctionRequest$functionId": "<p>The <code>Function</code> ID.</p>",
         "GetResolverRequest$typeName": "<p>The resolver type name.</p>",
         "GetResolverRequest$fieldName": "<p>The resolver field name.</p>",
         "GetTypeRequest$typeName": "<p>The type name.</p>",
@@ -522,6 +672,9 @@
         "Resolver$dataSourceName": "<p>The resolver data source name.</p>",
         "Type$name": "<p>The type name.</p>",
         "UpdateDataSourceRequest$name": "<p>The new name for the data source.</p>",
+        "UpdateFunctionRequest$name": "<p>The <code>Function</code> name.</p>",
+        "UpdateFunctionRequest$functionId": "<p>The function ID.</p>",
+        "UpdateFunctionRequest$dataSourceName": "<p>The <code>Function</code> <code>DataSource</code> name.</p>",
         "UpdateResolverRequest$typeName": "<p>The new type name.</p>",
         "UpdateResolverRequest$fieldName": "<p>The new field name.</p>",
         "UpdateResolverRequest$dataSourceName": "<p>The new data source name.</p>",
@@ -532,7 +685,7 @@
       "base": null,
       "refs": {
         "GetSchemaCreationStatusResponse$status": "<p>The current state of the schema (PROCESSING, ACTIVE, or DELETING). Once the schema is in the ACTIVE state, you can add data.</p>",
-        "StartSchemaCreationResponse$status": "<p>The current state of the schema (PROCESSING, ACTIVE, or DELETING). Once the schema is in the ACTIVE state, you can add data.</p>"
+        "StartSchemaCreationResponse$status": "<p>The current state of the schema (PROCESSING, ACTIVE, or DELETING). When the schema is in the ACTIVE state, you can add data.</p>"
       }
     },
     "StartSchemaCreationRequest": {
@@ -553,29 +706,41 @@
         "ApiKeyLimitExceededException$message": null,
         "ApiKeyValidityOutOfBoundsException$message": null,
         "ApiLimitExceededException$message": null,
+        "AwsIamConfig$signingRegion": "<p>The signing region for AWS IAM authorization.</p>",
+        "AwsIamConfig$signingServiceName": "<p>The signing service name for AWS IAM authorization.</p>",
         "CreateApiKeyRequest$apiId": "<p>The ID for your GraphQL API.</p>",
         "CreateApiKeyRequest$description": "<p>A description of the purpose of the API key.</p>",
         "CreateDataSourceRequest$apiId": "<p>The API ID for the GraphQL API for the <code>DataSource</code>.</p>",
         "CreateDataSourceRequest$description": "<p>A description of the <code>DataSource</code>.</p>",
-        "CreateDataSourceRequest$serviceRoleArn": "<p>The IAM service role ARN for the data source. The system assumes this role when accessing the data source.</p>",
+        "CreateDataSourceRequest$serviceRoleArn": "<p>The AWS IAM service role ARN for the data source. The system assumes this role when accessing the data source.</p>",
+        "CreateFunctionRequest$apiId": "<p>The GraphQL API ID.</p>",
+        "CreateFunctionRequest$description": "<p>The <code>Function</code> description.</p>",
+        "CreateFunctionRequest$functionVersion": "<p>The <code>version</code> of the request mapping template. Currently the supported value is 2018-05-29. </p>",
         "CreateGraphqlApiRequest$name": "<p>A user-supplied name for the <code>GraphqlApi</code>.</p>",
         "CreateResolverRequest$apiId": "<p>The ID for the GraphQL API for which the resolver is being created.</p>",
         "CreateTypeRequest$apiId": "<p>The API ID.</p>",
         "CreateTypeRequest$definition": "<p>The type definition, in GraphQL Schema Definition Language (SDL) format.</p> <p>For more information, see the <a href=\"http://graphql.org/learn/schema/\">GraphQL SDL documentation</a>.</p>",
         "DataSource$dataSourceArn": "<p>The data source ARN.</p>",
         "DataSource$description": "<p>The description of the data source.</p>",
-        "DataSource$serviceRoleArn": "<p>The IAM service role ARN for the data source. The system assumes this role when accessing the data source.</p>",
+        "DataSource$serviceRoleArn": "<p>The AWS IAM service role ARN for the data source. The system assumes this role when accessing the data source.</p>",
         "DeleteApiKeyRequest$apiId": "<p>The API ID.</p>",
         "DeleteApiKeyRequest$id": "<p>The ID for the API key.</p>",
         "DeleteDataSourceRequest$apiId": "<p>The API ID.</p>",
+        "DeleteFunctionRequest$apiId": "<p>The GraphQL API ID.</p>",
         "DeleteGraphqlApiRequest$apiId": "<p>The API ID.</p>",
         "DeleteResolverRequest$apiId": "<p>The API ID.</p>",
         "DeleteTypeRequest$apiId": "<p>The API ID.</p>",
         "DynamodbDataSourceConfig$tableName": "<p>The table name.</p>",
-        "DynamodbDataSourceConfig$awsRegion": "<p>The AWS region.</p>",
+        "DynamodbDataSourceConfig$awsRegion": "<p>The AWS Region.</p>",
         "ElasticsearchDataSourceConfig$endpoint": "<p>The endpoint.</p>",
-        "ElasticsearchDataSourceConfig$awsRegion": "<p>The AWS region.</p>",
+        "ElasticsearchDataSourceConfig$awsRegion": "<p>The AWS Region.</p>",
+        "FunctionConfiguration$functionId": "<p>A unique ID representing the <code>Function</code> object.</p>",
+        "FunctionConfiguration$functionArn": "<p>The ARN of the <code>Function</code> object.</p>",
+        "FunctionConfiguration$description": "<p>The <code>Function</code> description.</p>",
+        "FunctionConfiguration$functionVersion": "<p>The version of the request mapping template. Currently only the 2018-05-29 version of the template is supported.</p>",
+        "FunctionsIds$member": null,
         "GetDataSourceRequest$apiId": "<p>The API ID.</p>",
+        "GetFunctionRequest$apiId": "<p>The GraphQL API ID.</p>",
         "GetGraphqlApiRequest$apiId": "<p>The API ID for the GraphQL API.</p>",
         "GetIntrospectionSchemaRequest$apiId": "<p>The API ID.</p>",
         "GetResolverRequest$apiId": "<p>The API ID.</p>",
@@ -584,12 +749,15 @@
         "GetTypeRequest$apiId": "<p>The API ID.</p>",
         "GraphqlApi$apiId": "<p>The API ID.</p>",
         "GraphqlApi$arn": "<p>The ARN.</p>",
-        "HttpDataSourceConfig$endpoint": "<p>The Http url endpoint. You can either specify the domain name or ip and port combination and the url scheme must be http(s). If the port is not specified, AWS AppSync will use the default port 80 for http endpoint and port 443 for https endpoints.</p>",
+        "HttpDataSourceConfig$endpoint": "<p>The HTTP URL endpoint. You can either specify the domain name or IP, and port combination, and the URL scheme must be HTTP or HTTPS. If the port is not specified, AWS AppSync uses the default port 80 for the HTTP endpoint and port 443 for HTTPS endpoints.</p>",
         "InternalFailureException$message": null,
         "LambdaDataSourceConfig$lambdaFunctionArn": "<p>The ARN for the Lambda function.</p>",
         "LimitExceededException$message": null,
         "ListApiKeysRequest$apiId": "<p>The API ID.</p>",
         "ListDataSourcesRequest$apiId": "<p>The API ID.</p>",
+        "ListFunctionsRequest$apiId": "<p>The GraphQL API ID.</p>",
+        "ListResolversByFunctionRequest$apiId": "<p>The API ID.</p>",
+        "ListResolversByFunctionRequest$functionId": "<p>The Function ID.</p>",
         "ListResolversRequest$apiId": "<p>The API ID.</p>",
         "ListResolversRequest$typeName": "<p>The type name.</p>",
         "ListTypesRequest$apiId": "<p>The API ID.</p>",
@@ -597,28 +765,36 @@
         "MapOfStringToString$key": null,
         "MapOfStringToString$value": null,
         "NotFoundException$message": null,
-        "OpenIDConnectConfig$issuer": "<p>The issuer for the open id connect configuration. The issuer returned by discovery MUST exactly match the value of iss in the ID Token.</p>",
-        "OpenIDConnectConfig$clientId": "<p>The client identifier of the Relying party at the OpenID Provider. This identifier is typically obtained when the Relying party is registered with the OpenID Provider. You can specify a regular expression so the AWS AppSync can validate against multiple client identifiers at a time</p>",
+        "OpenIDConnectConfig$issuer": "<p>The issuer for the OpenID Connect configuration. The issuer returned by discovery must exactly match the value of <code>iss</code> in the ID token.</p>",
+        "OpenIDConnectConfig$clientId": "<p>The client identifier of the Relying party at the OpenID identity provider. This identifier is typically obtained when the Relying party is registered with the OpenID identity provider. You can specify a regular expression so the AWS AppSync can validate against multiple client identifiers at a time.</p>",
+        "RdsHttpEndpointConfig$awsRegion": "<p>AWS Region for RDS HTTP endpoint.</p>",
+        "RdsHttpEndpointConfig$dbClusterIdentifier": "<p>Amazon RDS cluster identifier.</p>",
+        "RdsHttpEndpointConfig$databaseName": "<p>Logical database name.</p>",
+        "RdsHttpEndpointConfig$schema": "<p>Logical schema name.</p>",
+        "RdsHttpEndpointConfig$awsSecretStoreArn": "<p>AWS secret store ARN for database credentials.</p>",
         "Resolver$resolverArn": "<p>The resolver ARN.</p>",
         "StartSchemaCreationRequest$apiId": "<p>The API ID.</p>",
         "Type$description": "<p>The type description.</p>",
         "Type$arn": "<p>The type ARN.</p>",
         "Type$definition": "<p>The type definition.</p>",
         "UnauthorizedException$message": null,
-        "UpdateApiKeyRequest$apiId": "<p>The ID for the GraphQL API</p>",
+        "UpdateApiKeyRequest$apiId": "<p>The ID for the GraphQL API.</p>",
         "UpdateApiKeyRequest$id": "<p>The API key ID.</p>",
         "UpdateApiKeyRequest$description": "<p>A description of the purpose of the API key.</p>",
         "UpdateDataSourceRequest$apiId": "<p>The API ID.</p>",
         "UpdateDataSourceRequest$description": "<p>The new description for the data source.</p>",
         "UpdateDataSourceRequest$serviceRoleArn": "<p>The new service role ARN for the data source.</p>",
+        "UpdateFunctionRequest$apiId": "<p>The GraphQL API ID.</p>",
+        "UpdateFunctionRequest$description": "<p>The <code>Function</code> description.</p>",
+        "UpdateFunctionRequest$functionVersion": "<p>The <code>version</code> of the request mapping template. Currently the supported value is 2018-05-29. </p>",
         "UpdateGraphqlApiRequest$apiId": "<p>The API ID.</p>",
         "UpdateGraphqlApiRequest$name": "<p>The new name for the <code>GraphqlApi</code> object.</p>",
         "UpdateResolverRequest$apiId": "<p>The API ID.</p>",
         "UpdateTypeRequest$apiId": "<p>The API ID.</p>",
         "UpdateTypeRequest$definition": "<p>The new definition.</p>",
         "UserPoolConfig$userPoolId": "<p>The user pool ID.</p>",
-        "UserPoolConfig$awsRegion": "<p>The AWS region in which the user pool was created.</p>",
-        "UserPoolConfig$appIdClientRegex": "<p>A regular expression for validating the incoming Amazon Cognito User Pool app client ID.</p>"
+        "UserPoolConfig$awsRegion": "<p>The AWS Region in which the user pool was created.</p>",
+        "UserPoolConfig$appIdClientRegex": "<p>A regular expression for validating the incoming Amazon Cognito user pool app client ID.</p>"
       }
     },
     "Type": {
@@ -671,6 +847,16 @@
       "refs": {
       }
     },
+    "UpdateFunctionRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateFunctionResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "UpdateGraphqlApiRequest": {
       "base": null,
       "refs": {
@@ -702,11 +888,11 @@
       }
     },
     "UserPoolConfig": {
-      "base": "<p>Describes an Amazon Cognito User Pool configuration.</p>",
+      "base": "<p>Describes an Amazon Cognito user pool configuration.</p>",
       "refs": {
-        "CreateGraphqlApiRequest$userPoolConfig": "<p>The Amazon Cognito User Pool configuration.</p>",
-        "GraphqlApi$userPoolConfig": "<p>The Amazon Cognito User Pool configuration.</p>",
-        "UpdateGraphqlApiRequest$userPoolConfig": "<p>The new Amazon Cognito User Pool configuration for the <code>GraphqlApi</code> object.</p>"
+        "CreateGraphqlApiRequest$userPoolConfig": "<p>The Amazon Cognito user pool configuration.</p>",
+        "GraphqlApi$userPoolConfig": "<p>The Amazon Cognito user pool configuration.</p>",
+        "UpdateGraphqlApiRequest$userPoolConfig": "<p>The new Amazon Cognito user pool configuration for the <code>GraphqlApi</code> object.</p>"
       }
     }
   }

@@ -120,6 +120,42 @@
         {"shape":"UnauthenticatedException"}
       ]
     },
+    "CopySnapshot":{
+      "name":"CopySnapshot",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CopySnapshotRequest"},
+      "output":{"shape":"CopySnapshotResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "CreateCloudFormationStack":{
+      "name":"CreateCloudFormationStack",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateCloudFormationStackRequest"},
+      "output":{"shape":"CreateCloudFormationStackResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
     "CreateDisk":{
       "name":"CreateDisk",
       "http":{
@@ -318,6 +354,60 @@
         {"shape":"UnauthenticatedException"}
       ]
     },
+    "CreateRelationalDatabase":{
+      "name":"CreateRelationalDatabase",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateRelationalDatabaseRequest"},
+      "output":{"shape":"CreateRelationalDatabaseResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "CreateRelationalDatabaseFromSnapshot":{
+      "name":"CreateRelationalDatabaseFromSnapshot",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateRelationalDatabaseFromSnapshotRequest"},
+      "output":{"shape":"CreateRelationalDatabaseFromSnapshotResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "CreateRelationalDatabaseSnapshot":{
+      "name":"CreateRelationalDatabaseSnapshot",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateRelationalDatabaseSnapshotRequest"},
+      "output":{"shape":"CreateRelationalDatabaseSnapshotResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
     "DeleteDisk":{
       "name":"DeleteDisk",
       "http":{
@@ -480,6 +570,42 @@
         {"shape":"UnauthenticatedException"}
       ]
     },
+    "DeleteRelationalDatabase":{
+      "name":"DeleteRelationalDatabase",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteRelationalDatabaseRequest"},
+      "output":{"shape":"DeleteRelationalDatabaseResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "DeleteRelationalDatabaseSnapshot":{
+      "name":"DeleteRelationalDatabaseSnapshot",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteRelationalDatabaseSnapshotRequest"},
+      "output":{"shape":"DeleteRelationalDatabaseSnapshotResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
     "DetachDisk":{
       "name":"DetachDisk",
       "http":{
@@ -552,6 +678,24 @@
         {"shape":"UnauthenticatedException"}
       ]
     },
+    "ExportSnapshot":{
+      "name":"ExportSnapshot",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ExportSnapshotRequest"},
+      "output":{"shape":"ExportSnapshotResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
     "GetActiveNames":{
       "name":"GetActiveNames",
       "http":{
@@ -596,6 +740,24 @@
       },
       "input":{"shape":"GetBundlesRequest"},
       "output":{"shape":"GetBundlesResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "GetCloudFormationStackRecords":{
+      "name":"GetCloudFormationStackRecords",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetCloudFormationStackRecordsRequest"},
+      "output":{"shape":"GetCloudFormationStackRecordsResult"},
       "errors":[
         {"shape":"ServiceException"},
         {"shape":"InvalidInputException"},
@@ -704,6 +866,24 @@
       },
       "input":{"shape":"GetDomainsRequest"},
       "output":{"shape":"GetDomainsResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "GetExportSnapshotRecords":{
+      "name":"GetExportSnapshotRecords",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetExportSnapshotRecordsRequest"},
+      "output":{"shape":"GetExportSnapshotRecordsResult"},
       "errors":[
         {"shape":"ServiceException"},
         {"shape":"InvalidInputException"},
@@ -1038,6 +1218,222 @@
         {"shape":"UnauthenticatedException"}
       ]
     },
+    "GetRelationalDatabase":{
+      "name":"GetRelationalDatabase",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetRelationalDatabaseRequest"},
+      "output":{"shape":"GetRelationalDatabaseResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "GetRelationalDatabaseBlueprints":{
+      "name":"GetRelationalDatabaseBlueprints",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetRelationalDatabaseBlueprintsRequest"},
+      "output":{"shape":"GetRelationalDatabaseBlueprintsResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "GetRelationalDatabaseBundles":{
+      "name":"GetRelationalDatabaseBundles",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetRelationalDatabaseBundlesRequest"},
+      "output":{"shape":"GetRelationalDatabaseBundlesResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "GetRelationalDatabaseEvents":{
+      "name":"GetRelationalDatabaseEvents",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetRelationalDatabaseEventsRequest"},
+      "output":{"shape":"GetRelationalDatabaseEventsResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "GetRelationalDatabaseLogEvents":{
+      "name":"GetRelationalDatabaseLogEvents",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetRelationalDatabaseLogEventsRequest"},
+      "output":{"shape":"GetRelationalDatabaseLogEventsResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "GetRelationalDatabaseLogStreams":{
+      "name":"GetRelationalDatabaseLogStreams",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetRelationalDatabaseLogStreamsRequest"},
+      "output":{"shape":"GetRelationalDatabaseLogStreamsResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "GetRelationalDatabaseMasterUserPassword":{
+      "name":"GetRelationalDatabaseMasterUserPassword",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetRelationalDatabaseMasterUserPasswordRequest"},
+      "output":{"shape":"GetRelationalDatabaseMasterUserPasswordResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "GetRelationalDatabaseMetricData":{
+      "name":"GetRelationalDatabaseMetricData",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetRelationalDatabaseMetricDataRequest"},
+      "output":{"shape":"GetRelationalDatabaseMetricDataResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "GetRelationalDatabaseParameters":{
+      "name":"GetRelationalDatabaseParameters",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetRelationalDatabaseParametersRequest"},
+      "output":{"shape":"GetRelationalDatabaseParametersResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "GetRelationalDatabaseSnapshot":{
+      "name":"GetRelationalDatabaseSnapshot",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetRelationalDatabaseSnapshotRequest"},
+      "output":{"shape":"GetRelationalDatabaseSnapshotResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "GetRelationalDatabaseSnapshots":{
+      "name":"GetRelationalDatabaseSnapshots",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetRelationalDatabaseSnapshotsRequest"},
+      "output":{"shape":"GetRelationalDatabaseSnapshotsResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "GetRelationalDatabases":{
+      "name":"GetRelationalDatabases",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetRelationalDatabasesRequest"},
+      "output":{"shape":"GetRelationalDatabasesResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
     "GetStaticIp":{
       "name":"GetStaticIp",
       "http":{
@@ -1182,6 +1578,24 @@
         {"shape":"UnauthenticatedException"}
       ]
     },
+    "RebootRelationalDatabase":{
+      "name":"RebootRelationalDatabase",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"RebootRelationalDatabaseRequest"},
+      "output":{"shape":"RebootRelationalDatabaseResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
     "ReleaseStaticIp":{
       "name":"ReleaseStaticIp",
       "http":{
@@ -1218,6 +1632,24 @@
         {"shape":"UnauthenticatedException"}
       ]
     },
+    "StartRelationalDatabase":{
+      "name":"StartRelationalDatabase",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StartRelationalDatabaseRequest"},
+      "output":{"shape":"StartRelationalDatabaseResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
     "StopInstance":{
       "name":"StopInstance",
       "http":{
@@ -1236,6 +1668,42 @@
         {"shape":"UnauthenticatedException"}
       ]
     },
+    "StopRelationalDatabase":{
+      "name":"StopRelationalDatabase",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StopRelationalDatabaseRequest"},
+      "output":{"shape":"StopRelationalDatabaseResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "TagResource":{
+      "name":"TagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TagResourceRequest"},
+      "output":{"shape":"TagResourceResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
     "UnpeerVpc":{
       "name":"UnpeerVpc",
       "http":{
@@ -1244,6 +1712,24 @@
       },
       "input":{"shape":"UnpeerVpcRequest"},
       "output":{"shape":"UnpeerVpcResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "UntagResource":{
+      "name":"UntagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UntagResourceRequest"},
+      "output":{"shape":"UntagResourceResult"},
       "errors":[
         {"shape":"ServiceException"},
         {"shape":"InvalidInputException"},
@@ -1280,6 +1766,42 @@
       },
       "input":{"shape":"UpdateLoadBalancerAttributeRequest"},
       "output":{"shape":"UpdateLoadBalancerAttributeResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "UpdateRelationalDatabase":{
+      "name":"UpdateRelationalDatabase",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateRelationalDatabaseRequest"},
+      "output":{"shape":"UpdateRelationalDatabaseResult"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"NotFoundException"},
+        {"shape":"OperationFailureException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"AccountSetupInProgressException"},
+        {"shape":"UnauthenticatedException"}
+      ]
+    },
+    "UpdateRelationalDatabaseParameters":{
+      "name":"UpdateRelationalDatabaseParameters",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateRelationalDatabaseParametersRequest"},
+      "output":{"shape":"UpdateRelationalDatabaseParametersResult"},
       "errors":[
         {"shape":"ServiceException"},
         {"shape":"InvalidInputException"},
@@ -1484,6 +2006,71 @@
         "operation":{"shape":"Operation"}
       }
     },
+    "CloudFormationStackRecord":{
+      "type":"structure",
+      "members":{
+        "name":{"shape":"ResourceName"},
+        "arn":{"shape":"NonEmptyString"},
+        "createdAt":{"shape":"IsoDate"},
+        "location":{"shape":"ResourceLocation"},
+        "resourceType":{"shape":"ResourceType"},
+        "state":{"shape":"RecordState"},
+        "sourceInfo":{"shape":"CloudFormationStackRecordSourceInfoList"},
+        "destinationInfo":{"shape":"DestinationInfo"}
+      }
+    },
+    "CloudFormationStackRecordList":{
+      "type":"list",
+      "member":{"shape":"CloudFormationStackRecord"}
+    },
+    "CloudFormationStackRecordSourceInfo":{
+      "type":"structure",
+      "members":{
+        "resourceType":{"shape":"CloudFormationStackRecordSourceType"},
+        "name":{"shape":"NonEmptyString"},
+        "arn":{"shape":"NonEmptyString"}
+      }
+    },
+    "CloudFormationStackRecordSourceInfoList":{
+      "type":"list",
+      "member":{"shape":"CloudFormationStackRecordSourceInfo"}
+    },
+    "CloudFormationStackRecordSourceType":{
+      "type":"string",
+      "enum":["ExportSnapshotRecord"]
+    },
+    "CopySnapshotRequest":{
+      "type":"structure",
+      "required":[
+        "sourceSnapshotName",
+        "targetSnapshotName",
+        "sourceRegion"
+      ],
+      "members":{
+        "sourceSnapshotName":{"shape":"ResourceName"},
+        "targetSnapshotName":{"shape":"ResourceName"},
+        "sourceRegion":{"shape":"RegionName"}
+      }
+    },
+    "CopySnapshotResult":{
+      "type":"structure",
+      "members":{
+        "operations":{"shape":"OperationList"}
+      }
+    },
+    "CreateCloudFormationStackRequest":{
+      "type":"structure",
+      "required":["instances"],
+      "members":{
+        "instances":{"shape":"InstanceEntryList"}
+      }
+    },
+    "CreateCloudFormationStackResult":{
+      "type":"structure",
+      "members":{
+        "operations":{"shape":"OperationList"}
+      }
+    },
     "CreateDiskFromSnapshotRequest":{
       "type":"structure",
       "required":[
@@ -1496,7 +2083,8 @@
         "diskName":{"shape":"ResourceName"},
         "diskSnapshotName":{"shape":"ResourceName"},
         "availabilityZone":{"shape":"NonEmptyString"},
-        "sizeInGb":{"shape":"integer"}
+        "sizeInGb":{"shape":"integer"},
+        "tags":{"shape":"TagList"}
       }
     },
     "CreateDiskFromSnapshotResult":{
@@ -1515,7 +2103,8 @@
       "members":{
         "diskName":{"shape":"ResourceName"},
         "availabilityZone":{"shape":"NonEmptyString"},
-        "sizeInGb":{"shape":"integer"}
+        "sizeInGb":{"shape":"integer"},
+        "tags":{"shape":"TagList"}
       }
     },
     "CreateDiskResult":{
@@ -1532,7 +2121,8 @@
       ],
       "members":{
         "diskName":{"shape":"ResourceName"},
-        "diskSnapshotName":{"shape":"ResourceName"}
+        "diskSnapshotName":{"shape":"ResourceName"},
+        "tags":{"shape":"TagList"}
       }
     },
     "CreateDiskSnapshotResult":{
@@ -1562,7 +2152,8 @@
       "type":"structure",
       "required":["domainName"],
       "members":{
-        "domainName":{"shape":"DomainName"}
+        "domainName":{"shape":"DomainName"},
+        "tags":{"shape":"TagList"}
       }
     },
     "CreateDomainResult":{
@@ -1579,7 +2170,8 @@
       ],
       "members":{
         "instanceSnapshotName":{"shape":"ResourceName"},
-        "instanceName":{"shape":"ResourceName"}
+        "instanceName":{"shape":"ResourceName"},
+        "tags":{"shape":"TagList"}
       }
     },
     "CreateInstanceSnapshotResult":{
@@ -1603,7 +2195,8 @@
         "instanceSnapshotName":{"shape":"ResourceName"},
         "bundleId":{"shape":"NonEmptyString"},
         "userData":{"shape":"string"},
-        "keyPairName":{"shape":"ResourceName"}
+        "keyPairName":{"shape":"ResourceName"},
+        "tags":{"shape":"TagList"}
       }
     },
     "CreateInstancesFromSnapshotResult":{
@@ -1630,7 +2223,8 @@
         "blueprintId":{"shape":"NonEmptyString"},
         "bundleId":{"shape":"NonEmptyString"},
         "userData":{"shape":"string"},
-        "keyPairName":{"shape":"ResourceName"}
+        "keyPairName":{"shape":"ResourceName"},
+        "tags":{"shape":"TagList"}
       }
     },
     "CreateInstancesResult":{
@@ -1643,7 +2237,8 @@
       "type":"structure",
       "required":["keyPairName"],
       "members":{
-        "keyPairName":{"shape":"ResourceName"}
+        "keyPairName":{"shape":"ResourceName"},
+        "tags":{"shape":"TagList"}
       }
     },
     "CreateKeyPairResult":{
@@ -1667,7 +2262,8 @@
         "healthCheckPath":{"shape":"string"},
         "certificateName":{"shape":"ResourceName"},
         "certificateDomainName":{"shape":"DomainName"},
-        "certificateAlternativeNames":{"shape":"DomainNameList"}
+        "certificateAlternativeNames":{"shape":"DomainNameList"},
+        "tags":{"shape":"TagList"}
       }
     },
     "CreateLoadBalancerResult":{
@@ -1687,10 +2283,79 @@
         "loadBalancerName":{"shape":"ResourceName"},
         "certificateName":{"shape":"ResourceName"},
         "certificateDomainName":{"shape":"DomainName"},
-        "certificateAlternativeNames":{"shape":"DomainNameList"}
+        "certificateAlternativeNames":{"shape":"DomainNameList"},
+        "tags":{"shape":"TagList"}
       }
     },
     "CreateLoadBalancerTlsCertificateResult":{
+      "type":"structure",
+      "members":{
+        "operations":{"shape":"OperationList"}
+      }
+    },
+    "CreateRelationalDatabaseFromSnapshotRequest":{
+      "type":"structure",
+      "required":["relationalDatabaseName"],
+      "members":{
+        "relationalDatabaseName":{"shape":"ResourceName"},
+        "availabilityZone":{"shape":"string"},
+        "publiclyAccessible":{"shape":"boolean"},
+        "relationalDatabaseSnapshotName":{"shape":"ResourceName"},
+        "relationalDatabaseBundleId":{"shape":"string"},
+        "sourceRelationalDatabaseName":{"shape":"ResourceName"},
+        "restoreTime":{"shape":"IsoDate"},
+        "useLatestRestorableTime":{"shape":"boolean"},
+        "tags":{"shape":"TagList"}
+      }
+    },
+    "CreateRelationalDatabaseFromSnapshotResult":{
+      "type":"structure",
+      "members":{
+        "operations":{"shape":"OperationList"}
+      }
+    },
+    "CreateRelationalDatabaseRequest":{
+      "type":"structure",
+      "required":[
+        "relationalDatabaseName",
+        "relationalDatabaseBlueprintId",
+        "relationalDatabaseBundleId",
+        "masterDatabaseName",
+        "masterUsername"
+      ],
+      "members":{
+        "relationalDatabaseName":{"shape":"ResourceName"},
+        "availabilityZone":{"shape":"string"},
+        "relationalDatabaseBlueprintId":{"shape":"string"},
+        "relationalDatabaseBundleId":{"shape":"string"},
+        "masterDatabaseName":{"shape":"string"},
+        "masterUsername":{"shape":"string"},
+        "masterUserPassword":{"shape":"SensitiveString"},
+        "preferredBackupWindow":{"shape":"string"},
+        "preferredMaintenanceWindow":{"shape":"string"},
+        "publiclyAccessible":{"shape":"boolean"},
+        "tags":{"shape":"TagList"}
+      }
+    },
+    "CreateRelationalDatabaseResult":{
+      "type":"structure",
+      "members":{
+        "operations":{"shape":"OperationList"}
+      }
+    },
+    "CreateRelationalDatabaseSnapshotRequest":{
+      "type":"structure",
+      "required":[
+        "relationalDatabaseName",
+        "relationalDatabaseSnapshotName"
+      ],
+      "members":{
+        "relationalDatabaseName":{"shape":"ResourceName"},
+        "relationalDatabaseSnapshotName":{"shape":"ResourceName"},
+        "tags":{"shape":"TagList"}
+      }
+    },
+    "CreateRelationalDatabaseSnapshotResult":{
       "type":"structure",
       "members":{
         "operations":{"shape":"OperationList"}
@@ -1822,6 +2487,41 @@
         "operations":{"shape":"OperationList"}
       }
     },
+    "DeleteRelationalDatabaseRequest":{
+      "type":"structure",
+      "required":["relationalDatabaseName"],
+      "members":{
+        "relationalDatabaseName":{"shape":"ResourceName"},
+        "skipFinalSnapshot":{"shape":"boolean"},
+        "finalRelationalDatabaseSnapshotName":{"shape":"ResourceName"}
+      }
+    },
+    "DeleteRelationalDatabaseResult":{
+      "type":"structure",
+      "members":{
+        "operations":{"shape":"OperationList"}
+      }
+    },
+    "DeleteRelationalDatabaseSnapshotRequest":{
+      "type":"structure",
+      "required":["relationalDatabaseSnapshotName"],
+      "members":{
+        "relationalDatabaseSnapshotName":{"shape":"ResourceName"}
+      }
+    },
+    "DeleteRelationalDatabaseSnapshotResult":{
+      "type":"structure",
+      "members":{
+        "operations":{"shape":"OperationList"}
+      }
+    },
+    "DestinationInfo":{
+      "type":"structure",
+      "members":{
+        "id":{"shape":"NonEmptyString"},
+        "service":{"shape":"NonEmptyString"}
+      }
+    },
     "DetachDiskRequest":{
       "type":"structure",
       "required":["diskName"],
@@ -1874,6 +2574,7 @@
         "createdAt":{"shape":"IsoDate"},
         "location":{"shape":"ResourceLocation"},
         "resourceType":{"shape":"ResourceType"},
+        "tags":{"shape":"TagList"},
         "sizeInGb":{"shape":"integer"},
         "isSystemDisk":{"shape":"boolean"},
         "iops":{"shape":"integer"},
@@ -1890,6 +2591,19 @@
           "deprecated":true
         }
       }
+    },
+    "DiskInfo":{
+      "type":"structure",
+      "members":{
+        "name":{"shape":"string"},
+        "path":{"shape":"NonEmptyString"},
+        "sizeInGb":{"shape":"integer"},
+        "isSystemDisk":{"shape":"boolean"}
+      }
+    },
+    "DiskInfoList":{
+      "type":"list",
+      "member":{"shape":"DiskInfo"}
     },
     "DiskList":{
       "type":"list",
@@ -1915,11 +2629,18 @@
         "createdAt":{"shape":"IsoDate"},
         "location":{"shape":"ResourceLocation"},
         "resourceType":{"shape":"ResourceType"},
+        "tags":{"shape":"TagList"},
         "sizeInGb":{"shape":"integer"},
         "state":{"shape":"DiskSnapshotState"},
         "progress":{"shape":"string"},
         "fromDiskName":{"shape":"ResourceName"},
         "fromDiskArn":{"shape":"NonEmptyString"}
+      }
+    },
+    "DiskSnapshotInfo":{
+      "type":"structure",
+      "members":{
+        "sizeInGb":{"shape":"integer"}
       }
     },
     "DiskSnapshotList":{
@@ -1954,6 +2675,7 @@
         "createdAt":{"shape":"IsoDate"},
         "location":{"shape":"ResourceLocation"},
         "resourceType":{"shape":"ResourceType"},
+        "tags":{"shape":"TagList"},
         "domainEntries":{"shape":"DomainEntryList"}
       }
     },
@@ -2003,6 +2725,56 @@
         "privateKeyBase64":{"shape":"Base64"}
       }
     },
+    "ExportSnapshotRecord":{
+      "type":"structure",
+      "members":{
+        "name":{"shape":"ResourceName"},
+        "arn":{"shape":"NonEmptyString"},
+        "createdAt":{"shape":"IsoDate"},
+        "location":{"shape":"ResourceLocation"},
+        "resourceType":{"shape":"ResourceType"},
+        "state":{"shape":"RecordState"},
+        "sourceInfo":{"shape":"ExportSnapshotRecordSourceInfo"},
+        "destinationInfo":{"shape":"DestinationInfo"}
+      }
+    },
+    "ExportSnapshotRecordList":{
+      "type":"list",
+      "member":{"shape":"ExportSnapshotRecord"}
+    },
+    "ExportSnapshotRecordSourceInfo":{
+      "type":"structure",
+      "members":{
+        "resourceType":{"shape":"ExportSnapshotRecordSourceType"},
+        "createdAt":{"shape":"IsoDate"},
+        "name":{"shape":"NonEmptyString"},
+        "arn":{"shape":"NonEmptyString"},
+        "fromResourceName":{"shape":"NonEmptyString"},
+        "fromResourceArn":{"shape":"NonEmptyString"},
+        "instanceSnapshotInfo":{"shape":"InstanceSnapshotInfo"},
+        "diskSnapshotInfo":{"shape":"DiskSnapshotInfo"}
+      }
+    },
+    "ExportSnapshotRecordSourceType":{
+      "type":"string",
+      "enum":[
+        "InstanceSnapshot",
+        "DiskSnapshot"
+      ]
+    },
+    "ExportSnapshotRequest":{
+      "type":"structure",
+      "required":["sourceSnapshotName"],
+      "members":{
+        "sourceSnapshotName":{"shape":"ResourceName"}
+      }
+    },
+    "ExportSnapshotResult":{
+      "type":"structure",
+      "members":{
+        "operations":{"shape":"OperationList"}
+      }
+    },
     "GetActiveNamesRequest":{
       "type":"structure",
       "members":{
@@ -2041,6 +2813,19 @@
       "type":"structure",
       "members":{
         "bundles":{"shape":"BundleList"},
+        "nextPageToken":{"shape":"string"}
+      }
+    },
+    "GetCloudFormationStackRecordsRequest":{
+      "type":"structure",
+      "members":{
+        "pageToken":{"shape":"string"}
+      }
+    },
+    "GetCloudFormationStackRecordsResult":{
+      "type":"structure",
+      "members":{
+        "cloudFormationStackRecords":{"shape":"CloudFormationStackRecordList"},
         "nextPageToken":{"shape":"string"}
       }
     },
@@ -2119,6 +2904,19 @@
       "type":"structure",
       "members":{
         "domains":{"shape":"DomainList"},
+        "nextPageToken":{"shape":"string"}
+      }
+    },
+    "GetExportSnapshotRecordsRequest":{
+      "type":"structure",
+      "members":{
+        "pageToken":{"shape":"string"}
+      }
+    },
+    "GetExportSnapshotRecordsResult":{
+      "type":"structure",
+      "members":{
+        "exportSnapshotRecords":{"shape":"ExportSnapshotRecordList"},
         "nextPageToken":{"shape":"string"}
       }
     },
@@ -2383,13 +3181,202 @@
     "GetRegionsRequest":{
       "type":"structure",
       "members":{
-        "includeAvailabilityZones":{"shape":"boolean"}
+        "includeAvailabilityZones":{"shape":"boolean"},
+        "includeRelationalDatabaseAvailabilityZones":{"shape":"boolean"}
       }
     },
     "GetRegionsResult":{
       "type":"structure",
       "members":{
         "regions":{"shape":"RegionList"}
+      }
+    },
+    "GetRelationalDatabaseBlueprintsRequest":{
+      "type":"structure",
+      "members":{
+        "pageToken":{"shape":"string"}
+      }
+    },
+    "GetRelationalDatabaseBlueprintsResult":{
+      "type":"structure",
+      "members":{
+        "blueprints":{"shape":"RelationalDatabaseBlueprintList"},
+        "nextPageToken":{"shape":"string"}
+      }
+    },
+    "GetRelationalDatabaseBundlesRequest":{
+      "type":"structure",
+      "members":{
+        "pageToken":{"shape":"string"}
+      }
+    },
+    "GetRelationalDatabaseBundlesResult":{
+      "type":"structure",
+      "members":{
+        "bundles":{"shape":"RelationalDatabaseBundleList"},
+        "nextPageToken":{"shape":"string"}
+      }
+    },
+    "GetRelationalDatabaseEventsRequest":{
+      "type":"structure",
+      "required":["relationalDatabaseName"],
+      "members":{
+        "relationalDatabaseName":{"shape":"ResourceName"},
+        "durationInMinutes":{"shape":"integer"},
+        "pageToken":{"shape":"string"}
+      }
+    },
+    "GetRelationalDatabaseEventsResult":{
+      "type":"structure",
+      "members":{
+        "relationalDatabaseEvents":{"shape":"RelationalDatabaseEventList"},
+        "nextPageToken":{"shape":"string"}
+      }
+    },
+    "GetRelationalDatabaseLogEventsRequest":{
+      "type":"structure",
+      "required":[
+        "relationalDatabaseName",
+        "logStreamName"
+      ],
+      "members":{
+        "relationalDatabaseName":{"shape":"ResourceName"},
+        "logStreamName":{"shape":"string"},
+        "startTime":{"shape":"IsoDate"},
+        "endTime":{"shape":"IsoDate"},
+        "startFromHead":{"shape":"boolean"},
+        "pageToken":{"shape":"string"}
+      }
+    },
+    "GetRelationalDatabaseLogEventsResult":{
+      "type":"structure",
+      "members":{
+        "resourceLogEvents":{"shape":"LogEventList"},
+        "nextBackwardToken":{"shape":"string"},
+        "nextForwardToken":{"shape":"string"}
+      }
+    },
+    "GetRelationalDatabaseLogStreamsRequest":{
+      "type":"structure",
+      "required":["relationalDatabaseName"],
+      "members":{
+        "relationalDatabaseName":{"shape":"ResourceName"}
+      }
+    },
+    "GetRelationalDatabaseLogStreamsResult":{
+      "type":"structure",
+      "members":{
+        "logStreams":{"shape":"StringList"}
+      }
+    },
+    "GetRelationalDatabaseMasterUserPasswordRequest":{
+      "type":"structure",
+      "required":["relationalDatabaseName"],
+      "members":{
+        "relationalDatabaseName":{"shape":"ResourceName"},
+        "passwordVersion":{"shape":"RelationalDatabasePasswordVersion"}
+      }
+    },
+    "GetRelationalDatabaseMasterUserPasswordResult":{
+      "type":"structure",
+      "members":{
+        "masterUserPassword":{"shape":"SensitiveString"},
+        "createdAt":{"shape":"IsoDate"}
+      }
+    },
+    "GetRelationalDatabaseMetricDataRequest":{
+      "type":"structure",
+      "required":[
+        "relationalDatabaseName",
+        "metricName",
+        "period",
+        "startTime",
+        "endTime",
+        "unit",
+        "statistics"
+      ],
+      "members":{
+        "relationalDatabaseName":{"shape":"ResourceName"},
+        "metricName":{"shape":"RelationalDatabaseMetricName"},
+        "period":{"shape":"MetricPeriod"},
+        "startTime":{"shape":"IsoDate"},
+        "endTime":{"shape":"IsoDate"},
+        "unit":{"shape":"MetricUnit"},
+        "statistics":{"shape":"MetricStatisticList"}
+      }
+    },
+    "GetRelationalDatabaseMetricDataResult":{
+      "type":"structure",
+      "members":{
+        "metricName":{"shape":"RelationalDatabaseMetricName"},
+        "metricData":{"shape":"MetricDatapointList"}
+      }
+    },
+    "GetRelationalDatabaseParametersRequest":{
+      "type":"structure",
+      "required":["relationalDatabaseName"],
+      "members":{
+        "relationalDatabaseName":{"shape":"ResourceName"},
+        "pageToken":{"shape":"string"}
+      }
+    },
+    "GetRelationalDatabaseParametersResult":{
+      "type":"structure",
+      "members":{
+        "parameters":{"shape":"RelationalDatabaseParameterList"},
+        "nextPageToken":{"shape":"string"}
+      }
+    },
+    "GetRelationalDatabaseRequest":{
+      "type":"structure",
+      "required":["relationalDatabaseName"],
+      "members":{
+        "relationalDatabaseName":{"shape":"ResourceName"}
+      }
+    },
+    "GetRelationalDatabaseResult":{
+      "type":"structure",
+      "members":{
+        "relationalDatabase":{"shape":"RelationalDatabase"}
+      }
+    },
+    "GetRelationalDatabaseSnapshotRequest":{
+      "type":"structure",
+      "required":["relationalDatabaseSnapshotName"],
+      "members":{
+        "relationalDatabaseSnapshotName":{"shape":"ResourceName"}
+      }
+    },
+    "GetRelationalDatabaseSnapshotResult":{
+      "type":"structure",
+      "members":{
+        "relationalDatabaseSnapshot":{"shape":"RelationalDatabaseSnapshot"}
+      }
+    },
+    "GetRelationalDatabaseSnapshotsRequest":{
+      "type":"structure",
+      "members":{
+        "pageToken":{"shape":"string"}
+      }
+    },
+    "GetRelationalDatabaseSnapshotsResult":{
+      "type":"structure",
+      "members":{
+        "relationalDatabaseSnapshots":{"shape":"RelationalDatabaseSnapshotList"},
+        "nextPageToken":{"shape":"string"}
+      }
+    },
+    "GetRelationalDatabasesRequest":{
+      "type":"structure",
+      "members":{
+        "pageToken":{"shape":"string"}
+      }
+    },
+    "GetRelationalDatabasesResult":{
+      "type":"structure",
+      "members":{
+        "relationalDatabases":{"shape":"RelationalDatabaseList"},
+        "nextPageToken":{"shape":"string"}
       }
     },
     "GetStaticIpRequest":{
@@ -2444,6 +3431,7 @@
         "createdAt":{"shape":"IsoDate"},
         "location":{"shape":"ResourceLocation"},
         "resourceType":{"shape":"ResourceType"},
+        "tags":{"shape":"TagList"},
         "blueprintId":{"shape":"NonEmptyString"},
         "blueprintName":{"shape":"NonEmptyString"},
         "bundleId":{"shape":"NonEmptyString"},
@@ -2478,6 +3466,26 @@
         "ssh",
         "rdp"
       ]
+    },
+    "InstanceEntry":{
+      "type":"structure",
+      "required":[
+        "sourceName",
+        "instanceType",
+        "portInfoSource",
+        "availabilityZone"
+      ],
+      "members":{
+        "sourceName":{"shape":"ResourceName"},
+        "instanceType":{"shape":"NonEmptyString"},
+        "portInfoSource":{"shape":"PortInfoSourceType"},
+        "userData":{"shape":"string"},
+        "availabilityZone":{"shape":"string"}
+      }
+    },
+    "InstanceEntryList":{
+      "type":"list",
+      "member":{"shape":"InstanceEntry"}
     },
     "InstanceHardware":{
       "type":"structure",
@@ -2597,6 +3605,7 @@
         "createdAt":{"shape":"IsoDate"},
         "location":{"shape":"ResourceLocation"},
         "resourceType":{"shape":"ResourceType"},
+        "tags":{"shape":"TagList"},
         "state":{"shape":"InstanceSnapshotState"},
         "progress":{"shape":"string"},
         "fromAttachedDisks":{"shape":"DiskList"},
@@ -2605,6 +3614,14 @@
         "fromBlueprintId":{"shape":"string"},
         "fromBundleId":{"shape":"string"},
         "sizeInGb":{"shape":"integer"}
+      }
+    },
+    "InstanceSnapshotInfo":{
+      "type":"structure",
+      "members":{
+        "fromBundleId":{"shape":"NonEmptyString"},
+        "fromBlueprintId":{"shape":"NonEmptyString"},
+        "fromDiskInfo":{"shape":"DiskInfoList"}
       }
     },
     "InstanceSnapshotList":{
@@ -2665,6 +3682,7 @@
         "createdAt":{"shape":"IsoDate"},
         "location":{"shape":"ResourceLocation"},
         "resourceType":{"shape":"ResourceType"},
+        "tags":{"shape":"TagList"},
         "fingerprint":{"shape":"Base64"}
       }
     },
@@ -2681,6 +3699,7 @@
         "createdAt":{"shape":"IsoDate"},
         "location":{"shape":"ResourceLocation"},
         "resourceType":{"shape":"ResourceType"},
+        "tags":{"shape":"TagList"},
         "dnsName":{"shape":"NonEmptyString"},
         "state":{"shape":"LoadBalancerState"},
         "protocol":{"shape":"LoadBalancerProtocol"},
@@ -2752,6 +3771,7 @@
         "createdAt":{"shape":"IsoDate"},
         "location":{"shape":"ResourceLocation"},
         "resourceType":{"shape":"ResourceType"},
+        "tags":{"shape":"TagList"},
         "loadBalancerName":{"shape":"ResourceName"},
         "isAttached":{"shape":"boolean"},
         "status":{"shape":"LoadBalancerTlsCertificateStatus"},
@@ -2873,6 +3893,17 @@
     "LoadBalancerTlsCertificateSummaryList":{
       "type":"list",
       "member":{"shape":"LoadBalancerTlsCertificateSummary"}
+    },
+    "LogEvent":{
+      "type":"structure",
+      "members":{
+        "createdAt":{"shape":"IsoDate"},
+        "message":{"shape":"string"}
+      }
+    },
+    "LogEventList":{
+      "type":"list",
+      "member":{"shape":"LogEvent"}
     },
     "MetricDatapoint":{
       "type":"structure",
@@ -3063,7 +4094,17 @@
         "DetachDisk",
         "CreateDiskSnapshot",
         "DeleteDiskSnapshot",
-        "CreateDiskFromSnapshot"
+        "CreateDiskFromSnapshot",
+        "CreateRelationalDatabase",
+        "UpdateRelationalDatabase",
+        "DeleteRelationalDatabase",
+        "CreateRelationalDatabaseFromSnapshot",
+        "CreateRelationalDatabaseSnapshot",
+        "DeleteRelationalDatabaseSnapshot",
+        "UpdateRelationalDatabaseParameters",
+        "StartRelationalDatabase",
+        "RebootRelationalDatabase",
+        "StopRelationalDatabase"
       ]
     },
     "PasswordData":{
@@ -3082,6 +4123,26 @@
       "type":"structure",
       "members":{
         "operation":{"shape":"Operation"}
+      }
+    },
+    "PendingMaintenanceAction":{
+      "type":"structure",
+      "members":{
+        "action":{"shape":"NonEmptyString"},
+        "description":{"shape":"NonEmptyString"},
+        "currentApplyDate":{"shape":"IsoDate"}
+      }
+    },
+    "PendingMaintenanceActionList":{
+      "type":"list",
+      "member":{"shape":"PendingMaintenanceAction"}
+    },
+    "PendingModifiedRelationalDatabaseValues":{
+      "type":"structure",
+      "members":{
+        "masterUserPassword":{"shape":"string"},
+        "engineVersion":{"shape":"string"},
+        "backupRetentionEnabled":{"shape":"boolean"}
       }
     },
     "Port":{
@@ -3107,6 +4168,14 @@
     "PortInfoList":{
       "type":"list",
       "member":{"shape":"PortInfo"}
+    },
+    "PortInfoSourceType":{
+      "type":"string",
+      "enum":[
+        "DEFAULT",
+        "INSTANCE",
+        "NONE"
+      ]
     },
     "PortList":{
       "type":"list",
@@ -3149,6 +4218,27 @@
         "operations":{"shape":"OperationList"}
       }
     },
+    "RebootRelationalDatabaseRequest":{
+      "type":"structure",
+      "required":["relationalDatabaseName"],
+      "members":{
+        "relationalDatabaseName":{"shape":"ResourceName"}
+      }
+    },
+    "RebootRelationalDatabaseResult":{
+      "type":"structure",
+      "members":{
+        "operations":{"shape":"OperationList"}
+      }
+    },
+    "RecordState":{
+      "type":"string",
+      "enum":[
+        "Started",
+        "Succeeded",
+        "Failed"
+      ]
+    },
     "Region":{
       "type":"structure",
       "members":{
@@ -3156,7 +4246,8 @@
         "description":{"shape":"string"},
         "displayName":{"shape":"string"},
         "name":{"shape":"RegionName"},
-        "availabilityZones":{"shape":"AvailabilityZoneList"}
+        "availabilityZones":{"shape":"AvailabilityZoneList"},
+        "relationalDatabaseAvailabilityZones":{"shape":"AvailabilityZoneList"}
       }
     },
     "RegionList":{
@@ -3170,15 +4261,176 @@
         "us-east-2",
         "us-west-1",
         "us-west-2",
-        "eu-central-1",
         "eu-west-1",
         "eu-west-2",
+        "eu-west-3",
+        "eu-central-1",
+        "ca-central-1",
         "ap-south-1",
         "ap-southeast-1",
         "ap-southeast-2",
         "ap-northeast-1",
         "ap-northeast-2"
       ]
+    },
+    "RelationalDatabase":{
+      "type":"structure",
+      "members":{
+        "name":{"shape":"ResourceName"},
+        "arn":{"shape":"NonEmptyString"},
+        "supportCode":{"shape":"string"},
+        "createdAt":{"shape":"IsoDate"},
+        "location":{"shape":"ResourceLocation"},
+        "resourceType":{"shape":"ResourceType"},
+        "tags":{"shape":"TagList"},
+        "relationalDatabaseBlueprintId":{"shape":"NonEmptyString"},
+        "relationalDatabaseBundleId":{"shape":"NonEmptyString"},
+        "masterDatabaseName":{"shape":"string"},
+        "hardware":{"shape":"RelationalDatabaseHardware"},
+        "state":{"shape":"NonEmptyString"},
+        "secondaryAvailabilityZone":{"shape":"string"},
+        "backupRetentionEnabled":{"shape":"boolean"},
+        "pendingModifiedValues":{"shape":"PendingModifiedRelationalDatabaseValues"},
+        "engine":{"shape":"NonEmptyString"},
+        "engineVersion":{"shape":"NonEmptyString"},
+        "latestRestorableTime":{"shape":"IsoDate"},
+        "masterUsername":{"shape":"NonEmptyString"},
+        "parameterApplyStatus":{"shape":"NonEmptyString"},
+        "preferredBackupWindow":{"shape":"NonEmptyString"},
+        "preferredMaintenanceWindow":{"shape":"NonEmptyString"},
+        "publiclyAccessible":{"shape":"boolean"},
+        "masterEndpoint":{"shape":"RelationalDatabaseEndpoint"},
+        "pendingMaintenanceActions":{"shape":"PendingMaintenanceActionList"}
+      }
+    },
+    "RelationalDatabaseBlueprint":{
+      "type":"structure",
+      "members":{
+        "blueprintId":{"shape":"string"},
+        "engine":{"shape":"RelationalDatabaseEngine"},
+        "engineVersion":{"shape":"string"},
+        "engineDescription":{"shape":"string"},
+        "engineVersionDescription":{"shape":"string"},
+        "isEngineDefault":{"shape":"boolean"}
+      }
+    },
+    "RelationalDatabaseBlueprintList":{
+      "type":"list",
+      "member":{"shape":"RelationalDatabaseBlueprint"}
+    },
+    "RelationalDatabaseBundle":{
+      "type":"structure",
+      "members":{
+        "bundleId":{"shape":"string"},
+        "name":{"shape":"string"},
+        "price":{"shape":"float"},
+        "ramSizeInGb":{"shape":"float"},
+        "diskSizeInGb":{"shape":"integer"},
+        "transferPerMonthInGb":{"shape":"integer"},
+        "cpuCount":{"shape":"integer"},
+        "isEncrypted":{"shape":"boolean"},
+        "isActive":{"shape":"boolean"}
+      }
+    },
+    "RelationalDatabaseBundleList":{
+      "type":"list",
+      "member":{"shape":"RelationalDatabaseBundle"}
+    },
+    "RelationalDatabaseEndpoint":{
+      "type":"structure",
+      "members":{
+        "port":{"shape":"integer"},
+        "address":{"shape":"NonEmptyString"}
+      }
+    },
+    "RelationalDatabaseEngine":{
+      "type":"string",
+      "enum":["mysql"]
+    },
+    "RelationalDatabaseEvent":{
+      "type":"structure",
+      "members":{
+        "resource":{"shape":"ResourceName"},
+        "createdAt":{"shape":"IsoDate"},
+        "message":{"shape":"string"},
+        "eventCategories":{"shape":"StringList"}
+      }
+    },
+    "RelationalDatabaseEventList":{
+      "type":"list",
+      "member":{"shape":"RelationalDatabaseEvent"}
+    },
+    "RelationalDatabaseHardware":{
+      "type":"structure",
+      "members":{
+        "cpuCount":{"shape":"integer"},
+        "diskSizeInGb":{"shape":"integer"},
+        "ramSizeInGb":{"shape":"float"}
+      }
+    },
+    "RelationalDatabaseList":{
+      "type":"list",
+      "member":{"shape":"RelationalDatabase"}
+    },
+    "RelationalDatabaseMetricName":{
+      "type":"string",
+      "enum":[
+        "CPUUtilization",
+        "DatabaseConnections",
+        "DiskQueueDepth",
+        "FreeStorageSpace",
+        "NetworkReceiveThroughput",
+        "NetworkTransmitThroughput"
+      ]
+    },
+    "RelationalDatabaseParameter":{
+      "type":"structure",
+      "members":{
+        "allowedValues":{"shape":"string"},
+        "applyMethod":{"shape":"string"},
+        "applyType":{"shape":"string"},
+        "dataType":{"shape":"string"},
+        "description":{"shape":"string"},
+        "isModifiable":{"shape":"boolean"},
+        "parameterName":{"shape":"string"},
+        "parameterValue":{"shape":"string"}
+      }
+    },
+    "RelationalDatabaseParameterList":{
+      "type":"list",
+      "member":{"shape":"RelationalDatabaseParameter"}
+    },
+    "RelationalDatabasePasswordVersion":{
+      "type":"string",
+      "enum":[
+        "CURRENT",
+        "PREVIOUS",
+        "PENDING"
+      ]
+    },
+    "RelationalDatabaseSnapshot":{
+      "type":"structure",
+      "members":{
+        "name":{"shape":"ResourceName"},
+        "arn":{"shape":"NonEmptyString"},
+        "supportCode":{"shape":"string"},
+        "createdAt":{"shape":"IsoDate"},
+        "location":{"shape":"ResourceLocation"},
+        "resourceType":{"shape":"ResourceType"},
+        "tags":{"shape":"TagList"},
+        "engine":{"shape":"NonEmptyString"},
+        "engineVersion":{"shape":"NonEmptyString"},
+        "sizeInGb":{"shape":"integer"},
+        "state":{"shape":"NonEmptyString"},
+        "fromRelationalDatabaseName":{"shape":"NonEmptyString"},
+        "fromRelationalDatabaseArn":{"shape":"NonEmptyString"},
+        "fromRelationalDatabaseBundleId":{"shape":"string"},
+        "fromRelationalDatabaseBlueprintId":{"shape":"string"}
+      }
+    },
+    "RelationalDatabaseSnapshotList":{
+      "type":"list",
+      "member":{"shape":"RelationalDatabaseSnapshot"}
     },
     "ReleaseStaticIpRequest":{
       "type":"structure",
@@ -3220,8 +4472,16 @@
         "LoadBalancer",
         "LoadBalancerTlsCertificate",
         "Disk",
-        "DiskSnapshot"
+        "DiskSnapshot",
+        "RelationalDatabase",
+        "RelationalDatabaseSnapshot",
+        "ExportSnapshotRecord",
+        "CloudFormationStackRecord"
       ]
+    },
+    "SensitiveString":{
+      "type":"string",
+      "sensitive":true
     },
     "ServiceException":{
       "type":"structure",
@@ -3242,6 +4502,19 @@
       }
     },
     "StartInstanceResult":{
+      "type":"structure",
+      "members":{
+        "operations":{"shape":"OperationList"}
+      }
+    },
+    "StartRelationalDatabaseRequest":{
+      "type":"structure",
+      "required":["relationalDatabaseName"],
+      "members":{
+        "relationalDatabaseName":{"shape":"ResourceName"}
+      }
+    },
+    "StartRelationalDatabaseResult":{
       "type":"structure",
       "members":{
         "operations":{"shape":"OperationList"}
@@ -3279,6 +4552,20 @@
         "operations":{"shape":"OperationList"}
       }
     },
+    "StopRelationalDatabaseRequest":{
+      "type":"structure",
+      "required":["relationalDatabaseName"],
+      "members":{
+        "relationalDatabaseName":{"shape":"ResourceName"},
+        "relationalDatabaseSnapshotName":{"shape":"ResourceName"}
+      }
+    },
+    "StopRelationalDatabaseResult":{
+      "type":"structure",
+      "members":{
+        "operations":{"shape":"OperationList"}
+      }
+    },
     "StringList":{
       "type":"list",
       "member":{"shape":"string"}
@@ -3288,6 +4575,40 @@
       "max":256,
       "min":1
     },
+    "Tag":{
+      "type":"structure",
+      "members":{
+        "key":{"shape":"TagKey"},
+        "value":{"shape":"TagValue"}
+      }
+    },
+    "TagKey":{"type":"string"},
+    "TagKeyList":{
+      "type":"list",
+      "member":{"shape":"TagKey"}
+    },
+    "TagList":{
+      "type":"list",
+      "member":{"shape":"Tag"}
+    },
+    "TagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "resourceName",
+        "tags"
+      ],
+      "members":{
+        "resourceName":{"shape":"ResourceName"},
+        "tags":{"shape":"TagList"}
+      }
+    },
+    "TagResourceResult":{
+      "type":"structure",
+      "members":{
+        "operations":{"shape":"OperationList"}
+      }
+    },
+    "TagValue":{"type":"string"},
     "UnauthenticatedException":{
       "type":"structure",
       "members":{
@@ -3307,6 +4628,23 @@
       "type":"structure",
       "members":{
         "operation":{"shape":"Operation"}
+      }
+    },
+    "UntagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "resourceName",
+        "tagKeys"
+      ],
+      "members":{
+        "resourceName":{"shape":"ResourceName"},
+        "tagKeys":{"shape":"TagKeyList"}
+      }
+    },
+    "UntagResourceResult":{
+      "type":"structure",
+      "members":{
+        "operations":{"shape":"OperationList"}
       }
     },
     "UpdateDomainEntryRequest":{
@@ -3340,6 +4678,44 @@
       }
     },
     "UpdateLoadBalancerAttributeResult":{
+      "type":"structure",
+      "members":{
+        "operations":{"shape":"OperationList"}
+      }
+    },
+    "UpdateRelationalDatabaseParametersRequest":{
+      "type":"structure",
+      "required":[
+        "relationalDatabaseName",
+        "parameters"
+      ],
+      "members":{
+        "relationalDatabaseName":{"shape":"ResourceName"},
+        "parameters":{"shape":"RelationalDatabaseParameterList"}
+      }
+    },
+    "UpdateRelationalDatabaseParametersResult":{
+      "type":"structure",
+      "members":{
+        "operations":{"shape":"OperationList"}
+      }
+    },
+    "UpdateRelationalDatabaseRequest":{
+      "type":"structure",
+      "required":["relationalDatabaseName"],
+      "members":{
+        "relationalDatabaseName":{"shape":"ResourceName"},
+        "masterUserPassword":{"shape":"SensitiveString"},
+        "rotateMasterUserPassword":{"shape":"boolean"},
+        "preferredBackupWindow":{"shape":"string"},
+        "preferredMaintenanceWindow":{"shape":"string"},
+        "enableBackupRetention":{"shape":"boolean"},
+        "disableBackupRetention":{"shape":"boolean"},
+        "publiclyAccessible":{"shape":"boolean"},
+        "applyImmediately":{"shape":"boolean"}
+      }
+    },
+    "UpdateRelationalDatabaseResult":{
       "type":"structure",
       "members":{
         "operations":{"shape":"OperationList"}

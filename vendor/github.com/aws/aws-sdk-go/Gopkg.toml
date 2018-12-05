@@ -37,11 +37,6 @@ ignored = [
 	"golang.org/x/tools/go/loader",
 ]
 
-
-[[constraint]]
-  name = "github.com/go-ini/ini"
-  version = "1.25.4"
-
 [[constraint]]
   name = "github.com/jmespath/go-jmespath"
   revision = "0b12d6b5"

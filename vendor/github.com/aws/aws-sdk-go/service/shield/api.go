@@ -16,7 +16,7 @@ const opAssociateDRTLogBucket = "AssociateDRTLogBucket"
 // AssociateDRTLogBucketRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateDRTLogBucket operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -132,7 +132,7 @@ const opAssociateDRTRole = "AssociateDRTRole"
 // AssociateDRTRoleRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateDRTRole operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -259,7 +259,7 @@ const opCreateProtection = "CreateProtection"
 // CreateProtectionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateProtection operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -372,7 +372,7 @@ const opCreateSubscription = "CreateSubscription"
 // CreateSubscriptionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSubscription operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -464,7 +464,7 @@ const opDeleteProtection = "DeleteProtection"
 // DeleteProtectionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteProtection operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -551,7 +551,7 @@ const opDeleteSubscription = "DeleteSubscription"
 // DeleteSubscriptionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSubscription operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -651,7 +651,7 @@ const opDescribeAttack = "DescribeAttack"
 // DescribeAttackRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeAttack operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -704,8 +704,7 @@ func (c *Shield) DescribeAttackRequest(input *DescribeAttackInput) (req *request
 //   Exception that indicates that a problem occurred with the service infrastructure.
 //   You can retry the request.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
-//   Exception that indicates that the parameters passed to the API are invalid.
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/shield-2016-06-02/DescribeAttack
 func (c *Shield) DescribeAttack(input *DescribeAttackInput) (*DescribeAttackOutput, error) {
@@ -734,7 +733,7 @@ const opDescribeDRTAccess = "DescribeDRTAccess"
 // DescribeDRTAccessRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDRTAccess operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -819,7 +818,7 @@ const opDescribeEmergencyContactSettings = "DescribeEmergencyContactSettings"
 // DescribeEmergencyContactSettingsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEmergencyContactSettings operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -903,7 +902,7 @@ const opDescribeProtection = "DescribeProtection"
 // DescribeProtectionRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeProtection operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -986,7 +985,7 @@ const opDescribeSubscription = "DescribeSubscription"
 // DescribeSubscriptionRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeSubscription operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1069,7 +1068,7 @@ const opDisassociateDRTLogBucket = "DisassociateDRTLogBucket"
 // DisassociateDRTLogBucketRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateDRTLogBucket operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1177,7 +1176,7 @@ const opDisassociateDRTRole = "DisassociateDRTRole"
 // DisassociateDRTRoleRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateDRTRole operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1275,7 +1274,7 @@ const opGetSubscriptionState = "GetSubscriptionState"
 // GetSubscriptionStateRequest generates a "aws/request.Request" representing the
 // client's request for the GetSubscriptionState operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1355,7 +1354,7 @@ const opListAttacks = "ListAttacks"
 // ListAttacksRequest generates a "aws/request.Request" representing the
 // client's request for the ListAttacks operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1443,7 +1442,7 @@ const opListProtections = "ListProtections"
 // ListProtectionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListProtections operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1530,7 +1529,7 @@ const opUpdateEmergencyContactSettings = "UpdateEmergencyContactSettings"
 // UpdateEmergencyContactSettingsRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateEmergencyContactSettings operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1621,7 +1620,7 @@ const opUpdateSubscription = "UpdateSubscription"
 // UpdateSubscriptionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateSubscription operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1780,7 +1779,7 @@ type AssociateDRTRoleInput struct {
 	// IAM Policies ( https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html).
 	//
 	// RoleArn is a required field
-	RoleArn *string `type:"string" required:"true"`
+	RoleArn *string `min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -1798,6 +1797,9 @@ func (s *AssociateDRTRoleInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "AssociateDRTRoleInput"}
 	if s.RoleArn == nil {
 		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
+	}
+	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -2151,7 +2153,7 @@ type CreateProtectionInput struct {
 	//
 	//    * For AWS CloudFront distribution: arn:aws:cloudfront::account-id:distribution/distribution-id
 	//
-	//    * For Amazon Route 53: arn:aws:route53::account-id:hostedzone/hosted-zone-id
+	//    * For Amazon Route 53: arn:aws:route53:::hostedzone/hosted-zone-id
 	//
 	//    * For an Elastic IP address: arn:aws:ec2:region:account-id:eip-allocation/allocation-id
 	//
@@ -2425,7 +2427,7 @@ type DescribeDRTAccessOutput struct {
 
 	// The Amazon Resource Name (ARN) of the role the DRT used to access your AWS
 	// account.
-	RoleArn *string `type:"string"`
+	RoleArn *string `min:"1" type:"string"`
 }
 
 // String returns the string representation
@@ -2680,7 +2682,7 @@ type EmergencyContact struct {
 	// An email address that the DRT can use to contact you during a suspected attack.
 	//
 	// EmailAddress is a required field
-	EmailAddress *string `type:"string" required:"true"`
+	EmailAddress *string `min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -2698,6 +2700,9 @@ func (s *EmergencyContact) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "EmergencyContact"}
 	if s.EmailAddress == nil {
 		invalidParams.Add(request.NewErrParamRequired("EmailAddress"))
+	}
+	if s.EmailAddress != nil && len(*s.EmailAddress) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EmailAddress", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -2795,6 +2800,12 @@ type ListAttacksInput struct {
 
 	// The maximum number of AttackSummary objects to be returned. If this is left
 	// blank, the first 20 results will be returned.
+	//
+	// This is a maximum value; it is possible that AWS WAF will return the results
+	// in smaller batches. That is, the number of AttackSummary objects returned
+	// could be less than MaxResults, even if there are still more AttackSummary
+	// objects yet to return. If there are more AttackSummary objects to return,
+	// AWS WAF will always also return a NextToken.
 	MaxResults *int64 `type:"integer"`
 
 	// The ListAttacksRequest.NextMarker value from a previous call to ListAttacksRequest.
@@ -2875,6 +2886,10 @@ type ListAttacksOutput struct {
 	// available. If not null, more results are available. Pass this value for the
 	// NextMarker parameter in a subsequent call to ListAttacks to retrieve the
 	// next set of items.
+	//
+	// AWS WAF might return the list of AttackSummary objects in batches smaller
+	// than the number specified by MaxResults. If there are more AttackSummary
+	// objects to return, AWS WAF will always also return a NextToken.
 	NextToken *string `min:"1" type:"string"`
 }
 
@@ -2905,6 +2920,12 @@ type ListProtectionsInput struct {
 
 	// The maximum number of Protection objects to be returned. If this is left
 	// blank the first 20 results will be returned.
+	//
+	// This is a maximum value; it is possible that AWS WAF will return the results
+	// in smaller batches. That is, the number of Protection objects returned could
+	// be less than MaxResults, even if there are still more Protection objects
+	// yet to return. If there are more Protection objects to return, AWS WAF will
+	// always also return a NextToken.
 	MaxResults *int64 `type:"integer"`
 
 	// The ListProtectionsRequest.NextToken value from a previous call to ListProtections.
@@ -2955,6 +2976,10 @@ type ListProtectionsOutput struct {
 	// the response that allows you to list another group of Protections. For the
 	// second and subsequent ListProtections requests, specify the value of NextToken
 	// from the previous response to get information about another batch of Protections.
+	//
+	// AWS WAF might return the list of Protection objects in batches smaller than
+	// the number specified by MaxResults. If there are more Protection objects
+	// to return, AWS WAF will always also return a NextToken.
 	NextToken *string `min:"1" type:"string"`
 
 	// The array of enabled Protection objects.

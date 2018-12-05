@@ -67,9 +67,17 @@ type XRayAPI interface {
 	BatchGetTracesPages(*xray.BatchGetTracesInput, func(*xray.BatchGetTracesOutput, bool) bool) error
 	BatchGetTracesPagesWithContext(aws.Context, *xray.BatchGetTracesInput, func(*xray.BatchGetTracesOutput, bool) bool, ...request.Option) error
 
+	CreateGroup(*xray.CreateGroupInput) (*xray.CreateGroupOutput, error)
+	CreateGroupWithContext(aws.Context, *xray.CreateGroupInput, ...request.Option) (*xray.CreateGroupOutput, error)
+	CreateGroupRequest(*xray.CreateGroupInput) (*request.Request, *xray.CreateGroupOutput)
+
 	CreateSamplingRule(*xray.CreateSamplingRuleInput) (*xray.CreateSamplingRuleOutput, error)
 	CreateSamplingRuleWithContext(aws.Context, *xray.CreateSamplingRuleInput, ...request.Option) (*xray.CreateSamplingRuleOutput, error)
 	CreateSamplingRuleRequest(*xray.CreateSamplingRuleInput) (*request.Request, *xray.CreateSamplingRuleOutput)
+
+	DeleteGroup(*xray.DeleteGroupInput) (*xray.DeleteGroupOutput, error)
+	DeleteGroupWithContext(aws.Context, *xray.DeleteGroupInput, ...request.Option) (*xray.DeleteGroupOutput, error)
+	DeleteGroupRequest(*xray.DeleteGroupInput) (*request.Request, *xray.DeleteGroupOutput)
 
 	DeleteSamplingRule(*xray.DeleteSamplingRuleInput) (*xray.DeleteSamplingRuleOutput, error)
 	DeleteSamplingRuleWithContext(aws.Context, *xray.DeleteSamplingRuleInput, ...request.Option) (*xray.DeleteSamplingRuleOutput, error)
@@ -78,6 +86,14 @@ type XRayAPI interface {
 	GetEncryptionConfig(*xray.GetEncryptionConfigInput) (*xray.GetEncryptionConfigOutput, error)
 	GetEncryptionConfigWithContext(aws.Context, *xray.GetEncryptionConfigInput, ...request.Option) (*xray.GetEncryptionConfigOutput, error)
 	GetEncryptionConfigRequest(*xray.GetEncryptionConfigInput) (*request.Request, *xray.GetEncryptionConfigOutput)
+
+	GetGroup(*xray.GetGroupInput) (*xray.GetGroupOutput, error)
+	GetGroupWithContext(aws.Context, *xray.GetGroupInput, ...request.Option) (*xray.GetGroupOutput, error)
+	GetGroupRequest(*xray.GetGroupInput) (*request.Request, *xray.GetGroupOutput)
+
+	GetGroups(*xray.GetGroupsInput) (*xray.GetGroupsOutput, error)
+	GetGroupsWithContext(aws.Context, *xray.GetGroupsInput, ...request.Option) (*xray.GetGroupsOutput, error)
+	GetGroupsRequest(*xray.GetGroupsInput) (*request.Request, *xray.GetGroupsOutput)
 
 	GetSamplingRules(*xray.GetSamplingRulesInput) (*xray.GetSamplingRulesOutput, error)
 	GetSamplingRulesWithContext(aws.Context, *xray.GetSamplingRulesInput, ...request.Option) (*xray.GetSamplingRulesOutput, error)
@@ -123,6 +139,10 @@ type XRayAPI interface {
 	PutTraceSegments(*xray.PutTraceSegmentsInput) (*xray.PutTraceSegmentsOutput, error)
 	PutTraceSegmentsWithContext(aws.Context, *xray.PutTraceSegmentsInput, ...request.Option) (*xray.PutTraceSegmentsOutput, error)
 	PutTraceSegmentsRequest(*xray.PutTraceSegmentsInput) (*request.Request, *xray.PutTraceSegmentsOutput)
+
+	UpdateGroup(*xray.UpdateGroupInput) (*xray.UpdateGroupOutput, error)
+	UpdateGroupWithContext(aws.Context, *xray.UpdateGroupInput, ...request.Option) (*xray.UpdateGroupOutput, error)
+	UpdateGroupRequest(*xray.UpdateGroupInput) (*request.Request, *xray.UpdateGroupOutput)
 
 	UpdateSamplingRule(*xray.UpdateSamplingRuleInput) (*xray.UpdateSamplingRuleOutput, error)
 	UpdateSamplingRuleWithContext(aws.Context, *xray.UpdateSamplingRuleInput, ...request.Option) (*xray.UpdateSamplingRuleOutput, error)

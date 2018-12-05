@@ -463,6 +463,10 @@ type IAMAPI interface {
 	ListRolePoliciesPages(*iam.ListRolePoliciesInput, func(*iam.ListRolePoliciesOutput, bool) bool) error
 	ListRolePoliciesPagesWithContext(aws.Context, *iam.ListRolePoliciesInput, func(*iam.ListRolePoliciesOutput, bool) bool, ...request.Option) error
 
+	ListRoleTags(*iam.ListRoleTagsInput) (*iam.ListRoleTagsOutput, error)
+	ListRoleTagsWithContext(aws.Context, *iam.ListRoleTagsInput, ...request.Option) (*iam.ListRoleTagsOutput, error)
+	ListRoleTagsRequest(*iam.ListRoleTagsInput) (*request.Request, *iam.ListRoleTagsOutput)
+
 	ListRoles(*iam.ListRolesInput) (*iam.ListRolesOutput, error)
 	ListRolesWithContext(aws.Context, *iam.ListRolesInput, ...request.Option) (*iam.ListRolesOutput, error)
 	ListRolesRequest(*iam.ListRolesInput) (*request.Request, *iam.ListRolesOutput)
@@ -505,6 +509,10 @@ type IAMAPI interface {
 
 	ListUserPoliciesPages(*iam.ListUserPoliciesInput, func(*iam.ListUserPoliciesOutput, bool) bool) error
 	ListUserPoliciesPagesWithContext(aws.Context, *iam.ListUserPoliciesInput, func(*iam.ListUserPoliciesOutput, bool) bool, ...request.Option) error
+
+	ListUserTags(*iam.ListUserTagsInput) (*iam.ListUserTagsOutput, error)
+	ListUserTagsWithContext(aws.Context, *iam.ListUserTagsInput, ...request.Option) (*iam.ListUserTagsOutput, error)
+	ListUserTagsRequest(*iam.ListUserTagsInput) (*request.Request, *iam.ListUserTagsOutput)
 
 	ListUsers(*iam.ListUsersInput) (*iam.ListUsersOutput, error)
 	ListUsersWithContext(aws.Context, *iam.ListUsersInput, ...request.Option) (*iam.ListUsersOutput, error)
@@ -577,6 +585,22 @@ type IAMAPI interface {
 
 	SimulatePrincipalPolicyPages(*iam.SimulatePrincipalPolicyInput, func(*iam.SimulatePolicyResponse, bool) bool) error
 	SimulatePrincipalPolicyPagesWithContext(aws.Context, *iam.SimulatePrincipalPolicyInput, func(*iam.SimulatePolicyResponse, bool) bool, ...request.Option) error
+
+	TagRole(*iam.TagRoleInput) (*iam.TagRoleOutput, error)
+	TagRoleWithContext(aws.Context, *iam.TagRoleInput, ...request.Option) (*iam.TagRoleOutput, error)
+	TagRoleRequest(*iam.TagRoleInput) (*request.Request, *iam.TagRoleOutput)
+
+	TagUser(*iam.TagUserInput) (*iam.TagUserOutput, error)
+	TagUserWithContext(aws.Context, *iam.TagUserInput, ...request.Option) (*iam.TagUserOutput, error)
+	TagUserRequest(*iam.TagUserInput) (*request.Request, *iam.TagUserOutput)
+
+	UntagRole(*iam.UntagRoleInput) (*iam.UntagRoleOutput, error)
+	UntagRoleWithContext(aws.Context, *iam.UntagRoleInput, ...request.Option) (*iam.UntagRoleOutput, error)
+	UntagRoleRequest(*iam.UntagRoleInput) (*request.Request, *iam.UntagRoleOutput)
+
+	UntagUser(*iam.UntagUserInput) (*iam.UntagUserOutput, error)
+	UntagUserWithContext(aws.Context, *iam.UntagUserInput, ...request.Option) (*iam.UntagUserOutput, error)
+	UntagUserRequest(*iam.UntagUserInput) (*request.Request, *iam.UntagUserOutput)
 
 	UpdateAccessKey(*iam.UpdateAccessKeyInput) (*iam.UpdateAccessKeyOutput, error)
 	UpdateAccessKeyWithContext(aws.Context, *iam.UpdateAccessKeyInput, ...request.Option) (*iam.UpdateAccessKeyOutput, error)

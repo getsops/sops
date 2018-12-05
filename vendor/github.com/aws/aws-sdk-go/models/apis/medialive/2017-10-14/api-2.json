@@ -1386,7 +1386,7 @@
       "type": "structure",
       "members": {
         "Name": {
-          "shape": "__string",
+          "shape": "__stringMin1",
           "locationName": "name"
         },
         "SelectorSettings": {
@@ -1867,7 +1867,7 @@
           "locationName": "languageCode"
         },
         "Name": {
-          "shape": "__string",
+          "shape": "__stringMin1",
           "locationName": "name"
         },
         "SelectorSettings": {
@@ -3336,7 +3336,34 @@
           "shape": "__string",
           "locationName": "time"
         }
-      }
+      },
+      "required": [
+        "Time"
+      ]
+    },
+    "FollowModeScheduleActionStartSettings": {
+      "type": "structure",
+      "members": {
+        "FollowPoint": {
+          "shape": "FollowPoint",
+          "locationName": "followPoint"
+        },
+        "ReferenceActionName": {
+          "shape": "__string",
+          "locationName": "referenceActionName"
+        }
+      },
+      "required": [
+        "ReferenceActionName",
+        "FollowPoint"
+      ]
+    },
+    "FollowPoint": {
+      "type": "string",
+      "enum": [
+        "END",
+        "START"
+      ]
     },
     "ForbiddenException": {
       "type": "structure",
@@ -3515,6 +3542,7 @@
       "type": "string",
       "enum": [
         "CBR",
+        "QVBR",
         "VBR"
       ]
     },
@@ -3638,6 +3666,10 @@
         "Profile": {
           "shape": "H264Profile",
           "locationName": "profile"
+        },
+        "QvbrQualityLevel": {
+          "shape": "__integerMin1Max10",
+          "locationName": "qvbrQualityLevel"
         },
         "RateControlMode": {
           "shape": "H264RateControlMode",
@@ -3942,6 +3974,10 @@
           "shape": "__integerMin0Max3600",
           "locationName": "programDateTimePeriod"
         },
+        "RedundantManifest": {
+          "shape": "HlsRedundantManifest",
+          "locationName": "redundantManifest"
+        },
         "SegmentLength": {
           "shape": "__integerMin1",
           "locationName": "segmentLength"
@@ -4100,6 +4136,13 @@
         "INCLUDE"
       ]
     },
+    "HlsRedundantManifest": {
+      "type": "string",
+      "enum": [
+        "DISABLED",
+        "ENABLED"
+      ]
+    },
     "HlsSegmentationMode": {
       "type": "string",
       "enum": [
@@ -4218,6 +4261,10 @@
     "InputAttachment": {
       "type": "structure",
       "members": {
+        "InputAttachmentName": {
+          "shape": "__string",
+          "locationName": "inputAttachmentName"
+        },
         "InputId": {
           "shape": "__string",
           "locationName": "inputId"
@@ -4329,6 +4376,13 @@
       ]
     },
     "InputLossActionForMsSmoothOut": {
+      "type": "string",
+      "enum": [
+        "EMIT_OUTPUT",
+        "PAUSE_OUTPUT"
+      ]
+    },
+    "InputLossActionForRtmpOut": {
       "type": "string",
       "enum": [
         "EMIT_OUTPUT",
@@ -4543,6 +4597,18 @@
         "DELETED"
       ]
     },
+    "InputSwitchScheduleActionSettings": {
+      "type": "structure",
+      "members": {
+        "InputAttachmentNameReference": {
+          "shape": "__string",
+          "locationName": "inputAttachmentNameReference"
+        }
+      },
+      "required": [
+        "InputAttachmentNameReference"
+      ]
+    },
     "InputType": {
       "type": "string",
       "enum": [
@@ -4550,7 +4616,8 @@
         "RTP_PUSH",
         "RTMP_PUSH",
         "RTMP_PULL",
-        "URL_PULL"
+        "URL_PULL",
+        "MP4_FILE"
       ]
     },
     "InputWhitelistRule": {
@@ -5697,8 +5764,15 @@
           "shape": "__string",
           "locationName": "requestId",
           "idempotencyToken": true
+        },
+        "Start": {
+          "shape": "__string",
+          "locationName": "start"
         }
-      }
+      },
+      "required": [
+        "Count"
+      ]
     },
     "PurchaseOfferingRequest": {
       "type": "structure",
@@ -5720,10 +5794,15 @@
           "shape": "__string",
           "locationName": "requestId",
           "idempotencyToken": true
+        },
+        "Start": {
+          "shape": "__string",
+          "locationName": "start"
         }
       },
       "required": [
-        "OfferingId"
+        "OfferingId",
+        "Count"
       ]
     },
     "PurchaseOfferingResponse": {
@@ -5991,6 +6070,10 @@
           "shape": "RtmpCaptionData",
           "locationName": "captionData"
         },
+        "InputLossAction": {
+          "shape": "InputLossActionForRtmpOut",
+          "locationName": "inputLossAction"
+        },
         "RestartDelay": {
           "shape": "__integerMin0",
           "locationName": "restartDelay"
@@ -6053,6 +6136,10 @@
     "ScheduleActionSettings": {
       "type": "structure",
       "members": {
+        "InputSwitchSettings": {
+          "shape": "InputSwitchScheduleActionSettings",
+          "locationName": "inputSwitchSettings"
+        },
         "Scte35ReturnToNetworkSettings": {
           "shape": "Scte35ReturnToNetworkScheduleActionSettings",
           "locationName": "scte35ReturnToNetworkSettings"
@@ -6081,6 +6168,10 @@
         "FixedModeScheduleActionStartSettings": {
           "shape": "FixedModeScheduleActionStartSettings",
           "locationName": "fixedModeScheduleActionStartSettings"
+        },
+        "FollowModeScheduleActionStartSettings": {
+          "shape": "FollowModeScheduleActionStartSettings",
+          "locationName": "followModeScheduleActionStartSettings"
         }
       }
     },
@@ -6600,7 +6691,6 @@
         }
       },
       "required": [
-        "KeyProviderServer",
         "StaticKeyValue"
       ]
     },
@@ -7279,6 +7369,11 @@
       "min": 1000,
       "max": 30000
     },
+    "__integerMin1Max10": {
+      "type": "integer",
+      "min": 1,
+      "max": 10
+    },
     "__integerMin1Max1000000": {
       "type": "integer",
       "min": 1,
@@ -7590,6 +7685,14 @@
       "type": "string",
       "min": 6,
       "max": 6
+    },
+    "__timestampIso8601": {
+      "type": "timestamp",
+      "timestampFormat": "iso8601"
+    },
+    "__timestampUnix": {
+      "type": "timestamp",
+      "timestampFormat": "unixTimestamp"
     }
   }
 }

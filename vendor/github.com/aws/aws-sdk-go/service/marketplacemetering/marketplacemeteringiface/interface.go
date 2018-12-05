@@ -68,6 +68,10 @@ type MarketplaceMeteringAPI interface {
 	MeterUsageWithContext(aws.Context, *marketplacemetering.MeterUsageInput, ...request.Option) (*marketplacemetering.MeterUsageOutput, error)
 	MeterUsageRequest(*marketplacemetering.MeterUsageInput) (*request.Request, *marketplacemetering.MeterUsageOutput)
 
+	RegisterUsage(*marketplacemetering.RegisterUsageInput) (*marketplacemetering.RegisterUsageOutput, error)
+	RegisterUsageWithContext(aws.Context, *marketplacemetering.RegisterUsageInput, ...request.Option) (*marketplacemetering.RegisterUsageOutput, error)
+	RegisterUsageRequest(*marketplacemetering.RegisterUsageInput) (*request.Request, *marketplacemetering.RegisterUsageOutput)
+
 	ResolveCustomer(*marketplacemetering.ResolveCustomerInput) (*marketplacemetering.ResolveCustomerOutput, error)
 	ResolveCustomerWithContext(aws.Context, *marketplacemetering.ResolveCustomerInput, ...request.Option) (*marketplacemetering.ResolveCustomerOutput, error)
 	ResolveCustomerRequest(*marketplacemetering.ResolveCustomerInput) (*request.Request, *marketplacemetering.ResolveCustomerOutput)

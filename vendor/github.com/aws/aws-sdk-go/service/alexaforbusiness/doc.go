@@ -3,13 +3,16 @@
 // Package alexaforbusiness provides the client and types for making API
 // requests to Alexa For Business.
 //
-// Alexa for Business makes it easy for you to use Alexa in your organization.
-// Alexa for Business gives you the tools you need for managing Alexa devices,
-// enroll your users, and assign skills, at scale. You can build your own context-aware
-// voice skills using the Alexa Skills Kit and the Alexa for Business API operations.
-// You can make also these available as private skills for your organization.
-// Alexa for Business makes it easy to voice-enable your products and services,
-// providing context-aware voice experiences for your customers.
+// Alexa for Business helps you use Alexa in your organization. Alexa for Business
+// provides the tools you to manage Alexa devices, enroll your users, and assign
+// skills, at scale. You can build your own context-aware voice skills using
+// the Alexa Skills Kit and the Alexa for Business API operations. You can also
+// make these available as private skills for your organization. Alexa for Business
+// makes it efficient to voice-enable your products and services, thus providing
+// context-aware voice experiences for your customers. In addition, Alexa for
+// Business enables Alexa Voice Services (AVS) device manufacturers to centrally
+// deploy and manage their devices in Alexa for Business as shared devices as
+// a part of their existing management flow.
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09 for more information on this service.
 //

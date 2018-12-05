@@ -3,6 +3,7 @@
 package codestar
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -15,7 +16,7 @@ const opAssociateTeamMember = "AssociateTeamMember"
 // AssociateTeamMemberRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateTeamMember operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -113,7 +114,7 @@ const opCreateProject = "CreateProject"
 // CreateProjectRequest generates a "aws/request.Request" representing the
 // client's request for the CreateProject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -152,7 +153,10 @@ func (c *CodeStar) CreateProjectRequest(input *CreateProjectInput) (req *request
 
 // CreateProject API operation for AWS CodeStar.
 //
-// Reserved for future use. To create a project, use the AWS CodeStar console.
+// Creates a project, including project resources. This action creates a project
+// based on a submitted project request. A set of source code files and a toolchain
+// template file can be included with the project request. If these are not
+// provided, an empty project is created.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -215,7 +219,7 @@ const opCreateUserProfile = "CreateUserProfile"
 // CreateUserProfileRequest generates a "aws/request.Request" representing the
 // client's request for the CreateUserProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -303,7 +307,7 @@ const opDeleteProject = "DeleteProject"
 // DeleteProjectRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteProject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -391,7 +395,7 @@ const opDeleteUserProfile = "DeleteUserProfile"
 // DeleteUserProfileRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteUserProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -473,7 +477,7 @@ const opDescribeProject = "DescribeProject"
 // DescribeProjectRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeProject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -565,7 +569,7 @@ const opDescribeUserProfile = "DescribeUserProfile"
 // DescribeUserProfileRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeUserProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -647,7 +651,7 @@ const opDisassociateTeamMember = "DisassociateTeamMember"
 // DisassociateTeamMemberRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateTeamMember operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -739,7 +743,7 @@ const opListProjects = "ListProjects"
 // ListProjectsRequest generates a "aws/request.Request" representing the
 // client's request for the ListProjects operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -821,7 +825,7 @@ const opListResources = "ListResources"
 // ListResourcesRequest generates a "aws/request.Request" representing the
 // client's request for the ListResources operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -906,7 +910,7 @@ const opListTagsForProject = "ListTagsForProject"
 // ListTagsForProjectRequest generates a "aws/request.Request" representing the
 // client's request for the ListTagsForProject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -991,7 +995,7 @@ const opListTeamMembers = "ListTeamMembers"
 // ListTeamMembersRequest generates a "aws/request.Request" representing the
 // client's request for the ListTeamMembers operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1076,7 +1080,7 @@ const opListUserProfiles = "ListUserProfiles"
 // ListUserProfilesRequest generates a "aws/request.Request" representing the
 // client's request for the ListUserProfiles operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1158,7 +1162,7 @@ const opTagProject = "TagProject"
 // TagProjectRequest generates a "aws/request.Request" representing the
 // client's request for the TagProject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1247,7 +1251,7 @@ const opUntagProject = "UntagProject"
 // UntagProjectRequest generates a "aws/request.Request" representing the
 // client's request for the UntagProject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1336,7 +1340,7 @@ const opUpdateProject = "UpdateProject"
 // UpdateProjectRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateProject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1418,7 +1422,7 @@ const opUpdateTeamMember = "UpdateTeamMember"
 // UpdateTeamMemberRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateTeamMember operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1518,7 +1522,7 @@ const opUpdateUserProfile = "UpdateUserProfile"
 // UpdateUserProfileRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateUserProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1719,24 +1723,254 @@ func (s *AssociateTeamMemberOutput) SetClientRequestToken(v string) *AssociateTe
 	return s
 }
 
+// Location and destination information about the source code files provided
+// with the project request. The source code is uploaded to the new project
+// source repository after project creation.
+type Code struct {
+	_ struct{} `type:"structure"`
+
+	// The repository to be created in AWS CodeStar. Valid values are AWS CodeCommit
+	// or GitHub. After AWS CodeStar provisions the new repository, the source code
+	// files provided with the project request are placed in the repository.
+	//
+	// Destination is a required field
+	Destination *CodeDestination `locationName:"destination" type:"structure" required:"true"`
+
+	// The location where the source code files provided with the project request
+	// are stored. AWS CodeStar retrieves the files during project creation.
+	//
+	// Source is a required field
+	Source *CodeSource `locationName:"source" type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s Code) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Code) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Code) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Code"}
+	if s.Destination == nil {
+		invalidParams.Add(request.NewErrParamRequired("Destination"))
+	}
+	if s.Source == nil {
+		invalidParams.Add(request.NewErrParamRequired("Source"))
+	}
+	if s.Destination != nil {
+		if err := s.Destination.Validate(); err != nil {
+			invalidParams.AddNested("Destination", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Source != nil {
+		if err := s.Source.Validate(); err != nil {
+			invalidParams.AddNested("Source", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDestination sets the Destination field's value.
+func (s *Code) SetDestination(v *CodeDestination) *Code {
+	s.Destination = v
+	return s
+}
+
+// SetSource sets the Source field's value.
+func (s *Code) SetSource(v *CodeSource) *Code {
+	s.Source = v
+	return s
+}
+
+// Information about the AWS CodeCommit repository to be created in AWS CodeStar.
+// This is where the source code files provided with the project request will
+// be uploaded after project creation.
+type CodeCommitCodeDestination struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the AWS CodeCommit repository to be created in AWS CodeStar.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CodeCommitCodeDestination) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CodeCommitCodeDestination) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CodeCommitCodeDestination) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CodeCommitCodeDestination"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *CodeCommitCodeDestination) SetName(v string) *CodeCommitCodeDestination {
+	s.Name = &v
+	return s
+}
+
+// The repository to be created in AWS CodeStar. Valid values are AWS CodeCommit
+// or GitHub. After AWS CodeStar provisions the new repository, the source code
+// files provided with the project request are placed in the repository.
+type CodeDestination struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the AWS CodeCommit repository to be created in AWS CodeStar.
+	// This is where the source code files provided with the project request will
+	// be uploaded after project creation.
+	CodeCommit *CodeCommitCodeDestination `locationName:"codeCommit" type:"structure"`
+
+	// Information about the GitHub repository to be created in AWS CodeStar. This
+	// is where the source code files provided with the project request will be
+	// uploaded after project creation.
+	GitHub *GitHubCodeDestination `locationName:"gitHub" type:"structure"`
+}
+
+// String returns the string representation
+func (s CodeDestination) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CodeDestination) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CodeDestination) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CodeDestination"}
+	if s.CodeCommit != nil {
+		if err := s.CodeCommit.Validate(); err != nil {
+			invalidParams.AddNested("CodeCommit", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.GitHub != nil {
+		if err := s.GitHub.Validate(); err != nil {
+			invalidParams.AddNested("GitHub", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCodeCommit sets the CodeCommit field's value.
+func (s *CodeDestination) SetCodeCommit(v *CodeCommitCodeDestination) *CodeDestination {
+	s.CodeCommit = v
+	return s
+}
+
+// SetGitHub sets the GitHub field's value.
+func (s *CodeDestination) SetGitHub(v *GitHubCodeDestination) *CodeDestination {
+	s.GitHub = v
+	return s
+}
+
+// The location where the source code files provided with the project request
+// are stored. AWS CodeStar retrieves the files during project creation.
+type CodeSource struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the Amazon S3 location where the source code files provided
+	// with the project request are stored.
+	//
+	// S3 is a required field
+	S3 *S3Location `locationName:"s3" type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s CodeSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CodeSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CodeSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CodeSource"}
+	if s.S3 == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3"))
+	}
+	if s.S3 != nil {
+		if err := s.S3.Validate(); err != nil {
+			invalidParams.AddNested("S3", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetS3 sets the S3 field's value.
+func (s *CodeSource) SetS3(v *S3Location) *CodeSource {
+	s.S3 = v
+	return s
+}
+
 type CreateProjectInput struct {
 	_ struct{} `type:"structure"`
 
-	// Reserved for future use.
+	// A user- or system-generated token that identifies the entity that requested
+	// project creation. This token can be used to repeat the request.
 	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string"`
 
-	// Reserved for future use.
-	Description *string `locationName:"description" type:"string"`
+	// The description of the project, if any.
+	Description *string `locationName:"description" type:"string" sensitive:"true"`
 
-	// Reserved for future use.
+	// The ID of the project to be created in AWS CodeStar.
 	//
 	// Id is a required field
 	Id *string `locationName:"id" min:"2" type:"string" required:"true"`
 
-	// Reserved for future use.
+	// The display name for the project to be created in AWS CodeStar.
 	//
 	// Name is a required field
-	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+	Name *string `locationName:"name" min:"1" type:"string" required:"true" sensitive:"true"`
+
+	// A list of the Code objects submitted with the project request. If this parameter
+	// is specified, the request must also include the toolchain parameter.
+	SourceCode []*Code `locationName:"sourceCode" type:"list"`
+
+	// The tags created for the project.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The name of the toolchain template file submitted with the project request.
+	// If this parameter is specified, the request must also include the sourceCode
+	// parameter.
+	Toolchain *Toolchain `locationName:"toolchain" type:"structure"`
 }
 
 // String returns the string representation
@@ -1766,6 +2000,21 @@ func (s *CreateProjectInput) Validate() error {
 	}
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.SourceCode != nil {
+		for i, v := range s.SourceCode {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "SourceCode", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.Toolchain != nil {
+		if err := s.Toolchain.Validate(); err != nil {
+			invalidParams.AddNested("Toolchain", err.(request.ErrInvalidParams))
+		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1798,18 +2047,37 @@ func (s *CreateProjectInput) SetName(v string) *CreateProjectInput {
 	return s
 }
 
+// SetSourceCode sets the SourceCode field's value.
+func (s *CreateProjectInput) SetSourceCode(v []*Code) *CreateProjectInput {
+	s.SourceCode = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateProjectInput) SetTags(v map[string]*string) *CreateProjectInput {
+	s.Tags = v
+	return s
+}
+
+// SetToolchain sets the Toolchain field's value.
+func (s *CreateProjectInput) SetToolchain(v *Toolchain) *CreateProjectInput {
+	s.Toolchain = v
+	return s
+}
+
 type CreateProjectOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Reserved for future use.
+	// The Amazon Resource Name (ARN) of the created project.
 	//
 	// Arn is a required field
 	Arn *string `locationName:"arn" type:"string" required:"true"`
 
-	// Reserved for future use.
+	// A user- or system-generated token that identifies the entity that requested
+	// project creation.
 	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string"`
 
-	// Reserved for future use.
+	// The ID of the project.
 	//
 	// Id is a required field
 	Id *string `locationName:"id" min:"2" type:"string" required:"true"`
@@ -1859,13 +2127,13 @@ type CreateUserProfileInput struct {
 	// CodeStar.
 	//
 	// DisplayName is a required field
-	DisplayName *string `locationName:"displayName" min:"1" type:"string" required:"true"`
+	DisplayName *string `locationName:"displayName" min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// The email address that will be displayed as part of the user's profile in
 	// AWS CodeStar.
 	//
 	// EmailAddress is a required field
-	EmailAddress *string `locationName:"emailAddress" min:"3" type:"string" required:"true"`
+	EmailAddress *string `locationName:"emailAddress" min:"3" type:"string" required:"true" sensitive:"true"`
 
 	// The SSH public key associated with the user in AWS CodeStar. If a project
 	// owner allows the user remote access to project resources, this public key
@@ -1947,11 +2215,11 @@ type CreateUserProfileOutput struct {
 	CreatedTimestamp *time.Time `locationName:"createdTimestamp" type:"timestamp"`
 
 	// The name that is displayed as the friendly name for the user in AWS CodeStar.
-	DisplayName *string `locationName:"displayName" min:"1" type:"string"`
+	DisplayName *string `locationName:"displayName" min:"1" type:"string" sensitive:"true"`
 
 	// The email address that is displayed as part of the user's profile in AWS
 	// CodeStar.
-	EmailAddress *string `locationName:"emailAddress" min:"3" type:"string"`
+	EmailAddress *string `locationName:"emailAddress" min:"3" type:"string" sensitive:"true"`
 
 	// The date the user profile was last modified, in timestamp format.
 	LastModifiedTimestamp *time.Time `locationName:"lastModifiedTimestamp" type:"timestamp"`
@@ -2233,13 +2501,13 @@ type DescribeProjectOutput struct {
 	CreatedTimeStamp *time.Time `locationName:"createdTimeStamp" type:"timestamp"`
 
 	// The description of the project, if any.
-	Description *string `locationName:"description" type:"string"`
+	Description *string `locationName:"description" type:"string" sensitive:"true"`
 
 	// The ID of the project.
 	Id *string `locationName:"id" min:"2" type:"string"`
 
 	// The display name for the project.
-	Name *string `locationName:"name" min:"1" type:"string"`
+	Name *string `locationName:"name" min:"1" type:"string" sensitive:"true"`
 
 	// The ID for the AWS CodeStar project template used to create the project.
 	ProjectTemplateId *string `locationName:"projectTemplateId" min:"1" type:"string"`
@@ -2247,6 +2515,9 @@ type DescribeProjectOutput struct {
 	// The ID of the primary stack in AWS CloudFormation used to generate resources
 	// for the project.
 	StackId *string `locationName:"stackId" type:"string"`
+
+	// The project creation or deletion status.
+	Status *ProjectStatus `locationName:"status" type:"structure"`
 }
 
 // String returns the string representation
@@ -2304,6 +2575,12 @@ func (s *DescribeProjectOutput) SetProjectTemplateId(v string) *DescribeProjectO
 // SetStackId sets the StackId field's value.
 func (s *DescribeProjectOutput) SetStackId(v string) *DescribeProjectOutput {
 	s.StackId = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DescribeProjectOutput) SetStatus(v *ProjectStatus) *DescribeProjectOutput {
+	s.Status = v
 	return s
 }
 
@@ -2366,10 +2643,10 @@ type DescribeUserProfileOutput struct {
 	// displays a maximum of two characters, so a display name with more than one
 	// space (for example "Mary Jane Major") would generate an initial icon using
 	// the first character and the first character after the space ("MJ", not "MM").
-	DisplayName *string `locationName:"displayName" min:"1" type:"string"`
+	DisplayName *string `locationName:"displayName" min:"1" type:"string" sensitive:"true"`
 
 	// The email address for the user. Optional.
-	EmailAddress *string `locationName:"emailAddress" min:"3" type:"string"`
+	EmailAddress *string `locationName:"emailAddress" min:"3" type:"string" sensitive:"true"`
 
 	// The date and time when the user profile was last modified, in timestamp format.
 	//
@@ -2505,6 +2782,142 @@ func (s DisassociateTeamMemberOutput) String() string {
 // GoString returns the string representation
 func (s DisassociateTeamMemberOutput) GoString() string {
 	return s.String()
+}
+
+// Information about the GitHub repository to be created in AWS CodeStar. This
+// is where the source code files provided with the project request will be
+// uploaded after project creation.
+type GitHubCodeDestination struct {
+	_ struct{} `type:"structure"`
+
+	// Description for the GitHub repository to be created in AWS CodeStar. This
+	// description displays in GitHub after the repository is created.
+	Description *string `locationName:"description" min:"1" type:"string"`
+
+	// Whether to enable issues for the GitHub repository.
+	//
+	// IssuesEnabled is a required field
+	IssuesEnabled *bool `locationName:"issuesEnabled" type:"boolean" required:"true"`
+
+	// Name of the GitHub repository to be created in AWS CodeStar.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The GitHub username for the owner of the GitHub repository to be created
+	// in AWS CodeStar. If this repository should be owned by a GitHub organization,
+	// provide its name.
+	//
+	// Owner is a required field
+	Owner *string `locationName:"owner" min:"1" type:"string" required:"true"`
+
+	// Whether the GitHub repository is to be a private repository.
+	//
+	// PrivateRepository is a required field
+	PrivateRepository *bool `locationName:"privateRepository" type:"boolean" required:"true"`
+
+	// The GitHub user's personal access token for the GitHub repository.
+	//
+	// Token is a required field
+	Token *string `locationName:"token" min:"1" type:"string" required:"true" sensitive:"true"`
+
+	// The type of GitHub repository to be created in AWS CodeStar. Valid values
+	// are User or Organization.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GitHubCodeDestination) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GitHubCodeDestination) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GitHubCodeDestination) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GitHubCodeDestination"}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.IssuesEnabled == nil {
+		invalidParams.Add(request.NewErrParamRequired("IssuesEnabled"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Owner == nil {
+		invalidParams.Add(request.NewErrParamRequired("Owner"))
+	}
+	if s.Owner != nil && len(*s.Owner) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Owner", 1))
+	}
+	if s.PrivateRepository == nil {
+		invalidParams.Add(request.NewErrParamRequired("PrivateRepository"))
+	}
+	if s.Token == nil {
+		invalidParams.Add(request.NewErrParamRequired("Token"))
+	}
+	if s.Token != nil && len(*s.Token) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Token", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *GitHubCodeDestination) SetDescription(v string) *GitHubCodeDestination {
+	s.Description = &v
+	return s
+}
+
+// SetIssuesEnabled sets the IssuesEnabled field's value.
+func (s *GitHubCodeDestination) SetIssuesEnabled(v bool) *GitHubCodeDestination {
+	s.IssuesEnabled = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *GitHubCodeDestination) SetName(v string) *GitHubCodeDestination {
+	s.Name = &v
+	return s
+}
+
+// SetOwner sets the Owner field's value.
+func (s *GitHubCodeDestination) SetOwner(v string) *GitHubCodeDestination {
+	s.Owner = &v
+	return s
+}
+
+// SetPrivateRepository sets the PrivateRepository field's value.
+func (s *GitHubCodeDestination) SetPrivateRepository(v bool) *GitHubCodeDestination {
+	s.PrivateRepository = &v
+	return s
+}
+
+// SetToken sets the Token field's value.
+func (s *GitHubCodeDestination) SetToken(v string) *GitHubCodeDestination {
+	s.Token = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *GitHubCodeDestination) SetType(v string) *GitHubCodeDestination {
+	s.Type = &v
+	return s
 }
 
 type ListProjectsInput struct {
@@ -2972,6 +3385,41 @@ func (s *ListUserProfilesOutput) SetUserProfiles(v []*UserProfileSummary) *ListU
 	return s
 }
 
+// An indication of whether a project creation or deletion is failed or successful.
+type ProjectStatus struct {
+	_ struct{} `type:"structure"`
+
+	// In the case of a project creation or deletion failure, a reason for the failure.
+	Reason *string `locationName:"reason" type:"string"`
+
+	// The phase of completion for a project creation or deletion.
+	//
+	// State is a required field
+	State *string `locationName:"state" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ProjectStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ProjectStatus) GoString() string {
+	return s.String()
+}
+
+// SetReason sets the Reason field's value.
+func (s *ProjectStatus) SetReason(v string) *ProjectStatus {
+	s.Reason = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *ProjectStatus) SetState(v string) *ProjectStatus {
+	s.State = &v
+	return s
+}
+
 // Information about the metadata for a project.
 type ProjectSummary struct {
 	_ struct{} `type:"structure"`
@@ -3028,6 +3476,55 @@ func (s Resource) GoString() string {
 // SetId sets the Id field's value.
 func (s *Resource) SetId(v string) *Resource {
 	s.Id = &v
+	return s
+}
+
+// The Amazon S3 location where the source code files provided with the project
+// request are stored.
+type S3Location struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon S3 object key where the source code files provided with the project
+	// request are stored.
+	BucketKey *string `locationName:"bucketKey" type:"string"`
+
+	// The Amazon S3 bucket name where the source code files provided with the project
+	// request are stored.
+	BucketName *string `locationName:"bucketName" min:"3" type:"string"`
+}
+
+// String returns the string representation
+func (s S3Location) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s S3Location) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3Location) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3Location"}
+	if s.BucketName != nil && len(*s.BucketName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("BucketName", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBucketKey sets the BucketKey field's value.
+func (s *S3Location) SetBucketKey(v string) *S3Location {
+	s.BucketKey = &v
+	return s
+}
+
+// SetBucketName sets the BucketName field's value.
+func (s *S3Location) SetBucketName(v string) *S3Location {
+	s.BucketName = &v
 	return s
 }
 
@@ -3158,6 +3655,123 @@ func (s *TeamMember) SetUserArn(v string) *TeamMember {
 	return s
 }
 
+// The toolchain template file provided with the project request. AWS CodeStar
+// uses the template to provision the toolchain stack in AWS CloudFormation.
+type Toolchain struct {
+	_ struct{} `type:"structure"`
+
+	// The service role ARN for AWS CodeStar to use for the toolchain template during
+	// stack provisioning.
+	RoleArn *string `locationName:"roleArn" min:"1" type:"string"`
+
+	// The Amazon S3 location where the toolchain template file provided with the
+	// project request is stored. AWS CodeStar retrieves the file during project
+	// creation.
+	//
+	// Source is a required field
+	Source *ToolchainSource `locationName:"source" type:"structure" required:"true"`
+
+	// The list of parameter overrides to be passed into the toolchain template
+	// during stack provisioning, if any.
+	StackParameters map[string]*string `locationName:"stackParameters" type:"map"`
+}
+
+// String returns the string representation
+func (s Toolchain) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Toolchain) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Toolchain) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Toolchain"}
+	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
+	}
+	if s.Source == nil {
+		invalidParams.Add(request.NewErrParamRequired("Source"))
+	}
+	if s.Source != nil {
+		if err := s.Source.Validate(); err != nil {
+			invalidParams.AddNested("Source", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *Toolchain) SetRoleArn(v string) *Toolchain {
+	s.RoleArn = &v
+	return s
+}
+
+// SetSource sets the Source field's value.
+func (s *Toolchain) SetSource(v *ToolchainSource) *Toolchain {
+	s.Source = v
+	return s
+}
+
+// SetStackParameters sets the StackParameters field's value.
+func (s *Toolchain) SetStackParameters(v map[string]*string) *Toolchain {
+	s.StackParameters = v
+	return s
+}
+
+// The Amazon S3 location where the toolchain template file provided with the
+// project request is stored. AWS CodeStar retrieves the file during project
+// creation.
+type ToolchainSource struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon S3 bucket where the toolchain template file provided with the
+	// project request is stored.
+	//
+	// S3 is a required field
+	S3 *S3Location `locationName:"s3" type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s ToolchainSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ToolchainSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ToolchainSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ToolchainSource"}
+	if s.S3 == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3"))
+	}
+	if s.S3 != nil {
+		if err := s.S3.Validate(); err != nil {
+			invalidParams.AddNested("S3", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetS3 sets the S3 field's value.
+func (s *ToolchainSource) SetS3(v *S3Location) *ToolchainSource {
+	s.S3 = v
+	return s
+}
+
 type UntagProjectInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3231,7 +3845,7 @@ type UpdateProjectInput struct {
 	_ struct{} `type:"structure"`
 
 	// The description of the project, if any.
-	Description *string `locationName:"description" type:"string"`
+	Description *string `locationName:"description" type:"string" sensitive:"true"`
 
 	// The ID of the project you want to update.
 	//
@@ -3239,7 +3853,7 @@ type UpdateProjectInput struct {
 	Id *string `locationName:"id" min:"2" type:"string" required:"true"`
 
 	// The name of the project you want to update.
-	Name *string `locationName:"name" min:"1" type:"string"`
+	Name *string `locationName:"name" min:"1" type:"string" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -3432,11 +4046,11 @@ type UpdateUserProfileInput struct {
 	_ struct{} `type:"structure"`
 
 	// The name that is displayed as the friendly name for the user in AWS CodeStar.
-	DisplayName *string `locationName:"displayName" min:"1" type:"string"`
+	DisplayName *string `locationName:"displayName" min:"1" type:"string" sensitive:"true"`
 
 	// The email address that is displayed as part of the user's profile in AWS
 	// CodeStar.
-	EmailAddress *string `locationName:"emailAddress" min:"3" type:"string"`
+	EmailAddress *string `locationName:"emailAddress" min:"3" type:"string" sensitive:"true"`
 
 	// The SSH public key associated with the user in AWS CodeStar. If a project
 	// owner allows the user remote access to project resources, this public key
@@ -3513,11 +4127,11 @@ type UpdateUserProfileOutput struct {
 	CreatedTimestamp *time.Time `locationName:"createdTimestamp" type:"timestamp"`
 
 	// The name that is displayed as the friendly name for the user in AWS CodeStar.
-	DisplayName *string `locationName:"displayName" min:"1" type:"string"`
+	DisplayName *string `locationName:"displayName" min:"1" type:"string" sensitive:"true"`
 
 	// The email address that is displayed as part of the user's profile in AWS
 	// CodeStar.
-	EmailAddress *string `locationName:"emailAddress" min:"3" type:"string"`
+	EmailAddress *string `locationName:"emailAddress" min:"3" type:"string" sensitive:"true"`
 
 	// The date the user profile was last modified, in timestamp format.
 	LastModifiedTimestamp *time.Time `locationName:"lastModifiedTimestamp" type:"timestamp"`
@@ -3592,10 +4206,10 @@ type UserProfileSummary struct {
 	// two characters, so a display name with more than one space (for example "Mary
 	// Jane Major") would generate an initial icon using the first character and
 	// the first character after the space ("MJ", not "MM").
-	DisplayName *string `locationName:"displayName" min:"1" type:"string"`
+	DisplayName *string `locationName:"displayName" min:"1" type:"string" sensitive:"true"`
 
 	// The email address associated with the user.
-	EmailAddress *string `locationName:"emailAddress" min:"3" type:"string"`
+	EmailAddress *string `locationName:"emailAddress" min:"3" type:"string" sensitive:"true"`
 
 	// The SSH public key associated with the user in AWS CodeStar. If a project
 	// owner allows the user remote access to project resources, this public key

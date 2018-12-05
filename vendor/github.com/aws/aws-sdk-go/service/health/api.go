@@ -15,7 +15,7 @@ const opDescribeAffectedEntities = "DescribeAffectedEntities"
 // DescribeAffectedEntitiesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeAffectedEntities operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -161,7 +161,7 @@ const opDescribeEntityAggregates = "DescribeEntityAggregates"
 // DescribeEntityAggregatesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEntityAggregates operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -237,7 +237,7 @@ const opDescribeEventAggregates = "DescribeEventAggregates"
 // DescribeEventAggregatesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEventAggregates operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -374,7 +374,7 @@ const opDescribeEventDetails = "DescribeEventDetails"
 // DescribeEventDetailsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEventDetails operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -460,7 +460,7 @@ const opDescribeEventTypes = "DescribeEventTypes"
 // DescribeEventTypesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEventTypes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -599,7 +599,7 @@ const opDescribeEvents = "DescribeEvents"
 // DescribeEventsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEvents operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -750,6 +750,8 @@ type AffectedEntity struct {
 	// Example: arn:aws:health:us-east-1:111222333444:entity/AVh5GGT7ul1arKr1sE1K
 	EntityArn *string `locationName:"entityArn" type:"string"`
 
+	EntityUrl *string `locationName:"entityUrl" type:"string"`
+
 	// The ID of the affected entity.
 	EntityValue *string `locationName:"entityValue" type:"string"`
 
@@ -787,6 +789,12 @@ func (s *AffectedEntity) SetAwsAccountId(v string) *AffectedEntity {
 // SetEntityArn sets the EntityArn field's value.
 func (s *AffectedEntity) SetEntityArn(v string) *AffectedEntity {
 	s.EntityArn = &v
+	return s
+}
+
+// SetEntityUrl sets the EntityUrl field's value.
+func (s *AffectedEntity) SetEntityUrl(v string) *AffectedEntity {
+	s.EntityUrl = &v
 	return s
 }
 

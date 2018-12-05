@@ -15,7 +15,7 @@ const opAssociateNode = "AssociateNode"
 // AssociateNodeRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateNode operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -121,7 +121,7 @@ const opCreateBackup = "CreateBackup"
 // CreateBackupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateBackup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -223,7 +223,7 @@ const opCreateServer = "CreateServer"
 // CreateServerRequest generates a "aws/request.Request" representing the
 // client's request for the CreateServer operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -337,7 +337,7 @@ const opDeleteBackup = "DeleteBackup"
 // DeleteBackupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteBackup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -428,7 +428,7 @@ const opDeleteServer = "DeleteServer"
 // DeleteServerRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteServer operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -524,7 +524,7 @@ const opDescribeAccountAttributes = "DescribeAccountAttributes"
 // DescribeAccountAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeAccountAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -601,7 +601,7 @@ const opDescribeBackups = "DescribeBackups"
 // DescribeBackupsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeBackups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -692,7 +692,7 @@ const opDescribeEvents = "DescribeEvents"
 // DescribeEventsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEvents operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -783,7 +783,7 @@ const opDescribeNodeAssociationStatus = "DescribeNodeAssociationStatus"
 // DescribeNodeAssociationStatusRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeNodeAssociationStatus operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -869,7 +869,7 @@ const opDescribeServers = "DescribeServers"
 // DescribeServersRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeServers operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -961,7 +961,7 @@ const opDisassociateNode = "DisassociateNode"
 // DisassociateNodeRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateNode operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1050,12 +1050,107 @@ func (c *OpsWorksCM) DisassociateNodeWithContext(ctx aws.Context, input *Disasso
 	return out, req.Send()
 }
 
+const opExportServerEngineAttribute = "ExportServerEngineAttribute"
+
+// ExportServerEngineAttributeRequest generates a "aws/request.Request" representing the
+// client's request for the ExportServerEngineAttribute operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ExportServerEngineAttribute for more information on using the ExportServerEngineAttribute
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ExportServerEngineAttributeRequest method.
+//    req, resp := client.ExportServerEngineAttributeRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/ExportServerEngineAttribute
+func (c *OpsWorksCM) ExportServerEngineAttributeRequest(input *ExportServerEngineAttributeInput) (req *request.Request, output *ExportServerEngineAttributeOutput) {
+	op := &request.Operation{
+		Name:       opExportServerEngineAttribute,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ExportServerEngineAttributeInput{}
+	}
+
+	output = &ExportServerEngineAttributeOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ExportServerEngineAttribute API operation for AWS OpsWorks for Chef Automate.
+//
+// Exports a specified server engine attribute as a base64-encoded string. For
+// example, you can export user data that you can use in EC2 to associate nodes
+// with a server.
+//
+// This operation is synchronous.
+//
+// A ValidationException is raised when parameters of the request are not valid.
+// A ResourceNotFoundException is thrown when the server does not exist. An
+// InvalidStateException is thrown when the server is in any of the following
+// states: CREATING, TERMINATED, FAILED or DELETING.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS OpsWorks for Chef Automate's
+// API operation ExportServerEngineAttribute for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
+//   One or more of the provided request parameters are not valid.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The requested resource does not exist, or access was denied.
+//
+//   * ErrCodeInvalidStateException "InvalidStateException"
+//   The resource is in a state that does not allow you to perform a specified
+//   action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/ExportServerEngineAttribute
+func (c *OpsWorksCM) ExportServerEngineAttribute(input *ExportServerEngineAttributeInput) (*ExportServerEngineAttributeOutput, error) {
+	req, out := c.ExportServerEngineAttributeRequest(input)
+	return out, req.Send()
+}
+
+// ExportServerEngineAttributeWithContext is the same as ExportServerEngineAttribute with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ExportServerEngineAttribute for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *OpsWorksCM) ExportServerEngineAttributeWithContext(ctx aws.Context, input *ExportServerEngineAttributeInput, opts ...request.Option) (*ExportServerEngineAttributeOutput, error) {
+	req, out := c.ExportServerEngineAttributeRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opRestoreServer = "RestoreServer"
 
 // RestoreServerRequest generates a "aws/request.Request" representing the
 // client's request for the RestoreServer operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1151,7 +1246,7 @@ const opStartMaintenance = "StartMaintenance"
 // StartMaintenanceRequest generates a "aws/request.Request" representing the
 // client's request for the StartMaintenance operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1245,7 +1340,7 @@ const opUpdateServer = "UpdateServer"
 // UpdateServerRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateServer operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1333,7 +1428,7 @@ const opUpdateServerEngineAttributes = "UpdateServerEngineAttributes"
 // UpdateServerEngineAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateServerEngineAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2852,7 +2947,7 @@ type EngineAttribute struct {
 	Name *string `type:"string"`
 
 	// The value of the engine attribute.
-	Value *string `type:"string"`
+	Value *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -2874,6 +2969,114 @@ func (s *EngineAttribute) SetName(v string) *EngineAttribute {
 // SetValue sets the Value field's value.
 func (s *EngineAttribute) SetValue(v string) *EngineAttribute {
 	s.Value = &v
+	return s
+}
+
+type ExportServerEngineAttributeInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the export attribute. Currently supported export attribute is
+	// "Userdata" which exports a userdata script filled out with parameters provided
+	// in the InputAttributes list.
+	//
+	// ExportAttributeName is a required field
+	ExportAttributeName *string `type:"string" required:"true"`
+
+	// The list of engine attributes. The list type is EngineAttribute. EngineAttribute
+	// is a pair of attribute name and value. For ExportAttributeName "Userdata",
+	// currently supported input attribute names are: - "RunList": For Chef, an
+	// ordered list of roles and/or recipes that are run in the exact order. For
+	// Puppet, this parameter is ignored. - "OrganizationName": For Chef, an organization
+	// name. AWS OpsWorks for Chef Server always creates the organization "default".
+	// For Puppet, this parameter is ignored. - "NodeEnvironment": For Chef, a node
+	// environment (eg. development, staging, onebox). For Puppet, this parameter
+	// is ignored. - "NodeClientVersion": For Chef, version of Chef Engine (3 numbers
+	// separated by dots, eg. "13.8.5"). If empty, it uses the latest one. For Puppet,
+	// this parameter is ignored.
+	InputAttributes []*EngineAttribute `type:"list"`
+
+	// The name of the Server to which the attribute is being exported from
+	//
+	// ServerName is a required field
+	ServerName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ExportServerEngineAttributeInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ExportServerEngineAttributeInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ExportServerEngineAttributeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ExportServerEngineAttributeInput"}
+	if s.ExportAttributeName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ExportAttributeName"))
+	}
+	if s.ServerName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServerName"))
+	}
+	if s.ServerName != nil && len(*s.ServerName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServerName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExportAttributeName sets the ExportAttributeName field's value.
+func (s *ExportServerEngineAttributeInput) SetExportAttributeName(v string) *ExportServerEngineAttributeInput {
+	s.ExportAttributeName = &v
+	return s
+}
+
+// SetInputAttributes sets the InputAttributes field's value.
+func (s *ExportServerEngineAttributeInput) SetInputAttributes(v []*EngineAttribute) *ExportServerEngineAttributeInput {
+	s.InputAttributes = v
+	return s
+}
+
+// SetServerName sets the ServerName field's value.
+func (s *ExportServerEngineAttributeInput) SetServerName(v string) *ExportServerEngineAttributeInput {
+	s.ServerName = &v
+	return s
+}
+
+type ExportServerEngineAttributeOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The requested engine attribute pair with attribute name and value.
+	EngineAttribute *EngineAttribute `type:"structure"`
+
+	// The requested ServerName.
+	ServerName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ExportServerEngineAttributeOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ExportServerEngineAttributeOutput) GoString() string {
+	return s.String()
+}
+
+// SetEngineAttribute sets the EngineAttribute field's value.
+func (s *ExportServerEngineAttributeOutput) SetEngineAttribute(v *EngineAttribute) *ExportServerEngineAttributeOutput {
+	s.EngineAttribute = v
+	return s
+}
+
+// SetServerName sets the ServerName field's value.
+func (s *ExportServerEngineAttributeOutput) SetServerName(v string) *ExportServerEngineAttributeOutput {
+	s.ServerName = &v
 	return s
 }
 

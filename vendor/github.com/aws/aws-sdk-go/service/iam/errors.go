@@ -4,6 +4,14 @@ package iam
 
 const (
 
+	// ErrCodeConcurrentModificationException for service response error code
+	// "ConcurrentModification".
+	//
+	// The request was rejected because multiple requests to change this object
+	// were submitted simultaneously. Wait a few minutes and submit your request
+	// again.
+	ErrCodeConcurrentModificationException = "ConcurrentModification"
+
 	// ErrCodeCredentialReportExpiredException for service response error code
 	// "ReportExpired".
 	//

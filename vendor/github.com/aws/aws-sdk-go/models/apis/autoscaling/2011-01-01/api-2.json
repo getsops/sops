@@ -919,6 +919,7 @@
         "AutoScalingGroupARN":{"shape":"ResourceName"},
         "LaunchConfigurationName":{"shape":"XmlStringMaxLen255"},
         "LaunchTemplate":{"shape":"LaunchTemplateSpecification"},
+        "MixedInstancesPolicy":{"shape":"MixedInstancesPolicy"},
         "MinSize":{"shape":"AutoScalingGroupMinSize"},
         "MaxSize":{"shape":"AutoScalingGroupMaxSize"},
         "DesiredCapacity":{"shape":"AutoScalingGroupDesiredCapacity"},
@@ -1110,6 +1111,7 @@
         "AutoScalingGroupName":{"shape":"XmlStringMaxLen255"},
         "LaunchConfigurationName":{"shape":"ResourceName"},
         "LaunchTemplate":{"shape":"LaunchTemplateSpecification"},
+        "MixedInstancesPolicy":{"shape":"MixedInstancesPolicy"},
         "InstanceId":{"shape":"XmlStringMaxLen19"},
         "MinSize":{"shape":"AutoScalingGroupMinSize"},
         "MaxSize":{"shape":"AutoScalingGroupMaxSize"},
@@ -1585,6 +1587,17 @@
       "type":"list",
       "member":{"shape":"Instance"}
     },
+    "InstancesDistribution":{
+      "type":"structure",
+      "members":{
+        "OnDemandAllocationStrategy":{"shape":"XmlString"},
+        "OnDemandBaseCapacity":{"shape":"OnDemandBaseCapacity"},
+        "OnDemandPercentageAboveBaseCapacity":{"shape":"OnDemandPercentageAboveBaseCapacity"},
+        "SpotAllocationStrategy":{"shape":"XmlString"},
+        "SpotInstancePools":{"shape":"SpotInstancePools"},
+        "SpotMaxPrice":{"shape":"SpotPrice"}
+      }
+    },
     "InvalidNextToken":{
       "type":"structure",
       "members":{
@@ -1658,11 +1671,24 @@
         "NextToken":{"shape":"XmlString"}
       }
     },
+    "LaunchTemplate":{
+      "type":"structure",
+      "members":{
+        "LaunchTemplateSpecification":{"shape":"LaunchTemplateSpecification"},
+        "Overrides":{"shape":"Overrides"}
+      }
+    },
     "LaunchTemplateName":{
       "type":"string",
       "max":128,
       "min":3,
       "pattern":"[a-zA-Z0-9\\(\\)\\.-/_]+"
+    },
+    "LaunchTemplateOverrides":{
+      "type":"structure",
+      "members":{
+        "InstanceType":{"shape":"XmlStringMaxLen255"}
+      }
     },
     "LaunchTemplateSpecification":{
       "type":"structure",
@@ -1850,6 +1876,13 @@
       "type":"integer",
       "deprecated":true
     },
+    "MixedInstancesPolicy":{
+      "type":"structure",
+      "members":{
+        "LaunchTemplate":{"shape":"LaunchTemplate"},
+        "InstancesDistribution":{"shape":"InstancesDistribution"}
+      }
+    },
     "MonitoringEnabled":{"type":"boolean"},
     "NoDevice":{"type":"boolean"},
     "NotificationConfiguration":{
@@ -1872,6 +1905,12 @@
     },
     "NumberOfAutoScalingGroups":{"type":"integer"},
     "NumberOfLaunchConfigurations":{"type":"integer"},
+    "OnDemandBaseCapacity":{"type":"integer"},
+    "OnDemandPercentageAboveBaseCapacity":{"type":"integer"},
+    "Overrides":{
+      "type":"list",
+      "member":{"shape":"LaunchTemplateOverrides"}
+    },
     "PoliciesType":{
       "type":"structure",
       "members":{
@@ -2216,6 +2255,7 @@
     },
     "ShouldDecrementDesiredCapacity":{"type":"boolean"},
     "ShouldRespectGracePeriod":{"type":"boolean"},
+    "SpotInstancePools":{"type":"integer"},
     "SpotPrice":{
       "type":"string",
       "max":255,
@@ -2330,6 +2370,7 @@
         "AutoScalingGroupName":{"shape":"ResourceName"},
         "LaunchConfigurationName":{"shape":"ResourceName"},
         "LaunchTemplate":{"shape":"LaunchTemplateSpecification"},
+        "MixedInstancesPolicy":{"shape":"MixedInstancesPolicy"},
         "MinSize":{"shape":"AutoScalingGroupMinSize"},
         "MaxSize":{"shape":"AutoScalingGroupMaxSize"},
         "DesiredCapacity":{"shape":"AutoScalingGroupDesiredCapacity"},

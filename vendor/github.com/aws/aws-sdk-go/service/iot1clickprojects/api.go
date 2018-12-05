@@ -15,7 +15,7 @@ const opAssociateDeviceWithPlacement = "AssociateDeviceWithPlacement"
 // AssociateDeviceWithPlacementRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateDeviceWithPlacement operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -99,7 +99,7 @@ const opCreatePlacement = "CreatePlacement"
 // CreatePlacementRequest generates a "aws/request.Request" representing the
 // client's request for the CreatePlacement operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -183,7 +183,7 @@ const opCreateProject = "CreateProject"
 // CreateProjectRequest generates a "aws/request.Request" representing the
 // client's request for the CreateProject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -266,7 +266,7 @@ const opDeletePlacement = "DeletePlacement"
 // DeletePlacementRequest generates a "aws/request.Request" representing the
 // client's request for the DeletePlacement operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -353,7 +353,7 @@ const opDeleteProject = "DeleteProject"
 // DeleteProjectRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteProject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -440,7 +440,7 @@ const opDescribePlacement = "DescribePlacement"
 // DescribePlacementRequest generates a "aws/request.Request" representing the
 // client's request for the DescribePlacement operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -522,7 +522,7 @@ const opDescribeProject = "DescribeProject"
 // DescribeProjectRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeProject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -604,7 +604,7 @@ const opDisassociateDeviceFromPlacement = "DisassociateDeviceFromPlacement"
 // DisassociateDeviceFromPlacementRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateDeviceFromPlacement operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -688,7 +688,7 @@ const opGetDevicesInPlacement = "GetDevicesInPlacement"
 // GetDevicesInPlacementRequest generates a "aws/request.Request" representing the
 // client's request for the GetDevicesInPlacement operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -770,7 +770,7 @@ const opListPlacements = "ListPlacements"
 // ListPlacementsRequest generates a "aws/request.Request" representing the
 // client's request for the ListPlacements operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -852,7 +852,7 @@ const opListProjects = "ListProjects"
 // ListProjectsRequest generates a "aws/request.Request" representing the
 // client's request for the ListProjects operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -933,7 +933,7 @@ const opUpdatePlacement = "UpdatePlacement"
 // UpdatePlacementRequest generates a "aws/request.Request" representing the
 // client's request for the UpdatePlacement operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1018,7 +1018,7 @@ const opUpdateProject = "UpdateProject"
 // UpdateProjectRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateProject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.

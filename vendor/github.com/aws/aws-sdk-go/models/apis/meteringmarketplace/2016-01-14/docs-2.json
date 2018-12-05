@@ -1,9 +1,10 @@
 {
   "version": "2.0",
-  "service": "<fullname>AWS Marketplace Metering Service</fullname> <p>This reference provides descriptions of the low-level AWS Marketplace Metering Service API.</p> <p>AWS Marketplace sellers can use this API to submit usage data for custom usage dimensions.</p> <p> <b>Submitting Metering Records</b> </p> <ul> <li> <p> <i>MeterUsage</i>- Submits the metering record for a Marketplace product. MeterUsage is called from an EC2 instance.</p> </li> <li> <p> <i>BatchMeterUsage</i>- Submits the metering record for a set of customers. BatchMeterUsage is called from a software-as-a-service (SaaS) application.</p> </li> </ul> <p> <b>Accepting New Customers</b> </p> <ul> <li> <p> <i>ResolveCustomer</i>- Called by a SaaS application during the registration process. When a buyer visits your website during the registration process, the buyer submits a Registration Token through the browser. The Registration Token is resolved through this API to obtain a CustomerIdentifier and Product Code.</p> </li> </ul>",
+  "service": "<fullname>AWS Marketplace Metering Service</fullname> <p>This reference provides descriptions of the low-level AWS Marketplace Metering Service API.</p> <p>AWS Marketplace sellers can use this API to submit usage data for custom usage dimensions.</p> <p> <b>Submitting Metering Records</b> </p> <ul> <li> <p> <i>MeterUsage</i>- Submits the metering record for a Marketplace product. MeterUsage is called from an EC2 instance.</p> </li> <li> <p> <i>BatchMeterUsage</i>- Submits the metering record for a set of customers. BatchMeterUsage is called from a software-as-a-service (SaaS) application.</p> </li> </ul> <p> <b>Accepting New Customers</b> </p> <ul> <li> <p> <i>ResolveCustomer</i>- Called by a SaaS application during the registration process. When a buyer visits your website during the registration process, the buyer submits a Registration Token through the browser. The Registration Token is resolved through this API to obtain a CustomerIdentifier and Product Code.</p> </li> </ul> <p> <b>Entitlement and Metering for Paid Container Products</b> </p> <ul> <li> <p> Paid container software products sold through AWS Marketplace must integrate with the AWS Marketplace Metering Service and call the RegisterUsage operation for software entitlement and metering. Calling RegisterUsage from containers running outside of Amazon Elastic Container Service (Amazon ECR) isn't supported. Free and BYOL products for ECS aren't required to call RegisterUsage, but you can do so if you want to receive usage data in your seller reports. For more information on using the RegisterUsage operation, see <a href=\"https://docs.aws.amazon.com/latest/userguide/entitlement-and-metering-for-paid-products.html\">Container-Based Products</a>. </p> </li> </ul> <p>BatchMeterUsage API calls are captured by AWS CloudTrail. You can use Cloudtrail to verify that the SaaS metering records that you sent are accurate by searching for records with the eventName of BatchMeterUsage. You can also use CloudTrail to audit records over time. For more information, see the <i> <a href=\"http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html\">AWS CloudTrail User Guide</a> </i>.</p>",
   "operations": {
     "BatchMeterUsage": "<p>BatchMeterUsage is called from a SaaS application listed on the AWS Marketplace to post metering records for a set of customers.</p> <p>For identical requests, the API is idempotent; requests can be retried with the same records or a subset of the input records.</p> <p>Every request to BatchMeterUsage is for one product. If you need to meter usage for multiple products, you must make multiple calls to BatchMeterUsage.</p> <p>BatchMeterUsage can process up to 25 UsageRecords at a time.</p>",
     "MeterUsage": "<p>API to emit metering records. For identical requests, the API is idempotent. It simply returns the metering record ID.</p> <p>MeterUsage is authenticated on the buyer's AWS account, generally when running from an EC2 instance on the AWS Marketplace.</p>",
+    "RegisterUsage": "<p>Paid container software products sold through AWS Marketplace must integrate with the AWS Marketplace Metering Service and call the RegisterUsage operation for software entitlement and metering. Calling RegisterUsage from containers running outside of ECS is not currently supported. Free and BYOL products for ECS aren't required to call RegisterUsage, but you may choose to do so if you would like to receive usage data in your seller reports. The sections below explain the behavior of RegisterUsage. RegisterUsage performs two primary functions: metering and entitlement.</p> <ul> <li> <p> <i>Entitlement</i>: RegisterUsage allows you to verify that the customer running your paid software is subscribed to your product on AWS Marketplace, enabling you to guard against unauthorized use. Your container image that integrates with RegisterUsage is only required to guard against unauthorized use at container startup, as such a CustomerNotSubscribedException/PlatformNotSupportedException will only be thrown on the initial call to RegisterUsage. Subsequent calls from the same Amazon ECS task instance (e.g. task-id) will not throw a CustomerNotSubscribedException, even if the customer unsubscribes while the Amazon ECS task is still running.</p> </li> <li> <p> <i>Metering</i>: RegisterUsage meters software use per ECS task, per hour, with usage prorated to the second. A minimum of 1 minute of usage applies to tasks that are short lived. For example, if a customer has a 10 node ECS cluster and creates an ECS service configured as a Daemon Set, then ECS will launch a task on all 10 cluster nodes and the customer will be charged: (10 * hourly_rate). Metering for software use is automatically handled by the AWS Marketplace Metering Control Plane -- your software is not required to perform any metering specific actions, other than call RegisterUsage once for metering of software use to commence. The AWS Marketplace Metering Control Plane will also continue to bill customers for running ECS tasks, regardless of the customers subscription state, removing the need for your software to perform entitlement checks at runtime.</p> </li> </ul>",
     "ResolveCustomer": "<p>ResolveCustomer is called by a SaaS application during the registration process. When a buyer visits your website during the registration process, the buyer submits a registration token through their browser. The registration token is resolved through this API to obtain a CustomerIdentifier and product code.</p>"
   },
   "shapes": {
@@ -30,6 +31,16 @@
         "UsageRecord$CustomerIdentifier": "<p>The CustomerIdentifier is obtained through the ResolveCustomer operation and represents an individual buyer in your application.</p>"
       }
     },
+    "CustomerNotEntitledException": {
+      "base": "<p>Exception thrown when the customer does not have a valid subscription for the product.</p>",
+      "refs": {
+      }
+    },
+    "DisabledApiException": {
+      "base": "<p>The API is disabled in the Region.</p>",
+      "refs": {
+      }
+    },
     "DuplicateRequestException": {
       "base": "<p>A metering record has already been emitted by the same EC2 instance for the given {usageDimension, timestamp} with a different usageQuantity.</p>",
       "refs": {
@@ -51,7 +62,7 @@
       }
     },
     "InvalidEndpointRegionException": {
-      "base": "<p>The endpoint being called is in a region different from your EC2 instance. The region of the Metering service endpoint and the region of the EC2 instance must match.</p>",
+      "base": "<p>The endpoint being called is in a Region different from your EC2 instance. The Region of the Metering Service endpoint and the Region of the EC2 instance must match.</p>",
       "refs": {
       }
     },
@@ -60,8 +71,18 @@
       "refs": {
       }
     },
+    "InvalidPublicKeyVersionException": {
+      "base": "<p>Public Key version is invalid.</p>",
+      "refs": {
+      }
+    },
+    "InvalidRegionException": {
+      "base": "<p>RegisterUsage must be called in the same AWS Region the ECS task was launched in. This prevents a container from hardcoding a Region (e.g. withRegion(“us-east-1”) when calling RegisterUsage.</p>",
+      "refs": {
+      }
+    },
     "InvalidTokenException": {
-      "base": null,
+      "base": "<p>Registration token is invalid.</p>",
       "refs": {
       }
     },
@@ -83,7 +104,19 @@
     "NonEmptyString": {
       "base": null,
       "refs": {
+        "RegisterUsageResult$Signature": "<p>JWT Token</p>",
         "ResolveCustomerRequest$RegistrationToken": "<p>When a buyer visits your website during the registration process, the buyer submits a registration token through the browser. The registration token is resolved to obtain a CustomerIdentifier and product code.</p>"
+      }
+    },
+    "Nonce": {
+      "base": null,
+      "refs": {
+        "RegisterUsageRequest$Nonce": "<p>(Optional) To scope down the registration to a specific running software instance and guard against replay attacks.</p>"
+      }
+    },
+    "PlatformNotSupportedException": {
+      "base": "<p>AWS Marketplace does not support metering usage from the underlying platform. Currently, only Amazon ECS is supported.</p>",
+      "refs": {
       }
     },
     "ProductCode": {
@@ -91,7 +124,18 @@
       "refs": {
         "BatchMeterUsageRequest$ProductCode": "<p>Product code is used to uniquely identify a product in AWS Marketplace. The product code should be the same as the one used during the publishing of a new product.</p>",
         "MeterUsageRequest$ProductCode": "<p>Product code is used to uniquely identify a product in AWS Marketplace. The product code should be the same as the one used during the publishing of a new product.</p>",
+        "RegisterUsageRequest$ProductCode": "<p>Product code is used to uniquely identify a product in AWS Marketplace. The product code should be the same as the one used during the publishing of a new product.</p>",
         "ResolveCustomerResult$ProductCode": "<p>The product code is returned to confirm that the buyer is registering for your product. Subsequent BatchMeterUsage calls should be made using this product code.</p>"
+      }
+    },
+    "RegisterUsageRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "RegisterUsageResult": {
+      "base": null,
+      "refs": {
       }
     },
     "ResolveCustomerRequest": {
@@ -107,12 +151,12 @@
     "String": {
       "base": null,
       "refs": {
-        "MeterUsageResult$MeteringRecordId": null,
+        "MeterUsageResult$MeteringRecordId": "<p>Metering record id.</p>",
         "UsageRecordResult$MeteringRecordId": "<p>The MeteringRecordId is a unique identifier for this metering event.</p>"
       }
     },
     "ThrottlingException": {
-      "base": "<p>The calls to the MeterUsage API are throttled.</p>",
+      "base": "<p>The calls to the API are throttled.</p>",
       "refs": {
       }
     },
@@ -120,6 +164,7 @@
       "base": null,
       "refs": {
         "MeterUsageRequest$Timestamp": "<p>Timestamp of the hour, recorded in UTC. The seconds and milliseconds portions of the timestamp will be ignored.</p>",
+        "RegisterUsageResult$PublicKeyRotationTimestamp": "<p>(Optional) Only included when public key version has expired</p>",
         "UsageRecord$Timestamp": "<p>Timestamp of the hour, recorded in UTC. The seconds and milliseconds portions of the timestamp will be ignored.</p> <p>Your application can meter usage for up to one hour in the past.</p>"
       }
     },
@@ -174,17 +219,28 @@
         "UsageRecordResult$Status": "<p>The UsageRecordResult Status indicates the status of an individual UsageRecord processed by BatchMeterUsage.</p> <ul> <li> <p> <i>Success</i>- The UsageRecord was accepted and honored by BatchMeterUsage.</p> </li> <li> <p> <i>CustomerNotSubscribed</i>- The CustomerIdentifier specified is not subscribed to your product. The UsageRecord was not honored. Future UsageRecords for this customer will fail until the customer subscribes to your product.</p> </li> <li> <p> <i>DuplicateRecord</i>- Indicates that the UsageRecord was invalid and not honored. A previously metered UsageRecord had the same customer, dimension, and time, but a different quantity.</p> </li> </ul>"
       }
     },
+    "VersionInteger": {
+      "base": null,
+      "refs": {
+        "RegisterUsageRequest$PublicKeyVersion": "<p>Public Key Version provided by AWS Marketplace</p>"
+      }
+    },
     "errorMessage": {
       "base": null,
       "refs": {
+        "CustomerNotEntitledException$message": null,
+        "DisabledApiException$message": null,
         "DuplicateRequestException$message": null,
         "ExpiredTokenException$message": null,
         "InternalServiceErrorException$message": null,
         "InvalidCustomerIdentifierException$message": null,
         "InvalidEndpointRegionException$message": null,
         "InvalidProductCodeException$message": null,
+        "InvalidPublicKeyVersionException$message": null,
+        "InvalidRegionException$message": null,
         "InvalidTokenException$message": null,
         "InvalidUsageDimensionException$message": null,
+        "PlatformNotSupportedException$message": null,
         "ThrottlingException$message": null,
         "TimestampOutOfBoundsException$message": null
       }

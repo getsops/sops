@@ -1586,6 +1586,7 @@
       },
       "max":10
     },
+    "Disabled":{"type":"boolean"},
     "DisassociateVPCComment":{"type":"string"},
     "DisassociateVPCFromHostedZoneRequest":{
       "type":"structure",
@@ -2056,6 +2057,7 @@
         "FailureThreshold":{"shape":"FailureThreshold"},
         "MeasureLatency":{"shape":"MeasureLatency"},
         "Inverted":{"shape":"Inverted"},
+        "Disabled":{"shape":"Disabled"},
         "HealthThreshold":{"shape":"HealthThreshold"},
         "ChildHealthChecks":{"shape":"ChildHealthCheckList"},
         "EnableSNI":{"shape":"EnableSNI"},
@@ -3610,6 +3612,7 @@
         "SearchString":{"shape":"SearchString"},
         "FailureThreshold":{"shape":"FailureThreshold"},
         "Inverted":{"shape":"Inverted"},
+        "Disabled":{"shape":"Disabled"},
         "HealthThreshold":{"shape":"HealthThreshold"},
         "ChildHealthChecks":{"shape":"ChildHealthCheckList"},
         "EnableSNI":{"shape":"EnableSNI"},

@@ -26,7 +26,9 @@
       "errors":[
         {"shape":"ListenerNotFoundException"},
         {"shape":"TooManyCertificatesException"},
-        {"shape":"CertificateNotFoundException"}
+        {"shape":"CertificateNotFoundException"},
+        {"shape":"UnsupportedCertificateException"},
+        {"shape":"UnsupportedProtocolException"}
       ]
     },
     "AddTags":{
@@ -72,6 +74,7 @@
         {"shape":"UnsupportedProtocolException"},
         {"shape":"TooManyRegistrationsForTargetIdException"},
         {"shape":"TooManyTargetsException"},
+        {"shape":"UnsupportedCertificateException"},
         {"shape":"TooManyActionsException"},
         {"shape":"InvalidLoadBalancerActionException"}
       ]
@@ -300,6 +303,21 @@
         {"shape":"LoadBalancerNotFoundException"}
       ]
     },
+    "DescribeProvisionedCapacity":{
+      "name":"DescribeProvisionedCapacity",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeProvisionedCapacityInput"},
+      "output":{
+        "shape":"DescribeProvisionedCapacityOutput",
+        "resultWrapper":"DescribeProvisionedCapacityResult"
+      },
+      "errors":[
+        {"shape":"LoadBalancerNotFoundException"}
+      ]
+    },
     "DescribeRules":{
       "name":"DescribeRules",
       "http":{
@@ -423,6 +441,7 @@
         {"shape":"UnsupportedProtocolException"},
         {"shape":"TooManyRegistrationsForTargetIdException"},
         {"shape":"TooManyTargetsException"},
+        {"shape":"UnsupportedCertificateException"},
         {"shape":"TooManyActionsException"},
         {"shape":"InvalidLoadBalancerActionException"}
       ]
@@ -441,6 +460,25 @@
       "errors":[
         {"shape":"LoadBalancerNotFoundException"},
         {"shape":"InvalidConfigurationRequestException"}
+      ]
+    },
+    "ModifyProvisionedCapacity":{
+      "name":"ModifyProvisionedCapacity",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ModifyProvisionedCapacityInput"},
+      "output":{
+        "shape":"ModifyProvisionedCapacityOutput",
+        "resultWrapper":"ModifyProvisionedCapacityResult"
+      },
+      "errors":[
+        {"shape":"LoadBalancerNotFoundException"},
+        {"shape":"InvalidConfigurationRequestException"},
+        {"shape":"MinimumLBCapacityUnitsDecreaseThrottlingException"},
+        {"shape":"MinimumLBCapacityUnitsLimitExceededException"},
+        {"shape":"InsufficientCapacityException"}
       ]
     },
     "ModifyRule":{
@@ -648,8 +686,8 @@
       "enum":[
         "forward",
         "authenticate-oidc",
-        "authenticate-cognito",
         "redirect",
+        "authenticate-cognito",
         "fixed-response"
       ]
     },
@@ -766,8 +804,7 @@
         "AuthorizationEndpoint",
         "TokenEndpoint",
         "UserInfoEndpoint",
-        "ClientId",
-        "ClientSecret"
+        "ClientId"
       ],
       "members":{
         "Issuer":{"shape":"AuthenticateOidcActionIssuer"},
@@ -780,7 +817,8 @@
         "Scope":{"shape":"AuthenticateOidcActionScope"},
         "SessionTimeout":{"shape":"AuthenticateOidcActionSessionTimeout"},
         "AuthenticationRequestExtraParams":{"shape":"AuthenticateOidcActionAuthenticationRequestExtraParams"},
-        "OnUnauthenticatedRequest":{"shape":"AuthenticateOidcActionConditionalBehaviorEnum"}
+        "OnUnauthenticatedRequest":{"shape":"AuthenticateOidcActionConditionalBehaviorEnum"},
+        "UseExistingClientSecret":{"shape":"AuthenticateOidcActionUseExistingClientSecret"}
       }
     },
     "AuthenticateOidcActionIssuer":{"type":"string"},
@@ -788,13 +826,15 @@
     "AuthenticateOidcActionSessionCookieName":{"type":"string"},
     "AuthenticateOidcActionSessionTimeout":{"type":"long"},
     "AuthenticateOidcActionTokenEndpoint":{"type":"string"},
+    "AuthenticateOidcActionUseExistingClientSecret":{"type":"boolean"},
     "AuthenticateOidcActionUserInfoEndpoint":{"type":"string"},
     "AvailabilityZone":{
       "type":"structure",
       "members":{
         "ZoneName":{"shape":"ZoneName"},
         "SubnetId":{"shape":"SubnetId"},
-        "LoadBalancerAddresses":{"shape":"LoadBalancerAddresses"}
+        "LoadBalancerAddresses":{"shape":"LoadBalancerAddresses"},
+        "StaticIp":{"shape":"StaticIp"}
       }
     },
     "AvailabilityZoneNotSupportedException":{
@@ -919,12 +959,7 @@
     },
     "CreateTargetGroupInput":{
       "type":"structure",
-      "required":[
-        "Name",
-        "Protocol",
-        "Port",
-        "VpcId"
-      ],
+      "required":["Name"],
       "members":{
         "Name":{"shape":"TargetGroupName"},
         "Protocol":{"shape":"ProtocolEnum"},
@@ -932,6 +967,7 @@
         "VpcId":{"shape":"VpcId"},
         "HealthCheckProtocol":{"shape":"ProtocolEnum"},
         "HealthCheckPort":{"shape":"HealthCheckPort"},
+        "HealthCheckEnabled":{"shape":"HealthCheckEnabled"},
         "HealthCheckPath":{"shape":"Path"},
         "HealthCheckIntervalSeconds":{"shape":"HealthCheckIntervalSeconds"},
         "HealthCheckTimeoutSeconds":{"shape":"HealthCheckTimeoutSeconds"},
@@ -949,6 +985,7 @@
     },
     "CreatedTime":{"type":"timestamp"},
     "DNSName":{"type":"string"},
+    "DecreasesRemaining":{"type":"integer"},
     "Default":{"type":"boolean"},
     "DeleteListenerInput":{
       "type":"structure",
@@ -1087,6 +1124,19 @@
       "members":{
         "LoadBalancers":{"shape":"LoadBalancers"},
         "NextMarker":{"shape":"Marker"}
+      }
+    },
+    "DescribeProvisionedCapacityInput":{
+      "type":"structure",
+      "required":["LoadBalancerArn"],
+      "members":{
+        "LoadBalancerArn":{"shape":"LoadBalancerArn"}
+      }
+    },
+    "DescribeProvisionedCapacityOutput":{
+      "type":"structure",
+      "members":{
+        "ProvisionedCapacity":{"shape":"ProvisionedCapacity"}
       }
     },
     "DescribeRulesInput":{
@@ -1245,6 +1295,7 @@
       "type":"string",
       "pattern":"^(2|4|5)\\d\\d$"
     },
+    "HealthCheckEnabled":{"type":"boolean"},
     "HealthCheckIntervalSeconds":{
       "type":"integer",
       "max":300,
@@ -1258,7 +1309,7 @@
     },
     "HealthCheckTimeoutSeconds":{
       "type":"integer",
-      "max":60,
+      "max":120,
       "min":2
     },
     "HealthUnavailableException":{
@@ -1271,7 +1322,45 @@
       },
       "exception":true
     },
+    "HostHeaderConditionConfig":{
+      "type":"structure",
+      "members":{
+        "Values":{"shape":"ListOfString"}
+      }
+    },
     "HttpCode":{"type":"string"},
+    "HttpHeaderConditionConfig":{
+      "type":"structure",
+      "members":{
+        "HttpHeaderName":{"shape":"HttpHeaderConditionName"},
+        "Values":{"shape":"ListOfString"}
+      }
+    },
+    "HttpHeaderConditionName":{"type":"string"},
+    "HttpRequestMethodConditionConfig":{
+      "type":"structure",
+      "members":{
+        "Values":{"shape":"HttpRequestMethodList"}
+      }
+    },
+    "HttpRequestMethodEnum":{
+      "type":"string",
+      "enum":[
+        "GET",
+        "HEAD",
+        "POST",
+        "PUT",
+        "DELETE",
+        "CONNECT",
+        "OPTIONS",
+        "TRACE",
+        "PATCH"
+      ]
+    },
+    "HttpRequestMethodList":{
+      "type":"list",
+      "member":{"shape":"HttpRequestMethodEnum"}
+    },
     "IncompatibleProtocolsException":{
       "type":"structure",
       "members":{
@@ -1280,6 +1369,16 @@
         "code":"IncompatibleProtocols",
         "httpStatusCode":400,
         "senderFault":true
+      },
+      "exception":true
+    },
+    "InsufficientCapacityException":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"InsufficientCapacity",
+        "httpStatusCode":500
       },
       "exception":true
     },
@@ -1358,6 +1457,8 @@
       ]
     },
     "IsDefault":{"type":"boolean"},
+    "LBCapacityUnits":{"type":"integer"},
+    "LastModifiedTime":{"type":"timestamp"},
     "Limit":{
       "type":"structure",
       "members":{
@@ -1518,6 +1619,28 @@
       }
     },
     "Max":{"type":"string"},
+    "MinimumLBCapacityUnitsDecreaseThrottlingException":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"MinimumLBCapacityUnitsDecreaseThrottling",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "MinimumLBCapacityUnitsLimitExceededException":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"MinimumLBCapacityUnitsLimitExceeded",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
     "ModifyListenerInput":{
       "type":"structure",
       "required":["ListenerArn"],
@@ -1551,6 +1674,23 @@
       "type":"structure",
       "members":{
         "Attributes":{"shape":"LoadBalancerAttributes"}
+      }
+    },
+    "ModifyProvisionedCapacityInput":{
+      "type":"structure",
+      "required":[
+        "LoadBalancerArn",
+        "MinimumLBCapacityUnits"
+      ],
+      "members":{
+        "LoadBalancerArn":{"shape":"LoadBalancerArn"},
+        "MinimumLBCapacityUnits":{"shape":"LBCapacityUnits"}
+      }
+    },
+    "ModifyProvisionedCapacityOutput":{
+      "type":"structure",
+      "members":{
+        "ProvisionedCapacity":{"shape":"ProvisionedCapacity"}
       }
     },
     "ModifyRuleInput":{
@@ -1593,6 +1733,7 @@
         "HealthCheckProtocol":{"shape":"ProtocolEnum"},
         "HealthCheckPort":{"shape":"HealthCheckPort"},
         "HealthCheckPath":{"shape":"Path"},
+        "HealthCheckEnabled":{"shape":"HealthCheckEnabled"},
         "HealthCheckIntervalSeconds":{"shape":"HealthCheckIntervalSeconds"},
         "HealthCheckTimeoutSeconds":{"shape":"HealthCheckTimeoutSeconds"},
         "HealthyThresholdCount":{"shape":"HealthCheckThresholdCount"},
@@ -1628,6 +1769,12 @@
       "max":1024,
       "min":1
     },
+    "PathPatternConditionConfig":{
+      "type":"structure",
+      "members":{
+        "Values":{"shape":"ListOfString"}
+      }
+    },
     "Port":{
       "type":"integer",
       "max":65535,
@@ -1649,8 +1796,34 @@
       "enum":[
         "HTTP",
         "HTTPS",
-        "TCP"
+        "TCP",
+        "TLS",
+        "UDP"
       ]
+    },
+    "ProvisionedCapacity":{
+      "type":"structure",
+      "members":{
+        "MinimumLBCapacityUnits":{"shape":"LBCapacityUnits"},
+        "Status":{"shape":"ProvisionedCapacityStatus"},
+        "DecreasesRemaining":{"shape":"DecreasesRemaining"},
+        "LastModifiedTime":{"shape":"LastModifiedTime"}
+      }
+    },
+    "ProvisionedCapacityStatus":{
+      "type":"string",
+      "enum":[
+        "disabled",
+        "pending",
+        "provisioned",
+        "pre-warmed"
+      ]
+    },
+    "QueryStringConditionConfig":{
+      "type":"structure",
+      "members":{
+        "Values":{"shape":"ListOfString"}
+      }
     },
     "RedirectActionConfig":{
       "type":"structure",
@@ -1774,7 +1947,12 @@
       "type":"structure",
       "members":{
         "Field":{"shape":"ConditionFieldName"},
-        "Values":{"shape":"ListOfString"}
+        "Values":{"shape":"ListOfString"},
+        "HostHeaderConfig":{"shape":"HostHeaderConditionConfig"},
+        "PathPatternConfig":{"shape":"PathPatternConditionConfig"},
+        "HttpHeaderConfig":{"shape":"HttpHeaderConditionConfig"},
+        "QueryStringConfig":{"shape":"QueryStringConditionConfig"},
+        "HttpRequestMethodConfig":{"shape":"HttpRequestMethodConditionConfig"}
       }
     },
     "RuleConditionList":{
@@ -1913,6 +2091,7 @@
       "member":{"shape":"SslProtocol"}
     },
     "StateReason":{"type":"string"},
+    "StaticIp":{"type":"boolean"},
     "String":{"type":"string"},
     "StringValue":{"type":"string"},
     "SubnetId":{"type":"string"},
@@ -1920,7 +2099,8 @@
       "type":"structure",
       "members":{
         "SubnetId":{"shape":"SubnetId"},
-        "AllocationId":{"shape":"AllocationId"}
+        "AllocationId":{"shape":"AllocationId"},
+        "StaticIp":{"shape":"StaticIp"}
       }
     },
     "SubnetMappings":{
@@ -2005,6 +2185,7 @@
         "VpcId":{"shape":"VpcId"},
         "HealthCheckProtocol":{"shape":"ProtocolEnum"},
         "HealthCheckPort":{"shape":"HealthCheckPort"},
+        "HealthCheckEnabled":{"shape":"HealthCheckEnabled"},
         "HealthCheckIntervalSeconds":{"shape":"HealthCheckIntervalSeconds"},
         "HealthCheckTimeoutSeconds":{"shape":"HealthCheckTimeoutSeconds"},
         "HealthyThresholdCount":{"shape":"HealthCheckThresholdCount"},
@@ -2101,6 +2282,7 @@
         "Target.DeregistrationInProgress",
         "Target.InvalidState",
         "Target.IpUnusable",
+        "Target.HealthCheckDisabled",
         "Elb.InternalError"
       ]
     },
@@ -2120,7 +2302,8 @@
       "type":"string",
       "enum":[
         "instance",
-        "ip"
+        "ip",
+        "lambda"
       ]
     },
     "TooManyActionsException":{
@@ -2217,6 +2400,17 @@
       },
       "error":{
         "code":"TooManyTargets",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "UnsupportedCertificateException":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"UnsupportedCertificate",
         "httpStatusCode":400,
         "senderFault":true
       },

@@ -319,6 +319,7 @@
         "OriginEndpointList$NextToken" : "A token that can be used to resume pagination from the end of the collection.",
         "OriginEndpointUpdateParameters$Description" : "A short text description of the OriginEndpoint.",
         "OriginEndpointUpdateParameters$ManifestName" : "A short string that will be appended to the end of the Endpoint URL.",
+        "SpekeKeyProvider$CertificateArn" : "An Amazon Resource Name (ARN) of a Certificate Manager certificate\nthat MediaPackage will use for enforcing secure end-to-end data\ntransfer with the key provider service.\n",
         "SpekeKeyProvider$ResourceId" : "The resource ID to include in key requests.",
         "SpekeKeyProvider$RoleArn" : "An Amazon Resource Name (ARN) of an IAM role that AWS Elemental\nMediaPackage will assume when accessing the key provider service.\n",
         "SpekeKeyProvider$Url" : "The URL of the external key provider service.",

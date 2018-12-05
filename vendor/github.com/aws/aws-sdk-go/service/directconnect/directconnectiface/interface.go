@@ -235,6 +235,10 @@ type DirectConnectAPI interface {
 	UpdateLag(*directconnect.UpdateLagInput) (*directconnect.Lag, error)
 	UpdateLagWithContext(aws.Context, *directconnect.UpdateLagInput, ...request.Option) (*directconnect.Lag, error)
 	UpdateLagRequest(*directconnect.UpdateLagInput) (*request.Request, *directconnect.Lag)
+
+	UpdateVirtualInterfaceAttributes(*directconnect.UpdateVirtualInterfaceAttributesInput) (*directconnect.UpdateVirtualInterfaceAttributesOutput, error)
+	UpdateVirtualInterfaceAttributesWithContext(aws.Context, *directconnect.UpdateVirtualInterfaceAttributesInput, ...request.Option) (*directconnect.UpdateVirtualInterfaceAttributesOutput, error)
+	UpdateVirtualInterfaceAttributesRequest(*directconnect.UpdateVirtualInterfaceAttributesInput) (*request.Request, *directconnect.UpdateVirtualInterfaceAttributesOutput)
 }
 
 var _ DirectConnectAPI = (*directconnect.DirectConnect)(nil)

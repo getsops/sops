@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // AWS Server Migration Service.
 //    func myFunc(svc smsiface.SMSAPI) bool {
-//        // Make svc.CreateReplicationJob request
+//        // Make svc.CreateApp request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockSMSClient struct {
 //        smsiface.SMSAPI
 //    }
-//    func (m *mockSMSClient) CreateReplicationJob(input *sms.CreateReplicationJobInput) (*sms.CreateReplicationJobOutput, error) {
+//    func (m *mockSMSClient) CreateApp(input *sms.CreateAppInput) (*sms.CreateAppOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,9 +60,25 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type SMSAPI interface {
+	CreateApp(*sms.CreateAppInput) (*sms.CreateAppOutput, error)
+	CreateAppWithContext(aws.Context, *sms.CreateAppInput, ...request.Option) (*sms.CreateAppOutput, error)
+	CreateAppRequest(*sms.CreateAppInput) (*request.Request, *sms.CreateAppOutput)
+
 	CreateReplicationJob(*sms.CreateReplicationJobInput) (*sms.CreateReplicationJobOutput, error)
 	CreateReplicationJobWithContext(aws.Context, *sms.CreateReplicationJobInput, ...request.Option) (*sms.CreateReplicationJobOutput, error)
 	CreateReplicationJobRequest(*sms.CreateReplicationJobInput) (*request.Request, *sms.CreateReplicationJobOutput)
+
+	DeleteApp(*sms.DeleteAppInput) (*sms.DeleteAppOutput, error)
+	DeleteAppWithContext(aws.Context, *sms.DeleteAppInput, ...request.Option) (*sms.DeleteAppOutput, error)
+	DeleteAppRequest(*sms.DeleteAppInput) (*request.Request, *sms.DeleteAppOutput)
+
+	DeleteAppLaunchConfiguration(*sms.DeleteAppLaunchConfigurationInput) (*sms.DeleteAppLaunchConfigurationOutput, error)
+	DeleteAppLaunchConfigurationWithContext(aws.Context, *sms.DeleteAppLaunchConfigurationInput, ...request.Option) (*sms.DeleteAppLaunchConfigurationOutput, error)
+	DeleteAppLaunchConfigurationRequest(*sms.DeleteAppLaunchConfigurationInput) (*request.Request, *sms.DeleteAppLaunchConfigurationOutput)
+
+	DeleteAppReplicationConfiguration(*sms.DeleteAppReplicationConfigurationInput) (*sms.DeleteAppReplicationConfigurationOutput, error)
+	DeleteAppReplicationConfigurationWithContext(aws.Context, *sms.DeleteAppReplicationConfigurationInput, ...request.Option) (*sms.DeleteAppReplicationConfigurationOutput, error)
+	DeleteAppReplicationConfigurationRequest(*sms.DeleteAppReplicationConfigurationInput) (*request.Request, *sms.DeleteAppReplicationConfigurationOutput)
 
 	DeleteReplicationJob(*sms.DeleteReplicationJobInput) (*sms.DeleteReplicationJobOutput, error)
 	DeleteReplicationJobWithContext(aws.Context, *sms.DeleteReplicationJobInput, ...request.Option) (*sms.DeleteReplicationJobOutput, error)
@@ -75,6 +91,26 @@ type SMSAPI interface {
 	DisassociateConnector(*sms.DisassociateConnectorInput) (*sms.DisassociateConnectorOutput, error)
 	DisassociateConnectorWithContext(aws.Context, *sms.DisassociateConnectorInput, ...request.Option) (*sms.DisassociateConnectorOutput, error)
 	DisassociateConnectorRequest(*sms.DisassociateConnectorInput) (*request.Request, *sms.DisassociateConnectorOutput)
+
+	GenerateChangeSet(*sms.GenerateChangeSetInput) (*sms.GenerateChangeSetOutput, error)
+	GenerateChangeSetWithContext(aws.Context, *sms.GenerateChangeSetInput, ...request.Option) (*sms.GenerateChangeSetOutput, error)
+	GenerateChangeSetRequest(*sms.GenerateChangeSetInput) (*request.Request, *sms.GenerateChangeSetOutput)
+
+	GenerateTemplate(*sms.GenerateTemplateInput) (*sms.GenerateTemplateOutput, error)
+	GenerateTemplateWithContext(aws.Context, *sms.GenerateTemplateInput, ...request.Option) (*sms.GenerateTemplateOutput, error)
+	GenerateTemplateRequest(*sms.GenerateTemplateInput) (*request.Request, *sms.GenerateTemplateOutput)
+
+	GetApp(*sms.GetAppInput) (*sms.GetAppOutput, error)
+	GetAppWithContext(aws.Context, *sms.GetAppInput, ...request.Option) (*sms.GetAppOutput, error)
+	GetAppRequest(*sms.GetAppInput) (*request.Request, *sms.GetAppOutput)
+
+	GetAppLaunchConfiguration(*sms.GetAppLaunchConfigurationInput) (*sms.GetAppLaunchConfigurationOutput, error)
+	GetAppLaunchConfigurationWithContext(aws.Context, *sms.GetAppLaunchConfigurationInput, ...request.Option) (*sms.GetAppLaunchConfigurationOutput, error)
+	GetAppLaunchConfigurationRequest(*sms.GetAppLaunchConfigurationInput) (*request.Request, *sms.GetAppLaunchConfigurationOutput)
+
+	GetAppReplicationConfiguration(*sms.GetAppReplicationConfigurationInput) (*sms.GetAppReplicationConfigurationOutput, error)
+	GetAppReplicationConfigurationWithContext(aws.Context, *sms.GetAppReplicationConfigurationInput, ...request.Option) (*sms.GetAppReplicationConfigurationOutput, error)
+	GetAppReplicationConfigurationRequest(*sms.GetAppReplicationConfigurationInput) (*request.Request, *sms.GetAppReplicationConfigurationOutput)
 
 	GetConnectors(*sms.GetConnectorsInput) (*sms.GetConnectorsOutput, error)
 	GetConnectorsWithContext(aws.Context, *sms.GetConnectorsInput, ...request.Option) (*sms.GetConnectorsOutput, error)
@@ -108,9 +144,41 @@ type SMSAPI interface {
 	ImportServerCatalogWithContext(aws.Context, *sms.ImportServerCatalogInput, ...request.Option) (*sms.ImportServerCatalogOutput, error)
 	ImportServerCatalogRequest(*sms.ImportServerCatalogInput) (*request.Request, *sms.ImportServerCatalogOutput)
 
+	LaunchApp(*sms.LaunchAppInput) (*sms.LaunchAppOutput, error)
+	LaunchAppWithContext(aws.Context, *sms.LaunchAppInput, ...request.Option) (*sms.LaunchAppOutput, error)
+	LaunchAppRequest(*sms.LaunchAppInput) (*request.Request, *sms.LaunchAppOutput)
+
+	ListApps(*sms.ListAppsInput) (*sms.ListAppsOutput, error)
+	ListAppsWithContext(aws.Context, *sms.ListAppsInput, ...request.Option) (*sms.ListAppsOutput, error)
+	ListAppsRequest(*sms.ListAppsInput) (*request.Request, *sms.ListAppsOutput)
+
+	PutAppLaunchConfiguration(*sms.PutAppLaunchConfigurationInput) (*sms.PutAppLaunchConfigurationOutput, error)
+	PutAppLaunchConfigurationWithContext(aws.Context, *sms.PutAppLaunchConfigurationInput, ...request.Option) (*sms.PutAppLaunchConfigurationOutput, error)
+	PutAppLaunchConfigurationRequest(*sms.PutAppLaunchConfigurationInput) (*request.Request, *sms.PutAppLaunchConfigurationOutput)
+
+	PutAppReplicationConfiguration(*sms.PutAppReplicationConfigurationInput) (*sms.PutAppReplicationConfigurationOutput, error)
+	PutAppReplicationConfigurationWithContext(aws.Context, *sms.PutAppReplicationConfigurationInput, ...request.Option) (*sms.PutAppReplicationConfigurationOutput, error)
+	PutAppReplicationConfigurationRequest(*sms.PutAppReplicationConfigurationInput) (*request.Request, *sms.PutAppReplicationConfigurationOutput)
+
+	StartAppReplication(*sms.StartAppReplicationInput) (*sms.StartAppReplicationOutput, error)
+	StartAppReplicationWithContext(aws.Context, *sms.StartAppReplicationInput, ...request.Option) (*sms.StartAppReplicationOutput, error)
+	StartAppReplicationRequest(*sms.StartAppReplicationInput) (*request.Request, *sms.StartAppReplicationOutput)
+
 	StartOnDemandReplicationRun(*sms.StartOnDemandReplicationRunInput) (*sms.StartOnDemandReplicationRunOutput, error)
 	StartOnDemandReplicationRunWithContext(aws.Context, *sms.StartOnDemandReplicationRunInput, ...request.Option) (*sms.StartOnDemandReplicationRunOutput, error)
 	StartOnDemandReplicationRunRequest(*sms.StartOnDemandReplicationRunInput) (*request.Request, *sms.StartOnDemandReplicationRunOutput)
+
+	StopAppReplication(*sms.StopAppReplicationInput) (*sms.StopAppReplicationOutput, error)
+	StopAppReplicationWithContext(aws.Context, *sms.StopAppReplicationInput, ...request.Option) (*sms.StopAppReplicationOutput, error)
+	StopAppReplicationRequest(*sms.StopAppReplicationInput) (*request.Request, *sms.StopAppReplicationOutput)
+
+	TerminateApp(*sms.TerminateAppInput) (*sms.TerminateAppOutput, error)
+	TerminateAppWithContext(aws.Context, *sms.TerminateAppInput, ...request.Option) (*sms.TerminateAppOutput, error)
+	TerminateAppRequest(*sms.TerminateAppInput) (*request.Request, *sms.TerminateAppOutput)
+
+	UpdateApp(*sms.UpdateAppInput) (*sms.UpdateAppOutput, error)
+	UpdateAppWithContext(aws.Context, *sms.UpdateAppInput, ...request.Option) (*sms.UpdateAppOutput, error)
+	UpdateAppRequest(*sms.UpdateAppInput) (*request.Request, *sms.UpdateAppOutput)
 
 	UpdateReplicationJob(*sms.UpdateReplicationJobInput) (*sms.UpdateReplicationJobOutput, error)
 	UpdateReplicationJobWithContext(aws.Context, *sms.UpdateReplicationJobInput, ...request.Option) (*sms.UpdateReplicationJobOutput, error)

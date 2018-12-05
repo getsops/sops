@@ -59,6 +59,10 @@ const (
 	// The specified configuration is not valid with this protocol.
 	ErrCodeIncompatibleProtocolsException = "IncompatibleProtocols"
 
+	// ErrCodeInsufficientCapacityException for service response error code
+	// "InsufficientCapacity".
+	ErrCodeInsufficientCapacityException = "InsufficientCapacity"
+
 	// ErrCodeInvalidConfigurationRequestException for service response error code
 	// "InvalidConfigurationRequest".
 	//
@@ -107,6 +111,14 @@ const (
 	//
 	// The specified load balancer does not exist.
 	ErrCodeLoadBalancerNotFoundException = "LoadBalancerNotFound"
+
+	// ErrCodeMinimumLBCapacityUnitsDecreaseThrottlingException for service response error code
+	// "MinimumLBCapacityUnitsDecreaseThrottling".
+	ErrCodeMinimumLBCapacityUnitsDecreaseThrottlingException = "MinimumLBCapacityUnitsDecreaseThrottling"
+
+	// ErrCodeMinimumLBCapacityUnitsLimitExceededException for service response error code
+	// "MinimumLBCapacityUnitsLimitExceeded".
+	ErrCodeMinimumLBCapacityUnitsLimitExceededException = "MinimumLBCapacityUnitsLimitExceeded"
 
 	// ErrCodeOperationNotPermittedException for service response error code
 	// "OperationNotPermitted".
@@ -210,6 +222,10 @@ const (
 	//
 	// You've reached the limit on the number of targets.
 	ErrCodeTooManyTargetsException = "TooManyTargets"
+
+	// ErrCodeUnsupportedCertificateException for service response error code
+	// "UnsupportedCertificate".
+	ErrCodeUnsupportedCertificateException = "UnsupportedCertificate"
 
 	// ErrCodeUnsupportedProtocolException for service response error code
 	// "UnsupportedProtocol".

@@ -305,6 +305,26 @@
         "Dataset$arn": "<p>The ARN of the data set.</p>"
       }
     },
+    "DatasetContentDeliveryDestination": {
+      "base": null,
+      "refs": {
+        "DatasetContentDeliveryRule$destination": null
+      }
+    },
+    "DatasetContentDeliveryRule": {
+      "base": null,
+      "refs": {
+        "DatasetContentDeliveryRules$member": null
+      }
+    },
+    "DatasetContentDeliveryRules": {
+      "base": null,
+      "refs": {
+        "CreateDatasetRequest$contentDeliveryRules": null,
+        "Dataset$contentDeliveryRules": null,
+        "UpdateDatasetRequest$contentDeliveryRules": null
+      }
+    },
     "DatasetContentState": {
       "base": null,
       "refs": {
@@ -575,6 +595,7 @@
     "EntryName": {
       "base": null,
       "refs": {
+        "DatasetContentDeliveryRule$entryName": null,
         "DatasetEntry$entryName": "<p>The name of the data set item.</p>"
       }
     },
@@ -640,6 +661,18 @@
     "InvalidRequestException": {
       "base": "<p>The request was not valid.</p>",
       "refs": {
+      }
+    },
+    "IotEventsDestinationConfiguration": {
+      "base": null,
+      "refs": {
+        "DatasetContentDeliveryDestination$iotEventsDestinationConfiguration": null
+      }
+    },
+    "IotEventsInputName": {
+      "base": null,
+      "refs": {
+        "IotEventsDestinationConfiguration$inputName": null
       }
     },
     "LambdaActivity": {
@@ -1008,6 +1041,7 @@
         "ContainerDatasetAction$executionRoleArn": "<p>The ARN of the role which gives permission to the system to access needed resources in order to run the \"containerAction\". This includes, at minimum, permission to retrieve the data set contents which are the input to the containerized application.</p>",
         "DeviceRegistryEnrichActivity$roleArn": "<p>The ARN of the role that allows access to the device's registry information.</p>",
         "DeviceShadowEnrichActivity$roleArn": "<p>The ARN of the role that allows access to the device's shadow.</p>",
+        "IotEventsDestinationConfiguration$roleArn": null,
         "LoggingOptions$roleArn": "<p>The ARN of the role that grants permission to AWS IoT Analytics to perform logging.</p>"
       }
     },

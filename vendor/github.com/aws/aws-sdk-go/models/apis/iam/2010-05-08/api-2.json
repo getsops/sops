@@ -273,6 +273,7 @@
         {"shape":"InvalidInputException"},
         {"shape":"EntityAlreadyExistsException"},
         {"shape":"MalformedPolicyDocumentException"},
+        {"shape":"ConcurrentModificationException"},
         {"shape":"ServiceFailureException"}
       ]
     },
@@ -344,6 +345,8 @@
         {"shape":"LimitExceededException"},
         {"shape":"EntityAlreadyExistsException"},
         {"shape":"NoSuchEntityException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"ConcurrentModificationException"},
         {"shape":"ServiceFailureException"}
       ]
     },
@@ -526,6 +529,7 @@
         {"shape":"DeleteConflictException"},
         {"shape":"LimitExceededException"},
         {"shape":"UnmodifiableEntityException"},
+        {"shape":"ConcurrentModificationException"},
         {"shape":"ServiceFailureException"}
       ]
     },
@@ -647,6 +651,7 @@
         {"shape":"LimitExceededException"},
         {"shape":"NoSuchEntityException"},
         {"shape":"DeleteConflictException"},
+        {"shape":"ConcurrentModificationException"},
         {"shape":"ServiceFailureException"}
       ]
     },
@@ -1371,6 +1376,22 @@
         {"shape":"ServiceFailureException"}
       ]
     },
+    "ListRoleTags":{
+      "name":"ListRoleTags",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListRoleTagsRequest"},
+      "output":{
+        "shape":"ListRoleTagsResponse",
+        "resultWrapper":"ListRoleTagsResult"
+      },
+      "errors":[
+        {"shape":"NoSuchEntityException"},
+        {"shape":"ServiceFailureException"}
+      ]
+    },
     "ListRoles":{
       "name":"ListRoles",
       "http":{
@@ -1473,6 +1494,22 @@
       "output":{
         "shape":"ListUserPoliciesResponse",
         "resultWrapper":"ListUserPoliciesResult"
+      },
+      "errors":[
+        {"shape":"NoSuchEntityException"},
+        {"shape":"ServiceFailureException"}
+      ]
+    },
+    "ListUserTags":{
+      "name":"ListUserTags",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListUserTagsRequest"},
+      "output":{
+        "shape":"ListUserTagsResponse",
+        "resultWrapper":"ListUserTagsResult"
       },
       "errors":[
         {"shape":"NoSuchEntityException"},
@@ -1694,6 +1731,62 @@
         {"shape":"PolicyEvaluationException"}
       ]
     },
+    "TagRole":{
+      "name":"TagRole",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TagRoleRequest"},
+      "errors":[
+        {"shape":"NoSuchEntityException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"ServiceFailureException"}
+      ]
+    },
+    "TagUser":{
+      "name":"TagUser",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TagUserRequest"},
+      "errors":[
+        {"shape":"NoSuchEntityException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"ServiceFailureException"}
+      ]
+    },
+    "UntagRole":{
+      "name":"UntagRole",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UntagRoleRequest"},
+      "errors":[
+        {"shape":"NoSuchEntityException"},
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"ServiceFailureException"}
+      ]
+    },
+    "UntagUser":{
+      "name":"UntagUser",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UntagUserRequest"},
+      "errors":[
+        {"shape":"NoSuchEntityException"},
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"ServiceFailureException"}
+      ]
+    },
     "UpdateAccessKey":{
       "name":"UpdateAccessKey",
       "http":{
@@ -1891,6 +1984,7 @@
         {"shape":"LimitExceededException"},
         {"shape":"EntityAlreadyExistsException"},
         {"shape":"EntityTemporarilyUnmodifiableException"},
+        {"shape":"ConcurrentModificationException"},
         {"shape":"ServiceFailureException"}
       ]
     },
@@ -2102,6 +2196,19 @@
       }
     },
     "ColumnNumber":{"type":"integer"},
+    "ConcurrentModificationException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ConcurrentModificationMessage"}
+      },
+      "error":{
+        "code":"ConcurrentModification",
+        "httpStatusCode":409,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "ConcurrentModificationMessage":{"type":"string"},
     "ContextEntry":{
       "type":"structure",
       "members":{
@@ -2280,6 +2387,7 @@
         "RoleName":{"shape":"roleNameType"},
         "AssumeRolePolicyDocument":{"shape":"policyDocumentType"},
         "Description":{"shape":"roleDescriptionType"},
+        "Tags":{"shape":"tagListType"},
         "MaxSessionDuration":{"shape":"roleMaxSessionDurationType"},
         "PermissionsBoundary":{"shape":"arnType"}
       }
@@ -2346,6 +2454,7 @@
       "members":{
         "Path":{"shape":"pathType"},
         "UserName":{"shape":"userNameType"},
+        "Tags":{"shape":"tagListType"},
         "PermissionsBoundary":{"shape":"arnType"}
       }
     },
@@ -3523,6 +3632,24 @@
         "Marker":{"shape":"markerType"}
       }
     },
+    "ListRoleTagsRequest":{
+      "type":"structure",
+      "required":["RoleName"],
+      "members":{
+        "RoleName":{"shape":"roleNameType"},
+        "Marker":{"shape":"markerType"},
+        "MaxItems":{"shape":"maxItemsType"}
+      }
+    },
+    "ListRoleTagsResponse":{
+      "type":"structure",
+      "required":["Tags"],
+      "members":{
+        "Tags":{"shape":"tagListType"},
+        "IsTruncated":{"shape":"booleanType"},
+        "Marker":{"shape":"markerType"}
+      }
+    },
     "ListRolesRequest":{
       "type":"structure",
       "members":{
@@ -3628,6 +3755,24 @@
       "required":["PolicyNames"],
       "members":{
         "PolicyNames":{"shape":"policyNameListType"},
+        "IsTruncated":{"shape":"booleanType"},
+        "Marker":{"shape":"markerType"}
+      }
+    },
+    "ListUserTagsRequest":{
+      "type":"structure",
+      "required":["UserName"],
+      "members":{
+        "UserName":{"shape":"existingUserNameType"},
+        "Marker":{"shape":"markerType"},
+        "MaxItems":{"shape":"maxItemsType"}
+      }
+    },
+    "ListUserTagsResponse":{
+      "type":"structure",
+      "required":["Tags"],
+      "members":{
+        "Tags":{"shape":"tagListType"},
         "IsTruncated":{"shape":"booleanType"},
         "Marker":{"shape":"markerType"}
       }
@@ -4118,6 +4263,7 @@
         "CreateDate":{"shape":"dateType"},
         "AssumeRolePolicyDocument":{"shape":"policyDocumentType"},
         "Description":{"shape":"roleDescriptionType"},
+        "Tags":{"shape":"tagListType"},
         "MaxSessionDuration":{"shape":"roleMaxSessionDurationType"},
         "PermissionsBoundary":{"shape":"AttachedPermissionsBoundary"}
       }
@@ -4134,6 +4280,7 @@
         "InstanceProfileList":{"shape":"instanceProfileListType"},
         "RolePolicyList":{"shape":"policyDetailListType"},
         "AttachedManagedPolicies":{"shape":"attachedPoliciesListType"},
+        "Tags":{"shape":"tagListType"},
         "PermissionsBoundary":{"shape":"AttachedPermissionsBoundary"}
       }
     },
@@ -4395,6 +4542,39 @@
       "type":"list",
       "member":{"shape":"Statement"}
     },
+    "Tag":{
+      "type":"structure",
+      "required":[
+        "Key",
+        "Value"
+      ],
+      "members":{
+        "Key":{"shape":"tagKeyType"},
+        "Value":{"shape":"tagValueType"}
+      }
+    },
+    "TagRoleRequest":{
+      "type":"structure",
+      "required":[
+        "RoleName",
+        "Tags"
+      ],
+      "members":{
+        "RoleName":{"shape":"roleNameType"},
+        "Tags":{"shape":"tagListType"}
+      }
+    },
+    "TagUserRequest":{
+      "type":"structure",
+      "required":[
+        "UserName",
+        "Tags"
+      ],
+      "members":{
+        "UserName":{"shape":"existingUserNameType"},
+        "Tags":{"shape":"tagListType"}
+      }
+    },
     "UnmodifiableEntityException":{
       "type":"structure",
       "members":{
@@ -4418,6 +4598,28 @@
         "senderFault":true
       },
       "exception":true
+    },
+    "UntagRoleRequest":{
+      "type":"structure",
+      "required":[
+        "RoleName",
+        "TagKeys"
+      ],
+      "members":{
+        "RoleName":{"shape":"roleNameType"},
+        "TagKeys":{"shape":"tagKeyListType"}
+      }
+    },
+    "UntagUserRequest":{
+      "type":"structure",
+      "required":[
+        "UserName",
+        "TagKeys"
+      ],
+      "members":{
+        "UserName":{"shape":"existingUserNameType"},
+        "TagKeys":{"shape":"tagKeyListType"}
+      }
     },
     "UpdateAccessKeyRequest":{
       "type":"structure",
@@ -4657,6 +4859,7 @@
         "Arn":{"shape":"arnType"},
         "CreateDate":{"shape":"dateType"},
         "PasswordLastUsed":{"shape":"dateType"},
+        "Tags":{"shape":"tagListType"},
         "PermissionsBoundary":{"shape":"AttachedPermissionsBoundary"}
       }
     },
@@ -4671,6 +4874,7 @@
         "UserPolicyList":{"shape":"policyDetailListType"},
         "GroupList":{"shape":"groupNameListType"},
         "AttachedManagedPolicies":{"shape":"attachedPoliciesListType"},
+        "Tags":{"shape":"tagListType"},
         "PermissionsBoundary":{"shape":"AttachedPermissionsBoundary"}
       }
     },
@@ -5075,6 +5279,26 @@
       "value":{"shape":"summaryValueType"}
     },
     "summaryValueType":{"type":"integer"},
+    "tagKeyListType":{
+      "type":"list",
+      "member":{"shape":"tagKeyType"}
+    },
+    "tagKeyType":{
+      "type":"string",
+      "max":128,
+      "min":1,
+      "pattern":"[\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]+"
+    },
+    "tagListType":{
+      "type":"list",
+      "member":{"shape":"Tag"}
+    },
+    "tagValueType":{
+      "type":"string",
+      "max":256,
+      "min":0,
+      "pattern":"[\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*"
+    },
     "thumbprintListType":{
       "type":"list",
       "member":{"shape":"thumbprintType"}

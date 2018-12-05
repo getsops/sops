@@ -7,6 +7,7 @@
     "protocol":"json",
     "serviceAbbreviation":"AWS Shield",
     "serviceFullName":"AWS Shield",
+    "serviceId":"Shield",
     "signatureVersion":"v4",
     "targetPrefix":"AWSShield_20160616",
     "uid":"shield-2016-06-02"
@@ -118,7 +119,7 @@
       "output":{"shape":"DescribeAttackResponse"},
       "errors":[
         {"shape":"InternalErrorException"},
-        {"shape":"InvalidParameterException"}
+        {"shape":"AccessDeniedException"}
       ]
     },
     "DescribeDRTAccess":{
@@ -278,6 +279,13 @@
     }
   },
   "shapes":{
+    "AccessDeniedException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true
+    },
     "AccessDeniedForDependencyException":{
       "type":"structure",
       "members":{
@@ -540,6 +548,8 @@
     },
     "EmailAddress":{
       "type":"string",
+      "max":150,
+      "min":1,
       "pattern":"^\\S+@\\S+\\.\\S+$"
     },
     "EmergencyContact":{
@@ -740,7 +750,9 @@
     },
     "ResourceArn":{
       "type":"string",
-      "min":1
+      "max":2048,
+      "min":1,
+      "pattern":"^arn:aws.*"
     },
     "ResourceArnFilterList":{
       "type":"list",
@@ -755,7 +767,8 @@
     },
     "RoleArn":{
       "type":"string",
-      "max":96,
+      "max":2048,
+      "min":1,
       "pattern":"^arn:aws:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+"
     },
     "String":{"type":"string"},
@@ -833,7 +846,9 @@
     "Timestamp":{"type":"timestamp"},
     "Token":{
       "type":"string",
-      "min":1
+      "max":4096,
+      "min":1,
+      "pattern":"^.*$"
     },
     "TopContributors":{
       "type":"list",

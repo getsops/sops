@@ -15,7 +15,7 @@ const opCreateBroker = "CreateBroker"
 // CreateBrokerRequest generates a "aws/request.Request" representing the
 // client's request for the CreateBroker operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -106,7 +106,7 @@ const opCreateConfiguration = "CreateConfiguration"
 // CreateConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the CreateConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -195,7 +195,7 @@ const opCreateUser = "CreateUser"
 // CreateUserRequest generates a "aws/request.Request" representing the
 // client's request for the CreateUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -286,7 +286,7 @@ const opDeleteBroker = "DeleteBroker"
 // DeleteBrokerRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteBroker operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -374,7 +374,7 @@ const opDeleteUser = "DeleteUser"
 // DeleteUserRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -462,7 +462,7 @@ const opDescribeBroker = "DescribeBroker"
 // DescribeBrokerRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeBroker operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -550,7 +550,7 @@ const opDescribeConfiguration = "DescribeConfiguration"
 // DescribeConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -638,7 +638,7 @@ const opDescribeConfigurationRevision = "DescribeConfigurationRevision"
 // DescribeConfigurationRevisionRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeConfigurationRevision operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -726,7 +726,7 @@ const opDescribeUser = "DescribeUser"
 // DescribeUserRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -814,7 +814,7 @@ const opListBrokers = "ListBrokers"
 // ListBrokersRequest generates a "aws/request.Request" representing the
 // client's request for the ListBrokers operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -899,7 +899,7 @@ const opListConfigurationRevisions = "ListConfigurationRevisions"
 // ListConfigurationRevisionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListConfigurationRevisions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -987,7 +987,7 @@ const opListConfigurations = "ListConfigurations"
 // ListConfigurationsRequest generates a "aws/request.Request" representing the
 // client's request for the ListConfigurations operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1072,7 +1072,7 @@ const opListUsers = "ListUsers"
 // ListUsersRequest generates a "aws/request.Request" representing the
 // client's request for the ListUsers operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1160,7 +1160,7 @@ const opRebootBroker = "RebootBroker"
 // RebootBrokerRequest generates a "aws/request.Request" representing the
 // client's request for the RebootBroker operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1248,7 +1248,7 @@ const opUpdateBroker = "UpdateBroker"
 // UpdateBrokerRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateBroker operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1306,6 +1306,9 @@ func (c *MQ) UpdateBrokerRequest(input *UpdateBrokerRequest) (req *request.Reque
 //   * ErrCodeInternalServerErrorException "InternalServerErrorException"
 //   Returns information about an error.
 //
+//   * ErrCodeConflictException "ConflictException"
+//   Returns information about an error.
+//
 //   * ErrCodeForbiddenException "ForbiddenException"
 //   Returns information about an error.
 //
@@ -1336,7 +1339,7 @@ const opUpdateConfiguration = "UpdateConfiguration"
 // UpdateConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1427,7 +1430,7 @@ const opUpdateUser = "UpdateUser"
 // UpdateUserRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1523,7 +1526,7 @@ type BrokerInstance struct {
 	// The broker's wire-level protocol endpoints.
 	Endpoints []*string `locationName:"endpoints" type:"list"`
 
-	// The IP address of the ENI attached to the broker.
+	// The IP address of the Elastic Network Interface (ENI) attached to the broker.
 	IpAddress *string `locationName:"ipAddress" type:"string"`
 }
 
@@ -2145,8 +2148,14 @@ func (s *CreateUserRequest) Validate() error {
 	if s.BrokerId == nil {
 		invalidParams.Add(request.NewErrParamRequired("BrokerId"))
 	}
+	if s.BrokerId != nil && len(*s.BrokerId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BrokerId", 1))
+	}
 	if s.Username == nil {
 		invalidParams.Add(request.NewErrParamRequired("Username"))
+	}
+	if s.Username != nil && len(*s.Username) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Username", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -2207,6 +2216,9 @@ func (s *DeleteBrokerInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteBrokerInput"}
 	if s.BrokerId == nil {
 		invalidParams.Add(request.NewErrParamRequired("BrokerId"))
+	}
+	if s.BrokerId != nil && len(*s.BrokerId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BrokerId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -2269,8 +2281,14 @@ func (s *DeleteUserInput) Validate() error {
 	if s.BrokerId == nil {
 		invalidParams.Add(request.NewErrParamRequired("BrokerId"))
 	}
+	if s.BrokerId != nil && len(*s.BrokerId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BrokerId", 1))
+	}
 	if s.Username == nil {
 		invalidParams.Add(request.NewErrParamRequired("Username"))
+	}
+	if s.Username != nil && len(*s.Username) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Username", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -2328,6 +2346,9 @@ func (s *DescribeBrokerInput) Validate() error {
 	if s.BrokerId == nil {
 		invalidParams.Add(request.NewErrParamRequired("BrokerId"))
 	}
+	if s.BrokerId != nil && len(*s.BrokerId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BrokerId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -2379,6 +2400,8 @@ type DescribeBrokerResponse struct {
 	// The scheduled time period relative to UTC during which Amazon MQ begins to
 	// apply pending updates or patches to the broker.
 	MaintenanceWindowStartTime *WeeklyStartTime `locationName:"maintenanceWindowStartTime" type:"structure"`
+
+	PendingEngineVersion *string `locationName:"pendingEngineVersion" type:"string"`
 
 	PubliclyAccessible *bool `locationName:"publiclyAccessible" type:"boolean"`
 
@@ -2483,6 +2506,12 @@ func (s *DescribeBrokerResponse) SetMaintenanceWindowStartTime(v *WeeklyStartTim
 	return s
 }
 
+// SetPendingEngineVersion sets the PendingEngineVersion field's value.
+func (s *DescribeBrokerResponse) SetPendingEngineVersion(v string) *DescribeBrokerResponse {
+	s.PendingEngineVersion = &v
+	return s
+}
+
 // SetPubliclyAccessible sets the PubliclyAccessible field's value.
 func (s *DescribeBrokerResponse) SetPubliclyAccessible(v bool) *DescribeBrokerResponse {
 	s.PubliclyAccessible = &v
@@ -2529,6 +2558,9 @@ func (s *DescribeConfigurationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeConfigurationInput"}
 	if s.ConfigurationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ConfigurationId"))
+	}
+	if s.ConfigurationId != nil && len(*s.ConfigurationId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConfigurationId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -2649,8 +2681,14 @@ func (s *DescribeConfigurationRevisionInput) Validate() error {
 	if s.ConfigurationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ConfigurationId"))
 	}
+	if s.ConfigurationId != nil && len(*s.ConfigurationId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConfigurationId", 1))
+	}
 	if s.ConfigurationRevision == nil {
 		invalidParams.Add(request.NewErrParamRequired("ConfigurationRevision"))
+	}
+	if s.ConfigurationRevision != nil && len(*s.ConfigurationRevision) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConfigurationRevision", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -2743,8 +2781,14 @@ func (s *DescribeUserInput) Validate() error {
 	if s.BrokerId == nil {
 		invalidParams.Add(request.NewErrParamRequired("BrokerId"))
 	}
+	if s.BrokerId != nil && len(*s.BrokerId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BrokerId", 1))
+	}
 	if s.Username == nil {
 		invalidParams.Add(request.NewErrParamRequired("Username"))
+	}
+	if s.Username != nil && len(*s.Username) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Username", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -2920,6 +2964,9 @@ func (s *ListConfigurationRevisionsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListConfigurationRevisionsInput"}
 	if s.ConfigurationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ConfigurationId"))
+	}
+	if s.ConfigurationId != nil && len(*s.ConfigurationId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConfigurationId", 1))
 	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
@@ -3103,6 +3150,9 @@ func (s *ListUsersInput) Validate() error {
 	if s.BrokerId == nil {
 		invalidParams.Add(request.NewErrParamRequired("BrokerId"))
 	}
+	if s.BrokerId != nil && len(*s.BrokerId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BrokerId", 1))
+	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
@@ -3220,13 +3270,13 @@ type LogsSummary struct {
 	// ActiveMQ Web Console is logged.
 	Audit *bool `locationName:"audit" type:"boolean"`
 
-	// Location of CloudWatch Log group where audit logs will be sent.
+	// The location of the CloudWatch Logs log group where audit logs are sent.
 	AuditLogGroup *string `locationName:"auditLogGroup" type:"string"`
 
 	// Enables general logging.
 	General *bool `locationName:"general" type:"boolean"`
 
-	// Location of CloudWatch Log group where general logs will be sent.
+	// The location of the CloudWatch Logs log group where general logs are sent.
 	GeneralLogGroup *string `locationName:"generalLogGroup" type:"string"`
 
 	// The list of information about logs pending to be deployed for the specified
@@ -3331,6 +3381,9 @@ func (s *RebootBrokerInput) Validate() error {
 	if s.BrokerId == nil {
 		invalidParams.Add(request.NewErrParamRequired("BrokerId"))
 	}
+	if s.BrokerId != nil && len(*s.BrokerId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BrokerId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -3404,11 +3457,15 @@ func (s *SanitizationWarning) SetReason(v string) *SanitizationWarning {
 type UpdateBrokerRequest struct {
 	_ struct{} `type:"structure"`
 
+	AutoMinorVersionUpgrade *bool `locationName:"autoMinorVersionUpgrade" type:"boolean"`
+
 	// BrokerId is a required field
 	BrokerId *string `location:"uri" locationName:"broker-id" type:"string" required:"true"`
 
 	// A list of information about the configuration.
 	Configuration *ConfigurationId `locationName:"configuration" type:"structure"`
+
+	EngineVersion *string `locationName:"engineVersion" type:"string"`
 
 	// The list of information about logs to be enabled for the specified broker.
 	Logs *Logs `locationName:"logs" type:"structure"`
@@ -3430,11 +3487,20 @@ func (s *UpdateBrokerRequest) Validate() error {
 	if s.BrokerId == nil {
 		invalidParams.Add(request.NewErrParamRequired("BrokerId"))
 	}
+	if s.BrokerId != nil && len(*s.BrokerId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BrokerId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAutoMinorVersionUpgrade sets the AutoMinorVersionUpgrade field's value.
+func (s *UpdateBrokerRequest) SetAutoMinorVersionUpgrade(v bool) *UpdateBrokerRequest {
+	s.AutoMinorVersionUpgrade = &v
+	return s
 }
 
 // SetBrokerId sets the BrokerId field's value.
@@ -3449,6 +3515,12 @@ func (s *UpdateBrokerRequest) SetConfiguration(v *ConfigurationId) *UpdateBroker
 	return s
 }
 
+// SetEngineVersion sets the EngineVersion field's value.
+func (s *UpdateBrokerRequest) SetEngineVersion(v string) *UpdateBrokerRequest {
+	s.EngineVersion = &v
+	return s
+}
+
 // SetLogs sets the Logs field's value.
 func (s *UpdateBrokerRequest) SetLogs(v *Logs) *UpdateBrokerRequest {
 	s.Logs = v
@@ -3458,10 +3530,14 @@ func (s *UpdateBrokerRequest) SetLogs(v *Logs) *UpdateBrokerRequest {
 type UpdateBrokerResponse struct {
 	_ struct{} `type:"structure"`
 
+	AutoMinorVersionUpgrade *bool `locationName:"autoMinorVersionUpgrade" type:"boolean"`
+
 	BrokerId *string `locationName:"brokerId" type:"string"`
 
 	// A list of information about the configuration.
 	Configuration *ConfigurationId `locationName:"configuration" type:"structure"`
+
+	EngineVersion *string `locationName:"engineVersion" type:"string"`
 
 	// The list of information about logs to be enabled for the specified broker.
 	Logs *Logs `locationName:"logs" type:"structure"`
@@ -3477,6 +3553,12 @@ func (s UpdateBrokerResponse) GoString() string {
 	return s.String()
 }
 
+// SetAutoMinorVersionUpgrade sets the AutoMinorVersionUpgrade field's value.
+func (s *UpdateBrokerResponse) SetAutoMinorVersionUpgrade(v bool) *UpdateBrokerResponse {
+	s.AutoMinorVersionUpgrade = &v
+	return s
+}
+
 // SetBrokerId sets the BrokerId field's value.
 func (s *UpdateBrokerResponse) SetBrokerId(v string) *UpdateBrokerResponse {
 	s.BrokerId = &v
@@ -3486,6 +3568,12 @@ func (s *UpdateBrokerResponse) SetBrokerId(v string) *UpdateBrokerResponse {
 // SetConfiguration sets the Configuration field's value.
 func (s *UpdateBrokerResponse) SetConfiguration(v *ConfigurationId) *UpdateBrokerResponse {
 	s.Configuration = v
+	return s
+}
+
+// SetEngineVersion sets the EngineVersion field's value.
+func (s *UpdateBrokerResponse) SetEngineVersion(v string) *UpdateBrokerResponse {
+	s.EngineVersion = &v
 	return s
 }
 
@@ -3521,6 +3609,9 @@ func (s *UpdateConfigurationRequest) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateConfigurationRequest"}
 	if s.ConfigurationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ConfigurationId"))
+	}
+	if s.ConfigurationId != nil && len(*s.ConfigurationId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConfigurationId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -3656,8 +3747,14 @@ func (s *UpdateUserRequest) Validate() error {
 	if s.BrokerId == nil {
 		invalidParams.Add(request.NewErrParamRequired("BrokerId"))
 	}
+	if s.BrokerId != nil && len(*s.BrokerId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BrokerId", 1))
+	}
 	if s.Username == nil {
 		invalidParams.Add(request.NewErrParamRequired("Username"))
+	}
+	if s.Username != nil && len(*s.Username) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Username", 1))
 	}
 
 	if invalidParams.Len() > 0 {

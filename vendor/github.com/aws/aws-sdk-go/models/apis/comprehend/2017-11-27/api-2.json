@@ -92,6 +92,104 @@
         {"shape":"InternalServerException"}
       ]
     },
+    "CreateDocumentClassifier":{
+      "name":"CreateDocumentClassifier",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateDocumentClassifierRequest"},
+      "output":{"shape":"CreateDocumentClassifierResponse"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"ResourceInUseException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"ResourceLimitExceededException"},
+        {"shape":"UnsupportedLanguageException"},
+        {"shape":"InternalServerException"}
+      ]
+    },
+    "CreateEntityRecognizer":{
+      "name":"CreateEntityRecognizer",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateEntityRecognizerRequest"},
+      "output":{"shape":"CreateEntityRecognizerResponse"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"ResourceInUseException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"ResourceLimitExceededException"},
+        {"shape":"UnsupportedLanguageException"},
+        {"shape":"InternalServerException"}
+      ]
+    },
+    "DeleteDocumentClassifier":{
+      "name":"DeleteDocumentClassifier",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteDocumentClassifierRequest"},
+      "output":{"shape":"DeleteDocumentClassifierResponse"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ResourceUnavailableException"},
+        {"shape":"ResourceInUseException"},
+        {"shape":"InternalServerException"}
+      ]
+    },
+    "DeleteEntityRecognizer":{
+      "name":"DeleteEntityRecognizer",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteEntityRecognizerRequest"},
+      "output":{"shape":"DeleteEntityRecognizerResponse"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ResourceUnavailableException"},
+        {"shape":"ResourceInUseException"},
+        {"shape":"InternalServerException"}
+      ]
+    },
+    "DescribeDocumentClassificationJob":{
+      "name":"DescribeDocumentClassificationJob",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeDocumentClassificationJobRequest"},
+      "output":{"shape":"DescribeDocumentClassificationJobResponse"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"JobNotFoundException"},
+        {"shape":"InternalServerException"}
+      ]
+    },
+    "DescribeDocumentClassifier":{
+      "name":"DescribeDocumentClassifier",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeDocumentClassifierRequest"},
+      "output":{"shape":"DescribeDocumentClassifierResponse"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalServerException"}
+      ]
+    },
     "DescribeDominantLanguageDetectionJob":{
       "name":"DescribeDominantLanguageDetectionJob",
       "http":{
@@ -119,6 +217,21 @@
         {"shape":"InvalidRequestException"},
         {"shape":"JobNotFoundException"},
         {"shape":"TooManyRequestsException"},
+        {"shape":"InternalServerException"}
+      ]
+    },
+    "DescribeEntityRecognizer":{
+      "name":"DescribeEntityRecognizer",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeEntityRecognizerRequest"},
+      "output":{"shape":"DescribeEntityRecognizerResponse"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"ResourceNotFoundException"},
         {"shape":"InternalServerException"}
       ]
     },
@@ -241,6 +354,36 @@
         {"shape":"InternalServerException"}
       ]
     },
+    "ListDocumentClassificationJobs":{
+      "name":"ListDocumentClassificationJobs",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListDocumentClassificationJobsRequest"},
+      "output":{"shape":"ListDocumentClassificationJobsResponse"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"InvalidFilterException"},
+        {"shape":"InternalServerException"}
+      ]
+    },
+    "ListDocumentClassifiers":{
+      "name":"ListDocumentClassifiers",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListDocumentClassifiersRequest"},
+      "output":{"shape":"ListDocumentClassifiersResponse"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"InvalidFilterException"},
+        {"shape":"InternalServerException"}
+      ]
+    },
     "ListDominantLanguageDetectionJobs":{
       "name":"ListDominantLanguageDetectionJobs",
       "http":{
@@ -264,6 +407,21 @@
       },
       "input":{"shape":"ListEntitiesDetectionJobsRequest"},
       "output":{"shape":"ListEntitiesDetectionJobsResponse"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"InvalidFilterException"},
+        {"shape":"InternalServerException"}
+      ]
+    },
+    "ListEntityRecognizers":{
+      "name":"ListEntityRecognizers",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListEntityRecognizersRequest"},
+      "output":{"shape":"ListEntityRecognizersResponse"},
       "errors":[
         {"shape":"InvalidRequestException"},
         {"shape":"TooManyRequestsException"},
@@ -316,6 +474,22 @@
         {"shape":"InternalServerException"}
       ]
     },
+    "StartDocumentClassificationJob":{
+      "name":"StartDocumentClassificationJob",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StartDocumentClassificationJobRequest"},
+      "output":{"shape":"StartDocumentClassificationJobResponse"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ResourceUnavailableException"},
+        {"shape":"InternalServerException"}
+      ]
+    },
     "StartDominantLanguageDetectionJob":{
       "name":"StartDominantLanguageDetectionJob",
       "http":{
@@ -341,6 +515,8 @@
       "errors":[
         {"shape":"InvalidRequestException"},
         {"shape":"TooManyRequestsException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ResourceUnavailableException"},
         {"shape":"InternalServerException"}
       ]
     },
@@ -606,11 +782,134 @@
       },
       "exception":true
     },
+    "ClassifierEvaluationMetrics":{
+      "type":"structure",
+      "members":{
+        "Accuracy":{"shape":"Double"},
+        "Precision":{"shape":"Double"},
+        "Recall":{"shape":"Double"},
+        "F1Score":{"shape":"Double"}
+      }
+    },
+    "ClassifierMetadata":{
+      "type":"structure",
+      "members":{
+        "NumberOfLabels":{"shape":"Integer"},
+        "NumberOfTrainedDocuments":{"shape":"Integer"},
+        "NumberOfTestDocuments":{"shape":"Integer"},
+        "EvaluationMetrics":{"shape":"ClassifierEvaluationMetrics"}
+      }
+    },
     "ClientRequestTokenString":{
       "type":"string",
       "max":64,
       "min":1,
       "pattern":"^[a-zA-Z0-9-]+$"
+    },
+    "ComprehendArnName":{
+      "type":"string",
+      "max":63,
+      "pattern":"^[a-zA-Z0-9](-*[a-zA-Z0-9])*"
+    },
+    "CreateDocumentClassifierRequest":{
+      "type":"structure",
+      "required":[
+        "DocumentClassifierName",
+        "DataAccessRoleArn",
+        "InputDataConfig",
+        "LanguageCode"
+      ],
+      "members":{
+        "DocumentClassifierName":{"shape":"ComprehendArnName"},
+        "DataAccessRoleArn":{"shape":"IamRoleArn"},
+        "InputDataConfig":{"shape":"DocumentClassifierInputDataConfig"},
+        "ClientRequestToken":{
+          "shape":"ClientRequestTokenString",
+          "idempotencyToken":true
+        },
+        "LanguageCode":{"shape":"LanguageCode"}
+      }
+    },
+    "CreateDocumentClassifierResponse":{
+      "type":"structure",
+      "members":{
+        "DocumentClassifierArn":{"shape":"DocumentClassifierArn"}
+      }
+    },
+    "CreateEntityRecognizerRequest":{
+      "type":"structure",
+      "required":[
+        "RecognizerName",
+        "DataAccessRoleArn",
+        "InputDataConfig",
+        "LanguageCode"
+      ],
+      "members":{
+        "RecognizerName":{"shape":"ComprehendArnName"},
+        "DataAccessRoleArn":{"shape":"IamRoleArn"},
+        "InputDataConfig":{"shape":"EntityRecognizerInputDataConfig"},
+        "ClientRequestToken":{
+          "shape":"ClientRequestTokenString",
+          "idempotencyToken":true
+        },
+        "LanguageCode":{"shape":"LanguageCode"}
+      }
+    },
+    "CreateEntityRecognizerResponse":{
+      "type":"structure",
+      "members":{
+        "EntityRecognizerArn":{"shape":"EntityRecognizerArn"}
+      }
+    },
+    "DeleteDocumentClassifierRequest":{
+      "type":"structure",
+      "required":["DocumentClassifierArn"],
+      "members":{
+        "DocumentClassifierArn":{"shape":"DocumentClassifierArn"}
+      }
+    },
+    "DeleteDocumentClassifierResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "DeleteEntityRecognizerRequest":{
+      "type":"structure",
+      "required":["EntityRecognizerArn"],
+      "members":{
+        "EntityRecognizerArn":{"shape":"EntityRecognizerArn"}
+      }
+    },
+    "DeleteEntityRecognizerResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "DescribeDocumentClassificationJobRequest":{
+      "type":"structure",
+      "required":["JobId"],
+      "members":{
+        "JobId":{"shape":"JobId"}
+      }
+    },
+    "DescribeDocumentClassificationJobResponse":{
+      "type":"structure",
+      "members":{
+        "DocumentClassificationJobProperties":{"shape":"DocumentClassificationJobProperties"}
+      }
+    },
+    "DescribeDocumentClassifierRequest":{
+      "type":"structure",
+      "required":["DocumentClassifierArn"],
+      "members":{
+        "DocumentClassifierArn":{"shape":"DocumentClassifierArn"}
+      }
+    },
+    "DescribeDocumentClassifierResponse":{
+      "type":"structure",
+      "members":{
+        "DocumentClassifierProperties":{"shape":"DocumentClassifierProperties"}
+      }
     },
     "DescribeDominantLanguageDetectionJobRequest":{
       "type":"structure",
@@ -636,6 +935,19 @@
       "type":"structure",
       "members":{
         "EntitiesDetectionJobProperties":{"shape":"EntitiesDetectionJobProperties"}
+      }
+    },
+    "DescribeEntityRecognizerRequest":{
+      "type":"structure",
+      "required":["EntityRecognizerArn"],
+      "members":{
+        "EntityRecognizerArn":{"shape":"EntityRecognizerArn"}
+      }
+    },
+    "DescribeEntityRecognizerResponse":{
+      "type":"structure",
+      "members":{
+        "EntityRecognizerProperties":{"shape":"EntityRecognizerProperties"}
       }
     },
     "DescribeKeyPhrasesDetectionJobRequest":{
@@ -759,6 +1071,74 @@
         "SyntaxTokens":{"shape":"ListOfSyntaxTokens"}
       }
     },
+    "DocumentClassificationJobFilter":{
+      "type":"structure",
+      "members":{
+        "JobName":{"shape":"JobName"},
+        "JobStatus":{"shape":"JobStatus"},
+        "SubmitTimeBefore":{"shape":"Timestamp"},
+        "SubmitTimeAfter":{"shape":"Timestamp"}
+      }
+    },
+    "DocumentClassificationJobProperties":{
+      "type":"structure",
+      "members":{
+        "JobId":{"shape":"JobId"},
+        "JobName":{"shape":"JobName"},
+        "JobStatus":{"shape":"JobStatus"},
+        "Message":{"shape":"AnyLengthString"},
+        "SubmitTime":{"shape":"Timestamp"},
+        "EndTime":{"shape":"Timestamp"},
+        "DocumentClassifierArn":{"shape":"DocumentClassifierArn"},
+        "InputDataConfig":{"shape":"InputDataConfig"},
+        "OutputDataConfig":{"shape":"OutputDataConfig"},
+        "DataAccessRoleArn":{"shape":"IamRoleArn"}
+      }
+    },
+    "DocumentClassificationJobPropertiesList":{
+      "type":"list",
+      "member":{"shape":"DocumentClassificationJobProperties"}
+    },
+    "DocumentClassifierArn":{
+      "type":"string",
+      "max":256,
+      "pattern":"arn:aws:comprehend:[a-zA-Z0-9-]*:[0-9]{12}:document-classifier/[a-zA-Z0-9](-*[a-zA-Z0-9])*"
+    },
+    "DocumentClassifierFilter":{
+      "type":"structure",
+      "members":{
+        "Status":{"shape":"ModelStatus"},
+        "SubmitTimeBefore":{"shape":"Timestamp"},
+        "SubmitTimeAfter":{"shape":"Timestamp"}
+      }
+    },
+    "DocumentClassifierInputDataConfig":{
+      "type":"structure",
+      "required":["S3Uri"],
+      "members":{
+        "S3Uri":{"shape":"S3Uri"}
+      }
+    },
+    "DocumentClassifierProperties":{
+      "type":"structure",
+      "members":{
+        "DocumentClassifierArn":{"shape":"DocumentClassifierArn"},
+        "LanguageCode":{"shape":"LanguageCode"},
+        "Status":{"shape":"ModelStatus"},
+        "Message":{"shape":"AnyLengthString"},
+        "SubmitTime":{"shape":"Timestamp"},
+        "EndTime":{"shape":"Timestamp"},
+        "TrainingStartTime":{"shape":"Timestamp"},
+        "TrainingEndTime":{"shape":"Timestamp"},
+        "InputDataConfig":{"shape":"DocumentClassifierInputDataConfig"},
+        "ClassifierMetadata":{"shape":"ClassifierMetadata"},
+        "DataAccessRoleArn":{"shape":"IamRoleArn"}
+      }
+    },
+    "DocumentClassifierPropertiesList":{
+      "type":"list",
+      "member":{"shape":"DocumentClassifierProperties"}
+    },
     "DominantLanguage":{
       "type":"structure",
       "members":{
@@ -793,6 +1173,7 @@
       "type":"list",
       "member":{"shape":"DominantLanguageDetectionJobProperties"}
     },
+    "Double":{"type":"double"},
     "EntitiesDetectionJobFilter":{
       "type":"structure",
       "members":{
@@ -811,6 +1192,7 @@
         "Message":{"shape":"AnyLengthString"},
         "SubmitTime":{"shape":"Timestamp"},
         "EndTime":{"shape":"Timestamp"},
+        "EntityRecognizerArn":{"shape":"EntityRecognizerArn"},
         "InputDataConfig":{"shape":"InputDataConfig"},
         "OutputDataConfig":{"shape":"OutputDataConfig"},
         "LanguageCode":{"shape":"LanguageCode"},
@@ -831,6 +1213,100 @@
         "EndOffset":{"shape":"Integer"}
       }
     },
+    "EntityRecognizerAnnotations":{
+      "type":"structure",
+      "required":["S3Uri"],
+      "members":{
+        "S3Uri":{"shape":"S3Uri"}
+      }
+    },
+    "EntityRecognizerArn":{
+      "type":"string",
+      "max":256,
+      "pattern":"arn:aws:comprehend:[a-zA-Z0-9-]*:[0-9]{12}:entity-recognizer/[a-zA-Z0-9](-*[a-zA-Z0-9])*"
+    },
+    "EntityRecognizerDocuments":{
+      "type":"structure",
+      "required":["S3Uri"],
+      "members":{
+        "S3Uri":{"shape":"S3Uri"}
+      }
+    },
+    "EntityRecognizerEntityList":{
+      "type":"structure",
+      "required":["S3Uri"],
+      "members":{
+        "S3Uri":{"shape":"S3Uri"}
+      }
+    },
+    "EntityRecognizerEvaluationMetrics":{
+      "type":"structure",
+      "members":{
+        "Precision":{"shape":"Double"},
+        "Recall":{"shape":"Double"},
+        "F1Score":{"shape":"Double"}
+      }
+    },
+    "EntityRecognizerFilter":{
+      "type":"structure",
+      "members":{
+        "Status":{"shape":"ModelStatus"},
+        "SubmitTimeBefore":{"shape":"Timestamp"},
+        "SubmitTimeAfter":{"shape":"Timestamp"}
+      }
+    },
+    "EntityRecognizerInputDataConfig":{
+      "type":"structure",
+      "required":[
+        "EntityTypes",
+        "Documents"
+      ],
+      "members":{
+        "EntityTypes":{"shape":"EntityTypesList"},
+        "Documents":{"shape":"EntityRecognizerDocuments"},
+        "Annotations":{"shape":"EntityRecognizerAnnotations"},
+        "EntityList":{"shape":"EntityRecognizerEntityList"}
+      }
+    },
+    "EntityRecognizerMetadata":{
+      "type":"structure",
+      "members":{
+        "NumberOfTrainedDocuments":{"shape":"Integer"},
+        "NumberOfTestDocuments":{"shape":"Integer"},
+        "EvaluationMetrics":{"shape":"EntityRecognizerEvaluationMetrics"},
+        "EntityTypes":{"shape":"EntityRecognizerMetadataEntityTypesList"}
+      }
+    },
+    "EntityRecognizerMetadataEntityTypesList":{
+      "type":"list",
+      "member":{"shape":"EntityRecognizerMetadataEntityTypesListItem"}
+    },
+    "EntityRecognizerMetadataEntityTypesListItem":{
+      "type":"structure",
+      "members":{
+        "Type":{"shape":"AnyLengthString"}
+      }
+    },
+    "EntityRecognizerProperties":{
+      "type":"structure",
+      "members":{
+        "EntityRecognizerArn":{"shape":"EntityRecognizerArn"},
+        "LanguageCode":{"shape":"LanguageCode"},
+        "Status":{"shape":"ModelStatus"},
+        "Message":{"shape":"AnyLengthString"},
+        "SubmitTime":{"shape":"Timestamp"},
+        "EndTime":{"shape":"Timestamp"},
+        "TrainingStartTime":{"shape":"Timestamp"},
+        "TrainingEndTime":{"shape":"Timestamp"},
+        "InputDataConfig":{"shape":"EntityRecognizerInputDataConfig"},
+        "RecognizerMetadata":{"shape":"EntityRecognizerMetadata"},
+        "DataAccessRoleArn":{"shape":"IamRoleArn"}
+      }
+    },
+    "EntityRecognizerPropertiesList":{
+      "type":"list",
+      "member":{"shape":"EntityRecognizerProperties"}
+    },
     "EntityType":{
       "type":"string",
       "enum":[
@@ -845,9 +1321,27 @@
         "OTHER"
       ]
     },
+    "EntityTypeName":{
+      "type":"string",
+      "max":64,
+      "pattern":"[_A-Z0-9]+"
+    },
+    "EntityTypesList":{
+      "type":"list",
+      "member":{"shape":"EntityTypesListItem"}
+    },
+    "EntityTypesListItem":{
+      "type":"structure",
+      "required":["Type"],
+      "members":{
+        "Type":{"shape":"EntityTypeName"}
+      }
+    },
     "Float":{"type":"float"},
     "IamRoleArn":{
       "type":"string",
+      "max":2048,
+      "min":20,
       "pattern":"arn:aws(-[^:]+)?:iam::[0-9]{12}:role/.+"
     },
     "InputDataConfig":{
@@ -891,7 +1385,8 @@
     "JobId":{
       "type":"string",
       "max":32,
-      "min":1
+      "min":1,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-%@]*)$"
     },
     "JobName":{
       "type":"string",
@@ -958,8 +1453,42 @@
       "type":"string",
       "enum":[
         "en",
-        "es"
+        "es",
+        "fr",
+        "de",
+        "it",
+        "pt"
       ]
+    },
+    "ListDocumentClassificationJobsRequest":{
+      "type":"structure",
+      "members":{
+        "Filter":{"shape":"DocumentClassificationJobFilter"},
+        "NextToken":{"shape":"String"},
+        "MaxResults":{"shape":"MaxResultsInteger"}
+      }
+    },
+    "ListDocumentClassificationJobsResponse":{
+      "type":"structure",
+      "members":{
+        "DocumentClassificationJobPropertiesList":{"shape":"DocumentClassificationJobPropertiesList"},
+        "NextToken":{"shape":"String"}
+      }
+    },
+    "ListDocumentClassifiersRequest":{
+      "type":"structure",
+      "members":{
+        "Filter":{"shape":"DocumentClassifierFilter"},
+        "NextToken":{"shape":"String"},
+        "MaxResults":{"shape":"MaxResultsInteger"}
+      }
+    },
+    "ListDocumentClassifiersResponse":{
+      "type":"structure",
+      "members":{
+        "DocumentClassifierPropertiesList":{"shape":"DocumentClassifierPropertiesList"},
+        "NextToken":{"shape":"String"}
+      }
     },
     "ListDominantLanguageDetectionJobsRequest":{
       "type":"structure",
@@ -988,6 +1517,21 @@
       "type":"structure",
       "members":{
         "EntitiesDetectionJobPropertiesList":{"shape":"EntitiesDetectionJobPropertiesList"},
+        "NextToken":{"shape":"String"}
+      }
+    },
+    "ListEntityRecognizersRequest":{
+      "type":"structure",
+      "members":{
+        "Filter":{"shape":"EntityRecognizerFilter"},
+        "NextToken":{"shape":"String"},
+        "MaxResults":{"shape":"MaxResultsInteger"}
+      }
+    },
+    "ListEntityRecognizersResponse":{
+      "type":"structure",
+      "members":{
+        "EntityRecognizerPropertiesList":{"shape":"EntityRecognizerPropertiesList"},
         "NextToken":{"shape":"String"}
       }
     },
@@ -1077,6 +1621,16 @@
       "max":500,
       "min":1
     },
+    "ModelStatus":{
+      "type":"string",
+      "enum":[
+        "SUBMITTED",
+        "TRAINING",
+        "DELETING",
+        "IN_ERROR",
+        "TRAINED"
+      ]
+    },
     "NumberOfTopicsInteger":{
       "type":"integer",
       "max":100,
@@ -1104,6 +1658,7 @@
         "ADV",
         "AUX",
         "CONJ",
+        "CCONJ",
         "DET",
         "INTJ",
         "NOUN",
@@ -1117,6 +1672,34 @@
         "SYM",
         "VERB"
       ]
+    },
+    "ResourceInUseException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
+    },
+    "ResourceLimitExceededException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
+    },
+    "ResourceNotFoundException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
+    },
+    "ResourceUnavailableException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
     },
     "S3Uri":{
       "type":"string",
@@ -1169,6 +1752,33 @@
         "MIXED"
       ]
     },
+    "StartDocumentClassificationJobRequest":{
+      "type":"structure",
+      "required":[
+        "DocumentClassifierArn",
+        "InputDataConfig",
+        "OutputDataConfig",
+        "DataAccessRoleArn"
+      ],
+      "members":{
+        "JobName":{"shape":"JobName"},
+        "DocumentClassifierArn":{"shape":"DocumentClassifierArn"},
+        "InputDataConfig":{"shape":"InputDataConfig"},
+        "OutputDataConfig":{"shape":"OutputDataConfig"},
+        "DataAccessRoleArn":{"shape":"IamRoleArn"},
+        "ClientRequestToken":{
+          "shape":"ClientRequestTokenString",
+          "idempotencyToken":true
+        }
+      }
+    },
+    "StartDocumentClassificationJobResponse":{
+      "type":"structure",
+      "members":{
+        "JobId":{"shape":"JobId"},
+        "JobStatus":{"shape":"JobStatus"}
+      }
+    },
     "StartDominantLanguageDetectionJobRequest":{
       "type":"structure",
       "required":[
@@ -1207,6 +1817,7 @@
         "OutputDataConfig":{"shape":"OutputDataConfig"},
         "DataAccessRoleArn":{"shape":"IamRoleArn"},
         "JobName":{"shape":"JobName"},
+        "EntityRecognizerArn":{"shape":"EntityRecognizerArn"},
         "LanguageCode":{"shape":"LanguageCode"},
         "ClientRequestToken":{
           "shape":"ClientRequestTokenString",
@@ -1367,7 +1978,14 @@
     },
     "SyntaxLanguageCode":{
       "type":"string",
-      "enum":["en"]
+      "enum":[
+        "en",
+        "es",
+        "fr",
+        "de",
+        "it",
+        "pt"
+      ]
     },
     "SyntaxToken":{
       "type":"structure",

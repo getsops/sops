@@ -1,17 +1,34 @@
 {
   "version":"2.0",
   "metadata":{
-    "uid":"sms-2016-10-24",
     "apiVersion":"2016-10-24",
     "endpointPrefix":"sms",
     "jsonVersion":"1.1",
     "protocol":"json",
     "serviceAbbreviation":"SMS",
     "serviceFullName":"AWS Server Migration Service",
+    "serviceId":"SMS",
     "signatureVersion":"v4",
-    "targetPrefix":"AWSServerMigrationService_V2016_10_24"
+    "targetPrefix":"AWSServerMigrationService_V2016_10_24",
+    "uid":"sms-2016-10-24"
   },
   "operations":{
+    "CreateApp":{
+      "name":"CreateApp",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateAppRequest"},
+      "output":{"shape":"CreateAppResponse"},
+      "errors":[
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"MissingRequiredParameterException"},
+        {"shape":"InternalError"},
+        {"shape":"OperationNotPermittedException"}
+      ]
+    },
     "CreateReplicationJob":{
       "name":"CreateReplicationJob",
       "http":{
@@ -28,7 +45,56 @@
         {"shape":"ServerCannotBeReplicatedException"},
         {"shape":"ReplicationJobAlreadyExistsException"},
         {"shape":"NoConnectorsAvailableException"},
-        {"shape":"InternalError"}
+        {"shape":"InternalError"},
+        {"shape":"TemporarilyUnavailableException"}
+      ]
+    },
+    "DeleteApp":{
+      "name":"DeleteApp",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteAppRequest"},
+      "output":{"shape":"DeleteAppResponse"},
+      "errors":[
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"MissingRequiredParameterException"},
+        {"shape":"InternalError"},
+        {"shape":"OperationNotPermittedException"}
+      ]
+    },
+    "DeleteAppLaunchConfiguration":{
+      "name":"DeleteAppLaunchConfiguration",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteAppLaunchConfigurationRequest"},
+      "output":{"shape":"DeleteAppLaunchConfigurationResponse"},
+      "errors":[
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"MissingRequiredParameterException"},
+        {"shape":"InternalError"},
+        {"shape":"OperationNotPermittedException"}
+      ]
+    },
+    "DeleteAppReplicationConfiguration":{
+      "name":"DeleteAppReplicationConfiguration",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteAppReplicationConfigurationRequest"},
+      "output":{"shape":"DeleteAppReplicationConfigurationResponse"},
+      "errors":[
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"MissingRequiredParameterException"},
+        {"shape":"InternalError"},
+        {"shape":"OperationNotPermittedException"}
       ]
     },
     "DeleteReplicationJob":{
@@ -75,6 +141,86 @@
         {"shape":"UnauthorizedOperationException"},
         {"shape":"OperationNotPermittedException"},
         {"shape":"InvalidParameterException"}
+      ]
+    },
+    "GenerateChangeSet":{
+      "name":"GenerateChangeSet",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GenerateChangeSetRequest"},
+      "output":{"shape":"GenerateChangeSetResponse"},
+      "errors":[
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"MissingRequiredParameterException"},
+        {"shape":"InternalError"},
+        {"shape":"OperationNotPermittedException"}
+      ]
+    },
+    "GenerateTemplate":{
+      "name":"GenerateTemplate",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GenerateTemplateRequest"},
+      "output":{"shape":"GenerateTemplateResponse"},
+      "errors":[
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"MissingRequiredParameterException"},
+        {"shape":"InternalError"},
+        {"shape":"OperationNotPermittedException"}
+      ]
+    },
+    "GetApp":{
+      "name":"GetApp",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetAppRequest"},
+      "output":{"shape":"GetAppResponse"},
+      "errors":[
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"MissingRequiredParameterException"},
+        {"shape":"InternalError"},
+        {"shape":"OperationNotPermittedException"}
+      ]
+    },
+    "GetAppLaunchConfiguration":{
+      "name":"GetAppLaunchConfiguration",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetAppLaunchConfigurationRequest"},
+      "output":{"shape":"GetAppLaunchConfigurationResponse"},
+      "errors":[
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"MissingRequiredParameterException"},
+        {"shape":"InternalError"},
+        {"shape":"OperationNotPermittedException"}
+      ]
+    },
+    "GetAppReplicationConfiguration":{
+      "name":"GetAppReplicationConfiguration",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetAppReplicationConfigurationRequest"},
+      "output":{"shape":"GetAppReplicationConfigurationResponse"},
+      "errors":[
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"MissingRequiredParameterException"},
+        {"shape":"InternalError"},
+        {"shape":"OperationNotPermittedException"}
       ]
     },
     "GetConnectors":{
@@ -145,6 +291,86 @@
         {"shape":"NoConnectorsAvailableException"}
       ]
     },
+    "LaunchApp":{
+      "name":"LaunchApp",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"LaunchAppRequest"},
+      "output":{"shape":"LaunchAppResponse"},
+      "errors":[
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"MissingRequiredParameterException"},
+        {"shape":"InternalError"},
+        {"shape":"OperationNotPermittedException"}
+      ]
+    },
+    "ListApps":{
+      "name":"ListApps",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListAppsRequest"},
+      "output":{"shape":"ListAppsResponse"},
+      "errors":[
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"MissingRequiredParameterException"},
+        {"shape":"InternalError"},
+        {"shape":"OperationNotPermittedException"}
+      ]
+    },
+    "PutAppLaunchConfiguration":{
+      "name":"PutAppLaunchConfiguration",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutAppLaunchConfigurationRequest"},
+      "output":{"shape":"PutAppLaunchConfigurationResponse"},
+      "errors":[
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"MissingRequiredParameterException"},
+        {"shape":"InternalError"},
+        {"shape":"OperationNotPermittedException"}
+      ]
+    },
+    "PutAppReplicationConfiguration":{
+      "name":"PutAppReplicationConfiguration",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutAppReplicationConfigurationRequest"},
+      "output":{"shape":"PutAppReplicationConfigurationResponse"},
+      "errors":[
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"MissingRequiredParameterException"},
+        {"shape":"InternalError"},
+        {"shape":"OperationNotPermittedException"}
+      ]
+    },
+    "StartAppReplication":{
+      "name":"StartAppReplication",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StartAppReplicationRequest"},
+      "output":{"shape":"StartAppReplicationResponse"},
+      "errors":[
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"MissingRequiredParameterException"},
+        {"shape":"InternalError"},
+        {"shape":"OperationNotPermittedException"}
+      ]
+    },
     "StartOnDemandReplicationRun":{
       "name":"StartOnDemandReplicationRun",
       "http":{
@@ -159,6 +385,54 @@
         {"shape":"UnauthorizedOperationException"},
         {"shape":"OperationNotPermittedException"},
         {"shape":"ReplicationRunLimitExceededException"}
+      ]
+    },
+    "StopAppReplication":{
+      "name":"StopAppReplication",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StopAppReplicationRequest"},
+      "output":{"shape":"StopAppReplicationResponse"},
+      "errors":[
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"MissingRequiredParameterException"},
+        {"shape":"InternalError"},
+        {"shape":"OperationNotPermittedException"}
+      ]
+    },
+    "TerminateApp":{
+      "name":"TerminateApp",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TerminateAppRequest"},
+      "output":{"shape":"TerminateAppResponse"},
+      "errors":[
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"MissingRequiredParameterException"},
+        {"shape":"InternalError"},
+        {"shape":"OperationNotPermittedException"}
+      ]
+    },
+    "UpdateApp":{
+      "name":"UpdateApp",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateAppRequest"},
+      "output":{"shape":"UpdateAppResponse"},
+      "errors":[
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"MissingRequiredParameterException"},
+        {"shape":"InternalError"},
+        {"shape":"OperationNotPermittedException"}
       ]
     },
     "UpdateReplicationJob":{
@@ -176,12 +450,101 @@
         {"shape":"UnauthorizedOperationException"},
         {"shape":"ServerCannotBeReplicatedException"},
         {"shape":"ReplicationJobNotFoundException"},
-        {"shape":"InternalError"}
+        {"shape":"InternalError"},
+        {"shape":"TemporarilyUnavailableException"}
       ]
     }
   },
   "shapes":{
     "AmiId":{"type":"string"},
+    "AppDescription":{"type":"string"},
+    "AppId":{"type":"string"},
+    "AppIds":{
+      "type":"list",
+      "member":{"shape":"AppId"}
+    },
+    "AppLaunchStatus":{
+      "type":"string",
+      "enum":[
+        "READY_FOR_CONFIGURATION",
+        "CONFIGURATION_IN_PROGRESS",
+        "CONFIGURATION_INVALID",
+        "READY_FOR_LAUNCH",
+        "VALIDATION_IN_PROGRESS",
+        "LAUNCH_PENDING",
+        "LAUNCH_IN_PROGRESS",
+        "LAUNCHED",
+        "DELTA_LAUNCH_IN_PROGRESS",
+        "DELTA_LAUNCH_FAILED",
+        "LAUNCH_FAILED",
+        "TERMINATE_IN_PROGRESS",
+        "TERMINATE_FAILED",
+        "TERMINATED"
+      ]
+    },
+    "AppLaunchStatusMessage":{"type":"string"},
+    "AppName":{"type":"string"},
+    "AppReplicationStatus":{
+      "type":"string",
+      "enum":[
+        "READY_FOR_CONFIGURATION",
+        "CONFIGURATION_IN_PROGRESS",
+        "CONFIGURATION_INVALID",
+        "READY_FOR_REPLICATION",
+        "VALIDATION_IN_PROGRESS",
+        "REPLICATION_PENDING",
+        "REPLICATION_IN_PROGRESS",
+        "REPLICATED",
+        "DELTA_REPLICATION_IN_PROGRESS",
+        "DELTA_REPLICATED",
+        "DELTA_REPLICATION_FAILED",
+        "REPLICATION_FAILED",
+        "REPLICATION_STOPPING",
+        "REPLICATION_STOP_FAILED",
+        "REPLICATION_STOPPED"
+      ]
+    },
+    "AppReplicationStatusMessage":{"type":"string"},
+    "AppStatus":{
+      "type":"string",
+      "enum":[
+        "CREATING",
+        "ACTIVE",
+        "UPDATING",
+        "DELETING",
+        "DELETED",
+        "DELETE_FAILED"
+      ]
+    },
+    "AppStatusMessage":{"type":"string"},
+    "AppSummary":{
+      "type":"structure",
+      "members":{
+        "appId":{"shape":"AppId"},
+        "name":{"shape":"AppName"},
+        "description":{"shape":"AppDescription"},
+        "status":{"shape":"AppStatus"},
+        "statusMessage":{"shape":"AppStatusMessage"},
+        "replicationStatus":{"shape":"AppReplicationStatus"},
+        "replicationStatusMessage":{"shape":"AppReplicationStatusMessage"},
+        "latestReplicationTime":{"shape":"Timestamp"},
+        "launchStatus":{"shape":"AppLaunchStatus"},
+        "launchStatusMessage":{"shape":"AppLaunchStatusMessage"},
+        "launchDetails":{"shape":"LaunchDetails"},
+        "creationTime":{"shape":"Timestamp"},
+        "lastModified":{"shape":"Timestamp"},
+        "roleName":{"shape":"RoleName"},
+        "totalServerGroups":{"shape":"TotalServerGroups"},
+        "totalServers":{"shape":"TotalServers"}
+      }
+    },
+    "Apps":{
+      "type":"list",
+      "member":{"shape":"AppSummary"}
+    },
+    "AssociatePublicIpAddress":{"type":"boolean"},
+    "BucketName":{"type":"string"},
+    "ClientToken":{"type":"string"},
     "Connector":{
       "type":"structure",
       "members":{
@@ -199,22 +562,21 @@
     },
     "ConnectorCapability":{
       "type":"string",
-      "enum":["VSPHERE"]
+      "enum":[
+        "VSPHERE",
+        "SCVMM",
+        "HYPERV-MANAGER",
+        "SNAPSHOT_BATCHING"
+      ]
     },
     "ConnectorCapabilityList":{
       "type":"list",
-      "member":{
-        "shape":"ConnectorCapability",
-        "locationName":"item"
-      }
+      "member":{"shape":"ConnectorCapability"}
     },
     "ConnectorId":{"type":"string"},
     "ConnectorList":{
       "type":"list",
-      "member":{
-        "shape":"Connector",
-        "locationName":"item"
-      }
+      "member":{"shape":"Connector"}
     },
     "ConnectorStatus":{
       "type":"string",
@@ -224,26 +586,83 @@
       ]
     },
     "ConnectorVersion":{"type":"string"},
+    "CreateAppRequest":{
+      "type":"structure",
+      "members":{
+        "name":{"shape":"AppName"},
+        "description":{"shape":"AppDescription"},
+        "roleName":{"shape":"RoleName"},
+        "clientToken":{"shape":"ClientToken"},
+        "serverGroups":{"shape":"ServerGroups"},
+        "tags":{"shape":"Tags"}
+      }
+    },
+    "CreateAppResponse":{
+      "type":"structure",
+      "members":{
+        "appSummary":{"shape":"AppSummary"},
+        "serverGroups":{"shape":"ServerGroups"},
+        "tags":{"shape":"Tags"}
+      }
+    },
     "CreateReplicationJobRequest":{
       "type":"structure",
       "required":[
         "serverId",
-        "seedReplicationTime",
-        "frequency"
+        "seedReplicationTime"
       ],
       "members":{
         "serverId":{"shape":"ServerId"},
         "seedReplicationTime":{"shape":"Timestamp"},
         "frequency":{"shape":"Frequency"},
+        "runOnce":{"shape":"RunOnce"},
         "licenseType":{"shape":"LicenseType"},
         "roleName":{"shape":"RoleName"},
-        "description":{"shape":"Description"}
+        "description":{"shape":"Description"},
+        "numberOfRecentAmisToKeep":{"shape":"NumberOfRecentAmisToKeep"},
+        "encrypted":{"shape":"Encrypted"},
+        "kmsKeyId":{"shape":"KmsKeyId"}
       }
     },
     "CreateReplicationJobResponse":{
       "type":"structure",
       "members":{
         "replicationJobId":{"shape":"ReplicationJobId"}
+      }
+    },
+    "DeleteAppLaunchConfigurationRequest":{
+      "type":"structure",
+      "members":{
+        "appId":{"shape":"AppId"}
+      }
+    },
+    "DeleteAppLaunchConfigurationResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "DeleteAppReplicationConfigurationRequest":{
+      "type":"structure",
+      "members":{
+        "appId":{"shape":"AppId"}
+      }
+    },
+    "DeleteAppReplicationConfigurationResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "DeleteAppRequest":{
+      "type":"structure",
+      "members":{
+        "appId":{"shape":"AppId"},
+        "forceStopAppReplication":{"shape":"ForceStopAppReplication"},
+        "forceTerminateApp":{"shape":"ForceTerminateApp"}
+      }
+    },
+    "DeleteAppResponse":{
+      "type":"structure",
+      "members":{
       }
     },
     "DeleteReplicationJobRequest":{
@@ -281,8 +700,78 @@
       "members":{
       }
     },
+    "EC2KeyName":{"type":"string"},
+    "Encrypted":{"type":"boolean"},
     "ErrorMessage":{"type":"string"},
+    "ForceStopAppReplication":{"type":"boolean"},
+    "ForceTerminateApp":{"type":"boolean"},
     "Frequency":{"type":"integer"},
+    "GenerateChangeSetRequest":{
+      "type":"structure",
+      "members":{
+        "appId":{"shape":"AppId"},
+        "changesetFormat":{"shape":"OutputFormat"}
+      }
+    },
+    "GenerateChangeSetResponse":{
+      "type":"structure",
+      "members":{
+        "s3Location":{"shape":"S3Location"}
+      }
+    },
+    "GenerateTemplateRequest":{
+      "type":"structure",
+      "members":{
+        "appId":{"shape":"AppId"},
+        "templateFormat":{"shape":"OutputFormat"}
+      }
+    },
+    "GenerateTemplateResponse":{
+      "type":"structure",
+      "members":{
+        "s3Location":{"shape":"S3Location"}
+      }
+    },
+    "GetAppLaunchConfigurationRequest":{
+      "type":"structure",
+      "members":{
+        "appId":{"shape":"AppId"}
+      }
+    },
+    "GetAppLaunchConfigurationResponse":{
+      "type":"structure",
+      "members":{
+        "appId":{"shape":"AppId"},
+        "roleName":{"shape":"RoleName"},
+        "serverGroupLaunchConfigurations":{"shape":"ServerGroupLaunchConfigurations"}
+      }
+    },
+    "GetAppReplicationConfigurationRequest":{
+      "type":"structure",
+      "members":{
+        "appId":{"shape":"AppId"}
+      }
+    },
+    "GetAppReplicationConfigurationResponse":{
+      "type":"structure",
+      "members":{
+        "serverGroupReplicationConfigurations":{"shape":"ServerGroupReplicationConfigurations"}
+      }
+    },
+    "GetAppRequest":{
+      "type":"structure",
+      "members":{
+        "appId":{"shape":"AppId"}
+      }
+    },
+    "GetAppResponse":{
+      "type":"structure",
+      "members":{
+        "appSummary":{"shape":"AppSummary"},
+        "serverGroups":{"shape":"ServerGroups"},
+        "tags":{"shape":"Tags"}
+      }
+    },
     "GetConnectorsRequest":{
       "type":"structure",
       "members":{
@@ -333,7 +822,8 @@
       "type":"structure",
       "members":{
         "nextToken":{"shape":"NextToken"},
-        "maxResults":{"shape":"MaxResults"}
+        "maxResults":{"shape":"MaxResults"},
+        "vmServerAddressList":{"shape":"VmServerAddressList"}
       }
     },
     "GetServersResponse":{
@@ -355,6 +845,7 @@
       "members":{
       }
     },
+    "InstanceType":{"type":"string"},
     "InternalError":{
       "type":"structure",
       "members":{
@@ -371,6 +862,28 @@
       "exception":true
     },
     "IpAddress":{"type":"string"},
+    "KeyName":{"type":"string"},
+    "KmsKeyId":{"type":"string"},
+    "LaunchAppRequest":{
+      "type":"structure",
+      "members":{
+        "appId":{"shape":"AppId"}
+      }
+    },
+    "LaunchAppResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "LaunchDetails":{
+      "type":"structure",
+      "members":{
+        "latestLaunchTime":{"shape":"Timestamp"},
+        "stackName":{"shape":"StackName"},
+        "stackId":{"shape":"StackId"}
+      }
+    },
+    "LaunchOrder":{"type":"integer"},
     "LicenseType":{
       "type":"string",
       "enum":[
@@ -378,6 +891,22 @@
         "BYOL"
       ]
     },
+    "ListAppsRequest":{
+      "type":"structure",
+      "members":{
+        "appIds":{"shape":"AppIds"},
+        "nextToken":{"shape":"NextToken"},
+        "maxResults":{"shape":"MaxResults"}
+      }
+    },
+    "ListAppsResponse":{
+      "type":"structure",
+      "members":{
+        "apps":{"shape":"Apps"},
+        "nextToken":{"shape":"NextToken"}
+      }
+    },
+    "LogicalId":{"type":"string"},
     "MacAddress":{"type":"string"},
     "MaxResults":{"type":"integer"},
     "MissingRequiredParameterException":{
@@ -395,12 +924,45 @@
       },
       "exception":true
     },
+    "NumberOfRecentAmisToKeep":{"type":"integer"},
     "OperationNotPermittedException":{
       "type":"structure",
       "members":{
         "message":{"shape":"ErrorMessage"}
       },
       "exception":true
+    },
+    "OutputFormat":{
+      "type":"string",
+      "enum":[
+        "JSON",
+        "YAML"
+      ]
+    },
+    "PutAppLaunchConfigurationRequest":{
+      "type":"structure",
+      "members":{
+        "appId":{"shape":"AppId"},
+        "roleName":{"shape":"RoleName"},
+        "serverGroupLaunchConfigurations":{"shape":"ServerGroupLaunchConfigurations"}
+      }
+    },
+    "PutAppLaunchConfigurationResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "PutAppReplicationConfigurationRequest":{
+      "type":"structure",
+      "members":{
+        "appId":{"shape":"AppId"},
+        "serverGroupReplicationConfigurations":{"shape":"ServerGroupReplicationConfigurations"}
+      }
+    },
+    "PutAppReplicationConfigurationResponse":{
+      "type":"structure",
+      "members":{
+      }
     },
     "ReplicationJob":{
       "type":"structure",
@@ -411,6 +973,7 @@
         "vmServer":{"shape":"VmServer"},
         "seedReplicationTime":{"shape":"Timestamp"},
         "frequency":{"shape":"Frequency"},
+        "runOnce":{"shape":"RunOnce"},
         "nextReplicationRunStartTime":{"shape":"Timestamp"},
         "licenseType":{"shape":"LicenseType"},
         "roleName":{"shape":"RoleName"},
@@ -418,6 +981,9 @@
         "state":{"shape":"ReplicationJobState"},
         "statusMessage":{"shape":"ReplicationJobStatusMessage"},
         "description":{"shape":"Description"},
+        "numberOfRecentAmisToKeep":{"shape":"NumberOfRecentAmisToKeep"},
+        "encrypted":{"shape":"Encrypted"},
+        "kmsKeyId":{"shape":"KmsKeyId"},
         "replicationRunList":{"shape":"ReplicationRunList"}
       }
     },
@@ -431,10 +997,7 @@
     "ReplicationJobId":{"type":"string"},
     "ReplicationJobList":{
       "type":"list",
-      "member":{
-        "shape":"ReplicationJob",
-        "locationName":"item"
-      }
+      "member":{"shape":"ReplicationJob"}
     },
     "ReplicationJobNotFoundException":{
       "type":"structure",
@@ -450,7 +1013,10 @@
         "ACTIVE",
         "FAILED",
         "DELETING",
-        "DELETED"
+        "DELETED",
+        "COMPLETED",
+        "PAUSED_ON_FAILURE",
+        "FAILING"
       ]
     },
     "ReplicationJobStatusMessage":{"type":"string"},
@@ -461,11 +1027,14 @@
         "replicationRunId":{"shape":"ReplicationRunId"},
         "state":{"shape":"ReplicationRunState"},
         "type":{"shape":"ReplicationRunType"},
+        "stageDetails":{"shape":"ReplicationRunStageDetails"},
         "statusMessage":{"shape":"ReplicationRunStatusMessage"},
         "amiId":{"shape":"AmiId"},
         "scheduledStartTime":{"shape":"Timestamp"},
         "completedTime":{"shape":"Timestamp"},
-        "description":{"shape":"Description"}
+        "description":{"shape":"Description"},
+        "encrypted":{"shape":"Encrypted"},
+        "kmsKeyId":{"shape":"KmsKeyId"}
       }
     },
     "ReplicationRunId":{"type":"string"},
@@ -478,11 +1047,17 @@
     },
     "ReplicationRunList":{
       "type":"list",
-      "member":{
-        "shape":"ReplicationRun",
-        "locationName":"item"
+      "member":{"shape":"ReplicationRun"}
+    },
+    "ReplicationRunStage":{"type":"string"},
+    "ReplicationRunStageDetails":{
+      "type":"structure",
+      "members":{
+        "stage":{"shape":"ReplicationRunStage"},
+        "stageProgress":{"shape":"ReplicationRunStageProgress"}
       }
     },
+    "ReplicationRunStageProgress":{"type":"string"},
     "ReplicationRunState":{
       "type":"string",
       "enum":[
@@ -504,6 +1079,15 @@
       ]
     },
     "RoleName":{"type":"string"},
+    "RunOnce":{"type":"boolean"},
+    "S3Location":{
+      "type":"structure",
+      "members":{
+        "bucket":{"shape":"BucketName"},
+        "key":{"shape":"KeyName"}
+      }
+    },
+    "SecurityGroup":{"type":"string"},
     "Server":{
       "type":"structure",
       "members":{
@@ -531,17 +1115,105 @@
         "EXPIRED"
       ]
     },
+    "ServerGroup":{
+      "type":"structure",
+      "members":{
+        "serverGroupId":{"shape":"ServerGroupId"},
+        "name":{"shape":"ServerGroupName"},
+        "serverList":{"shape":"ServerList"}
+      }
+    },
+    "ServerGroupId":{"type":"string"},
+    "ServerGroupLaunchConfiguration":{
+      "type":"structure",
+      "members":{
+        "serverGroupId":{"shape":"ServerGroupId"},
+        "launchOrder":{"shape":"LaunchOrder"},
+        "serverLaunchConfigurations":{"shape":"ServerLaunchConfigurations"}
+      }
+    },
+    "ServerGroupLaunchConfigurations":{
+      "type":"list",
+      "member":{"shape":"ServerGroupLaunchConfiguration"}
+    },
+    "ServerGroupName":{"type":"string"},
+    "ServerGroupReplicationConfiguration":{
+      "type":"structure",
+      "members":{
+        "serverGroupId":{"shape":"ServerGroupId"},
+        "serverReplicationConfigurations":{"shape":"ServerReplicationConfigurations"}
+      }
+    },
+    "ServerGroupReplicationConfigurations":{
+      "type":"list",
+      "member":{"shape":"ServerGroupReplicationConfiguration"}
+    },
+    "ServerGroups":{
+      "type":"list",
+      "member":{"shape":"ServerGroup"}
+    },
     "ServerId":{"type":"string"},
+    "ServerLaunchConfiguration":{
+      "type":"structure",
+      "members":{
+        "server":{"shape":"Server"},
+        "logicalId":{"shape":"LogicalId"},
+        "vpc":{"shape":"VPC"},
+        "subnet":{"shape":"Subnet"},
+        "securityGroup":{"shape":"SecurityGroup"},
+        "ec2KeyName":{"shape":"EC2KeyName"},
+        "userData":{"shape":"UserData"},
+        "instanceType":{"shape":"InstanceType"},
+        "associatePublicIpAddress":{"shape":"AssociatePublicIpAddress"}
+      }
+    },
+    "ServerLaunchConfigurations":{
+      "type":"list",
+      "member":{"shape":"ServerLaunchConfiguration"}
+    },
     "ServerList":{
       "type":"list",
-      "member":{
-        "shape":"Server",
-        "locationName":"item"
+      "member":{"shape":"Server"}
+    },
+    "ServerReplicationConfiguration":{
+      "type":"structure",
+      "members":{
+        "server":{"shape":"Server"},
+        "serverReplicationParameters":{"shape":"ServerReplicationParameters"}
+      }
+    },
+    "ServerReplicationConfigurations":{
+      "type":"list",
+      "member":{"shape":"ServerReplicationConfiguration"}
+    },
+    "ServerReplicationParameters":{
+      "type":"structure",
+      "members":{
+        "seedTime":{"shape":"Timestamp"},
+        "frequency":{"shape":"Frequency"},
+        "runOnce":{"shape":"RunOnce"},
+        "licenseType":{"shape":"LicenseType"},
+        "numberOfRecentAmisToKeep":{"shape":"NumberOfRecentAmisToKeep"},
+        "encrypted":{"shape":"Encrypted"},
+        "kmsKeyId":{"shape":"KmsKeyId"}
       }
     },
     "ServerType":{
       "type":"string",
       "enum":["VIRTUAL_MACHINE"]
+    },
+    "StackId":{"type":"string"},
+    "StackName":{"type":"string"},
+    "StartAppReplicationRequest":{
+      "type":"structure",
+      "members":{
+        "appId":{"shape":"AppId"}
+      }
+    },
+    "StartAppReplicationResponse":{
+      "type":"structure",
+      "members":{
+      }
     },
     "StartOnDemandReplicationRunRequest":{
       "type":"structure",
@@ -557,13 +1229,77 @@
         "replicationRunId":{"shape":"ReplicationRunId"}
       }
     },
+    "StopAppReplicationRequest":{
+      "type":"structure",
+      "members":{
+        "appId":{"shape":"AppId"}
+      }
+    },
+    "StopAppReplicationResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "Subnet":{"type":"string"},
+    "Tag":{
+      "type":"structure",
+      "members":{
+        "key":{"shape":"TagKey"},
+        "value":{"shape":"TagValue"}
+      }
+    },
+    "TagKey":{"type":"string"},
+    "TagValue":{"type":"string"},
+    "Tags":{
+      "type":"list",
+      "member":{"shape":"Tag"}
+    },
+    "TemporarilyUnavailableException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true,
+      "fault":true
+    },
+    "TerminateAppRequest":{
+      "type":"structure",
+      "members":{
+        "appId":{"shape":"AppId"}
+      }
+    },
+    "TerminateAppResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "Timestamp":{"type":"timestamp"},
+    "TotalServerGroups":{"type":"integer"},
+    "TotalServers":{"type":"integer"},
     "UnauthorizedOperationException":{
       "type":"structure",
       "members":{
         "message":{"shape":"ErrorMessage"}
       },
       "exception":true
+    },
+    "UpdateAppRequest":{
+      "type":"structure",
+      "members":{
+        "appId":{"shape":"AppId"},
+        "name":{"shape":"AppName"},
+        "description":{"shape":"AppDescription"},
+        "roleName":{"shape":"RoleName"},
+        "serverGroups":{"shape":"ServerGroups"},
+        "tags":{"shape":"Tags"}
+      }
+    },
+    "UpdateAppResponse":{
+      "type":"structure",
+      "members":{
+        "appSummary":{"shape":"AppSummary"},
+        "serverGroups":{"shape":"ServerGroups"},
+        "tags":{"shape":"Tags"}
+      }
     },
     "UpdateReplicationJobRequest":{
       "type":"structure",
@@ -574,7 +1310,10 @@
         "nextReplicationRunStartTime":{"shape":"Timestamp"},
         "licenseType":{"shape":"LicenseType"},
         "roleName":{"shape":"RoleName"},
-        "description":{"shape":"Description"}
+        "description":{"shape":"Description"},
+        "numberOfRecentAmisToKeep":{"shape":"NumberOfRecentAmisToKeep"},
+        "encrypted":{"shape":"Encrypted"},
+        "kmsKeyId":{"shape":"KmsKeyId"}
       }
     },
     "UpdateReplicationJobResponse":{
@@ -582,12 +1321,23 @@
       "members":{
       }
     },
+    "UserData":{
+      "type":"structure",
+      "members":{
+        "s3Location":{"shape":"S3Location"}
+      }
+    },
+    "VPC":{"type":"string"},
     "VmId":{"type":"string"},
     "VmManagerId":{"type":"string"},
     "VmManagerName":{"type":"string"},
     "VmManagerType":{
       "type":"string",
-      "enum":["VSPHERE"]
+      "enum":[
+        "VSPHERE",
+        "SCVMM",
+        "HYPERV-MANAGER"
+      ]
     },
     "VmName":{"type":"string"},
     "VmPath":{"type":"string"},
@@ -607,6 +1357,10 @@
         "vmManagerId":{"shape":"VmManagerId"},
         "vmId":{"shape":"VmId"}
       }
+    },
+    "VmServerAddressList":{
+      "type":"list",
+      "member":{"shape":"VmServerAddress"}
     }
   }
 }

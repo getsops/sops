@@ -16,7 +16,7 @@ const opCreateLifecyclePolicy = "CreateLifecyclePolicy"
 // CreateLifecyclePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the CreateLifecyclePolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -102,7 +102,7 @@ const opDeleteLifecyclePolicy = "DeleteLifecyclePolicy"
 // DeleteLifecyclePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteLifecyclePolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -188,7 +188,7 @@ const opGetLifecyclePolicies = "GetLifecyclePolicies"
 // GetLifecyclePoliciesRequest generates a "aws/request.Request" representing the
 // client's request for the GetLifecyclePolicies operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -278,7 +278,7 @@ const opGetLifecyclePolicy = "GetLifecyclePolicy"
 // GetLifecyclePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the GetLifecyclePolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -363,7 +363,7 @@ const opUpdateLifecyclePolicy = "UpdateLifecyclePolicy"
 // UpdateLifecyclePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateLifecyclePolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -650,6 +650,9 @@ func (s *DeleteLifecyclePolicyInput) Validate() error {
 	if s.PolicyId == nil {
 		invalidParams.Add(request.NewErrParamRequired("PolicyId"))
 	}
+	if s.PolicyId != nil && len(*s.PolicyId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PolicyId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -806,6 +809,9 @@ func (s *GetLifecyclePolicyInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetLifecyclePolicyInput"}
 	if s.PolicyId == nil {
 		invalidParams.Add(request.NewErrParamRequired("PolicyId"))
+	}
+	if s.PolicyId != nil && len(*s.PolicyId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PolicyId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1091,6 +1097,8 @@ func (s *RetainRule) SetCount(v int64) *RetainRule {
 type Schedule struct {
 	_ struct{} `type:"structure"`
 
+	CopyTags *bool `type:"boolean"`
+
 	// The create rule.
 	CreateRule *CreateRule `type:"structure"`
 
@@ -1143,6 +1151,12 @@ func (s *Schedule) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetCopyTags sets the CopyTags field's value.
+func (s *Schedule) SetCopyTags(v bool) *Schedule {
+	s.CopyTags = &v
+	return s
 }
 
 // SetCreateRule sets the CreateRule field's value.
@@ -1261,6 +1275,9 @@ func (s *UpdateLifecyclePolicyInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateLifecyclePolicyInput"}
 	if s.PolicyId == nil {
 		invalidParams.Add(request.NewErrParamRequired("PolicyId"))
+	}
+	if s.PolicyId != nil && len(*s.PolicyId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PolicyId", 1))
 	}
 	if s.PolicyDetails != nil {
 		if err := s.PolicyDetails.Validate(); err != nil {

@@ -15,7 +15,7 @@ const opBatchUpdateSchedule = "BatchUpdateSchedule"
 // BatchUpdateScheduleRequest generates a "aws/request.Request" representing the
 // client's request for the BatchUpdateSchedule operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -107,7 +107,7 @@ const opCreateChannel = "CreateChannel"
 // CreateChannelRequest generates a "aws/request.Request" representing the
 // client's request for the CreateChannel operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -199,7 +199,7 @@ const opCreateInput = "CreateInput"
 // CreateInputRequest generates a "aws/request.Request" representing the
 // client's request for the CreateInput operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -287,7 +287,7 @@ const opCreateInputSecurityGroup = "CreateInputSecurityGroup"
 // CreateInputSecurityGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateInputSecurityGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -375,7 +375,7 @@ const opDeleteChannel = "DeleteChannel"
 // DeleteChannelRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteChannel operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -467,7 +467,7 @@ const opDeleteInput = "DeleteInput"
 // DeleteInputRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteInput operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -559,7 +559,7 @@ const opDeleteInputSecurityGroup = "DeleteInputSecurityGroup"
 // DeleteInputSecurityGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteInputSecurityGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -649,7 +649,7 @@ const opDeleteReservation = "DeleteReservation"
 // DeleteReservationRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteReservation operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -741,7 +741,7 @@ const opDescribeChannel = "DescribeChannel"
 // DescribeChannelRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeChannel operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -831,7 +831,7 @@ const opDescribeInput = "DescribeInput"
 // DescribeInputRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeInput operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -921,7 +921,7 @@ const opDescribeInputSecurityGroup = "DescribeInputSecurityGroup"
 // DescribeInputSecurityGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeInputSecurityGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1011,7 +1011,7 @@ const opDescribeOffering = "DescribeOffering"
 // DescribeOfferingRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeOffering operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1101,7 +1101,7 @@ const opDescribeReservation = "DescribeReservation"
 // DescribeReservationRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeReservation operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1191,7 +1191,7 @@ const opDescribeSchedule = "DescribeSchedule"
 // DescribeScheduleRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeSchedule operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1337,7 +1337,7 @@ const opListChannels = "ListChannels"
 // ListChannelsRequest generates a "aws/request.Request" representing the
 // client's request for the ListChannels operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1481,7 +1481,7 @@ const opListInputSecurityGroups = "ListInputSecurityGroups"
 // ListInputSecurityGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the ListInputSecurityGroups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1625,7 +1625,7 @@ const opListInputs = "ListInputs"
 // ListInputsRequest generates a "aws/request.Request" representing the
 // client's request for the ListInputs operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1769,7 +1769,7 @@ const opListOfferings = "ListOfferings"
 // ListOfferingsRequest generates a "aws/request.Request" representing the
 // client's request for the ListOfferings operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1913,7 +1913,7 @@ const opListReservations = "ListReservations"
 // ListReservationsRequest generates a "aws/request.Request" representing the
 // client's request for the ListReservations operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2057,7 +2057,7 @@ const opPurchaseOffering = "PurchaseOffering"
 // PurchaseOfferingRequest generates a "aws/request.Request" representing the
 // client's request for the PurchaseOffering operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2149,7 +2149,7 @@ const opStartChannel = "StartChannel"
 // StartChannelRequest generates a "aws/request.Request" representing the
 // client's request for the StartChannel operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2241,7 +2241,7 @@ const opStopChannel = "StopChannel"
 // StopChannelRequest generates a "aws/request.Request" representing the
 // client's request for the StopChannel operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2333,7 +2333,7 @@ const opUpdateChannel = "UpdateChannel"
 // UpdateChannelRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateChannel operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2423,7 +2423,7 @@ const opUpdateInput = "UpdateInput"
 // UpdateInputRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateInput operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2513,7 +2513,7 @@ const opUpdateInputSecurityGroup = "UpdateInputSecurityGroup"
 // UpdateInputSecurityGroupRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateInputSecurityGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3485,7 +3485,7 @@ type AudioSelector struct {
 	// identify this Selector. Selector names should be unique per input.
 	//
 	// Name is a required field
-	Name *string `locationName:"name" type:"string" required:"true"`
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
 	// The audio selector settings.
 	SelectorSettings *AudioSelectorSettings `locationName:"selectorSettings" type:"structure"`
@@ -3506,6 +3506,9 @@ func (s *AudioSelector) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "AudioSelector"}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
 	if s.SelectorSettings != nil {
 		if err := s.SelectorSettings.Validate(); err != nil {
@@ -3718,7 +3721,8 @@ func (s *AvailSettings) SetScte35TimeSignalApos(v *Scte35TimeSignalApos) *AvailS
 	return s
 }
 
-// A list of schedule actions to create.
+// A list of schedule actions to create (in a request) or that have been created
+// (in a response).
 type BatchScheduleActionCreateRequest struct {
 	_ struct{} `type:"structure"`
 
@@ -3767,11 +3771,11 @@ func (s *BatchScheduleActionCreateRequest) SetScheduleActions(v []*ScheduleActio
 	return s
 }
 
-// Returned list of created schedule actions.
+// List of actions that have been created in the schedule.
 type BatchScheduleActionCreateResult struct {
 	_ struct{} `type:"structure"`
 
-	// Returned list of created schedule actions.
+	// List of actions that have been created in the schedule.
 	//
 	// ScheduleActions is a required field
 	ScheduleActions []*ScheduleAction `locationName:"scheduleActions" type:"list" required:"true"`
@@ -3797,7 +3801,7 @@ func (s *BatchScheduleActionCreateResult) SetScheduleActions(v []*ScheduleAction
 type BatchScheduleActionDeleteRequest struct {
 	_ struct{} `type:"structure"`
 
-	// A list of schedule actions to delete, identified by unique name.
+	// A list of schedule actions to delete.
 	//
 	// ActionNames is a required field
 	ActionNames []*string `locationName:"actionNames" type:"list" required:"true"`
@@ -3832,11 +3836,11 @@ func (s *BatchScheduleActionDeleteRequest) SetActionNames(v []*string) *BatchSch
 	return s
 }
 
-// Returned list of deleted schedule actions.
+// List of actions that have been deleted from the schedule.
 type BatchScheduleActionDeleteResult struct {
 	_ struct{} `type:"structure"`
 
-	// Returned list of deleted schedule actions.
+	// List of actions that have been deleted from the schedule.
 	//
 	// ScheduleActions is a required field
 	ScheduleActions []*ScheduleAction `locationName:"scheduleActions" type:"list" required:"true"`
@@ -3858,7 +3862,8 @@ func (s *BatchScheduleActionDeleteResult) SetScheduleActions(v []*ScheduleAction
 	return s
 }
 
-// A schedule update, including actions to insert, and action names to delete.
+// A request to create actions (add actions to the schedule), delete actions
+// (remove actions from the schedule), or both create and delete actions.
 type BatchUpdateScheduleInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3887,6 +3892,9 @@ func (s *BatchUpdateScheduleInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "BatchUpdateScheduleInput"}
 	if s.ChannelId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ChannelId"))
+	}
+	if s.ChannelId != nil && len(*s.ChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelId", 1))
 	}
 	if s.Creates != nil {
 		if err := s.Creates.Validate(); err != nil {
@@ -3926,10 +3934,10 @@ func (s *BatchUpdateScheduleInput) SetDeletes(v *BatchScheduleActionDeleteReques
 type BatchUpdateScheduleOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Returned list of created schedule actions.
+	// List of actions that have been created in the schedule.
 	Creates *BatchScheduleActionCreateResult `locationName:"creates" type:"structure"`
 
-	// Returned list of deleted schedule actions.
+	// List of actions that have been deleted from the schedule.
 	Deletes *BatchScheduleActionDeleteResult `locationName:"deletes" type:"structure"`
 }
 
@@ -4584,7 +4592,7 @@ type CaptionSelector struct {
 	// within an event.
 	//
 	// Name is a required field
-	Name *string `locationName:"name" type:"string" required:"true"`
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
 	// Caption selector settings.
 	SelectorSettings *CaptionSelectorSettings `locationName:"selectorSettings" type:"structure"`
@@ -4605,6 +4613,9 @@ func (s *CaptionSelector) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CaptionSelector"}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
 	if s.SelectorSettings != nil {
 		if err := s.SelectorSettings.Validate(); err != nil {
@@ -4996,6 +5007,7 @@ type CreateChannelInput struct {
 
 	InputSpecification *InputSpecification `locationName:"inputSpecification" type:"structure"`
 
+	// The log level the user wants for their channel.
 	LogLevel *string `locationName:"logLevel" type:"string" enum:"LogLevel"`
 
 	Name *string `locationName:"name" type:"string"`
@@ -5270,6 +5282,9 @@ func (s *DeleteChannelInput) Validate() error {
 	if s.ChannelId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ChannelId"))
 	}
+	if s.ChannelId != nil && len(*s.ChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -5300,6 +5315,7 @@ type DeleteChannelOutput struct {
 
 	InputSpecification *InputSpecification `locationName:"inputSpecification" type:"structure"`
 
+	// The log level the user wants for their channel.
 	LogLevel *string `locationName:"logLevel" type:"string" enum:"LogLevel"`
 
 	Name *string `locationName:"name" type:"string"`
@@ -5416,6 +5432,9 @@ func (s *DeleteInputInput) Validate() error {
 	if s.InputId == nil {
 		invalidParams.Add(request.NewErrParamRequired("InputId"))
 	}
+	if s.InputId != nil && len(*s.InputId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -5466,6 +5485,9 @@ func (s *DeleteInputSecurityGroupInput) Validate() error {
 	if s.InputSecurityGroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("InputSecurityGroupId"))
 	}
+	if s.InputSecurityGroupId != nil && len(*s.InputSecurityGroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputSecurityGroupId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -5515,6 +5537,9 @@ func (s *DeleteReservationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteReservationInput"}
 	if s.ReservationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ReservationId"))
+	}
+	if s.ReservationId != nil && len(*s.ReservationId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ReservationId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -5706,6 +5731,9 @@ func (s *DescribeChannelInput) Validate() error {
 	if s.ChannelId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ChannelId"))
 	}
+	if s.ChannelId != nil && len(*s.ChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -5736,6 +5764,7 @@ type DescribeChannelOutput struct {
 
 	InputSpecification *InputSpecification `locationName:"inputSpecification" type:"structure"`
 
+	// The log level the user wants for their channel.
 	LogLevel *string `locationName:"logLevel" type:"string" enum:"LogLevel"`
 
 	Name *string `locationName:"name" type:"string"`
@@ -5851,6 +5880,9 @@ func (s *DescribeInputInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeInputInput"}
 	if s.InputId == nil {
 		invalidParams.Add(request.NewErrParamRequired("InputId"))
+	}
+	if s.InputId != nil && len(*s.InputId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -5974,6 +6006,9 @@ func (s *DescribeInputSecurityGroupInput) Validate() error {
 	if s.InputSecurityGroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("InputSecurityGroupId"))
 	}
+	if s.InputSecurityGroupId != nil && len(*s.InputSecurityGroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputSecurityGroupId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -6063,6 +6098,9 @@ func (s *DescribeOfferingInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeOfferingInput"}
 	if s.OfferingId == nil {
 		invalidParams.Add(request.NewErrParamRequired("OfferingId"))
+	}
+	if s.OfferingId != nil && len(*s.OfferingId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OfferingId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -6204,6 +6242,9 @@ func (s *DescribeReservationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeReservationInput"}
 	if s.ReservationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ReservationId"))
+	}
+	if s.ReservationId != nil && len(*s.ReservationId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ReservationId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -6398,6 +6439,9 @@ func (s *DescribeScheduleInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeScheduleInput"}
 	if s.ChannelId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ChannelId"))
+	}
+	if s.ChannelId != nil && len(*s.ChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelId", 1))
 	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
@@ -7480,12 +7524,18 @@ func (s *FecOutputSettings) SetRowLength(v int64) *FecOutputSettings {
 	return s
 }
 
-// Fixed mode schedule action start settings
+// Start time for the action.
 type FixedModeScheduleActionStartSettings struct {
 	_ struct{} `type:"structure"`
 
-	// Fixed timestamp action start. Conforms to ISO-8601.
-	Time *string `locationName:"time" type:"string"`
+	// Start time for the action to start in the channel. (Not the time for the
+	// action to be added to the schedule: actions are always added to the schedule
+	// immediately.) UTC format: yyyy-mm-ddThh:mm:ss.nnnZ. All the letters are digits
+	// (for example, mm might be 01) except for the two constants "T" for time and
+	// "Z" for "UTC format".
+	//
+	// Time is a required field
+	Time *string `locationName:"time" type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -7498,9 +7548,76 @@ func (s FixedModeScheduleActionStartSettings) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FixedModeScheduleActionStartSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FixedModeScheduleActionStartSettings"}
+	if s.Time == nil {
+		invalidParams.Add(request.NewErrParamRequired("Time"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // SetTime sets the Time field's value.
 func (s *FixedModeScheduleActionStartSettings) SetTime(v string) *FixedModeScheduleActionStartSettings {
 	s.Time = &v
+	return s
+}
+
+// Settings to specify if an action follows another.
+type FollowModeScheduleActionStartSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Identifies whether this action starts relative to the start or relative to
+	// the end of the reference action.
+	//
+	// FollowPoint is a required field
+	FollowPoint *string `locationName:"followPoint" type:"string" required:"true" enum:"FollowPoint"`
+
+	// The action name of another action that this one refers to.
+	//
+	// ReferenceActionName is a required field
+	ReferenceActionName *string `locationName:"referenceActionName" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s FollowModeScheduleActionStartSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FollowModeScheduleActionStartSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FollowModeScheduleActionStartSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FollowModeScheduleActionStartSettings"}
+	if s.FollowPoint == nil {
+		invalidParams.Add(request.NewErrParamRequired("FollowPoint"))
+	}
+	if s.ReferenceActionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReferenceActionName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFollowPoint sets the FollowPoint field's value.
+func (s *FollowModeScheduleActionStartSettings) SetFollowPoint(v string) *FollowModeScheduleActionStartSettings {
+	s.FollowPoint = &v
+	return s
+}
+
+// SetReferenceActionName sets the ReferenceActionName field's value.
+func (s *FollowModeScheduleActionStartSettings) SetReferenceActionName(v string) *FollowModeScheduleActionStartSettings {
+	s.ReferenceActionName = &v
 	return s
 }
 
@@ -7510,12 +7627,12 @@ type GlobalConfiguration struct {
 	// Value to set the initial audio gain for the Live Event.
 	InitialAudioGain *int64 `locationName:"initialAudioGain" type:"integer"`
 
-	// Indicates the action to take when an input completes (e.g. end-of-file.)
-	// Options include immediately switching to the next sequential input (via "switchInput"),
-	// switching to the next input and looping back to the first input when last
-	// input ends (via "switchAndLoopInputs") or not switching inputs and instead
-	// transcoding black / color / slate images per the "Input Loss Behavior" configuration
-	// until an activateInput REST command is received (via "none").
+	// Indicates the action to take when the current input completes (e.g. end-of-file).
+	// When switchAndLoopInputs is configured the encoder will restart at the beginning
+	// of the first input. When "none" is configured the encoder will transcode
+	// either black, a solid color, or a user specified slate images per the "Input
+	// Loss Behavior" configuration until the next input switch occurs (which is
+	// controlled through the Channel Schedule API).
 	InputEndAction *string `locationName:"inputEndAction" type:"string" enum:"GlobalConfigurationInputEndAction"`
 
 	// Settings for system actions when input is lost.
@@ -7670,7 +7787,8 @@ type H264Settings struct {
 	// while high can produce better quality for certain content.
 	LookAheadRateControl *string `locationName:"lookAheadRateControl" type:"string" enum:"H264LookAheadRateControl"`
 
-	// Maximum bitrate in bits/second (for VBR mode only).
+	// Maximum bitrate in bits/second (for VBR and QVBR modes only).Required when
+	// rateControlMode is "qvbr".
 	MaxBitrate *int64 `locationName:"maxBitrate" min:"1000" type:"integer"`
 
 	// Only meaningful if sceneChangeDetect is set to enabled. Enforces separation
@@ -7702,13 +7820,23 @@ type H264Settings struct {
 	// H.264 Profile.
 	Profile *string `locationName:"profile" type:"string" enum:"H264Profile"`
 
-	// Rate control mode.
+	// Target quality value. Applicable only to QVBR mode. 1 is the lowest quality
+	// and 10 is thehighest and approaches lossless. Typical levels for content
+	// distribution are between 6 and 8.
+	QvbrQualityLevel *int64 `locationName:"qvbrQualityLevel" min:"1" type:"integer"`
+
+	// Rate control mode. - CBR: Constant Bit Rate- VBR: Variable Bit Rate- QVBR:
+	// Encoder dynamically controls the bitrate to meet the desired quality (specifiedthrough
+	// the qvbrQualityLevel field). The bitrate will not exceed the bitrate specified
+	// inthe maxBitrate field and will not fall below the bitrate required to meet
+	// the desiredquality level.
 	RateControlMode *string `locationName:"rateControlMode" type:"string" enum:"H264RateControlMode"`
 
 	// Sets the scan type of the output to progressive or top-field-first interlaced.
 	ScanType *string `locationName:"scanType" type:"string" enum:"H264ScanType"`
 
-	// Scene change detection. Inserts I-frames on scene changes when enabled.
+	// Scene change detection.- On: inserts I-frames when scene change is detected.-
+	// Off: does not force an I-frame when scene change is detected.
 	SceneChangeDetect *string `locationName:"sceneChangeDetect" type:"string" enum:"H264SceneChangeDetect"`
 
 	// Number of slices per picture. Must be less than or equal to the number of
@@ -7763,6 +7891,9 @@ func (s *H264Settings) Validate() error {
 	}
 	if s.ParDenominator != nil && *s.ParDenominator < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("ParDenominator", 1))
+	}
+	if s.QvbrQualityLevel != nil && *s.QvbrQualityLevel < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("QvbrQualityLevel", 1))
 	}
 	if s.Slices != nil && *s.Slices < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("Slices", 1))
@@ -7927,6 +8058,12 @@ func (s *H264Settings) SetParNumerator(v int64) *H264Settings {
 // SetProfile sets the Profile field's value.
 func (s *H264Settings) SetProfile(v string) *H264Settings {
 	s.Profile = &v
+	return s
+}
+
+// SetQvbrQualityLevel sets the QvbrQualityLevel field's value.
+func (s *H264Settings) SetQvbrQualityLevel(v int64) *H264Settings {
+	s.QvbrQualityLevel = &v
 	return s
 }
 
@@ -8294,6 +8431,10 @@ type HlsGroupSettings struct {
 	// Period of insertion of EXT-X-PROGRAM-DATE-TIME entry, in seconds.
 	ProgramDateTimePeriod *int64 `locationName:"programDateTimePeriod" type:"integer"`
 
+	// When set to "enabled", includes the media playlists from both pipelines in
+	// the master manifest (.m3u8) file.
+	RedundantManifest *string `locationName:"redundantManifest" type:"string" enum:"HlsRedundantManifest"`
+
 	// Length of MPEG-2 Transport Stream segments to create (in seconds). Note that
 	// segments will end on the next keyframe after this number of seconds, so actual
 	// segment length may be longer.
@@ -8539,6 +8680,12 @@ func (s *HlsGroupSettings) SetProgramDateTime(v string) *HlsGroupSettings {
 // SetProgramDateTimePeriod sets the ProgramDateTimePeriod field's value.
 func (s *HlsGroupSettings) SetProgramDateTimePeriod(v int64) *HlsGroupSettings {
 	s.ProgramDateTimePeriod = &v
+	return s
+}
+
+// SetRedundantManifest sets the RedundantManifest field's value.
+func (s *HlsGroupSettings) SetRedundantManifest(v string) *HlsGroupSettings {
+	s.RedundantManifest = &v
 	return s
 }
 
@@ -8985,6 +9132,10 @@ func (s *Input) SetType(v string) *Input {
 type InputAttachment struct {
 	_ struct{} `type:"structure"`
 
+	// User-specified name for the attachment. This is required if the user wants
+	// to use this input in an input switch action.
+	InputAttachmentName *string `locationName:"inputAttachmentName" type:"string"`
+
 	// The ID of the input
 	InputId *string `locationName:"inputId" type:"string"`
 
@@ -9015,6 +9166,12 @@ func (s *InputAttachment) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetInputAttachmentName sets the InputAttachmentName field's value.
+func (s *InputAttachment) SetInputAttachmentName(v string) *InputAttachment {
+	s.InputAttachmentName = &v
+	return s
 }
 
 // SetInputId sets the InputId field's value.
@@ -9614,6 +9771,45 @@ func (s *InputSpecification) SetMaximumBitrate(v string) *InputSpecification {
 // SetResolution sets the Resolution field's value.
 func (s *InputSpecification) SetResolution(v string) *InputSpecification {
 	s.Resolution = &v
+	return s
+}
+
+// Settings for the action to switch an input.
+type InputSwitchScheduleActionSettings struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the input attachment that should be switched to by this action.
+	//
+	// InputAttachmentNameReference is a required field
+	InputAttachmentNameReference *string `locationName:"inputAttachmentNameReference" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s InputSwitchScheduleActionSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InputSwitchScheduleActionSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InputSwitchScheduleActionSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InputSwitchScheduleActionSettings"}
+	if s.InputAttachmentNameReference == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputAttachmentNameReference"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputAttachmentNameReference sets the InputAttachmentNameReference field's value.
+func (s *InputSwitchScheduleActionSettings) SetInputAttachmentNameReference(v string) *InputSwitchScheduleActionSettings {
+	s.InputAttachmentNameReference = &v
 	return s
 }
 
@@ -11003,15 +11199,7 @@ type MsSmoothGroupSettings struct {
 	// set by the RAI markers from the input streams.
 	SegmentationMode *string `locationName:"segmentationMode" type:"string" enum:"SmoothGroupSegmentationMode"`
 
-	// Outputs that are "output locked" can use this delay. Assign a delay to the
-	// output that is "secondary". Do not assign a delay to the "primary" output.
-	// The delay means that the primary output will always reach the downstream
-	// system before the secondary, which helps ensure that the downstream system
-	// always uses the primary output. (If there were no delay, the downstream system
-	// might flip-flop between whichever output happens to arrive first.) If the
-	// primary fails, the downstream system will switch to the secondary output.
-	// When the primary is restarted, the downstream system will switch back to
-	// the primary (because once again it is always arriving first)
+	// Number of milliseconds to delay the output from the second pipeline.
 	SendDelayMs *int64 `locationName:"sendDelayMs" type:"integer"`
 
 	// If set to scte35, use incoming SCTE-35 messages to generate a sparse track
@@ -11800,7 +11988,8 @@ func (s PassThroughSettings) GoString() string {
 type PurchaseOfferingInput struct {
 	_ struct{} `type:"structure"`
 
-	Count *int64 `locationName:"count" min:"1" type:"integer"`
+	// Count is a required field
+	Count *int64 `locationName:"count" min:"1" type:"integer" required:"true"`
 
 	Name *string `locationName:"name" type:"string"`
 
@@ -11808,6 +11997,8 @@ type PurchaseOfferingInput struct {
 	OfferingId *string `location:"uri" locationName:"offeringId" type:"string" required:"true"`
 
 	RequestId *string `locationName:"requestId" type:"string" idempotencyToken:"true"`
+
+	Start *string `locationName:"start" type:"string"`
 }
 
 // String returns the string representation
@@ -11823,11 +12014,17 @@ func (s PurchaseOfferingInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *PurchaseOfferingInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "PurchaseOfferingInput"}
+	if s.Count == nil {
+		invalidParams.Add(request.NewErrParamRequired("Count"))
+	}
 	if s.Count != nil && *s.Count < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("Count", 1))
 	}
 	if s.OfferingId == nil {
 		invalidParams.Add(request.NewErrParamRequired("OfferingId"))
+	}
+	if s.OfferingId != nil && len(*s.OfferingId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OfferingId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -11857,6 +12054,12 @@ func (s *PurchaseOfferingInput) SetOfferingId(v string) *PurchaseOfferingInput {
 // SetRequestId sets the RequestId field's value.
 func (s *PurchaseOfferingInput) SetRequestId(v string) *PurchaseOfferingInput {
 	s.RequestId = &v
+	return s
+}
+
+// SetStart sets the Start field's value.
+func (s *PurchaseOfferingInput) SetStart(v string) *PurchaseOfferingInput {
+	s.Start = &v
 	return s
 }
 
@@ -12241,6 +12444,11 @@ type RtmpGroupSettings struct {
 	// 1 video will be passed.
 	CaptionData *string `locationName:"captionData" type:"string" enum:"RtmpCaptionData"`
 
+	// Controls the behavior of this RTMP group if input becomes unavailable.- emitOutput:
+	// Emit a slate until input returns.- pauseOutput: Stop transmitting data until
+	// input returns. This does not close the underlying RTMP connection.
+	InputLossAction *string `locationName:"inputLossAction" type:"string" enum:"InputLossActionForRtmpOut"`
+
 	// If a streaming output fails, number of seconds to wait until a restart is
 	// initiated. A value of 0 means never restart.
 	RestartDelay *int64 `locationName:"restartDelay" type:"integer"`
@@ -12290,6 +12498,12 @@ func (s *RtmpGroupSettings) SetCacheLength(v int64) *RtmpGroupSettings {
 // SetCaptionData sets the CaptionData field's value.
 func (s *RtmpGroupSettings) SetCaptionData(v string) *RtmpGroupSettings {
 	s.CaptionData = &v
+	return s
+}
+
+// SetInputLossAction sets the InputLossAction field's value.
+func (s *RtmpGroupSettings) SetInputLossAction(v string) *RtmpGroupSettings {
+	s.InputLossAction = &v
 	return s
 }
 
@@ -12372,11 +12586,15 @@ func (s *RtmpOutputSettings) SetNumRetries(v int64) *RtmpOutputSettings {
 	return s
 }
 
-// A single schedule action.
+// Contains information on a single schedule action.
 type ScheduleAction struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the action, must be unique within the schedule.
+	// The name of the action, must be unique within the schedule. This name provides
+	// the main reference to an action once it is added to the schedule. A name
+	// is unique if it is no longer in the schedule. The schedule is automatically
+	// cleaned up to remove actions with a start time of more than 1 hour ago (approximately)
+	// so at that point a name can be reused.
 	//
 	// ActionName is a required field
 	ActionName *string `locationName:"actionName" type:"string" required:"true"`
@@ -12386,7 +12604,7 @@ type ScheduleAction struct {
 	// ScheduleActionSettings is a required field
 	ScheduleActionSettings *ScheduleActionSettings `locationName:"scheduleActionSettings" type:"structure" required:"true"`
 
-	// When the action takes effect.
+	// The time for the action to start in the channel.
 	//
 	// ScheduleActionStartSettings is a required field
 	ScheduleActionStartSettings *ScheduleActionStartSettings `locationName:"scheduleActionStartSettings" type:"structure" required:"true"`
@@ -12419,6 +12637,11 @@ func (s *ScheduleAction) Validate() error {
 			invalidParams.AddNested("ScheduleActionSettings", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.ScheduleActionStartSettings != nil {
+		if err := s.ScheduleActionStartSettings.Validate(); err != nil {
+			invalidParams.AddNested("ScheduleActionStartSettings", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -12444,23 +12667,26 @@ func (s *ScheduleAction) SetScheduleActionStartSettings(v *ScheduleActionStartSe
 	return s
 }
 
-// Settings for a single schedule action.
+// Holds the settings for a single schedule action.
 type ScheduleActionSettings struct {
 	_ struct{} `type:"structure"`
 
-	// SCTE-35 Return to Network Settings
+	// Settings to switch an input
+	InputSwitchSettings *InputSwitchScheduleActionSettings `locationName:"inputSwitchSettings" type:"structure"`
+
+	// Settings for SCTE-35 return_to_network message
 	Scte35ReturnToNetworkSettings *Scte35ReturnToNetworkScheduleActionSettings `locationName:"scte35ReturnToNetworkSettings" type:"structure"`
 
-	// SCTE-35 Splice Insert Settings
+	// Settings for SCTE-35 splice_insert message
 	Scte35SpliceInsertSettings *Scte35SpliceInsertScheduleActionSettings `locationName:"scte35SpliceInsertSettings" type:"structure"`
 
-	// SCTE-35 Time Signal Settings
+	// Settings for SCTE-35 time_signal message
 	Scte35TimeSignalSettings *Scte35TimeSignalScheduleActionSettings `locationName:"scte35TimeSignalSettings" type:"structure"`
 
-	// Static Image Activate
+	// Settings to activate a static image overlay
 	StaticImageActivateSettings *StaticImageActivateScheduleActionSettings `locationName:"staticImageActivateSettings" type:"structure"`
 
-	// Static Image Deactivate
+	// Settings to deactivate a static image overlay
 	StaticImageDeactivateSettings *StaticImageDeactivateScheduleActionSettings `locationName:"staticImageDeactivateSettings" type:"structure"`
 }
 
@@ -12477,6 +12703,11 @@ func (s ScheduleActionSettings) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ScheduleActionSettings) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ScheduleActionSettings"}
+	if s.InputSwitchSettings != nil {
+		if err := s.InputSwitchSettings.Validate(); err != nil {
+			invalidParams.AddNested("InputSwitchSettings", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.Scte35ReturnToNetworkSettings != nil {
 		if err := s.Scte35ReturnToNetworkSettings.Validate(); err != nil {
 			invalidParams.AddNested("Scte35ReturnToNetworkSettings", err.(request.ErrInvalidParams))
@@ -12502,6 +12733,12 @@ func (s *ScheduleActionSettings) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetInputSwitchSettings sets the InputSwitchSettings field's value.
+func (s *ScheduleActionSettings) SetInputSwitchSettings(v *InputSwitchScheduleActionSettings) *ScheduleActionSettings {
+	s.InputSwitchSettings = v
+	return s
 }
 
 // SetScte35ReturnToNetworkSettings sets the Scte35ReturnToNetworkSettings field's value.
@@ -12534,12 +12771,15 @@ func (s *ScheduleActionSettings) SetStaticImageDeactivateSettings(v *StaticImage
 	return s
 }
 
-// When the schedule action starts.
+// Settings to specify the start time for an action.
 type ScheduleActionStartSettings struct {
 	_ struct{} `type:"structure"`
 
-	// Fixed timestamp action start. Conforms to ISO-8601.
+	// Holds the start time for the action.
 	FixedModeScheduleActionStartSettings *FixedModeScheduleActionStartSettings `locationName:"fixedModeScheduleActionStartSettings" type:"structure"`
+
+	// Specifies an action to follow for scheduling this action.
+	FollowModeScheduleActionStartSettings *FollowModeScheduleActionStartSettings `locationName:"followModeScheduleActionStartSettings" type:"structure"`
 }
 
 // String returns the string representation
@@ -12552,9 +12792,35 @@ func (s ScheduleActionStartSettings) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ScheduleActionStartSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ScheduleActionStartSettings"}
+	if s.FixedModeScheduleActionStartSettings != nil {
+		if err := s.FixedModeScheduleActionStartSettings.Validate(); err != nil {
+			invalidParams.AddNested("FixedModeScheduleActionStartSettings", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.FollowModeScheduleActionStartSettings != nil {
+		if err := s.FollowModeScheduleActionStartSettings.Validate(); err != nil {
+			invalidParams.AddNested("FollowModeScheduleActionStartSettings", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // SetFixedModeScheduleActionStartSettings sets the FixedModeScheduleActionStartSettings field's value.
 func (s *ScheduleActionStartSettings) SetFixedModeScheduleActionStartSettings(v *FixedModeScheduleActionStartSettings) *ScheduleActionStartSettings {
 	s.FixedModeScheduleActionStartSettings = v
+	return s
+}
+
+// SetFollowModeScheduleActionStartSettings sets the FollowModeScheduleActionStartSettings field's value.
+func (s *ScheduleActionStartSettings) SetFollowModeScheduleActionStartSettings(v *FollowModeScheduleActionStartSettings) *ScheduleActionStartSettings {
+	s.FollowModeScheduleActionStartSettings = v
 	return s
 }
 
@@ -12676,26 +12942,28 @@ func (s *Scte27SourceSettings) SetPid(v int64) *Scte27SourceSettings {
 	return s
 }
 
-// SCTE-35 Delivery Restrictions.
+// Corresponds to SCTE-35 delivery_not_restricted_flag parameter. To declare
+// delivery restrictions, include this element and its four "restriction" flags.
+// To declare that there are no restrictions, omit this element.
 type Scte35DeliveryRestrictions struct {
 	_ struct{} `type:"structure"`
 
-	// SCTE-35 segmentation_descriptor archive_allowed_flag.
+	// Corresponds to SCTE-35 archive_allowed_flag.
 	//
 	// ArchiveAllowedFlag is a required field
 	ArchiveAllowedFlag *string `locationName:"archiveAllowedFlag" type:"string" required:"true" enum:"Scte35ArchiveAllowedFlag"`
 
-	// SCTE-35 segmentation_descriptor web_delivery_allowed_flag.
+	// Corresponds to SCTE-35 device_restrictions parameter.
 	//
 	// DeviceRestrictions is a required field
 	DeviceRestrictions *string `locationName:"deviceRestrictions" type:"string" required:"true" enum:"Scte35DeviceRestrictions"`
 
-	// SCTE-35 segmentation_descriptor no_regional_blackout_flag.
+	// Corresponds to SCTE-35 no_regional_blackout_flag parameter.
 	//
 	// NoRegionalBlackoutFlag is a required field
 	NoRegionalBlackoutFlag *string `locationName:"noRegionalBlackoutFlag" type:"string" required:"true" enum:"Scte35NoRegionalBlackoutFlag"`
 
-	// SCTE-35 segmentation_descriptor web_delivery_allowed_flag.
+	// Corresponds to SCTE-35 web_delivery_allowed_flag parameter.
 	//
 	// WebDeliveryAllowedFlag is a required field
 	WebDeliveryAllowedFlag *string `locationName:"webDeliveryAllowedFlag" type:"string" required:"true" enum:"Scte35WebDeliveryAllowedFlag"`
@@ -12757,7 +13025,7 @@ func (s *Scte35DeliveryRestrictions) SetWebDeliveryAllowedFlag(v string) *Scte35
 	return s
 }
 
-// SCTE-35 Descriptor.
+// Holds one set of SCTE-35 Descriptor Settings.
 type Scte35Descriptor struct {
 	_ struct{} `type:"structure"`
 
@@ -12845,7 +13113,7 @@ func (s *Scte35DescriptorSettings) SetSegmentationDescriptorScte35DescriptorSett
 	return s
 }
 
-// SCTE-35 Return to Network Settings.
+// Settings for a SCTE-35 return_to_network message.
 type Scte35ReturnToNetworkScheduleActionSettings struct {
 	_ struct{} `type:"structure"`
 
@@ -12884,46 +13152,64 @@ func (s *Scte35ReturnToNetworkScheduleActionSettings) SetSpliceEventId(v int64) 
 	return s
 }
 
-// SCTE-35 Segmentation Descriptor.
+// Corresponds to SCTE-35 segmentation_descriptor.
 type Scte35SegmentationDescriptor struct {
 	_ struct{} `type:"structure"`
 
-	// SCTE-35 delivery restrictions.
+	// Holds the four SCTE-35 delivery restriction parameters.
 	DeliveryRestrictions *Scte35DeliveryRestrictions `locationName:"deliveryRestrictions" type:"structure"`
 
-	// SCTE-35 segmentation_descriptor segment_num.
+	// Corresponds to SCTE-35 segment_num. A value that is valid for the specified
+	// segmentation_type_id.
 	SegmentNum *int64 `locationName:"segmentNum" type:"integer"`
 
-	// SCTE-35 segmentation_descriptor segmentation_event_cancel_indicator.
+	// Corresponds to SCTE-35 segmentation_event_cancel_indicator.
 	//
 	// SegmentationCancelIndicator is a required field
 	SegmentationCancelIndicator *string `locationName:"segmentationCancelIndicator" type:"string" required:"true" enum:"Scte35SegmentationCancelIndicator"`
 
-	// SCTE-35 segmentation_descriptor segmentation_duration specified in 90 KHz
-	// clock ticks.
+	// Corresponds to SCTE-35 segmentation_duration. Optional. The duration for
+	// the time_signal, in 90 KHz ticks. To convert seconds to ticks, multiple the
+	// seconds by 90,000. Enter time in 90 KHz clock ticks. If you do not enter
+	// a duration, the time_signal will continue until you insert a cancellation
+	// message.
 	SegmentationDuration *int64 `locationName:"segmentationDuration" type:"long"`
 
-	// SCTE-35 segmentation_descriptor segmentation_event_id.
+	// Corresponds to SCTE-35 segmentation_event_id.
 	//
 	// SegmentationEventId is a required field
 	SegmentationEventId *int64 `locationName:"segmentationEventId" type:"long" required:"true"`
 
-	// SCTE-35 segmentation_descriptor segmentation_type_id.
+	// Corresponds to SCTE-35 segmentation_type_id. One of the segmentation_type_id
+	// values listed in the SCTE-35 specification. On the console, enter the ID
+	// in decimal (for example, "52"). In the CLI, API, or an SDK, enter the ID
+	// in hex (for example, "0x34") or decimal (for example, "52").
 	SegmentationTypeId *int64 `locationName:"segmentationTypeId" type:"integer"`
 
-	// SCTE-35 segmentation_descriptor segmentation_upid as a hex string.
+	// Corresponds to SCTE-35 segmentation_upid. Enter a string containing the hexadecimal
+	// representation of the characters that make up the SCTE-35 segmentation_upid
+	// value. Must contain an even number of hex characters. Do not include spaces
+	// between each hex pair. For example, the ASCII "ADS Information" becomes hex
+	// "41445320496e666f726d6174696f6e.
 	SegmentationUpid *string `locationName:"segmentationUpid" type:"string"`
 
-	// SCTE-35 segmentation_descriptor segmentation_upid_type.
+	// Corresponds to SCTE-35 segmentation_upid_type. On the console, enter one
+	// of the types listed in the SCTE-35 specification, converted to a decimal.
+	// For example, "0x0C" hex from the specification is "12" in decimal. In the
+	// CLI, API, or an SDK, enter one of the types listed in the SCTE-35 specification,
+	// in either hex (for example, "0x0C" ) or in decimal (for example, "12").
 	SegmentationUpidType *int64 `locationName:"segmentationUpidType" type:"integer"`
 
-	// SCTE-35 segmentation_descriptor segments_expected.
+	// Corresponds to SCTE-35 segments_expected. A value that is valid for the specified
+	// segmentation_type_id.
 	SegmentsExpected *int64 `locationName:"segmentsExpected" type:"integer"`
 
-	// SCTE-35 segmentation_descriptor sub_segment_num.
+	// Corresponds to SCTE-35 sub_segment_num. A value that is valid for the specified
+	// segmentation_type_id.
 	SubSegmentNum *int64 `locationName:"subSegmentNum" type:"integer"`
 
-	// SCTE-35 segmentation_descriptor sub_segments_expected.
+	// Corresponds to SCTE-35 sub_segments_expected. A value that is valid for the
+	// specified segmentation_type_id.
 	SubSegmentsExpected *int64 `locationName:"subSegmentsExpected" type:"integer"`
 }
 
@@ -13082,13 +13368,16 @@ func (s *Scte35SpliceInsert) SetWebDeliveryAllowedFlag(v string) *Scte35SpliceIn
 	return s
 }
 
-// SCTE-35 Splice Insert Settings.
+// Settings for a SCTE-35 splice_insert message.
 type Scte35SpliceInsertScheduleActionSettings struct {
 	_ struct{} `type:"structure"`
 
-	// The duration for the SCTE-35 splice_insert specified in 90KHz clock ticks.
-	// When duration is not specified the expectation is that a Scte35ReturnToNetwork
-	// action will be scheduled.
+	// Optional, the duration for the splice_insert, in 90 KHz ticks. To convert
+	// seconds to ticks, multiple the seconds by 90,000. If you enter a duration,
+	// there is an expectation that the downstream system can read the duration
+	// and cue in at that time. If you do not enter a duration, the splice_insert
+	// will continue indefinitely and there is an expectation that you will enter
+	// a return_to_network to end the splice_insert at the appropriate time.
 	Duration *int64 `locationName:"duration" type:"long"`
 
 	// The splice_event_id for the SCTE-35 splice_insert, as defined in SCTE-35.
@@ -13190,7 +13479,7 @@ func (s *Scte35TimeSignalApos) SetWebDeliveryAllowedFlag(v string) *Scte35TimeSi
 	return s
 }
 
-// SCTE-35 Time Signal Settings.
+// Settings for a SCTE-35 time_signal.
 type Scte35TimeSignalScheduleActionSettings struct {
 	_ struct{} `type:"structure"`
 
@@ -13324,6 +13613,9 @@ func (s *StartChannelInput) Validate() error {
 	if s.ChannelId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ChannelId"))
 	}
+	if s.ChannelId != nil && len(*s.ChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -13354,6 +13646,7 @@ type StartChannelOutput struct {
 
 	InputSpecification *InputSpecification `locationName:"inputSpecification" type:"structure"`
 
+	// The log level the user wants for their channel.
 	LogLevel *string `locationName:"logLevel" type:"string" enum:"LogLevel"`
 
 	Name *string `locationName:"name" type:"string"`
@@ -13447,50 +13740,61 @@ func (s *StartChannelOutput) SetState(v string) *StartChannelOutput {
 	return s
 }
 
-// Static image activate.
+// Settings for the action to activate a static image.
 type StaticImageActivateScheduleActionSettings struct {
 	_ struct{} `type:"structure"`
 
-	// The duration in milliseconds for the image to remain in the video. If omitted
-	// or set to 0, duration is infinite and image will remain until explicitly
-	// deactivated.
+	// The duration in milliseconds for the image to remain on the video. If omitted
+	// or set to 0 the duration is unlimited and the image will remain until it
+	// is explicitly deactivated.
 	Duration *int64 `locationName:"duration" type:"integer"`
 
-	// The time in milliseconds for the image to fade in. Defaults to 0.
+	// The time in milliseconds for the image to fade in. The fade-in starts at
+	// the start time of the overlay. Default is 0 (no fade-in).
 	FadeIn *int64 `locationName:"fadeIn" type:"integer"`
 
-	// The time in milliseconds for the image to fade out. Defaults to 0.
+	// Applies only if a duration is specified. The time in milliseconds for the
+	// image to fade out. The fade-out starts when the duration time is hit, so
+	// it effectively extends the duration. Default is 0 (no fade-out).
 	FadeOut *int64 `locationName:"fadeOut" type:"integer"`
 
-	// The height of the image when inserted into the video. Defaults to the native
-	// height of the image.
+	// The height of the image when inserted into the video, in pixels. The overlay
+	// will be scaled up or down to the specified height. Leave blank to use the
+	// native height of the overlay.
 	Height *int64 `locationName:"height" min:"1" type:"integer"`
 
-	// The image to overlay on the video. Must be a 32 bit BMP, PNG, or TGA file.
-	// Must not be larger than the input video.
+	// The location and filename of the image file to overlay on the video. The
+	// file must be a 32-bit BMP, PNG, or TGA file, and must not be larger (in pixels)
+	// than the input video.
 	//
 	// Image is a required field
 	Image *InputLocation `locationName:"image" type:"structure" required:"true"`
 
-	// Placement of the left edge of the image on the horizontal axis in pixels.
-	// 0 is the left edge of the frame. Defaults to 0.
+	// Placement of the left edge of the overlay relative to the left edge of the
+	// video frame, in pixels. 0 (the default) is the left edge of the frame. If
+	// the placement causes the overlay to extend beyond the right edge of the underlying
+	// video, then the overlay is cropped on the right.
 	ImageX *int64 `locationName:"imageX" type:"integer"`
 
-	// Placement of the top edge of the image on the vertical axis in pixels. 0
-	// is the top edge of the frame. Defaults to 0.
+	// Placement of the top edge of the overlay relative to the top edge of the
+	// video frame, in pixels. 0 (the default) is the top edge of the frame. If
+	// the placement causes the overlay to extend beyond the bottom edge of the
+	// underlying video, then the overlay is cropped on the bottom.
 	ImageY *int64 `locationName:"imageY" type:"integer"`
 
-	// The Z order of the inserted image. Images with higher layer values will be
-	// inserted on top of images with lower layer values. Permitted values are 0-7
-	// inclusive. Defaults to 0.
+	// The number of the layer, 0 to 7. There are 8 layers that can be overlaid
+	// on the video, each layer with a different image. The layers are in Z order,
+	// which means that overlays with higher values of layer are inserted on top
+	// of overlays with lower values of layer. Default is 0.
 	Layer *int64 `locationName:"layer" type:"integer"`
 
-	// Opacity of image where 0 is transparent and 100 is fully opaque. Defaults
-	// to 100.
+	// Opacity of image where 0 is transparent and 100 is fully opaque. Default
+	// is 100.
 	Opacity *int64 `locationName:"opacity" type:"integer"`
 
-	// The width of the image when inserted into the video. Defaults to the native
-	// width of the image.
+	// The width of the image when inserted into the video, in pixels. The overlay
+	// will be scaled up or down to the specified width. Leave blank to use the
+	// native width of the overlay.
 	Width *int64 `locationName:"width" min:"1" type:"integer"`
 }
 
@@ -13588,16 +13892,14 @@ func (s *StaticImageActivateScheduleActionSettings) SetWidth(v int64) *StaticIma
 	return s
 }
 
-// Static image deactivate.
+// Settings for the action to deactivate the image in a specific layer.
 type StaticImageDeactivateScheduleActionSettings struct {
 	_ struct{} `type:"structure"`
 
-	// The time in milliseconds for the image to fade out. Defaults to 0.
+	// The time in milliseconds for the image to fade out. Default is 0 (no fade-out).
 	FadeOut *int64 `locationName:"fadeOut" type:"integer"`
 
-	// The Z order of the inserted image. Images with higher layer values will be
-	// inserted on top of images with lower layer values. Permitted values are 0-7
-	// inclusive. Defaults to 0.
+	// The image overlay layer to deactivate, 0 to 7. Default is 0.
 	Layer *int64 `locationName:"layer" type:"integer"`
 }
 
@@ -13627,9 +13929,7 @@ type StaticKeySettings struct {
 	_ struct{} `type:"structure"`
 
 	// The URL of the license server used for protecting content.
-	//
-	// KeyProviderServer is a required field
-	KeyProviderServer *InputLocation `locationName:"keyProviderServer" type:"structure" required:"true"`
+	KeyProviderServer *InputLocation `locationName:"keyProviderServer" type:"structure"`
 
 	// Static key value as a 32 character hexadecimal string.
 	//
@@ -13650,9 +13950,6 @@ func (s StaticKeySettings) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *StaticKeySettings) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "StaticKeySettings"}
-	if s.KeyProviderServer == nil {
-		invalidParams.Add(request.NewErrParamRequired("KeyProviderServer"))
-	}
 	if s.StaticKeyValue == nil {
 		invalidParams.Add(request.NewErrParamRequired("StaticKeyValue"))
 	}
@@ -13706,6 +14003,9 @@ func (s *StopChannelInput) Validate() error {
 	if s.ChannelId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ChannelId"))
 	}
+	if s.ChannelId != nil && len(*s.ChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -13736,6 +14036,7 @@ type StopChannelOutput struct {
 
 	InputSpecification *InputSpecification `locationName:"inputSpecification" type:"structure"`
 
+	// The log level the user wants for their channel.
 	LogLevel *string `locationName:"logLevel" type:"string" enum:"LogLevel"`
 
 	Name *string `locationName:"name" type:"string"`
@@ -14131,6 +14432,7 @@ type UpdateChannelInput struct {
 
 	InputSpecification *InputSpecification `locationName:"inputSpecification" type:"structure"`
 
+	// The log level the user wants for their channel.
 	LogLevel *string `locationName:"logLevel" type:"string" enum:"LogLevel"`
 
 	Name *string `locationName:"name" type:"string"`
@@ -14153,6 +14455,9 @@ func (s *UpdateChannelInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateChannelInput"}
 	if s.ChannelId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ChannelId"))
+	}
+	if s.ChannelId != nil && len(*s.ChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelId", 1))
 	}
 	if s.EncoderSettings != nil {
 		if err := s.EncoderSettings.Validate(); err != nil {
@@ -14277,6 +14582,9 @@ func (s *UpdateInputInput) Validate() error {
 	if s.InputId == nil {
 		invalidParams.Add(request.NewErrParamRequired("InputId"))
 	}
+	if s.InputId != nil && len(*s.InputId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -14360,6 +14668,9 @@ func (s *UpdateInputSecurityGroupInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateInputSecurityGroupInput"}
 	if s.InputSecurityGroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("InputSecurityGroupId"))
+	}
+	if s.InputSecurityGroupId != nil && len(*s.InputSecurityGroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputSecurityGroupId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -15392,6 +15703,15 @@ const (
 	FixedAfdAfd1111 = "AFD_1111"
 )
 
+// Follow reference point.
+const (
+	// FollowPointEnd is a FollowPoint enum value
+	FollowPointEnd = "END"
+
+	// FollowPointStart is a FollowPoint enum value
+	FollowPointStart = "START"
+)
+
 const (
 	// GlobalConfigurationInputEndActionNone is a GlobalConfigurationInputEndAction enum value
 	GlobalConfigurationInputEndActionNone = "NONE"
@@ -15580,6 +15900,9 @@ const (
 	// H264RateControlModeCbr is a H264RateControlMode enum value
 	H264RateControlModeCbr = "CBR"
 
+	// H264RateControlModeQvbr is a H264RateControlMode enum value
+	H264RateControlModeQvbr = "QVBR"
+
 	// H264RateControlModeVbr is a H264RateControlMode enum value
 	H264RateControlModeVbr = "VBR"
 )
@@ -15756,6 +16079,14 @@ const (
 )
 
 const (
+	// HlsRedundantManifestDisabled is a HlsRedundantManifest enum value
+	HlsRedundantManifestDisabled = "DISABLED"
+
+	// HlsRedundantManifestEnabled is a HlsRedundantManifest enum value
+	HlsRedundantManifestEnabled = "ENABLED"
+)
+
+const (
 	// HlsSegmentationModeUseInputSegmentation is a HlsSegmentationMode enum value
 	HlsSegmentationModeUseInputSegmentation = "USE_INPUT_SEGMENTATION"
 
@@ -15851,6 +16182,14 @@ const (
 
 	// InputLossActionForMsSmoothOutPauseOutput is a InputLossActionForMsSmoothOut enum value
 	InputLossActionForMsSmoothOutPauseOutput = "PAUSE_OUTPUT"
+)
+
+const (
+	// InputLossActionForRtmpOutEmitOutput is a InputLossActionForRtmpOut enum value
+	InputLossActionForRtmpOutEmitOutput = "EMIT_OUTPUT"
+
+	// InputLossActionForRtmpOutPauseOutput is a InputLossActionForRtmpOut enum value
+	InputLossActionForRtmpOutPauseOutput = "PAUSE_OUTPUT"
 )
 
 const (
@@ -15952,8 +16291,12 @@ const (
 
 	// InputTypeUrlPull is a InputType enum value
 	InputTypeUrlPull = "URL_PULL"
+
+	// InputTypeMp4File is a InputType enum value
+	InputTypeMp4File = "MP4_FILE"
 )
 
+// The log level the user wants for their channel.
 const (
 	// LogLevelError is a LogLevel enum value
 	LogLevelError = "ERROR"
@@ -16327,7 +16670,9 @@ const (
 	Scte35AposWebDeliveryAllowedBehaviorIgnore = "IGNORE"
 )
 
-// SCTE-35 segmentation_descriptor archive_allowed_flag.
+// Corresponds to the archive_allowed parameter. A value of ARCHIVE_NOT_ALLOWED
+// corresponds to 0 (false) in the SCTE-35 specification. If you include one
+// of the "restriction" flags then you must include all four of them.
 const (
 	// Scte35ArchiveAllowedFlagArchiveNotAllowed is a Scte35ArchiveAllowedFlag enum value
 	Scte35ArchiveAllowedFlagArchiveNotAllowed = "ARCHIVE_NOT_ALLOWED"
@@ -16336,7 +16681,9 @@ const (
 	Scte35ArchiveAllowedFlagArchiveAllowed = "ARCHIVE_ALLOWED"
 )
 
-// SCTE-35 Device Restrictions.
+// Corresponds to the device_restrictions parameter in a segmentation_descriptor.
+// If you include one of the "restriction" flags then you must include all four
+// of them.
 const (
 	// Scte35DeviceRestrictionsNone is a Scte35DeviceRestrictions enum value
 	Scte35DeviceRestrictionsNone = "NONE"
@@ -16351,7 +16698,9 @@ const (
 	Scte35DeviceRestrictionsRestrictGroup2 = "RESTRICT_GROUP2"
 )
 
-// SCTE-35 segmentation_descriptor no_regional_blackout_flag.
+// Corresponds to the no_regional_blackout_flag parameter. A value of REGIONAL_BLACKOUT
+// corresponds to 0 (false) in the SCTE-35 specification. If you include one
+// of the "restriction" flags then you must include all four of them.
 const (
 	// Scte35NoRegionalBlackoutFlagRegionalBlackout is a Scte35NoRegionalBlackoutFlag enum value
 	Scte35NoRegionalBlackoutFlagRegionalBlackout = "REGIONAL_BLACKOUT"
@@ -16360,7 +16709,11 @@ const (
 	Scte35NoRegionalBlackoutFlagNoRegionalBlackout = "NO_REGIONAL_BLACKOUT"
 )
 
-// SCTE-35 segmentation_descriptor segmentation_event_cancel_indicator.
+// Corresponds to SCTE-35 segmentation_event_cancel_indicator. SEGMENTATION_EVENT_NOT_CANCELED
+// corresponds to 0 in the SCTE-35 specification and indicates that this is
+// an insertion request. SEGMENTATION_EVENT_CANCELED corresponds to 1 in the
+// SCTE-35 specification and indicates that this is a cancelation request, in
+// which case complete this field and the existing event ID to cancel.
 const (
 	// Scte35SegmentationCancelIndicatorSegmentationEventNotCanceled is a Scte35SegmentationCancelIndicator enum value
 	Scte35SegmentationCancelIndicatorSegmentationEventNotCanceled = "SEGMENTATION_EVENT_NOT_CANCELED"
@@ -16385,7 +16738,9 @@ const (
 	Scte35SpliceInsertWebDeliveryAllowedBehaviorIgnore = "IGNORE"
 )
 
-// SCTE-35 segmentation_descriptor web_delivery_allowed_flag.
+// Corresponds to the web_delivery_allowed_flag parameter. A value of WEB_DELIVERY_NOT_ALLOWED
+// corresponds to 0 (false) in the SCTE-35 specification. If you include one
+// of the "restriction" flags then you must include all four of them.
 const (
 	// Scte35WebDeliveryAllowedFlagWebDeliveryNotAllowed is a Scte35WebDeliveryAllowedFlag enum value
 	Scte35WebDeliveryAllowedFlagWebDeliveryNotAllowed = "WEB_DELIVERY_NOT_ALLOWED"

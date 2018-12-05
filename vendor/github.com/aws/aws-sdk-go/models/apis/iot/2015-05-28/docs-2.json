@@ -3,6 +3,7 @@
   "service": "<fullname>AWS IoT</fullname> <p>AWS IoT provides secure, bi-directional communication between Internet-connected devices (such as sensors, actuators, embedded devices, or smart appliances) and the AWS cloud. You can discover your custom IoT-Data endpoint to communicate with, configure rules for data processing and integration with other services, organize resources associated with each device (Registry), configure logging, and create and manage policies and credentials to authenticate devices.</p> <p>For more information about how AWS IoT works, see the <a href=\"http://docs.aws.amazon.com/iot/latest/developerguide/aws-iot-how-it-works.html\">Developer Guide</a>.</p> <p>For information about how to use the credentials provider for AWS IoT, see <a href=\"http://docs.aws.amazon.com/iot/latest/developerguide/authorizing-direct-aws.html\">Authorizing Direct Calls to AWS Services</a>.</p>",
   "operations": {
     "AcceptCertificateTransfer": "<p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>",
+    "AddThingToBillingGroup": "<p>Adds a thing to a billing group.</p>",
     "AddThingToThingGroup": "<p>Adds a thing to a thing group.</p>",
     "AssociateTargetsWithJob": "<p>Associates a group with a continuous job. The following criteria must be met: </p> <ul> <li> <p>The job must have been created with the <code>targetSelection</code> field set to \"CONTINUOUS\".</p> </li> <li> <p>The job status must currently be \"IN_PROGRESS\".</p> </li> <li> <p>The total number of targets associated with a job must not exceed 100.</p> </li> </ul>",
     "AttachPolicy": "<p>Attaches a policy to the specified target.</p>",
@@ -15,7 +16,9 @@
     "CancelJobExecution": "<p>Cancels the execution of a job for a given thing.</p>",
     "ClearDefaultAuthorizer": "<p>Clears the default authorizer.</p>",
     "CreateAuthorizer": "<p>Creates an authorizer.</p>",
+    "CreateBillingGroup": "<p>Creates a billing group.</p>",
     "CreateCertificateFromCsr": "<p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c \"cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path\"</p>",
+    "CreateDynamicThingGroup": "<p>Creates a dynamic thing group.</p>",
     "CreateJob": "<p>Creates a job.</p>",
     "CreateKeysAndCertificate": "<p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>",
     "CreateOTAUpdate": "<p>Creates an AWS IoT OTAUpdate on a target group of things or groups.</p>",
@@ -31,8 +34,10 @@
     "CreateTopicRule": "<p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>",
     "DeleteAccountAuditConfiguration": "<p>Restores the default settings for Device Defender audits for this account. Any configuration data you entered is deleted and all audit checks are reset to disabled. </p>",
     "DeleteAuthorizer": "<p>Deletes an authorizer.</p>",
+    "DeleteBillingGroup": "<p>Deletes the billing group.</p>",
     "DeleteCACertificate": "<p>Deletes a registered CA certificate.</p>",
     "DeleteCertificate": "<p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>",
+    "DeleteDynamicThingGroup": "<p>Deletes a dynamic thing group.</p>",
     "DeleteJob": "<p>Deletes a job and its related job executions.</p> <p>Deleting a job may take time, depending on the number of job executions created for the job and various other factors. While the job is being deleted, the status of the job will be shown as \"DELETION_IN_PROGRESS\". Attempting to delete or cancel a job whose status is already \"DELETION_IN_PROGRESS\" will result in an error.</p> <p>Only 10 jobs may have status \"DELETION_IN_PROGRESS\" at the same time, or a LimitExceededException will occur.</p>",
     "DeleteJobExecution": "<p>Deletes a job execution.</p>",
     "DeleteOTAUpdate": "<p>Delete an OTA update.</p>",
@@ -43,15 +48,16 @@
     "DeleteScheduledAudit": "<p>Deletes a scheduled audit.</p>",
     "DeleteSecurityProfile": "<p>Deletes a Device Defender security profile.</p>",
     "DeleteStream": "<p>Deletes a stream.</p>",
-    "DeleteThing": "<p>Deletes the specified thing.</p>",
+    "DeleteThing": "<p>Deletes the specified thing. Returns successfully with no error if the deletion is successful or you specify a thing that doesn't exist.</p>",
     "DeleteThingGroup": "<p>Deletes a thing group.</p>",
-    "DeleteThingType": "<p>Deletes the specified thing type . You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>",
+    "DeleteThingType": "<p>Deletes the specified thing type. You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>",
     "DeleteTopicRule": "<p>Deletes the rule.</p>",
     "DeleteV2LoggingLevel": "<p>Deletes a logging level.</p>",
     "DeprecateThingType": "<p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>",
     "DescribeAccountAuditConfiguration": "<p>Gets information about the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>",
     "DescribeAuditTask": "<p>Gets information about a Device Defender audit.</p>",
     "DescribeAuthorizer": "<p>Describes an authorizer.</p>",
+    "DescribeBillingGroup": "<p>Returns information about a billing group.</p>",
     "DescribeCACertificate": "<p>Describes a registered CA certificate.</p>",
     "DescribeCertificate": "<p>Gets information about the specified certificate.</p>",
     "DescribeDefaultAuthorizer": "<p>Describes the default authorizer.</p>",
@@ -71,7 +77,7 @@
     "DetachPolicy": "<p>Detaches a policy from the specified target.</p>",
     "DetachPrincipalPolicy": "<p>Removes the specified policy from the specified certificate.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>DetachPolicy</a> instead.</p>",
     "DetachSecurityProfile": "<p>Disassociates a Device Defender security profile from a thing group or from this account.</p>",
-    "DetachThingPrincipal": "<p>Detaches the specified principal from the specified thing.</p>",
+    "DetachThingPrincipal": "<p>Detaches the specified principal from the specified thing.</p> <note> <p>This call is asynchronous. It might take several seconds for the detachment to propagate.</p> </note>",
     "DisableTopicRule": "<p>Disables the rule.</p>",
     "EnableTopicRule": "<p>Enables the rule.</p>",
     "GetEffectivePolicies": "<p>Gets a list of the policies that have an effect on the authorization behavior of the specified device when it connects to the AWS IoT device gateway.</p>",
@@ -89,6 +95,7 @@
     "ListAuditFindings": "<p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 180 days.)</p>",
     "ListAuditTasks": "<p>Lists the Device Defender audits that have been performed during a given time period.</p>",
     "ListAuthorizers": "<p>Lists the authorizers registered in your account.</p>",
+    "ListBillingGroups": "<p>Lists the billing groups you have created.</p>",
     "ListCACertificates": "<p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>",
     "ListCertificates": "<p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>",
     "ListCertificatesByCA": "<p>List the device certificates signed by the specified CA certificate.</p>",
@@ -108,6 +115,7 @@
     "ListSecurityProfiles": "<p>Lists the Device Defender security profiles you have created. You can use filters to list only those security profiles associated with a thing group or only those associated with your account.</p>",
     "ListSecurityProfilesForTarget": "<p>Lists the Device Defender security profiles attached to a target (thing group).</p>",
     "ListStreams": "<p>Lists all of the streams in your AWS account.</p>",
+    "ListTagsForResource": "<p>Lists the tags (metadata) you have assigned to the resource.</p>",
     "ListTargetsForPolicy": "<p>List targets for the specified policy.</p>",
     "ListTargetsForSecurityProfile": "<p>Lists the targets (thing groups) associated with a given Device Defender security profile.</p>",
     "ListThingGroups": "<p>List the thing groups in your account.</p>",
@@ -117,6 +125,7 @@
     "ListThingRegistrationTasks": "<p>List bulk thing provisioning tasks.</p>",
     "ListThingTypes": "<p>Lists the existing thing types.</p>",
     "ListThings": "<p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>",
+    "ListThingsInBillingGroup": "<p>Lists the things you have added to the given billing group.</p>",
     "ListThingsInThingGroup": "<p>Lists the things in the specified group.</p>",
     "ListTopicRules": "<p>Lists the rules for the specific topic.</p>",
     "ListV2LoggingLevels": "<p>Lists logging levels.</p>",
@@ -125,6 +134,7 @@
     "RegisterCertificate": "<p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>",
     "RegisterThing": "<p>Provisions a thing.</p>",
     "RejectCertificateTransfer": "<p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>",
+    "RemoveThingFromBillingGroup": "<p>Removes the given thing from the billing group.</p>",
     "RemoveThingFromThingGroup": "<p>Remove the specified thing from the specified group.</p>",
     "ReplaceTopicRule": "<p>Replaces the rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>",
     "SearchIndex": "<p>The query search index.</p>",
@@ -136,15 +146,20 @@
     "StartOnDemandAuditTask": "<p>Starts an on-demand Device Defender audit.</p>",
     "StartThingRegistrationTask": "<p>Creates a bulk thing provisioning task.</p>",
     "StopThingRegistrationTask": "<p>Cancels a bulk thing provisioning task.</p>",
+    "TagResource": "<p>Adds to or modifies the tags of the given resource. Tags are metadata which can be used to manage a resource.</p>",
     "TestAuthorization": "<p>Tests if a specified principal is authorized to perform an AWS IoT action on a specified resource. Use this to test and debug the authorization behavior of devices that connect to the AWS IoT device gateway.</p>",
     "TestInvokeAuthorizer": "<p>Tests a custom authorization behavior by invoking a specified custom authorizer. Use this to test and debug the custom authorization behavior of devices that connect to the AWS IoT device gateway.</p>",
     "TransferCertificate": "<p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>",
+    "UntagResource": "<p>Removes the given tags (metadata) from the resource.</p>",
     "UpdateAccountAuditConfiguration": "<p>Configures or reconfigures the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>",
     "UpdateAuthorizer": "<p>Updates an authorizer.</p>",
+    "UpdateBillingGroup": "<p>Updates information about the billing group.</p>",
     "UpdateCACertificate": "<p>Updates a registered CA certificate.</p>",
     "UpdateCertificate": "<p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>",
+    "UpdateDynamicThingGroup": "<p>Updates a dynamic thing group.</p>",
     "UpdateEventConfigurations": "<p>Updates the event configurations.</p>",
     "UpdateIndexingConfiguration": "<p>Updates the search configuration.</p>",
+    "UpdateJob": "<p>Updates supported fields of the specified job.</p>",
     "UpdateRoleAlias": "<p>Updates a role alias.</p>",
     "UpdateScheduledAudit": "<p>Updates a scheduled audit, including what checks are performed and how often the audit takes place.</p>",
     "UpdateSecurityProfile": "<p>Updates a Device Defender security profile.</p>",
@@ -155,6 +170,38 @@
     "ValidateSecurityProfileBehaviors": "<p>Validates a Device Defender security profile behaviors specification.</p>"
   },
   "shapes": {
+    "AbortAction": {
+      "base": null,
+      "refs": {
+        "AbortCriteria$action": "<p>The type of abort action to initiate a job abort.</p>"
+      }
+    },
+    "AbortConfig": {
+      "base": "<p>Details of abort criteria to abort the job.</p>",
+      "refs": {
+        "CreateJobRequest$abortConfig": "<p>Allows you to create criteria to abort a job.</p>",
+        "Job$abortConfig": "<p>Configuration for criteria to abort the job.</p>",
+        "UpdateJobRequest$abortConfig": "<p>Allows you to create criteria to abort a job.</p>"
+      }
+    },
+    "AbortCriteria": {
+      "base": "<p>Details of abort criteria to define rules to abort the job.</p>",
+      "refs": {
+        "AbortCriteriaList$member": null
+      }
+    },
+    "AbortCriteriaList": {
+      "base": null,
+      "refs": {
+        "AbortConfig$criteriaList": "<p>The list of abort criteria to define rules to abort the job.</p>"
+      }
+    },
+    "AbortThresholdPercentage": {
+      "base": null,
+      "refs": {
+        "AbortCriteria$thresholdPercentage": "<p>The threshold as a percentage of the total number of executed things that will initiate a job abort.</p> <p>AWS IoT supports up to two digits after the decimal (for example, 10.9 and 10.99, but not 10.999).</p>"
+      }
+    },
     "AcceptCertificateTransferRequest": {
       "base": "<p>The input for the AcceptCertificateTransfer operation.</p>",
       "refs": {
@@ -191,6 +238,16 @@
       "base": null,
       "refs": {
         "ListActiveViolationsResponse$activeViolations": "<p>The list of active violations.</p>"
+      }
+    },
+    "AddThingToBillingGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "AddThingToBillingGroupResponse": {
+      "base": null,
+      "refs": {
       }
     },
     "AddThingToThingGroupRequest": {
@@ -253,6 +310,12 @@
       "base": "<p>Contains information that allowed the authorization.</p>",
       "refs": {
         "AuthResult$allowed": "<p>The policies and statements that allowed the specified action.</p>"
+      }
+    },
+    "ApproximateSecondsBeforeTimedOut": {
+      "base": null,
+      "refs": {
+        "JobExecution$approximateSecondsBeforeTimedOut": "<p>The estimated number of seconds that remain before the job execution status will be changed to <code>TIMED_OUT</code>. The timeout interval can be anywhere between 1 minute and 7 days (1 to 10080 minutes). The actual job execution timeout can occur up to 60 seconds later than the estimated duration. This value will not be included if the job execution has reached a terminal status.</p>"
       }
     },
     "AscendingOrder": {
@@ -607,6 +670,7 @@
         "GetV2LoggingOptionsResponse$roleArn": "<p>The IAM role ARN AWS IoT uses to write to your CloudWatch logs.</p>",
         "IotAnalyticsAction$channelArn": "<p>(deprecated) The ARN of the IoT Analytics channel to which message data will be sent.</p>",
         "IotAnalyticsAction$roleArn": "<p>The ARN of the role which has a policy that grants IoT Analytics permission to send message data via IoT Analytics (iotanalytics:BatchPutMessage).</p>",
+        "IotEventsAction$roleArn": "<p>The ARN of the role that grants AWS IoT permission to send an input to an AWS IoT Events detector. (\"Action\":\"iotevents:BatchPutMessage\").</p>",
         "KinesisAction$roleArn": "<p>The ARN of the IAM role that grants access to the Amazon Kinesis stream.</p>",
         "LoggingOptionsPayload$roleArn": "<p>The ARN of the IAM role that grants access.</p>",
         "RepublishAction$roleArn": "<p>The ARN of the IAM role that grants access.</p>",
@@ -682,9 +746,69 @@
         "ValidateSecurityProfileBehaviorsRequest$behaviors": "<p>Specifies the behaviors that, when violated by a device (thing), cause an alert.</p>"
       }
     },
+    "BillingGroupArn": {
+      "base": null,
+      "refs": {
+        "AddThingToBillingGroupRequest$billingGroupArn": "<p>The ARN of the billing group.</p>",
+        "CreateBillingGroupResponse$billingGroupArn": "<p>The ARN of the billing group.</p>",
+        "DescribeBillingGroupResponse$billingGroupArn": "<p>The ARN of the billing group.</p>",
+        "RemoveThingFromBillingGroupRequest$billingGroupArn": "<p>The ARN of the billing group.</p>"
+      }
+    },
+    "BillingGroupDescription": {
+      "base": null,
+      "refs": {
+        "BillingGroupProperties$billingGroupDescription": "<p>The description of the billing group.</p>"
+      }
+    },
+    "BillingGroupId": {
+      "base": null,
+      "refs": {
+        "CreateBillingGroupResponse$billingGroupId": "<p>The ID of the billing group.</p>",
+        "DescribeBillingGroupResponse$billingGroupId": "<p>The ID of the billing group.</p>"
+      }
+    },
+    "BillingGroupMetadata": {
+      "base": "<p>Additional information about the billing group.</p>",
+      "refs": {
+        "DescribeBillingGroupResponse$billingGroupMetadata": "<p>Additional information about the billing group.</p>"
+      }
+    },
+    "BillingGroupName": {
+      "base": null,
+      "refs": {
+        "AddThingToBillingGroupRequest$billingGroupName": "<p>The name of the billing group.</p>",
+        "CreateBillingGroupRequest$billingGroupName": "<p>The name you wish to give to the billing group.</p>",
+        "CreateBillingGroupResponse$billingGroupName": "<p>The name you gave to the billing group.</p>",
+        "CreateThingRequest$billingGroupName": "<p>The name of the billing group the thing will be added to.</p>",
+        "DeleteBillingGroupRequest$billingGroupName": "<p>The name of the billing group.</p>",
+        "DescribeBillingGroupRequest$billingGroupName": "<p>The name of the billing group.</p>",
+        "DescribeBillingGroupResponse$billingGroupName": "<p>The name of the billing group.</p>",
+        "DescribeThingResponse$billingGroupName": "<p>The name of the billing group the thing belongs to.</p>",
+        "ListBillingGroupsRequest$namePrefixFilter": "<p>Limit the results to billing groups whose names have the given prefix.</p>",
+        "ListThingsInBillingGroupRequest$billingGroupName": "<p>The name of the billing group.</p>",
+        "RemoveThingFromBillingGroupRequest$billingGroupName": "<p>The name of the billing group.</p>",
+        "UpdateBillingGroupRequest$billingGroupName": "<p>The name of the billing group.</p>"
+      }
+    },
+    "BillingGroupNameAndArnList": {
+      "base": null,
+      "refs": {
+        "ListBillingGroupsResponse$billingGroups": "<p>The list of billing groups.</p>"
+      }
+    },
+    "BillingGroupProperties": {
+      "base": "<p>The properties of a billing group.</p>",
+      "refs": {
+        "CreateBillingGroupRequest$billingGroupProperties": "<p>The properties of the billing group.</p>",
+        "DescribeBillingGroupResponse$billingGroupProperties": "<p>The properties of the billing group.</p>",
+        "UpdateBillingGroupRequest$billingGroupProperties": "<p>The properties of the billing group.</p>"
+      }
+    },
     "Boolean": {
       "base": null,
       "refs": {
+        "ThingConnectivity$connected": "<p>True if the thing is connected to the AWS IoT service, false if it is not connected.</p>",
         "ThingTypeMetadata$deprecated": "<p>Whether the thing type is deprecated. If <b>true</b>, no new things could be associated with this type.</p>"
       }
     },
@@ -1011,6 +1135,12 @@
       "refs": {
       }
     },
+    "ConnectivityTimestamp": {
+      "base": null,
+      "refs": {
+        "ThingConnectivity$timestamp": "<p>The epoch time (in milliseconds) when the thing last connected or disconnected. Note that if the thing has been disconnected for more than a few weeks, the time value can be missing.</p>"
+      }
+    },
     "Count": {
       "base": null,
       "refs": {
@@ -1028,6 +1158,16 @@
       "refs": {
       }
     },
+    "CreateBillingGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateBillingGroupResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "CreateCertificateFromCsrRequest": {
       "base": "<p>The input for the CreateCertificateFromCsr operation.</p>",
       "refs": {
@@ -1035,6 +1175,16 @@
     },
     "CreateCertificateFromCsrResponse": {
       "base": "<p>The output from the CreateCertificateFromCsr operation.</p>",
+      "refs": {
+      }
+    },
+    "CreateDynamicThingGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateDynamicThingGroupResponse": {
+      "base": null,
       "refs": {
       }
     },
@@ -1173,6 +1323,7 @@
     "CreationDate": {
       "base": null,
       "refs": {
+        "BillingGroupMetadata$creationDate": "<p>The date the billing group was created.</p>",
         "DescribeEventConfigurationsResponse$creationDate": "<p>The creation date of the event configuration.</p>",
         "DescribeThingRegistrationTaskResponse$creationDate": "<p>The task creation date.</p>",
         "ThingGroupMetadata$creationDate": "<p>The UNIX timestamp of when the thing group was created.</p>",
@@ -1282,6 +1433,16 @@
       "refs": {
       }
     },
+    "DeleteBillingGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteBillingGroupResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DeleteCACertificateRequest": {
       "base": "<p>Input for the DeleteCACertificate operation.</p>",
       "refs": {
@@ -1299,6 +1460,16 @@
     },
     "DeleteConflictException": {
       "base": "<p>You can't delete the resource because it is attached to one or more resources.</p>",
+      "refs": {
+      }
+    },
+    "DeleteDynamicThingGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteDynamicThingGroupResponse": {
+      "base": null,
       "refs": {
       }
     },
@@ -1488,6 +1659,16 @@
       }
     },
     "DescribeAuthorizerResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeBillingGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeBillingGroupResponse": {
       "base": null,
       "refs": {
       }
@@ -1732,6 +1913,12 @@
         "BehaviorCriteria$durationSeconds": "<p>Use this to specify the period of time over which the behavior is evaluated, for those criteria which have a time dimension (for example, <code>NUM_MESSAGES_SENT</code>).</p>"
       }
     },
+    "DynamicGroupStatus": {
+      "base": null,
+      "refs": {
+        "DescribeThingGroupResponse$status": "<p>The dynamic thing group status.</p>"
+      }
+    },
     "DynamoDBAction": {
       "base": "<p>Describes an action to write to a DynamoDB table.</p> <p>The <code>tableName</code>, <code>hashKeyField</code>, and <code>rangeKeyField</code> values must match the values used when you created the table.</p> <p>The <code>hashKeyValue</code> and <code>rangeKeyvalue</code> fields use a substitution template syntax. These templates provide data at runtime. The syntax is as follows: ${<i>sql-expression</i>}.</p> <p>You can specify any valid expression in a WHERE or SELECT clause, including JSON properties, comparisons, calculations, and functions. For example, the following field uses the third level of the topic:</p> <p> <code>\"hashKeyValue\": \"${topic(3)}\"</code> </p> <p>The following field uses the timestamp:</p> <p> <code>\"rangeKeyValue\": \"${timestamp()}\"</code> </p>",
       "refs": {
@@ -1821,7 +2008,7 @@
     "EndpointType": {
       "base": null,
       "refs": {
-        "DescribeEndpointRequest$endpointType": "<p>The endpoint type (such as <code>iot:Data</code>, <code>iot:CredentialProvider</code> and <code>iot:Jobs</code>). </p>"
+        "DescribeEndpointRequest$endpointType": "<p>The endpoint type. Valid endpoint types include:</p> <ul> <li> <p> <code>iot:Data</code> - Returns a VeriSign signed data endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:Data-ATS</code> - Returns an ATS signed data endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:CredentialProvider</code> - Returns an AWS IoT credentials provider API endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:Jobs</code> - Returns an AWS IoT device management Jobs API endpoint.</p> </li> </ul>"
       }
     },
     "ErrorCode": {
@@ -1888,6 +2075,12 @@
       "base": "<p>Information that explicitly denies authorization.</p>",
       "refs": {
         "Denied$explicitDeny": "<p>Information that explicitly denies the authorization. </p>"
+      }
+    },
+    "ExponentialRolloutRate": {
+      "base": "<p>Allows you to create an exponential rate of rollout for a job.</p>",
+      "refs": {
+        "JobExecutionsRolloutConfig$exponentialRate": "<p>The rate of increase for a job rollout. This parameter allows you to define an exponential rate for a job rollout.</p>"
       }
     },
     "FailedChecksCount": {
@@ -2091,6 +2284,7 @@
     "GroupNameAndArn": {
       "base": "<p>The name and ARN of a group.</p>",
       "refs": {
+        "BillingGroupNameAndArnList$member": null,
         "ThingGroupNameAndArnList$member": null
       }
     },
@@ -2130,13 +2324,29 @@
         "JobProcessDetails$numberOfInProgressThings": "<p>The number of things currently executing the job.</p>"
       }
     },
+    "InProgressTimeoutInMinutes": {
+      "base": null,
+      "refs": {
+        "TimeoutConfig$inProgressTimeoutInMinutes": "<p>Specifies the amount of time, in minutes, this device has to finish execution of this job. The timeout interval can be anywhere between 1 minute and 7 days (1 to 10080 minutes). The in progress timer can't be updated and will apply to all job executions for the job. Whenever a job execution remains in the IN_PROGRESS status for longer than this interval, the job execution will fail and switch to the terminal <code>TIMED_OUT</code> status.</p>"
+      }
+    },
+    "IncrementFactor": {
+      "base": null,
+      "refs": {
+        "ExponentialRolloutRate$incrementFactor": "<p>The exponential factor to increase the rate of rollout for a job.</p>"
+      }
+    },
     "IndexName": {
       "base": null,
       "refs": {
+        "CreateDynamicThingGroupRequest$indexName": "<p>The dynamic thing group index name.</p> <note> <p>Currently one index is supported: \"AWS_Things\".</p> </note>",
+        "CreateDynamicThingGroupResponse$indexName": "<p>The dynamic thing group index name.</p>",
         "DescribeIndexRequest$indexName": "<p>The index name.</p>",
         "DescribeIndexResponse$indexName": "<p>The index name.</p>",
+        "DescribeThingGroupResponse$indexName": "<p>The dynamic thing group index name.</p>",
         "IndexNamesList$member": null,
-        "SearchIndexRequest$indexName": "<p>The search index name.</p>"
+        "SearchIndexRequest$indexName": "<p>The search index name.</p>",
+        "UpdateDynamicThingGroupRequest$indexName": "<p>The dynamic thing group index to update.</p> <note> <p>Currently one index is supported: 'AWS_Things'.</p> </note>"
       }
     },
     "IndexNamesList": {
@@ -2153,7 +2363,7 @@
     "IndexSchema": {
       "base": null,
       "refs": {
-        "DescribeIndexResponse$schema": "<p>Contains a value that specifies the type of indexing performed. Valid values are:</p> <ol> <li> <p>REGISTRY – Your thing index will contain only registry data.</p> </li> <li> <p>REGISTRY_AND_SHADOW - Your thing index will contain registry and shadow data.</p> </li> </ol>"
+        "DescribeIndexResponse$schema": "<p>Contains a value that specifies the type of indexing performed. Valid values are:</p> <ul> <li> <p>REGISTRY – Your thing index will contain only registry data.</p> </li> <li> <p>REGISTRY_AND_SHADOW - Your thing index will contain registry data and shadow data.</p> </li> <li> <p>REGISTRY_AND_CONNECTIVITY_STATUS - Your thing index will contain registry data and thing connectivity status data.</p> </li> <li> <p>REGISTRY_AND_SHADOW_AND_CONNECTIVITY_STATUS - Your thing index will contain registry data, shadow data, and thing connectivity status data.</p> </li> </ul>"
       }
     },
     "IndexStatus": {
@@ -2166,6 +2376,12 @@
       "base": null,
       "refs": {
         "CodeSigningCertificateChain$inlineDocument": "<p>A base64 encoded binary representation of the code signing certificate chain.</p>"
+      }
+    },
+    "InputName": {
+      "base": null,
+      "refs": {
+        "IotEventsAction$inputName": "<p>The name of the AWS IoT Events input.</p>"
       }
     },
     "InternalException": {
@@ -2202,6 +2418,12 @@
       "base": "<p>Sends messge data to an AWS IoT Analytics channel.</p>",
       "refs": {
         "Action$iotAnalytics": "<p>Sends message data to an AWS IoT Analytics channel.</p>"
+      }
+    },
+    "IotEventsAction": {
+      "base": "<p>Sends an input to an AWS IoT Events detector.</p>",
+      "refs": {
+        "Action$iotEvents": "<p>Sends an input to an AWS IoT Events detector.</p>"
       }
     },
     "IsAuthenticated": {
@@ -2250,13 +2472,14 @@
         "CancelJobResponse$description": "<p>A short text description of the job.</p>",
         "CreateJobRequest$description": "<p>A short text description of the job.</p>",
         "CreateJobResponse$description": "<p>The job description.</p>",
-        "Job$description": "<p>A short text description of the job.</p>"
+        "Job$description": "<p>A short text description of the job.</p>",
+        "UpdateJobRequest$description": "<p>A short text description of the job.</p>"
       }
     },
     "JobDocument": {
       "base": null,
       "refs": {
-        "CreateJobRequest$document": "<p>The job document.</p>",
+        "CreateJobRequest$document": "<p>The job document.</p> <note> <p>If the job document resides in an S3 bucket, you must use a placeholder link when specifying the document.</p> <p>The placeholder link is of the following form:</p> <p> <code>${aws:iot:s3-presigned-url:https://s3.amazonaws.com/<i>bucket</i>/<i>key</i>}</code> </p> <p>where <i>bucket</i> is your bucket name and <i>key</i> is the object in the bucket to which you are linking.</p> </note>",
         "GetJobDocumentResponse$document": "<p>The job document content.</p>"
       }
     },
@@ -2273,10 +2496,16 @@
         "DescribeJobExecutionResponse$execution": "<p>Information about the job execution.</p>"
       }
     },
+    "JobExecutionFailureType": {
+      "base": null,
+      "refs": {
+        "AbortCriteria$failureType": "<p>The type of job execution failure to define a rule to initiate a job abort.</p>"
+      }
+    },
     "JobExecutionStatus": {
       "base": null,
       "refs": {
-        "JobExecution$status": "<p>The status of the job execution (IN_PROGRESS, QUEUED, FAILED, SUCCESS, CANCELED, or REJECTED).</p>",
+        "JobExecution$status": "<p>The status of the job execution (IN_PROGRESS, QUEUED, FAILED, SUCCEEDED, TIMED_OUT, CANCELED, or REJECTED).</p>",
         "JobExecutionSummary$status": "<p>The status of the job execution.</p>",
         "ListJobExecutionsForJobRequest$status": "<p>The status of the job.</p>",
         "ListJobExecutionsForThingRequest$status": "<p>An optional filter that lets you search for jobs that have the specified status.</p>"
@@ -2323,7 +2552,8 @@
       "base": "<p>Allows you to create a staged rollout of a job.</p>",
       "refs": {
         "CreateJobRequest$jobExecutionsRolloutConfig": "<p>Allows you to create a staged rollout of the job.</p>",
-        "Job$jobExecutionsRolloutConfig": "<p>Allows you to create a staged rollout of a job.</p>"
+        "Job$jobExecutionsRolloutConfig": "<p>Allows you to create a staged rollout of a job.</p>",
+        "UpdateJobRequest$jobExecutionsRolloutConfig": "<p>Allows you to create a staged rollout of the job.</p>"
       }
     },
     "JobId": {
@@ -2345,7 +2575,8 @@
         "JobExecution$jobId": "<p>The unique identifier you assigned to the job when it was created.</p>",
         "JobExecutionSummaryForThing$jobId": "<p>The unique identifier you assigned to this job when it was created.</p>",
         "JobSummary$jobId": "<p>The unique identifier you assigned to this job when it was created.</p>",
-        "ListJobExecutionsForJobRequest$jobId": "<p>The unique identifier you assigned to this job when it was created.</p>"
+        "ListJobExecutionsForJobRequest$jobId": "<p>The unique identifier you assigned to this job when it was created.</p>",
+        "UpdateJobRequest$jobId": "<p>The ID of the job to be updated.</p>"
       }
     },
     "JobProcessDetails": {
@@ -2357,7 +2588,7 @@
     "JobStatus": {
       "base": null,
       "refs": {
-        "Job$status": "<p>The status of the job, one of <code>IN_PROGRESS</code>, <code>CANCELED</code>, or <code>COMPLETED</code>. </p>",
+        "Job$status": "<p>The status of the job, one of <code>IN_PROGRESS</code>, <code>CANCELED</code>, <code>DELETION_IN_PROGRESS</code> or <code>COMPLETED</code>. </p>",
         "JobSummary$status": "<p>The job summary status.</p>",
         "ListJobsRequest$status": "<p>An optional filter that lets you search for jobs that have the specified status.</p>"
       }
@@ -2490,6 +2721,16 @@
       }
     },
     "ListAuthorizersResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListBillingGroupsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListBillingGroupsResponse": {
       "base": null,
       "refs": {
       }
@@ -2684,6 +2925,16 @@
       "refs": {
       }
     },
+    "ListTagsForResourceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListTagsForResourceResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "ListTargetsForPolicyRequest": {
       "base": null,
       "refs": {
@@ -2761,6 +3012,16 @@
     },
     "ListThingTypesResponse": {
       "base": "<p>The output for the ListThingTypes operation.</p>",
+      "refs": {
+      }
+    },
+    "ListThingsInBillingGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListThingsInBillingGroupResponse": {
+      "base": null,
       "refs": {
       }
     },
@@ -2940,12 +3201,24 @@
         "SnsAction$messageFormat": "<p>(Optional) The message format of the message to publish. Accepted values are \"JSON\" and \"RAW\". The default value of the attribute is \"RAW\". SNS uses this setting to determine if the payload should be parsed and relevant platform-specific bits of the payload should be extracted. To read more about SNS message formats, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/json-formats.html\">http://docs.aws.amazon.com/sns/latest/dg/json-formats.html</a> refer to their official documentation.</p>"
       }
     },
+    "MessageId": {
+      "base": null,
+      "refs": {
+        "IotEventsAction$messageId": "<p>[Optional] Use this to ensure that only one input (message) with a given messageId will be processed by an AWS IoT Events detector.</p>"
+      }
+    },
     "MetricValue": {
       "base": "<p>The value to be compared with the <code>metric</code>.</p>",
       "refs": {
         "ActiveViolation$lastViolationValue": "<p>The value of the metric (the measurement) which caused the most recent violation.</p>",
         "BehaviorCriteria$value": "<p>The value to be compared with the <code>metric</code>.</p>",
         "ViolationEvent$metricValue": "<p>The value of the metric (the measurement).</p>"
+      }
+    },
+    "MinimumNumberOfExecutedThings": {
+      "base": null,
+      "refs": {
+        "AbortCriteria$minNumberOfExecutedThings": "<p>Minimum number of executed things before evaluating an abort rule.</p>"
       }
     },
     "MissingContextValue": {
@@ -2969,6 +3242,8 @@
         "ListAuditFindingsResponse$nextToken": "<p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>",
         "ListAuditTasksRequest$nextToken": "<p>The token for the next set of results.</p>",
         "ListAuditTasksResponse$nextToken": "<p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>",
+        "ListBillingGroupsRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
+        "ListBillingGroupsResponse$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
         "ListIndicesRequest$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
         "ListIndicesResponse$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
         "ListJobExecutionsForJobRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
@@ -2989,6 +3264,8 @@
         "ListSecurityProfilesResponse$nextToken": "<p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>",
         "ListStreamsRequest$nextToken": "<p>A token used to get the next set of results.</p>",
         "ListStreamsResponse$nextToken": "<p>A token used to get the next set of results.</p>",
+        "ListTagsForResourceRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
+        "ListTagsForResourceResponse$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
         "ListTargetsForSecurityProfileRequest$nextToken": "<p>The token for the next set of results.</p>",
         "ListTargetsForSecurityProfileResponse$nextToken": "<p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>",
         "ListThingGroupsForThingRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
@@ -3001,6 +3278,8 @@
         "ListThingRegistrationTasksResponse$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
         "ListThingTypesRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
         "ListThingTypesResponse$nextToken": "<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>",
+        "ListThingsInBillingGroupRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
+        "ListThingsInBillingGroupResponse$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
         "ListThingsInThingGroupRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
         "ListThingsInThingGroupResponse$nextToken": "<p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>",
         "ListThingsRequest$nextToken": "<p>The token to retrieve the next set of results.</p>",
@@ -3036,6 +3315,13 @@
     "NotConfiguredException": {
       "base": "<p>The resource is not configured.</p>",
       "refs": {
+      }
+    },
+    "NumberOfThings": {
+      "base": null,
+      "refs": {
+        "RateIncreaseCriteria$numberOfNotifiedThings": "<p>The threshold for number of notified things that will initiate the increase in rate of rollout.</p>",
+        "RateIncreaseCriteria$numberOfSucceededThings": "<p>The threshold for number of succeeded things that will initiate the increase in rate of rollout.</p>"
       }
     },
     "OTAUpdateArn": {
@@ -3118,9 +3404,13 @@
     "OptionalVersion": {
       "base": null,
       "refs": {
+        "DeleteBillingGroupRequest$expectedVersion": "<p>The expected version of the billing group. If the version of the billing group does not match the expected version specified in the request, the <code>DeleteBillingGroup</code> request is rejected with a <code>VersionConflictException</code>.</p>",
+        "DeleteDynamicThingGroupRequest$expectedVersion": "<p>The expected version of the dynamic thing group to delete.</p>",
         "DeleteSecurityProfileRequest$expectedVersion": "<p>The expected version of the security profile. A new version is generated whenever the security profile is updated. If you specify a value that is different than the actual version, a <code>VersionConflictException</code> is thrown.</p>",
         "DeleteThingGroupRequest$expectedVersion": "<p>The expected version of the thing group to delete.</p>",
         "DeleteThingRequest$expectedVersion": "<p>The expected version of the thing record in the registry. If the version of the record in the registry does not match the expected version specified in the request, the <code>DeleteThing</code> request is rejected with a <code>VersionConflictException</code>.</p>",
+        "UpdateBillingGroupRequest$expectedVersion": "<p>The expected version of the billing group. If the version of the billing group does not match the expected version specified in the request, the <code>UpdateBillingGroup</code> request is rejected with a <code>VersionConflictException</code>.</p>",
+        "UpdateDynamicThingGroupRequest$expectedVersion": "<p>The expected version of the dynamic thing group to update.</p>",
         "UpdateSecurityProfileRequest$expectedVersion": "<p>The expected version of the security profile. A new version is generated whenever the security profile is updated. If you specify a value that is different than the actual version, a <code>VersionConflictException</code> is thrown.</p>",
         "UpdateThingGroupRequest$expectedVersion": "<p>The expected version of the thing group. If this does not match the version of the thing group being updated, the update will fail.</p>",
         "UpdateThingRequest$expectedVersion": "<p>The expected version of the thing record in the registry. If the version of the record in the registry does not match the expected version specified in the request, the <code>UpdateThing</code> request is rejected with a <code>VersionConflictException</code>.</p>"
@@ -3136,6 +3426,13 @@
       "base": null,
       "refs": {
         "ListOutgoingCertificatesResponse$outgoingCertificates": "<p>The certificates that are being transferred but not yet accepted.</p>"
+      }
+    },
+    "OverrideDynamicGroups": {
+      "base": null,
+      "refs": {
+        "AddThingToThingGroupRequest$overrideDynamicGroups": "<p>Override dynamic thing groups with static thing groups when 10-group limit is reached. If a thing belongs to 10 thing groups, and one or more of those groups are dynamic thing groups, adding a thing to a static group removes the thing from the last dynamic group.</p>",
+        "UpdateThingGroupsForThingRequest$overrideDynamicGroups": "<p>Override dynamic thing groups with static thing groups when 10-group limit is reached. If a thing belongs to 10 thing groups, and one or more of those groups are dynamic thing groups, adding a thing to a static group removes the thing from the last dynamic group.</p>"
       }
     },
     "PageSize": {
@@ -3273,7 +3570,7 @@
     "PolicyTarget": {
       "base": null,
       "refs": {
-        "AttachPolicyRequest$target": "<p>The identity to which the policy is attached.</p>",
+        "AttachPolicyRequest$target": "<p>The <a href=\"https://docs.aws.amazon.com/iot/latest/developerguide/iot-security-identity.html\">identity</a> to which the policy is attached.</p>",
         "DetachPolicyRequest$target": "<p>The target from which the policy will be detached.</p>",
         "ListAttachedPoliciesRequest$target": "<p>The group for which the policies will be listed.</p>",
         "PolicyTargets$member": null
@@ -3339,7 +3636,8 @@
       "base": "<p>Configuration for pre-signed S3 URLs.</p>",
       "refs": {
         "CreateJobRequest$presignedUrlConfig": "<p>Configuration information for pre-signed S3 URLs.</p>",
-        "Job$presignedUrlConfig": "<p>Configuration for pre-signed S3 URLs.</p>"
+        "Job$presignedUrlConfig": "<p>Configuration for pre-signed S3 URLs.</p>",
+        "UpdateJobRequest$presignedUrlConfig": "<p>Configuration information for pre-signed S3 URLs.</p>"
       }
     },
     "Principal": {
@@ -3422,13 +3720,21 @@
     "QueryString": {
       "base": null,
       "refs": {
-        "SearchIndexRequest$queryString": "<p>The search query string.</p>"
+        "CreateDynamicThingGroupRequest$queryString": "<p>The dynamic thing group search query string.</p> <p>See <a href=\"http://docs.aws.amazon.com/iot/latest/developerguide/query-syntax.html\">Query Syntax</a> for information about query string syntax.</p>",
+        "CreateDynamicThingGroupResponse$queryString": "<p>The dynamic thing group search query string.</p>",
+        "DescribeThingGroupResponse$queryString": "<p>The dynamic thing group search query string.</p>",
+        "SearchIndexRequest$queryString": "<p>The search query string.</p>",
+        "UpdateDynamicThingGroupRequest$queryString": "<p>The dynamic thing group search query string to update.</p>"
       }
     },
     "QueryVersion": {
       "base": null,
       "refs": {
-        "SearchIndexRequest$queryVersion": "<p>The query version.</p>"
+        "CreateDynamicThingGroupRequest$queryVersion": "<p>The dynamic thing group query version.</p> <note> <p>Currently one query version is supported: \"2017-09-30\". If not specified, the query version defaults to this value.</p> </note>",
+        "CreateDynamicThingGroupResponse$queryVersion": "<p>The dynamic thing group query version.</p>",
+        "DescribeThingGroupResponse$queryVersion": "<p>The dynamic thing group query version.</p>",
+        "SearchIndexRequest$queryVersion": "<p>The query version.</p>",
+        "UpdateDynamicThingGroupRequest$queryVersion": "<p>The dynamic thing group query version to update.</p> <note> <p>Currently one query version is supported: \"2017-09-30\". If not specified, the query version defaults to this value.</p> </note>"
       }
     },
     "QueueUrl": {
@@ -3453,6 +3759,19 @@
       "base": null,
       "refs": {
         "DynamoDBAction$rangeKeyValue": "<p>The range key value.</p>"
+      }
+    },
+    "RateIncreaseCriteria": {
+      "base": "<p>Allows you to define a criteria to initiate the increase in rate of rollout for a job.</p>",
+      "refs": {
+        "ExponentialRolloutRate$rateIncreaseCriteria": "<p>The criteria to initiate the increase in rate of rollout for a job.</p> <p>AWS IoT supports up to one digit after the decimal (for example, 1.5, but not 1.55).</p>"
+      }
+    },
+    "ReasonCode": {
+      "base": null,
+      "refs": {
+        "CancelJobRequest$reasonCode": "<p>(Optional)A reason code string that explains why the job was canceled.</p>",
+        "Job$reasonCode": "<p>If the job was updated, provides the reason code for the update.</p>"
       }
     },
     "ReasonForNonCompliance": {
@@ -3533,12 +3852,14 @@
     "RegistryMaxResults": {
       "base": null,
       "refs": {
+        "ListBillingGroupsRequest$maxResults": "<p>The maximum number of results to return per request.</p>",
         "ListPrincipalThingsRequest$maxResults": "<p>The maximum number of results to return in this operation.</p>",
         "ListThingGroupsForThingRequest$maxResults": "<p>The maximum number of results to return at one time.</p>",
         "ListThingGroupsRequest$maxResults": "<p>The maximum number of results to return at one time.</p>",
         "ListThingRegistrationTaskReportsRequest$maxResults": "<p>The maximum number of results to return per request.</p>",
         "ListThingRegistrationTasksRequest$maxResults": "<p>The maximum number of results to return at one time.</p>",
         "ListThingTypesRequest$maxResults": "<p>The maximum number of results to return in this operation.</p>",
+        "ListThingsInBillingGroupRequest$maxResults": "<p>The maximum number of results to return per request.</p>",
         "ListThingsInThingGroupRequest$maxResults": "<p>The maximum number of results to return at one time.</p>",
         "ListThingsRequest$maxResults": "<p>The maximum number of results to return in this operation.</p>"
       }
@@ -3584,6 +3905,16 @@
       "base": null,
       "refs": {
         "UpdateCACertificateRequest$removeAutoRegistration": "<p>If true, remove auto registration.</p>"
+      }
+    },
+    "RemoveThingFromBillingGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "RemoveThingFromBillingGroupResponse": {
+      "base": null,
+      "refs": {
       }
     },
     "RemoveThingFromThingGroupRequest": {
@@ -3640,7 +3971,10 @@
     "ResourceArn": {
       "base": null,
       "refs": {
-        "ResourceArns$value": null
+        "ListTagsForResourceRequest$resourceArn": "<p>The ARN of the resource.</p>",
+        "ResourceArns$value": null,
+        "TagResourceRequest$resourceArn": "<p>The ARN of the resource.</p>",
+        "UntagResourceRequest$resourceArn": "<p>The ARN of the resource.</p>"
       }
     },
     "ResourceArns": {
@@ -3737,6 +4071,12 @@
         "UpdateAccountAuditConfigurationRequest$roleArn": "<p>The ARN of the role that grants permission to AWS IoT to access information about your devices, policies, certificates and other items as necessary when performing an audit.</p>",
         "UpdateRoleAliasRequest$roleArn": "<p>The role ARN.</p>",
         "UpdateStreamRequest$roleArn": "<p>An IAM role that allows the IoT service principal assumes to access your S3 files.</p>"
+      }
+    },
+    "RolloutRatePerMinute": {
+      "base": null,
+      "refs": {
+        "ExponentialRolloutRate$baseRatePerMinute": "<p>The minimum number of things that will be notified of a pending job, per minute at the start of job rollout. This parameter allows you to define the initial rate of rollout.</p>"
       }
     },
     "RuleArn": {
@@ -4270,6 +4610,54 @@
         "PutItemInput$tableName": "<p>The table where the message data will be written</p>"
       }
     },
+    "Tag": {
+      "base": "<p>A set of key/value pairs that are used to manage the resource.</p>",
+      "refs": {
+        "TagList$member": null
+      }
+    },
+    "TagKey": {
+      "base": null,
+      "refs": {
+        "Tag$Key": "<p>The tag's key.</p>",
+        "TagKeyList$member": null
+      }
+    },
+    "TagKeyList": {
+      "base": null,
+      "refs": {
+        "UntagResourceRequest$tagKeys": "<p>A list of the keys of the tags to be removed from the resource.</p>"
+      }
+    },
+    "TagList": {
+      "base": null,
+      "refs": {
+        "CreateBillingGroupRequest$tags": "<p>Metadata which can be used to manage the billing group.</p>",
+        "CreateDynamicThingGroupRequest$tags": "<p>Metadata which can be used to manage the dynamic thing group.</p>",
+        "CreateJobRequest$tags": "<p>Metadata which can be used to manage the job.</p>",
+        "CreateSecurityProfileRequest$tags": "<p>Metadata which can be used to manage the security profile.</p>",
+        "CreateThingGroupRequest$tags": "<p>Metadata which can be used to manage the thing group.</p>",
+        "CreateThingTypeRequest$tags": "<p>Metadata which can be used to manage the thing type.</p>",
+        "ListTagsForResourceResponse$tags": "<p>The list of tags assigned to the resource.</p>",
+        "TagResourceRequest$tags": "<p>The new or modified tags for the resource.</p>"
+      }
+    },
+    "TagResourceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "TagResourceResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "TagValue": {
+      "base": null,
+      "refs": {
+        "Tag$Value": "<p>The tag's value.</p>"
+      }
+    },
     "Target": {
       "base": null,
       "refs": {
@@ -4365,11 +4753,13 @@
     "ThingArn": {
       "base": null,
       "refs": {
+        "AddThingToBillingGroupRequest$thingArn": "<p>The ARN of the thing to be added to the billing group.</p>",
         "AddThingToThingGroupRequest$thingArn": "<p>The ARN of the thing to add to a group.</p>",
         "CreateThingResponse$thingArn": "<p>The ARN of the new thing.</p>",
         "DescribeThingResponse$thingArn": "<p>The ARN of the thing to describe.</p>",
         "JobExecution$thingArn": "<p>The ARN of the thing on which the job execution is running.</p>",
         "JobExecutionSummaryForJob$thingArn": "<p>The ARN of the thing on which the job execution is running.</p>",
+        "RemoveThingFromBillingGroupRequest$thingArn": "<p>The ARN of the thing to be removed from the billing group.</p>",
         "RemoveThingFromThingGroupRequest$thingArn": "<p>The ARN of the thing to remove from the group.</p>",
         "ThingAttribute$thingArn": "<p>The thing ARN.</p>"
       }
@@ -4384,6 +4774,18 @@
       "base": null,
       "refs": {
         "ListThingsResponse$things": "<p>The things.</p>"
+      }
+    },
+    "ThingConnectivity": {
+      "base": "<p>The connectivity status of the thing.</p>",
+      "refs": {
+        "ThingDocument$connectivity": "<p>Indicates whether or not the thing is connected to the AWS IoT service.</p>"
+      }
+    },
+    "ThingConnectivityIndexingMode": {
+      "base": null,
+      "refs": {
+        "ThingIndexingConfiguration$thingConnectivityIndexingMode": "<p>Thing connectivity indexing mode. Valid values are: </p> <ul> <li> <p>STATUS – Your thing index will contain connectivity status. In order to enable thing connectivity indexing, thingIndexMode must not be set to OFF.</p> </li> <li> <p>OFF - Thing connectivity status indexing is disabled.</p> </li> </ul>"
       }
     },
     "ThingDocument": {
@@ -4402,6 +4804,7 @@
       "base": null,
       "refs": {
         "AddThingToThingGroupRequest$thingGroupArn": "<p>The ARN of the group to which you are adding a thing.</p>",
+        "CreateDynamicThingGroupResponse$thingGroupArn": "<p>The dynamic thing group ARN.</p>",
         "CreateThingGroupResponse$thingGroupArn": "<p>The thing group ARN.</p>",
         "DescribeThingGroupResponse$thingGroupArn": "<p>The thing group ARN.</p>",
         "GroupNameAndArn$groupArn": "<p>The group ARN.</p>",
@@ -4430,6 +4833,7 @@
     "ThingGroupId": {
       "base": null,
       "refs": {
+        "CreateDynamicThingGroupResponse$thingGroupId": "<p>The dynamic thing group ID.</p>",
         "CreateThingGroupResponse$thingGroupId": "<p>The thing group ID.</p>",
         "DescribeThingGroupResponse$thingGroupId": "<p>The thing group ID.</p>",
         "JobSummary$thingGroupId": "<p>The ID of the thing group.</p>",
@@ -4467,9 +4871,12 @@
       "base": null,
       "refs": {
         "AddThingToThingGroupRequest$thingGroupName": "<p>The name of the group to which you are adding a thing.</p>",
+        "CreateDynamicThingGroupRequest$thingGroupName": "<p>The dynamic thing group name to create.</p>",
+        "CreateDynamicThingGroupResponse$thingGroupName": "<p>The dynamic thing group name.</p>",
         "CreateThingGroupRequest$thingGroupName": "<p>The thing group name to create.</p>",
         "CreateThingGroupRequest$parentGroupName": "<p>The name of the parent thing group.</p>",
         "CreateThingGroupResponse$thingGroupName": "<p>The thing group name.</p>",
+        "DeleteDynamicThingGroupRequest$thingGroupName": "<p>The name of the dynamic thing group to delete.</p>",
         "DeleteThingGroupRequest$thingGroupName": "<p>The name of the thing group to delete.</p>",
         "DescribeThingGroupRequest$thingGroupName": "<p>The name of the thing group.</p>",
         "DescribeThingGroupResponse$thingGroupName": "<p>The name of the thing group.</p>",
@@ -4483,6 +4890,7 @@
         "ThingGroupList$member": null,
         "ThingGroupMetadata$parentGroupName": "<p>The parent thing group name.</p>",
         "ThingGroupNameList$member": null,
+        "UpdateDynamicThingGroupRequest$thingGroupName": "<p>The name of the dynamic thing group to update.</p>",
         "UpdateThingGroupRequest$thingGroupName": "<p>The thing group to update.</p>"
       }
     },
@@ -4504,8 +4912,10 @@
     "ThingGroupProperties": {
       "base": "<p>Thing group properties.</p>",
       "refs": {
+        "CreateDynamicThingGroupRequest$thingGroupProperties": "<p>The dynamic thing group properties.</p>",
         "CreateThingGroupRequest$thingGroupProperties": "<p>The thing group properties.</p>",
         "DescribeThingGroupResponse$thingGroupProperties": "<p>The thing group properties.</p>",
+        "UpdateDynamicThingGroupRequest$thingGroupProperties": "<p>The dynamic thing group properties to update.</p>",
         "UpdateThingGroupRequest$thingGroupProperties": "<p>The thing group properties.</p>"
       }
     },
@@ -4518,7 +4928,7 @@
       }
     },
     "ThingIndexingConfiguration": {
-      "base": "<p>Thing indexing configuration.</p>",
+      "base": "<p>The thing indexing configuration. For more information, see <a href=\"https://docs.aws.amazon.com/iot/latest/developerguide/managing-index.html\">Managing Thing Indexing</a>.</p>",
       "refs": {
         "GetIndexingConfigurationResponse$thingIndexingConfiguration": "<p>Thing indexing configuration.</p>",
         "UpdateIndexingConfigurationRequest$thingIndexingConfiguration": "<p>Thing indexing configuration.</p>"
@@ -4527,13 +4937,14 @@
     "ThingIndexingMode": {
       "base": null,
       "refs": {
-        "ThingIndexingConfiguration$thingIndexingMode": "<p>Thing indexing mode. Valid values are: </p> <ul> <li> <p>REGISTRY – Your thing index will contain only registry data.</p> </li> <li> <p>REGISTRY_AND_SHADOW - Your thing index will contain registry and shadow data.</p> </li> <li> <p>OFF - Thing indexing is disabled.</p> </li> </ul>"
+        "ThingIndexingConfiguration$thingIndexingMode": "<p>Thing indexing mode. Valid values are:</p> <ul> <li> <p>REGISTRY – Your thing index will contain only registry data.</p> </li> <li> <p>REGISTRY_AND_SHADOW - Your thing index will contain registry and shadow data.</p> </li> <li> <p>OFF - Thing indexing is disabled.</p> </li> </ul>"
       }
     },
     "ThingName": {
       "base": null,
       "refs": {
         "ActiveViolation$thingName": "<p>The name of the thing responsible for the active violation.</p>",
+        "AddThingToBillingGroupRequest$thingName": "<p>The name of the thing to be added to the billing group.</p>",
         "AddThingToThingGroupRequest$thingName": "<p>The name of the thing to add to a group.</p>",
         "AttachThingPrincipalRequest$thingName": "<p>The name of the thing.</p>",
         "CancelJobExecutionRequest$thingName": "<p>The name of the thing whose execution of the job will be canceled.</p>",
@@ -4551,6 +4962,7 @@
         "ListThingGroupsForThingRequest$thingName": "<p>The thing name.</p>",
         "ListThingPrincipalsRequest$thingName": "<p>The name of the thing.</p>",
         "ListViolationEventsRequest$thingName": "<p>A filter to limit results to those alerts caused by the specified thing.</p>",
+        "RemoveThingFromBillingGroupRequest$thingName": "<p>The name of the thing to be removed from the billing group.</p>",
         "RemoveThingFromThingGroupRequest$thingName": "<p>The name of the thing to remove from the group.</p>",
         "ThingAttribute$thingName": "<p>The name of the thing.</p>",
         "ThingDocument$thingName": "<p>The thing name.</p>",
@@ -4564,6 +4976,7 @@
       "base": null,
       "refs": {
         "ListPrincipalThingsResponse$things": "<p>The things.</p>",
+        "ListThingsInBillingGroupResponse$things": "<p>A list of things in the billing group.</p>",
         "ListThingsInThingGroupResponse$things": "<p>The things in the specified thing group.</p>"
       }
     },
@@ -4637,6 +5050,20 @@
     "ThrottlingException": {
       "base": "<p>The rate exceeds the limit.</p>",
       "refs": {
+      }
+    },
+    "TimedOutThings": {
+      "base": null,
+      "refs": {
+        "JobProcessDetails$numberOfTimedOutThings": "<p>The number of things whose job execution status is <code>TIMED_OUT</code>.</p>"
+      }
+    },
+    "TimeoutConfig": {
+      "base": "<p>Specifies the amount of time each device has to finish its execution of the job. A timer is started when the job execution status is set to <code>IN_PROGRESS</code>. If the job execution status is not set to another terminal state before the timer expires, it will be automatically set to <code>TIMED_OUT</code>.</p>",
+      "refs": {
+        "CreateJobRequest$timeoutConfig": "<p>Specifies the amount of time each device has to finish its execution of the job. The timer is started when the job execution status is set to <code>IN_PROGRESS</code>. If the job execution status is not set to another terminal state before the time expires, it will be automatically set to <code>TIMED_OUT</code>.</p>",
+        "Job$timeoutConfig": "<p>Specifies the amount of time each device has to finish its execution of the job. A timer is started when the job execution status is set to <code>IN_PROGRESS</code>. If the job execution status is not set to another terminal state before the timer expires, it will be automatically set to <code>TIMED_OUT</code>.</p>",
+        "UpdateJobRequest$timeoutConfig": "<p>Specifies the amount of time each device has to finish its execution of the job. The timer is started when the job execution status is set to <code>IN_PROGRESS</code>. If the job execution status is not set to another terminal state before the time expires, it will be automatically set to <code>TIMED_OUT</code>. </p>"
       }
     },
     "Timestamp": {
@@ -4773,6 +5200,16 @@
         "MetricValue$count": "<p>If the <code>comparisonOperator</code> calls for a numeric value, use this to specify that numeric value to be compared with the <code>metric</code>.</p>"
       }
     },
+    "UntagResourceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UntagResourceResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "UpdateAccountAuditConfigurationRequest": {
       "base": null,
       "refs": {
@@ -4793,6 +5230,16 @@
       "refs": {
       }
     },
+    "UpdateBillingGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateBillingGroupResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "UpdateCACertificateRequest": {
       "base": "<p>The input to the UpdateCACertificate operation.</p>",
       "refs": {
@@ -4800,6 +5247,16 @@
     },
     "UpdateCertificateRequest": {
       "base": "<p>The input for the UpdateCertificate operation.</p>",
+      "refs": {
+      }
+    },
+    "UpdateDynamicThingGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateDynamicThingGroupResponse": {
+      "base": null,
       "refs": {
       }
     },
@@ -4819,6 +5276,11 @@
       }
     },
     "UpdateIndexingConfigurationResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateJobRequest": {
       "base": null,
       "refs": {
       }
@@ -4938,10 +5400,13 @@
     "Version": {
       "base": null,
       "refs": {
+        "DescribeBillingGroupResponse$version": "<p>The version of the billing group.</p>",
         "DescribeSecurityProfileResponse$version": "<p>The version of the security profile. A new version is generated whenever the security profile is updated.</p>",
         "DescribeThingGroupResponse$version": "<p>The version of the thing group.</p>",
         "DescribeThingResponse$version": "<p>The current version of the thing record in the registry.</p> <note> <p>To avoid unintentional changes to the information in the registry, you can pass the version information in the <code>expectedVersion</code> parameter of the <code>UpdateThing</code> and <code>DeleteThing</code> calls.</p> </note>",
         "ThingAttribute$version": "<p>The version of the thing record in the registry.</p>",
+        "UpdateBillingGroupResponse$version": "<p>The latest version of the billing group.</p>",
+        "UpdateDynamicThingGroupResponse$version": "<p>The dynamic thing group version.</p>",
         "UpdateSecurityProfileResponse$version": "<p>The updated version of the security profile.</p>",
         "UpdateThingGroupResponse$version": "<p>The version of the updated thing group.</p>"
       }

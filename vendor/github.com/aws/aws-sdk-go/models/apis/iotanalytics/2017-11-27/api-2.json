@@ -777,6 +777,7 @@
         "datasetName":{"shape":"DatasetName"},
         "actions":{"shape":"DatasetActions"},
         "triggers":{"shape":"DatasetTriggers"},
+        "contentDeliveryRules":{"shape":"DatasetContentDeliveryRules"},
         "retentionPeriod":{"shape":"RetentionPeriod"},
         "tags":{"shape":"TagList"}
       }
@@ -832,6 +833,7 @@
         "arn":{"shape":"DatasetArn"},
         "actions":{"shape":"DatasetActions"},
         "triggers":{"shape":"DatasetTriggers"},
+        "contentDeliveryRules":{"shape":"DatasetContentDeliveryRules"},
         "status":{"shape":"DatasetStatus"},
         "creationTime":{"shape":"Timestamp"},
         "lastUpdateTime":{"shape":"Timestamp"},
@@ -879,6 +881,26 @@
       "min":1
     },
     "DatasetArn":{"type":"string"},
+    "DatasetContentDeliveryDestination":{
+      "type":"structure",
+      "members":{
+        "iotEventsDestinationConfiguration":{"shape":"IotEventsDestinationConfiguration"}
+      }
+    },
+    "DatasetContentDeliveryRule":{
+      "type":"structure",
+      "required":["destination"],
+      "members":{
+        "entryName":{"shape":"EntryName"},
+        "destination":{"shape":"DatasetContentDeliveryDestination"}
+      }
+    },
+    "DatasetContentDeliveryRules":{
+      "type":"list",
+      "member":{"shape":"DatasetContentDeliveryRule"},
+      "max":20,
+      "min":0
+    },
     "DatasetContentState":{
       "type":"string",
       "enum":[
@@ -1296,6 +1318,23 @@
       },
       "error":{"httpStatusCode":400},
       "exception":true
+    },
+    "IotEventsDestinationConfiguration":{
+      "type":"structure",
+      "required":[
+        "inputName",
+        "roleArn"
+      ],
+      "members":{
+        "inputName":{"shape":"IotEventsInputName"},
+        "roleArn":{"shape":"RoleArn"}
+      }
+    },
+    "IotEventsInputName":{
+      "type":"string",
+      "max":128,
+      "min":1,
+      "pattern":"^[a-zA-Z][a-zA-Z0-9_]*$"
     },
     "LambdaActivity":{
       "type":"structure",
@@ -1937,6 +1976,7 @@
         },
         "actions":{"shape":"DatasetActions"},
         "triggers":{"shape":"DatasetTriggers"},
+        "contentDeliveryRules":{"shape":"DatasetContentDeliveryRules"},
         "retentionPeriod":{"shape":"RetentionPeriod"}
       }
     },

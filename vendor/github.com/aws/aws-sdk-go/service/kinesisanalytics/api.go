@@ -16,7 +16,7 @@ const opAddApplicationCloudWatchLoggingOption = "AddApplicationCloudWatchLogging
 // AddApplicationCloudWatchLoggingOptionRequest generates a "aws/request.Request" representing the
 // client's request for the AddApplicationCloudWatchLoggingOption operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -81,6 +81,8 @@ func (c *KinesisAnalytics) AddApplicationCloudWatchLoggingOptionRequest(input *A
 //   For example, two individuals attempting to edit the same application at the
 //   same time.
 //
+//   * ErrCodeUnsupportedOperationException "UnsupportedOperationException"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/AddApplicationCloudWatchLoggingOption
 func (c *KinesisAnalytics) AddApplicationCloudWatchLoggingOption(input *AddApplicationCloudWatchLoggingOptionInput) (*AddApplicationCloudWatchLoggingOptionOutput, error) {
 	req, out := c.AddApplicationCloudWatchLoggingOptionRequest(input)
@@ -108,7 +110,7 @@ const opAddApplicationInput = "AddApplicationInput"
 // AddApplicationInputRequest generates a "aws/request.Request" representing the
 // client's request for the AddApplicationInput operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -187,6 +189,8 @@ func (c *KinesisAnalytics) AddApplicationInputRequest(input *AddApplicationInput
 //   User-provided application code (query) is invalid. This can be a simple syntax
 //   error.
 //
+//   * ErrCodeUnsupportedOperationException "UnsupportedOperationException"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/AddApplicationInput
 func (c *KinesisAnalytics) AddApplicationInput(input *AddApplicationInputInput) (*AddApplicationInputOutput, error) {
 	req, out := c.AddApplicationInputRequest(input)
@@ -214,7 +218,7 @@ const opAddApplicationInputProcessingConfiguration = "AddApplicationInputProcess
 // AddApplicationInputProcessingConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the AddApplicationInputProcessingConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -279,6 +283,8 @@ func (c *KinesisAnalytics) AddApplicationInputProcessingConfigurationRequest(inp
 //   For example, two individuals attempting to edit the same application at the
 //   same time.
 //
+//   * ErrCodeUnsupportedOperationException "UnsupportedOperationException"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/AddApplicationInputProcessingConfiguration
 func (c *KinesisAnalytics) AddApplicationInputProcessingConfiguration(input *AddApplicationInputProcessingConfigurationInput) (*AddApplicationInputProcessingConfigurationOutput, error) {
 	req, out := c.AddApplicationInputProcessingConfigurationRequest(input)
@@ -306,7 +312,7 @@ const opAddApplicationOutput = "AddApplicationOutput"
 // AddApplicationOutputRequest generates a "aws/request.Request" representing the
 // client's request for the AddApplicationOutput operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -349,19 +355,19 @@ func (c *KinesisAnalytics) AddApplicationOutputRequest(input *AddApplicationOutp
 //
 // If you want Amazon Kinesis Analytics to deliver data from an in-application
 // stream within your application to an external destination (such as an Amazon
-// Kinesis stream, an Amazon Kinesis Firehose delivery stream, or an Amazon
-// Lambda function), you add the relevant configuration to your application
-// using this operation. You can configure one or more outputs for your application.
-// Each output configuration maps an in-application stream and an external destination.
+// Kinesis stream, an Amazon Kinesis Firehose delivery stream, or an AWS Lambda
+// function), you add the relevant configuration to your application using this
+// operation. You can configure one or more outputs for your application. Each
+// output configuration maps an in-application stream and an external destination.
 //
 // You can use one of the output configurations to deliver data from your in-application
 // error stream to an external destination so that you can analyze the errors.
-// For conceptual information, see Understanding Application Output (Destination)
+// For more information, see Understanding Application Output (Destination)
 // (http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html).
 //
-// Note that any configuration update, including adding a streaming source using
-// this operation, results in a new version of the application. You can use
-// the DescribeApplication operation to find the current application version.
+// Any configuration update, including adding a streaming source using this
+// operation, results in a new version of the application. You can use the DescribeApplication
+// operation to find the current application version.
 //
 // For the limits on the number of application inputs and outputs you can configure,
 // see Limits (http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html).
@@ -391,6 +397,8 @@ func (c *KinesisAnalytics) AddApplicationOutputRequest(input *AddApplicationOutp
 //   For example, two individuals attempting to edit the same application at the
 //   same time.
 //
+//   * ErrCodeUnsupportedOperationException "UnsupportedOperationException"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/AddApplicationOutput
 func (c *KinesisAnalytics) AddApplicationOutput(input *AddApplicationOutputInput) (*AddApplicationOutputOutput, error) {
 	req, out := c.AddApplicationOutputRequest(input)
@@ -418,7 +426,7 @@ const opAddApplicationReferenceDataSource = "AddApplicationReferenceDataSource"
 // AddApplicationReferenceDataSourceRequest generates a "aws/request.Request" representing the
 // client's request for the AddApplicationReferenceDataSource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -495,6 +503,8 @@ func (c *KinesisAnalytics) AddApplicationReferenceDataSourceRequest(input *AddAp
 //   For example, two individuals attempting to edit the same application at the
 //   same time.
 //
+//   * ErrCodeUnsupportedOperationException "UnsupportedOperationException"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/AddApplicationReferenceDataSource
 func (c *KinesisAnalytics) AddApplicationReferenceDataSource(input *AddApplicationReferenceDataSourceInput) (*AddApplicationReferenceDataSourceOutput, error) {
 	req, out := c.AddApplicationReferenceDataSourceRequest(input)
@@ -522,7 +532,7 @@ const opCreateApplication = "CreateApplication"
 // CreateApplicationRequest generates a "aws/request.Request" representing the
 // client's request for the CreateApplication operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -635,7 +645,7 @@ const opDeleteApplication = "DeleteApplication"
 // DeleteApplicationRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteApplication operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -700,6 +710,8 @@ func (c *KinesisAnalytics) DeleteApplicationRequest(input *DeleteApplicationInpu
 //   * ErrCodeResourceInUseException "ResourceInUseException"
 //   Application is not available for this operation.
 //
+//   * ErrCodeUnsupportedOperationException "UnsupportedOperationException"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/DeleteApplication
 func (c *KinesisAnalytics) DeleteApplication(input *DeleteApplicationInput) (*DeleteApplicationOutput, error) {
 	req, out := c.DeleteApplicationRequest(input)
@@ -727,7 +739,7 @@ const opDeleteApplicationCloudWatchLoggingOption = "DeleteApplicationCloudWatchL
 // DeleteApplicationCloudWatchLoggingOptionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteApplicationCloudWatchLoggingOption operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -792,6 +804,8 @@ func (c *KinesisAnalytics) DeleteApplicationCloudWatchLoggingOptionRequest(input
 //   For example, two individuals attempting to edit the same application at the
 //   same time.
 //
+//   * ErrCodeUnsupportedOperationException "UnsupportedOperationException"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/DeleteApplicationCloudWatchLoggingOption
 func (c *KinesisAnalytics) DeleteApplicationCloudWatchLoggingOption(input *DeleteApplicationCloudWatchLoggingOptionInput) (*DeleteApplicationCloudWatchLoggingOptionOutput, error) {
 	req, out := c.DeleteApplicationCloudWatchLoggingOptionRequest(input)
@@ -819,7 +833,7 @@ const opDeleteApplicationInputProcessingConfiguration = "DeleteApplicationInputP
 // DeleteApplicationInputProcessingConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteApplicationInputProcessingConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -882,6 +896,8 @@ func (c *KinesisAnalytics) DeleteApplicationInputProcessingConfigurationRequest(
 //   For example, two individuals attempting to edit the same application at the
 //   same time.
 //
+//   * ErrCodeUnsupportedOperationException "UnsupportedOperationException"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/DeleteApplicationInputProcessingConfiguration
 func (c *KinesisAnalytics) DeleteApplicationInputProcessingConfiguration(input *DeleteApplicationInputProcessingConfigurationInput) (*DeleteApplicationInputProcessingConfigurationOutput, error) {
 	req, out := c.DeleteApplicationInputProcessingConfigurationRequest(input)
@@ -909,7 +925,7 @@ const opDeleteApplicationOutput = "DeleteApplicationOutput"
 // DeleteApplicationOutputRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteApplicationOutput operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -977,6 +993,8 @@ func (c *KinesisAnalytics) DeleteApplicationOutputRequest(input *DeleteApplicati
 //   For example, two individuals attempting to edit the same application at the
 //   same time.
 //
+//   * ErrCodeUnsupportedOperationException "UnsupportedOperationException"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/DeleteApplicationOutput
 func (c *KinesisAnalytics) DeleteApplicationOutput(input *DeleteApplicationOutputInput) (*DeleteApplicationOutputOutput, error) {
 	req, out := c.DeleteApplicationOutputRequest(input)
@@ -1004,7 +1022,7 @@ const opDeleteApplicationReferenceDataSource = "DeleteApplicationReferenceDataSo
 // DeleteApplicationReferenceDataSourceRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteApplicationReferenceDataSource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1075,6 +1093,8 @@ func (c *KinesisAnalytics) DeleteApplicationReferenceDataSourceRequest(input *De
 //   For example, two individuals attempting to edit the same application at the
 //   same time.
 //
+//   * ErrCodeUnsupportedOperationException "UnsupportedOperationException"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/DeleteApplicationReferenceDataSource
 func (c *KinesisAnalytics) DeleteApplicationReferenceDataSource(input *DeleteApplicationReferenceDataSourceInput) (*DeleteApplicationReferenceDataSourceOutput, error) {
 	req, out := c.DeleteApplicationReferenceDataSourceRequest(input)
@@ -1102,7 +1122,7 @@ const opDescribeApplication = "DescribeApplication"
 // DescribeApplicationRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeApplication operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1161,6 +1181,8 @@ func (c *KinesisAnalytics) DescribeApplicationRequest(input *DescribeApplication
 //   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Specified application can't be found.
 //
+//   * ErrCodeUnsupportedOperationException "UnsupportedOperationException"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/DescribeApplication
 func (c *KinesisAnalytics) DescribeApplication(input *DescribeApplicationInput) (*DescribeApplicationOutput, error) {
 	req, out := c.DescribeApplicationRequest(input)
@@ -1188,7 +1210,7 @@ const opDiscoverInputSchema = "DiscoverInputSchema"
 // DiscoverInputSchemaRequest generates a "aws/request.Request" representing the
 // client's request for the DiscoverInputSchema operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1254,7 +1276,7 @@ func (c *KinesisAnalytics) DiscoverInputSchemaRequest(input *DiscoverInputSchema
 //   Specified input parameter value is invalid.
 //
 //   * ErrCodeUnableToDetectSchemaException "UnableToDetectSchemaException"
-//   Data format is not valid, Amazon Kinesis Analytics is not able to detect
+//   Data format is not valid. Amazon Kinesis Analytics is not able to detect
 //   schema for the given streaming source.
 //
 //   * ErrCodeResourceProvisionedThroughputExceededException "ResourceProvisionedThroughputExceededException"
@@ -1264,7 +1286,7 @@ func (c *KinesisAnalytics) DiscoverInputSchemaRequest(input *DiscoverInputSchema
 //   in the Amazon Kinesis Streams API Reference.
 //
 //   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
-//   The service is unavailable, back off and retry the operation.
+//   The service is unavailable. Back off and retry the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/DiscoverInputSchema
 func (c *KinesisAnalytics) DiscoverInputSchema(input *DiscoverInputSchemaInput) (*DiscoverInputSchemaOutput, error) {
@@ -1293,7 +1315,7 @@ const opListApplications = "ListApplications"
 // ListApplicationsRequest generates a "aws/request.Request" representing the
 // client's request for the ListApplications operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1377,7 +1399,7 @@ const opStartApplication = "StartApplication"
 // StartApplicationRequest generates a "aws/request.Request" representing the
 // client's request for the StartApplication operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1452,6 +1474,8 @@ func (c *KinesisAnalytics) StartApplicationRequest(input *StartApplicationInput)
 //   * ErrCodeInvalidApplicationConfigurationException "InvalidApplicationConfigurationException"
 //   User-provided application configuration is not valid.
 //
+//   * ErrCodeUnsupportedOperationException "UnsupportedOperationException"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/StartApplication
 func (c *KinesisAnalytics) StartApplication(input *StartApplicationInput) (*StartApplicationOutput, error) {
 	req, out := c.StartApplicationRequest(input)
@@ -1479,7 +1503,7 @@ const opStopApplication = "StopApplication"
 // StopApplicationRequest generates a "aws/request.Request" representing the
 // client's request for the StopApplication operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1541,6 +1565,8 @@ func (c *KinesisAnalytics) StopApplicationRequest(input *StopApplicationInput) (
 //   * ErrCodeResourceInUseException "ResourceInUseException"
 //   Application is not available for this operation.
 //
+//   * ErrCodeUnsupportedOperationException "UnsupportedOperationException"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/StopApplication
 func (c *KinesisAnalytics) StopApplication(input *StopApplicationInput) (*StopApplicationOutput, error) {
 	req, out := c.StopApplicationRequest(input)
@@ -1568,7 +1594,7 @@ const opUpdateApplication = "UpdateApplication"
 // UpdateApplicationRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateApplication operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1641,6 +1667,8 @@ func (c *KinesisAnalytics) UpdateApplicationRequest(input *UpdateApplicationInpu
 //   Exception thrown as a result of concurrent modification to an application.
 //   For example, two individuals attempting to edit the same application at the
 //   same time.
+//
+//   * ErrCodeUnsupportedOperationException "UnsupportedOperationException"
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/UpdateApplication
 func (c *KinesisAnalytics) UpdateApplication(input *UpdateApplicationInput) (*UpdateApplicationOutput, error) {
@@ -1982,7 +2010,7 @@ type AddApplicationOutputInput struct {
 	// An array of objects, each describing one output configuration. In the output
 	// configuration, you specify the name of an in-application stream, a destination
 	// (that is, an Amazon Kinesis stream, an Amazon Kinesis Firehose delivery stream,
-	// or an Amazon Lambda function), and record the formation to use when writing
+	// or an AWS Lambda function), and record the formation to use when writing
 	// to the destination.
 	//
 	// Output is a required field
@@ -2464,7 +2492,7 @@ func (s *ApplicationUpdate) SetReferenceDataSourceUpdates(v []*ReferenceDataSour
 //
 // "name1", "address1"
 //
-// "name2, "address2"
+// "name2", "address2"
 type CSVMappingParameters struct {
 	_ struct{} `type:"structure"`
 
@@ -2758,7 +2786,7 @@ type CreateApplicationInput struct {
 	// streams to up to three destinations.
 	//
 	// These destinations can be Amazon Kinesis streams, Amazon Kinesis Firehose
-	// delivery streams, Amazon Lambda destinations, or any combination of the three.
+	// delivery streams, AWS Lambda destinations, or any combination of the three.
 	//
 	// In the configuration, you specify the in-application stream name, the destination
 	// stream or Lambda function Amazon Resource Name (ARN), and the format to use
@@ -3409,7 +3437,9 @@ type DestinationSchema struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies the format of the records on the output stream.
-	RecordFormatType *string `type:"string" enum:"RecordFormatType"`
+	//
+	// RecordFormatType is a required field
+	RecordFormatType *string `type:"string" required:"true" enum:"RecordFormatType"`
 }
 
 // String returns the string representation
@@ -3420,6 +3450,19 @@ func (s DestinationSchema) String() string {
 // GoString returns the string representation
 func (s DestinationSchema) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DestinationSchema) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DestinationSchema"}
+	if s.RecordFormatType == nil {
+		invalidParams.Add(request.NewErrParamRequired("RecordFormatType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetRecordFormatType sets the RecordFormatType field's value.
@@ -3446,7 +3489,7 @@ type DiscoverInputSchemaInput struct {
 	// stream on your behalf.
 	RoleARN *string `min:"1" type:"string"`
 
-	// Specify this parameter to discover a schema from data in an S3 object.
+	// Specify this parameter to discover a schema from data in an Amazon S3 object.
 	S3Configuration *S3Configuration `type:"structure"`
 }
 
@@ -4514,8 +4557,8 @@ type KinesisFirehoseInput struct {
 	ResourceARN *string `min:"1" type:"string" required:"true"`
 
 	// ARN of the IAM role that Amazon Kinesis Analytics can assume to access the
-	// stream on your behalf. You need to make sure the role has necessary permissions
-	// to access the stream.
+	// stream on your behalf. You need to make sure that the role has the necessary
+	// permissions to access the stream.
 	//
 	// RoleARN is a required field
 	RoleARN *string `min:"1" type:"string" required:"true"`
@@ -4609,7 +4652,8 @@ type KinesisFirehoseInputUpdate struct {
 	ResourceARNUpdate *string `min:"1" type:"string"`
 
 	// ARN of the IAM role that Amazon Kinesis Analytics can assume to access the
-	// stream on your behalf. You need to grant necessary permissions to this role.
+	// stream on your behalf. You need to grant the necessary permissions to this
+	// role.
 	RoleARNUpdate *string `min:"1" type:"string"`
 }
 
@@ -4761,7 +4805,8 @@ type KinesisFirehoseOutputUpdate struct {
 	ResourceARNUpdate *string `min:"1" type:"string"`
 
 	// ARN of the IAM role that Amazon Kinesis Analytics can assume to access the
-	// stream on your behalf. You need to grant necessary permissions to this role.
+	// stream on your behalf. You need to grant the necessary permissions to this
+	// role.
 	RoleARNUpdate *string `min:"1" type:"string"`
 }
 
@@ -5454,6 +5499,11 @@ func (s *Output) Validate() error {
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
+	if s.DestinationSchema != nil {
+		if err := s.DestinationSchema.Validate(); err != nil {
+			invalidParams.AddNested("DestinationSchema", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.KinesisFirehoseOutput != nil {
 		if err := s.KinesisFirehoseOutput.Validate(); err != nil {
 			invalidParams.AddNested("KinesisFirehoseOutput", err.(request.ErrInvalidParams))
@@ -5629,6 +5679,11 @@ func (s *OutputUpdate) Validate() error {
 	}
 	if s.OutputId != nil && len(*s.OutputId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("OutputId", 1))
+	}
+	if s.DestinationSchemaUpdate != nil {
+		if err := s.DestinationSchemaUpdate.Validate(); err != nil {
+			invalidParams.AddNested("DestinationSchemaUpdate", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.KinesisFirehoseOutputUpdate != nil {
 		if err := s.KinesisFirehoseOutputUpdate.Validate(); err != nil {
@@ -6054,7 +6109,8 @@ func (s *ReferenceDataSourceUpdate) SetTableNameUpdate(v string) *ReferenceDataS
 
 // Provides a description of an Amazon S3 data source, including the Amazon
 // Resource Name (ARN) of the S3 bucket, the ARN of the IAM role that is used
-// to access the bucket, and the name of the S3 object that contains the data.
+// to access the bucket, and the name of the Amazon S3 object that contains
+// the data.
 type S3Configuration struct {
 	_ struct{} `type:"structure"`
 

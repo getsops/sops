@@ -24,6 +24,7 @@
       "errors":[
         {"shape":"ProvisionedThroughputExceededException"},
         {"shape":"ResourceNotFoundException"},
+        {"shape":"RequestLimitExceeded"},
         {"shape":"InternalServerError"}
       ],
       "endpointdiscovery":{
@@ -41,6 +42,7 @@
         {"shape":"ProvisionedThroughputExceededException"},
         {"shape":"ResourceNotFoundException"},
         {"shape":"ItemCollectionSizeLimitExceededException"},
+        {"shape":"RequestLimitExceeded"},
         {"shape":"InternalServerError"}
       ],
       "endpointdiscovery":{
@@ -128,6 +130,8 @@
         {"shape":"ProvisionedThroughputExceededException"},
         {"shape":"ResourceNotFoundException"},
         {"shape":"ItemCollectionSizeLimitExceededException"},
+        {"shape":"TransactionConflictException"},
+        {"shape":"RequestLimitExceeded"},
         {"shape":"InternalServerError"}
       ],
       "endpointdiscovery":{
@@ -275,6 +279,7 @@
       "errors":[
         {"shape":"ProvisionedThroughputExceededException"},
         {"shape":"ResourceNotFoundException"},
+        {"shape":"RequestLimitExceeded"},
         {"shape":"InternalServerError"}
       ],
       "endpointdiscovery":{
@@ -350,6 +355,8 @@
         {"shape":"ProvisionedThroughputExceededException"},
         {"shape":"ResourceNotFoundException"},
         {"shape":"ItemCollectionSizeLimitExceededException"},
+        {"shape":"TransactionConflictException"},
+        {"shape":"RequestLimitExceeded"},
         {"shape":"InternalServerError"}
       ],
       "endpointdiscovery":{
@@ -366,6 +373,7 @@
       "errors":[
         {"shape":"ProvisionedThroughputExceededException"},
         {"shape":"ResourceNotFoundException"},
+        {"shape":"RequestLimitExceeded"},
         {"shape":"InternalServerError"}
       ],
       "endpointdiscovery":{
@@ -421,6 +429,7 @@
       "errors":[
         {"shape":"ProvisionedThroughputExceededException"},
         {"shape":"ResourceNotFoundException"},
+        {"shape":"RequestLimitExceeded"},
         {"shape":"InternalServerError"}
       ],
       "endpointdiscovery":{
@@ -438,6 +447,40 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"InternalServerError"},
         {"shape":"ResourceInUseException"}
+      ],
+      "endpointdiscovery":{
+      }
+    },
+    "TransactGetItems":{
+      "name":"TransactGetItems",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TransactGetItemsInput"},
+      "output":{"shape":"TransactGetItemsOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"TransactionCanceledException"},
+        {"shape":"InternalServerError"}
+      ],
+      "endpointdiscovery":{
+      }
+    },
+    "TransactWriteItems":{
+      "name":"TransactWriteItems",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TransactWriteItemsInput"},
+      "output":{"shape":"TransactWriteItemsOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"TransactionCanceledException"},
+        {"shape":"TransactionInProgressException"},
+        {"shape":"IdempotentParameterMismatchException"},
+        {"shape":"InternalServerError"}
       ],
       "endpointdiscovery":{
       }
@@ -524,6 +567,8 @@
         {"shape":"ProvisionedThroughputExceededException"},
         {"shape":"ResourceNotFoundException"},
         {"shape":"ItemCollectionSizeLimitExceededException"},
+        {"shape":"TransactionConflictException"},
+        {"shape":"RequestLimitExceeded"},
         {"shape":"InternalServerError"}
       ],
       "endpointdiscovery":{
@@ -861,6 +906,20 @@
       "max":25,
       "min":1
     },
+    "BillingMode":{
+      "type":"string",
+      "enum":[
+        "PROVISIONED",
+        "PAY_PER_REQUEST"
+      ]
+    },
+    "BillingModeSummary":{
+      "type":"structure",
+      "members":{
+        "BillingMode":{"shape":"BillingMode"},
+        "LastUpdateToPayPerRequestDateTime":{"shape":"Date"}
+      }
+    },
     "BinaryAttributeValue":{"type":"blob"},
     "BinarySetAttributeValue":{
       "type":"list",
@@ -868,12 +927,29 @@
     },
     "BooleanAttributeValue":{"type":"boolean"},
     "BooleanObject":{"type":"boolean"},
+    "CancellationReason":{
+      "type":"structure",
+      "members":{
+        "Item":{"shape":"AttributeMap"},
+        "Code":{"shape":"Code"},
+        "Message":{"shape":"ErrorMessage"}
+      }
+    },
+    "CancellationReasonList":{
+      "type":"list",
+      "member":{"shape":"CancellationReason"},
+      "max":10,
+      "min":1
+    },
     "Capacity":{
       "type":"structure",
       "members":{
+        "ReadCapacityUnits":{"shape":"ConsumedCapacityUnits"},
+        "WriteCapacityUnits":{"shape":"ConsumedCapacityUnits"},
         "CapacityUnits":{"shape":"ConsumedCapacityUnits"}
       }
     },
+    "Code":{"type":"string"},
     "ComparisonOperator":{
       "type":"string",
       "enum":[
@@ -900,6 +976,22 @@
         "ComparisonOperator":{"shape":"ComparisonOperator"}
       }
     },
+    "ConditionCheck":{
+      "type":"structure",
+      "required":[
+        "Key",
+        "TableName",
+        "ConditionExpression"
+      ],
+      "members":{
+        "Key":{"shape":"Key"},
+        "TableName":{"shape":"TableName"},
+        "ConditionExpression":{"shape":"ConditionExpression"},
+        "ExpressionAttributeNames":{"shape":"ExpressionAttributeNameMap"},
+        "ExpressionAttributeValues":{"shape":"ExpressionAttributeValueMap"},
+        "ReturnValuesOnConditionCheckFailure":{"shape":"ReturnValuesOnConditionCheckFailure"}
+      }
+    },
     "ConditionExpression":{"type":"string"},
     "ConditionalCheckFailedException":{
       "type":"structure",
@@ -921,6 +1013,8 @@
       "members":{
         "TableName":{"shape":"TableName"},
         "CapacityUnits":{"shape":"ConsumedCapacityUnits"},
+        "ReadCapacityUnits":{"shape":"ConsumedCapacityUnits"},
+        "WriteCapacityUnits":{"shape":"ConsumedCapacityUnits"},
         "Table":{"shape":"Capacity"},
         "LocalSecondaryIndexes":{"shape":"SecondaryIndexesCapacityMap"},
         "GlobalSecondaryIndexes":{"shape":"SecondaryIndexesCapacityMap"}
@@ -975,8 +1069,7 @@
       "required":[
         "IndexName",
         "KeySchema",
-        "Projection",
-        "ProvisionedThroughput"
+        "Projection"
       ],
       "members":{
         "IndexName":{"shape":"IndexName"},
@@ -1014,8 +1107,7 @@
       "required":[
         "AttributeDefinitions",
         "TableName",
-        "KeySchema",
-        "ProvisionedThroughput"
+        "KeySchema"
       ],
       "members":{
         "AttributeDefinitions":{"shape":"AttributeDefinitions"},
@@ -1023,6 +1115,7 @@
         "KeySchema":{"shape":"KeySchema"},
         "LocalSecondaryIndexes":{"shape":"LocalSecondaryIndexList"},
         "GlobalSecondaryIndexes":{"shape":"GlobalSecondaryIndexList"},
+        "BillingMode":{"shape":"BillingMode"},
         "ProvisionedThroughput":{"shape":"ProvisionedThroughput"},
         "StreamSpecification":{"shape":"StreamSpecification"},
         "SSESpecification":{"shape":"SSESpecification"}
@@ -1035,6 +1128,21 @@
       }
     },
     "Date":{"type":"timestamp"},
+    "Delete":{
+      "type":"structure",
+      "required":[
+        "Key",
+        "TableName"
+      ],
+      "members":{
+        "Key":{"shape":"Key"},
+        "TableName":{"shape":"TableName"},
+        "ConditionExpression":{"shape":"ConditionExpression"},
+        "ExpressionAttributeNames":{"shape":"ExpressionAttributeNameMap"},
+        "ExpressionAttributeValues":{"shape":"ExpressionAttributeValueMap"},
+        "ReturnValuesOnConditionCheckFailure":{"shape":"ReturnValuesOnConditionCheckFailure"}
+      }
+    },
     "DeleteBackupInput":{
       "type":"structure",
       "required":["BackupArn"],
@@ -1262,6 +1370,19 @@
       "key":{"shape":"AttributeName"},
       "value":{"shape":"Condition"}
     },
+    "Get":{
+      "type":"structure",
+      "required":[
+        "Key",
+        "TableName"
+      ],
+      "members":{
+        "Key":{"shape":"Key"},
+        "TableName":{"shape":"TableName"},
+        "ProjectionExpression":{"shape":"ProjectionExpression"},
+        "ExpressionAttributeNames":{"shape":"ExpressionAttributeNameMap"}
+      }
+    },
     "GetItemInput":{
       "type":"structure",
       "required":[
@@ -1290,8 +1411,7 @@
       "required":[
         "IndexName",
         "KeySchema",
-        "Projection",
-        "ProvisionedThroughput"
+        "Projection"
       ],
       "members":{
         "IndexName":{"shape":"IndexName"},
@@ -1407,6 +1527,13 @@
         "UPDATING"
       ]
     },
+    "IdempotentParameterMismatchException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ErrorMessage"}
+      },
+      "exception":true
+    },
     "IndexName":{
       "type":"string",
       "max":255,
@@ -1486,6 +1613,18 @@
     "ItemList":{
       "type":"list",
       "member":{"shape":"AttributeMap"}
+    },
+    "ItemResponse":{
+      "type":"structure",
+      "members":{
+        "Item":{"shape":"AttributeMap"}
+      }
+    },
+    "ItemResponseList":{
+      "type":"list",
+      "member":{"shape":"ItemResponse"},
+      "max":10,
+      "min":1
     },
     "KMSMasterKeyArn":{"type":"string"},
     "KMSMasterKeyId":{"type":"string"},
@@ -1686,6 +1825,10 @@
       "max":20,
       "min":1
     },
+    "NonNegativeLongObject":{
+      "type":"long",
+      "min":0
+    },
     "NullAttributeValue":{"type":"boolean"},
     "NumberAttributeValue":{"type":"string"},
     "NumberSetAttributeValue":{
@@ -1762,8 +1905,8 @@
         "LastIncreaseDateTime":{"shape":"Date"},
         "LastDecreaseDateTime":{"shape":"Date"},
         "NumberOfDecreasesToday":{"shape":"PositiveLongObject"},
-        "ReadCapacityUnits":{"shape":"PositiveLongObject"},
-        "WriteCapacityUnits":{"shape":"PositiveLongObject"}
+        "ReadCapacityUnits":{"shape":"NonNegativeLongObject"},
+        "WriteCapacityUnits":{"shape":"NonNegativeLongObject"}
       }
     },
     "ProvisionedThroughputExceededException":{
@@ -1772,6 +1915,21 @@
         "message":{"shape":"ErrorMessage"}
       },
       "exception":true
+    },
+    "Put":{
+      "type":"structure",
+      "required":[
+        "Item",
+        "TableName"
+      ],
+      "members":{
+        "Item":{"shape":"PutItemInputAttributeMap"},
+        "TableName":{"shape":"TableName"},
+        "ConditionExpression":{"shape":"ConditionExpression"},
+        "ExpressionAttributeNames":{"shape":"ExpressionAttributeNameMap"},
+        "ExpressionAttributeValues":{"shape":"ExpressionAttributeValueMap"},
+        "ReturnValuesOnConditionCheckFailure":{"shape":"ReturnValuesOnConditionCheckFailure"}
+      }
     },
     "PutItemInput":{
       "type":"structure",
@@ -1917,9 +2075,10 @@
       "members":{
         "RegionName":{"shape":"RegionName"},
         "ReplicaStatus":{"shape":"ReplicaStatus"},
-        "ReplicaProvisionedReadCapacityUnits":{"shape":"PositiveLongObject"},
+        "ReplicaBillingModeSummary":{"shape":"BillingModeSummary"},
+        "ReplicaProvisionedReadCapacityUnits":{"shape":"NonNegativeLongObject"},
         "ReplicaProvisionedReadCapacityAutoScalingSettings":{"shape":"AutoScalingSettingsDescription"},
-        "ReplicaProvisionedWriteCapacityUnits":{"shape":"PositiveLongObject"},
+        "ReplicaProvisionedWriteCapacityUnits":{"shape":"NonNegativeLongObject"},
         "ReplicaProvisionedWriteCapacityAutoScalingSettings":{"shape":"AutoScalingSettingsDescription"},
         "ReplicaGlobalSecondaryIndexSettings":{"shape":"ReplicaGlobalSecondaryIndexSettingsDescriptionList"}
       }
@@ -1963,6 +2122,13 @@
     "ReplicaUpdateList":{
       "type":"list",
       "member":{"shape":"ReplicaUpdate"}
+    },
+    "RequestLimitExceeded":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "exception":true
     },
     "ResourceArnString":{
       "type":"string",
@@ -2056,6 +2222,13 @@
         "UPDATED_OLD",
         "ALL_NEW",
         "UPDATED_NEW"
+      ]
+    },
+    "ReturnValuesOnConditionCheckFailure":{
+      "type":"string",
+      "enum":[
+        "ALL_OLD",
+        "NONE"
       ]
     },
     "SSEDescription":{
@@ -2173,7 +2346,8 @@
         "KeySchema":{"shape":"KeySchema"},
         "TableCreationDateTime":{"shape":"TableCreationDateTime"},
         "ProvisionedThroughput":{"shape":"ProvisionedThroughput"},
-        "ItemCount":{"shape":"ItemCount"}
+        "ItemCount":{"shape":"ItemCount"},
+        "BillingMode":{"shape":"BillingMode"}
       }
     },
     "SourceTableFeatureDetails":{
@@ -2236,6 +2410,7 @@
         "ItemCount":{"shape":"Long"},
         "TableArn":{"shape":"String"},
         "TableId":{"shape":"TableId"},
+        "BillingModeSummary":{"shape":"BillingModeSummary"},
         "LocalSecondaryIndexes":{"shape":"LocalSecondaryIndexDescriptionList"},
         "GlobalSecondaryIndexes":{"shape":"GlobalSecondaryIndexDescriptionList"},
         "StreamSpecification":{"shape":"StreamSpecification"},
@@ -2357,6 +2532,91 @@
         "DISABLED"
       ]
     },
+    "TransactGetItem":{
+      "type":"structure",
+      "required":["Get"],
+      "members":{
+        "Get":{"shape":"Get"}
+      }
+    },
+    "TransactGetItemList":{
+      "type":"list",
+      "member":{"shape":"TransactGetItem"},
+      "max":10,
+      "min":1
+    },
+    "TransactGetItemsInput":{
+      "type":"structure",
+      "required":["TransactItems"],
+      "members":{
+        "TransactItems":{"shape":"TransactGetItemList"},
+        "ReturnConsumedCapacity":{"shape":"ReturnConsumedCapacity"}
+      }
+    },
+    "TransactGetItemsOutput":{
+      "type":"structure",
+      "members":{
+        "ConsumedCapacity":{"shape":"ConsumedCapacityMultiple"},
+        "Responses":{"shape":"ItemResponseList"}
+      }
+    },
+    "TransactWriteItem":{
+      "type":"structure",
+      "members":{
+        "ConditionCheck":{"shape":"ConditionCheck"},
+        "Put":{"shape":"Put"},
+        "Delete":{"shape":"Delete"},
+        "Update":{"shape":"Update"}
+      }
+    },
+    "TransactWriteItemList":{
+      "type":"list",
+      "member":{"shape":"TransactWriteItem"},
+      "max":10,
+      "min":1
+    },
+    "TransactWriteItemsInput":{
+      "type":"structure",
+      "required":["TransactItems"],
+      "members":{
+        "TransactItems":{"shape":"TransactWriteItemList"},
+        "ReturnConsumedCapacity":{"shape":"ReturnConsumedCapacity"},
+        "ReturnItemCollectionMetrics":{"shape":"ReturnItemCollectionMetrics"},
+        "ClientRequestToken":{
+          "shape":"String",
+          "idempotencyToken":true
+        }
+      }
+    },
+    "TransactWriteItemsOutput":{
+      "type":"structure",
+      "members":{
+        "ConsumedCapacity":{"shape":"ConsumedCapacityMultiple"},
+        "ItemCollectionMetrics":{"shape":"ItemCollectionMetricsPerTable"}
+      }
+    },
+    "TransactionCanceledException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ErrorMessage"},
+        "CancellationReasons":{"shape":"CancellationReasonList"}
+      },
+      "exception":true
+    },
+    "TransactionConflictException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "exception":true
+    },
+    "TransactionInProgressException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ErrorMessage"}
+      },
+      "exception":true
+    },
     "UntagResourceInput":{
       "type":"structure",
       "required":[
@@ -2366,6 +2626,23 @@
       "members":{
         "ResourceArn":{"shape":"ResourceArnString"},
         "TagKeys":{"shape":"TagKeyList"}
+      }
+    },
+    "Update":{
+      "type":"structure",
+      "required":[
+        "Key",
+        "UpdateExpression",
+        "TableName"
+      ],
+      "members":{
+        "Key":{"shape":"Key"},
+        "UpdateExpression":{"shape":"UpdateExpression"},
+        "TableName":{"shape":"TableName"},
+        "ConditionExpression":{"shape":"ConditionExpression"},
+        "ExpressionAttributeNames":{"shape":"ExpressionAttributeNameMap"},
+        "ExpressionAttributeValues":{"shape":"ExpressionAttributeValueMap"},
+        "ReturnValuesOnConditionCheckFailure":{"shape":"ReturnValuesOnConditionCheckFailure"}
       }
     },
     "UpdateContinuousBackupsInput":{
@@ -2419,6 +2696,7 @@
       "required":["GlobalTableName"],
       "members":{
         "GlobalTableName":{"shape":"TableName"},
+        "GlobalTableBillingMode":{"shape":"BillingMode"},
         "GlobalTableProvisionedWriteCapacityUnits":{"shape":"PositiveLongObject"},
         "GlobalTableProvisionedWriteCapacityAutoScalingSettingsUpdate":{"shape":"AutoScalingSettingsUpdate"},
         "GlobalTableGlobalSecondaryIndexSettingsUpdate":{"shape":"GlobalTableGlobalSecondaryIndexSettingsUpdateList"},
@@ -2467,6 +2745,7 @@
       "members":{
         "AttributeDefinitions":{"shape":"AttributeDefinitions"},
         "TableName":{"shape":"TableName"},
+        "BillingMode":{"shape":"BillingMode"},
         "ProvisionedThroughput":{"shape":"ProvisionedThroughput"},
         "GlobalSecondaryIndexUpdates":{"shape":"GlobalSecondaryIndexUpdateList"},
         "StreamSpecification":{"shape":"StreamSpecification"},

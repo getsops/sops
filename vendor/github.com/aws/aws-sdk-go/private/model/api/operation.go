@@ -13,21 +13,58 @@ import (
 
 // An Operation defines a specific API Operation.
 type Operation struct {
-	API           *API `json:"-"`
-	ExportedName  string
-	Name          string
-	Documentation string
-	HTTP          HTTPInfo
-	InputRef      ShapeRef   `json:"input"`
-	OutputRef     ShapeRef   `json:"output"`
-	ErrorRefs     []ShapeRef `json:"errors"`
-	Paginator     *Paginator
-	Deprecated    bool   `json:"deprecated"`
-	DeprecatedMsg string `json:"deprecatedMessage"`
-	AuthType      string `json:"authtype"`
-	imports       map[string]bool
+	API                 *API `json:"-"`
+	ExportedName        string
+	Name                string
+	Documentation       string
+	HTTP                HTTPInfo
+	Host                string     `json:"host"`
+	InputRef            ShapeRef   `json:"input"`
+	OutputRef           ShapeRef   `json:"output"`
+	ErrorRefs           []ShapeRef `json:"errors"`
+	Paginator           *Paginator
+	Deprecated          bool   `json:"deprecated"`
+	DeprecatedMsg       string `json:"deprecatedMessage"`
+	AuthType            string `json:"authtype"`
+	imports             map[string]bool
+	CustomBuildHandlers []string
 
 	EventStreamAPI *EventStreamAPI
+
+	IsEndpointDiscoveryOp bool               `json:"endpointoperation"`
+	EndpointDiscovery     *EndpointDiscovery `json:"endpointdiscovery"`
+	Endpoint              *EndpointTrait     `json:"endpoint"`
+}
+
+// EndpointTrait provides the structure of the modeled enpdoint trait, and its
+// properties.
+type EndpointTrait struct {
+	// Specifies the hostPrefix template to prepend to the operation's request
+	// endpoint host.
+	HostPrefix string `json:"hostPrefix"`
+}
+
+// EndpointDiscovery represents a map of key values pairs that represents
+// metadata about how a given API will make a call to the discovery endpoint.
+type EndpointDiscovery struct {
+	// Required indicates that for a given operation that endpoint is required.
+	// Any required endpoint discovery operation cannot have endpoint discovery
+	// turned off.
+	Required bool `json:"required"`
+}
+
+// OperationForMethod returns the API operation name that corresponds to the
+// client method name provided.
+func (a *API) OperationForMethod(name string) *Operation {
+	for _, op := range a.Operations {
+		for _, m := range op.Methods() {
+			if m == name {
+				return op
+			}
+		}
+	}
+
+	return nil
 }
 
 // A HTTPInfo defines the method of HTTP request for the Operation.
@@ -35,6 +72,24 @@ type HTTPInfo struct {
 	Method       string
 	RequestURI   string
 	ResponseCode uint
+}
+
+// Methods Returns a list of method names that will be generated.
+func (o *Operation) Methods() []string {
+	methods := []string{
+		o.ExportedName,
+		o.ExportedName + "Request",
+		o.ExportedName + "WithContext",
+	}
+
+	if o.Paginator != nil {
+		methods = append(methods, []string{
+			o.ExportedName + "Pages",
+			o.ExportedName + "PagesWithContext",
+		}...)
+	}
+
+	return methods
 }
 
 // HasInput returns if the Operation accepts an input paramater
@@ -68,8 +123,8 @@ func (o *Operation) GetSigner() string {
 	return buf.String()
 }
 
-// tplOperation defines a template for rendering an API Operation
-var tplOperation = template.Must(template.New("operation").Funcs(template.FuncMap{
+// operationTmpl defines a template for rendering an API Operation
+var operationTmpl = template.Must(template.New("operation").Funcs(template.FuncMap{
 	"GetCrosslinkURL":       GetCrosslinkURL,
 	"EnableStopOnSameToken": enableStopOnSameToken,
 	"GetDeprecatedMsg":      getDeprecatedMessage,
@@ -79,7 +134,7 @@ const op{{ .ExportedName }} = "{{ .Name }}"
 // {{ .ExportedName }}Request generates a "aws/request.Request" representing the
 // client's request for the {{ .ExportedName }} operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -142,6 +197,41 @@ func (c *{{ .API.StructName }}) {{ .ExportedName }}Request(` +
 		{{ if eq .API.Metadata.Protocol "json" -}}
 			req.Handlers.Unmarshal.PushBack(output.unmarshalInitialResponse)
 		{{ end -}}
+	{{ end -}}
+	{{ if .EndpointDiscovery -}}
+		{{if not .EndpointDiscovery.Required -}}
+			if aws.BoolValue(req.Config.EnableEndpointDiscovery) {
+		{{end -}}
+		de := discoverer{{ .API.EndpointDiscoveryOp.Name }}{
+			Required: {{ .EndpointDiscovery.Required }},
+			EndpointCache: c.endpointCache,
+			Params: map[string]*string{
+				"op": aws.String(req.Operation.Name),
+				{{ range $key, $ref := .InputRef.Shape.MemberRefs -}}
+				{{ if $ref.EndpointDiscoveryID -}}
+				"{{ $ref.OrigShapeName }}": input.{{ $key }},
+				{{ end -}}
+				{{- end }}
+			},
+			Client: c,
+		}
+
+		for k, v := range de.Params {
+			if v == nil {
+				delete(de.Params, k)
+			}
+		}
+
+		req.Handlers.Build.PushFrontNamed(request.NamedHandler{
+			Name: "crr.endpointdiscovery",
+			Fn: de.Handler,
+		})
+		{{if not .EndpointDiscovery.Required -}}
+			}
+		{{ end -}}
+	{{ end -}}
+	{{- range $_, $handler := $.CustomBuildHandlers -}}
+		req.Handlers.Build.PushBackNamed({{ $handler }})
 	{{ end -}}
 	return
 }
@@ -267,6 +357,76 @@ func (c *{{ .API.StructName }}) {{ .ExportedName }}PagesWithContext(` +
 	return p.Err()
 }
 {{ end }}
+
+{{ if .IsEndpointDiscoveryOp -}}
+
+type discoverer{{ .ExportedName }} struct {
+	Client *{{ .API.StructName }}
+	Required bool
+	EndpointCache *crr.EndpointCache
+	Params map[string]*string
+	Key string
+}
+
+func (d *discoverer{{ .ExportedName }}) Discover() (crr.Endpoint, error) {
+	input := &{{ .API.EndpointDiscoveryOp.InputRef.ShapeName }}{
+		{{ if .API.EndpointDiscoveryOp.InputRef.Shape.HasMember "Operation" -}}
+		Operation: d.Params["op"],
+		{{ end -}}
+		{{ if .API.EndpointDiscoveryOp.InputRef.Shape.HasMember "Identifiers" -}}
+		Identifiers: d.Params,
+		{{ end -}}
+	}
+
+	resp, err := d.Client.{{ .API.EndpointDiscoveryOp.Name }}(input)
+	if err != nil {
+		return crr.Endpoint{}, err
+	}
+
+	endpoint := crr.Endpoint{
+		Key: d.Key,
+	}
+
+	for _, e := range resp.Endpoints {
+		if e.Address == nil {
+			continue
+		}
+
+		cachedInMinutes := aws.Int64Value(e.CachePeriodInMinutes)
+		u, err := url.Parse(*e.Address)
+		if err != nil {
+			continue
+		}
+
+		addr := crr.WeightedAddress{
+			URL: u,
+			Expired:  time.Now().Add(time.Duration(cachedInMinutes) * time.Minute),
+		}
+
+		endpoint.Add(addr)
+	}
+
+	d.EndpointCache.Add(endpoint)
+
+	return endpoint, nil
+}
+
+func (d *discoverer{{ .ExportedName }}) Handler(r *request.Request) {
+	endpointKey := crr.BuildEndpointKey(d.Params)
+	d.Key = endpointKey
+
+	endpoint, err := d.EndpointCache.Get(d, endpointKey, d.Required)
+	if err != nil {
+		r.Error = err
+		return
+	}
+
+	if endpoint.URL != nil && len(endpoint.URL.String()) > 0 {
+		r.HTTPRequest.URL = endpoint.URL
+	}
+}
+{{ end -}}
+
 `))
 
 // GoCode returns a string of rendered GoCode for this Operation
@@ -280,7 +440,17 @@ func (o *Operation) GoCode() string {
 		o.API.imports["github.com/aws/aws-sdk-go/private/protocol/"+o.API.ProtocolPackage()] = true
 	}
 
-	err := tplOperation.Execute(&buf, o)
+	if o.API.EndpointDiscoveryOp != nil {
+		o.API.imports["github.com/aws/aws-sdk-go/aws/crr"] = true
+		o.API.imports["time"] = true
+		o.API.imports["net/url"] = true
+	}
+
+	if o.Endpoint != nil && len(o.Endpoint.HostPrefix) != 0 {
+		setupEndpointHostPrefix(o)
+	}
+
+	err := operationTmpl.Execute(&buf, o)
 	if err != nil {
 		panic(err)
 	}

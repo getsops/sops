@@ -36,6 +36,13 @@
     "UpdatePipeline": "<p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with UpdatePipeline to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>"
   },
   "shapes": {
+    "AWSRegionName": {
+      "base": null,
+      "refs": {
+        "ActionDeclaration$region": "<p>The action declaration's AWS Region, such as us-east-1.</p>",
+        "ArtifactStoreMap$key": null
+      }
+    },
     "AWSSessionCredentials": {
       "base": "<p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the Amazon S3 bucket used to store artifact for the pipeline in AWS CodePipeline.</p>",
       "refs": {
@@ -175,7 +182,7 @@
         "ActionState$actionName": "<p>The name of the action.</p>",
         "PutActionRevisionInput$actionName": "<p>The name of the action that will process the revision.</p>",
         "PutApprovalResultInput$actionName": "<p>The name of the action for which approval is requested.</p>",
-        "SourceRevision$actionName": null,
+        "SourceRevision$actionName": "<p>The name of the action that processed the revision to the source artifact.</p>",
         "WebhookDefinition$targetAction": "<p>The name of the action in a pipeline you want to connect to the webhook. The action must be from the source (first) stage of the pipeline.</p>"
       }
     },
@@ -349,6 +356,7 @@
     "ArtifactStore": {
       "base": "<p>The Amazon S3 bucket where artifacts are stored for the pipeline.</p>",
       "refs": {
+        "ArtifactStoreMap$value": null,
         "PipelineDeclaration$artifactStore": "<p>Represents information about the Amazon S3 bucket where artifacts are stored for the pipeline. </p>"
       }
     },
@@ -356,6 +364,12 @@
       "base": null,
       "refs": {
         "ArtifactStore$location": "<p>The Amazon S3 bucket used for storing the artifacts for a pipeline. You can specify the name of an S3 bucket but not a folder within the bucket. A folder to contain the pipeline artifacts is created for you based on the name of the pipeline. You can use any Amazon S3 bucket in the same AWS Region as the pipeline to store your pipeline artifacts.</p>"
+      }
+    },
+    "ArtifactStoreMap": {
+      "base": null,
+      "refs": {
+        "PipelineDeclaration$artifactStores": "<p>A mapping of artifactStore objects and their corresponding regions. There must be an artifact store for the pipeline region and for each cross-region action within the pipeline. You can only use either artifactStore or artifactStores, not both.</p> <p>If you create a cross-region action in your pipeline, you must use artifactStores.</p>"
       }
     },
     "ArtifactStoreType": {
@@ -396,6 +410,12 @@
       "base": null,
       "refs": {
         "ThirdPartyJob$clientId": "<p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>"
+      }
+    },
+    "ClientRequestToken": {
+      "base": null,
+      "refs": {
+        "StartPipelineExecutionInput$clientRequestToken": "<p>The system-generated unique ID used to identify a unique execution request.</p>"
       }
     },
     "ClientToken": {
@@ -1141,7 +1161,7 @@
         "Artifact$revision": "<p>The artifact's revision ID. Depending on the type of object, this could be a commit ID (GitHub) or a revision ID (Amazon S3).</p>",
         "ArtifactRevision$revisionId": "<p>The revision ID of the artifact.</p>",
         "CurrentRevision$revision": "<p>The revision ID of the current version of an artifact.</p>",
-        "SourceRevision$revisionId": null
+        "SourceRevision$revisionId": "<p>The system-generated unique ID that identifies the revision number of the artifact.</p>"
       }
     },
     "RevisionChangeIdentifier": {
@@ -1157,7 +1177,7 @@
       "refs": {
         "ArtifactRevision$revisionSummary": "<p>Summary information about the most recent revision of the artifact. For GitHub and AWS CodeCommit repositories, the commit message. For Amazon S3 buckets or actions, the user-provided content of a <code>codepipeline-artifact-revision-summary</code> key specified in the object metadata.</p>",
         "CurrentRevision$revisionSummary": "<p>The summary of the most recent revision of the artifact.</p>",
-        "SourceRevision$revisionSummary": null
+        "SourceRevision$revisionSummary": "<p>Summary information about the most recent revision of the artifact. For GitHub and AWS CodeCommit repositories, the commit message. For Amazon S3 buckets or actions, the user-provided content of a <code>codepipeline-artifact-revision-summary</code> key specified in the object metadata.</p>"
       }
     },
     "RoleArn": {
@@ -1198,7 +1218,7 @@
       }
     },
     "SourceRevision": {
-      "base": null,
+      "base": "<p>Information about the version (or revision) of a source artifact that initiated a pipeline execution.</p>",
       "refs": {
         "SourceRevisionList$member": null
       }
@@ -1206,7 +1226,7 @@
     "SourceRevisionList": {
       "base": null,
       "refs": {
-        "PipelineExecutionSummary$sourceRevisions": null
+        "PipelineExecutionSummary$sourceRevisions": "<p>A list of the source artifact revisions that initiated a pipeline execution.</p>"
       }
     },
     "StageActionDeclarationList": {
@@ -1384,7 +1404,7 @@
         "ActionState$revisionUrl": "<p>A URL link for more information about the revision, such as a commit details page.</p>",
         "ActionTypeSettings$thirdPartyConfigurationUrl": "<p>The URL of a sign-up page where users can sign up for an external service and perform initial configuration of the action provided by that service.</p>",
         "ArtifactRevision$revisionUrl": "<p>The commit ID for the artifact revision. For artifacts stored in GitHub or AWS CodeCommit repositories, the commit ID is linked to a commit details page.</p>",
-        "SourceRevision$revisionUrl": null
+        "SourceRevision$revisionUrl": "<p>The commit ID for the artifact revision. For artifacts stored in GitHub or AWS CodeCommit repositories, the commit ID is linked to a commit details page.</p>"
       }
     },
     "UrlTemplate": {
@@ -1415,7 +1435,7 @@
       }
     },
     "WebhookAuthConfiguration": {
-      "base": null,
+      "base": "<p>The authentication applied to incoming webhook trigger requests.</p>",
       "refs": {
         "WebhookDefinition$authenticationConfiguration": "<p>Properties that configure the authentication applied to incoming webhook trigger requests. The required properties depend on the authentication type. For GITHUB_HMAC, only the SecretToken property must be set. For IP, only the AllowedIPRange property must be set to a valid CIDR range. For UNAUTHENTICATED, no properties can be set.</p>"
       }
@@ -1423,13 +1443,13 @@
     "WebhookAuthConfigurationAllowedIPRange": {
       "base": null,
       "refs": {
-        "WebhookAuthConfiguration$AllowedIPRange": null
+        "WebhookAuthConfiguration$AllowedIPRange": "<p>The property used to configure acceptance of webhooks within a specific IP range. For IP, only the AllowedIPRange property must be set, and this property must be set to a valid CIDR range.</p>"
       }
     },
     "WebhookAuthConfigurationSecretToken": {
       "base": null,
       "refs": {
-        "WebhookAuthConfiguration$SecretToken": null
+        "WebhookAuthConfiguration$SecretToken": "<p>The property used to configure GitHub authentication. For GITHUB_HMAC, only the SecretToken property must be set.</p>"
       }
     },
     "WebhookAuthenticationType": {

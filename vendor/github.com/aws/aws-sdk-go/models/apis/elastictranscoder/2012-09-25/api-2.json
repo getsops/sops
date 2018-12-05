@@ -1,12 +1,13 @@
 {
   "version":"2.0",
   "metadata":{
-    "uid":"elastictranscoder-2012-09-25",
     "apiVersion":"2012-09-25",
     "endpointPrefix":"elastictranscoder",
     "protocol":"rest-json",
     "serviceFullName":"Amazon Elastic Transcoder",
-    "signatureVersion":"v4"
+    "serviceId":"Elastic Transcoder",
+    "signatureVersion":"v4",
+    "uid":"elastictranscoder-2012-09-25"
   },
   "operations":{
     "CancelJob":{
@@ -792,7 +793,7 @@
     "JobInputs":{
       "type":"list",
       "member":{"shape":"JobInput"},
-      "max":10000
+      "max":200
     },
     "JobOutput":{
       "type":"structure",
@@ -1131,7 +1132,7 @@
     },
     "PresetContainer":{
       "type":"string",
-      "pattern":"(^mp4$)|(^ts$)|(^webm$)|(^mp3$)|(^flac$)|(^oga$)|(^ogg$)|(^fmp4$)|(^mpg$)|(^flv$)|(^gif$)|(^mxf$)|(^wav$)"
+      "pattern":"(^mp4$)|(^ts$)|(^webm$)|(^mp3$)|(^flac$)|(^oga$)|(^ogg$)|(^fmp4$)|(^mpg$)|(^flv$)|(^gif$)|(^mxf$)|(^wav$)|(^mp2$)"
     },
     "PresetType":{
       "type":"string",

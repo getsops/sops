@@ -5,11 +5,8 @@ package api
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"path"
-	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
@@ -25,6 +22,7 @@ type API struct {
 	Waiters       []Waiter
 	Documentation string
 	Examples      Examples
+	SmokeTests    SmokeTestSuite
 
 	// Set to true to avoid removing unused shapes
 	NoRemoveUnusedShapes bool
@@ -47,7 +45,7 @@ type API struct {
 	// Set to true to not generate struct field accessors
 	NoGenStructFieldAccessors bool
 
-	SvcClientImportPath string
+	BaseImportPath string
 
 	initialized bool
 	imports     map[string]bool
@@ -57,6 +55,8 @@ type API struct {
 	BaseCrosslinkURL string
 
 	HasEventStream bool `json:"-"`
+
+	EndpointDiscoveryOp *Operation
 }
 
 // A Metadata is the metadata about an API's definition.
@@ -84,21 +84,14 @@ type ProtocolSettings struct {
 	HTTP2 string `json:"h2,omitempty"`
 }
 
-var serviceAliases map[string]string
-
-// Bootstrap loads SDK model customizations prior to the API model is parsed.
-func Bootstrap() error {
-	b, err := ioutil.ReadFile(filepath.Join("..", "models", "customizations", "service-aliases.json"))
-	if err != nil {
-		return err
-	}
-
-	return json.Unmarshal(b, &serviceAliases)
-}
-
 // PackageName name of the API package
 func (a *API) PackageName() string {
 	return strings.ToLower(a.StructName())
+}
+
+// ImportPath returns the client's full import path
+func (a *API) ImportPath() string {
+	return path.Join(a.BaseImportPath, a.PackageName())
 }
 
 // InterfacePackageName returns the package name for the interface.
@@ -146,11 +139,6 @@ func (a *API) StructName() string {
 
 	// Strip out spaces.
 	name = strings.Replace(name, " ", "", -1)
-
-	// Swap out for alias name if one is defined.
-	if alias, ok := serviceAliases[strings.ToLower(name)]; ok {
-		name = alias
-	}
 
 	a.name = name
 	return a.name
@@ -493,6 +481,9 @@ var tplService = template.Must(template.New("service").Funcs(template.FuncMap{
 // modify mutate any of the struct's properties though.
 type {{ .StructName }} struct {
 	*client.Client
+	{{- if .EndpointDiscoveryOp }}
+	endpointCache *crr.EndpointCache
+	{{ end -}}
 }
 
 {{ if .UseInitMethods }}// Used for custom client initialization logic
@@ -565,8 +556,22 @@ func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegio
     	),
     }
 
+	{{- if .EndpointDiscoveryOp }}
+	svc.endpointCache = crr.NewEndpointCache(10)
+	{{- end }}
+
 	// Handlers
-	svc.Handlers.Sign.PushBackNamed({{if eq .Metadata.SignatureVersion "v2"}}v2{{else}}v4{{end}}.SignRequestHandler)
+	svc.Handlers.Sign.PushBackNamed(
+		{{- if eq .Metadata.SignatureVersion "v2" -}}
+			v2.SignRequestHandler
+		{{- else if or (eq .Metadata.SignatureVersion "s3") (eq .Metadata.SignatureVersion "s3v4") -}}
+			v4.BuildNamedHandler(v4.SignRequestHandler.Name, func(s *v4.Signer) {
+				s.DisableURIPathEscaping = true
+			})
+		{{- else -}}
+			v4.SignRequestHandler
+		{{- end -}}
+	)
 	{{- if eq .Metadata.SignatureVersion "v2" }}
 		svc.Handlers.Sign.PushBackNamed(corehandlers.BuildContentLengthHandler)
 	{{- end }}
@@ -629,6 +634,9 @@ func (a *API) ServiceGoCode() string {
 		a.imports["github.com/aws/aws-sdk-go/aws/signer/v4"] = true
 	}
 	a.imports["github.com/aws/aws-sdk-go/private/protocol/"+a.ProtocolPackage()] = true
+	if a.EndpointDiscoveryOp != nil {
+		a.imports["github.com/aws/aws-sdk-go/aws/crr"] = true
+	}
 
 	var buf bytes.Buffer
 	err := tplService.Execute(&buf, a)
@@ -658,7 +666,7 @@ func (a *API) ExampleGoCode() string {
 		"time",
 		"github.com/aws/aws-sdk-go/aws",
 		"github.com/aws/aws-sdk-go/aws/session",
-		path.Join(a.SvcClientImportPath, a.PackageName()),
+		a.ImportPath(),
 	)
 	for k := range imports {
 		code += fmt.Sprintf("%q\n", k)
@@ -734,9 +742,9 @@ var _ {{ .StructName }}API = (*{{ .PackageName }}.{{ .StructName }})(nil)
 func (a *API) InterfaceGoCode() string {
 	a.resetImports()
 	a.imports = map[string]bool{
-		"github.com/aws/aws-sdk-go/aws":                   true,
-		"github.com/aws/aws-sdk-go/aws/request":           true,
-		path.Join(a.SvcClientImportPath, a.PackageName()): true,
+		"github.com/aws/aws-sdk-go/aws":         true,
+		"github.com/aws/aws-sdk-go/aws/request": true,
+		a.ImportPath():                          true,
 	}
 
 	var buf bytes.Buffer
@@ -783,6 +791,12 @@ func resolveShapeValidations(s *Shape, ancestry ...*Shape) {
 		}
 
 		if ref.Shape.Min != 0 && !s.Validations.Has(ref, ShapeValidationMinVal) {
+			s.Validations = append(s.Validations, ShapeValidation{
+				Name: name, Ref: ref, Type: ShapeValidationMinVal,
+			})
+		}
+
+		if !ref.CanBeEmpty() && !s.Validations.Has(ref, ShapeValidationMinVal) {
 			s.Validations = append(s.Validations, ShapeValidation{
 				Name: name, Ref: ref, Type: ShapeValidationMinVal,
 			})

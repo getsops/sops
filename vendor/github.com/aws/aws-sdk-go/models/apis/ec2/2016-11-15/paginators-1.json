@@ -84,9 +84,15 @@
       "result_key": "ReservedInstancesOfferings"
     },
     "DescribeRouteTables": {
+      "input_token": "NextToken",
+      "limit_key": "MaxResults",
+      "output_token": "NextToken",
       "result_key": "RouteTables"
     },
     "DescribeSecurityGroups": {
+      "input_token": "NextToken",
+      "limit_key": "MaxResults",
+      "output_token": "NextToken",
       "result_key": "SecurityGroups"
     },
     "DescribeSnapshots": {

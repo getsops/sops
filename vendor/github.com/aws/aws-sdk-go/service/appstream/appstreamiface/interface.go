@@ -64,6 +64,14 @@ type AppStreamAPI interface {
 	AssociateFleetWithContext(aws.Context, *appstream.AssociateFleetInput, ...request.Option) (*appstream.AssociateFleetOutput, error)
 	AssociateFleetRequest(*appstream.AssociateFleetInput) (*request.Request, *appstream.AssociateFleetOutput)
 
+	BatchAssociateUserStack(*appstream.BatchAssociateUserStackInput) (*appstream.BatchAssociateUserStackOutput, error)
+	BatchAssociateUserStackWithContext(aws.Context, *appstream.BatchAssociateUserStackInput, ...request.Option) (*appstream.BatchAssociateUserStackOutput, error)
+	BatchAssociateUserStackRequest(*appstream.BatchAssociateUserStackInput) (*request.Request, *appstream.BatchAssociateUserStackOutput)
+
+	BatchDisassociateUserStack(*appstream.BatchDisassociateUserStackInput) (*appstream.BatchDisassociateUserStackOutput, error)
+	BatchDisassociateUserStackWithContext(aws.Context, *appstream.BatchDisassociateUserStackInput, ...request.Option) (*appstream.BatchDisassociateUserStackOutput, error)
+	BatchDisassociateUserStackRequest(*appstream.BatchDisassociateUserStackInput) (*request.Request, *appstream.BatchDisassociateUserStackOutput)
+
 	CopyImage(*appstream.CopyImageInput) (*appstream.CopyImageOutput, error)
 	CopyImageWithContext(aws.Context, *appstream.CopyImageInput, ...request.Option) (*appstream.CopyImageOutput, error)
 	CopyImageRequest(*appstream.CopyImageInput) (*request.Request, *appstream.CopyImageOutput)
@@ -92,6 +100,10 @@ type AppStreamAPI interface {
 	CreateStreamingURLWithContext(aws.Context, *appstream.CreateStreamingURLInput, ...request.Option) (*appstream.CreateStreamingURLOutput, error)
 	CreateStreamingURLRequest(*appstream.CreateStreamingURLInput) (*request.Request, *appstream.CreateStreamingURLOutput)
 
+	CreateUser(*appstream.CreateUserInput) (*appstream.CreateUserOutput, error)
+	CreateUserWithContext(aws.Context, *appstream.CreateUserInput, ...request.Option) (*appstream.CreateUserOutput, error)
+	CreateUserRequest(*appstream.CreateUserInput) (*request.Request, *appstream.CreateUserOutput)
+
 	DeleteDirectoryConfig(*appstream.DeleteDirectoryConfigInput) (*appstream.DeleteDirectoryConfigOutput, error)
 	DeleteDirectoryConfigWithContext(aws.Context, *appstream.DeleteDirectoryConfigInput, ...request.Option) (*appstream.DeleteDirectoryConfigOutput, error)
 	DeleteDirectoryConfigRequest(*appstream.DeleteDirectoryConfigInput) (*request.Request, *appstream.DeleteDirectoryConfigOutput)
@@ -115,6 +127,10 @@ type AppStreamAPI interface {
 	DeleteStack(*appstream.DeleteStackInput) (*appstream.DeleteStackOutput, error)
 	DeleteStackWithContext(aws.Context, *appstream.DeleteStackInput, ...request.Option) (*appstream.DeleteStackOutput, error)
 	DeleteStackRequest(*appstream.DeleteStackInput) (*request.Request, *appstream.DeleteStackOutput)
+
+	DeleteUser(*appstream.DeleteUserInput) (*appstream.DeleteUserOutput, error)
+	DeleteUserWithContext(aws.Context, *appstream.DeleteUserInput, ...request.Option) (*appstream.DeleteUserOutput, error)
+	DeleteUserRequest(*appstream.DeleteUserInput) (*request.Request, *appstream.DeleteUserOutput)
 
 	DescribeDirectoryConfigs(*appstream.DescribeDirectoryConfigsInput) (*appstream.DescribeDirectoryConfigsOutput, error)
 	DescribeDirectoryConfigsWithContext(aws.Context, *appstream.DescribeDirectoryConfigsInput, ...request.Option) (*appstream.DescribeDirectoryConfigsOutput, error)
@@ -150,9 +166,25 @@ type AppStreamAPI interface {
 	DescribeStacksWithContext(aws.Context, *appstream.DescribeStacksInput, ...request.Option) (*appstream.DescribeStacksOutput, error)
 	DescribeStacksRequest(*appstream.DescribeStacksInput) (*request.Request, *appstream.DescribeStacksOutput)
 
+	DescribeUserStackAssociations(*appstream.DescribeUserStackAssociationsInput) (*appstream.DescribeUserStackAssociationsOutput, error)
+	DescribeUserStackAssociationsWithContext(aws.Context, *appstream.DescribeUserStackAssociationsInput, ...request.Option) (*appstream.DescribeUserStackAssociationsOutput, error)
+	DescribeUserStackAssociationsRequest(*appstream.DescribeUserStackAssociationsInput) (*request.Request, *appstream.DescribeUserStackAssociationsOutput)
+
+	DescribeUsers(*appstream.DescribeUsersInput) (*appstream.DescribeUsersOutput, error)
+	DescribeUsersWithContext(aws.Context, *appstream.DescribeUsersInput, ...request.Option) (*appstream.DescribeUsersOutput, error)
+	DescribeUsersRequest(*appstream.DescribeUsersInput) (*request.Request, *appstream.DescribeUsersOutput)
+
+	DisableUser(*appstream.DisableUserInput) (*appstream.DisableUserOutput, error)
+	DisableUserWithContext(aws.Context, *appstream.DisableUserInput, ...request.Option) (*appstream.DisableUserOutput, error)
+	DisableUserRequest(*appstream.DisableUserInput) (*request.Request, *appstream.DisableUserOutput)
+
 	DisassociateFleet(*appstream.DisassociateFleetInput) (*appstream.DisassociateFleetOutput, error)
 	DisassociateFleetWithContext(aws.Context, *appstream.DisassociateFleetInput, ...request.Option) (*appstream.DisassociateFleetOutput, error)
 	DisassociateFleetRequest(*appstream.DisassociateFleetInput) (*request.Request, *appstream.DisassociateFleetOutput)
+
+	EnableUser(*appstream.EnableUserInput) (*appstream.EnableUserOutput, error)
+	EnableUserWithContext(aws.Context, *appstream.EnableUserInput, ...request.Option) (*appstream.EnableUserOutput, error)
+	EnableUserRequest(*appstream.EnableUserInput) (*request.Request, *appstream.EnableUserOutput)
 
 	ExpireSession(*appstream.ExpireSessionInput) (*appstream.ExpireSessionOutput, error)
 	ExpireSessionWithContext(aws.Context, *appstream.ExpireSessionInput, ...request.Option) (*appstream.ExpireSessionOutput, error)

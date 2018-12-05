@@ -22,6 +22,7 @@
     "DeleteSegment" : "Deletes a segment.",
     "DeleteSmsChannel" : "Delete an SMS channel.",
     "DeleteUserEndpoints" : "Deletes endpoints that are associated with a User ID.",
+    "DeleteVoiceChannel" : "Delete an Voice channel",
     "GetAdmChannel" : "Get an ADM channel.",
     "GetApnsChannel" : "Returns information about the APNs channel for an app.",
     "GetApnsSandboxChannel" : "Get an APNS sandbox channel.",
@@ -53,6 +54,7 @@
     "GetSegments" : "Used to get information about your segments.",
     "GetSmsChannel" : "Get an SMS channel.",
     "GetUserEndpoints" : "Returns information about the endpoints that are associated with a User ID.",
+    "GetVoiceChannel" : "Get a Voice Channel",
     "PhoneNumberValidate" : "Returns information about the specified phone number.",
     "PutEventStream" : "Use to create or update the event stream for an app.",
     "PutEvents" : "Use to record events for endpoints. This method creates events and creates or updates the endpoints that those events are associated with.",
@@ -72,7 +74,8 @@
     "UpdateEndpointsBatch" : "Use to update a batch of endpoints.",
     "UpdateGcmChannel" : "Use to update the GCM channel for an app.",
     "UpdateSegment" : "Used to update a segment.",
-    "UpdateSmsChannel" : "Update an SMS channel."
+    "UpdateSmsChannel" : "Update an SMS channel.",
+    "UpdateVoiceChannel" : "Update an Voice channel"
   },
   "shapes" : {
     "ADMChannelRequest" : {
@@ -177,7 +180,7 @@
     "AttributeType" : {
       "base" : null,
       "refs" : {
-        "AttributeDimension$AttributeType" : "The type of dimension:\nINCLUSIVE - Endpoints that match the criteria are included in the segment.\nEXCLUSIVE - Endpoints that match the criteria are excluded from the segment."
+        "AttributeDimension$AttributeType" : "The type of dimension:\n\nINCLUSIVE - Endpoints that match the criteria are included in the segment.\n\nEXCLUSIVE - Endpoints that match the criteria are excluded from the segment."
       }
     },
     "AttributesResource" : {
@@ -208,6 +211,12 @@
         "MessageConfiguration$EmailMessage" : "The email message configuration."
       }
     },
+    "CampaignEventFilter" : {
+      "base" : "An object that defines the events that cause the campaign to be sent.",
+      "refs" : {
+        "Schedule$EventFilter" : "Defines the type of events that can trigger the campaign. Used when the Frequency is set to EVENT."
+      }
+    },
     "CampaignHook" : {
       "base" : "Campaign hook information.",
       "refs" : {
@@ -218,11 +227,11 @@
       }
     },
     "CampaignLimits" : {
-      "base" : "Campaign Limits are used to limit the number of messages that can be sent to a user.",
+      "base" : "Campaign Limits are used to limit the number of messages that can be sent to a single endpoint.",
       "refs" : {
         "ApplicationSettingsResource$Limits" : "The default campaign limits for the app. These limits apply to each campaign for the app, unless the campaign overrides the default with limits of its own.",
         "CampaignResponse$Limits" : "The campaign limits settings.",
-        "WriteApplicationSettingsRequest$Limits" : "The default campaign limits for the app. These limits apply to each campaign for the app, unless the campaign overrides the default with limits of its own.",
+        "WriteApplicationSettingsRequest$Limits" : "The limits that apply to each campaign in the project by default. Campaigns can also have their own limits, which override the settings at the project level.",
         "WriteCampaignRequest$Limits" : "The campaign limits settings."
       }
     },
@@ -295,14 +304,14 @@
     "DeliveryStatus" : {
       "base" : null,
       "refs" : {
-        "EndpointMessageResult$DeliveryStatus" : "The delivery status of the message. Possible values:\n\nSUCCESS - The message was successfully delivered to the endpoint.\n\nTRANSIENT_FAILURE - A temporary error occurred. Amazon Pinpoint will attempt to deliver the message again later.\n\nFAILURE_PERMANENT - An error occurred when delivering the message to the endpoint. Amazon Pinpoint won't attempt to send the message again.\n\nTIMEOUT - The message couldn't be sent within the timeout period.\n\nQUIET_TIME - The local time for the endpoint was within the Quiet Hours for the campaign.\n\nDAILY_CAP - The endpoint has received the maximum number of messages it can receive within a 24-hour period.\n\nHOLDOUT - The endpoint was in a hold out treatment for the campaign.\n\nTHROTTLED - Amazon Pinpoint throttled sending to this endpoint.\n\nEXPIRED - The endpoint address is expired.\n\nCAMPAIGN_CAP - The endpoint received the maximum number of messages allowed by the campaign.\n\nSERVICE_FAILURE - A service-level failure prevented Amazon Pinpoint from delivering the message.\n\nUNKNOWN - An unknown error occurred.",
-        "MessageResult$DeliveryStatus" : "The delivery status of the message. Possible values:\n\nSUCCESS - The message was successfully delivered to the endpoint.\n\nTRANSIENT_FAILURE - A temporary error occurred. Amazon Pinpoint will attempt to deliver the message again later.\n\nFAILURE_PERMANENT - An error occurred when delivering the message to the endpoint. Amazon Pinpoint won't attempt to send the message again.\n\nTIMEOUT - The message couldn't be sent within the timeout period.\n\nQUIET_TIME - The local time for the endpoint was within the Quiet Hours for the campaign.\n\nDAILY_CAP - The endpoint has received the maximum number of messages it can receive within a 24-hour period.\n\nHOLDOUT - The endpoint was in a hold out treatment for the campaign.\n\nTHROTTLED - Amazon Pinpoint throttled sending to this endpoint.\n\nEXPIRED - The endpoint address is expired.\n\nCAMPAIGN_CAP - The endpoint received the maximum number of messages allowed by the campaign.\n\nSERVICE_FAILURE - A service-level failure prevented Amazon Pinpoint from delivering the message.\n\nUNKNOWN - An unknown error occurred."
+        "EndpointMessageResult$DeliveryStatus" : "The delivery status of the message. Possible values:\n\nSUCCESS - The message was successfully delivered to the endpoint.\n\nTRANSIENT_FAILURE - A temporary error occurred. Amazon Pinpoint will attempt to deliver the message again later.\n\nFAILURE_PERMANENT - An error occurred when delivering the message to the endpoint. Amazon Pinpoint won't attempt to send the message again.\n\nTIMEOUT - The message couldn't be sent within the timeout period.\n\nQUIET_TIME - The local time for the endpoint was within the QuietTime for the campaign or app.\n\nDAILY_CAP - The endpoint has received the maximum number of messages it can receive within a 24-hour period.\n\nHOLDOUT - The endpoint was in a hold out treatment for the campaign.\n\nTHROTTLED - Amazon Pinpoint throttled sending to this endpoint.\n\nEXPIRED - The endpoint address is expired.\n\nCAMPAIGN_CAP - The endpoint received the maximum number of messages allowed by the campaign.\n\nSERVICE_FAILURE - A service-level failure prevented Amazon Pinpoint from delivering the message.\n\nUNKNOWN - An unknown error occurred.",
+        "MessageResult$DeliveryStatus" : "The delivery status of the message. Possible values:\n\nSUCCESS - The message was successfully delivered to the endpoint.\n\nTRANSIENT_FAILURE - A temporary error occurred. Amazon Pinpoint will attempt to deliver the message again later.\n\nFAILURE_PERMANENT - An error occurred when delivering the message to the endpoint. Amazon Pinpoint won't attempt to send the message again.\n\nTIMEOUT - The message couldn't be sent within the timeout period.\n\nQUIET_TIME - The local time for the endpoint was within the QuietTime for the campaign or app.\n\nDAILY_CAP - The endpoint has received the maximum number of messages it can receive within a 24-hour period.\n\nHOLDOUT - The endpoint was in a hold out treatment for the campaign.\n\nTHROTTLED - Amazon Pinpoint throttled sending to this endpoint.\n\nEXPIRED - The endpoint address is expired.\n\nCAMPAIGN_CAP - The endpoint received the maximum number of messages allowed by the campaign.\n\nSERVICE_FAILURE - A service-level failure prevented Amazon Pinpoint from delivering the message.\n\nUNKNOWN - An unknown error occurred."
       }
     },
     "DimensionType" : {
       "base" : null,
       "refs" : {
-        "SetDimension$DimensionType" : "The type of dimension:\nINCLUSIVE - Endpoints that match the criteria are included in the segment.\nEXCLUSIVE - Endpoints that match the criteria are excluded from the segment."
+        "SetDimension$DimensionType" : "The type of dimension:\n\nINCLUSIVE - Endpoints that match the criteria are included in the segment.\n\nEXCLUSIVE - Endpoints that match the criteria are excluded from the segment."
       }
     },
     "DirectMessageConfiguration" : {
@@ -315,7 +324,7 @@
     "Duration" : {
       "base" : null,
       "refs" : {
-        "RecencyDimension$Duration" : "The length of time during which users have been active or inactive with your app.\nValid values: HR_24, DAY_7, DAY_14, DAY_30"
+        "RecencyDimension$Duration" : "The length of time during which users have been active or inactive with your app.\n\nValid values: HR_24, DAY_7, DAY_14, DAY_30"
       }
     },
     "EmailChannelRequest" : {
@@ -325,6 +334,12 @@
     "EmailChannelResponse" : {
       "base" : "Email Channel Response.",
       "refs" : { }
+    },
+    "EmailMessage" : {
+      "base" : "Email Message.",
+      "refs" : {
+        "DirectMessageConfiguration$EmailMessage" : "The message to Email channels. Overrides the default message."
+      }
     },
     "EndpointBatchItem" : {
       "base" : "Endpoint update request",
@@ -346,9 +361,9 @@
       }
     },
     "EndpointItemResponse" : {
-      "base" : "The responses that are returned after you create or update an endpoint and record an event.",
+      "base" : "A complex object that holds the status code and message as a result of processing an endpoint.",
       "refs" : {
-        "ItemResponse$EndpointItemResponse" : "Endpoint item response after endpoint registration"
+        "ItemResponse$EndpointItemResponse" : "The response received after the endpoint was accepted."
       }
     },
     "EndpointLocation" : {
@@ -367,7 +382,7 @@
       }
     },
     "EndpointRequest" : {
-      "base" : "Endpoint update request",
+      "base" : "An endpoint update request.",
       "refs" : { }
     },
     "EndpointResponse" : {
@@ -401,8 +416,14 @@
         "MapOfEvent$member" : null
       }
     },
+    "EventDimensions" : {
+      "base" : "Event dimensions.",
+      "refs" : {
+        "CampaignEventFilter$Dimensions" : "An object that defines the dimensions for the event filter."
+      }
+    },
     "EventItemResponse" : {
-      "base" : "The responses that are returned after you record an event.",
+      "base" : "A complex object that holds the status code and message as a result of processing an event.",
       "refs" : {
         "MapOfEventItemResponse$member" : null
       }
@@ -412,17 +433,17 @@
       "refs" : { }
     },
     "EventsBatch" : {
-      "base" : "Events batch definition",
+      "base" : "A batch of PublicEndpoints and Events to process.",
       "refs" : {
         "MapOfEventsBatch$member" : null
       }
     },
     "EventsRequest" : {
-      "base" : "Put Events request",
+      "base" : "A set of events to process.",
       "refs" : { }
     },
     "EventsResponse" : {
-      "base" : "The results from processing a put events request",
+      "base" : "Custom messages associated with events.",
       "refs" : { }
     },
     "ExportJobRequest" : {
@@ -445,6 +466,12 @@
       "base" : "Export job list.",
       "refs" : { }
     },
+    "FilterType" : {
+      "base" : null,
+      "refs" : {
+        "CampaignEventFilter$FilterType" : "The type of event that causes the campaign to be sent. Possible values:\n\nSYSTEM - Send the campaign when a system event occurs. See the System resource for more information.\n\nENDPOINT - Send the campaign when an endpoint event occurs. See the Event resource for more information."
+      }
+    },
     "ForbiddenException" : {
       "base" : "Simple message object.",
       "refs" : { }
@@ -460,7 +487,7 @@
     "Frequency" : {
       "base" : null,
       "refs" : {
-        "Schedule$Frequency" : "How often the campaign delivers messages.\n\nValid values: ONCE, HOURLY, DAILY, WEEKLY, MONTHLY"
+        "Schedule$Frequency" : "How often the campaign delivers messages.\n\nValid values:\n\nONCE\n\nHOURLY\n\nDAILY\n\nWEEKLY\n\nMONTHLY\n\nEVENT"
       }
     },
     "GCMChannelRequest" : {
@@ -520,7 +547,7 @@
       "refs" : { }
     },
     "ItemResponse" : {
-      "base" : "The endpoint and events combined response definition",
+      "base" : "The response that's provided after registering the endpoint.",
       "refs" : {
         "MapOfItemResponse$member" : null
       }
@@ -597,25 +624,31 @@
       "refs" : { }
     },
     "NumberValidateRequest" : {
-      "base" : "Phone Number Information request.",
+      "base" : "Phone Number Validate request.",
       "refs" : { }
     },
     "NumberValidateResponse" : {
-      "base" : "Phone Number Information response.",
+      "base" : "Phone Number Validate response.",
       "refs" : { }
     },
     "PublicEndpoint" : {
       "base" : "Public endpoint attributes.",
       "refs" : {
-        "EventsBatch$Endpoint" : "Endpoint information"
+        "EventsBatch$Endpoint" : "The PublicEndpoint attached to the EndpointId from the request."
       }
     },
     "QuietTime" : {
       "base" : "Quiet Time",
       "refs" : {
-        "ApplicationSettingsResource$QuietTime" : "The default quiet time for the app. Each campaign for this app sends no messages during this time unless the campaign overrides the default with a quiet time of its own.",
-        "Schedule$QuietTime" : "The time during which the campaign sends no messages.",
-        "WriteApplicationSettingsRequest$QuietTime" : "The default quiet time for the app. Each campaign for this app sends no messages during this time unless the campaign overrides the default with a quiet time of its own."
+        "ApplicationSettingsResource$QuietTime" : "The default quiet time for the app. Campaigns in the app don't send messages to endpoints during the quiet time.\n\nNote: Make sure that your endpoints include the Demographics.Timezone attribute if you plan to enable a quiet time for your app. If your endpoints don't include this attribute, they'll receive the messages that you send them, even if quiet time is enabled.\n\nWhen you set up an app to use quiet time, campaigns in that app don't send messages during the time range you specified, as long as all of the following are true:\n- The endpoint includes a valid Demographic.Timezone attribute.\n- The current time in the endpoint's time zone is later than or equal to the time specified in the QuietTime.Start attribute for the app (or campaign, if applicable).\n- The current time in the endpoint's time zone is earlier than or equal to the time specified in the QuietTime.End attribute for the app (or campaign, if applicable).\n\nIndividual campaigns within the app can have their own quiet time settings, which override the quiet time settings at the app level.",
+        "Schedule$QuietTime" : "The default quiet time for the campaign. The campaign doesn't send messages to endpoints during the quiet time.\n\nNote: Make sure that your endpoints include the Demographics.Timezone attribute if you plan to enable a quiet time for your campaign. If your endpoints don't include this attribute, they'll receive the messages that you send them, even if quiet time is enabled.\n\nWhen you set up a campaign to use quiet time, the campaign doesn't send messages during the time range you specified, as long as all of the following are true:\n- The endpoint includes a valid Demographic.Timezone attribute.\n- The current time in the endpoint's time zone is later than or equal to the time specified in the QuietTime.Start attribute for the campaign.\n- The current time in the endpoint's time zone is earlier than or equal to the time specified in the QuietTime.End attribute for the campaign.",
+        "WriteApplicationSettingsRequest$QuietTime" : "The default quiet time for the app. Campaigns in the app don't send messages to endpoints during the quiet time.\n\nNote: Make sure that your endpoints include the Demographics.Timezone attribute if you plan to enable a quiet time for your app. If your endpoints don't include this attribute, they'll receive the messages that you send them, even if quiet time is enabled.\n\nWhen you set up an app to use quiet time, campaigns in that app don't send messages during the time range you specified, as long as all of the following are true:\n- The endpoint includes a valid Demographic.Timezone attribute.\n- The current time in the endpoint's time zone is later than or equal to the time specified in the QuietTime.Start attribute for the app (or campaign, if applicable).\n- The current time in the endpoint's time zone is earlier than or equal to the time specified in the QuietTime.End attribute for the app (or campaign, if applicable).\n\nIndividual campaigns within the app can have their own quiet time settings, which override the quiet time settings at the app level."
+      }
+    },
+    "RawEmail" : {
+      "base" : "An email represented as a raw MIME message.",
+      "refs" : {
+        "EmailMessage$RawEmail" : "An email represented as a raw MIME message."
       }
     },
     "RecencyDimension" : {
@@ -627,7 +660,7 @@
     "RecencyType" : {
       "base" : null,
       "refs" : {
-        "RecencyDimension$RecencyType" : "The recency dimension type:\nACTIVE - Users who have used your app within the specified duration are included in the segment.\nINACTIVE - Users who have not used your app within the specified duration are included in the segment."
+        "RecencyDimension$RecencyType" : "The recency dimension type:\n\nACTIVE - Users who have used your app within the specified duration are included in the segment.\n\nINACTIVE - Users who have not used your app within the specified duration are included in the segment."
       }
     },
     "SMSChannelRequest" : {
@@ -731,19 +764,34 @@
     "Session" : {
       "base" : "Information about a session.",
       "refs" : {
-        "Event$Session" : "The session"
+        "Event$Session" : "Information about the session in which the event occurred."
       }
     },
     "SetDimension" : {
       "base" : "Dimension specification of a segment.",
       "refs" : {
+        "EventDimensions$EventType" : "The name of the event that causes the campaign to be sent. This can be a standard event type that Amazon Pinpoint generates, such as _session.start, or a custom event that's specific to your app.",
         "SegmentDemographics$AppVersion" : "The app version criteria for the segment.",
         "SegmentDemographics$Channel" : "The channel criteria for the segment.",
         "SegmentDemographics$DeviceType" : "The device type criteria for the segment.",
         "SegmentDemographics$Make" : "The device make criteria for the segment.",
         "SegmentDemographics$Model" : "The device model criteria for the segment.",
         "SegmentDemographics$Platform" : "The device platform criteria for the segment.",
-        "SegmentLocation$Country" : "The country filter according to ISO 3166-1 Alpha-2 codes."
+        "SegmentLocation$Country" : "The country or region, in ISO 3166-1 alpha-2 format."
+      }
+    },
+    "SimpleEmail" : {
+      "base" : "An email composed of a subject, a text part and a html part.",
+      "refs" : {
+        "EmailMessage$SimpleEmail" : "An email composed of a subject, a text part and a html part."
+      }
+    },
+    "SimpleEmailPart" : {
+      "base" : "Textual email data, plus an optional character set specification.",
+      "refs" : {
+        "SimpleEmail$HtmlPart" : "The content of the message, in HTML format. Use this for email clients that can process HTML. You can include clickable links, formatted text, and much more in an HTML message.",
+        "SimpleEmail$Subject" : "The subject of the message: A short summary of the content, which will appear in the recipient's inbox.",
+        "SimpleEmail$TextPart" : "The content of the message, in text format. Use this for text-based email clients, or clients on high-latency networks (such as mobile devices)."
       }
     },
     "SourceType" : {
@@ -771,6 +819,20 @@
     "UpdateAttributesRequest" : {
       "base" : "Update attributes request",
       "refs" : { }
+    },
+    "VoiceChannelRequest" : {
+      "base" : "Voice Channel Request",
+      "refs" : { }
+    },
+    "VoiceChannelResponse" : {
+      "base" : "Voice Channel Response.",
+      "refs" : { }
+    },
+    "VoiceMessage" : {
+      "base" : "Voice Message.",
+      "refs" : {
+        "DirectMessageConfiguration$VoiceMessage" : "The message to Voice channels. Overrides the default message."
+      }
     },
     "WriteApplicationSettingsRequest" : {
       "base" : "Creating application setting request",
@@ -832,7 +894,7 @@
         "ChannelResponse$Enabled" : "If the channel is enabled for sending messages.",
         "ChannelResponse$HasCredential" : "Not used. Retained for backwards compatibility.",
         "ChannelResponse$IsArchived" : "Is this channel archived",
-        "DefaultPushNotificationMessage$SilentPush" : "Indicates if the message should display on the users device. Silent pushes can be used for Remote Configuration and Phone Home use cases.",
+        "DefaultPushNotificationMessage$SilentPush" : "Indicates if the message should display on the recipient's device. You can use silent pushes for remote configuration or to deliver messages to in-app notification centers.",
         "EmailChannelRequest$Enabled" : "If the channel is enabled for sending messages.",
         "EmailChannelResponse$Enabled" : "If the channel is enabled for sending messages.",
         "EmailChannelResponse$HasCredential" : "Not used. Retained for backwards compatibility.",
@@ -852,6 +914,10 @@
         "SMSChannelResponse$HasCredential" : "Not used. Retained for backwards compatibility.",
         "SMSChannelResponse$IsArchived" : "Is this channel archived",
         "Schedule$IsLocalTime" : "Indicates whether the campaign schedule takes effect according to each user's local time.",
+        "VoiceChannelRequest$Enabled" : "If the channel is enabled for sending messages.",
+        "VoiceChannelResponse$Enabled" : "If the channel is enabled for sending messages.",
+        "VoiceChannelResponse$HasCredential" : null,
+        "VoiceChannelResponse$IsArchived" : "Is this channel archived",
         "WriteApplicationSettingsRequest$CloudWatchMetricsEnabled" : "The CloudWatchMetrics settings for the app.",
         "WriteCampaignRequest$IsPaused" : "Indicates whether the campaign is paused. A paused campaign does not send messages unless you resume it by setting IsPaused to false."
       }
@@ -864,7 +930,7 @@
         "GPSCoordinates$Latitude" : "Latitude",
         "GPSCoordinates$Longitude" : "Longitude",
         "GPSPointDimension$RangeInKilometers" : "Range in kilometers from the coordinate.",
-        "MetricDimension$Value" : "Value to be compared.",
+        "MetricDimension$Value" : "The value to be compared.",
         "MapOf__double$member" : null
       }
     },
@@ -884,19 +950,19 @@
         "ActivityResponse$TotalEndpointCount" : "The total number of endpoints to which the campaign attempts to deliver messages.",
         "BaiduChannelResponse$Version" : "Version of channel",
         "BaiduMessage$TimeToLive" : "This parameter specifies how long (in seconds) the message should be kept in Baidu storage if the device is offline. The and the default value and the maximum time to live supported is 7 days (604800 seconds)",
-        "CampaignLimits$Daily" : "The maximum number of messages that the campaign can send daily.",
+        "CampaignLimits$Daily" : "The maximum number of messages that each campaign can send to a single endpoint in a 24-hour period.",
         "CampaignLimits$MaximumDuration" : "The length of time (in seconds) that the campaign can run before it ends and message deliveries stop. This duration begins at the scheduled start time for the campaign. The minimum value is 60.",
         "CampaignLimits$MessagesPerSecond" : "The number of messages that the campaign can send per second. The minimum value is 50, and the maximum is 20000.",
-        "CampaignLimits$Total" : "The maximum total number of messages that the campaign can send.",
+        "CampaignLimits$Total" : "The maximum number of messages that an individual campaign can send to a single endpoint over the course of the campaign.",
         "CampaignResponse$HoldoutPercent" : "The allocated percentage of end users who will not receive messages from this campaign.",
         "CampaignResponse$SegmentVersion" : "The version of the segment to which the campaign sends messages.",
         "CampaignResponse$Version" : "The campaign version number.",
         "ChannelResponse$Version" : "Version of channel",
         "EmailChannelResponse$MessagesPerSecond" : "Messages per second that can be sent",
         "EmailChannelResponse$Version" : "Version of channel",
-        "EndpointItemResponse$StatusCode" : "The status code to respond with for a particular endpoint id after endpoint registration",
+        "EndpointItemResponse$StatusCode" : "The status code associated with the merging of an endpoint when issuing a response.",
         "EndpointMessageResult$StatusCode" : "Downstream service status code.",
-        "EventItemResponse$StatusCode" : "The status code to respond with for a particular event id",
+        "EventItemResponse$StatusCode" : "The status returned in the response as a result of processing the event.\n\nPossible values: 400 (for invalid events) and 202 (for events that were accepted).",
         "ExportJobRequest$SegmentVersion" : "The version of the segment to export if specified.",
         "ExportJobResource$SegmentVersion" : "The version of the segment to export if specified.",
         "ExportJobResponse$CompletedPieces" : "The number of pieces that have successfully completed as of the time of the request.",
@@ -920,8 +986,9 @@
         "SegmentImportResource$Size" : "The number of endpoints that were successfully imported to create this segment.",
         "SegmentReference$Version" : "If specified contains a specific version of the segment included.",
         "SegmentResponse$Version" : "The segment version number.",
-        "Session$Duration" : "Session duration in millis",
+        "Session$Duration" : "The duration of the session, in milliseconds.",
         "TreatmentResource$SizePercent" : "The allocated percentage of users for this treatment.",
+        "VoiceChannelResponse$Version" : "Version of channel",
         "WriteCampaignRequest$HoldoutPercent" : "The allocated percentage of end users who will not receive messages from this campaign.",
         "WriteCampaignRequest$SegmentVersion" : "The version of the segment to which the campaign sends messages.",
         "WriteTreatmentResource$SizePercent" : "The allocated percentage of users for this treatment.",
@@ -985,7 +1052,7 @@
     "ListOfSegmentReference" : {
       "base" : null,
       "refs" : {
-        "SegmentGroup$SourceSegments" : "The base segment that you build your segment on. The source segment defines the starting \"universe\" of endpoints. When you add dimensions to the segment, it filters the source segment based on the dimensions that you specify. You can specify more than one dimensional segment. You can only specify one imported segment."
+        "SegmentGroup$SourceSegments" : "The base segment that you build your segment on. The source segment defines the starting \"universe\" of endpoints. When you add dimensions to the segment, it filters the source segment based on the dimensions that you specify. You can specify more than one dimensional segment. You can only specify one imported segment.\n\nNOTE: If you specify an imported segment for this attribute, the segment size estimate that appears in the Amazon Pinpoint console shows the size of the imported segment, without any filters applied to it."
       }
     },
     "ListOfSegmentResponse" : {
@@ -1011,6 +1078,7 @@
       "refs" : {
         "AttributeDimension$Values" : "The criteria values for the segment dimension. Endpoints with matching attribute values are included or excluded from the segment, depending on the setting for Type.",
         "AttributesResource$Attributes" : "The attributes for the application.",
+        "EmailMessage$ReplyToAddresses" : "The reply-to email address(es) for the email. If the recipient replies to the email, each reply-to address will receive the reply.",
         "ExportJobResponse$Failures" : "Provides up to 100 of the first failed entries for the job, if any exist.",
         "ImportJobResponse$Failures" : "Provides up to 100 of the first failed entries for the job, if any exist.",
         "SetDimension$Values" : "The criteria values for the segment dimension. Endpoints with matching attribute values are included or excluded from the segment, depending on the setting for Type.",
@@ -1027,6 +1095,7 @@
     "MapOfAttributeDimension" : {
       "base" : null,
       "refs" : {
+        "EventDimensions$Attributes" : "Custom attributes that your app reports to Amazon Pinpoint. You can use these attributes as selection criteria when you create an event filter.",
         "SegmentDimensions$Attributes" : "Custom segment attributes.",
         "SegmentDimensions$UserAttributes" : "Custom segment user attributes."
       }
@@ -1054,25 +1123,25 @@
     "MapOfEvent" : {
       "base" : null,
       "refs" : {
-        "EventsBatch$Events" : "Events"
+        "EventsBatch$Events" : "An object that contains a set of events associated with the endpoint."
       }
     },
     "MapOfEventItemResponse" : {
       "base" : null,
       "refs" : {
-        "ItemResponse$EventsItemResponse" : "Events item response is a multipart response object per event Id, with eventId as the key and EventItemResponse object as the value"
+        "ItemResponse$EventsItemResponse" : "A multipart response object that contains a key and value for each event ID in the request. In each object, the event ID is the key, and an EventItemResponse object is the value."
       }
     },
     "MapOfEventsBatch" : {
       "base" : null,
       "refs" : {
-        "EventsRequest$BatchItem" : "Batch of events with endpoint id as the key and an object of EventsBatch as value. The EventsBatch object has the PublicEndpoint and a map of event Id's to events"
+        "EventsRequest$BatchItem" : "A batch of events to process. Each BatchItem consists of an endpoint ID as the key, and an EventsBatch object as the value."
       }
     },
     "MapOfItemResponse" : {
       "base" : null,
       "refs" : {
-        "EventsResponse$Results" : "A map containing a multi part response for each endpoint, with the endpoint id as the key and item response as the value"
+        "EventsResponse$Results" : "A map that contains a multipart response for each endpoint. Each item in this object uses the endpoint ID as the key, and the item response as the value.\n\nIf no item response exists, the value can also be one of the following: 202 (if the request was processed successfully) or 400 (if the payload was invalid, or required fields were missing)."
       }
     },
     "MapOfMessageResult" : {
@@ -1084,6 +1153,7 @@
     "MapOfMetricDimension" : {
       "base" : null,
       "refs" : {
+        "EventDimensions$Metrics" : "Custom metrics that your app reports to Amazon Pinpoint. You can use these attributes as selection criteria when you create an event filter.",
         "SegmentDimensions$Metrics" : "Custom segment metrics."
       }
     },
@@ -1093,7 +1163,7 @@
         "EndpointBatchItem$Metrics" : "Custom metrics that your app reports to Amazon Pinpoint.",
         "EndpointRequest$Metrics" : "Custom metrics that your app reports to Amazon Pinpoint.",
         "EndpointResponse$Metrics" : "Custom metrics that your app reports to Amazon Pinpoint.",
-        "Event$Metrics" : "Event metrics",
+        "Event$Metrics" : "Custom metrics related to the event.",
         "PublicEndpoint$Metrics" : "Custom metrics that your app reports to Amazon Pinpoint."
       }
     },
@@ -1112,6 +1182,7 @@
         "BaiduMessage$Substitutions" : "Default message substitutions. Can be overridden by individual address substitutions.",
         "DefaultMessage$Substitutions" : "Default message substitutions. Can be overridden by individual address substitutions.",
         "DefaultPushNotificationMessage$Substitutions" : "Default message substitutions. Can be overridden by individual address substitutions.",
+        "EmailMessage$Substitutions" : "Default message substitutions. Can be overridden by individual address substitutions.",
         "EndpointBatchItem$Attributes" : "Custom attributes that describe the endpoint by associating a name with an array of values. For example, an attribute named \"interests\" might have the values [\"science\", \"politics\", \"travel\"]. You can use these attributes as selection criteria when you create a segment of users to engage with a messaging campaign.\n\nThe following characters are not recommended in attribute names: # : ? \\ /. The Amazon Pinpoint console does not display attributes that include these characters in the name. This limitation does not apply to attribute values.",
         "EndpointRequest$Attributes" : "Custom attributes that describe the endpoint by associating a name with an array of values. For example, an attribute named \"interests\" might have the values [\"science\", \"politics\", \"travel\"]. You can use these attributes as selection criteria when you create a segment of users to engage with a messaging campaign.\n\nThe following characters are not recommended in attribute names: # : ? \\ /. The Amazon Pinpoint console does not display attributes that include these characters in the name. This limitation does not apply to attribute values.",
         "EndpointResponse$Attributes" : "Custom attributes that describe the endpoint by associating a name with an array of values. For example, an attribute named \"interests\" might have the following values: [\"science\", \"politics\", \"travel\"]. You can use these attributes as selection criteria when you create segments.\n\nThe Amazon Pinpoint console can't display attribute names that include the following characters: hash/pound sign (#), colon (:), question mark (?), backslash (\\), and forward slash (/). For this reason, you should avoid using these characters in the names of custom attributes.",
@@ -1119,7 +1190,8 @@
         "EndpointUser$UserAttributes" : "Custom attributes that describe the user by associating a name with an array of values. For example, an attribute named \"interests\" might have the following values: [\"science\", \"politics\", \"travel\"]. You can use these attributes as selection criteria when you create segments.\n\nThe Amazon Pinpoint console can't display attribute names that include the following characters: hash/pound sign (#), colon (:), question mark (?), backslash (\\), and forward slash (/). For this reason, you should avoid using these characters in the names of custom attributes.",
         "GCMMessage$Substitutions" : "Default message substitutions. Can be overridden by individual address substitutions.",
         "PublicEndpoint$Attributes" : "Custom attributes that your app reports to Amazon Pinpoint. You can use these attributes as selection criteria when you create a segment.",
-        "SMSMessage$Substitutions" : "Default message substitutions. Can be overridden by individual address substitutions."
+        "SMSMessage$Substitutions" : "Default message substitutions. Can be overridden by individual address substitutions.",
+        "VoiceMessage$Substitutions" : "Default message substitutions. Can be overridden by individual address substitutions."
       }
     },
     "MapOfMapOfEndpointMessageResult" : {
@@ -1183,7 +1255,7 @@
         "APNSMessage$Body" : "The message body of the notification.",
         "APNSMessage$Category" : "Provide this key with a string value that represents the notification's type. This value corresponds to the value in the identifier property of one of your app's registered categories.",
         "APNSMessage$CollapseId" : "An ID that, if assigned to multiple messages, causes APNs to coalesce the messages into a single push notification instead of delivering each message individually. The value must not exceed 64 bytes. Amazon Pinpoint uses this value to set the apns-collapse-id request header when it sends the message to APNs.",
-        "APNSMessage$MediaUrl" : "The URL that points to a video used in the push notification.",
+        "APNSMessage$MediaUrl" : "A URL that refers to the location of an image or video that you want to display in the push notification.",
         "APNSMessage$PreferredAuthenticationMethod" : "The preferred authentication method, either \"CERTIFICATE\" or \"TOKEN\"",
         "APNSMessage$Priority" : "The message priority. Amazon Pinpoint uses this value to set the apns-priority request header when it sends the message to APNs. Accepts the following values:\n\n\"5\" - Low priority. Messages might be delayed, delivered in groups, and throttled.\n\n\"10\" - High priority. Messages are sent immediately. High priority messages must cause an alert, sound, or badge on the receiving device.\n\nThe default value is \"10\".\n\nThe equivalent values for FCM or GCM messages are \"normal\" and \"high\". Amazon Pinpoint accepts these values for APNs messages and converts them.\n\nFor more information about the apns-priority parameter, see Communicating with APNs in the APNs Local and Remote Notification Programming Guide.",
         "APNSMessage$RawContent" : "The Raw JSON formatted string to be used as the payload. This value overrides the message.",
@@ -1299,10 +1371,12 @@
         "DefaultPushNotificationMessage$Body" : "The message body of the notification.",
         "DefaultPushNotificationMessage$Title" : "The message title that displays above the message on the user's device.",
         "DefaultPushNotificationMessage$Url" : "The URL to open in the user's mobile browser. Used if the value for Action is URL.",
+        "EmailChannelRequest$ConfigurationSet" : "The configuration set that you want to use when you send email using the Pinpoint Email API.",
         "EmailChannelRequest$FromAddress" : "The email address used to send emails from.",
         "EmailChannelRequest$Identity" : "The ARN of an identity verified with SES.",
         "EmailChannelRequest$RoleArn" : "The ARN of an IAM Role used to submit events to Mobile Analytics' event ingestion service",
         "EmailChannelResponse$ApplicationId" : "The unique ID of the application to which the email channel belongs.",
+        "EmailChannelResponse$ConfigurationSet" : "The configuration set that you want to use when you send email using the Pinpoint Email API.",
         "EmailChannelResponse$CreationDate" : "The date that the settings were last updated in ISO 8601 format.",
         "EmailChannelResponse$FromAddress" : "The email address used to send emails from.",
         "EmailChannelResponse$Id" : "Channel ID. Not used, only for backwards compatibility.",
@@ -1311,6 +1385,9 @@
         "EmailChannelResponse$LastModifiedDate" : "Last date this was updated",
         "EmailChannelResponse$Platform" : "Platform type. Will be \"EMAIL\"",
         "EmailChannelResponse$RoleArn" : "The ARN of an IAM Role used to submit events to Mobile Analytics' event ingestion service",
+        "EmailMessage$Body" : "The body of the email message.",
+        "EmailMessage$FeedbackForwardingAddress" : "The email address that bounces and complaints will be forwarded to when feedback forwarding is enabled.",
+        "EmailMessage$FromAddress" : "The email address used to send the email from. Defaults to use FromAddress specified in the Email Channel.",
         "EndpointBatchItem$Address" : "The destination for messages that you send to this endpoint. The address varies by channel. For mobile push channels, use the token provided by the push notification service, such as the APNs device token or the FCM registration token. For the SMS channel, use a phone number in E.164 format, such as +12065550100. For the email channel, use an email address.",
         "EndpointBatchItem$EffectiveDate" : "The last time the endpoint was updated. Provided in ISO 8601 format.",
         "EndpointBatchItem$EndpointStatus" : "Unused.",
@@ -1327,7 +1404,7 @@
         "EndpointDemographic$Timezone" : "The timezone of the endpoint. Specified as a tz database value, such as Americas/Los_Angeles.",
         "EndpointItemResponse$Message" : "A custom message associated with the registration of an endpoint when issuing a response.",
         "EndpointLocation$City" : "The city where the endpoint is located.",
-        "EndpointLocation$Country" : "The two-letter code for the country or region of the endpoint. Specified as an ISO 3166-1 Alpha-2 code, such as \"US\" for the United States.",
+        "EndpointLocation$Country" : "The two-letter code for the country or region of the endpoint. Specified as an ISO 3166-1 alpha-2 code, such as \"US\" for the United States.",
         "EndpointLocation$PostalCode" : "The postal code or zip code of the endpoint.",
         "EndpointLocation$Region" : "The region of the endpoint location. For example, in the United States, this corresponds to a state.",
         "EndpointMessageResult$Address" : "Address that endpoint message was delivered to.",
@@ -1415,7 +1492,7 @@
         "Message$ImageSmallIconUrl" : "The URL that points to the small icon image for the push notification icon, for example, the app icon.",
         "Message$ImageUrl" : "The URL that points to an image used in the push notification.",
         "Message$JsonBody" : "The JSON payload used for a silent push.",
-        "Message$MediaUrl" : "The URL that points to the media resource, for example a .mp4 or .gif file.",
+        "Message$MediaUrl" : "A URL that refers to the location of an image or video that you want to display in the push notification.",
         "Message$RawContent" : "The Raw JSON formatted string to be used as the payload. This value overrides the message.",
         "Message$Title" : "The message title that displays above the message on the user's device.",
         "Message$Url" : "The URL to open in the user's mobile browser. Used if the value for Action is URL.",
@@ -1427,7 +1504,7 @@
         "MessageResult$MessageId" : "Unique message identifier associated with the message that was sent.",
         "MessageResult$StatusMessage" : "Status message for message delivery.",
         "MessageResult$UpdatedToken" : "If token was updated as part of delivery. (This is GCM Specific)",
-        "MetricDimension$ComparisonOperator" : "GREATER_THAN | LESS_THAN | GREATER_THAN_OR_EQUAL | LESS_THAN_OR_EQUAL | EQUAL",
+        "MetricDimension$ComparisonOperator" : "The operator that you're using to compare metric values. Possible values: GREATER_THAN, LESS_THAN, GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL, or EQUAL",
         "NumberValidateRequest$IsoCountryCode" : "(Optional) The two-character ISO country code for the country or region where the phone number was originally registered.",
         "NumberValidateRequest$PhoneNumber" : "The phone number to get information about. The phone number that you provide should include a country code. If the number doesn't include a valid country code, the operation might result in an error.",
         "NumberValidateResponse$Carrier" : "The carrier or servive provider that the phone number is currently registered with.",
@@ -1438,18 +1515,19 @@
         "NumberValidateResponse$CountryCodeIso2" : "The two-character ISO code for the country or region where the phone number was originally registered.",
         "NumberValidateResponse$CountryCodeNumeric" : "The numeric code for the country or region where the phone number was originally registered.",
         "NumberValidateResponse$County" : "The county where the phone number was originally registered.",
-        "NumberValidateResponse$OriginalCountryCodeIso2" : "The two-character ISO code for the country or region that you included in the request body.",
+        "NumberValidateResponse$OriginalCountryCodeIso2" : "The two-character code (in ISO 3166-1 alpha-2 format) for the country or region in the request body.",
         "NumberValidateResponse$OriginalPhoneNumber" : "The phone number that you included in the request body.",
         "NumberValidateResponse$PhoneType" : "A description of the phone type. Possible values are MOBILE, LANDLINE, VOIP, INVALID, PREPAID, and OTHER.",
         "NumberValidateResponse$Timezone" : "The time zone for the location where the phone number was originally registered.",
         "NumberValidateResponse$ZipCode" : "The postal code for the location where the phone number was originally registered.",
-        "PublicEndpoint$Address" : "The unique identifier for the recipient. For example, an address could be a device token or an endpoint ID.",
-        "PublicEndpoint$EffectiveDate" : "The date and time when the endpoint was last updated.",
+        "PublicEndpoint$Address" : "The unique identifier for the recipient. For example, an address could be a device token, email address, or mobile phone number.",
+        "PublicEndpoint$EffectiveDate" : "The date and time when the endpoint was last updated, in  ISO 8601 format.",
         "PublicEndpoint$EndpointStatus" : "The status of the endpoint. If the update fails, the value is INACTIVE. If the endpoint is updated successfully, the value is ACTIVE.",
         "PublicEndpoint$OptOut" : "Indicates whether a user has opted out of receiving messages with one of the following values:\n\nALL - User has opted out of all messages.\n\nNONE - Users has not opted out and receives all messages.",
         "PublicEndpoint$RequestId" : "A unique identifier that is generated each time the endpoint is updated.",
-        "QuietTime$End" : "The default end time for quiet time in ISO 8601 format.",
-        "QuietTime$Start" : "The default start time for quiet time in ISO 8601 format.",
+        "QuietTime$End" : "The time at which quiet time should end. The value that you specify has to be in HH:mm format, where HH is the hour in 24-hour format (with a leading zero, if applicable), and mm is the minutes. For example, use 02:30 to represent 2:30 AM, or 14:30 to represent 2:30 PM.",
+        "QuietTime$Start" : "The time at which quiet time should begin. The value that you specify has to be in HH:mm format, where HH is the hour in 24-hour format (with a leading zero, if applicable), and mm is the minutes. For example, use 02:30 to represent 2:30 AM, or 14:30 to represent 2:30 PM.",
+        "RawEmail$Data" : "The raw email message itself. Then entire message must be base64-encoded.",
         "SMSChannelRequest$SenderId" : "Sender identifier of your messages.",
         "SMSChannelRequest$ShortCode" : "ShortCode registered with phone provider.",
         "SMSChannelResponse$ApplicationId" : "The unique ID of the application to which the SMS channel belongs.",
@@ -1483,9 +1561,21 @@
         "Session$Id" : "A unique identifier for the session.",
         "Session$StartTimestamp" : "The date and time when the session began.",
         "Session$StopTimestamp" : "The date and time when the session ended.",
+        "SimpleEmailPart$Charset" : "The character set of the content.",
+        "SimpleEmailPart$Data" : "The textual data of the content.",
         "TreatmentResource$Id" : "The unique treatment ID.",
         "TreatmentResource$TreatmentDescription" : "A custom description for the treatment.",
         "TreatmentResource$TreatmentName" : "The custom name of a variation of the campaign used for A/B testing.",
+        "VoiceChannelResponse$ApplicationId" : "Application id",
+        "VoiceChannelResponse$CreationDate" : "The date that the settings were last updated in ISO 8601 format.",
+        "VoiceChannelResponse$Id" : "Channel ID. Not used, only for backwards compatibility.",
+        "VoiceChannelResponse$LastModifiedBy" : "Who made the last change",
+        "VoiceChannelResponse$LastModifiedDate" : "Last date this was updated",
+        "VoiceChannelResponse$Platform" : "Platform type. Will be \"Voice\"",
+        "VoiceMessage$Body" : "The message body of the notification, the email body or the text message.",
+        "VoiceMessage$LanguageCode" : "Language of sent message",
+        "VoiceMessage$OriginationNumber" : "Is the number from the pool or messaging service to send from.",
+        "VoiceMessage$VoiceId" : "Voice ID of sent message.",
         "WriteCampaignRequest$Description" : "A description of the campaign.",
         "WriteCampaignRequest$Name" : "The custom name of the campaign.",
         "WriteCampaignRequest$SegmentId" : "The ID of the segment to which the campaign sends messages.",

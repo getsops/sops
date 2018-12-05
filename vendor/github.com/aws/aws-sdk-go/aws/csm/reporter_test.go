@@ -2,7 +2,6 @@ package csm_test
 
 import (
 	"fmt"
-	"net"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -17,41 +16,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws/signer/v4"
 	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
-
-func startUDPServer(done chan struct{}, fn func([]byte)) (string, error) {
-	addr, err := net.ResolveUDPAddr("udp", "127.0.0.1:0")
-	if err != nil {
-		return "", err
-	}
-
-	conn, err := net.ListenUDP("udp", addr)
-	if err != nil {
-		return "", err
-	}
-
-	buf := make([]byte, 1024)
-	i := 0
-	go func() {
-		defer conn.Close()
-		for {
-			i++
-			select {
-			case <-done:
-				return
-			default:
-			}
-
-			n, _, err := conn.ReadFromUDP(buf)
-			fn(buf[:n])
-
-			if err != nil {
-				panic(err)
-			}
-		}
-	}()
-
-	return conn.LocalAddr().String(), nil
-}
 
 func TestReportingMetrics(t *testing.T) {
 	reporter := csm.Get()

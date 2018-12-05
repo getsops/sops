@@ -68,6 +68,10 @@ type AppSyncAPI interface {
 	CreateDataSourceWithContext(aws.Context, *appsync.CreateDataSourceInput, ...request.Option) (*appsync.CreateDataSourceOutput, error)
 	CreateDataSourceRequest(*appsync.CreateDataSourceInput) (*request.Request, *appsync.CreateDataSourceOutput)
 
+	CreateFunction(*appsync.CreateFunctionInput) (*appsync.CreateFunctionOutput, error)
+	CreateFunctionWithContext(aws.Context, *appsync.CreateFunctionInput, ...request.Option) (*appsync.CreateFunctionOutput, error)
+	CreateFunctionRequest(*appsync.CreateFunctionInput) (*request.Request, *appsync.CreateFunctionOutput)
+
 	CreateGraphqlApi(*appsync.CreateGraphqlApiInput) (*appsync.CreateGraphqlApiOutput, error)
 	CreateGraphqlApiWithContext(aws.Context, *appsync.CreateGraphqlApiInput, ...request.Option) (*appsync.CreateGraphqlApiOutput, error)
 	CreateGraphqlApiRequest(*appsync.CreateGraphqlApiInput) (*request.Request, *appsync.CreateGraphqlApiOutput)
@@ -88,6 +92,10 @@ type AppSyncAPI interface {
 	DeleteDataSourceWithContext(aws.Context, *appsync.DeleteDataSourceInput, ...request.Option) (*appsync.DeleteDataSourceOutput, error)
 	DeleteDataSourceRequest(*appsync.DeleteDataSourceInput) (*request.Request, *appsync.DeleteDataSourceOutput)
 
+	DeleteFunction(*appsync.DeleteFunctionInput) (*appsync.DeleteFunctionOutput, error)
+	DeleteFunctionWithContext(aws.Context, *appsync.DeleteFunctionInput, ...request.Option) (*appsync.DeleteFunctionOutput, error)
+	DeleteFunctionRequest(*appsync.DeleteFunctionInput) (*request.Request, *appsync.DeleteFunctionOutput)
+
 	DeleteGraphqlApi(*appsync.DeleteGraphqlApiInput) (*appsync.DeleteGraphqlApiOutput, error)
 	DeleteGraphqlApiWithContext(aws.Context, *appsync.DeleteGraphqlApiInput, ...request.Option) (*appsync.DeleteGraphqlApiOutput, error)
 	DeleteGraphqlApiRequest(*appsync.DeleteGraphqlApiInput) (*request.Request, *appsync.DeleteGraphqlApiOutput)
@@ -103,6 +111,10 @@ type AppSyncAPI interface {
 	GetDataSource(*appsync.GetDataSourceInput) (*appsync.GetDataSourceOutput, error)
 	GetDataSourceWithContext(aws.Context, *appsync.GetDataSourceInput, ...request.Option) (*appsync.GetDataSourceOutput, error)
 	GetDataSourceRequest(*appsync.GetDataSourceInput) (*request.Request, *appsync.GetDataSourceOutput)
+
+	GetFunction(*appsync.GetFunctionInput) (*appsync.GetFunctionOutput, error)
+	GetFunctionWithContext(aws.Context, *appsync.GetFunctionInput, ...request.Option) (*appsync.GetFunctionOutput, error)
+	GetFunctionRequest(*appsync.GetFunctionInput) (*request.Request, *appsync.GetFunctionOutput)
 
 	GetGraphqlApi(*appsync.GetGraphqlApiInput) (*appsync.GetGraphqlApiOutput, error)
 	GetGraphqlApiWithContext(aws.Context, *appsync.GetGraphqlApiInput, ...request.Option) (*appsync.GetGraphqlApiOutput, error)
@@ -132,6 +144,10 @@ type AppSyncAPI interface {
 	ListDataSourcesWithContext(aws.Context, *appsync.ListDataSourcesInput, ...request.Option) (*appsync.ListDataSourcesOutput, error)
 	ListDataSourcesRequest(*appsync.ListDataSourcesInput) (*request.Request, *appsync.ListDataSourcesOutput)
 
+	ListFunctions(*appsync.ListFunctionsInput) (*appsync.ListFunctionsOutput, error)
+	ListFunctionsWithContext(aws.Context, *appsync.ListFunctionsInput, ...request.Option) (*appsync.ListFunctionsOutput, error)
+	ListFunctionsRequest(*appsync.ListFunctionsInput) (*request.Request, *appsync.ListFunctionsOutput)
+
 	ListGraphqlApis(*appsync.ListGraphqlApisInput) (*appsync.ListGraphqlApisOutput, error)
 	ListGraphqlApisWithContext(aws.Context, *appsync.ListGraphqlApisInput, ...request.Option) (*appsync.ListGraphqlApisOutput, error)
 	ListGraphqlApisRequest(*appsync.ListGraphqlApisInput) (*request.Request, *appsync.ListGraphqlApisOutput)
@@ -139,6 +155,10 @@ type AppSyncAPI interface {
 	ListResolvers(*appsync.ListResolversInput) (*appsync.ListResolversOutput, error)
 	ListResolversWithContext(aws.Context, *appsync.ListResolversInput, ...request.Option) (*appsync.ListResolversOutput, error)
 	ListResolversRequest(*appsync.ListResolversInput) (*request.Request, *appsync.ListResolversOutput)
+
+	ListResolversByFunction(*appsync.ListResolversByFunctionInput) (*appsync.ListResolversByFunctionOutput, error)
+	ListResolversByFunctionWithContext(aws.Context, *appsync.ListResolversByFunctionInput, ...request.Option) (*appsync.ListResolversByFunctionOutput, error)
+	ListResolversByFunctionRequest(*appsync.ListResolversByFunctionInput) (*request.Request, *appsync.ListResolversByFunctionOutput)
 
 	ListTypes(*appsync.ListTypesInput) (*appsync.ListTypesOutput, error)
 	ListTypesWithContext(aws.Context, *appsync.ListTypesInput, ...request.Option) (*appsync.ListTypesOutput, error)
@@ -155,6 +175,10 @@ type AppSyncAPI interface {
 	UpdateDataSource(*appsync.UpdateDataSourceInput) (*appsync.UpdateDataSourceOutput, error)
 	UpdateDataSourceWithContext(aws.Context, *appsync.UpdateDataSourceInput, ...request.Option) (*appsync.UpdateDataSourceOutput, error)
 	UpdateDataSourceRequest(*appsync.UpdateDataSourceInput) (*request.Request, *appsync.UpdateDataSourceOutput)
+
+	UpdateFunction(*appsync.UpdateFunctionInput) (*appsync.UpdateFunctionOutput, error)
+	UpdateFunctionWithContext(aws.Context, *appsync.UpdateFunctionInput, ...request.Option) (*appsync.UpdateFunctionOutput, error)
+	UpdateFunctionRequest(*appsync.UpdateFunctionInput) (*request.Request, *appsync.UpdateFunctionOutput)
 
 	UpdateGraphqlApi(*appsync.UpdateGraphqlApiInput) (*appsync.UpdateGraphqlApiOutput, error)
 	UpdateGraphqlApiWithContext(aws.Context, *appsync.UpdateGraphqlApiInput, ...request.Option) (*appsync.UpdateGraphqlApiOutput, error)

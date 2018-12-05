@@ -282,6 +282,12 @@
         "EntityFilter$statusCodes": "<p>A list of entity status codes (<code>IMPAIRED</code>, <code>UNIMPAIRED</code>, or <code>UNKNOWN</code>).</p>"
       }
     },
+    "entityUrl": {
+      "base": null,
+      "refs": {
+        "AffectedEntity$entityUrl": null
+      }
+    },
     "entityValue": {
       "base": null,
       "refs": {

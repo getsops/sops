@@ -13,7 +13,7 @@ const opGetCostAndUsage = "GetCostAndUsage"
 // GetCostAndUsageRequest generates a "aws/request.Request" representing the
 // client's request for the GetCostAndUsage operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -106,12 +106,95 @@ func (c *CostExplorer) GetCostAndUsageWithContext(ctx aws.Context, input *GetCos
 	return out, req.Send()
 }
 
+const opGetCostForecast = "GetCostForecast"
+
+// GetCostForecastRequest generates a "aws/request.Request" representing the
+// client's request for the GetCostForecast operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetCostForecast for more information on using the GetCostForecast
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetCostForecastRequest method.
+//    req, resp := client.GetCostForecastRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ce-2017-10-25/GetCostForecast
+func (c *CostExplorer) GetCostForecastRequest(input *GetCostForecastInput) (req *request.Request, output *GetCostForecastOutput) {
+	op := &request.Operation{
+		Name:       opGetCostForecast,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetCostForecastInput{}
+	}
+
+	output = &GetCostForecastOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetCostForecast API operation for AWS Cost Explorer Service.
+//
+// Retrieves a forecast for how much Amazon Web Services predicts that you will
+// spend over the forecast time period that you select, based on your past costs.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Cost Explorer Service's
+// API operation GetCostForecast for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeLimitExceededException "LimitExceededException"
+//   You made too many calls in a short period of time. Try again later.
+//
+//   * ErrCodeDataUnavailableException "DataUnavailableException"
+//   The requested data is unavailable.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ce-2017-10-25/GetCostForecast
+func (c *CostExplorer) GetCostForecast(input *GetCostForecastInput) (*GetCostForecastOutput, error) {
+	req, out := c.GetCostForecastRequest(input)
+	return out, req.Send()
+}
+
+// GetCostForecastWithContext is the same as GetCostForecast with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetCostForecast for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CostExplorer) GetCostForecastWithContext(ctx aws.Context, input *GetCostForecastInput, opts ...request.Option) (*GetCostForecastOutput, error) {
+	req, out := c.GetCostForecastRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetDimensionValues = "GetDimensionValues"
 
 // GetDimensionValuesRequest generates a "aws/request.Request" representing the
 // client's request for the GetDimensionValues operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -204,7 +287,7 @@ const opGetReservationCoverage = "GetReservationCoverage"
 // GetReservationCoverageRequest generates a "aws/request.Request" representing the
 // client's request for the GetReservationCoverage operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -320,7 +403,7 @@ const opGetReservationPurchaseRecommendation = "GetReservationPurchaseRecommenda
 // GetReservationPurchaseRecommendationRequest generates a "aws/request.Request" representing the
 // client's request for the GetReservationPurchaseRecommendation operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -422,7 +505,7 @@ const opGetReservationUtilization = "GetReservationUtilization"
 // GetReservationUtilizationRequest generates a "aws/request.Request" representing the
 // client's request for the GetReservationUtilization operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -510,7 +593,7 @@ const opGetTags = "GetTags"
 // GetTagsRequest generates a "aws/request.Request" representing the
 // client's request for the GetTags operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -783,6 +866,10 @@ type DimensionValues struct {
 
 	// The metadata values that you can use to filter and group your results. You
 	// can use GetDimensionValues to find specific values.
+	//
+	// Valid values for the SERVICE dimension are Amazon Elastic Compute Cloud -
+	// Compute, Amazon Elasticsearch Service, Amazon ElastiCache, Amazon Redshift,
+	// and Amazon Relational Database Service.
 	Values []*string `type:"list"`
 }
 
@@ -1175,6 +1262,57 @@ func (s *Expression) SetTags(v *TagValues) *Expression {
 	return s
 }
 
+// The forecast created for your query.
+type ForecastResult struct {
+	_ struct{} `type:"structure"`
+
+	// The mean value of the forecast.
+	MeanValue *string `type:"string"`
+
+	// The lower limit for the prediction interval.
+	PredictionIntervalLowerBound *string `type:"string"`
+
+	// The upper limit for the prediction interval.
+	PredictionIntervalUpperBound *string `type:"string"`
+
+	// The period of time that the forecast covers.
+	TimePeriod *DateInterval `type:"structure"`
+}
+
+// String returns the string representation
+func (s ForecastResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ForecastResult) GoString() string {
+	return s.String()
+}
+
+// SetMeanValue sets the MeanValue field's value.
+func (s *ForecastResult) SetMeanValue(v string) *ForecastResult {
+	s.MeanValue = &v
+	return s
+}
+
+// SetPredictionIntervalLowerBound sets the PredictionIntervalLowerBound field's value.
+func (s *ForecastResult) SetPredictionIntervalLowerBound(v string) *ForecastResult {
+	s.PredictionIntervalLowerBound = &v
+	return s
+}
+
+// SetPredictionIntervalUpperBound sets the PredictionIntervalUpperBound field's value.
+func (s *ForecastResult) SetPredictionIntervalUpperBound(v string) *ForecastResult {
+	s.PredictionIntervalUpperBound = &v
+	return s
+}
+
+// SetTimePeriod sets the TimePeriod field's value.
+func (s *ForecastResult) SetTimePeriod(v *DateInterval) *ForecastResult {
+	s.TimePeriod = v
+	return s
+}
+
 type GetCostAndUsageInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1201,7 +1339,8 @@ type GetCostAndUsageInput struct {
 	// and unblended rates, see Why does the "blended" annotation appear on some
 	// line items in my bill? (https://aws.amazon.com/premiumsupport/knowledge-center/blended-rates-intro/).
 	//
-	// Valid values are AmortizedCost, BlendedCost, UnblendedCost, and UsageQuantity.
+	// Valid values are AmortizedCost, BlendedCost, NetAmortizedCost, NetUnblendedCost,
+	// NormalizedUsageAmount, UnblendedCost, and UsageQuantity.
 	//
 	// If you return the UsageQuantity metric, the service aggregates all usage
 	// numbers without taking into account the units. For example, if you aggregate
@@ -1327,6 +1466,151 @@ func (s *GetCostAndUsageOutput) SetNextPageToken(v string) *GetCostAndUsageOutpu
 // SetResultsByTime sets the ResultsByTime field's value.
 func (s *GetCostAndUsageOutput) SetResultsByTime(v []*ResultByTime) *GetCostAndUsageOutput {
 	s.ResultsByTime = v
+	return s
+}
+
+type GetCostForecastInput struct {
+	_ struct{} `type:"structure"`
+
+	// The filters that you want to use to filter your forecast. Cost Explorer API
+	// supports all of the Cost Explorer filters.
+	Filter *Expression `type:"structure"`
+
+	// How granular you want the forecast to be. You can get 3 months of DAILY forecasts
+	// or 12 months of MONTHLY forecasts.
+	//
+	// Granularity is a required field
+	Granularity *string `type:"string" required:"true" enum:"Granularity"`
+
+	// Which metric Cost Explorer uses to create your forecast. For more information
+	// about blended and unblended rates, see Why does the "blended" annotation
+	// appear on some line items in my bill? (https://aws.amazon.com/premiumsupport/knowledge-center/blended-rates-intro/).
+	//
+	// Valid values for a GetCostForecast call are the following:
+	//
+	//    * AmortizedCost
+	//
+	//    * BlendedCost
+	//
+	//    * NetAmortizedCost
+	//
+	//    * NetUnblendedCost
+	//
+	//    * UnblendedCost
+	//
+	// Metric is a required field
+	Metric *string `type:"string" required:"true" enum:"Metric"`
+
+	// Cost Explorer always returns the mean forecast as a single point. You can
+	// request a prediction interval around the mean by specifying a confidence
+	// level. The higher the confidence level, the more confident Cost Explorer
+	// is about the actual value falling in the prediction interval. Higher confidence
+	// levels result in wider prediction intervals.
+	PredictionIntervalLevel *int64 `min:"51" type:"integer"`
+
+	// The period of time that you want the forecast to cover.
+	//
+	// TimePeriod is a required field
+	TimePeriod *DateInterval `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s GetCostForecastInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetCostForecastInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetCostForecastInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetCostForecastInput"}
+	if s.Granularity == nil {
+		invalidParams.Add(request.NewErrParamRequired("Granularity"))
+	}
+	if s.Metric == nil {
+		invalidParams.Add(request.NewErrParamRequired("Metric"))
+	}
+	if s.PredictionIntervalLevel != nil && *s.PredictionIntervalLevel < 51 {
+		invalidParams.Add(request.NewErrParamMinValue("PredictionIntervalLevel", 51))
+	}
+	if s.TimePeriod == nil {
+		invalidParams.Add(request.NewErrParamRequired("TimePeriod"))
+	}
+	if s.TimePeriod != nil {
+		if err := s.TimePeriod.Validate(); err != nil {
+			invalidParams.AddNested("TimePeriod", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilter sets the Filter field's value.
+func (s *GetCostForecastInput) SetFilter(v *Expression) *GetCostForecastInput {
+	s.Filter = v
+	return s
+}
+
+// SetGranularity sets the Granularity field's value.
+func (s *GetCostForecastInput) SetGranularity(v string) *GetCostForecastInput {
+	s.Granularity = &v
+	return s
+}
+
+// SetMetric sets the Metric field's value.
+func (s *GetCostForecastInput) SetMetric(v string) *GetCostForecastInput {
+	s.Metric = &v
+	return s
+}
+
+// SetPredictionIntervalLevel sets the PredictionIntervalLevel field's value.
+func (s *GetCostForecastInput) SetPredictionIntervalLevel(v int64) *GetCostForecastInput {
+	s.PredictionIntervalLevel = &v
+	return s
+}
+
+// SetTimePeriod sets the TimePeriod field's value.
+func (s *GetCostForecastInput) SetTimePeriod(v *DateInterval) *GetCostForecastInput {
+	s.TimePeriod = v
+	return s
+}
+
+type GetCostForecastOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The forecasts for your query, in order. For DAILY forecasts, this is a list
+	// of days. For MONTHLY forecasts, this is a list of months.
+	ForecastResultsByTime []*ForecastResult `type:"list"`
+
+	// How much you are forecasted to spend over the forecast period, in USD.
+	Total *MetricValue `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetCostForecastOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetCostForecastOutput) GoString() string {
+	return s.String()
+}
+
+// SetForecastResultsByTime sets the ForecastResultsByTime field's value.
+func (s *GetCostForecastOutput) SetForecastResultsByTime(v []*ForecastResult) *GetCostForecastOutput {
+	s.ForecastResultsByTime = v
+	return s
+}
+
+// SetTotal sets the Total field's value.
+func (s *GetCostForecastOutput) SetTotal(v *MetricValue) *GetCostForecastOutput {
+	s.Total = v
 	return s
 }
 
@@ -2808,6 +3092,8 @@ func (s *ReservationPurchaseRecommendation) SetTermInYears(v string) *Reservatio
 type ReservationPurchaseRecommendationDetail struct {
 	_ struct{} `type:"structure"`
 
+	AccountId *string `type:"string"`
+
 	// The average number of normalized units that you used in an hour during the
 	// historical period. AWS uses this to calculate your recommended reservation
 	// purchases.
@@ -2884,6 +3170,12 @@ func (s ReservationPurchaseRecommendationDetail) String() string {
 // GoString returns the string representation
 func (s ReservationPurchaseRecommendationDetail) GoString() string {
 	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *ReservationPurchaseRecommendationDetail) SetAccountId(v string) *ReservationPurchaseRecommendationDetail {
+	s.AccountId = &v
+	return s
 }
 
 // SetAverageNormalizedUnitsUsedPerHour sets the AverageNormalizedUnitsUsedPerHour field's value.
@@ -3352,6 +3644,12 @@ const (
 
 	// DimensionInstanceTypeFamily is a Dimension enum value
 	DimensionInstanceTypeFamily = "INSTANCE_TYPE_FAMILY"
+
+	// DimensionBillingEntity is a Dimension enum value
+	DimensionBillingEntity = "BILLING_ENTITY"
+
+	// DimensionReservationId is a Dimension enum value
+	DimensionReservationId = "RESERVATION_ID"
 )
 
 const (
@@ -3360,6 +3658,9 @@ const (
 
 	// GranularityMonthly is a Granularity enum value
 	GranularityMonthly = "MONTHLY"
+
+	// GranularityHourly is a Granularity enum value
+	GranularityHourly = "HOURLY"
 )
 
 const (
@@ -3379,6 +3680,29 @@ const (
 
 	// LookbackPeriodInDaysSixtyDays is a LookbackPeriodInDays enum value
 	LookbackPeriodInDaysSixtyDays = "SIXTY_DAYS"
+)
+
+const (
+	// MetricBlendedCost is a Metric enum value
+	MetricBlendedCost = "BLENDED_COST"
+
+	// MetricUnblendedCost is a Metric enum value
+	MetricUnblendedCost = "UNBLENDED_COST"
+
+	// MetricAmortizedCost is a Metric enum value
+	MetricAmortizedCost = "AMORTIZED_COST"
+
+	// MetricNetUnblendedCost is a Metric enum value
+	MetricNetUnblendedCost = "NET_UNBLENDED_COST"
+
+	// MetricNetAmortizedCost is a Metric enum value
+	MetricNetAmortizedCost = "NET_AMORTIZED_COST"
+
+	// MetricUsageQuantity is a Metric enum value
+	MetricUsageQuantity = "USAGE_QUANTITY"
+
+	// MetricNormalizedUsageAmount is a Metric enum value
+	MetricNormalizedUsageAmount = "NORMALIZED_USAGE_AMOUNT"
 )
 
 const (

@@ -6,6 +6,7 @@
     "jsonVersion":"1.1",
     "protocol":"rest-json",
     "serviceFullName":"Amazon WorkDocs",
+    "serviceId":"WorkDocs",
     "signatureVersion":"v4",
     "uid":"workdocs-2016-05-01"
   },
@@ -76,7 +77,8 @@
         {"shape":"UnauthorizedResourceAccessException"},
         {"shape":"FailedDependencyException"},
         {"shape":"ServiceUnavailableException"},
-        {"shape":"DocumentLockedForCommentsException"}
+        {"shape":"DocumentLockedForCommentsException"},
+        {"shape":"InvalidCommentOperationException"}
       ]
     },
     "CreateCustomMetadata":{
@@ -111,6 +113,7 @@
         {"shape":"EntityNotExistsException"},
         {"shape":"EntityAlreadyExistsException"},
         {"shape":"ProhibitedStateException"},
+        {"shape":"ConflictingOperationException"},
         {"shape":"LimitExceededException"},
         {"shape":"UnauthorizedOperationException"},
         {"shape":"UnauthorizedResourceAccessException"},
@@ -231,6 +234,7 @@
       "errors":[
         {"shape":"EntityNotExistsException"},
         {"shape":"ProhibitedStateException"},
+        {"shape":"ConflictingOperationException"},
         {"shape":"ConcurrentModificationException"},
         {"shape":"UnauthorizedOperationException"},
         {"shape":"UnauthorizedResourceAccessException"},
@@ -249,6 +253,7 @@
       "errors":[
         {"shape":"EntityNotExistsException"},
         {"shape":"ProhibitedStateException"},
+        {"shape":"ConflictingOperationException"},
         {"shape":"ConcurrentModificationException"},
         {"shape":"UnauthorizedOperationException"},
         {"shape":"UnauthorizedResourceAccessException"},
@@ -266,6 +271,8 @@
       "input":{"shape":"DeleteFolderContentsRequest"},
       "errors":[
         {"shape":"EntityNotExistsException"},
+        {"shape":"ProhibitedStateException"},
+        {"shape":"ConflictingOperationException"},
         {"shape":"UnauthorizedOperationException"},
         {"shape":"UnauthorizedResourceAccessException"},
         {"shape":"FailedDependencyException"},
@@ -466,11 +473,13 @@
       "input":{"shape":"DescribeUsersRequest"},
       "output":{"shape":"DescribeUsersResponse"},
       "errors":[
+        {"shape":"EntityNotExistsException"},
         {"shape":"UnauthorizedOperationException"},
         {"shape":"UnauthorizedResourceAccessException"},
         {"shape":"FailedDependencyException"},
         {"shape":"ServiceUnavailableException"},
-        {"shape":"InvalidArgumentException"}
+        {"shape":"InvalidArgumentException"},
+        {"shape":"RequestedEntityTooLargeException"}
       ]
     },
     "GetCurrentUser":{
@@ -581,6 +590,23 @@
         {"shape":"ServiceUnavailableException"}
       ]
     },
+    "GetResources":{
+      "name":"GetResources",
+      "http":{
+        "method":"GET",
+        "requestUri":"/api/v1/resources",
+        "responseCode":200
+      },
+      "input":{"shape":"GetResourcesRequest"},
+      "output":{"shape":"GetResourcesResponse"},
+      "errors":[
+        {"shape":"UnauthorizedResourceAccessException"},
+        {"shape":"UnauthorizedOperationException"},
+        {"shape":"InvalidArgumentException"},
+        {"shape":"FailedDependencyException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
     "InitiateDocumentVersionUpload":{
       "name":"InitiateDocumentVersionUpload",
       "http":{
@@ -647,6 +673,7 @@
         {"shape":"EntityAlreadyExistsException"},
         {"shape":"LimitExceededException"},
         {"shape":"ProhibitedStateException"},
+        {"shape":"ConflictingOperationException"},
         {"shape":"ConcurrentModificationException"},
         {"shape":"UnauthorizedOperationException"},
         {"shape":"UnauthorizedResourceAccessException"},
@@ -685,6 +712,7 @@
         {"shape":"EntityNotExistsException"},
         {"shape":"EntityAlreadyExistsException"},
         {"shape":"ProhibitedStateException"},
+        {"shape":"ConflictingOperationException"},
         {"shape":"ConcurrentModificationException"},
         {"shape":"LimitExceededException"},
         {"shape":"UnauthorizedOperationException"},
@@ -766,6 +794,7 @@
       "members":{
         "Type":{"shape":"ActivityType"},
         "TimeStamp":{"shape":"TimestampType"},
+        "IsIndirectActivity":{"shape":"BooleanType"},
         "OrganizationId":{"shape":"IdType"},
         "Initiator":{"shape":"UserMetadata"},
         "Participants":{"shape":"Participants"},
@@ -773,6 +802,12 @@
         "OriginalParent":{"shape":"ResourceMetadata"},
         "CommentMetadata":{"shape":"CommentMetadata"}
       }
+    },
+    "ActivityNamesFilterType":{
+      "type":"string",
+      "max":1024,
+      "min":1,
+      "pattern":"[\\w,]+"
     },
     "ActivityType":{
       "type":"string",
@@ -782,6 +817,8 @@
         "DOCUMENT_RENAMED",
         "DOCUMENT_VERSION_UPLOADED",
         "DOCUMENT_VERSION_DELETED",
+        "DOCUMENT_VERSION_VIEWED",
+        "DOCUMENT_VERSION_DOWNLOADED",
         "DOCUMENT_RECYCLED",
         "DOCUMENT_RESTORED",
         "DOCUMENT_REVERTED",
@@ -908,6 +945,14 @@
       ]
     },
     "ConcurrentModificationException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ErrorMessageType"}
+      },
+      "error":{"httpStatusCode":409},
+      "exception":true
+    },
+    "ConflictingOperationException":{
       "type":"structure",
       "members":{
         "Message":{"shape":"ErrorMessageType"}
@@ -1338,10 +1383,25 @@
           "location":"querystring",
           "locationName":"organizationId"
         },
+        "ActivityTypes":{
+          "shape":"ActivityNamesFilterType",
+          "location":"querystring",
+          "locationName":"activityTypes"
+        },
+        "ResourceId":{
+          "shape":"IdType",
+          "location":"querystring",
+          "locationName":"resourceId"
+        },
         "UserId":{
           "shape":"IdType",
           "location":"querystring",
           "locationName":"userId"
+        },
+        "IncludeIndirectActivities":{
+          "shape":"BooleanType",
+          "location":"querystring",
+          "locationName":"includeIndirectActivities"
         },
         "Limit":{
           "shape":"LimitType",
@@ -2058,6 +2118,44 @@
         "CustomMetadata":{"shape":"CustomMetadataMap"}
       }
     },
+    "GetResourcesRequest":{
+      "type":"structure",
+      "members":{
+        "AuthenticationToken":{
+          "shape":"AuthenticationHeaderType",
+          "location":"header",
+          "locationName":"Authentication"
+        },
+        "UserId":{
+          "shape":"IdType",
+          "location":"querystring",
+          "locationName":"userId"
+        },
+        "CollectionType":{
+          "shape":"ResourceCollectionType",
+          "location":"querystring",
+          "locationName":"collectionType"
+        },
+        "Limit":{
+          "shape":"LimitType",
+          "location":"querystring",
+          "locationName":"limit"
+        },
+        "Marker":{
+          "shape":"PageMarkerType",
+          "location":"querystring",
+          "locationName":"marker"
+        }
+      }
+    },
+    "GetResourcesResponse":{
+      "type":"structure",
+      "members":{
+        "Folders":{"shape":"FolderMetadataList"},
+        "Documents":{"shape":"DocumentMetadataList"},
+        "Marker":{"shape":"PageMarkerType"}
+      }
+    },
     "GroupMetadata":{
       "type":"structure",
       "members":{
@@ -2132,6 +2230,14 @@
         "Message":{"shape":"ErrorMessageType"}
       },
       "error":{"httpStatusCode":400},
+      "exception":true
+    },
+    "InvalidCommentOperationException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ErrorMessageType"}
+      },
+      "error":{"httpStatusCode":409},
       "exception":true
     },
     "InvalidOperationException":{
@@ -2322,6 +2428,14 @@
         }
       }
     },
+    "RequestedEntityTooLargeException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ErrorMessageType"}
+      },
+      "error":{"httpStatusCode":413},
+      "exception":true
+    },
     "ResourceAlreadyCheckedOutException":{
       "type":"structure",
       "members":{
@@ -2329,6 +2443,10 @@
       },
       "error":{"httpStatusCode":409},
       "exception":true
+    },
+    "ResourceCollectionType":{
+      "type":"string",
+      "enum":["SHARED_WITH_ME"]
     },
     "ResourceIdType":{
       "type":"string",
@@ -2447,6 +2565,7 @@
       "type":"structure",
       "members":{
         "PrincipalId":{"shape":"IdType"},
+        "InviteePrincipalId":{"shape":"IdType"},
         "Role":{"shape":"RoleType"},
         "Status":{"shape":"ShareStatusType"},
         "ShareId":{"shape":"ResourceIdType"},

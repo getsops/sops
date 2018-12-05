@@ -104,6 +104,7 @@
         "GetTagsInput$Arn": "<p>The ARN of the resource for which you want a list of tags. The resource must exist within the account you are using.</p>",
         "GetTagsOutput$Arn": "<p>The ARN of the tagged resource.</p>",
         "Group$GroupArn": "<p>The ARN of a resource group.</p>",
+        "GroupIdentifier$GroupArn": "<p>The ARN of a resource group.</p>",
         "TagInput$Arn": "<p>The ARN of the resource to which to add tags.</p>",
         "TagOutput$Arn": "<p>The ARN of the tagged resource.</p>",
         "UntagInput$Arn": "<p>The ARN of the resource from which to remove tags.</p>",
@@ -116,6 +117,48 @@
         "CreateGroupInput$Description": "<p>The description of the resource group. Descriptions can have a maximum of 511 characters, including letters, numbers, hyphens, underscores, punctuation, and spaces.</p>",
         "Group$Description": "<p>The description of the resource group.</p>",
         "UpdateGroupInput$Description": "<p>The description of the resource group. Descriptions can have a maximum of 511 characters, including letters, numbers, hyphens, underscores, punctuation, and spaces.</p>"
+      }
+    },
+    "GroupFilter": {
+      "base": "<p>A filter name and value pair that is used to obtain more specific results from a list of groups.</p>",
+      "refs": {
+        "GroupFilterList$member": null
+      }
+    },
+    "GroupFilterList": {
+      "base": null,
+      "refs": {
+        "ListGroupsInput$Filters": "<p>Filters, formatted as GroupFilter objects, that you want to apply to a ListGroups operation.</p> <ul> <li> <p> <code>resource-type</code> - Filter groups by resource type. Specify up to five resource types in the format AWS::ServiceCode::ResourceType. For example, AWS::EC2::Instance, or AWS::S3::Bucket.</p> </li> </ul>"
+      }
+    },
+    "GroupFilterName": {
+      "base": null,
+      "refs": {
+        "GroupFilter$Name": "<p>The name of the filter. Filter names are case-sensitive.</p>"
+      }
+    },
+    "GroupFilterValue": {
+      "base": null,
+      "refs": {
+        "GroupFilterValues$member": null
+      }
+    },
+    "GroupFilterValues": {
+      "base": null,
+      "refs": {
+        "GroupFilter$Values": "<p>One or more filter values. Allowed filter values vary by group filter name, and are case-sensitive.</p>"
+      }
+    },
+    "GroupIdentifier": {
+      "base": "<p>The ARN and group name of a group.</p>",
+      "refs": {
+        "GroupIdentifierList$member": null
+      }
+    },
+    "GroupIdentifierList": {
+      "base": null,
+      "refs": {
+        "ListGroupsOutput$GroupIdentifiers": "<p>A list of GroupIdentifier objects. Each identifier is an object that contains both the GroupName and the GroupArn.</p>"
       }
     },
     "GroupList": {
@@ -132,6 +175,7 @@
         "GetGroupInput$GroupName": "<p>The name of the resource group.</p>",
         "GetGroupQueryInput$GroupName": "<p>The name of the resource group.</p>",
         "Group$Name": "<p>The name of a resource group.</p>",
+        "GroupIdentifier$GroupName": "<p>The name of a resource group.</p>",
         "GroupQuery$GroupName": "<p>The name of a resource group that is associated with a specific resource query.</p>",
         "ListGroupResourcesInput$GroupName": "<p>The name of the resource group.</p>",
         "UpdateGroupInput$GroupName": "<p>The name of the resource group for which you want to update its description.</p>",
@@ -205,10 +249,35 @@
         "ResourceQuery$Query": "<p>The query that defines a group or a search.</p>"
       }
     },
+    "QueryError": {
+      "base": "<p>A two-part error structure that can occur in <code>ListGroupResources</code> or <code>SearchResources</code> operations on CloudFormation stack-based queries. The error occurs if the CloudFormation stack on which the query is based either does not exist, or has a status that renders the stack inactive. A <code>QueryError</code> occurrence does not necessarily mean that AWS Resource Groups could not complete the operation, but the resulting group might have no member resources.</p>",
+      "refs": {
+        "QueryErrorList$member": null
+      }
+    },
+    "QueryErrorCode": {
+      "base": null,
+      "refs": {
+        "QueryError$ErrorCode": "<p>Possible values are <code>CLOUDFORMATION_STACK_INACTIVE</code> and <code>CLOUDFORMATION_STACK_NOT_EXISTING</code>.</p>"
+      }
+    },
+    "QueryErrorList": {
+      "base": null,
+      "refs": {
+        "ListGroupResourcesOutput$QueryErrors": "<p>A list of <code>QueryError</code> objects. Each error is an object that contains <code>ErrorCode</code> and <code>Message</code> structures. Possible values for <code>ErrorCode</code> are <code>CLOUDFORMATION_STACK_INACTIVE</code> and <code>CLOUDFORMATION_STACK_NOT_EXISTING</code>.</p>",
+        "SearchResourcesOutput$QueryErrors": "<p>A list of <code>QueryError</code> objects. Each error is an object that contains <code>ErrorCode</code> and <code>Message</code> structures. Possible values for <code>ErrorCode</code> are <code>CLOUDFORMATION_STACK_INACTIVE</code> and <code>CLOUDFORMATION_STACK_NOT_EXISTING</code>.</p>"
+      }
+    },
+    "QueryErrorMessage": {
+      "base": null,
+      "refs": {
+        "QueryError$Message": "<p>A message that explains the <code>ErrorCode</code> value. Messages might state that the specified CloudFormation stack does not exist (or no longer exists). For <code>CLOUDFORMATION_STACK_INACTIVE</code>, the message typically states that the CloudFormation stack has a status that is not (or no longer) active, such as <code>CREATE_FAILED</code>.</p>"
+      }
+    },
     "QueryType": {
       "base": null,
       "refs": {
-        "ResourceQuery$Type": "<p>The type of the query. The valid value in this release is <code>TAG_FILTERS_1_0</code>.</p> <p> <i> <code>TAG_FILTERS_1_0:</code> </i> A JSON syntax that lets you specify a collection of simple tag filters for resource types and tags, as supported by the AWS Tagging API GetResources operation. When more than one element is present, only resources that match all filters are part of the result. If a filter specifies more than one value for a key, a resource matches the filter if its tag value matches any of the specified values.</p>"
+        "ResourceQuery$Type": "<p>The type of the query. The valid values in this release are <code>TAG_FILTERS_1_0</code> and <code>CLOUDFORMATION_STACK_1_0</code>.</p> <p> <i> <code>TAG_FILTERS_1_0:</code> </i> A JSON syntax that lets you specify a collection of simple tag filters for resource types and tags, as supported by the AWS Tagging API <a href=\"https://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/API_GetResources.html\">GetResources</a> operation. If you specify more than one tag key, only resources that match all tag keys, and at least one value of each specified tag key, are returned in your query. If you specify more than one value for a tag key, a resource matches the filter if it has a tag key value that matches <i>any</i> of the specified values.</p> <p>For example, consider the following sample query for resources that have two tags, <code>Stage</code> and <code>Version</code>, with two values each. (<code>[{\"Key\":\"Stage\",\"Values\":[\"Test\",\"Deploy\"]},{\"Key\":\"Version\",\"Values\":[\"1\",\"2\"]}]</code>) The results of this query might include the following.</p> <ul> <li> <p>An EC2 instance that has the following two tags: <code>{\"Key\":\"Stage\",\"Values\":[\"Deploy\"]}</code>, and <code>{\"Key\":\"Version\",\"Values\":[\"2\"]}</code> </p> </li> <li> <p>An S3 bucket that has the following two tags: {\"Key\":\"Stage\",\"Values\":[\"Test\",\"Deploy\"]}, and {\"Key\":\"Version\",\"Values\":[\"1\"]}</p> </li> </ul> <p>The query would not return the following results, however. The following EC2 instance does not have all tag keys specified in the filter, so it is rejected. The RDS database has all of the tag keys, but no values that match at least one of the specified tag key values in the filter.</p> <ul> <li> <p>An EC2 instance that has only the following tag: <code>{\"Key\":\"Stage\",\"Values\":[\"Deploy\"]}</code>.</p> </li> <li> <p>An RDS database that has the following two tags: <code>{\"Key\":\"Stage\",\"Values\":[\"Archived\"]}</code>, and <code>{\"Key\":\"Version\",\"Values\":[\"4\"]}</code> </p> </li> </ul> <p> <i> <code>CLOUDFORMATION_STACK_1_0:</code> </i> A JSON syntax that lets you specify a CloudFormation stack ARN.</p>"
       }
     },
     "ResourceArn": {

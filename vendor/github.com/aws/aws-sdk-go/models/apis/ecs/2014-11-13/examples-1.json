@@ -600,6 +600,30 @@
         "title": "To list the services in a cluster"
       }
     ],
+    "ListTagsForResource": [
+      {
+        "input": {
+          "resourceArn": "arn:aws:ecs:region:aws_account_id:cluster/dev"
+        },
+        "output": {
+          "tags": [
+            {
+              "key": "team",
+              "value": "dev"
+            }
+          ]
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "This example lists the tags for the 'dev' cluster.",
+        "id": "to-list-the-tags-for-a-cluster-1540582700259",
+        "title": "To list the tags for a cluster."
+      }
+    ],
     "ListTaskDefinitionFamilies": [
       {
         "input": {
@@ -841,6 +865,51 @@
         "description": "This example runs the specified task definition on your default cluster.",
         "id": "6f238c83-a133-42cd-ab3d-abeca0560445",
         "title": "To run a task on your default cluster"
+      }
+    ],
+    "TagResource": [
+      {
+        "input": {
+          "resourceArn": "arn:aws:ecs:region:aws_account_id:cluster/dev",
+          "tags": [
+            {
+              "key": "team",
+              "value": "dev"
+            }
+          ]
+        },
+        "output": {
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "This example tags the 'dev' cluster with key 'team' and value 'dev'.",
+        "id": "to-tag-a-cluster-1540581863751",
+        "title": "To tag a cluster."
+      }
+    ],
+    "UntagResource": [
+      {
+        "input": {
+          "resourceArn": "arn:aws:ecs:region:aws_account_id:cluster/dev",
+          "tagKeys": [
+            "team"
+          ]
+        },
+        "output": {
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "This example deletes the 'team' tag from the 'dev' cluster.",
+        "id": "to-untag-a-cluster-1540582546056",
+        "title": "To untag a cluster."
       }
     ],
     "UpdateService": [

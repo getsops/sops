@@ -18,7 +18,7 @@ const opAddClientIDToOpenIDConnectProvider = "AddClientIDToOpenIDConnectProvider
 // AddClientIDToOpenIDConnectProviderRequest generates a "aws/request.Request" representing the
 // client's request for the AddClientIDToOpenIDConnectProvider operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -116,7 +116,7 @@ const opAddRoleToInstanceProfile = "AddRoleToInstanceProfile"
 // AddRoleToInstanceProfileRequest generates a "aws/request.Request" representing the
 // client's request for the AddRoleToInstanceProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -230,7 +230,7 @@ const opAddUserToGroup = "AddUserToGroup"
 // AddUserToGroupRequest generates a "aws/request.Request" representing the
 // client's request for the AddUserToGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -320,7 +320,7 @@ const opAttachGroupPolicy = "AttachGroupPolicy"
 // AttachGroupPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the AttachGroupPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -425,7 +425,7 @@ const opAttachRolePolicy = "AttachRolePolicy"
 // AttachRolePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the AttachRolePolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -540,7 +540,7 @@ const opAttachUserPolicy = "AttachUserPolicy"
 // AttachUserPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the AttachUserPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -645,7 +645,7 @@ const opChangePassword = "ChangePassword"
 // ChangePasswordRequest generates a "aws/request.Request" representing the
 // client's request for the ChangePassword operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -754,7 +754,7 @@ const opCreateAccessKey = "CreateAccessKey"
 // CreateAccessKeyRequest generates a "aws/request.Request" representing the
 // client's request for the CreateAccessKey operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -859,7 +859,7 @@ const opCreateAccountAlias = "CreateAccountAlias"
 // CreateAccountAliasRequest generates a "aws/request.Request" representing the
 // client's request for the CreateAccountAlias operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -951,7 +951,7 @@ const opCreateGroup = "CreateGroup"
 // CreateGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1047,7 +1047,7 @@ const opCreateInstanceProfile = "CreateInstanceProfile"
 // CreateInstanceProfileRequest generates a "aws/request.Request" representing the
 // client's request for the CreateInstanceProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1140,7 +1140,7 @@ const opCreateLoginProfile = "CreateLoginProfile"
 // CreateLoginProfileRequest generates a "aws/request.Request" representing the
 // client's request for the CreateLoginProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1239,7 +1239,7 @@ const opCreateOpenIDConnectProvider = "CreateOpenIDConnectProvider"
 // CreateOpenIDConnectProviderRequest generates a "aws/request.Request" representing the
 // client's request for the CreateOpenIDConnectProvider operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1352,7 +1352,7 @@ const opCreatePolicy = "CreatePolicy"
 // CreatePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the CreatePolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1457,7 +1457,7 @@ const opCreatePolicyVersion = "CreatePolicyVersion"
 // CreatePolicyVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreatePolicyVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1564,7 +1564,7 @@ const opCreateRole = "CreateRole"
 // CreateRoleRequest generates a "aws/request.Request" representing the
 // client's request for the CreateRole operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1633,6 +1633,11 @@ func (c *IAM) CreateRoleRequest(input *CreateRoleInput) (req *request.Request, o
 //   The request was rejected because the policy document was malformed. The error
 //   message describes the specific error.
 //
+//   * ErrCodeConcurrentModificationException "ConcurrentModification"
+//   The request was rejected because multiple requests to change this object
+//   were submitted simultaneously. Wait a few minutes and submit your request
+//   again.
+//
 //   * ErrCodeServiceFailureException "ServiceFailure"
 //   The request processing has failed because of an unknown error, exception
 //   or failure.
@@ -1664,7 +1669,7 @@ const opCreateSAMLProvider = "CreateSAMLProvider"
 // CreateSAMLProviderRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSAMLProvider operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1777,7 +1782,7 @@ const opCreateServiceLinkedRole = "CreateServiceLinkedRole"
 // CreateServiceLinkedRoleRequest generates a "aws/request.Request" representing the
 // client's request for the CreateServiceLinkedRole operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1821,12 +1826,9 @@ func (c *IAM) CreateServiceLinkedRoleRequest(input *CreateServiceLinkedRoleInput
 // ensure that the service is not broken by an unexpectedly changed or deleted
 // role, which could put your AWS resources into an unknown state. Allowing
 // the service to control the role helps improve service stability and proper
-// cleanup when a service and its role are no longer needed.
-//
-// The name of the role is generated by combining the string that you specify
-// for the AWSServiceName parameter with the string that you specify for the
-// CustomSuffix parameter. The resulting name must be unique in your account
-// or the request fails.
+// cleanup when a service and its role are no longer needed. For more information,
+// see Using Service-Linked Roles (http://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html)
+// in the IAM User Guide.
 //
 // To attach a policy to this service-linked role, you must make the request
 // using the AWS service that depends on this role.
@@ -1882,7 +1884,7 @@ const opCreateServiceSpecificCredential = "CreateServiceSpecificCredential"
 // CreateServiceSpecificCredentialRequest generates a "aws/request.Request" representing the
 // client's request for the CreateServiceSpecificCredential operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1982,7 +1984,7 @@ const opCreateUser = "CreateUser"
 // CreateUserRequest generates a "aws/request.Request" representing the
 // client's request for the CreateUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2047,6 +2049,15 @@ func (c *IAM) CreateUserRequest(input *CreateUserInput) (req *request.Request, o
 //   The request was rejected because it referenced an entity that does not exist.
 //   The error message describes the entity.
 //
+//   * ErrCodeInvalidInputException "InvalidInput"
+//   The request was rejected because an invalid or out-of-range value was supplied
+//   for an input parameter.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModification"
+//   The request was rejected because multiple requests to change this object
+//   were submitted simultaneously. Wait a few minutes and submit your request
+//   again.
+//
 //   * ErrCodeServiceFailureException "ServiceFailure"
 //   The request processing has failed because of an unknown error, exception
 //   or failure.
@@ -2078,7 +2089,7 @@ const opCreateVirtualMFADevice = "CreateVirtualMFADevice"
 // CreateVirtualMFADeviceRequest generates a "aws/request.Request" representing the
 // client's request for the CreateVirtualMFADevice operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2179,7 +2190,7 @@ const opDeactivateMFADevice = "DeactivateMFADevice"
 // DeactivateMFADeviceRequest generates a "aws/request.Request" representing the
 // client's request for the DeactivateMFADevice operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2280,7 +2291,7 @@ const opDeleteAccessKey = "DeleteAccessKey"
 // DeleteAccessKeyRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteAccessKey operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2376,7 +2387,7 @@ const opDeleteAccountAlias = "DeleteAccountAlias"
 // DeleteAccountAliasRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteAccountAlias operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2468,7 +2479,7 @@ const opDeleteAccountPasswordPolicy = "DeleteAccountPasswordPolicy"
 // DeleteAccountPasswordPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteAccountPasswordPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2558,7 +2569,7 @@ const opDeleteGroup = "DeleteGroup"
 // DeleteGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2653,7 +2664,7 @@ const opDeleteGroupPolicy = "DeleteGroupPolicy"
 // DeleteGroupPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteGroupPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2749,7 +2760,7 @@ const opDeleteInstanceProfile = "DeleteInstanceProfile"
 // DeleteInstanceProfileRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteInstanceProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2852,7 +2863,7 @@ const opDeleteLoginProfile = "DeleteLoginProfile"
 // DeleteLoginProfileRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteLoginProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2954,7 +2965,7 @@ const opDeleteOpenIDConnectProvider = "DeleteOpenIDConnectProvider"
 // DeleteOpenIDConnectProviderRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteOpenIDConnectProvider operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3051,7 +3062,7 @@ const opDeletePolicy = "DeletePolicy"
 // DeletePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DeletePolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3171,7 +3182,7 @@ const opDeletePolicyVersion = "DeletePolicyVersion"
 // DeletePolicyVersionRequest generates a "aws/request.Request" representing the
 // client's request for the DeletePolicyVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3277,7 +3288,7 @@ const opDeleteRole = "DeleteRole"
 // DeleteRoleRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteRole operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3352,6 +3363,11 @@ func (c *IAM) DeleteRoleRequest(input *DeleteRoleInput) (req *request.Request, o
 //   the name of the service that depends on this service-linked role. You must
 //   request the change through that service.
 //
+//   * ErrCodeConcurrentModificationException "ConcurrentModification"
+//   The request was rejected because multiple requests to change this object
+//   were submitted simultaneously. Wait a few minutes and submit your request
+//   again.
+//
 //   * ErrCodeServiceFailureException "ServiceFailure"
 //   The request processing has failed because of an unknown error, exception
 //   or failure.
@@ -3383,7 +3399,7 @@ const opDeleteRolePermissionsBoundary = "DeleteRolePermissionsBoundary"
 // DeleteRolePermissionsBoundaryRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteRolePermissionsBoundary operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3479,7 +3495,7 @@ const opDeleteRolePolicy = "DeleteRolePolicy"
 // DeleteRolePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteRolePolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3581,7 +3597,7 @@ const opDeleteSAMLProvider = "DeleteSAMLProvider"
 // DeleteSAMLProviderRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSAMLProvider operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3682,7 +3698,7 @@ const opDeleteSSHPublicKey = "DeleteSSHPublicKey"
 // DeleteSSHPublicKeyRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSSHPublicKey operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3770,7 +3786,7 @@ const opDeleteServerCertificate = "DeleteServerCertificate"
 // DeleteServerCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteServerCertificate operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3879,7 +3895,7 @@ const opDeleteServiceLinkedRole = "DeleteServiceLinkedRole"
 // DeleteServiceLinkedRoleRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteServiceLinkedRole operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3986,7 +4002,7 @@ const opDeleteServiceSpecificCredential = "DeleteServiceSpecificCredential"
 // DeleteServiceSpecificCredentialRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteServiceSpecificCredential operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4068,7 +4084,7 @@ const opDeleteSigningCertificate = "DeleteSigningCertificate"
 // DeleteSigningCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSigningCertificate operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4164,7 +4180,7 @@ const opDeleteUser = "DeleteUser"
 // DeleteUserRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4228,6 +4244,11 @@ func (c *IAM) DeleteUserRequest(input *DeleteUserInput) (req *request.Request, o
 //   The request was rejected because it attempted to delete a resource that has
 //   attached subordinate entities. The error message describes these entities.
 //
+//   * ErrCodeConcurrentModificationException "ConcurrentModification"
+//   The request was rejected because multiple requests to change this object
+//   were submitted simultaneously. Wait a few minutes and submit your request
+//   again.
+//
 //   * ErrCodeServiceFailureException "ServiceFailure"
 //   The request processing has failed because of an unknown error, exception
 //   or failure.
@@ -4259,7 +4280,7 @@ const opDeleteUserPermissionsBoundary = "DeleteUserPermissionsBoundary"
 // DeleteUserPermissionsBoundaryRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteUserPermissionsBoundary operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4349,7 +4370,7 @@ const opDeleteUserPolicy = "DeleteUserPolicy"
 // DeleteUserPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteUserPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4445,7 +4466,7 @@ const opDeleteVirtualMFADevice = "DeleteVirtualMFADevice"
 // DeleteVirtualMFADeviceRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteVirtualMFADevice operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4542,7 +4563,7 @@ const opDetachGroupPolicy = "DetachGroupPolicy"
 // DetachGroupPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DetachGroupPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4641,7 +4662,7 @@ const opDetachRolePolicy = "DetachRolePolicy"
 // DetachRolePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DetachRolePolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4746,7 +4767,7 @@ const opDetachUserPolicy = "DetachUserPolicy"
 // DetachUserPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DetachUserPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4845,7 +4866,7 @@ const opEnableMFADevice = "EnableMFADevice"
 // EnableMFADeviceRequest generates a "aws/request.Request" representing the
 // client's request for the EnableMFADevice operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4951,7 +4972,7 @@ const opGenerateCredentialReport = "GenerateCredentialReport"
 // GenerateCredentialReportRequest generates a "aws/request.Request" representing the
 // client's request for the GenerateCredentialReport operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5037,7 +5058,7 @@ const opGetAccessKeyLastUsed = "GetAccessKeyLastUsed"
 // GetAccessKeyLastUsedRequest generates a "aws/request.Request" representing the
 // client's request for the GetAccessKeyLastUsed operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5120,7 +5141,7 @@ const opGetAccountAuthorizationDetails = "GetAccountAuthorizationDetails"
 // GetAccountAuthorizationDetailsRequest generates a "aws/request.Request" representing the
 // client's request for the GetAccountAuthorizationDetails operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5268,7 +5289,7 @@ const opGetAccountPasswordPolicy = "GetAccountPasswordPolicy"
 // GetAccountPasswordPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the GetAccountPasswordPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5353,7 +5374,7 @@ const opGetAccountSummary = "GetAccountSummary"
 // GetAccountSummaryRequest generates a "aws/request.Request" representing the
 // client's request for the GetAccountSummary operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5437,7 +5458,7 @@ const opGetContextKeysForCustomPolicy = "GetContextKeysForCustomPolicy"
 // GetContextKeysForCustomPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the GetContextKeysForCustomPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5526,7 +5547,7 @@ const opGetContextKeysForPrincipalPolicy = "GetContextKeysForPrincipalPolicy"
 // GetContextKeysForPrincipalPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the GetContextKeysForPrincipalPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5626,7 +5647,7 @@ const opGetCredentialReport = "GetCredentialReport"
 // GetCredentialReportRequest generates a "aws/request.Request" representing the
 // client's request for the GetCredentialReport operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5722,7 +5743,7 @@ const opGetGroup = "GetGroup"
 // GetGroupRequest generates a "aws/request.Request" representing the
 // client's request for the GetGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5863,7 +5884,7 @@ const opGetGroupPolicy = "GetGroupPolicy"
 // GetGroupPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the GetGroupPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5963,7 +5984,7 @@ const opGetInstanceProfile = "GetInstanceProfile"
 // GetInstanceProfileRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstanceProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6050,7 +6071,7 @@ const opGetLoginProfile = "GetLoginProfile"
 // GetLoginProfileRequest generates a "aws/request.Request" representing the
 // client's request for the GetLoginProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6136,7 +6157,7 @@ const opGetOpenIDConnectProvider = "GetOpenIDConnectProvider"
 // GetOpenIDConnectProviderRequest generates a "aws/request.Request" representing the
 // client's request for the GetOpenIDConnectProvider operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6225,7 +6246,7 @@ const opGetPolicy = "GetPolicy"
 // GetPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the GetPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6326,7 +6347,7 @@ const opGetPolicyVersion = "GetPolicyVersion"
 // GetPolicyVersionRequest generates a "aws/request.Request" representing the
 // client's request for the GetPolicyVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6435,7 +6456,7 @@ const opGetRole = "GetRole"
 // GetRoleRequest generates a "aws/request.Request" representing the
 // client's request for the GetRole operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6527,7 +6548,7 @@ const opGetRolePolicy = "GetRolePolicy"
 // GetRolePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the GetRolePolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6630,7 +6651,7 @@ const opGetSAMLProvider = "GetSAMLProvider"
 // GetSAMLProviderRequest generates a "aws/request.Request" representing the
 // client's request for the GetSAMLProvider operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6721,7 +6742,7 @@ const opGetSSHPublicKey = "GetSSHPublicKey"
 // GetSSHPublicKeyRequest generates a "aws/request.Request" representing the
 // client's request for the GetSSHPublicKey operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6811,7 +6832,7 @@ const opGetServerCertificate = "GetServerCertificate"
 // GetServerCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the GetServerCertificate operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6900,7 +6921,7 @@ const opGetServiceLinkedRoleDeletionStatus = "GetServiceLinkedRoleDeletionStatus
 // GetServiceLinkedRoleDeletionStatusRequest generates a "aws/request.Request" representing the
 // client's request for the GetServiceLinkedRoleDeletionStatus operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6993,7 +7014,7 @@ const opGetUser = "GetUser"
 // GetUserRequest generates a "aws/request.Request" representing the
 // client's request for the GetUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7081,7 +7102,7 @@ const opGetUserPolicy = "GetUserPolicy"
 // GetUserPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the GetUserPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7181,7 +7202,7 @@ const opListAccessKeys = "ListAccessKeys"
 // ListAccessKeysRequest generates a "aws/request.Request" representing the
 // client's request for the ListAccessKeys operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7334,7 +7355,7 @@ const opListAccountAliases = "ListAccountAliases"
 // ListAccountAliasesRequest generates a "aws/request.Request" representing the
 // client's request for the ListAccountAliases operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7473,7 +7494,7 @@ const opListAttachedGroupPolicies = "ListAttachedGroupPolicies"
 // ListAttachedGroupPoliciesRequest generates a "aws/request.Request" representing the
 // client's request for the ListAttachedGroupPolicies operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7628,7 +7649,7 @@ const opListAttachedRolePolicies = "ListAttachedRolePolicies"
 // ListAttachedRolePoliciesRequest generates a "aws/request.Request" representing the
 // client's request for the ListAttachedRolePolicies operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7783,7 +7804,7 @@ const opListAttachedUserPolicies = "ListAttachedUserPolicies"
 // ListAttachedUserPoliciesRequest generates a "aws/request.Request" representing the
 // client's request for the ListAttachedUserPolicies operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7938,7 +7959,7 @@ const opListEntitiesForPolicy = "ListEntitiesForPolicy"
 // ListEntitiesForPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the ListEntitiesForPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8090,7 +8111,7 @@ const opListGroupPolicies = "ListGroupPolicies"
 // ListGroupPoliciesRequest generates a "aws/request.Request" representing the
 // client's request for the ListGroupPolicies operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8241,7 +8262,7 @@ const opListGroups = "ListGroups"
 // ListGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the ListGroups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8379,7 +8400,7 @@ const opListGroupsForUser = "ListGroupsForUser"
 // ListGroupsForUserRequest generates a "aws/request.Request" representing the
 // client's request for the ListGroupsForUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8521,7 +8542,7 @@ const opListInstanceProfiles = "ListInstanceProfiles"
 // ListInstanceProfilesRequest generates a "aws/request.Request" representing the
 // client's request for the ListInstanceProfiles operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8661,7 +8682,7 @@ const opListInstanceProfilesForRole = "ListInstanceProfilesForRole"
 // ListInstanceProfilesForRoleRequest generates a "aws/request.Request" representing the
 // client's request for the ListInstanceProfilesForRole operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8805,7 +8826,7 @@ const opListMFADevices = "ListMFADevices"
 // ListMFADevicesRequest generates a "aws/request.Request" representing the
 // client's request for the ListMFADevices operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8950,7 +8971,7 @@ const opListOpenIDConnectProviders = "ListOpenIDConnectProviders"
 // ListOpenIDConnectProvidersRequest generates a "aws/request.Request" representing the
 // client's request for the ListOpenIDConnectProviders operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -9031,7 +9052,7 @@ const opListPolicies = "ListPolicies"
 // ListPoliciesRequest generates a "aws/request.Request" representing the
 // client's request for the ListPolicies operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -9179,7 +9200,7 @@ const opListPolicyVersions = "ListPolicyVersions"
 // ListPolicyVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListPolicyVersions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -9328,7 +9349,7 @@ const opListRolePolicies = "ListRolePolicies"
 // ListRolePoliciesRequest generates a "aws/request.Request" representing the
 // client's request for the ListRolePolicies operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -9473,12 +9494,99 @@ func (c *IAM) ListRolePoliciesPagesWithContext(ctx aws.Context, input *ListRoleP
 	return p.Err()
 }
 
+const opListRoleTags = "ListRoleTags"
+
+// ListRoleTagsRequest generates a "aws/request.Request" representing the
+// client's request for the ListRoleTags operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListRoleTags for more information on using the ListRoleTags
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListRoleTagsRequest method.
+//    req, resp := client.ListRoleTagsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iam-2010-05-08/ListRoleTags
+func (c *IAM) ListRoleTagsRequest(input *ListRoleTagsInput) (req *request.Request, output *ListRoleTagsOutput) {
+	op := &request.Operation{
+		Name:       opListRoleTags,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListRoleTagsInput{}
+	}
+
+	output = &ListRoleTagsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListRoleTags API operation for AWS Identity and Access Management.
+//
+// Lists the tags that are attached to the specified role. The returned list
+// of tags is sorted by tag key. For more information about tagging, see Tagging
+// IAM Identities (http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html)
+// in the IAM User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Identity and Access Management's
+// API operation ListRoleTags for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNoSuchEntityException "NoSuchEntity"
+//   The request was rejected because it referenced an entity that does not exist.
+//   The error message describes the entity.
+//
+//   * ErrCodeServiceFailureException "ServiceFailure"
+//   The request processing has failed because of an unknown error, exception
+//   or failure.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iam-2010-05-08/ListRoleTags
+func (c *IAM) ListRoleTags(input *ListRoleTagsInput) (*ListRoleTagsOutput, error) {
+	req, out := c.ListRoleTagsRequest(input)
+	return out, req.Send()
+}
+
+// ListRoleTagsWithContext is the same as ListRoleTags with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListRoleTags for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IAM) ListRoleTagsWithContext(ctx aws.Context, input *ListRoleTagsInput, opts ...request.Option) (*ListRoleTagsOutput, error) {
+	req, out := c.ListRoleTagsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListRoles = "ListRoles"
 
 // ListRolesRequest generates a "aws/request.Request" representing the
 // client's request for the ListRoles operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -9618,7 +9726,7 @@ const opListSAMLProviders = "ListSAMLProviders"
 // ListSAMLProvidersRequest generates a "aws/request.Request" representing the
 // client's request for the ListSAMLProviders operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -9700,7 +9808,7 @@ const opListSSHPublicKeys = "ListSSHPublicKeys"
 // ListSSHPublicKeysRequest generates a "aws/request.Request" representing the
 // client's request for the ListSSHPublicKeys operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -9846,7 +9954,7 @@ const opListServerCertificates = "ListServerCertificates"
 // ListServerCertificatesRequest generates a "aws/request.Request" representing the
 // client's request for the ListServerCertificates operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -9990,7 +10098,7 @@ const opListServiceSpecificCredentials = "ListServiceSpecificCredentials"
 // ListServiceSpecificCredentialsRequest generates a "aws/request.Request" representing the
 // client's request for the ListServiceSpecificCredentials operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -10079,7 +10187,7 @@ const opListSigningCertificates = "ListSigningCertificates"
 // ListSigningCertificatesRequest generates a "aws/request.Request" representing the
 // client's request for the ListSigningCertificates operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -10229,7 +10337,7 @@ const opListUserPolicies = "ListUserPolicies"
 // ListUserPoliciesRequest generates a "aws/request.Request" representing the
 // client's request for the ListUserPolicies operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -10373,12 +10481,99 @@ func (c *IAM) ListUserPoliciesPagesWithContext(ctx aws.Context, input *ListUserP
 	return p.Err()
 }
 
+const opListUserTags = "ListUserTags"
+
+// ListUserTagsRequest generates a "aws/request.Request" representing the
+// client's request for the ListUserTags operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListUserTags for more information on using the ListUserTags
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListUserTagsRequest method.
+//    req, resp := client.ListUserTagsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iam-2010-05-08/ListUserTags
+func (c *IAM) ListUserTagsRequest(input *ListUserTagsInput) (req *request.Request, output *ListUserTagsOutput) {
+	op := &request.Operation{
+		Name:       opListUserTags,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListUserTagsInput{}
+	}
+
+	output = &ListUserTagsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListUserTags API operation for AWS Identity and Access Management.
+//
+// Lists the tags that are attached to the specified user. The returned list
+// of tags is sorted by tag key. For more information about tagging, see Tagging
+// IAM Identities (http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html)
+// in the IAM User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Identity and Access Management's
+// API operation ListUserTags for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNoSuchEntityException "NoSuchEntity"
+//   The request was rejected because it referenced an entity that does not exist.
+//   The error message describes the entity.
+//
+//   * ErrCodeServiceFailureException "ServiceFailure"
+//   The request processing has failed because of an unknown error, exception
+//   or failure.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iam-2010-05-08/ListUserTags
+func (c *IAM) ListUserTags(input *ListUserTagsInput) (*ListUserTagsOutput, error) {
+	req, out := c.ListUserTagsRequest(input)
+	return out, req.Send()
+}
+
+// ListUserTagsWithContext is the same as ListUserTags with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListUserTags for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IAM) ListUserTagsWithContext(ctx aws.Context, input *ListUserTagsInput, opts ...request.Option) (*ListUserTagsOutput, error) {
+	req, out := c.ListUserTagsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListUsers = "ListUsers"
 
 // ListUsersRequest generates a "aws/request.Request" representing the
 // client's request for the ListUsers operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -10518,7 +10713,7 @@ const opListVirtualMFADevices = "ListVirtualMFADevices"
 // ListVirtualMFADevicesRequest generates a "aws/request.Request" representing the
 // client's request for the ListVirtualMFADevices operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -10653,7 +10848,7 @@ const opPutGroupPolicy = "PutGroupPolicy"
 // PutGroupPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the PutGroupPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -10763,7 +10958,7 @@ const opPutRolePermissionsBoundary = "PutRolePermissionsBoundary"
 // PutRolePermissionsBoundaryRequest generates a "aws/request.Request" representing the
 // client's request for the PutRolePermissionsBoundary operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -10875,7 +11070,7 @@ const opPutRolePolicy = "PutRolePolicy"
 // PutRolePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the PutRolePolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -10997,7 +11192,7 @@ const opPutUserPermissionsBoundary = "PutUserPermissionsBoundary"
 // PutUserPermissionsBoundaryRequest generates a "aws/request.Request" representing the
 // client's request for the PutUserPermissionsBoundary operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -11101,7 +11296,7 @@ const opPutUserPolicy = "PutUserPolicy"
 // PutUserPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the PutUserPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -11211,7 +11406,7 @@ const opRemoveClientIDFromOpenIDConnectProvider = "RemoveClientIDFromOpenIDConne
 // RemoveClientIDFromOpenIDConnectProviderRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveClientIDFromOpenIDConnectProvider operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -11306,7 +11501,7 @@ const opRemoveRoleFromInstanceProfile = "RemoveRoleFromInstanceProfile"
 // RemoveRoleFromInstanceProfileRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveRoleFromInstanceProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -11411,7 +11606,7 @@ const opRemoveUserFromGroup = "RemoveUserFromGroup"
 // RemoveUserFromGroupRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveUserFromGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -11501,7 +11696,7 @@ const opResetServiceSpecificCredential = "ResetServiceSpecificCredential"
 // ResetServiceSpecificCredentialRequest generates a "aws/request.Request" representing the
 // client's request for the ResetServiceSpecificCredential operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -11584,7 +11779,7 @@ const opResyncMFADevice = "ResyncMFADevice"
 // ResyncMFADeviceRequest generates a "aws/request.Request" representing the
 // client's request for the ResyncMFADevice operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -11683,7 +11878,7 @@ const opSetDefaultPolicyVersion = "SetDefaultPolicyVersion"
 // SetDefaultPolicyVersionRequest generates a "aws/request.Request" representing the
 // client's request for the SetDefaultPolicyVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -11786,7 +11981,7 @@ const opSimulateCustomPolicy = "SimulateCustomPolicy"
 // SimulateCustomPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the SimulateCustomPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -11942,7 +12137,7 @@ const opSimulatePrincipalPolicy = "SimulatePrincipalPolicy"
 // SimulatePrincipalPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the SimulatePrincipalPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -12107,12 +12302,461 @@ func (c *IAM) SimulatePrincipalPolicyPagesWithContext(ctx aws.Context, input *Si
 	return p.Err()
 }
 
+const opTagRole = "TagRole"
+
+// TagRoleRequest generates a "aws/request.Request" representing the
+// client's request for the TagRole operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TagRole for more information on using the TagRole
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TagRoleRequest method.
+//    req, resp := client.TagRoleRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iam-2010-05-08/TagRole
+func (c *IAM) TagRoleRequest(input *TagRoleInput) (req *request.Request, output *TagRoleOutput) {
+	op := &request.Operation{
+		Name:       opTagRole,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &TagRoleInput{}
+	}
+
+	output = &TagRoleOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
+	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// TagRole API operation for AWS Identity and Access Management.
+//
+// Adds one or more tags to an IAM role. The role can be a regular role or a
+// service-linked role. If a tag with the same key name already exists, then
+// that tag is overwritten with the new value.
+//
+// A tag consists of a key name and an associated value. By assigning tags to
+// your resources, you can do the following:
+//
+//    * Administrative grouping and discovery - Attach tags to resources to
+//    aid in organization and search. For example, you could search for all
+//    resources with the key name Project and the value MyImportantProject.
+//    Or search for all resources with the key name Cost Center and the value
+//    41200.
+//
+//    * Access control - Reference tags in IAM user-based and resource-based
+//    policies. You can use tags to restrict access to only an IAM user or role
+//    that has a specified tag attached. You can also restrict access to only
+//    those resources that have a certain tag attached. For examples of policies
+//    that show how to use tags to control access, see Control Access Using
+//    IAM Tags (http://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html)
+//    in the IAM User Guide.
+//
+//    * Cost allocation - Use tags to help track which individuals and teams
+//    are using which AWS resources.
+//
+// Make sure that you have no invalid tags and that you do not exceed the allowed
+// number of tags per role. In either case, the entire request fails and no
+// tags are added to the role.
+//
+// AWS always interprets the tag Value as a single string. If you need to store
+// an array, you can store comma-separated values in the string. However, you
+// must interpret the value in your code.
+//
+// For more information about tagging, see Tagging IAM Identities (http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html)
+// in the IAM User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Identity and Access Management's
+// API operation TagRole for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNoSuchEntityException "NoSuchEntity"
+//   The request was rejected because it referenced an entity that does not exist.
+//   The error message describes the entity.
+//
+//   * ErrCodeLimitExceededException "LimitExceeded"
+//   The request was rejected because it attempted to create resources beyond
+//   the current AWS account limits. The error message describes the limit exceeded.
+//
+//   * ErrCodeInvalidInputException "InvalidInput"
+//   The request was rejected because an invalid or out-of-range value was supplied
+//   for an input parameter.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModification"
+//   The request was rejected because multiple requests to change this object
+//   were submitted simultaneously. Wait a few minutes and submit your request
+//   again.
+//
+//   * ErrCodeServiceFailureException "ServiceFailure"
+//   The request processing has failed because of an unknown error, exception
+//   or failure.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iam-2010-05-08/TagRole
+func (c *IAM) TagRole(input *TagRoleInput) (*TagRoleOutput, error) {
+	req, out := c.TagRoleRequest(input)
+	return out, req.Send()
+}
+
+// TagRoleWithContext is the same as TagRole with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TagRole for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IAM) TagRoleWithContext(ctx aws.Context, input *TagRoleInput, opts ...request.Option) (*TagRoleOutput, error) {
+	req, out := c.TagRoleRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opTagUser = "TagUser"
+
+// TagUserRequest generates a "aws/request.Request" representing the
+// client's request for the TagUser operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TagUser for more information on using the TagUser
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TagUserRequest method.
+//    req, resp := client.TagUserRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iam-2010-05-08/TagUser
+func (c *IAM) TagUserRequest(input *TagUserInput) (req *request.Request, output *TagUserOutput) {
+	op := &request.Operation{
+		Name:       opTagUser,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &TagUserInput{}
+	}
+
+	output = &TagUserOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
+	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// TagUser API operation for AWS Identity and Access Management.
+//
+// Adds one or more tags to an IAM user. If a tag with the same key name already
+// exists, then that tag is overwritten with the new value.
+//
+// A tag consists of a key name and an associated value. By assigning tags to
+// your resources, you can do the following:
+//
+//    * Administrative grouping and discovery - Attach tags to resources to
+//    aid in organization and search. For example, you could search for all
+//    resources with the key name Project and the value MyImportantProject.
+//    Or search for all resources with the key name Cost Center and the value
+//    41200.
+//
+//    * Access control - Reference tags in IAM user-based and resource-based
+//    policies. You can use tags to restrict access to only an IAM requesting
+//    user or to a role that has a specified tag attached. You can also restrict
+//    access to only those resources that have a certain tag attached. For examples
+//    of policies that show how to use tags to control access, see Control Access
+//    Using IAM Tags (http://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html)
+//    in the IAM User Guide.
+//
+//    * Cost allocation - Use tags to help track which individuals and teams
+//    are using which AWS resources.
+//
+// Make sure that you have no invalid tags and that you do not exceed the allowed
+// number of tags per role. In either case, the entire request fails and no
+// tags are added to the role.
+//
+// AWS always interprets the tag Value as a single string. If you need to store
+// an array, you can store comma-separated values in the string. However, you
+// must interpret the value in your code.
+//
+// For more information about tagging, see Tagging IAM Identities (http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html)
+// in the IAM User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Identity and Access Management's
+// API operation TagUser for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNoSuchEntityException "NoSuchEntity"
+//   The request was rejected because it referenced an entity that does not exist.
+//   The error message describes the entity.
+//
+//   * ErrCodeLimitExceededException "LimitExceeded"
+//   The request was rejected because it attempted to create resources beyond
+//   the current AWS account limits. The error message describes the limit exceeded.
+//
+//   * ErrCodeInvalidInputException "InvalidInput"
+//   The request was rejected because an invalid or out-of-range value was supplied
+//   for an input parameter.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModification"
+//   The request was rejected because multiple requests to change this object
+//   were submitted simultaneously. Wait a few minutes and submit your request
+//   again.
+//
+//   * ErrCodeServiceFailureException "ServiceFailure"
+//   The request processing has failed because of an unknown error, exception
+//   or failure.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iam-2010-05-08/TagUser
+func (c *IAM) TagUser(input *TagUserInput) (*TagUserOutput, error) {
+	req, out := c.TagUserRequest(input)
+	return out, req.Send()
+}
+
+// TagUserWithContext is the same as TagUser with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TagUser for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IAM) TagUserWithContext(ctx aws.Context, input *TagUserInput, opts ...request.Option) (*TagUserOutput, error) {
+	req, out := c.TagUserRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUntagRole = "UntagRole"
+
+// UntagRoleRequest generates a "aws/request.Request" representing the
+// client's request for the UntagRole operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UntagRole for more information on using the UntagRole
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UntagRoleRequest method.
+//    req, resp := client.UntagRoleRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iam-2010-05-08/UntagRole
+func (c *IAM) UntagRoleRequest(input *UntagRoleInput) (req *request.Request, output *UntagRoleOutput) {
+	op := &request.Operation{
+		Name:       opUntagRole,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UntagRoleInput{}
+	}
+
+	output = &UntagRoleOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
+	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UntagRole API operation for AWS Identity and Access Management.
+//
+// Removes the specified tags from the role. For more information about tagging,
+// see Tagging IAM Identities (http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html)
+// in the IAM User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Identity and Access Management's
+// API operation UntagRole for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNoSuchEntityException "NoSuchEntity"
+//   The request was rejected because it referenced an entity that does not exist.
+//   The error message describes the entity.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModification"
+//   The request was rejected because multiple requests to change this object
+//   were submitted simultaneously. Wait a few minutes and submit your request
+//   again.
+//
+//   * ErrCodeServiceFailureException "ServiceFailure"
+//   The request processing has failed because of an unknown error, exception
+//   or failure.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iam-2010-05-08/UntagRole
+func (c *IAM) UntagRole(input *UntagRoleInput) (*UntagRoleOutput, error) {
+	req, out := c.UntagRoleRequest(input)
+	return out, req.Send()
+}
+
+// UntagRoleWithContext is the same as UntagRole with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UntagRole for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IAM) UntagRoleWithContext(ctx aws.Context, input *UntagRoleInput, opts ...request.Option) (*UntagRoleOutput, error) {
+	req, out := c.UntagRoleRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUntagUser = "UntagUser"
+
+// UntagUserRequest generates a "aws/request.Request" representing the
+// client's request for the UntagUser operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UntagUser for more information on using the UntagUser
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UntagUserRequest method.
+//    req, resp := client.UntagUserRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iam-2010-05-08/UntagUser
+func (c *IAM) UntagUserRequest(input *UntagUserInput) (req *request.Request, output *UntagUserOutput) {
+	op := &request.Operation{
+		Name:       opUntagUser,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UntagUserInput{}
+	}
+
+	output = &UntagUserOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
+	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UntagUser API operation for AWS Identity and Access Management.
+//
+// Removes the specified tags from the user. For more information about tagging,
+// see Tagging IAM Identities (http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html)
+// in the IAM User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Identity and Access Management's
+// API operation UntagUser for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNoSuchEntityException "NoSuchEntity"
+//   The request was rejected because it referenced an entity that does not exist.
+//   The error message describes the entity.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModification"
+//   The request was rejected because multiple requests to change this object
+//   were submitted simultaneously. Wait a few minutes and submit your request
+//   again.
+//
+//   * ErrCodeServiceFailureException "ServiceFailure"
+//   The request processing has failed because of an unknown error, exception
+//   or failure.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iam-2010-05-08/UntagUser
+func (c *IAM) UntagUser(input *UntagUserInput) (*UntagUserOutput, error) {
+	req, out := c.UntagUserRequest(input)
+	return out, req.Send()
+}
+
+// UntagUserWithContext is the same as UntagUser with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UntagUser for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IAM) UntagUserWithContext(ctx aws.Context, input *UntagUserInput, opts ...request.Option) (*UntagUserOutput, error) {
+	req, out := c.UntagUserRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateAccessKey = "UpdateAccessKey"
 
 // UpdateAccessKeyRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateAccessKey operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -12213,7 +12857,7 @@ const opUpdateAccountPasswordPolicy = "UpdateAccountPasswordPolicy"
 // UpdateAccountPasswordPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateAccountPasswordPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -12318,7 +12962,7 @@ const opUpdateAssumeRolePolicy = "UpdateAssumeRolePolicy"
 // UpdateAssumeRolePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateAssumeRolePolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -12421,7 +13065,7 @@ const opUpdateGroup = "UpdateGroup"
 // UpdateGroupRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -12526,7 +13170,7 @@ const opUpdateLoginProfile = "UpdateLoginProfile"
 // UpdateLoginProfileRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateLoginProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -12630,7 +13274,7 @@ const opUpdateOpenIDConnectProviderThumbprint = "UpdateOpenIDConnectProviderThum
 // UpdateOpenIDConnectProviderThumbprintRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateOpenIDConnectProviderThumbprint operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -12733,7 +13377,7 @@ const opUpdateRole = "UpdateRole"
 // UpdateRoleRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateRole operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -12823,7 +13467,7 @@ const opUpdateRoleDescription = "UpdateRoleDescription"
 // UpdateRoleDescriptionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateRoleDescription operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -12916,7 +13560,7 @@ const opUpdateSAMLProvider = "UpdateSAMLProvider"
 // UpdateSAMLProviderRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateSAMLProvider operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -13010,7 +13654,7 @@ const opUpdateSSHPublicKey = "UpdateSSHPublicKey"
 // UpdateSSHPublicKeyRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateSSHPublicKey operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -13101,7 +13745,7 @@ const opUpdateServerCertificate = "UpdateServerCertificate"
 // UpdateServerCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateServerCertificate operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -13214,7 +13858,7 @@ const opUpdateServiceSpecificCredential = "UpdateServiceSpecificCredential"
 // UpdateServiceSpecificCredentialRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateServiceSpecificCredential operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -13299,7 +13943,7 @@ const opUpdateSigningCertificate = "UpdateSigningCertificate"
 // UpdateSigningCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateSigningCertificate operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -13397,7 +14041,7 @@ const opUpdateUser = "UpdateUser"
 // UpdateUserRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -13477,6 +14121,11 @@ func (c *IAM) UpdateUserRequest(input *UpdateUserInput) (req *request.Request, o
 //   error indicates that the request is likely to succeed if you try again after
 //   waiting several minutes. The error message describes the entity.
 //
+//   * ErrCodeConcurrentModificationException "ConcurrentModification"
+//   The request was rejected because multiple requests to change this object
+//   were submitted simultaneously. Wait a few minutes and submit your request
+//   again.
+//
 //   * ErrCodeServiceFailureException "ServiceFailure"
 //   The request processing has failed because of an unknown error, exception
 //   or failure.
@@ -13508,7 +14157,7 @@ const opUploadSSHPublicKey = "UploadSSHPublicKey"
 // UploadSSHPublicKeyRequest generates a "aws/request.Request" representing the
 // client's request for the UploadSSHPublicKey operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -13610,7 +14259,7 @@ const opUploadServerCertificate = "UploadServerCertificate"
 // UploadServerCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the UploadServerCertificate operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -13731,7 +14380,7 @@ const opUploadSigningCertificate = "UploadSigningCertificate"
 // UploadSigningCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the UploadSigningCertificate operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -13869,7 +14518,7 @@ type AccessKey struct {
 	// The secret key used to sign requests.
 	//
 	// SecretAccessKey is a required field
-	SecretAccessKey *string `type:"string" required:"true"`
+	SecretAccessKey *string `type:"string" required:"true" sensitive:"true"`
 
 	// The status of the access key. Active means that the key is valid for API
 	// calls, while Inactive means it is not.
@@ -14636,12 +15285,12 @@ type ChangePasswordInput struct {
 	// because they have special meaning within that tool.
 	//
 	// NewPassword is a required field
-	NewPassword *string `min:"1" type:"string" required:"true"`
+	NewPassword *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// The IAM user's current password.
 	//
 	// OldPassword is a required field
-	OldPassword *string `min:"1" type:"string" required:"true"`
+	OldPassword *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -15100,7 +15749,7 @@ type CreateLoginProfileInput struct {
 	// because they have special meaning within that tool.
 	//
 	// Password is a required field
-	Password *string `min:"1" type:"string" required:"true"`
+	Password *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// Specifies whether the user is required to set a new password on next sign-in.
 	PasswordResetRequired *bool `type:"boolean"`
@@ -15640,6 +16289,15 @@ type CreateRoleInput struct {
 	//
 	// RoleName is a required field
 	RoleName *string `min:"1" type:"string" required:"true"`
+
+	// A list of tags that you want to attach to the newly created role. Each tag
+	// consists of a key name and an associated value. For more information about
+	// tagging, see Tagging IAM Identities (http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html)
+	// in the IAM User Guide.
+	//
+	// If any one of the tags is invalid or if you exceed the allowed number of
+	// tags per role, then the entire request fails and the role is not created.
+	Tags []*Tag `type:"list"`
 }
 
 // String returns the string representation
@@ -15675,6 +16333,16 @@ func (s *CreateRoleInput) Validate() error {
 	}
 	if s.RoleName != nil && len(*s.RoleName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("RoleName", 1))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -15716,6 +16384,12 @@ func (s *CreateRoleInput) SetPermissionsBoundary(v string) *CreateRoleInput {
 // SetRoleName sets the RoleName field's value.
 func (s *CreateRoleInput) SetRoleName(v string) *CreateRoleInput {
 	s.RoleName = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateRoleInput) SetTags(v []*Tag) *CreateRoleInput {
+	s.Tags = v
 	return s
 }
 
@@ -15841,17 +16515,26 @@ func (s *CreateSAMLProviderOutput) SetSAMLProviderArn(v string) *CreateSAMLProvi
 type CreateServiceLinkedRoleInput struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS service to which this role is attached. You use a string similar
-	// to a URL but without the http:// in front. For example: elasticbeanstalk.amazonaws.com
+	// The service principal for the AWS service to which this role is attached.
+	// You use a string similar to a URL but without the http:// in front. For example:
+	// elasticbeanstalk.amazonaws.com.
+	//
+	// Service principals are unique and case-sensitive. To find the exact service
+	// principal for your service-linked role, see AWS Services That Work with IAM
+	// (http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-services-that-work-with-iam.html)
+	// in the IAM User Guide and look for the services that have Yes in the Service-Linked
+	// Role column. Choose the Yes link to view the service-linked role documentation
+	// for that service.
 	//
 	// AWSServiceName is a required field
 	AWSServiceName *string `min:"1" type:"string" required:"true"`
 
-	// A string that you provide, which is combined with the service name to form
-	// the complete role name. If you make multiple requests for the same service,
-	// then you must supply a different CustomSuffix for each request. Otherwise
-	// the request fails with a duplicate role name error. For example, you could
-	// add -1 or -debug to the suffix.
+	// A string that you provide, which is combined with the service-provided prefix
+	// to form the complete role name. If you make multiple requests for the same
+	// service, then you must supply a different CustomSuffixfor each request. Otherwise the request fails with a duplicate role name
+	// error. For example, you could add -1or -debugto the suffix.
+	//
+	// Some services do not support the CustomSuffix
 	CustomSuffix *string `min:"1" type:"string"`
 
 	// The description of the role.
@@ -16041,6 +16724,15 @@ type CreateUserInput struct {
 	// user.
 	PermissionsBoundary *string `min:"20" type:"string"`
 
+	// A list of tags that you want to attach to the newly created user. Each tag
+	// consists of a key name and an associated value. For more information about
+	// tagging, see Tagging IAM Identities (http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html)
+	// in the IAM User Guide.
+	//
+	// If any one of the tags is invalid or if you exceed the allowed number of
+	// tags per user, then the entire request fails and the user is not created.
+	Tags []*Tag `type:"list"`
+
 	// The name of the user to create.
 	//
 	// This parameter allows (per its regex pattern (http://wikipedia.org/wiki/regex))
@@ -16078,6 +16770,16 @@ func (s *CreateUserInput) Validate() error {
 	if s.UserName != nil && len(*s.UserName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("UserName", 1))
 	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -16094,6 +16796,12 @@ func (s *CreateUserInput) SetPath(v string) *CreateUserInput {
 // SetPermissionsBoundary sets the PermissionsBoundary field's value.
 func (s *CreateUserInput) SetPermissionsBoundary(v string) *CreateUserInput {
 	s.PermissionsBoundary = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateUserInput) SetTags(v []*Tag) *CreateUserInput {
+	s.Tags = v
 	return s
 }
 
@@ -22648,6 +23356,138 @@ func (s *ListRolePoliciesOutput) SetPolicyNames(v []*string) *ListRolePoliciesOu
 	return s
 }
 
+type ListRoleTagsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Use this parameter only when paginating results and only after you receive
+	// a response indicating that the results are truncated. Set it to the value
+	// of the Marker element in the response to indicate where the next call should
+	// start.
+	Marker *string `min:"1" type:"string"`
+
+	// (Optional) Use this only when paginating results to indicate the maximum
+	// number of items that you want in the response. If additional items exist
+	// beyond the maximum that you specify, the IsTruncated response element is
+	// true.
+	//
+	// If you do not include this parameter, it defaults to 100. Note that IAM might
+	// return fewer results, even when more results are available. In that case,
+	// the IsTruncated response element returns true, and Marker contains a value
+	// to include in the subsequent call that tells the service where to continue
+	// from.
+	MaxItems *int64 `min:"1" type:"integer"`
+
+	// The name of the IAM role for which you want to see the list of tags.
+	//
+	// This parameter accepts (through its regex pattern (http://wikipedia.org/wiki/regex))
+	// a string of characters that consist of upper and lowercase alphanumeric characters
+	// with no spaces. You can also include any of the following characters: _+=,.@-
+	//
+	// RoleName is a required field
+	RoleName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListRoleTagsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListRoleTagsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListRoleTagsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListRoleTagsInput"}
+	if s.Marker != nil && len(*s.Marker) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Marker", 1))
+	}
+	if s.MaxItems != nil && *s.MaxItems < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxItems", 1))
+	}
+	if s.RoleName == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleName"))
+	}
+	if s.RoleName != nil && len(*s.RoleName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMarker sets the Marker field's value.
+func (s *ListRoleTagsInput) SetMarker(v string) *ListRoleTagsInput {
+	s.Marker = &v
+	return s
+}
+
+// SetMaxItems sets the MaxItems field's value.
+func (s *ListRoleTagsInput) SetMaxItems(v int64) *ListRoleTagsInput {
+	s.MaxItems = &v
+	return s
+}
+
+// SetRoleName sets the RoleName field's value.
+func (s *ListRoleTagsInput) SetRoleName(v string) *ListRoleTagsInput {
+	s.RoleName = &v
+	return s
+}
+
+type ListRoleTagsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A flag that indicates whether there are more items to return. If your results
+	// were truncated, you can use the Marker request parameter to make a subsequent
+	// pagination request that retrieves more items. Note that IAM might return
+	// fewer than the MaxItems number of results even when more results are available.
+	// Check IsTruncated after every call to ensure that you receive all of your
+	// results.
+	IsTruncated *bool `type:"boolean"`
+
+	// When IsTruncated is true, this element is present and contains the value
+	// to use for the Marker parameter in a subsequent pagination request.
+	Marker *string `min:"1" type:"string"`
+
+	// The list of tags currently that is attached to the role. Each tag consists
+	// of a key name and an associated value. If no tags are attached to the specified
+	// role, the response contains an empty list.
+	//
+	// Tags is a required field
+	Tags []*Tag `type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s ListRoleTagsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListRoleTagsOutput) GoString() string {
+	return s.String()
+}
+
+// SetIsTruncated sets the IsTruncated field's value.
+func (s *ListRoleTagsOutput) SetIsTruncated(v bool) *ListRoleTagsOutput {
+	s.IsTruncated = &v
+	return s
+}
+
+// SetMarker sets the Marker field's value.
+func (s *ListRoleTagsOutput) SetMarker(v string) *ListRoleTagsOutput {
+	s.Marker = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *ListRoleTagsOutput) SetTags(v []*Tag) *ListRoleTagsOutput {
+	s.Tags = v
+	return s
+}
+
 type ListRolesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -23398,6 +24238,138 @@ func (s *ListUserPoliciesOutput) SetMarker(v string) *ListUserPoliciesOutput {
 // SetPolicyNames sets the PolicyNames field's value.
 func (s *ListUserPoliciesOutput) SetPolicyNames(v []*string) *ListUserPoliciesOutput {
 	s.PolicyNames = v
+	return s
+}
+
+type ListUserTagsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Use this parameter only when paginating results and only after you receive
+	// a response indicating that the results are truncated. Set it to the value
+	// of the Marker element in the response to indicate where the next call should
+	// start.
+	Marker *string `min:"1" type:"string"`
+
+	// (Optional) Use this only when paginating results to indicate the maximum
+	// number of items that you want in the response. If additional items exist
+	// beyond the maximum that you specify, the IsTruncated response element is
+	// true.
+	//
+	// If you do not include this parameter, it defaults to 100. Note that IAM might
+	// return fewer results, even when more results are available. In that case,
+	// the IsTruncated response element returns true, and Marker contains a value
+	// to include in the subsequent call that tells the service where to continue
+	// from.
+	MaxItems *int64 `min:"1" type:"integer"`
+
+	// The name of the IAM user whose tags you want to see.
+	//
+	// This parameter accepts (through its regex pattern (http://wikipedia.org/wiki/regex))
+	// a string of characters that consist of upper and lowercase alphanumeric characters
+	// with no spaces. You can also include any of the following characters: =,.@-
+	//
+	// UserName is a required field
+	UserName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListUserTagsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListUserTagsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListUserTagsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListUserTagsInput"}
+	if s.Marker != nil && len(*s.Marker) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Marker", 1))
+	}
+	if s.MaxItems != nil && *s.MaxItems < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxItems", 1))
+	}
+	if s.UserName == nil {
+		invalidParams.Add(request.NewErrParamRequired("UserName"))
+	}
+	if s.UserName != nil && len(*s.UserName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMarker sets the Marker field's value.
+func (s *ListUserTagsInput) SetMarker(v string) *ListUserTagsInput {
+	s.Marker = &v
+	return s
+}
+
+// SetMaxItems sets the MaxItems field's value.
+func (s *ListUserTagsInput) SetMaxItems(v int64) *ListUserTagsInput {
+	s.MaxItems = &v
+	return s
+}
+
+// SetUserName sets the UserName field's value.
+func (s *ListUserTagsInput) SetUserName(v string) *ListUserTagsInput {
+	s.UserName = &v
+	return s
+}
+
+type ListUserTagsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A flag that indicates whether there are more items to return. If your results
+	// were truncated, you can use the Marker request parameter to make a subsequent
+	// pagination request that retrieves more items. Note that IAM might return
+	// fewer than the MaxItems number of results even when more results are available.
+	// Check IsTruncated after every call to ensure that you receive all of your
+	// results.
+	IsTruncated *bool `type:"boolean"`
+
+	// When IsTruncated is true, this element is present and contains the value
+	// to use for the Marker parameter in a subsequent pagination request.
+	Marker *string `min:"1" type:"string"`
+
+	// The list of tags that are currently attached to the user. Each tag consists
+	// of a key name and an associated value. If no tags are attached to the specified
+	// user, the response contains an empty list.
+	//
+	// Tags is a required field
+	Tags []*Tag `type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s ListUserTagsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListUserTagsOutput) GoString() string {
+	return s.String()
+}
+
+// SetIsTruncated sets the IsTruncated field's value.
+func (s *ListUserTagsOutput) SetIsTruncated(v bool) *ListUserTagsOutput {
+	s.IsTruncated = &v
+	return s
+}
+
+// SetMarker sets the Marker field's value.
+func (s *ListUserTagsOutput) SetMarker(v string) *ListUserTagsOutput {
+	s.Marker = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *ListUserTagsOutput) SetTags(v []*Tag) *ListUserTagsOutput {
+	s.Tags = v
 	return s
 }
 
@@ -25555,6 +26527,11 @@ type Role struct {
 	//
 	// RoleName is a required field
 	RoleName *string `min:"1" type:"string" required:"true"`
+
+	// A list of tags that are attached to the specified role. For more information
+	// about tagging, see Tagging IAM Identities (http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html)
+	// in the IAM User Guide.
+	Tags []*Tag `type:"list"`
 }
 
 // String returns the string representation
@@ -25621,6 +26598,12 @@ func (s *Role) SetRoleName(v string) *Role {
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *Role) SetTags(v []*Tag) *Role {
+	s.Tags = v
+	return s
+}
+
 // Contains information about an IAM role, including all of the role's policies.
 //
 // This data type is used as a response element in the GetAccountAuthorizationDetails
@@ -25672,6 +26655,11 @@ type RoleDetail struct {
 	// A list of inline policies embedded in the role. These policies are the role's
 	// access (permissions) policies.
 	RolePolicyList []*PolicyDetail `type:"list"`
+
+	// A list of tags that are attached to the specified role. For more information
+	// about tagging, see Tagging IAM Identities (http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html)
+	// in the IAM User Guide.
+	Tags []*Tag `type:"list"`
 }
 
 // String returns the string representation
@@ -25741,6 +26729,12 @@ func (s *RoleDetail) SetRoleName(v string) *RoleDetail {
 // SetRolePolicyList sets the RolePolicyList field's value.
 func (s *RoleDetail) SetRolePolicyList(v []*PolicyDetail) *RoleDetail {
 	s.RolePolicyList = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *RoleDetail) SetTags(v []*Tag) *RoleDetail {
+	s.Tags = v
 	return s
 }
 
@@ -26128,7 +27122,7 @@ type ServiceSpecificCredential struct {
 	// The generated password for the service-specific credential.
 	//
 	// ServicePassword is a required field
-	ServicePassword *string `type:"string" required:"true"`
+	ServicePassword *string `type:"string" required:"true" sensitive:"true"`
 
 	// The unique identifier for the service-specific credential.
 	//
@@ -27106,6 +28100,390 @@ func (s *Statement) SetStartPosition(v *Position) *Statement {
 	return s
 }
 
+// A structure that represents user-provided metadata that can be associated
+// with a resource such as an IAM user or role. For more information about tagging,
+// see Tagging IAM Identities (http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html)
+// in the IAM User Guide.
+type Tag struct {
+	_ struct{} `type:"structure"`
+
+	// The key name that can be used to look up or retrieve the associated value.
+	// For example, Department or Cost Center are common choices.
+	//
+	// Key is a required field
+	Key *string `min:"1" type:"string" required:"true"`
+
+	// The value associated with this tag. For example, tags with a key name of
+	// Department could have values such as Human Resources, Accounting, and Support.
+	// Tags with a key name of Cost Center might have values that consist of the
+	// number associated with the different cost centers in your company. Typically,
+	// many resources have tags with the same key name but with different values.
+	//
+	// AWS always interprets the tag Value as a single string. If you need to store
+	// an array, you can store comma-separated values in the string. However, you
+	// must interpret the value in your code.
+	//
+	// Value is a required field
+	Value *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s Tag) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Tag) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Tag) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Tag"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKey sets the Key field's value.
+func (s *Tag) SetKey(v string) *Tag {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *Tag) SetValue(v string) *Tag {
+	s.Value = &v
+	return s
+}
+
+type TagRoleInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the role that you want to add tags to.
+	//
+	// This parameter accepts (through its regex pattern (http://wikipedia.org/wiki/regex))
+	// a string of characters that consist of upper and lowercase alphanumeric characters
+	// with no spaces. You can also include any of the following characters: _+=,.@-
+	//
+	// RoleName is a required field
+	RoleName *string `min:"1" type:"string" required:"true"`
+
+	// The list of tags that you want to attach to the role. Each tag consists of
+	// a key name and an associated value. You can specify this with a JSON string.
+	//
+	// Tags is a required field
+	Tags []*Tag `type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s TagRoleInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagRoleInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagRoleInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TagRoleInput"}
+	if s.RoleName == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleName"))
+	}
+	if s.RoleName != nil && len(*s.RoleName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleName", 1))
+	}
+	if s.Tags == nil {
+		invalidParams.Add(request.NewErrParamRequired("Tags"))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRoleName sets the RoleName field's value.
+func (s *TagRoleInput) SetRoleName(v string) *TagRoleInput {
+	s.RoleName = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *TagRoleInput) SetTags(v []*Tag) *TagRoleInput {
+	s.Tags = v
+	return s
+}
+
+type TagRoleOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s TagRoleOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagRoleOutput) GoString() string {
+	return s.String()
+}
+
+type TagUserInput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of tags that you want to attach to the user. Each tag consists of
+	// a key name and an associated value.
+	//
+	// Tags is a required field
+	Tags []*Tag `type:"list" required:"true"`
+
+	// The name of the user that you want to add tags to.
+	//
+	// This parameter accepts (through its regex pattern (http://wikipedia.org/wiki/regex))
+	// a string of characters that consist of upper and lowercase alphanumeric characters
+	// with no spaces. You can also include any of the following characters: =,.@-
+	//
+	// UserName is a required field
+	UserName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s TagUserInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagUserInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagUserInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TagUserInput"}
+	if s.Tags == nil {
+		invalidParams.Add(request.NewErrParamRequired("Tags"))
+	}
+	if s.UserName == nil {
+		invalidParams.Add(request.NewErrParamRequired("UserName"))
+	}
+	if s.UserName != nil && len(*s.UserName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserName", 1))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTags sets the Tags field's value.
+func (s *TagUserInput) SetTags(v []*Tag) *TagUserInput {
+	s.Tags = v
+	return s
+}
+
+// SetUserName sets the UserName field's value.
+func (s *TagUserInput) SetUserName(v string) *TagUserInput {
+	s.UserName = &v
+	return s
+}
+
+type TagUserOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s TagUserOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagUserOutput) GoString() string {
+	return s.String()
+}
+
+type UntagRoleInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the IAM role from which you want to remove tags.
+	//
+	// This parameter accepts (through its regex pattern (http://wikipedia.org/wiki/regex))
+	// a string of characters that consist of upper and lowercase alphanumeric characters
+	// with no spaces. You can also include any of the following characters: _+=,.@-
+	//
+	// RoleName is a required field
+	RoleName *string `min:"1" type:"string" required:"true"`
+
+	// A list of key names as a simple array of strings. The tags with matching
+	// keys are removed from the specified role.
+	//
+	// TagKeys is a required field
+	TagKeys []*string `type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s UntagRoleInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagRoleInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UntagRoleInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UntagRoleInput"}
+	if s.RoleName == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleName"))
+	}
+	if s.RoleName != nil && len(*s.RoleName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleName", 1))
+	}
+	if s.TagKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("TagKeys"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRoleName sets the RoleName field's value.
+func (s *UntagRoleInput) SetRoleName(v string) *UntagRoleInput {
+	s.RoleName = &v
+	return s
+}
+
+// SetTagKeys sets the TagKeys field's value.
+func (s *UntagRoleInput) SetTagKeys(v []*string) *UntagRoleInput {
+	s.TagKeys = v
+	return s
+}
+
+type UntagRoleOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UntagRoleOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagRoleOutput) GoString() string {
+	return s.String()
+}
+
+type UntagUserInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of key names as a simple array of strings. The tags with matching
+	// keys are removed from the specified user.
+	//
+	// TagKeys is a required field
+	TagKeys []*string `type:"list" required:"true"`
+
+	// The name of the IAM user from which you want to remove tags.
+	//
+	// This parameter accepts (through its regex pattern (http://wikipedia.org/wiki/regex))
+	// a string of characters that consist of upper and lowercase alphanumeric characters
+	// with no spaces. You can also include any of the following characters: =,.@-
+	//
+	// UserName is a required field
+	UserName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UntagUserInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagUserInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UntagUserInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UntagUserInput"}
+	if s.TagKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("TagKeys"))
+	}
+	if s.UserName == nil {
+		invalidParams.Add(request.NewErrParamRequired("UserName"))
+	}
+	if s.UserName != nil && len(*s.UserName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTagKeys sets the TagKeys field's value.
+func (s *UntagUserInput) SetTagKeys(v []*string) *UntagUserInput {
+	s.TagKeys = v
+	return s
+}
+
+// SetUserName sets the UserName field's value.
+func (s *UntagUserInput) SetUserName(v string) *UntagUserInput {
+	s.UserName = &v
+	return s
+}
+
+type UntagUserOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UntagUserOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagUserOutput) GoString() string {
+	return s.String()
+}
+
 type UpdateAccessKeyInput struct {
 	_ struct{} `type:"structure"`
 
@@ -27573,7 +28951,7 @@ type UpdateLoginProfileInput struct {
 	// However, the format can be further restricted by the account administrator
 	// by setting a password policy on the AWS account. For more information, see
 	// UpdateAccountPasswordPolicy.
-	Password *string `min:"1" type:"string"`
+	Password *string `min:"1" type:"string" sensitive:"true"`
 
 	// Allows this new password to be used only once by requiring the specified
 	// IAM user to set a new password on next sign-in.
@@ -28625,7 +30003,7 @@ type UploadServerCertificateInput struct {
 	//    return (\u000D)
 	//
 	// PrivateKey is a required field
-	PrivateKey *string `min:"1" type:"string" required:"true"`
+	PrivateKey *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// The name for the server certificate. Do not include the path in this value.
 	// The name of the certificate cannot contain any spaces.
@@ -28892,6 +30270,11 @@ type User struct {
 	// in the IAM User Guide.
 	PermissionsBoundary *AttachedPermissionsBoundary `type:"structure"`
 
+	// A list of tags that are associated with the specified user. For more information
+	// about tagging, see Tagging IAM Identities (http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html)
+	// in the IAM User Guide.
+	Tags []*Tag `type:"list"`
+
 	// The stable and unique string identifying the user. For more information about
 	// IDs, see IAM Identifiers (http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
 	// in the Using IAM guide.
@@ -28945,6 +30328,12 @@ func (s *User) SetPermissionsBoundary(v *AttachedPermissionsBoundary) *User {
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *User) SetTags(v []*Tag) *User {
+	s.Tags = v
+	return s
+}
+
 // SetUserId sets the UserId field's value.
 func (s *User) SetUserId(v string) *User {
 	s.UserId = &v
@@ -28993,6 +30382,11 @@ type UserDetail struct {
 	// for IAM Identities  (https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html)
 	// in the IAM User Guide.
 	PermissionsBoundary *AttachedPermissionsBoundary `type:"structure"`
+
+	// A list of tags that are associated with the specified user. For more information
+	// about tagging, see Tagging IAM Identities (http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html)
+	// in the IAM User Guide.
+	Tags []*Tag `type:"list"`
 
 	// The stable and unique string identifying the user. For more information about
 	// IDs, see IAM Identifiers (http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
@@ -29052,6 +30446,12 @@ func (s *UserDetail) SetPermissionsBoundary(v *AttachedPermissionsBoundary) *Use
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *UserDetail) SetTags(v []*Tag) *UserDetail {
+	s.Tags = v
+	return s
+}
+
 // SetUserId sets the UserId field's value.
 func (s *UserDetail) SetUserId(v string) *UserDetail {
 	s.UserId = &v
@@ -29078,7 +30478,7 @@ type VirtualMFADevice struct {
 	// The Base32StringSeed is Base64-encoded.
 	//
 	// Base32StringSeed is automatically base64 encoded/decoded by the SDK.
-	Base32StringSeed []byte `type:"blob"`
+	Base32StringSeed []byte `type:"blob" sensitive:"true"`
 
 	// The date and time on which the virtual MFA device was enabled.
 	EnableDate *time.Time `type:"timestamp"`
@@ -29089,7 +30489,7 @@ type VirtualMFADevice struct {
 	// is the seed in Base32 format. The Base32String value is Base64-encoded.
 	//
 	// QRCodePNG is automatically base64 encoded/decoded by the SDK.
-	QRCodePNG []byte `type:"blob"`
+	QRCodePNG []byte `type:"blob" sensitive:"true"`
 
 	// The serial number associated with VirtualMFADevice.
 	//

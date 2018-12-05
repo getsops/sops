@@ -68,6 +68,10 @@ type ECSAPI interface {
 	CreateServiceWithContext(aws.Context, *ecs.CreateServiceInput, ...request.Option) (*ecs.CreateServiceOutput, error)
 	CreateServiceRequest(*ecs.CreateServiceInput) (*request.Request, *ecs.CreateServiceOutput)
 
+	DeleteAccountSetting(*ecs.DeleteAccountSettingInput) (*ecs.DeleteAccountSettingOutput, error)
+	DeleteAccountSettingWithContext(aws.Context, *ecs.DeleteAccountSettingInput, ...request.Option) (*ecs.DeleteAccountSettingOutput, error)
+	DeleteAccountSettingRequest(*ecs.DeleteAccountSettingInput) (*request.Request, *ecs.DeleteAccountSettingOutput)
+
 	DeleteAttributes(*ecs.DeleteAttributesInput) (*ecs.DeleteAttributesOutput, error)
 	DeleteAttributesWithContext(aws.Context, *ecs.DeleteAttributesInput, ...request.Option) (*ecs.DeleteAttributesOutput, error)
 	DeleteAttributesRequest(*ecs.DeleteAttributesInput) (*request.Request, *ecs.DeleteAttributesOutput)
@@ -112,6 +116,10 @@ type ECSAPI interface {
 	DiscoverPollEndpointWithContext(aws.Context, *ecs.DiscoverPollEndpointInput, ...request.Option) (*ecs.DiscoverPollEndpointOutput, error)
 	DiscoverPollEndpointRequest(*ecs.DiscoverPollEndpointInput) (*request.Request, *ecs.DiscoverPollEndpointOutput)
 
+	ListAccountSettings(*ecs.ListAccountSettingsInput) (*ecs.ListAccountSettingsOutput, error)
+	ListAccountSettingsWithContext(aws.Context, *ecs.ListAccountSettingsInput, ...request.Option) (*ecs.ListAccountSettingsOutput, error)
+	ListAccountSettingsRequest(*ecs.ListAccountSettingsInput) (*request.Request, *ecs.ListAccountSettingsOutput)
+
 	ListAttributes(*ecs.ListAttributesInput) (*ecs.ListAttributesOutput, error)
 	ListAttributesWithContext(aws.Context, *ecs.ListAttributesInput, ...request.Option) (*ecs.ListAttributesOutput, error)
 	ListAttributesRequest(*ecs.ListAttributesInput) (*request.Request, *ecs.ListAttributesOutput)
@@ -137,6 +145,10 @@ type ECSAPI interface {
 	ListServicesPages(*ecs.ListServicesInput, func(*ecs.ListServicesOutput, bool) bool) error
 	ListServicesPagesWithContext(aws.Context, *ecs.ListServicesInput, func(*ecs.ListServicesOutput, bool) bool, ...request.Option) error
 
+	ListTagsForResource(*ecs.ListTagsForResourceInput) (*ecs.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *ecs.ListTagsForResourceInput, ...request.Option) (*ecs.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*ecs.ListTagsForResourceInput) (*request.Request, *ecs.ListTagsForResourceOutput)
+
 	ListTaskDefinitionFamilies(*ecs.ListTaskDefinitionFamiliesInput) (*ecs.ListTaskDefinitionFamiliesOutput, error)
 	ListTaskDefinitionFamiliesWithContext(aws.Context, *ecs.ListTaskDefinitionFamiliesInput, ...request.Option) (*ecs.ListTaskDefinitionFamiliesOutput, error)
 	ListTaskDefinitionFamiliesRequest(*ecs.ListTaskDefinitionFamiliesInput) (*request.Request, *ecs.ListTaskDefinitionFamiliesOutput)
@@ -157,6 +169,10 @@ type ECSAPI interface {
 
 	ListTasksPages(*ecs.ListTasksInput, func(*ecs.ListTasksOutput, bool) bool) error
 	ListTasksPagesWithContext(aws.Context, *ecs.ListTasksInput, func(*ecs.ListTasksOutput, bool) bool, ...request.Option) error
+
+	PutAccountSetting(*ecs.PutAccountSettingInput) (*ecs.PutAccountSettingOutput, error)
+	PutAccountSettingWithContext(aws.Context, *ecs.PutAccountSettingInput, ...request.Option) (*ecs.PutAccountSettingOutput, error)
+	PutAccountSettingRequest(*ecs.PutAccountSettingInput) (*request.Request, *ecs.PutAccountSettingOutput)
 
 	PutAttributes(*ecs.PutAttributesInput) (*ecs.PutAttributesOutput, error)
 	PutAttributesWithContext(aws.Context, *ecs.PutAttributesInput, ...request.Option) (*ecs.PutAttributesOutput, error)
@@ -189,6 +205,14 @@ type ECSAPI interface {
 	SubmitTaskStateChange(*ecs.SubmitTaskStateChangeInput) (*ecs.SubmitTaskStateChangeOutput, error)
 	SubmitTaskStateChangeWithContext(aws.Context, *ecs.SubmitTaskStateChangeInput, ...request.Option) (*ecs.SubmitTaskStateChangeOutput, error)
 	SubmitTaskStateChangeRequest(*ecs.SubmitTaskStateChangeInput) (*request.Request, *ecs.SubmitTaskStateChangeOutput)
+
+	TagResource(*ecs.TagResourceInput) (*ecs.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *ecs.TagResourceInput, ...request.Option) (*ecs.TagResourceOutput, error)
+	TagResourceRequest(*ecs.TagResourceInput) (*request.Request, *ecs.TagResourceOutput)
+
+	UntagResource(*ecs.UntagResourceInput) (*ecs.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *ecs.UntagResourceInput, ...request.Option) (*ecs.UntagResourceOutput, error)
+	UntagResourceRequest(*ecs.UntagResourceInput) (*request.Request, *ecs.UntagResourceOutput)
 
 	UpdateContainerAgent(*ecs.UpdateContainerAgentInput) (*ecs.UpdateContainerAgentOutput, error)
 	UpdateContainerAgentWithContext(aws.Context, *ecs.UpdateContainerAgentInput, ...request.Option) (*ecs.UpdateContainerAgentOutput, error)

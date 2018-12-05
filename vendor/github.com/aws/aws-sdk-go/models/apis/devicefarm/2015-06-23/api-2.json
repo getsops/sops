@@ -1392,7 +1392,8 @@
         "remoteDebugEnabled":{"shape":"Boolean"},
         "fleetType":{"shape":"String"},
         "fleetName":{"shape":"String"},
-        "instances":{"shape":"DeviceInstances"}
+        "instances":{"shape":"DeviceInstances"},
+        "availability":{"shape":"DeviceAvailability"}
       }
     },
     "DeviceAttribute":{
@@ -1409,6 +1410,61 @@
         "INSTANCE_LABELS",
         "FLEET_TYPE"
       ]
+    },
+    "DeviceAvailability":{
+      "type":"string",
+      "enum":[
+        "TEMPORARY_NOT_AVAILABLE",
+        "BUSY",
+        "AVAILABLE",
+        "HIGHLY_AVAILABLE"
+      ]
+    },
+    "DeviceFilter":{
+      "type":"structure",
+      "members":{
+        "attribute":{"shape":"DeviceFilterAttribute"},
+        "operator":{"shape":"DeviceFilterOperator"},
+        "values":{"shape":"DeviceFilterValues"}
+      }
+    },
+    "DeviceFilterAttribute":{
+      "type":"string",
+      "enum":[
+        "ARN",
+        "PLATFORM",
+        "OS_VERSION",
+        "MODEL",
+        "AVAILABILITY",
+        "FORM_FACTOR",
+        "MANUFACTURER",
+        "REMOTE_ACCESS_ENABLED",
+        "REMOTE_DEBUG_ENABLED",
+        "INSTANCE_ARN",
+        "INSTANCE_LABELS",
+        "FLEET_TYPE"
+      ]
+    },
+    "DeviceFilterOperator":{
+      "type":"string",
+      "enum":[
+        "EQUALS",
+        "LESS_THAN",
+        "LESS_THAN_OR_EQUALS",
+        "GREATER_THAN",
+        "GREATER_THAN_OR_EQUALS",
+        "IN",
+        "NOT_IN",
+        "CONTAINS"
+      ]
+    },
+    "DeviceFilterValues":{
+      "type":"list",
+      "member":{"shape":"String"}
+    },
+    "DeviceFilters":{
+      "type":"list",
+      "member":{"shape":"DeviceFilter"}
     },
     "DeviceFormFactor":{
       "type":"string",
@@ -1483,6 +1539,25 @@
     "DevicePools":{
       "type":"list",
       "member":{"shape":"DevicePool"}
+    },
+    "DeviceSelectionConfiguration":{
+      "type":"structure",
+      "required":[
+        "filters",
+        "maxDevices"
+      ],
+      "members":{
+        "filters":{"shape":"DeviceFilters"},
+        "maxDevices":{"shape":"Integer"}
+      }
+    },
+    "DeviceSelectionResult":{
+      "type":"structure",
+      "members":{
+        "filters":{"shape":"DeviceFilters"},
+        "matchedDevicesCount":{"shape":"Integer"},
+        "maxDevices":{"shape":"Integer"}
+      }
     },
     "Devices":{
       "type":"list",
@@ -1923,7 +1998,8 @@
       "type":"structure",
       "members":{
         "arn":{"shape":"AmazonResourceName"},
-        "nextToken":{"shape":"PaginationToken"}
+        "nextToken":{"shape":"PaginationToken"},
+        "filters":{"shape":"DeviceFilters"}
       }
     },
     "ListDevicesResult":{
@@ -2503,7 +2579,8 @@
         "customerArtifactPaths":{"shape":"CustomerArtifactPaths"},
         "webUrl":{"shape":"String"},
         "skipAppResign":{"shape":"SkipAppResign"},
-        "testSpecArn":{"shape":"AmazonResourceName"}
+        "testSpecArn":{"shape":"AmazonResourceName"},
+        "deviceSelectionResult":{"shape":"DeviceSelectionResult"}
       }
     },
     "Runs":{
@@ -2562,13 +2639,13 @@
       "type":"structure",
       "required":[
         "projectArn",
-        "devicePoolArn",
         "test"
       ],
       "members":{
         "projectArn":{"shape":"AmazonResourceName"},
         "appArn":{"shape":"AmazonResourceName"},
         "devicePoolArn":{"shape":"AmazonResourceName"},
+        "deviceSelectionConfiguration":{"shape":"DeviceSelectionConfiguration"},
         "name":{"shape":"Name"},
         "test":{"shape":"ScheduleRunTest"},
         "configuration":{"shape":"ScheduleRunConfiguration"},

@@ -15,7 +15,7 @@ const opGetResources = "GetResources"
 // GetResourcesRequest generates a "aws/request.Request" representing the
 // client's request for the GetResources operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -167,7 +167,7 @@ const opGetTagKeys = "GetTagKeys"
 // GetTagKeysRequest generates a "aws/request.Request" representing the
 // client's request for the GetTagKeys operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -314,7 +314,7 @@ const opGetTagValues = "GetTagValues"
 // GetTagValuesRequest generates a "aws/request.Request" representing the
 // client's request for the GetTagValues operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -462,7 +462,7 @@ const opTagResources = "TagResources"
 // TagResourcesRequest generates a "aws/request.Request" representing the
 // client's request for the TagResources operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -565,7 +565,7 @@ const opUntagResources = "UntagResources"
 // UntagResourcesRequest generates a "aws/request.Request" representing the
 // client's request for the UntagResources operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.

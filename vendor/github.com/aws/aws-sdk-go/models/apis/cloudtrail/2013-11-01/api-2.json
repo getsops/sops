@@ -7,6 +7,7 @@
     "protocol":"json",
     "serviceAbbreviation":"CloudTrail",
     "serviceFullName":"AWS CloudTrail",
+    "serviceId":"CloudTrail",
     "signatureVersion":"v4",
     "targetPrefix":"com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101",
     "uid":"cloudtrail-2013-11-01"
@@ -28,7 +29,8 @@
         {"shape":"InvalidTrailNameException"},
         {"shape":"InvalidTagParameterException"},
         {"shape":"UnsupportedOperationException"},
-        {"shape":"OperationNotPermittedException"}
+        {"shape":"OperationNotPermittedException"},
+        {"shape":"NotOrganizationMasterAccountException"}
       ],
       "idempotent":true
     },
@@ -61,7 +63,12 @@
         {"shape":"InvalidCloudWatchLogsRoleArnException"},
         {"shape":"CloudWatchLogsDeliveryUnavailableException"},
         {"shape":"UnsupportedOperationException"},
-        {"shape":"OperationNotPermittedException"}
+        {"shape":"OperationNotPermittedException"},
+        {"shape":"CloudTrailAccessNotEnabledException"},
+        {"shape":"InsufficientDependencyServiceAccessPermissionException"},
+        {"shape":"NotOrganizationMasterAccountException"},
+        {"shape":"OrganizationsNotInUseException"},
+        {"shape":"OrganizationNotInAllFeaturesModeException"}
       ],
       "idempotent":true
     },
@@ -76,7 +83,11 @@
       "errors":[
         {"shape":"TrailNotFoundException"},
         {"shape":"InvalidTrailNameException"},
-        {"shape":"InvalidHomeRegionException"}
+        {"shape":"InvalidHomeRegionException"},
+        {"shape":"UnsupportedOperationException"},
+        {"shape":"OperationNotPermittedException"},
+        {"shape":"NotOrganizationMasterAccountException"},
+        {"shape":"InsufficientDependencyServiceAccessPermissionException"}
       ],
       "idempotent":true
     },
@@ -189,7 +200,9 @@
         {"shape":"InvalidHomeRegionException"},
         {"shape":"InvalidEventSelectorsException"},
         {"shape":"UnsupportedOperationException"},
-        {"shape":"OperationNotPermittedException"}
+        {"shape":"OperationNotPermittedException"},
+        {"shape":"NotOrganizationMasterAccountException"},
+        {"shape":"InsufficientDependencyServiceAccessPermissionException"}
       ],
       "idempotent":true
     },
@@ -208,7 +221,8 @@
         {"shape":"InvalidTrailNameException"},
         {"shape":"InvalidTagParameterException"},
         {"shape":"UnsupportedOperationException"},
-        {"shape":"OperationNotPermittedException"}
+        {"shape":"OperationNotPermittedException"},
+        {"shape":"NotOrganizationMasterAccountException"}
       ],
       "idempotent":true
     },
@@ -223,7 +237,11 @@
       "errors":[
         {"shape":"TrailNotFoundException"},
         {"shape":"InvalidTrailNameException"},
-        {"shape":"InvalidHomeRegionException"}
+        {"shape":"InvalidHomeRegionException"},
+        {"shape":"UnsupportedOperationException"},
+        {"shape":"OperationNotPermittedException"},
+        {"shape":"NotOrganizationMasterAccountException"},
+        {"shape":"InsufficientDependencyServiceAccessPermissionException"}
       ],
       "idempotent":true
     },
@@ -238,7 +256,11 @@
       "errors":[
         {"shape":"TrailNotFoundException"},
         {"shape":"InvalidTrailNameException"},
-        {"shape":"InvalidHomeRegionException"}
+        {"shape":"InvalidHomeRegionException"},
+        {"shape":"UnsupportedOperationException"},
+        {"shape":"OperationNotPermittedException"},
+        {"shape":"NotOrganizationMasterAccountException"},
+        {"shape":"InsufficientDependencyServiceAccessPermissionException"}
       ],
       "idempotent":true
     },
@@ -271,7 +293,12 @@
         {"shape":"InvalidCloudWatchLogsRoleArnException"},
         {"shape":"CloudWatchLogsDeliveryUnavailableException"},
         {"shape":"UnsupportedOperationException"},
-        {"shape":"OperationNotPermittedException"}
+        {"shape":"OperationNotPermittedException"},
+        {"shape":"CloudTrailAccessNotEnabledException"},
+        {"shape":"InsufficientDependencyServiceAccessPermissionException"},
+        {"shape":"OrganizationsNotInUseException"},
+        {"shape":"NotOrganizationMasterAccountException"},
+        {"shape":"OrganizationNotInAllFeaturesModeException"}
       ],
       "idempotent":true
     }
@@ -293,6 +320,12 @@
     "Boolean":{"type":"boolean"},
     "ByteBuffer":{"type":"blob"},
     "CloudTrailARNInvalidException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "CloudTrailAccessNotEnabledException":{
       "type":"structure",
       "members":{
       },
@@ -320,7 +353,8 @@
         "EnableLogFileValidation":{"shape":"Boolean"},
         "CloudWatchLogsLogGroupArn":{"shape":"String"},
         "CloudWatchLogsRoleArn":{"shape":"String"},
-        "KmsKeyId":{"shape":"String"}
+        "KmsKeyId":{"shape":"String"},
+        "IsOrganizationTrail":{"shape":"Boolean"}
       }
     },
     "CreateTrailResponse":{
@@ -340,7 +374,8 @@
         "LogFileValidationEnabled":{"shape":"Boolean"},
         "CloudWatchLogsLogGroupArn":{"shape":"String"},
         "CloudWatchLogsRoleArn":{"shape":"String"},
-        "KmsKeyId":{"shape":"String"}
+        "KmsKeyId":{"shape":"String"},
+        "IsOrganizationTrail":{"shape":"Boolean"}
       }
     },
     "DataResource":{
@@ -389,6 +424,8 @@
       "members":{
         "EventId":{"shape":"String"},
         "EventName":{"shape":"String"},
+        "ReadOnly":{"shape":"String"},
+        "AccessKeyId":{"shape":"String"},
         "EventTime":{"shape":"Date"},
         "EventSource":{"shape":"String"},
         "Username":{"shape":"String"},
@@ -454,6 +491,12 @@
         "TimeLoggingStarted":{"shape":"String"},
         "TimeLoggingStopped":{"shape":"String"}
       }
+    },
+    "InsufficientDependencyServiceAccessPermissionException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
     },
     "InsufficientEncryptionPolicyException":{
       "type":"structure",
@@ -634,10 +677,12 @@
       "enum":[
         "EventId",
         "EventName",
+        "ReadOnly",
         "Username",
         "ResourceType",
         "ResourceName",
-        "EventSource"
+        "EventSource",
+        "AccessKeyId"
       ]
     },
     "LookupAttributesList":{
@@ -673,7 +718,25 @@
       "exception":true
     },
     "NextToken":{"type":"string"},
+    "NotOrganizationMasterAccountException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
     "OperationNotPermittedException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "OrganizationNotInAllFeaturesModeException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "OrganizationsNotInUseException":{
       "type":"structure",
       "members":{
       },
@@ -837,7 +900,8 @@
         "CloudWatchLogsLogGroupArn":{"shape":"String"},
         "CloudWatchLogsRoleArn":{"shape":"String"},
         "KmsKeyId":{"shape":"String"},
-        "HasCustomEventSelectors":{"shape":"Boolean"}
+        "HasCustomEventSelectors":{"shape":"Boolean"},
+        "IsOrganizationTrail":{"shape":"Boolean"}
       }
     },
     "TrailAlreadyExistsException":{
@@ -885,7 +949,8 @@
         "EnableLogFileValidation":{"shape":"Boolean"},
         "CloudWatchLogsLogGroupArn":{"shape":"String"},
         "CloudWatchLogsRoleArn":{"shape":"String"},
-        "KmsKeyId":{"shape":"String"}
+        "KmsKeyId":{"shape":"String"},
+        "IsOrganizationTrail":{"shape":"Boolean"}
       }
     },
     "UpdateTrailResponse":{
@@ -905,7 +970,8 @@
         "LogFileValidationEnabled":{"shape":"Boolean"},
         "CloudWatchLogsLogGroupArn":{"shape":"String"},
         "CloudWatchLogsRoleArn":{"shape":"String"},
-        "KmsKeyId":{"shape":"String"}
+        "KmsKeyId":{"shape":"String"},
+        "IsOrganizationTrail":{"shape":"Boolean"}
       }
     }
   }

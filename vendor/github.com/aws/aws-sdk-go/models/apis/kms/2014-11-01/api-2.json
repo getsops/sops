@@ -29,6 +29,22 @@
         {"shape":"KMSInvalidStateException"}
       ]
     },
+    "ConnectCustomKeyStore":{
+      "name":"ConnectCustomKeyStore",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ConnectCustomKeyStoreRequest"},
+      "output":{"shape":"ConnectCustomKeyStoreResponse"},
+      "errors":[
+        {"shape":"CloudHsmClusterNotActiveException"},
+        {"shape":"CustomKeyStoreInvalidStateException"},
+        {"shape":"CustomKeyStoreNotFoundException"},
+        {"shape":"KMSInternalException"},
+        {"shape":"CloudHsmClusterInvalidConfigurationException"}
+      ]
+    },
     "CreateAlias":{
       "name":"CreateAlias",
       "http":{
@@ -44,6 +60,24 @@
         {"shape":"KMSInternalException"},
         {"shape":"LimitExceededException"},
         {"shape":"KMSInvalidStateException"}
+      ]
+    },
+    "CreateCustomKeyStore":{
+      "name":"CreateCustomKeyStore",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateCustomKeyStoreRequest"},
+      "output":{"shape":"CreateCustomKeyStoreResponse"},
+      "errors":[
+        {"shape":"CloudHsmClusterInUseException"},
+        {"shape":"CustomKeyStoreNameInUseException"},
+        {"shape":"CloudHsmClusterNotFoundException"},
+        {"shape":"KMSInternalException"},
+        {"shape":"CloudHsmClusterNotActiveException"},
+        {"shape":"IncorrectTrustAnchorException"},
+        {"shape":"CloudHsmClusterInvalidConfigurationException"}
       ]
     },
     "CreateGrant":{
@@ -80,7 +114,10 @@
         {"shape":"UnsupportedOperationException"},
         {"shape":"KMSInternalException"},
         {"shape":"LimitExceededException"},
-        {"shape":"TagException"}
+        {"shape":"TagException"},
+        {"shape":"CustomKeyStoreNotFoundException"},
+        {"shape":"CustomKeyStoreInvalidStateException"},
+        {"shape":"CloudHsmClusterInvalidConfigurationException"}
       ]
     },
     "Decrypt":{
@@ -116,6 +153,21 @@
         {"shape":"KMSInvalidStateException"}
       ]
     },
+    "DeleteCustomKeyStore":{
+      "name":"DeleteCustomKeyStore",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteCustomKeyStoreRequest"},
+      "output":{"shape":"DeleteCustomKeyStoreResponse"},
+      "errors":[
+        {"shape":"CustomKeyStoreHasCMKsException"},
+        {"shape":"CustomKeyStoreInvalidStateException"},
+        {"shape":"CustomKeyStoreNotFoundException"},
+        {"shape":"KMSInternalException"}
+      ]
+    },
     "DeleteImportedKeyMaterial":{
       "name":"DeleteImportedKeyMaterial",
       "http":{
@@ -130,6 +182,19 @@
         {"shape":"NotFoundException"},
         {"shape":"KMSInternalException"},
         {"shape":"KMSInvalidStateException"}
+      ]
+    },
+    "DescribeCustomKeyStores":{
+      "name":"DescribeCustomKeyStores",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeCustomKeyStoresRequest"},
+      "output":{"shape":"DescribeCustomKeyStoresResponse"},
+      "errors":[
+        {"shape":"CustomKeyStoreNotFoundException"},
+        {"shape":"KMSInternalException"}
       ]
     },
     "DescribeKey":{
@@ -177,6 +242,20 @@
         {"shape":"KMSInternalException"},
         {"shape":"KMSInvalidStateException"},
         {"shape":"UnsupportedOperationException"}
+      ]
+    },
+    "DisconnectCustomKeyStore":{
+      "name":"DisconnectCustomKeyStore",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DisconnectCustomKeyStoreRequest"},
+      "output":{"shape":"DisconnectCustomKeyStoreResponse"},
+      "errors":[
+        {"shape":"CustomKeyStoreInvalidStateException"},
+        {"shape":"CustomKeyStoreNotFoundException"},
+        {"shape":"KMSInternalException"}
       ]
     },
     "EnableKey":{
@@ -279,7 +358,9 @@
       "output":{"shape":"GenerateRandomResponse"},
       "errors":[
         {"shape":"DependencyTimeoutException"},
-        {"shape":"KMSInternalException"}
+        {"shape":"KMSInternalException"},
+        {"shape":"CustomKeyStoreNotFoundException"},
+        {"shape":"CustomKeyStoreInvalidStateException"}
       ]
     },
     "GetKeyPolicy":{
@@ -364,7 +445,9 @@
       "errors":[
         {"shape":"DependencyTimeoutException"},
         {"shape":"InvalidMarkerException"},
-        {"shape":"KMSInternalException"}
+        {"shape":"KMSInternalException"},
+        {"shape":"InvalidArnException"},
+        {"shape":"NotFoundException"}
       ]
     },
     "ListGrants":{
@@ -577,6 +660,24 @@
         {"shape":"KMSInvalidStateException"}
       ]
     },
+    "UpdateCustomKeyStore":{
+      "name":"UpdateCustomKeyStore",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateCustomKeyStoreRequest"},
+      "output":{"shape":"UpdateCustomKeyStoreResponse"},
+      "errors":[
+        {"shape":"CustomKeyStoreNotFoundException"},
+        {"shape":"CloudHsmClusterNotFoundException"},
+        {"shape":"CloudHsmClusterNotRelatedException"},
+        {"shape":"CustomKeyStoreInvalidStateException"},
+        {"shape":"KMSInternalException"},
+        {"shape":"CloudHsmClusterNotActiveException"},
+        {"shape":"CloudHsmClusterInvalidConfigurationException"}
+      ]
+    },
     "UpdateKeyDescription":{
       "name":"UpdateKeyDescription",
       "http":{
@@ -652,6 +753,78 @@
       "max":6144,
       "min":1
     },
+    "CloudHsmClusterIdType":{
+      "type":"string",
+      "max":24,
+      "min":19
+    },
+    "CloudHsmClusterInUseException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessageType"}
+      },
+      "exception":true
+    },
+    "CloudHsmClusterInvalidConfigurationException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessageType"}
+      },
+      "exception":true
+    },
+    "CloudHsmClusterNotActiveException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessageType"}
+      },
+      "exception":true
+    },
+    "CloudHsmClusterNotFoundException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessageType"}
+      },
+      "exception":true
+    },
+    "CloudHsmClusterNotRelatedException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessageType"}
+      },
+      "exception":true
+    },
+    "ConnectCustomKeyStoreRequest":{
+      "type":"structure",
+      "required":["CustomKeyStoreId"],
+      "members":{
+        "CustomKeyStoreId":{"shape":"CustomKeyStoreIdType"}
+      }
+    },
+    "ConnectCustomKeyStoreResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "ConnectionErrorCodeType":{
+      "type":"string",
+      "enum":[
+        "INVALID_CREDENTIALS",
+        "CLUSTER_NOT_FOUND",
+        "NETWORK_ERRORS",
+        "INSUFFICIENT_CLOUDHSM_HSMS",
+        "USER_LOCKED_OUT"
+      ]
+    },
+    "ConnectionStateType":{
+      "type":"string",
+      "enum":[
+        "CONNECTED",
+        "CONNECTING",
+        "FAILED",
+        "DISCONNECTED",
+        "DISCONNECTING"
+      ]
+    },
     "CreateAliasRequest":{
       "type":"structure",
       "required":[
@@ -661,6 +834,27 @@
       "members":{
         "AliasName":{"shape":"AliasNameType"},
         "TargetKeyId":{"shape":"KeyIdType"}
+      }
+    },
+    "CreateCustomKeyStoreRequest":{
+      "type":"structure",
+      "required":[
+        "CustomKeyStoreName",
+        "CloudHsmClusterId",
+        "TrustAnchorCertificate",
+        "KeyStorePassword"
+      ],
+      "members":{
+        "CustomKeyStoreName":{"shape":"CustomKeyStoreNameType"},
+        "CloudHsmClusterId":{"shape":"CloudHsmClusterIdType"},
+        "TrustAnchorCertificate":{"shape":"TrustAnchorCertificateType"},
+        "KeyStorePassword":{"shape":"KeyStorePasswordType"}
+      }
+    },
+    "CreateCustomKeyStoreResponse":{
+      "type":"structure",
+      "members":{
+        "CustomKeyStoreId":{"shape":"CustomKeyStoreIdType"}
       }
     },
     "CreateGrantRequest":{
@@ -694,6 +888,7 @@
         "Description":{"shape":"DescriptionType"},
         "KeyUsage":{"shape":"KeyUsageType"},
         "Origin":{"shape":"OriginType"},
+        "CustomKeyStoreId":{"shape":"CustomKeyStoreIdType"},
         "BypassPolicyLockoutSafetyCheck":{"shape":"BooleanType"},
         "Tags":{"shape":"TagList"}
       }
@@ -702,6 +897,60 @@
       "type":"structure",
       "members":{
         "KeyMetadata":{"shape":"KeyMetadata"}
+      }
+    },
+    "CustomKeyStoreHasCMKsException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessageType"}
+      },
+      "exception":true
+    },
+    "CustomKeyStoreIdType":{
+      "type":"string",
+      "max":64,
+      "min":1
+    },
+    "CustomKeyStoreInvalidStateException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessageType"}
+      },
+      "exception":true
+    },
+    "CustomKeyStoreNameInUseException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessageType"}
+      },
+      "exception":true
+    },
+    "CustomKeyStoreNameType":{
+      "type":"string",
+      "max":256,
+      "min":1
+    },
+    "CustomKeyStoreNotFoundException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessageType"}
+      },
+      "exception":true
+    },
+    "CustomKeyStoresList":{
+      "type":"list",
+      "member":{"shape":"CustomKeyStoresListEntry"}
+    },
+    "CustomKeyStoresListEntry":{
+      "type":"structure",
+      "members":{
+        "CustomKeyStoreId":{"shape":"CustomKeyStoreIdType"},
+        "CustomKeyStoreName":{"shape":"CustomKeyStoreNameType"},
+        "CloudHsmClusterId":{"shape":"CloudHsmClusterIdType"},
+        "TrustAnchorCertificate":{"shape":"TrustAnchorCertificateType"},
+        "ConnectionState":{"shape":"ConnectionStateType"},
+        "ConnectionErrorCode":{"shape":"ConnectionErrorCodeType"},
+        "CreationDate":{"shape":"DateType"}
       }
     },
     "DataKeySpec":{
@@ -735,6 +984,18 @@
         "AliasName":{"shape":"AliasNameType"}
       }
     },
+    "DeleteCustomKeyStoreRequest":{
+      "type":"structure",
+      "required":["CustomKeyStoreId"],
+      "members":{
+        "CustomKeyStoreId":{"shape":"CustomKeyStoreIdType"}
+      }
+    },
+    "DeleteCustomKeyStoreResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "DeleteImportedKeyMaterialRequest":{
       "type":"structure",
       "required":["KeyId"],
@@ -749,6 +1010,23 @@
       },
       "exception":true,
       "fault":true
+    },
+    "DescribeCustomKeyStoresRequest":{
+      "type":"structure",
+      "members":{
+        "CustomKeyStoreId":{"shape":"CustomKeyStoreIdType"},
+        "CustomKeyStoreName":{"shape":"CustomKeyStoreNameType"},
+        "Limit":{"shape":"LimitType"},
+        "Marker":{"shape":"MarkerType"}
+      }
+    },
+    "DescribeCustomKeyStoresResponse":{
+      "type":"structure",
+      "members":{
+        "CustomKeyStores":{"shape":"CustomKeyStoresList"},
+        "NextMarker":{"shape":"MarkerType"},
+        "Truncated":{"shape":"BooleanType"}
+      }
     },
     "DescribeKeyRequest":{
       "type":"structure",
@@ -789,6 +1067,18 @@
         "message":{"shape":"ErrorMessageType"}
       },
       "exception":true
+    },
+    "DisconnectCustomKeyStoreRequest":{
+      "type":"structure",
+      "required":["CustomKeyStoreId"],
+      "members":{
+        "CustomKeyStoreId":{"shape":"CustomKeyStoreIdType"}
+      }
+    },
+    "DisconnectCustomKeyStoreResponse":{
+      "type":"structure",
+      "members":{
+      }
     },
     "EnableKeyRequest":{
       "type":"structure",
@@ -886,7 +1176,8 @@
     "GenerateRandomRequest":{
       "type":"structure",
       "members":{
-        "NumberOfBytes":{"shape":"NumberOfBytesType"}
+        "NumberOfBytes":{"shape":"NumberOfBytesType"},
+        "CustomKeyStoreId":{"shape":"CustomKeyStoreIdType"}
       }
     },
     "GenerateRandomResponse":{
@@ -1039,6 +1330,13 @@
       },
       "exception":true
     },
+    "IncorrectTrustAnchorException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessageType"}
+      },
+      "exception":true
+    },
     "InvalidAliasNameException":{
       "type":"structure",
       "members":{
@@ -1100,7 +1398,8 @@
       "members":{
         "message":{"shape":"ErrorMessageType"}
       },
-      "exception":true
+      "exception":true,
+      "fault":true
     },
     "KMSInvalidStateException":{
       "type":"structure",
@@ -1147,6 +1446,8 @@
         "DeletionDate":{"shape":"DateType"},
         "ValidTo":{"shape":"DateType"},
         "Origin":{"shape":"OriginType"},
+        "CustomKeyStoreId":{"shape":"CustomKeyStoreIdType"},
+        "CloudHsmClusterId":{"shape":"CloudHsmClusterIdType"},
         "ExpirationModel":{"shape":"ExpirationModelType"},
         "KeyManager":{"shape":"KeyManagerType"}
       }
@@ -1157,8 +1458,14 @@
         "Enabled",
         "Disabled",
         "PendingDeletion",
-        "PendingImport"
+        "PendingImport",
+        "Unavailable"
       ]
+    },
+    "KeyStorePasswordType":{
+      "type":"string",
+      "min":1,
+      "sensitive":true
     },
     "KeyUnavailableException":{
       "type":"structure",
@@ -1304,7 +1611,8 @@
       "type":"string",
       "enum":[
         "AWS_KMS",
-        "EXTERNAL"
+        "EXTERNAL",
+        "AWS_CLOUDHSM"
       ]
     },
     "PendingWindowInDaysType":{
@@ -1337,7 +1645,8 @@
     "PrincipalIdType":{
       "type":"string",
       "max":256,
-      "min":1
+      "min":1,
+      "pattern":"^[\\w+=,.@:/-]+$"
     },
     "PutKeyPolicyRequest":{
       "type":"structure",
@@ -1456,6 +1765,11 @@
       "max":256,
       "min":0
     },
+    "TrustAnchorCertificateType":{
+      "type":"string",
+      "max":5000,
+      "min":1
+    },
     "UnsupportedOperationException":{
       "type":"structure",
       "members":{
@@ -1483,6 +1797,21 @@
       "members":{
         "AliasName":{"shape":"AliasNameType"},
         "TargetKeyId":{"shape":"KeyIdType"}
+      }
+    },
+    "UpdateCustomKeyStoreRequest":{
+      "type":"structure",
+      "required":["CustomKeyStoreId"],
+      "members":{
+        "CustomKeyStoreId":{"shape":"CustomKeyStoreIdType"},
+        "NewCustomKeyStoreName":{"shape":"CustomKeyStoreNameType"},
+        "KeyStorePassword":{"shape":"KeyStorePasswordType"},
+        "CloudHsmClusterId":{"shape":"CloudHsmClusterIdType"}
+      }
+    },
+    "UpdateCustomKeyStoreResponse":{
+      "type":"structure",
+      "members":{
       }
     },
     "UpdateKeyDescriptionRequest":{

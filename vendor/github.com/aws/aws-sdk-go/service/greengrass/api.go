@@ -13,7 +13,7 @@ const opAssociateRoleToGroup = "AssociateRoleToGroup"
 // AssociateRoleToGroupRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateRoleToGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -52,8 +52,8 @@ func (c *Greengrass) AssociateRoleToGroupRequest(input *AssociateRoleToGroupInpu
 
 // AssociateRoleToGroup API operation for AWS Greengrass.
 //
-// Associates a role with a group. Your AWS Greengrass core will use the role
-// to access AWS cloud services. The role's permissions should allow Greengrass
+// Associates a role with a group. Your Greengrass core will use the role to
+// access AWS cloud services. The role's permissions should allow Greengrass
 // core Lambda functions to perform actions against the cloud.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -97,7 +97,7 @@ const opAssociateServiceRoleToAccount = "AssociateServiceRoleToAccount"
 // AssociateServiceRoleToAccountRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateServiceRoleToAccount operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -136,10 +136,10 @@ func (c *Greengrass) AssociateServiceRoleToAccountRequest(input *AssociateServic
 
 // AssociateServiceRoleToAccount API operation for AWS Greengrass.
 //
-// Associates a role with your account. AWS Greengrass will use the role to
-// access your Lambda functions and AWS IoT resources. This is necessary for
-// deployments to succeed. The role must have at least minimum permissions in
-// the policy ''AWSGreengrassResourceAccessRolePolicy''.
+// Associates a role with your account. AWS IoT Greengrass will use the role
+// to access your Lambda functions and AWS IoT resources. This is necessary
+// for deployments to succeed. The role must have at least minimum permissions
+// in the policy ''AWSGreengrassResourceAccessRolePolicy''.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -177,12 +177,172 @@ func (c *Greengrass) AssociateServiceRoleToAccountWithContext(ctx aws.Context, i
 	return out, req.Send()
 }
 
+const opCreateConnectorDefinition = "CreateConnectorDefinition"
+
+// CreateConnectorDefinitionRequest generates a "aws/request.Request" representing the
+// client's request for the CreateConnectorDefinition operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateConnectorDefinition for more information on using the CreateConnectorDefinition
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateConnectorDefinitionRequest method.
+//    req, resp := client.CreateConnectorDefinitionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateConnectorDefinition
+func (c *Greengrass) CreateConnectorDefinitionRequest(input *CreateConnectorDefinitionInput) (req *request.Request, output *CreateConnectorDefinitionOutput) {
+	op := &request.Operation{
+		Name:       opCreateConnectorDefinition,
+		HTTPMethod: "POST",
+		HTTPPath:   "/greengrass/definition/connectors",
+	}
+
+	if input == nil {
+		input = &CreateConnectorDefinitionInput{}
+	}
+
+	output = &CreateConnectorDefinitionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateConnectorDefinition API operation for AWS Greengrass.
+//
+// Creates a connector definition. You may provide the initial version of the
+// connector definition now or use ''CreateConnectorDefinitionVersion'' at a
+// later time.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Greengrass's
+// API operation CreateConnectorDefinition for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   General error information.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateConnectorDefinition
+func (c *Greengrass) CreateConnectorDefinition(input *CreateConnectorDefinitionInput) (*CreateConnectorDefinitionOutput, error) {
+	req, out := c.CreateConnectorDefinitionRequest(input)
+	return out, req.Send()
+}
+
+// CreateConnectorDefinitionWithContext is the same as CreateConnectorDefinition with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateConnectorDefinition for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Greengrass) CreateConnectorDefinitionWithContext(ctx aws.Context, input *CreateConnectorDefinitionInput, opts ...request.Option) (*CreateConnectorDefinitionOutput, error) {
+	req, out := c.CreateConnectorDefinitionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateConnectorDefinitionVersion = "CreateConnectorDefinitionVersion"
+
+// CreateConnectorDefinitionVersionRequest generates a "aws/request.Request" representing the
+// client's request for the CreateConnectorDefinitionVersion operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateConnectorDefinitionVersion for more information on using the CreateConnectorDefinitionVersion
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateConnectorDefinitionVersionRequest method.
+//    req, resp := client.CreateConnectorDefinitionVersionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateConnectorDefinitionVersion
+func (c *Greengrass) CreateConnectorDefinitionVersionRequest(input *CreateConnectorDefinitionVersionInput) (req *request.Request, output *CreateConnectorDefinitionVersionOutput) {
+	op := &request.Operation{
+		Name:       opCreateConnectorDefinitionVersion,
+		HTTPMethod: "POST",
+		HTTPPath:   "/greengrass/definition/connectors/{ConnectorDefinitionId}/versions",
+	}
+
+	if input == nil {
+		input = &CreateConnectorDefinitionVersionInput{}
+	}
+
+	output = &CreateConnectorDefinitionVersionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateConnectorDefinitionVersion API operation for AWS Greengrass.
+//
+// Creates a version of a connector definition which has already been defined.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Greengrass's
+// API operation CreateConnectorDefinitionVersion for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   General error information.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateConnectorDefinitionVersion
+func (c *Greengrass) CreateConnectorDefinitionVersion(input *CreateConnectorDefinitionVersionInput) (*CreateConnectorDefinitionVersionOutput, error) {
+	req, out := c.CreateConnectorDefinitionVersionRequest(input)
+	return out, req.Send()
+}
+
+// CreateConnectorDefinitionVersionWithContext is the same as CreateConnectorDefinitionVersion with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateConnectorDefinitionVersion for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Greengrass) CreateConnectorDefinitionVersionWithContext(ctx aws.Context, input *CreateConnectorDefinitionVersionInput, opts ...request.Option) (*CreateConnectorDefinitionVersionOutput, error) {
+	req, out := c.CreateConnectorDefinitionVersionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateCoreDefinition = "CreateCoreDefinition"
 
 // CreateCoreDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateCoreDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -222,8 +382,8 @@ func (c *Greengrass) CreateCoreDefinitionRequest(input *CreateCoreDefinitionInpu
 // CreateCoreDefinition API operation for AWS Greengrass.
 //
 // Creates a core definition. You may provide the initial version of the core
-// definition now or use ''CreateCoreDefinitionVersion'' at a later time. AWS
-// Greengrass groups must each contain exactly one AWS Greengrass core.
+// definition now or use ''CreateCoreDefinitionVersion'' at a later time. Greengrass
+// groups must each contain exactly one Greengrass core.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -263,7 +423,7 @@ const opCreateCoreDefinitionVersion = "CreateCoreDefinitionVersion"
 // CreateCoreDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateCoreDefinitionVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -302,8 +462,8 @@ func (c *Greengrass) CreateCoreDefinitionVersionRequest(input *CreateCoreDefinit
 
 // CreateCoreDefinitionVersion API operation for AWS Greengrass.
 //
-// Creates a version of a core definition that has already been defined. AWS
-// Greengrass groups must each contain exactly one AWS Greengrass core.
+// Creates a version of a core definition that has already been defined. Greengrass
+// groups must each contain exactly one Greengrass core.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -343,7 +503,7 @@ const opCreateDeployment = "CreateDeployment"
 // CreateDeploymentRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDeployment operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -382,7 +542,8 @@ func (c *Greengrass) CreateDeploymentRequest(input *CreateDeploymentInput) (req 
 
 // CreateDeployment API operation for AWS Greengrass.
 //
-// Creates a deployment.
+// Creates a deployment. ''CreateDeployment'' requests are idempotent with respect
+// to the ''X-Amzn-Client-Token'' token and the request parameters.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -422,7 +583,7 @@ const opCreateDeviceDefinition = "CreateDeviceDefinition"
 // CreateDeviceDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDeviceDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -502,7 +663,7 @@ const opCreateDeviceDefinitionVersion = "CreateDeviceDefinitionVersion"
 // CreateDeviceDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDeviceDefinitionVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -581,7 +742,7 @@ const opCreateFunctionDefinition = "CreateFunctionDefinition"
 // CreateFunctionDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateFunctionDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -663,7 +824,7 @@ const opCreateFunctionDefinitionVersion = "CreateFunctionDefinitionVersion"
 // CreateFunctionDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateFunctionDefinitionVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -742,7 +903,7 @@ const opCreateGroup = "CreateGroup"
 // CreateGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -782,7 +943,9 @@ func (c *Greengrass) CreateGroupRequest(input *CreateGroupInput) (req *request.R
 // CreateGroup API operation for AWS Greengrass.
 //
 // Creates a group. You may provide the initial version of the group or use
-// ''CreateGroupVersion'' at a later time.
+// ''CreateGroupVersion'' at a later time. Tip: You can use the ''gg_group_setup''
+// package (https://github.com/awslabs/aws-greengrass-group-setup) as a library
+// or command-line application to create and deploy Greengrass groups.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -822,7 +985,7 @@ const opCreateGroupCertificateAuthority = "CreateGroupCertificateAuthority"
 // CreateGroupCertificateAuthorityRequest generates a "aws/request.Request" representing the
 // client's request for the CreateGroupCertificateAuthority operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -905,7 +1068,7 @@ const opCreateGroupVersion = "CreateGroupVersion"
 // CreateGroupVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateGroupVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -984,7 +1147,7 @@ const opCreateLoggerDefinition = "CreateLoggerDefinition"
 // CreateLoggerDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateLoggerDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1064,7 +1227,7 @@ const opCreateLoggerDefinitionVersion = "CreateLoggerDefinitionVersion"
 // CreateLoggerDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateLoggerDefinitionVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1143,7 +1306,7 @@ const opCreateResourceDefinition = "CreateResourceDefinition"
 // CreateResourceDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateResourceDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1224,7 +1387,7 @@ const opCreateResourceDefinitionVersion = "CreateResourceDefinitionVersion"
 // CreateResourceDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateResourceDefinitionVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1303,7 +1466,7 @@ const opCreateSoftwareUpdateJob = "CreateSoftwareUpdateJob"
 // CreateSoftwareUpdateJobRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSoftwareUpdateJob operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1388,7 +1551,7 @@ const opCreateSubscriptionDefinition = "CreateSubscriptionDefinition"
 // CreateSubscriptionDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSubscriptionDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1469,7 +1632,7 @@ const opCreateSubscriptionDefinitionVersion = "CreateSubscriptionDefinitionVersi
 // CreateSubscriptionDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSubscriptionDefinitionVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1543,12 +1706,91 @@ func (c *Greengrass) CreateSubscriptionDefinitionVersionWithContext(ctx aws.Cont
 	return out, req.Send()
 }
 
+const opDeleteConnectorDefinition = "DeleteConnectorDefinition"
+
+// DeleteConnectorDefinitionRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteConnectorDefinition operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteConnectorDefinition for more information on using the DeleteConnectorDefinition
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteConnectorDefinitionRequest method.
+//    req, resp := client.DeleteConnectorDefinitionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/DeleteConnectorDefinition
+func (c *Greengrass) DeleteConnectorDefinitionRequest(input *DeleteConnectorDefinitionInput) (req *request.Request, output *DeleteConnectorDefinitionOutput) {
+	op := &request.Operation{
+		Name:       opDeleteConnectorDefinition,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/greengrass/definition/connectors/{ConnectorDefinitionId}",
+	}
+
+	if input == nil {
+		input = &DeleteConnectorDefinitionInput{}
+	}
+
+	output = &DeleteConnectorDefinitionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteConnectorDefinition API operation for AWS Greengrass.
+//
+// Deletes a connector definition.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Greengrass's
+// API operation DeleteConnectorDefinition for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   General error information.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/DeleteConnectorDefinition
+func (c *Greengrass) DeleteConnectorDefinition(input *DeleteConnectorDefinitionInput) (*DeleteConnectorDefinitionOutput, error) {
+	req, out := c.DeleteConnectorDefinitionRequest(input)
+	return out, req.Send()
+}
+
+// DeleteConnectorDefinitionWithContext is the same as DeleteConnectorDefinition with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteConnectorDefinition for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Greengrass) DeleteConnectorDefinitionWithContext(ctx aws.Context, input *DeleteConnectorDefinitionInput, opts ...request.Option) (*DeleteConnectorDefinitionOutput, error) {
+	req, out := c.DeleteConnectorDefinitionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteCoreDefinition = "DeleteCoreDefinition"
 
 // DeleteCoreDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteCoreDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1627,7 +1869,7 @@ const opDeleteDeviceDefinition = "DeleteDeviceDefinition"
 // DeleteDeviceDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDeviceDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1706,7 +1948,7 @@ const opDeleteFunctionDefinition = "DeleteFunctionDefinition"
 // DeleteFunctionDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteFunctionDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1785,7 +2027,7 @@ const opDeleteGroup = "DeleteGroup"
 // DeleteGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1864,7 +2106,7 @@ const opDeleteLoggerDefinition = "DeleteLoggerDefinition"
 // DeleteLoggerDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteLoggerDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1943,7 +2185,7 @@ const opDeleteResourceDefinition = "DeleteResourceDefinition"
 // DeleteResourceDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteResourceDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2022,7 +2264,7 @@ const opDeleteSubscriptionDefinition = "DeleteSubscriptionDefinition"
 // DeleteSubscriptionDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSubscriptionDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2101,7 +2343,7 @@ const opDisassociateRoleFromGroup = "DisassociateRoleFromGroup"
 // DisassociateRoleFromGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateRoleFromGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2183,7 +2425,7 @@ const opDisassociateServiceRoleFromAccount = "DisassociateServiceRoleFromAccount
 // DisassociateServiceRoleFromAccountRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateServiceRoleFromAccount operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2263,7 +2505,7 @@ const opGetAssociatedRole = "GetAssociatedRole"
 // GetAssociatedRoleRequest generates a "aws/request.Request" representing the
 // client's request for the GetAssociatedRole operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2340,12 +2582,91 @@ func (c *Greengrass) GetAssociatedRoleWithContext(ctx aws.Context, input *GetAss
 	return out, req.Send()
 }
 
+const opGetBulkDeploymentStatus = "GetBulkDeploymentStatus"
+
+// GetBulkDeploymentStatusRequest generates a "aws/request.Request" representing the
+// client's request for the GetBulkDeploymentStatus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetBulkDeploymentStatus for more information on using the GetBulkDeploymentStatus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetBulkDeploymentStatusRequest method.
+//    req, resp := client.GetBulkDeploymentStatusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetBulkDeploymentStatus
+func (c *Greengrass) GetBulkDeploymentStatusRequest(input *GetBulkDeploymentStatusInput) (req *request.Request, output *GetBulkDeploymentStatusOutput) {
+	op := &request.Operation{
+		Name:       opGetBulkDeploymentStatus,
+		HTTPMethod: "GET",
+		HTTPPath:   "/greengrass/bulk/deployments/{BulkDeploymentId}/status",
+	}
+
+	if input == nil {
+		input = &GetBulkDeploymentStatusInput{}
+	}
+
+	output = &GetBulkDeploymentStatusOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetBulkDeploymentStatus API operation for AWS Greengrass.
+//
+// Returns the status of a bulk deployment.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Greengrass's
+// API operation GetBulkDeploymentStatus for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   General error information.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetBulkDeploymentStatus
+func (c *Greengrass) GetBulkDeploymentStatus(input *GetBulkDeploymentStatusInput) (*GetBulkDeploymentStatusOutput, error) {
+	req, out := c.GetBulkDeploymentStatusRequest(input)
+	return out, req.Send()
+}
+
+// GetBulkDeploymentStatusWithContext is the same as GetBulkDeploymentStatus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetBulkDeploymentStatus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Greengrass) GetBulkDeploymentStatusWithContext(ctx aws.Context, input *GetBulkDeploymentStatusInput, opts ...request.Option) (*GetBulkDeploymentStatusOutput, error) {
+	req, out := c.GetBulkDeploymentStatusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetConnectivityInfo = "GetConnectivityInfo"
 
 // GetConnectivityInfoRequest generates a "aws/request.Request" representing the
 // client's request for the GetConnectivityInfo operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2422,12 +2743,173 @@ func (c *Greengrass) GetConnectivityInfoWithContext(ctx aws.Context, input *GetC
 	return out, req.Send()
 }
 
+const opGetConnectorDefinition = "GetConnectorDefinition"
+
+// GetConnectorDefinitionRequest generates a "aws/request.Request" representing the
+// client's request for the GetConnectorDefinition operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetConnectorDefinition for more information on using the GetConnectorDefinition
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetConnectorDefinitionRequest method.
+//    req, resp := client.GetConnectorDefinitionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetConnectorDefinition
+func (c *Greengrass) GetConnectorDefinitionRequest(input *GetConnectorDefinitionInput) (req *request.Request, output *GetConnectorDefinitionOutput) {
+	op := &request.Operation{
+		Name:       opGetConnectorDefinition,
+		HTTPMethod: "GET",
+		HTTPPath:   "/greengrass/definition/connectors/{ConnectorDefinitionId}",
+	}
+
+	if input == nil {
+		input = &GetConnectorDefinitionInput{}
+	}
+
+	output = &GetConnectorDefinitionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetConnectorDefinition API operation for AWS Greengrass.
+//
+// Retrieves information about a connector definition.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Greengrass's
+// API operation GetConnectorDefinition for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   General error information.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetConnectorDefinition
+func (c *Greengrass) GetConnectorDefinition(input *GetConnectorDefinitionInput) (*GetConnectorDefinitionOutput, error) {
+	req, out := c.GetConnectorDefinitionRequest(input)
+	return out, req.Send()
+}
+
+// GetConnectorDefinitionWithContext is the same as GetConnectorDefinition with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetConnectorDefinition for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Greengrass) GetConnectorDefinitionWithContext(ctx aws.Context, input *GetConnectorDefinitionInput, opts ...request.Option) (*GetConnectorDefinitionOutput, error) {
+	req, out := c.GetConnectorDefinitionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetConnectorDefinitionVersion = "GetConnectorDefinitionVersion"
+
+// GetConnectorDefinitionVersionRequest generates a "aws/request.Request" representing the
+// client's request for the GetConnectorDefinitionVersion operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetConnectorDefinitionVersion for more information on using the GetConnectorDefinitionVersion
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetConnectorDefinitionVersionRequest method.
+//    req, resp := client.GetConnectorDefinitionVersionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetConnectorDefinitionVersion
+func (c *Greengrass) GetConnectorDefinitionVersionRequest(input *GetConnectorDefinitionVersionInput) (req *request.Request, output *GetConnectorDefinitionVersionOutput) {
+	op := &request.Operation{
+		Name:       opGetConnectorDefinitionVersion,
+		HTTPMethod: "GET",
+		HTTPPath:   "/greengrass/definition/connectors/{ConnectorDefinitionId}/versions/{ConnectorDefinitionVersionId}",
+	}
+
+	if input == nil {
+		input = &GetConnectorDefinitionVersionInput{}
+	}
+
+	output = &GetConnectorDefinitionVersionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetConnectorDefinitionVersion API operation for AWS Greengrass.
+//
+// Retrieves information about a connector definition version, including the
+// connectors that the version contains. Connectors are prebuilt modules that
+// interact with local infrastructure, device protocols, AWS, and other cloud
+// services.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Greengrass's
+// API operation GetConnectorDefinitionVersion for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   General error information.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetConnectorDefinitionVersion
+func (c *Greengrass) GetConnectorDefinitionVersion(input *GetConnectorDefinitionVersionInput) (*GetConnectorDefinitionVersionOutput, error) {
+	req, out := c.GetConnectorDefinitionVersionRequest(input)
+	return out, req.Send()
+}
+
+// GetConnectorDefinitionVersionWithContext is the same as GetConnectorDefinitionVersion with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetConnectorDefinitionVersion for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Greengrass) GetConnectorDefinitionVersionWithContext(ctx aws.Context, input *GetConnectorDefinitionVersionInput, opts ...request.Option) (*GetConnectorDefinitionVersionOutput, error) {
+	req, out := c.GetConnectorDefinitionVersionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetCoreDefinition = "GetCoreDefinition"
 
 // GetCoreDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the GetCoreDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2506,7 +2988,7 @@ const opGetCoreDefinitionVersion = "GetCoreDefinitionVersion"
 // GetCoreDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the GetCoreDefinitionVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2585,7 +3067,7 @@ const opGetDeploymentStatus = "GetDeploymentStatus"
 // GetDeploymentStatusRequest generates a "aws/request.Request" representing the
 // client's request for the GetDeploymentStatus operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2664,7 +3146,7 @@ const opGetDeviceDefinition = "GetDeviceDefinition"
 // GetDeviceDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the GetDeviceDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2743,7 +3225,7 @@ const opGetDeviceDefinitionVersion = "GetDeviceDefinitionVersion"
 // GetDeviceDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the GetDeviceDefinitionVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2822,7 +3304,7 @@ const opGetFunctionDefinition = "GetFunctionDefinition"
 // GetFunctionDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the GetFunctionDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2902,7 +3384,7 @@ const opGetFunctionDefinitionVersion = "GetFunctionDefinitionVersion"
 // GetFunctionDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the GetFunctionDefinitionVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2982,7 +3464,7 @@ const opGetGroup = "GetGroup"
 // GetGroupRequest generates a "aws/request.Request" representing the
 // client's request for the GetGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3061,7 +3543,7 @@ const opGetGroupCertificateAuthority = "GetGroupCertificateAuthority"
 // GetGroupCertificateAuthorityRequest generates a "aws/request.Request" representing the
 // client's request for the GetGroupCertificateAuthority operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3143,7 +3625,7 @@ const opGetGroupCertificateConfiguration = "GetGroupCertificateConfiguration"
 // GetGroupCertificateConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the GetGroupCertificateConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3225,7 +3707,7 @@ const opGetGroupVersion = "GetGroupVersion"
 // GetGroupVersionRequest generates a "aws/request.Request" representing the
 // client's request for the GetGroupVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3304,7 +3786,7 @@ const opGetLoggerDefinition = "GetLoggerDefinition"
 // GetLoggerDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the GetLoggerDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3383,7 +3865,7 @@ const opGetLoggerDefinitionVersion = "GetLoggerDefinitionVersion"
 // GetLoggerDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the GetLoggerDefinitionVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3462,7 +3944,7 @@ const opGetResourceDefinition = "GetResourceDefinition"
 // GetResourceDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the GetResourceDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3542,7 +4024,7 @@ const opGetResourceDefinitionVersion = "GetResourceDefinitionVersion"
 // GetResourceDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the GetResourceDefinitionVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3622,7 +4104,7 @@ const opGetServiceRoleForAccount = "GetServiceRoleForAccount"
 // GetServiceRoleForAccountRequest generates a "aws/request.Request" representing the
 // client's request for the GetServiceRoleForAccount operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3701,7 +4183,7 @@ const opGetSubscriptionDefinition = "GetSubscriptionDefinition"
 // GetSubscriptionDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the GetSubscriptionDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3780,7 +4262,7 @@ const opGetSubscriptionDefinitionVersion = "GetSubscriptionDefinitionVersion"
 // GetSubscriptionDefinitionVersionRequest generates a "aws/request.Request" representing the
 // client's request for the GetSubscriptionDefinitionVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3854,12 +4336,326 @@ func (c *Greengrass) GetSubscriptionDefinitionVersionWithContext(ctx aws.Context
 	return out, req.Send()
 }
 
+const opListBulkDeploymentDetailedReports = "ListBulkDeploymentDetailedReports"
+
+// ListBulkDeploymentDetailedReportsRequest generates a "aws/request.Request" representing the
+// client's request for the ListBulkDeploymentDetailedReports operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListBulkDeploymentDetailedReports for more information on using the ListBulkDeploymentDetailedReports
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListBulkDeploymentDetailedReportsRequest method.
+//    req, resp := client.ListBulkDeploymentDetailedReportsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListBulkDeploymentDetailedReports
+func (c *Greengrass) ListBulkDeploymentDetailedReportsRequest(input *ListBulkDeploymentDetailedReportsInput) (req *request.Request, output *ListBulkDeploymentDetailedReportsOutput) {
+	op := &request.Operation{
+		Name:       opListBulkDeploymentDetailedReports,
+		HTTPMethod: "GET",
+		HTTPPath:   "/greengrass/bulk/deployments/{BulkDeploymentId}/detailed-reports",
+	}
+
+	if input == nil {
+		input = &ListBulkDeploymentDetailedReportsInput{}
+	}
+
+	output = &ListBulkDeploymentDetailedReportsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListBulkDeploymentDetailedReports API operation for AWS Greengrass.
+//
+// Gets a paginated list of the deployments that have been started in a bulk
+// deployment operation, and their current deployment status.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Greengrass's
+// API operation ListBulkDeploymentDetailedReports for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   General error information.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListBulkDeploymentDetailedReports
+func (c *Greengrass) ListBulkDeploymentDetailedReports(input *ListBulkDeploymentDetailedReportsInput) (*ListBulkDeploymentDetailedReportsOutput, error) {
+	req, out := c.ListBulkDeploymentDetailedReportsRequest(input)
+	return out, req.Send()
+}
+
+// ListBulkDeploymentDetailedReportsWithContext is the same as ListBulkDeploymentDetailedReports with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListBulkDeploymentDetailedReports for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Greengrass) ListBulkDeploymentDetailedReportsWithContext(ctx aws.Context, input *ListBulkDeploymentDetailedReportsInput, opts ...request.Option) (*ListBulkDeploymentDetailedReportsOutput, error) {
+	req, out := c.ListBulkDeploymentDetailedReportsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListBulkDeployments = "ListBulkDeployments"
+
+// ListBulkDeploymentsRequest generates a "aws/request.Request" representing the
+// client's request for the ListBulkDeployments operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListBulkDeployments for more information on using the ListBulkDeployments
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListBulkDeploymentsRequest method.
+//    req, resp := client.ListBulkDeploymentsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListBulkDeployments
+func (c *Greengrass) ListBulkDeploymentsRequest(input *ListBulkDeploymentsInput) (req *request.Request, output *ListBulkDeploymentsOutput) {
+	op := &request.Operation{
+		Name:       opListBulkDeployments,
+		HTTPMethod: "GET",
+		HTTPPath:   "/greengrass/bulk/deployments",
+	}
+
+	if input == nil {
+		input = &ListBulkDeploymentsInput{}
+	}
+
+	output = &ListBulkDeploymentsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListBulkDeployments API operation for AWS Greengrass.
+//
+// Returns a list of bulk deployments.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Greengrass's
+// API operation ListBulkDeployments for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   General error information.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListBulkDeployments
+func (c *Greengrass) ListBulkDeployments(input *ListBulkDeploymentsInput) (*ListBulkDeploymentsOutput, error) {
+	req, out := c.ListBulkDeploymentsRequest(input)
+	return out, req.Send()
+}
+
+// ListBulkDeploymentsWithContext is the same as ListBulkDeployments with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListBulkDeployments for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Greengrass) ListBulkDeploymentsWithContext(ctx aws.Context, input *ListBulkDeploymentsInput, opts ...request.Option) (*ListBulkDeploymentsOutput, error) {
+	req, out := c.ListBulkDeploymentsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListConnectorDefinitionVersions = "ListConnectorDefinitionVersions"
+
+// ListConnectorDefinitionVersionsRequest generates a "aws/request.Request" representing the
+// client's request for the ListConnectorDefinitionVersions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListConnectorDefinitionVersions for more information on using the ListConnectorDefinitionVersions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListConnectorDefinitionVersionsRequest method.
+//    req, resp := client.ListConnectorDefinitionVersionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListConnectorDefinitionVersions
+func (c *Greengrass) ListConnectorDefinitionVersionsRequest(input *ListConnectorDefinitionVersionsInput) (req *request.Request, output *ListConnectorDefinitionVersionsOutput) {
+	op := &request.Operation{
+		Name:       opListConnectorDefinitionVersions,
+		HTTPMethod: "GET",
+		HTTPPath:   "/greengrass/definition/connectors/{ConnectorDefinitionId}/versions",
+	}
+
+	if input == nil {
+		input = &ListConnectorDefinitionVersionsInput{}
+	}
+
+	output = &ListConnectorDefinitionVersionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListConnectorDefinitionVersions API operation for AWS Greengrass.
+//
+// Lists the versions of a connector definition, which are containers for connectors.
+// Connectors run on the Greengrass core and contain built-in integration with
+// local infrastructure, device protocols, AWS, and other cloud services.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Greengrass's
+// API operation ListConnectorDefinitionVersions for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   General error information.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListConnectorDefinitionVersions
+func (c *Greengrass) ListConnectorDefinitionVersions(input *ListConnectorDefinitionVersionsInput) (*ListConnectorDefinitionVersionsOutput, error) {
+	req, out := c.ListConnectorDefinitionVersionsRequest(input)
+	return out, req.Send()
+}
+
+// ListConnectorDefinitionVersionsWithContext is the same as ListConnectorDefinitionVersions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListConnectorDefinitionVersions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Greengrass) ListConnectorDefinitionVersionsWithContext(ctx aws.Context, input *ListConnectorDefinitionVersionsInput, opts ...request.Option) (*ListConnectorDefinitionVersionsOutput, error) {
+	req, out := c.ListConnectorDefinitionVersionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListConnectorDefinitions = "ListConnectorDefinitions"
+
+// ListConnectorDefinitionsRequest generates a "aws/request.Request" representing the
+// client's request for the ListConnectorDefinitions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListConnectorDefinitions for more information on using the ListConnectorDefinitions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListConnectorDefinitionsRequest method.
+//    req, resp := client.ListConnectorDefinitionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListConnectorDefinitions
+func (c *Greengrass) ListConnectorDefinitionsRequest(input *ListConnectorDefinitionsInput) (req *request.Request, output *ListConnectorDefinitionsOutput) {
+	op := &request.Operation{
+		Name:       opListConnectorDefinitions,
+		HTTPMethod: "GET",
+		HTTPPath:   "/greengrass/definition/connectors",
+	}
+
+	if input == nil {
+		input = &ListConnectorDefinitionsInput{}
+	}
+
+	output = &ListConnectorDefinitionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListConnectorDefinitions API operation for AWS Greengrass.
+//
+// Retrieves a list of connector definitions.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Greengrass's
+// API operation ListConnectorDefinitions for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListConnectorDefinitions
+func (c *Greengrass) ListConnectorDefinitions(input *ListConnectorDefinitionsInput) (*ListConnectorDefinitionsOutput, error) {
+	req, out := c.ListConnectorDefinitionsRequest(input)
+	return out, req.Send()
+}
+
+// ListConnectorDefinitionsWithContext is the same as ListConnectorDefinitions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListConnectorDefinitions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Greengrass) ListConnectorDefinitionsWithContext(ctx aws.Context, input *ListConnectorDefinitionsInput, opts ...request.Option) (*ListConnectorDefinitionsOutput, error) {
+	req, out := c.ListConnectorDefinitionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListCoreDefinitionVersions = "ListCoreDefinitionVersions"
 
 // ListCoreDefinitionVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListCoreDefinitionVersions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3938,7 +4734,7 @@ const opListCoreDefinitions = "ListCoreDefinitions"
 // ListCoreDefinitionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListCoreDefinitions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4012,7 +4808,7 @@ const opListDeployments = "ListDeployments"
 // ListDeploymentsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDeployments operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4091,7 +4887,7 @@ const opListDeviceDefinitionVersions = "ListDeviceDefinitionVersions"
 // ListDeviceDefinitionVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDeviceDefinitionVersions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4170,7 +4966,7 @@ const opListDeviceDefinitions = "ListDeviceDefinitions"
 // ListDeviceDefinitionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDeviceDefinitions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4244,7 +5040,7 @@ const opListFunctionDefinitionVersions = "ListFunctionDefinitionVersions"
 // ListFunctionDefinitionVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListFunctionDefinitionVersions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4323,7 +5119,7 @@ const opListFunctionDefinitions = "ListFunctionDefinitions"
 // ListFunctionDefinitionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListFunctionDefinitions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4397,7 +5193,7 @@ const opListGroupCertificateAuthorities = "ListGroupCertificateAuthorities"
 // ListGroupCertificateAuthoritiesRequest generates a "aws/request.Request" representing the
 // client's request for the ListGroupCertificateAuthorities operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4479,7 +5275,7 @@ const opListGroupVersions = "ListGroupVersions"
 // ListGroupVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListGroupVersions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4558,7 +5354,7 @@ const opListGroups = "ListGroups"
 // ListGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the ListGroups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4632,7 +5428,7 @@ const opListLoggerDefinitionVersions = "ListLoggerDefinitionVersions"
 // ListLoggerDefinitionVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListLoggerDefinitionVersions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4711,7 +5507,7 @@ const opListLoggerDefinitions = "ListLoggerDefinitions"
 // ListLoggerDefinitionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListLoggerDefinitions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4785,7 +5581,7 @@ const opListResourceDefinitionVersions = "ListResourceDefinitionVersions"
 // ListResourceDefinitionVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListResourceDefinitionVersions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4864,7 +5660,7 @@ const opListResourceDefinitions = "ListResourceDefinitions"
 // ListResourceDefinitionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListResourceDefinitions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4938,7 +5734,7 @@ const opListSubscriptionDefinitionVersions = "ListSubscriptionDefinitionVersions
 // ListSubscriptionDefinitionVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSubscriptionDefinitionVersions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5017,7 +5813,7 @@ const opListSubscriptionDefinitions = "ListSubscriptionDefinitions"
 // ListSubscriptionDefinitionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSubscriptionDefinitions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5091,7 +5887,7 @@ const opResetDeployments = "ResetDeployments"
 // ResetDeploymentsRequest generates a "aws/request.Request" representing the
 // client's request for the ResetDeployments operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5165,12 +5961,178 @@ func (c *Greengrass) ResetDeploymentsWithContext(ctx aws.Context, input *ResetDe
 	return out, req.Send()
 }
 
+const opStartBulkDeployment = "StartBulkDeployment"
+
+// StartBulkDeploymentRequest generates a "aws/request.Request" representing the
+// client's request for the StartBulkDeployment operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartBulkDeployment for more information on using the StartBulkDeployment
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartBulkDeploymentRequest method.
+//    req, resp := client.StartBulkDeploymentRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/StartBulkDeployment
+func (c *Greengrass) StartBulkDeploymentRequest(input *StartBulkDeploymentInput) (req *request.Request, output *StartBulkDeploymentOutput) {
+	op := &request.Operation{
+		Name:       opStartBulkDeployment,
+		HTTPMethod: "POST",
+		HTTPPath:   "/greengrass/bulk/deployments",
+	}
+
+	if input == nil {
+		input = &StartBulkDeploymentInput{}
+	}
+
+	output = &StartBulkDeploymentOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartBulkDeployment API operation for AWS Greengrass.
+//
+// Deploys multiple groups in one operation. This action starts the bulk deployment
+// of a specified set of group versions. Each group version deployment will
+// be triggered with an adaptive rate that has a fixed upper limit. We recommend
+// that you include an ''X-Amzn-Client-Token'' token in every ''StartBulkDeployment''
+// request. These requests are idempotent with respect to the token and the
+// request parameters.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Greengrass's
+// API operation StartBulkDeployment for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   General error information.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/StartBulkDeployment
+func (c *Greengrass) StartBulkDeployment(input *StartBulkDeploymentInput) (*StartBulkDeploymentOutput, error) {
+	req, out := c.StartBulkDeploymentRequest(input)
+	return out, req.Send()
+}
+
+// StartBulkDeploymentWithContext is the same as StartBulkDeployment with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartBulkDeployment for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Greengrass) StartBulkDeploymentWithContext(ctx aws.Context, input *StartBulkDeploymentInput, opts ...request.Option) (*StartBulkDeploymentOutput, error) {
+	req, out := c.StartBulkDeploymentRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStopBulkDeployment = "StopBulkDeployment"
+
+// StopBulkDeploymentRequest generates a "aws/request.Request" representing the
+// client's request for the StopBulkDeployment operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StopBulkDeployment for more information on using the StopBulkDeployment
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StopBulkDeploymentRequest method.
+//    req, resp := client.StopBulkDeploymentRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/StopBulkDeployment
+func (c *Greengrass) StopBulkDeploymentRequest(input *StopBulkDeploymentInput) (req *request.Request, output *StopBulkDeploymentOutput) {
+	op := &request.Operation{
+		Name:       opStopBulkDeployment,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/greengrass/bulk/deployments/{BulkDeploymentId}/$stop",
+	}
+
+	if input == nil {
+		input = &StopBulkDeploymentInput{}
+	}
+
+	output = &StopBulkDeploymentOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StopBulkDeployment API operation for AWS Greengrass.
+//
+// Stops the execution of a bulk deployment. This action returns a status of
+// ''Stopping'' until the deployment is stopped. You cannot start a new bulk
+// deployment while a previous deployment is in the ''Stopping'' state. This
+// action doesn't rollback completed deployments or cancel pending deployments.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Greengrass's
+// API operation StopBulkDeployment for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   General error information.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/StopBulkDeployment
+func (c *Greengrass) StopBulkDeployment(input *StopBulkDeploymentInput) (*StopBulkDeploymentOutput, error) {
+	req, out := c.StopBulkDeploymentRequest(input)
+	return out, req.Send()
+}
+
+// StopBulkDeploymentWithContext is the same as StopBulkDeployment with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StopBulkDeployment for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Greengrass) StopBulkDeploymentWithContext(ctx aws.Context, input *StopBulkDeploymentInput, opts ...request.Option) (*StopBulkDeploymentOutput, error) {
+	req, out := c.StopBulkDeploymentRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateConnectivityInfo = "UpdateConnectivityInfo"
 
 // UpdateConnectivityInfoRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateConnectivityInfo operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5249,12 +6211,91 @@ func (c *Greengrass) UpdateConnectivityInfoWithContext(ctx aws.Context, input *U
 	return out, req.Send()
 }
 
+const opUpdateConnectorDefinition = "UpdateConnectorDefinition"
+
+// UpdateConnectorDefinitionRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateConnectorDefinition operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateConnectorDefinition for more information on using the UpdateConnectorDefinition
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateConnectorDefinitionRequest method.
+//    req, resp := client.UpdateConnectorDefinitionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/UpdateConnectorDefinition
+func (c *Greengrass) UpdateConnectorDefinitionRequest(input *UpdateConnectorDefinitionInput) (req *request.Request, output *UpdateConnectorDefinitionOutput) {
+	op := &request.Operation{
+		Name:       opUpdateConnectorDefinition,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/greengrass/definition/connectors/{ConnectorDefinitionId}",
+	}
+
+	if input == nil {
+		input = &UpdateConnectorDefinitionInput{}
+	}
+
+	output = &UpdateConnectorDefinitionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateConnectorDefinition API operation for AWS Greengrass.
+//
+// Updates a connector definition.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Greengrass's
+// API operation UpdateConnectorDefinition for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   General error information.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/UpdateConnectorDefinition
+func (c *Greengrass) UpdateConnectorDefinition(input *UpdateConnectorDefinitionInput) (*UpdateConnectorDefinitionOutput, error) {
+	req, out := c.UpdateConnectorDefinitionRequest(input)
+	return out, req.Send()
+}
+
+// UpdateConnectorDefinitionWithContext is the same as UpdateConnectorDefinition with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateConnectorDefinition for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Greengrass) UpdateConnectorDefinitionWithContext(ctx aws.Context, input *UpdateConnectorDefinitionInput, opts ...request.Option) (*UpdateConnectorDefinitionOutput, error) {
+	req, out := c.UpdateConnectorDefinitionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateCoreDefinition = "UpdateCoreDefinition"
 
 // UpdateCoreDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateCoreDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5333,7 +6374,7 @@ const opUpdateDeviceDefinition = "UpdateDeviceDefinition"
 // UpdateDeviceDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDeviceDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5412,7 +6453,7 @@ const opUpdateFunctionDefinition = "UpdateFunctionDefinition"
 // UpdateFunctionDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateFunctionDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5491,7 +6532,7 @@ const opUpdateGroup = "UpdateGroup"
 // UpdateGroupRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5570,7 +6611,7 @@ const opUpdateGroupCertificateConfiguration = "UpdateGroupCertificateConfigurati
 // UpdateGroupCertificateConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateGroupCertificateConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5652,7 +6693,7 @@ const opUpdateLoggerDefinition = "UpdateLoggerDefinition"
 // UpdateLoggerDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateLoggerDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5731,7 +6772,7 @@ const opUpdateResourceDefinition = "UpdateResourceDefinition"
 // UpdateResourceDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateResourceDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5810,7 +6851,7 @@ const opUpdateSubscriptionDefinition = "UpdateSubscriptionDefinition"
 // UpdateSubscriptionDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateSubscriptionDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5910,6 +6951,9 @@ func (s *AssociateRoleToGroupInput) Validate() error {
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
 	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -5999,6 +7043,186 @@ func (s *AssociateServiceRoleToAccountOutput) SetAssociatedAt(v string) *Associa
 	return s
 }
 
+// Information about a bulk deployment. You cannot start a new bulk deployment
+// while another one is still running or in a non-terminal state.
+type BulkDeployment struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the bulk deployment.
+	BulkDeploymentArn *string `type:"string"`
+
+	// The ID of the bulk deployment.
+	BulkDeploymentId *string `type:"string"`
+
+	// The time, in ISO format, when the deployment was created.
+	CreatedAt *string `type:"string"`
+}
+
+// String returns the string representation
+func (s BulkDeployment) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BulkDeployment) GoString() string {
+	return s.String()
+}
+
+// SetBulkDeploymentArn sets the BulkDeploymentArn field's value.
+func (s *BulkDeployment) SetBulkDeploymentArn(v string) *BulkDeployment {
+	s.BulkDeploymentArn = &v
+	return s
+}
+
+// SetBulkDeploymentId sets the BulkDeploymentId field's value.
+func (s *BulkDeployment) SetBulkDeploymentId(v string) *BulkDeployment {
+	s.BulkDeploymentId = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *BulkDeployment) SetCreatedAt(v string) *BulkDeployment {
+	s.CreatedAt = &v
+	return s
+}
+
+// Relevant metrics on input records processed during bulk deployment.
+type BulkDeploymentMetrics struct {
+	_ struct{} `type:"structure"`
+
+	// The total number of records that returned a non-retryable error. For example,
+	// this can occur if a group record from the input file uses an invalid format
+	// or specifies a nonexistent group version, or if the execution role doesn't
+	// grant permission to deploy a group or group version.
+	InvalidInputRecords *int64 `type:"integer"`
+
+	// The total number of group records from the input file that have been processed
+	// so far, or attempted.
+	RecordsProcessed *int64 `type:"integer"`
+
+	// The total number of deployment attempts that returned a retryable error.
+	// For example, a retry is triggered if the attempt to deploy a group returns
+	// a throttling error. ''StartBulkDeployment'' retries a group deployment up
+	// to five times.
+	RetryAttempts *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s BulkDeploymentMetrics) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BulkDeploymentMetrics) GoString() string {
+	return s.String()
+}
+
+// SetInvalidInputRecords sets the InvalidInputRecords field's value.
+func (s *BulkDeploymentMetrics) SetInvalidInputRecords(v int64) *BulkDeploymentMetrics {
+	s.InvalidInputRecords = &v
+	return s
+}
+
+// SetRecordsProcessed sets the RecordsProcessed field's value.
+func (s *BulkDeploymentMetrics) SetRecordsProcessed(v int64) *BulkDeploymentMetrics {
+	s.RecordsProcessed = &v
+	return s
+}
+
+// SetRetryAttempts sets the RetryAttempts field's value.
+func (s *BulkDeploymentMetrics) SetRetryAttempts(v int64) *BulkDeploymentMetrics {
+	s.RetryAttempts = &v
+	return s
+}
+
+// Information about an individual group deployment in a bulk deployment operation.
+type BulkDeploymentResult struct {
+	_ struct{} `type:"structure"`
+
+	// The time, in ISO format, when the deployment was created.
+	CreatedAt *string `type:"string"`
+
+	// The ARN of the group deployment.
+	DeploymentArn *string `type:"string"`
+
+	// The ID of the group deployment.
+	DeploymentId *string `type:"string"`
+
+	// The current status of the group deployment: ''Pending'', ''InProgress'',
+	// ''Success'', or ''Failure''.
+	DeploymentStatus *string `type:"string"`
+
+	// The type of the deployment.
+	DeploymentType *string `type:"string" enum:"DeploymentType"`
+
+	// Details about the error.
+	ErrorDetails []*ErrorDetail `type:"list"`
+
+	// The error message for a failed deployment
+	ErrorMessage *string `type:"string"`
+
+	// The ARN of the Greengrass group.
+	GroupArn *string `type:"string"`
+}
+
+// String returns the string representation
+func (s BulkDeploymentResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BulkDeploymentResult) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *BulkDeploymentResult) SetCreatedAt(v string) *BulkDeploymentResult {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDeploymentArn sets the DeploymentArn field's value.
+func (s *BulkDeploymentResult) SetDeploymentArn(v string) *BulkDeploymentResult {
+	s.DeploymentArn = &v
+	return s
+}
+
+// SetDeploymentId sets the DeploymentId field's value.
+func (s *BulkDeploymentResult) SetDeploymentId(v string) *BulkDeploymentResult {
+	s.DeploymentId = &v
+	return s
+}
+
+// SetDeploymentStatus sets the DeploymentStatus field's value.
+func (s *BulkDeploymentResult) SetDeploymentStatus(v string) *BulkDeploymentResult {
+	s.DeploymentStatus = &v
+	return s
+}
+
+// SetDeploymentType sets the DeploymentType field's value.
+func (s *BulkDeploymentResult) SetDeploymentType(v string) *BulkDeploymentResult {
+	s.DeploymentType = &v
+	return s
+}
+
+// SetErrorDetails sets the ErrorDetails field's value.
+func (s *BulkDeploymentResult) SetErrorDetails(v []*ErrorDetail) *BulkDeploymentResult {
+	s.ErrorDetails = v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *BulkDeploymentResult) SetErrorMessage(v string) *BulkDeploymentResult {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetGroupArn sets the GroupArn field's value.
+func (s *BulkDeploymentResult) SetGroupArn(v string) *BulkDeploymentResult {
+	s.GroupArn = &v
+	return s
+}
+
 // Information about a Greengrass core's connectivity.
 type ConnectivityInfo struct {
 	_ struct{} `type:"structure"`
@@ -6050,6 +7274,78 @@ func (s *ConnectivityInfo) SetPortNumber(v int64) *ConnectivityInfo {
 	return s
 }
 
+// Information about a connector. Connectors run on the Greengrass core and
+// contain built-in integration with local infrastructure, device protocols,
+// AWS, and other cloud services.
+type Connector struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the connector.
+	ConnectorArn *string `type:"string"`
+
+	// A descriptive or arbitrary ID for the connector. This value must be unique
+	// within the connector definition version. Max length is 128 characters with
+	// pattern [a-zA-Z0-9:_-]+.
+	Id *string `type:"string"`
+
+	// The parameters or configuration that the connector uses.
+	Parameters map[string]*string `type:"map"`
+}
+
+// String returns the string representation
+func (s Connector) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Connector) GoString() string {
+	return s.String()
+}
+
+// SetConnectorArn sets the ConnectorArn field's value.
+func (s *Connector) SetConnectorArn(v string) *Connector {
+	s.ConnectorArn = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *Connector) SetId(v string) *Connector {
+	s.Id = &v
+	return s
+}
+
+// SetParameters sets the Parameters field's value.
+func (s *Connector) SetParameters(v map[string]*string) *Connector {
+	s.Parameters = v
+	return s
+}
+
+// Information about the connector definition version, which is a container
+// for connectors.
+type ConnectorDefinitionVersion struct {
+	_ struct{} `type:"structure"`
+
+	// A list of references to connectors in this version, with their corresponding
+	// configuration settings.
+	Connectors []*Connector `type:"list"`
+}
+
+// String returns the string representation
+func (s ConnectorDefinitionVersion) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConnectorDefinitionVersion) GoString() string {
+	return s.String()
+}
+
+// SetConnectors sets the Connectors field's value.
+func (s *ConnectorDefinitionVersion) SetConnectors(v []*Connector) *ConnectorDefinitionVersion {
+	s.Connectors = v
+	return s
+}
+
 // Information about a core.
 type Core struct {
 	_ struct{} `type:"structure"`
@@ -6057,7 +7353,8 @@ type Core struct {
 	// The ARN of the certificate associated with the core.
 	CertificateArn *string `type:"string"`
 
-	// The ID of the core.
+	// A descriptive or arbitrary ID for the core. This value must be unique within
+	// the core definition version. Max length is 128 characters with pattern ''[a-zA-Z0-9:_-]+''.
 	Id *string `type:"string"`
 
 	// If true, the core's local shadow is automatically synced with the cloud.
@@ -6122,6 +7419,217 @@ func (s CoreDefinitionVersion) GoString() string {
 // SetCores sets the Cores field's value.
 func (s *CoreDefinitionVersion) SetCores(v []*Core) *CoreDefinitionVersion {
 	s.Cores = v
+	return s
+}
+
+type CreateConnectorDefinitionInput struct {
+	_ struct{} `type:"structure"`
+
+	AmznClientToken *string `location:"header" locationName:"X-Amzn-Client-Token" type:"string"`
+
+	// Information about the connector definition version, which is a container
+	// for connectors.
+	InitialVersion *ConnectorDefinitionVersion `type:"structure"`
+
+	Name *string `type:"string"`
+}
+
+// String returns the string representation
+func (s CreateConnectorDefinitionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateConnectorDefinitionInput) GoString() string {
+	return s.String()
+}
+
+// SetAmznClientToken sets the AmznClientToken field's value.
+func (s *CreateConnectorDefinitionInput) SetAmznClientToken(v string) *CreateConnectorDefinitionInput {
+	s.AmznClientToken = &v
+	return s
+}
+
+// SetInitialVersion sets the InitialVersion field's value.
+func (s *CreateConnectorDefinitionInput) SetInitialVersion(v *ConnectorDefinitionVersion) *CreateConnectorDefinitionInput {
+	s.InitialVersion = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateConnectorDefinitionInput) SetName(v string) *CreateConnectorDefinitionInput {
+	s.Name = &v
+	return s
+}
+
+type CreateConnectorDefinitionOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `type:"string"`
+
+	CreationTimestamp *string `type:"string"`
+
+	Id *string `type:"string"`
+
+	LastUpdatedTimestamp *string `type:"string"`
+
+	LatestVersion *string `type:"string"`
+
+	LatestVersionArn *string `type:"string"`
+
+	Name *string `type:"string"`
+}
+
+// String returns the string representation
+func (s CreateConnectorDefinitionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateConnectorDefinitionOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CreateConnectorDefinitionOutput) SetArn(v string) *CreateConnectorDefinitionOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCreationTimestamp sets the CreationTimestamp field's value.
+func (s *CreateConnectorDefinitionOutput) SetCreationTimestamp(v string) *CreateConnectorDefinitionOutput {
+	s.CreationTimestamp = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CreateConnectorDefinitionOutput) SetId(v string) *CreateConnectorDefinitionOutput {
+	s.Id = &v
+	return s
+}
+
+// SetLastUpdatedTimestamp sets the LastUpdatedTimestamp field's value.
+func (s *CreateConnectorDefinitionOutput) SetLastUpdatedTimestamp(v string) *CreateConnectorDefinitionOutput {
+	s.LastUpdatedTimestamp = &v
+	return s
+}
+
+// SetLatestVersion sets the LatestVersion field's value.
+func (s *CreateConnectorDefinitionOutput) SetLatestVersion(v string) *CreateConnectorDefinitionOutput {
+	s.LatestVersion = &v
+	return s
+}
+
+// SetLatestVersionArn sets the LatestVersionArn field's value.
+func (s *CreateConnectorDefinitionOutput) SetLatestVersionArn(v string) *CreateConnectorDefinitionOutput {
+	s.LatestVersionArn = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateConnectorDefinitionOutput) SetName(v string) *CreateConnectorDefinitionOutput {
+	s.Name = &v
+	return s
+}
+
+type CreateConnectorDefinitionVersionInput struct {
+	_ struct{} `type:"structure"`
+
+	AmznClientToken *string `location:"header" locationName:"X-Amzn-Client-Token" type:"string"`
+
+	// ConnectorDefinitionId is a required field
+	ConnectorDefinitionId *string `location:"uri" locationName:"ConnectorDefinitionId" type:"string" required:"true"`
+
+	Connectors []*Connector `type:"list"`
+}
+
+// String returns the string representation
+func (s CreateConnectorDefinitionVersionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateConnectorDefinitionVersionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateConnectorDefinitionVersionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateConnectorDefinitionVersionInput"}
+	if s.ConnectorDefinitionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectorDefinitionId"))
+	}
+	if s.ConnectorDefinitionId != nil && len(*s.ConnectorDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConnectorDefinitionId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAmznClientToken sets the AmznClientToken field's value.
+func (s *CreateConnectorDefinitionVersionInput) SetAmznClientToken(v string) *CreateConnectorDefinitionVersionInput {
+	s.AmznClientToken = &v
+	return s
+}
+
+// SetConnectorDefinitionId sets the ConnectorDefinitionId field's value.
+func (s *CreateConnectorDefinitionVersionInput) SetConnectorDefinitionId(v string) *CreateConnectorDefinitionVersionInput {
+	s.ConnectorDefinitionId = &v
+	return s
+}
+
+// SetConnectors sets the Connectors field's value.
+func (s *CreateConnectorDefinitionVersionInput) SetConnectors(v []*Connector) *CreateConnectorDefinitionVersionInput {
+	s.Connectors = v
+	return s
+}
+
+type CreateConnectorDefinitionVersionOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `type:"string"`
+
+	CreationTimestamp *string `type:"string"`
+
+	Id *string `type:"string"`
+
+	Version *string `type:"string"`
+}
+
+// String returns the string representation
+func (s CreateConnectorDefinitionVersionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateConnectorDefinitionVersionOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CreateConnectorDefinitionVersionOutput) SetArn(v string) *CreateConnectorDefinitionVersionOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCreationTimestamp sets the CreationTimestamp field's value.
+func (s *CreateConnectorDefinitionVersionOutput) SetCreationTimestamp(v string) *CreateConnectorDefinitionVersionOutput {
+	s.CreationTimestamp = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CreateConnectorDefinitionVersionOutput) SetId(v string) *CreateConnectorDefinitionVersionOutput {
+	s.Id = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *CreateConnectorDefinitionVersionOutput) SetVersion(v string) *CreateConnectorDefinitionVersionOutput {
+	s.Version = &v
 	return s
 }
 
@@ -6261,6 +7769,9 @@ func (s *CreateCoreDefinitionVersionInput) Validate() error {
 	if s.CoreDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("CoreDefinitionId"))
 	}
+	if s.CoreDefinitionId != nil && len(*s.CoreDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CoreDefinitionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -6367,6 +7878,9 @@ func (s *CreateDeploymentInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateDeploymentInput"}
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
+	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -6573,6 +8087,9 @@ func (s *CreateDeviceDefinitionVersionInput) Validate() error {
 	if s.DeviceDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceDefinitionId"))
 	}
+	if s.DeviceDefinitionId != nil && len(*s.DeviceDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceDefinitionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -6758,6 +8275,9 @@ type CreateFunctionDefinitionVersionInput struct {
 
 	AmznClientToken *string `location:"header" locationName:"X-Amzn-Client-Token" type:"string"`
 
+	// Default configuration that will apply to all Lambda functions in the group.
+	DefaultConfig *FunctionDefaultConfig `type:"structure"`
+
 	// FunctionDefinitionId is a required field
 	FunctionDefinitionId *string `location:"uri" locationName:"FunctionDefinitionId" type:"string" required:"true"`
 
@@ -6780,6 +8300,9 @@ func (s *CreateFunctionDefinitionVersionInput) Validate() error {
 	if s.FunctionDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("FunctionDefinitionId"))
 	}
+	if s.FunctionDefinitionId != nil && len(*s.FunctionDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FunctionDefinitionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -6790,6 +8313,12 @@ func (s *CreateFunctionDefinitionVersionInput) Validate() error {
 // SetAmznClientToken sets the AmznClientToken field's value.
 func (s *CreateFunctionDefinitionVersionInput) SetAmznClientToken(v string) *CreateFunctionDefinitionVersionInput {
 	s.AmznClientToken = &v
+	return s
+}
+
+// SetDefaultConfig sets the DefaultConfig field's value.
+func (s *CreateFunctionDefinitionVersionInput) SetDefaultConfig(v *FunctionDefaultConfig) *CreateFunctionDefinitionVersionInput {
+	s.DefaultConfig = v
 	return s
 }
 
@@ -6875,6 +8404,9 @@ func (s *CreateGroupCertificateAuthorityInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateGroupCertificateAuthorityInput"}
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
+	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -7032,6 +8564,8 @@ type CreateGroupVersionInput struct {
 
 	AmznClientToken *string `location:"header" locationName:"X-Amzn-Client-Token" type:"string"`
 
+	ConnectorDefinitionVersionArn *string `type:"string"`
+
 	CoreDefinitionVersionArn *string `type:"string"`
 
 	DeviceDefinitionVersionArn *string `type:"string"`
@@ -7064,6 +8598,9 @@ func (s *CreateGroupVersionInput) Validate() error {
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
 	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -7074,6 +8611,12 @@ func (s *CreateGroupVersionInput) Validate() error {
 // SetAmznClientToken sets the AmznClientToken field's value.
 func (s *CreateGroupVersionInput) SetAmznClientToken(v string) *CreateGroupVersionInput {
 	s.AmznClientToken = &v
+	return s
+}
+
+// SetConnectorDefinitionVersionArn sets the ConnectorDefinitionVersionArn field's value.
+func (s *CreateGroupVersionInput) SetConnectorDefinitionVersionArn(v string) *CreateGroupVersionInput {
+	s.ConnectorDefinitionVersionArn = &v
 	return s
 }
 
@@ -7301,6 +8844,9 @@ func (s *CreateLoggerDefinitionVersionInput) Validate() error {
 	if s.LoggerDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("LoggerDefinitionId"))
 	}
+	if s.LoggerDefinitionId != nil && len(*s.LoggerDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LoggerDefinitionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -7507,6 +9053,9 @@ func (s *CreateResourceDefinitionVersionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateResourceDefinitionVersionInput"}
 	if s.ResourceDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResourceDefinitionId"))
+	}
+	if s.ResourceDefinitionId != nil && len(*s.ResourceDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceDefinitionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -7827,6 +9376,9 @@ func (s *CreateSubscriptionDefinitionVersionInput) Validate() error {
 	if s.SubscriptionDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("SubscriptionDefinitionId"))
 	}
+	if s.SubscriptionDefinitionId != nil && len(*s.SubscriptionDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubscriptionDefinitionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -7976,6 +9528,59 @@ func (s *DefinitionInformation) SetName(v string) *DefinitionInformation {
 	return s
 }
 
+type DeleteConnectorDefinitionInput struct {
+	_ struct{} `type:"structure"`
+
+	// ConnectorDefinitionId is a required field
+	ConnectorDefinitionId *string `location:"uri" locationName:"ConnectorDefinitionId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteConnectorDefinitionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteConnectorDefinitionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteConnectorDefinitionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteConnectorDefinitionInput"}
+	if s.ConnectorDefinitionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectorDefinitionId"))
+	}
+	if s.ConnectorDefinitionId != nil && len(*s.ConnectorDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConnectorDefinitionId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConnectorDefinitionId sets the ConnectorDefinitionId field's value.
+func (s *DeleteConnectorDefinitionInput) SetConnectorDefinitionId(v string) *DeleteConnectorDefinitionInput {
+	s.ConnectorDefinitionId = &v
+	return s
+}
+
+type DeleteConnectorDefinitionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteConnectorDefinitionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteConnectorDefinitionOutput) GoString() string {
+	return s.String()
+}
+
 type DeleteCoreDefinitionInput struct {
 	_ struct{} `type:"structure"`
 
@@ -7998,6 +9603,9 @@ func (s *DeleteCoreDefinitionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteCoreDefinitionInput"}
 	if s.CoreDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("CoreDefinitionId"))
+	}
+	if s.CoreDefinitionId != nil && len(*s.CoreDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CoreDefinitionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8049,6 +9657,9 @@ func (s *DeleteDeviceDefinitionInput) Validate() error {
 	if s.DeviceDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceDefinitionId"))
 	}
+	if s.DeviceDefinitionId != nil && len(*s.DeviceDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceDefinitionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -8098,6 +9709,9 @@ func (s *DeleteFunctionDefinitionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteFunctionDefinitionInput"}
 	if s.FunctionDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("FunctionDefinitionId"))
+	}
+	if s.FunctionDefinitionId != nil && len(*s.FunctionDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FunctionDefinitionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8149,6 +9763,9 @@ func (s *DeleteGroupInput) Validate() error {
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
 	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -8198,6 +9815,9 @@ func (s *DeleteLoggerDefinitionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteLoggerDefinitionInput"}
 	if s.LoggerDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("LoggerDefinitionId"))
+	}
+	if s.LoggerDefinitionId != nil && len(*s.LoggerDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LoggerDefinitionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8249,6 +9869,9 @@ func (s *DeleteResourceDefinitionInput) Validate() error {
 	if s.ResourceDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResourceDefinitionId"))
 	}
+	if s.ResourceDefinitionId != nil && len(*s.ResourceDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceDefinitionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -8298,6 +9921,9 @@ func (s *DeleteSubscriptionDefinitionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteSubscriptionDefinitionInput"}
 	if s.SubscriptionDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("SubscriptionDefinitionId"))
+	}
+	if s.SubscriptionDefinitionId != nil && len(*s.SubscriptionDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubscriptionDefinitionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8393,7 +10019,9 @@ type Device struct {
 	// The ARN of the certificate associated with the device.
 	CertificateArn *string `type:"string"`
 
-	// The ID of the device.
+	// A descriptive or arbitrary ID for the device. This value must be unique within
+	// the device definition version. Max length is 128 characters with pattern
+	// ''[a-zA-Z0-9:_-]+''.
 	Id *string `type:"string"`
 
 	// If true, the device's local shadow will be automatically synced with the
@@ -8484,6 +10112,9 @@ func (s *DisassociateRoleFromGroupInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DisassociateRoleFromGroupInput"}
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
+	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8602,7 +10233,9 @@ type Function struct {
 	// The configuration of the Lambda function.
 	FunctionConfiguration *FunctionConfiguration `type:"structure"`
 
-	// The ID of the Lambda function.
+	// A descriptive or arbitrary ID for the function. This value must be unique
+	// within the function definition version. Max length is 128 characters with
+	// pattern ''[a-zA-Z0-9:_-]+''.
 	Id *string `type:"string"`
 }
 
@@ -8651,7 +10284,9 @@ type FunctionConfiguration struct {
 	// The name of the function executable.
 	Executable *string `type:"string"`
 
-	// The memory size, in KB, which the function requires.
+	// The memory size, in KB, which the function requires. This setting is not
+	// applicable and should be cleared when you run the Lambda function without
+	// containerization.
 	MemorySize *int64 `type:"integer"`
 
 	// True if the function is pinned. Pinned means the function is long-lived and
@@ -8659,7 +10294,8 @@ type FunctionConfiguration struct {
 	Pinned *bool `type:"boolean"`
 
 	// The allowed function execution time, after which Lambda should terminate
-	// the function. This timeout still applies to pinned lambdas for each request.
+	// the function. This timeout still applies to pinned Lambda functions for each
+	// request.
 	Timeout *int64 `type:"integer"`
 }
 
@@ -8721,10 +10357,17 @@ type FunctionConfigurationEnvironment struct {
 
 	// If true, the Lambda function is allowed to access the host's /sys folder.
 	// Use this when the Lambda function needs to read device information from /sys.
+	// This setting applies only when you run the Lambda function in a Greengrass
+	// container.
 	AccessSysfs *bool `type:"boolean"`
+
+	// Configuration related to executing the Lambda function
+	Execution *FunctionExecutionConfig `type:"structure"`
 
 	// A list of the resources, with their permissions, to which the Lambda function
 	// will be granted access. A Lambda function can have at most 10 resources.
+	// ResourceAccessPolicies apply only when you run the Lambda function in a Greengrass
+	// container.
 	ResourceAccessPolicies []*ResourceAccessPolicy `type:"list"`
 
 	// Environment variables for the Lambda function's configuration.
@@ -8747,6 +10390,12 @@ func (s *FunctionConfigurationEnvironment) SetAccessSysfs(v bool) *FunctionConfi
 	return s
 }
 
+// SetExecution sets the Execution field's value.
+func (s *FunctionConfigurationEnvironment) SetExecution(v *FunctionExecutionConfig) *FunctionConfigurationEnvironment {
+	s.Execution = v
+	return s
+}
+
 // SetResourceAccessPolicies sets the ResourceAccessPolicies field's value.
 func (s *FunctionConfigurationEnvironment) SetResourceAccessPolicies(v []*ResourceAccessPolicy) *FunctionConfigurationEnvironment {
 	s.ResourceAccessPolicies = v
@@ -8759,9 +10408,69 @@ func (s *FunctionConfigurationEnvironment) SetVariables(v map[string]*string) *F
 	return s
 }
 
+// Default configuration that will apply to all Lambda functions in the group.
+type FunctionDefaultConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Configuration that defines the default containerization used for when running
+	// Lambda functions in the group. Individual Lambda functions can be override
+	// this setting.
+	Execution *FunctionDefaultExecutionConfig `type:"structure"`
+}
+
+// String returns the string representation
+func (s FunctionDefaultConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FunctionDefaultConfig) GoString() string {
+	return s.String()
+}
+
+// SetExecution sets the Execution field's value.
+func (s *FunctionDefaultConfig) SetExecution(v *FunctionDefaultExecutionConfig) *FunctionDefaultConfig {
+	s.Execution = v
+	return s
+}
+
+// Configuration that defines the default containerization used for when running
+// Lambda functions in the group. Individual Lambda functions can be override
+// this setting.
+type FunctionDefaultExecutionConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies whether the Lambda function runs in a Greengrass container (default)
+	// or without containerization. Unless your scenario requires that you run without
+	// containerization, we recommend that you run in a Greengrass container. Omit
+	// this value to run the Lambda function with the default containerization for
+	// the group.
+	IsolationMode *string `type:"string" enum:"FunctionIsolationMode"`
+}
+
+// String returns the string representation
+func (s FunctionDefaultExecutionConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FunctionDefaultExecutionConfig) GoString() string {
+	return s.String()
+}
+
+// SetIsolationMode sets the IsolationMode field's value.
+func (s *FunctionDefaultExecutionConfig) SetIsolationMode(v string) *FunctionDefaultExecutionConfig {
+	s.IsolationMode = &v
+	return s
+}
+
 // Information about a function definition version.
 type FunctionDefinitionVersion struct {
 	_ struct{} `type:"structure"`
+
+	// Default configuration that will apply to all Lambda functions in this function
+	// definition version
+	DefaultConfig *FunctionDefaultConfig `type:"structure"`
 
 	// A list of Lambda functions in this function definition version.
 	Functions []*Function `type:"list"`
@@ -8777,9 +10486,97 @@ func (s FunctionDefinitionVersion) GoString() string {
 	return s.String()
 }
 
+// SetDefaultConfig sets the DefaultConfig field's value.
+func (s *FunctionDefinitionVersion) SetDefaultConfig(v *FunctionDefaultConfig) *FunctionDefinitionVersion {
+	s.DefaultConfig = v
+	return s
+}
+
 // SetFunctions sets the Functions field's value.
 func (s *FunctionDefinitionVersion) SetFunctions(v []*Function) *FunctionDefinitionVersion {
 	s.Functions = v
+	return s
+}
+
+// Configuration information that specifies how the Lambda function runs.
+type FunctionExecutionConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies whether the Lambda function runs in a Greengrass container (default)
+	// or without containerization. Unless your scenario requires that you run without
+	// containerization, we recommend that you run in a Greengrass container. Omit
+	// this value to run the Lambda function with the default containerization for
+	// the group.
+	IsolationMode *string `type:"string" enum:"FunctionIsolationMode"`
+
+	// Specifies the user and/or group whose permissions are used when running the
+	// Lambda function. You can specify one or both values to override the default
+	// values (ggc_user/ggc_group). We recommend that you avoid running as root
+	// unless absolutely necessary to minimize the risk of unintended changes or
+	// malicious attacks. To run as root, you must set IsolationMode to NoContainer
+	// and you must update config.json in greengrass-root/config to set allowFunctionsToRunAsRoot
+	// to yes.
+	RunAs *FunctionRunAsConfig `type:"structure"`
+}
+
+// String returns the string representation
+func (s FunctionExecutionConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FunctionExecutionConfig) GoString() string {
+	return s.String()
+}
+
+// SetIsolationMode sets the IsolationMode field's value.
+func (s *FunctionExecutionConfig) SetIsolationMode(v string) *FunctionExecutionConfig {
+	s.IsolationMode = &v
+	return s
+}
+
+// SetRunAs sets the RunAs field's value.
+func (s *FunctionExecutionConfig) SetRunAs(v *FunctionRunAsConfig) *FunctionExecutionConfig {
+	s.RunAs = v
+	return s
+}
+
+// Specifies the user and/or group whose permissions are used when running the
+// Lambda function. You can specify one or both values to override the default
+// values (ggc_user/ggc_group). We recommend that you avoid running as root
+// unless absolutely necessary to minimize the risk of unintended changes or
+// malicious attacks. To run as root, you must set IsolationMode to NoContainer
+// and you must update config.json in greengrass-root/config to set allowFunctionsToRunAsRoot
+// to yes.
+type FunctionRunAsConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The Group ID whose permissions are used to run a Lambda function.
+	Gid *int64 `type:"integer"`
+
+	// The User ID whose permissions are used to run a Lambda function.
+	Uid *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s FunctionRunAsConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FunctionRunAsConfig) GoString() string {
+	return s.String()
+}
+
+// SetGid sets the Gid field's value.
+func (s *FunctionRunAsConfig) SetGid(v int64) *FunctionRunAsConfig {
+	s.Gid = &v
+	return s
+}
+
+// SetUid sets the Uid field's value.
+func (s *FunctionRunAsConfig) SetUid(v int64) *FunctionRunAsConfig {
+	s.Uid = &v
 	return s
 }
 
@@ -8805,6 +10602,9 @@ func (s *GetAssociatedRoleInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetAssociatedRoleInput"}
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
+	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8851,6 +10651,105 @@ func (s *GetAssociatedRoleOutput) SetRoleArn(v string) *GetAssociatedRoleOutput 
 	return s
 }
 
+type GetBulkDeploymentStatusInput struct {
+	_ struct{} `type:"structure"`
+
+	// BulkDeploymentId is a required field
+	BulkDeploymentId *string `location:"uri" locationName:"BulkDeploymentId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetBulkDeploymentStatusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetBulkDeploymentStatusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetBulkDeploymentStatusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetBulkDeploymentStatusInput"}
+	if s.BulkDeploymentId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BulkDeploymentId"))
+	}
+	if s.BulkDeploymentId != nil && len(*s.BulkDeploymentId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BulkDeploymentId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBulkDeploymentId sets the BulkDeploymentId field's value.
+func (s *GetBulkDeploymentStatusInput) SetBulkDeploymentId(v string) *GetBulkDeploymentStatusInput {
+	s.BulkDeploymentId = &v
+	return s
+}
+
+// Information about the status of a bulk deployment at the time of the request.
+type GetBulkDeploymentStatusOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Relevant metrics on input records processed during bulk deployment.
+	BulkDeploymentMetrics *BulkDeploymentMetrics `type:"structure"`
+
+	// The status of the bulk deployment.
+	BulkDeploymentStatus *string `type:"string" enum:"BulkDeploymentStatus"`
+
+	// The time, in ISO format, when the deployment was created.
+	CreatedAt *string `type:"string"`
+
+	// Error details
+	ErrorDetails []*ErrorDetail `type:"list"`
+
+	// Error message
+	ErrorMessage *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetBulkDeploymentStatusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetBulkDeploymentStatusOutput) GoString() string {
+	return s.String()
+}
+
+// SetBulkDeploymentMetrics sets the BulkDeploymentMetrics field's value.
+func (s *GetBulkDeploymentStatusOutput) SetBulkDeploymentMetrics(v *BulkDeploymentMetrics) *GetBulkDeploymentStatusOutput {
+	s.BulkDeploymentMetrics = v
+	return s
+}
+
+// SetBulkDeploymentStatus sets the BulkDeploymentStatus field's value.
+func (s *GetBulkDeploymentStatusOutput) SetBulkDeploymentStatus(v string) *GetBulkDeploymentStatusOutput {
+	s.BulkDeploymentStatus = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *GetBulkDeploymentStatusOutput) SetCreatedAt(v string) *GetBulkDeploymentStatusOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetErrorDetails sets the ErrorDetails field's value.
+func (s *GetBulkDeploymentStatusOutput) SetErrorDetails(v []*ErrorDetail) *GetBulkDeploymentStatusOutput {
+	s.ErrorDetails = v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *GetBulkDeploymentStatusOutput) SetErrorMessage(v string) *GetBulkDeploymentStatusOutput {
+	s.ErrorMessage = &v
+	return s
+}
+
 type GetConnectivityInfoInput struct {
 	_ struct{} `type:"structure"`
 
@@ -8873,6 +10772,9 @@ func (s *GetConnectivityInfoInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetConnectivityInfoInput"}
 	if s.ThingName == nil {
 		invalidParams.Add(request.NewErrParamRequired("ThingName"))
+	}
+	if s.ThingName != nil && len(*s.ThingName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ThingName", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8920,6 +10822,248 @@ func (s *GetConnectivityInfoOutput) SetMessage(v string) *GetConnectivityInfoOut
 	return s
 }
 
+type GetConnectorDefinitionInput struct {
+	_ struct{} `type:"structure"`
+
+	// ConnectorDefinitionId is a required field
+	ConnectorDefinitionId *string `location:"uri" locationName:"ConnectorDefinitionId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetConnectorDefinitionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetConnectorDefinitionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetConnectorDefinitionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetConnectorDefinitionInput"}
+	if s.ConnectorDefinitionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectorDefinitionId"))
+	}
+	if s.ConnectorDefinitionId != nil && len(*s.ConnectorDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConnectorDefinitionId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConnectorDefinitionId sets the ConnectorDefinitionId field's value.
+func (s *GetConnectorDefinitionInput) SetConnectorDefinitionId(v string) *GetConnectorDefinitionInput {
+	s.ConnectorDefinitionId = &v
+	return s
+}
+
+type GetConnectorDefinitionOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `type:"string"`
+
+	CreationTimestamp *string `type:"string"`
+
+	Id *string `type:"string"`
+
+	LastUpdatedTimestamp *string `type:"string"`
+
+	LatestVersion *string `type:"string"`
+
+	LatestVersionArn *string `type:"string"`
+
+	Name *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetConnectorDefinitionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetConnectorDefinitionOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *GetConnectorDefinitionOutput) SetArn(v string) *GetConnectorDefinitionOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCreationTimestamp sets the CreationTimestamp field's value.
+func (s *GetConnectorDefinitionOutput) SetCreationTimestamp(v string) *GetConnectorDefinitionOutput {
+	s.CreationTimestamp = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *GetConnectorDefinitionOutput) SetId(v string) *GetConnectorDefinitionOutput {
+	s.Id = &v
+	return s
+}
+
+// SetLastUpdatedTimestamp sets the LastUpdatedTimestamp field's value.
+func (s *GetConnectorDefinitionOutput) SetLastUpdatedTimestamp(v string) *GetConnectorDefinitionOutput {
+	s.LastUpdatedTimestamp = &v
+	return s
+}
+
+// SetLatestVersion sets the LatestVersion field's value.
+func (s *GetConnectorDefinitionOutput) SetLatestVersion(v string) *GetConnectorDefinitionOutput {
+	s.LatestVersion = &v
+	return s
+}
+
+// SetLatestVersionArn sets the LatestVersionArn field's value.
+func (s *GetConnectorDefinitionOutput) SetLatestVersionArn(v string) *GetConnectorDefinitionOutput {
+	s.LatestVersionArn = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *GetConnectorDefinitionOutput) SetName(v string) *GetConnectorDefinitionOutput {
+	s.Name = &v
+	return s
+}
+
+type GetConnectorDefinitionVersionInput struct {
+	_ struct{} `type:"structure"`
+
+	// ConnectorDefinitionId is a required field
+	ConnectorDefinitionId *string `location:"uri" locationName:"ConnectorDefinitionId" type:"string" required:"true"`
+
+	// ConnectorDefinitionVersionId is a required field
+	ConnectorDefinitionVersionId *string `location:"uri" locationName:"ConnectorDefinitionVersionId" type:"string" required:"true"`
+
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s GetConnectorDefinitionVersionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetConnectorDefinitionVersionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetConnectorDefinitionVersionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetConnectorDefinitionVersionInput"}
+	if s.ConnectorDefinitionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectorDefinitionId"))
+	}
+	if s.ConnectorDefinitionId != nil && len(*s.ConnectorDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConnectorDefinitionId", 1))
+	}
+	if s.ConnectorDefinitionVersionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectorDefinitionVersionId"))
+	}
+	if s.ConnectorDefinitionVersionId != nil && len(*s.ConnectorDefinitionVersionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConnectorDefinitionVersionId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConnectorDefinitionId sets the ConnectorDefinitionId field's value.
+func (s *GetConnectorDefinitionVersionInput) SetConnectorDefinitionId(v string) *GetConnectorDefinitionVersionInput {
+	s.ConnectorDefinitionId = &v
+	return s
+}
+
+// SetConnectorDefinitionVersionId sets the ConnectorDefinitionVersionId field's value.
+func (s *GetConnectorDefinitionVersionInput) SetConnectorDefinitionVersionId(v string) *GetConnectorDefinitionVersionInput {
+	s.ConnectorDefinitionVersionId = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetConnectorDefinitionVersionInput) SetNextToken(v string) *GetConnectorDefinitionVersionInput {
+	s.NextToken = &v
+	return s
+}
+
+// Information about a connector definition version.
+type GetConnectorDefinitionVersionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the connector definition version.
+	Arn *string `type:"string"`
+
+	// The time, in milliseconds since the epoch, when the connector definition
+	// version was created.
+	CreationTimestamp *string `type:"string"`
+
+	// Information about the connector definition version.
+	Definition *ConnectorDefinitionVersion `type:"structure"`
+
+	// The ID of the connector definition version.
+	Id *string `type:"string"`
+
+	// The token for the next set of results, or ''null'' if there are no additional
+	// results.
+	NextToken *string `type:"string"`
+
+	// The version of the connector definition version.
+	Version *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetConnectorDefinitionVersionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetConnectorDefinitionVersionOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *GetConnectorDefinitionVersionOutput) SetArn(v string) *GetConnectorDefinitionVersionOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCreationTimestamp sets the CreationTimestamp field's value.
+func (s *GetConnectorDefinitionVersionOutput) SetCreationTimestamp(v string) *GetConnectorDefinitionVersionOutput {
+	s.CreationTimestamp = &v
+	return s
+}
+
+// SetDefinition sets the Definition field's value.
+func (s *GetConnectorDefinitionVersionOutput) SetDefinition(v *ConnectorDefinitionVersion) *GetConnectorDefinitionVersionOutput {
+	s.Definition = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *GetConnectorDefinitionVersionOutput) SetId(v string) *GetConnectorDefinitionVersionOutput {
+	s.Id = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetConnectorDefinitionVersionOutput) SetNextToken(v string) *GetConnectorDefinitionVersionOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *GetConnectorDefinitionVersionOutput) SetVersion(v string) *GetConnectorDefinitionVersionOutput {
+	s.Version = &v
+	return s
+}
+
 type GetCoreDefinitionInput struct {
 	_ struct{} `type:"structure"`
 
@@ -8942,6 +11086,9 @@ func (s *GetCoreDefinitionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetCoreDefinitionInput"}
 	if s.CoreDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("CoreDefinitionId"))
+	}
+	if s.CoreDefinitionId != nil && len(*s.CoreDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CoreDefinitionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -9052,8 +11199,14 @@ func (s *GetCoreDefinitionVersionInput) Validate() error {
 	if s.CoreDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("CoreDefinitionId"))
 	}
+	if s.CoreDefinitionId != nil && len(*s.CoreDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CoreDefinitionId", 1))
+	}
 	if s.CoreDefinitionVersionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("CoreDefinitionVersionId"))
+	}
+	if s.CoreDefinitionVersionId != nil && len(*s.CoreDefinitionVersionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CoreDefinitionVersionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -9089,6 +11242,10 @@ type GetCoreDefinitionVersionOutput struct {
 
 	// The ID of the core definition version.
 	Id *string `type:"string"`
+
+	// The token for the next set of results, or ''null'' if there are no additional
+	// results.
+	NextToken *string `type:"string"`
 
 	// The version of the core definition version.
 	Version *string `type:"string"`
@@ -9128,6 +11285,12 @@ func (s *GetCoreDefinitionVersionOutput) SetId(v string) *GetCoreDefinitionVersi
 	return s
 }
 
+// SetNextToken sets the NextToken field's value.
+func (s *GetCoreDefinitionVersionOutput) SetNextToken(v string) *GetCoreDefinitionVersionOutput {
+	s.NextToken = &v
+	return s
+}
+
 // SetVersion sets the Version field's value.
 func (s *GetCoreDefinitionVersionOutput) SetVersion(v string) *GetCoreDefinitionVersionOutput {
 	s.Version = &v
@@ -9160,8 +11323,14 @@ func (s *GetDeploymentStatusInput) Validate() error {
 	if s.DeploymentId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeploymentId"))
 	}
+	if s.DeploymentId != nil && len(*s.DeploymentId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeploymentId", 1))
+	}
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
+	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -9186,7 +11355,8 @@ func (s *GetDeploymentStatusInput) SetGroupId(v string) *GetDeploymentStatusInpu
 type GetDeploymentStatusOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The status of the deployment.
+	// The status of the deployment: ''Pending'', ''InProgress'', ''Success'', or
+	// ''Failure''.
 	DeploymentStatus *string `type:"string"`
 
 	// The type of the deployment.
@@ -9265,6 +11435,9 @@ func (s *GetDeviceDefinitionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetDeviceDefinitionInput"}
 	if s.DeviceDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceDefinitionId"))
+	}
+	if s.DeviceDefinitionId != nil && len(*s.DeviceDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceDefinitionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -9357,6 +11530,8 @@ type GetDeviceDefinitionVersionInput struct {
 
 	// DeviceDefinitionVersionId is a required field
 	DeviceDefinitionVersionId *string `location:"uri" locationName:"DeviceDefinitionVersionId" type:"string" required:"true"`
+
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
 }
 
 // String returns the string representation
@@ -9375,8 +11550,14 @@ func (s *GetDeviceDefinitionVersionInput) Validate() error {
 	if s.DeviceDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceDefinitionId"))
 	}
+	if s.DeviceDefinitionId != nil && len(*s.DeviceDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceDefinitionId", 1))
+	}
 	if s.DeviceDefinitionVersionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceDefinitionVersionId"))
+	}
+	if s.DeviceDefinitionVersionId != nil && len(*s.DeviceDefinitionVersionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceDefinitionVersionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -9397,6 +11578,12 @@ func (s *GetDeviceDefinitionVersionInput) SetDeviceDefinitionVersionId(v string)
 	return s
 }
 
+// SetNextToken sets the NextToken field's value.
+func (s *GetDeviceDefinitionVersionInput) SetNextToken(v string) *GetDeviceDefinitionVersionInput {
+	s.NextToken = &v
+	return s
+}
+
 type GetDeviceDefinitionVersionOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -9412,6 +11599,10 @@ type GetDeviceDefinitionVersionOutput struct {
 
 	// The ID of the device definition version.
 	Id *string `type:"string"`
+
+	// The token for the next set of results, or ''null'' if there are no additional
+	// results.
+	NextToken *string `type:"string"`
 
 	// The version of the device definition version.
 	Version *string `type:"string"`
@@ -9451,6 +11642,12 @@ func (s *GetDeviceDefinitionVersionOutput) SetId(v string) *GetDeviceDefinitionV
 	return s
 }
 
+// SetNextToken sets the NextToken field's value.
+func (s *GetDeviceDefinitionVersionOutput) SetNextToken(v string) *GetDeviceDefinitionVersionOutput {
+	s.NextToken = &v
+	return s
+}
+
 // SetVersion sets the Version field's value.
 func (s *GetDeviceDefinitionVersionOutput) SetVersion(v string) *GetDeviceDefinitionVersionOutput {
 	s.Version = &v
@@ -9479,6 +11676,9 @@ func (s *GetFunctionDefinitionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetFunctionDefinitionInput"}
 	if s.FunctionDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("FunctionDefinitionId"))
+	}
+	if s.FunctionDefinitionId != nil && len(*s.FunctionDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FunctionDefinitionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -9571,6 +11771,8 @@ type GetFunctionDefinitionVersionInput struct {
 
 	// FunctionDefinitionVersionId is a required field
 	FunctionDefinitionVersionId *string `location:"uri" locationName:"FunctionDefinitionVersionId" type:"string" required:"true"`
+
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
 }
 
 // String returns the string representation
@@ -9589,8 +11791,14 @@ func (s *GetFunctionDefinitionVersionInput) Validate() error {
 	if s.FunctionDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("FunctionDefinitionId"))
 	}
+	if s.FunctionDefinitionId != nil && len(*s.FunctionDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FunctionDefinitionId", 1))
+	}
 	if s.FunctionDefinitionVersionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("FunctionDefinitionVersionId"))
+	}
+	if s.FunctionDefinitionVersionId != nil && len(*s.FunctionDefinitionVersionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FunctionDefinitionVersionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -9611,6 +11819,12 @@ func (s *GetFunctionDefinitionVersionInput) SetFunctionDefinitionVersionId(v str
 	return s
 }
 
+// SetNextToken sets the NextToken field's value.
+func (s *GetFunctionDefinitionVersionInput) SetNextToken(v string) *GetFunctionDefinitionVersionInput {
+	s.NextToken = &v
+	return s
+}
+
 // Information about a function definition version.
 type GetFunctionDefinitionVersionOutput struct {
 	_ struct{} `type:"structure"`
@@ -9627,6 +11841,10 @@ type GetFunctionDefinitionVersionOutput struct {
 
 	// The ID of the function definition version.
 	Id *string `type:"string"`
+
+	// The token for the next set of results, or ''null'' if there are no additional
+	// results.
+	NextToken *string `type:"string"`
 
 	// The version of the function definition version.
 	Version *string `type:"string"`
@@ -9666,6 +11884,12 @@ func (s *GetFunctionDefinitionVersionOutput) SetId(v string) *GetFunctionDefinit
 	return s
 }
 
+// SetNextToken sets the NextToken field's value.
+func (s *GetFunctionDefinitionVersionOutput) SetNextToken(v string) *GetFunctionDefinitionVersionOutput {
+	s.NextToken = &v
+	return s
+}
+
 // SetVersion sets the Version field's value.
 func (s *GetFunctionDefinitionVersionOutput) SetVersion(v string) *GetFunctionDefinitionVersionOutput {
 	s.Version = &v
@@ -9698,8 +11922,14 @@ func (s *GetGroupCertificateAuthorityInput) Validate() error {
 	if s.CertificateAuthorityId == nil {
 		invalidParams.Add(request.NewErrParamRequired("CertificateAuthorityId"))
 	}
+	if s.CertificateAuthorityId != nil && len(*s.CertificateAuthorityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CertificateAuthorityId", 1))
+	}
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
+	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -9785,6 +12015,9 @@ func (s *GetGroupCertificateConfigurationInput) Validate() error {
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
 	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -9858,6 +12091,9 @@ func (s *GetGroupInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetGroupInput"}
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
+	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -9968,8 +12204,14 @@ func (s *GetGroupVersionInput) Validate() error {
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
 	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
+	}
 	if s.GroupVersionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupVersionId"))
+	}
+	if s.GroupVersionId != nil && len(*s.GroupVersionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupVersionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -10073,6 +12315,9 @@ func (s *GetLoggerDefinitionInput) Validate() error {
 	if s.LoggerDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("LoggerDefinitionId"))
 	}
+	if s.LoggerDefinitionId != nil && len(*s.LoggerDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LoggerDefinitionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -10164,6 +12409,8 @@ type GetLoggerDefinitionVersionInput struct {
 
 	// LoggerDefinitionVersionId is a required field
 	LoggerDefinitionVersionId *string `location:"uri" locationName:"LoggerDefinitionVersionId" type:"string" required:"true"`
+
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
 }
 
 // String returns the string representation
@@ -10182,8 +12429,14 @@ func (s *GetLoggerDefinitionVersionInput) Validate() error {
 	if s.LoggerDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("LoggerDefinitionId"))
 	}
+	if s.LoggerDefinitionId != nil && len(*s.LoggerDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LoggerDefinitionId", 1))
+	}
 	if s.LoggerDefinitionVersionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("LoggerDefinitionVersionId"))
+	}
+	if s.LoggerDefinitionVersionId != nil && len(*s.LoggerDefinitionVersionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LoggerDefinitionVersionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -10201,6 +12454,12 @@ func (s *GetLoggerDefinitionVersionInput) SetLoggerDefinitionId(v string) *GetLo
 // SetLoggerDefinitionVersionId sets the LoggerDefinitionVersionId field's value.
 func (s *GetLoggerDefinitionVersionInput) SetLoggerDefinitionVersionId(v string) *GetLoggerDefinitionVersionInput {
 	s.LoggerDefinitionVersionId = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetLoggerDefinitionVersionInput) SetNextToken(v string) *GetLoggerDefinitionVersionInput {
+	s.NextToken = &v
 	return s
 }
 
@@ -10287,6 +12546,9 @@ func (s *GetResourceDefinitionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetResourceDefinitionInput"}
 	if s.ResourceDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResourceDefinitionId"))
+	}
+	if s.ResourceDefinitionId != nil && len(*s.ResourceDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceDefinitionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -10397,8 +12659,14 @@ func (s *GetResourceDefinitionVersionInput) Validate() error {
 	if s.ResourceDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResourceDefinitionId"))
 	}
+	if s.ResourceDefinitionId != nil && len(*s.ResourceDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceDefinitionId", 1))
+	}
 	if s.ResourceDefinitionVersionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResourceDefinitionVersionId"))
+	}
+	if s.ResourceDefinitionVersionId != nil && len(*s.ResourceDefinitionVersionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceDefinitionVersionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -10549,6 +12817,9 @@ func (s *GetSubscriptionDefinitionInput) Validate() error {
 	if s.SubscriptionDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("SubscriptionDefinitionId"))
 	}
+	if s.SubscriptionDefinitionId != nil && len(*s.SubscriptionDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubscriptionDefinitionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -10635,6 +12906,8 @@ func (s *GetSubscriptionDefinitionOutput) SetName(v string) *GetSubscriptionDefi
 type GetSubscriptionDefinitionVersionInput struct {
 	_ struct{} `type:"structure"`
 
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
 	// SubscriptionDefinitionId is a required field
 	SubscriptionDefinitionId *string `location:"uri" locationName:"SubscriptionDefinitionId" type:"string" required:"true"`
 
@@ -10658,14 +12931,26 @@ func (s *GetSubscriptionDefinitionVersionInput) Validate() error {
 	if s.SubscriptionDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("SubscriptionDefinitionId"))
 	}
+	if s.SubscriptionDefinitionId != nil && len(*s.SubscriptionDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubscriptionDefinitionId", 1))
+	}
 	if s.SubscriptionDefinitionVersionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("SubscriptionDefinitionVersionId"))
+	}
+	if s.SubscriptionDefinitionVersionId != nil && len(*s.SubscriptionDefinitionVersionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubscriptionDefinitionVersionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetSubscriptionDefinitionVersionInput) SetNextToken(v string) *GetSubscriptionDefinitionVersionInput {
+	s.NextToken = &v
+	return s
 }
 
 // SetSubscriptionDefinitionId sets the SubscriptionDefinitionId field's value.
@@ -10696,6 +12981,10 @@ type GetSubscriptionDefinitionVersionOutput struct {
 
 	// The ID of the subscription definition version.
 	Id *string `type:"string"`
+
+	// The token for the next set of results, or ''null'' if there are no additional
+	// results.
+	NextToken *string `type:"string"`
 
 	// The version of the subscription definition version.
 	Version *string `type:"string"`
@@ -10732,6 +13021,12 @@ func (s *GetSubscriptionDefinitionVersionOutput) SetDefinition(v *SubscriptionDe
 // SetId sets the Id field's value.
 func (s *GetSubscriptionDefinitionVersionOutput) SetId(v string) *GetSubscriptionDefinitionVersionOutput {
 	s.Id = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetSubscriptionDefinitionVersionOutput) SetNextToken(v string) *GetSubscriptionDefinitionVersionOutput {
+	s.NextToken = &v
 	return s
 }
 
@@ -10856,8 +13151,8 @@ func (s *GroupInformation) SetName(v string) *GroupInformation {
 type GroupOwnerSetting struct {
 	_ struct{} `type:"structure"`
 
-	// If true, GreenGrass automatically adds the specified Linux OS group owner
-	// of the resource to the Lambda process privileges. Thus the Lambda process
+	// If true, AWS IoT Greengrass automatically adds the specified Linux OS group
+	// owner of the resource to the Lambda process privileges. Thus the Lambda process
 	// will have the file access permissions of the added Linux group.
 	AutoAddGroupOwner *bool `type:"boolean"`
 
@@ -10892,6 +13187,9 @@ func (s *GroupOwnerSetting) SetGroupOwner(v string) *GroupOwnerSetting {
 type GroupVersion struct {
 	_ struct{} `type:"structure"`
 
+	// The ARN of the connector definition version for this group.
+	ConnectorDefinitionVersionArn *string `type:"string"`
+
 	// The ARN of the core definition version for this group.
 	CoreDefinitionVersionArn *string `type:"string"`
 
@@ -10904,7 +13202,7 @@ type GroupVersion struct {
 	// The ARN of the logger definition version for this group.
 	LoggerDefinitionVersionArn *string `type:"string"`
 
-	// The resource definition version ARN for this group.
+	// The ARN of the resource definition version for this group.
 	ResourceDefinitionVersionArn *string `type:"string"`
 
 	// The ARN of the subscription definition version for this group.
@@ -10919,6 +13217,12 @@ func (s GroupVersion) String() string {
 // GoString returns the string representation
 func (s GroupVersion) GoString() string {
 	return s.String()
+}
+
+// SetConnectorDefinitionVersionArn sets the ConnectorDefinitionVersionArn field's value.
+func (s *GroupVersion) SetConnectorDefinitionVersionArn(v string) *GroupVersion {
+	s.ConnectorDefinitionVersionArn = &v
+	return s
 }
 
 // SetCoreDefinitionVersionArn sets the CoreDefinitionVersionArn field's value.
@@ -10957,6 +13261,302 @@ func (s *GroupVersion) SetSubscriptionDefinitionVersionArn(v string) *GroupVersi
 	return s
 }
 
+type ListBulkDeploymentDetailedReportsInput struct {
+	_ struct{} `type:"structure"`
+
+	// BulkDeploymentId is a required field
+	BulkDeploymentId *string `location:"uri" locationName:"BulkDeploymentId" type:"string" required:"true"`
+
+	MaxResults *string `location:"querystring" locationName:"MaxResults" type:"string"`
+
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListBulkDeploymentDetailedReportsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListBulkDeploymentDetailedReportsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListBulkDeploymentDetailedReportsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListBulkDeploymentDetailedReportsInput"}
+	if s.BulkDeploymentId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BulkDeploymentId"))
+	}
+	if s.BulkDeploymentId != nil && len(*s.BulkDeploymentId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BulkDeploymentId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBulkDeploymentId sets the BulkDeploymentId field's value.
+func (s *ListBulkDeploymentDetailedReportsInput) SetBulkDeploymentId(v string) *ListBulkDeploymentDetailedReportsInput {
+	s.BulkDeploymentId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListBulkDeploymentDetailedReportsInput) SetMaxResults(v string) *ListBulkDeploymentDetailedReportsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListBulkDeploymentDetailedReportsInput) SetNextToken(v string) *ListBulkDeploymentDetailedReportsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListBulkDeploymentDetailedReportsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of the individual group deployments in the bulk deployment operation.
+	Deployments []*BulkDeploymentResult `type:"list"`
+
+	// The token for the next set of results, or ''null'' if there are no additional
+	// results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListBulkDeploymentDetailedReportsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListBulkDeploymentDetailedReportsOutput) GoString() string {
+	return s.String()
+}
+
+// SetDeployments sets the Deployments field's value.
+func (s *ListBulkDeploymentDetailedReportsOutput) SetDeployments(v []*BulkDeploymentResult) *ListBulkDeploymentDetailedReportsOutput {
+	s.Deployments = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListBulkDeploymentDetailedReportsOutput) SetNextToken(v string) *ListBulkDeploymentDetailedReportsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListBulkDeploymentsInput struct {
+	_ struct{} `type:"structure"`
+
+	MaxResults *string `location:"querystring" locationName:"MaxResults" type:"string"`
+
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListBulkDeploymentsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListBulkDeploymentsInput) GoString() string {
+	return s.String()
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListBulkDeploymentsInput) SetMaxResults(v string) *ListBulkDeploymentsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListBulkDeploymentsInput) SetNextToken(v string) *ListBulkDeploymentsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListBulkDeploymentsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of bulk deployments.
+	BulkDeployments []*BulkDeployment `type:"list"`
+
+	// The token for the next set of results, or ''null'' if there are no additional
+	// results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListBulkDeploymentsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListBulkDeploymentsOutput) GoString() string {
+	return s.String()
+}
+
+// SetBulkDeployments sets the BulkDeployments field's value.
+func (s *ListBulkDeploymentsOutput) SetBulkDeployments(v []*BulkDeployment) *ListBulkDeploymentsOutput {
+	s.BulkDeployments = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListBulkDeploymentsOutput) SetNextToken(v string) *ListBulkDeploymentsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListConnectorDefinitionVersionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// ConnectorDefinitionId is a required field
+	ConnectorDefinitionId *string `location:"uri" locationName:"ConnectorDefinitionId" type:"string" required:"true"`
+
+	MaxResults *string `location:"querystring" locationName:"MaxResults" type:"string"`
+
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListConnectorDefinitionVersionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListConnectorDefinitionVersionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListConnectorDefinitionVersionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListConnectorDefinitionVersionsInput"}
+	if s.ConnectorDefinitionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectorDefinitionId"))
+	}
+	if s.ConnectorDefinitionId != nil && len(*s.ConnectorDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConnectorDefinitionId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConnectorDefinitionId sets the ConnectorDefinitionId field's value.
+func (s *ListConnectorDefinitionVersionsInput) SetConnectorDefinitionId(v string) *ListConnectorDefinitionVersionsInput {
+	s.ConnectorDefinitionId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListConnectorDefinitionVersionsInput) SetMaxResults(v string) *ListConnectorDefinitionVersionsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListConnectorDefinitionVersionsInput) SetNextToken(v string) *ListConnectorDefinitionVersionsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListConnectorDefinitionVersionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	Versions []*VersionInformation `type:"list"`
+}
+
+// String returns the string representation
+func (s ListConnectorDefinitionVersionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListConnectorDefinitionVersionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListConnectorDefinitionVersionsOutput) SetNextToken(v string) *ListConnectorDefinitionVersionsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetVersions sets the Versions field's value.
+func (s *ListConnectorDefinitionVersionsOutput) SetVersions(v []*VersionInformation) *ListConnectorDefinitionVersionsOutput {
+	s.Versions = v
+	return s
+}
+
+type ListConnectorDefinitionsInput struct {
+	_ struct{} `type:"structure"`
+
+	MaxResults *string `location:"querystring" locationName:"MaxResults" type:"string"`
+
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListConnectorDefinitionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListConnectorDefinitionsInput) GoString() string {
+	return s.String()
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListConnectorDefinitionsInput) SetMaxResults(v string) *ListConnectorDefinitionsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListConnectorDefinitionsInput) SetNextToken(v string) *ListConnectorDefinitionsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListConnectorDefinitionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	Definitions []*DefinitionInformation `type:"list"`
+
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListConnectorDefinitionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListConnectorDefinitionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetDefinitions sets the Definitions field's value.
+func (s *ListConnectorDefinitionsOutput) SetDefinitions(v []*DefinitionInformation) *ListConnectorDefinitionsOutput {
+	s.Definitions = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListConnectorDefinitionsOutput) SetNextToken(v string) *ListConnectorDefinitionsOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListCoreDefinitionVersionsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -10983,6 +13583,9 @@ func (s *ListCoreDefinitionVersionsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListCoreDefinitionVersionsInput"}
 	if s.CoreDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("CoreDefinitionId"))
+	}
+	if s.CoreDefinitionId != nil && len(*s.CoreDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CoreDefinitionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -11126,6 +13729,9 @@ func (s *ListDeploymentsInput) Validate() error {
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
 	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -11210,6 +13816,9 @@ func (s *ListDeviceDefinitionVersionsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListDeviceDefinitionVersionsInput"}
 	if s.DeviceDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceDefinitionId"))
+	}
+	if s.DeviceDefinitionId != nil && len(*s.DeviceDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceDefinitionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -11353,6 +13962,9 @@ func (s *ListFunctionDefinitionVersionsInput) Validate() error {
 	if s.FunctionDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("FunctionDefinitionId"))
 	}
+	if s.FunctionDefinitionId != nil && len(*s.FunctionDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FunctionDefinitionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -11491,6 +14103,9 @@ func (s *ListGroupCertificateAuthoritiesInput) Validate() error {
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
 	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -11553,6 +14168,9 @@ func (s *ListGroupVersionsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListGroupVersionsInput"}
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
+	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -11699,6 +14317,9 @@ func (s *ListLoggerDefinitionVersionsInput) Validate() error {
 	if s.LoggerDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("LoggerDefinitionId"))
 	}
+	if s.LoggerDefinitionId != nil && len(*s.LoggerDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LoggerDefinitionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -11841,6 +14462,9 @@ func (s *ListResourceDefinitionVersionsInput) Validate() error {
 	if s.ResourceDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResourceDefinitionId"))
 	}
+	if s.ResourceDefinitionId != nil && len(*s.ResourceDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceDefinitionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -11982,6 +14606,9 @@ func (s *ListSubscriptionDefinitionVersionsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListSubscriptionDefinitionVersionsInput"}
 	if s.SubscriptionDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("SubscriptionDefinitionId"))
+	}
+	if s.SubscriptionDefinitionId != nil && len(*s.SubscriptionDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubscriptionDefinitionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -12136,7 +14763,7 @@ func (s *LocalDeviceResourceData) SetSourcePath(v string) *LocalDeviceResourceDa
 type LocalVolumeResourceData struct {
 	_ struct{} `type:"structure"`
 
-	// The absolute local path of the resource inside the lambda environment.
+	// The absolute local path of the resource inside the Lambda environment.
 	DestinationPath *string `type:"string"`
 
 	// Allows you to configure additional group privileges for the Lambda process.
@@ -12183,7 +14810,9 @@ type Logger struct {
 	// The component that will be subject to logging.
 	Component *string `type:"string" enum:"LoggerComponent"`
 
-	// The id of the logger.
+	// A descriptive or arbitrary ID for the logger. This value must be unique within
+	// the logger definition version. Max length is 128 characters with pattern
+	// ''[a-zA-Z0-9:_-]+''.
 	Id *string `type:"string"`
 
 	// The level of the logs.
@@ -12290,6 +14919,9 @@ func (s *ResetDeploymentsInput) Validate() error {
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
 	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -12356,9 +14988,9 @@ type Resource struct {
 	// be unique within a Greengrass group.
 	Id *string `type:"string"`
 
-	// The descriptive resource name, which is displayed on the Greengrass console.
-	// Max length 128 characters with pattern ''[a-zA-Z0-9:_-]+''. This must be
-	// unique within a Greengrass group.
+	// The descriptive resource name, which is displayed on the AWS IoT Greengrass
+	// console. Max length 128 characters with pattern ''[a-zA-Z0-9:_-]+''. This
+	// must be unique within a Greengrass group.
 	Name *string `type:"string"`
 
 	// A container of data for all resource types.
@@ -12430,7 +15062,8 @@ func (s *ResourceAccessPolicy) SetResourceId(v string) *ResourceAccessPolicy {
 
 // A container for resource data. The container takes only one of the following
 // supported resource data types: ''LocalDeviceResourceData'', ''LocalVolumeResourceData'',
-// ''SageMakerMachineLearningModelResourceData'', ''S3MachineLearningModelResourceData''.
+// ''SageMakerMachineLearningModelResourceData'', ''S3MachineLearningModelResourceData'',
+// ''SecretsManagerSecretResourceData''.
 type ResourceDataContainer struct {
 	_ struct{} `type:"structure"`
 
@@ -12440,11 +15073,15 @@ type ResourceDataContainer struct {
 	// Attributes that define the local volume resource.
 	LocalVolumeResourceData *LocalVolumeResourceData `type:"structure"`
 
-	// Attributes that define an S3 machine learning resource.
+	// Attributes that define an Amazon S3 machine learning resource.
 	S3MachineLearningModelResourceData *S3MachineLearningModelResourceData `type:"structure"`
 
-	// Attributes that define an SageMaker machine learning resource.
+	// Attributes that define an Amazon SageMaker machine learning resource.
 	SageMakerMachineLearningModelResourceData *SageMakerMachineLearningModelResourceData `type:"structure"`
+
+	// Attributes that define a secret resource, which references a secret from
+	// AWS Secrets Manager.
+	SecretsManagerSecretResourceData *SecretsManagerSecretResourceData `type:"structure"`
 }
 
 // String returns the string representation
@@ -12481,6 +15118,12 @@ func (s *ResourceDataContainer) SetSageMakerMachineLearningModelResourceData(v *
 	return s
 }
 
+// SetSecretsManagerSecretResourceData sets the SecretsManagerSecretResourceData field's value.
+func (s *ResourceDataContainer) SetSecretsManagerSecretResourceData(v *SecretsManagerSecretResourceData) *ResourceDataContainer {
+	s.SecretsManagerSecretResourceData = v
+	return s
+}
+
 // Information about a resource definition version.
 type ResourceDefinitionVersion struct {
 	_ struct{} `type:"structure"`
@@ -12505,7 +15148,7 @@ func (s *ResourceDefinitionVersion) SetResources(v []*Resource) *ResourceDefinit
 	return s
 }
 
-// Attributes that define an S3 machine learning resource.
+// Attributes that define an Amazon S3 machine learning resource.
 type S3MachineLearningModelResourceData struct {
 	_ struct{} `type:"structure"`
 
@@ -12539,14 +15182,14 @@ func (s *S3MachineLearningModelResourceData) SetS3Uri(v string) *S3MachineLearni
 	return s
 }
 
-// Attributes that define an SageMaker machine learning resource.
+// Attributes that define an Amazon SageMaker machine learning resource.
 type SageMakerMachineLearningModelResourceData struct {
 	_ struct{} `type:"structure"`
 
 	// The absolute local path of the resource inside the Lambda environment.
 	DestinationPath *string `type:"string"`
 
-	// The ARN of the SageMaker training job that represents the source model.
+	// The ARN of the Amazon SageMaker training job that represents the source model.
 	SageMakerJobArn *string `type:"string"`
 }
 
@@ -12572,22 +15215,198 @@ func (s *SageMakerMachineLearningModelResourceData) SetSageMakerJobArn(v string)
 	return s
 }
 
+// Attributes that define a secret resource, which references a secret from
+// AWS Secrets Manager. AWS IoT Greengrass stores a local, encrypted copy of
+// the secret on the Greengrass core, where it can be securely accessed by connectors
+// and Lambda functions.
+type SecretsManagerSecretResourceData struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the Secrets Manager secret to make available on the core. The
+	// value of the secret's latest version (represented by the ''AWSCURRENT'' staging
+	// label) is included by default.
+	ARN *string `type:"string"`
+
+	// Optional. The staging labels whose values you want to make available on the
+	// core, in addition to ''AWSCURRENT''.
+	AdditionalStagingLabelsToDownload []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s SecretsManagerSecretResourceData) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SecretsManagerSecretResourceData) GoString() string {
+	return s.String()
+}
+
+// SetARN sets the ARN field's value.
+func (s *SecretsManagerSecretResourceData) SetARN(v string) *SecretsManagerSecretResourceData {
+	s.ARN = &v
+	return s
+}
+
+// SetAdditionalStagingLabelsToDownload sets the AdditionalStagingLabelsToDownload field's value.
+func (s *SecretsManagerSecretResourceData) SetAdditionalStagingLabelsToDownload(v []*string) *SecretsManagerSecretResourceData {
+	s.AdditionalStagingLabelsToDownload = v
+	return s
+}
+
+// Information about a bulk deployment. You cannot start a new bulk deployment
+// while another one is still running or in a non-terminal state.
+type StartBulkDeploymentInput struct {
+	_ struct{} `type:"structure"`
+
+	AmznClientToken *string `location:"header" locationName:"X-Amzn-Client-Token" type:"string"`
+
+	// The ARN of the execution role to associate with the bulk deployment operation.
+	// This IAM role must allow the ''greengrass:CreateDeployment'' action for all
+	// group versions that are listed in the input file. This IAM role must have
+	// access to the S3 bucket containing the input file.
+	ExecutionRoleArn *string `type:"string"`
+
+	// The URI of the input file contained in the S3 bucket. The execution role
+	// must have ''getObject'' permissions on this bucket to access the input file.
+	// The input file is a JSON-serialized, line delimited file with UTF-8 encoding
+	// that provides a list of group and version IDs and the deployment type. This
+	// file must be less than 100 MB. Currently, AWS IoT Greengrass supports only
+	// ''NewDeployment'' deployment types.
+	InputFileUri *string `type:"string"`
+}
+
+// String returns the string representation
+func (s StartBulkDeploymentInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartBulkDeploymentInput) GoString() string {
+	return s.String()
+}
+
+// SetAmznClientToken sets the AmznClientToken field's value.
+func (s *StartBulkDeploymentInput) SetAmznClientToken(v string) *StartBulkDeploymentInput {
+	s.AmznClientToken = &v
+	return s
+}
+
+// SetExecutionRoleArn sets the ExecutionRoleArn field's value.
+func (s *StartBulkDeploymentInput) SetExecutionRoleArn(v string) *StartBulkDeploymentInput {
+	s.ExecutionRoleArn = &v
+	return s
+}
+
+// SetInputFileUri sets the InputFileUri field's value.
+func (s *StartBulkDeploymentInput) SetInputFileUri(v string) *StartBulkDeploymentInput {
+	s.InputFileUri = &v
+	return s
+}
+
+type StartBulkDeploymentOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the bulk deployment.
+	BulkDeploymentArn *string `type:"string"`
+
+	// The ID of the bulk deployment.
+	BulkDeploymentId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s StartBulkDeploymentOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartBulkDeploymentOutput) GoString() string {
+	return s.String()
+}
+
+// SetBulkDeploymentArn sets the BulkDeploymentArn field's value.
+func (s *StartBulkDeploymentOutput) SetBulkDeploymentArn(v string) *StartBulkDeploymentOutput {
+	s.BulkDeploymentArn = &v
+	return s
+}
+
+// SetBulkDeploymentId sets the BulkDeploymentId field's value.
+func (s *StartBulkDeploymentOutput) SetBulkDeploymentId(v string) *StartBulkDeploymentOutput {
+	s.BulkDeploymentId = &v
+	return s
+}
+
+type StopBulkDeploymentInput struct {
+	_ struct{} `type:"structure"`
+
+	// BulkDeploymentId is a required field
+	BulkDeploymentId *string `location:"uri" locationName:"BulkDeploymentId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StopBulkDeploymentInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopBulkDeploymentInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopBulkDeploymentInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopBulkDeploymentInput"}
+	if s.BulkDeploymentId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BulkDeploymentId"))
+	}
+	if s.BulkDeploymentId != nil && len(*s.BulkDeploymentId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BulkDeploymentId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBulkDeploymentId sets the BulkDeploymentId field's value.
+func (s *StopBulkDeploymentInput) SetBulkDeploymentId(v string) *StopBulkDeploymentInput {
+	s.BulkDeploymentId = &v
+	return s
+}
+
+type StopBulkDeploymentOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s StopBulkDeploymentOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopBulkDeploymentOutput) GoString() string {
+	return s.String()
+}
+
 // Information about a subscription.
 type Subscription struct {
 	_ struct{} `type:"structure"`
 
-	// The id of the subscription.
+	// A descriptive or arbitrary ID for the subscription. This value must be unique
+	// within the subscription definition version. Max length is 128 characters
+	// with pattern ''[a-zA-Z0-9:_-]+''.
 	Id *string `type:"string"`
 
 	// The source of the subscription. Can be a thing ARN, a Lambda function ARN,
-	// 'cloud' (which represents the IoT cloud), or 'GGShadowService'.
+	// a connector ARN, 'cloud' (which represents the AWS IoT cloud), or 'GGShadowService'.
 	Source *string `type:"string"`
 
 	// The subject of the message.
 	Subject *string `type:"string"`
 
 	// Where the message is sent to. Can be a thing ARN, a Lambda function ARN,
-	// 'cloud' (which represents the IoT cloud), or 'GGShadowService'.
+	// a connector ARN, 'cloud' (which represents the AWS IoT cloud), or 'GGShadowService'.
 	Target *string `type:"string"`
 }
 
@@ -12676,6 +15495,9 @@ func (s *UpdateConnectivityInfoInput) Validate() error {
 	if s.ThingName == nil {
 		invalidParams.Add(request.NewErrParamRequired("ThingName"))
 	}
+	if s.ThingName != nil && len(*s.ThingName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ThingName", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -12727,6 +15549,67 @@ func (s *UpdateConnectivityInfoOutput) SetVersion(v string) *UpdateConnectivityI
 	return s
 }
 
+type UpdateConnectorDefinitionInput struct {
+	_ struct{} `type:"structure"`
+
+	// ConnectorDefinitionId is a required field
+	ConnectorDefinitionId *string `location:"uri" locationName:"ConnectorDefinitionId" type:"string" required:"true"`
+
+	Name *string `type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateConnectorDefinitionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateConnectorDefinitionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateConnectorDefinitionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateConnectorDefinitionInput"}
+	if s.ConnectorDefinitionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectorDefinitionId"))
+	}
+	if s.ConnectorDefinitionId != nil && len(*s.ConnectorDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConnectorDefinitionId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConnectorDefinitionId sets the ConnectorDefinitionId field's value.
+func (s *UpdateConnectorDefinitionInput) SetConnectorDefinitionId(v string) *UpdateConnectorDefinitionInput {
+	s.ConnectorDefinitionId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateConnectorDefinitionInput) SetName(v string) *UpdateConnectorDefinitionInput {
+	s.Name = &v
+	return s
+}
+
+type UpdateConnectorDefinitionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateConnectorDefinitionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateConnectorDefinitionOutput) GoString() string {
+	return s.String()
+}
+
 type UpdateCoreDefinitionInput struct {
 	_ struct{} `type:"structure"`
 
@@ -12751,6 +15634,9 @@ func (s *UpdateCoreDefinitionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateCoreDefinitionInput"}
 	if s.CoreDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("CoreDefinitionId"))
+	}
+	if s.CoreDefinitionId != nil && len(*s.CoreDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CoreDefinitionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -12810,6 +15696,9 @@ func (s *UpdateDeviceDefinitionInput) Validate() error {
 	if s.DeviceDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceDefinitionId"))
 	}
+	if s.DeviceDefinitionId != nil && len(*s.DeviceDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceDefinitionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -12867,6 +15756,9 @@ func (s *UpdateFunctionDefinitionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateFunctionDefinitionInput"}
 	if s.FunctionDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("FunctionDefinitionId"))
+	}
+	if s.FunctionDefinitionId != nil && len(*s.FunctionDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FunctionDefinitionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -12926,6 +15818,9 @@ func (s *UpdateGroupCertificateConfigurationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateGroupCertificateConfigurationInput"}
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
+	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -13009,6 +15904,9 @@ func (s *UpdateGroupInput) Validate() error {
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
 	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -13066,6 +15964,9 @@ func (s *UpdateLoggerDefinitionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateLoggerDefinitionInput"}
 	if s.LoggerDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("LoggerDefinitionId"))
+	}
+	if s.LoggerDefinitionId != nil && len(*s.LoggerDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LoggerDefinitionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -13125,6 +16026,9 @@ func (s *UpdateResourceDefinitionInput) Validate() error {
 	if s.ResourceDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResourceDefinitionId"))
 	}
+	if s.ResourceDefinitionId != nil && len(*s.ResourceDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceDefinitionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -13182,6 +16086,9 @@ func (s *UpdateSubscriptionDefinitionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateSubscriptionDefinitionInput"}
 	if s.SubscriptionDefinitionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("SubscriptionDefinitionId"))
+	}
+	if s.SubscriptionDefinitionId != nil && len(*s.SubscriptionDefinitionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubscriptionDefinitionId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -13267,6 +16174,28 @@ func (s *VersionInformation) SetVersion(v string) *VersionInformation {
 	return s
 }
 
+// The current status of the bulk deployment.
+const (
+	// BulkDeploymentStatusInitializing is a BulkDeploymentStatus enum value
+	BulkDeploymentStatusInitializing = "Initializing"
+
+	// BulkDeploymentStatusRunning is a BulkDeploymentStatus enum value
+	BulkDeploymentStatusRunning = "Running"
+
+	// BulkDeploymentStatusCompleted is a BulkDeploymentStatus enum value
+	BulkDeploymentStatusCompleted = "Completed"
+
+	// BulkDeploymentStatusStopping is a BulkDeploymentStatus enum value
+	BulkDeploymentStatusStopping = "Stopping"
+
+	// BulkDeploymentStatusStopped is a BulkDeploymentStatus enum value
+	BulkDeploymentStatusStopped = "Stopped"
+
+	// BulkDeploymentStatusFailed is a BulkDeploymentStatus enum value
+	BulkDeploymentStatusFailed = "Failed"
+)
+
+// The type of deployment.
 const (
 	// DeploymentTypeNewDeployment is a DeploymentType enum value
 	DeploymentTypeNewDeployment = "NewDeployment"
@@ -13287,6 +16216,19 @@ const (
 
 	// EncodingTypeJson is a EncodingType enum value
 	EncodingTypeJson = "json"
+)
+
+// Specifies whether the Lambda function runs in a Greengrass container (default)
+// or without containerization. Unless your scenario requires that you run without
+// containerization, we recommend that you run in a Greengrass container. Omit
+// this value to run the Lambda function with the default containerization for
+// the group.
+const (
+	// FunctionIsolationModeGreengrassContainer is a FunctionIsolationMode enum value
+	FunctionIsolationModeGreengrassContainer = "GreengrassContainer"
+
+	// FunctionIsolationModeNoContainer is a FunctionIsolationMode enum value
+	FunctionIsolationModeNoContainer = "NoContainer"
 )
 
 const (

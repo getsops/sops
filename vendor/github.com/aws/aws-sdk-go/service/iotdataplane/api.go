@@ -15,7 +15,7 @@ const opDeleteThingShadow = "DeleteThingShadow"
 // DeleteThingShadowRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteThingShadow operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -115,7 +115,7 @@ const opGetThingShadow = "GetThingShadow"
 // GetThingShadowRequest generates a "aws/request.Request" representing the
 // client's request for the GetThingShadow operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -215,7 +215,7 @@ const opPublish = "Publish"
 // PublishRequest generates a "aws/request.Request" representing the
 // client's request for the Publish operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -305,7 +305,7 @@ const opUpdateThingShadow = "UpdateThingShadow"
 // UpdateThingShadowRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateThingShadow operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -568,6 +568,9 @@ func (s *PublishInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "PublishInput"}
 	if s.Topic == nil {
 		invalidParams.Add(request.NewErrParamRequired("Topic"))
+	}
+	if s.Topic != nil && len(*s.Topic) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Topic", 1))
 	}
 
 	if invalidParams.Len() > 0 {

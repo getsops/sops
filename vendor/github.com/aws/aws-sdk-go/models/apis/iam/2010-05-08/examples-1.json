@@ -836,6 +836,35 @@
         "title": "To list the groups that an IAM user belongs to"
       }
     ],
+    "ListRoleTags": [
+      {
+        "input": {
+          "RoleName": "taggedrole1"
+        },
+        "output": {
+          "IsTruncated": false,
+          "Tags": [
+            {
+              "Key": "Dept",
+              "Value": "12345"
+            },
+            {
+              "Key": "Team",
+              "Value": "Accounting"
+            }
+          ]
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following example shows how to list the tags attached to a role.",
+        "id": "to-list-the-tags-attached-to-an-iam-role-1506719238376",
+        "title": "To list the tags attached to an IAM role"
+      }
+    ],
     "ListSigningCertificates": [
       {
         "input": {
@@ -861,6 +890,35 @@
         "description": "The following command lists the signing certificates for the IAM user named Bob.",
         "id": "b4c10256-4fc9-457e-b3fd-4a110d4d73dc",
         "title": "To list the signing certificates for an IAM user"
+      }
+    ],
+    "ListUserTags": [
+      {
+        "input": {
+          "UserName": "anika"
+        },
+        "output": {
+          "IsTruncated": false,
+          "Tags": [
+            {
+              "Key": "Dept",
+              "Value": "12345"
+            },
+            {
+              "Key": "Team",
+              "Value": "Accounting"
+            }
+          ]
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following example shows how to list the tags attached to a user.",
+        "id": "to-list-the-tags-attached-to-an-iam-user-1506719473186",
+        "title": "To list the tags attached to an IAM user"
       }
     ],
     "ListUsers": [
@@ -1009,6 +1067,96 @@
         "description": "The following command removes the user named Bob from the IAM group named Admins.",
         "id": "fb54d5b4-0caf-41d8-af0e-10a84413f174",
         "title": "To remove a user from an IAM group"
+      }
+    ],
+    "TagRole": [
+      {
+        "input": {
+          "RoleName": "taggedrole",
+          "Tags": [
+            {
+              "Key": "Dept",
+              "Value": "Accounting"
+            },
+            {
+              "Key": "CostCenter",
+              "Value": "12345"
+            }
+          ]
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following example shows how to add tags to an existing role.",
+        "id": "to-add-a-tag-key-and-value-to-an-iam-role-1506718791513",
+        "title": "To add a tag key and value to an IAM role"
+      }
+    ],
+    "TagUser": [
+      {
+        "input": {
+          "Tags": [
+            {
+              "Key": "Dept",
+              "Value": "Accounting"
+            },
+            {
+              "Key": "CostCenter",
+              "Value": "12345"
+            }
+          ],
+          "UserName": "anika"
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following example shows how to add tags to an existing user.",
+        "id": "to-add-a-tag-key-and-value-to-an-iam-user-1506719044227",
+        "title": "To add a tag key and value to an IAM user"
+      }
+    ],
+    "UntagRole": [
+      {
+        "input": {
+          "RoleName": "taggedrole",
+          "TagKeys": [
+            "Dept"
+          ]
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following example shows how to remove a tag with the key 'Dept' from a role named 'taggedrole'.",
+        "id": "to-remove-a-tag-from-an-iam-role-1506719589943",
+        "title": "To remove a tag from an IAM role"
+      }
+    ],
+    "UntagUser": [
+      {
+        "input": {
+          "TagKeys": [
+            "Dept"
+          ],
+          "UserName": "anika"
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following example shows how to remove tags that are attached to a user named 'anika'.",
+        "id": "to-remove-a-tag-from-an-iam-user-1506719725554",
+        "title": "To remove a tag from an IAM user"
       }
     ],
     "UpdateAccessKey": [

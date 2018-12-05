@@ -1,37 +1,55 @@
 {
   "version": "2.0",
-  "service": "<p>Alexa for Business makes it easy for you to use Alexa in your organization. Alexa for Business gives you the tools you need for managing Alexa devices, enroll your users, and assign skills, at scale. You can build your own context-aware voice skills using the Alexa Skills Kit and the Alexa for Business API operations. You can make also these available as private skills for your organization. Alexa for Business makes it easy to voice-enable your products and services, providing context-aware voice experiences for your customers.</p>",
+  "service": "<p>Alexa for Business helps you use Alexa in your organization. Alexa for Business provides the tools you to manage Alexa devices, enroll your users, and assign skills, at scale. You can build your own context-aware voice skills using the Alexa Skills Kit and the Alexa for Business API operations. You can also make these available as private skills for your organization. Alexa for Business makes it efficient to voice-enable your products and services, thus providing context-aware voice experiences for your customers. In addition, Alexa for Business enables Alexa Voice Services (AVS) device manufacturers to centrally deploy and manage their devices in Alexa for Business as shared devices as a part of their existing management flow. </p>",
   "operations": {
+    "ApproveSkill": "<p>Associates a skill with the organization under the customer's AWS account. If a skill is private, the user implicitly accepts access to this skill during enablement.</p>",
     "AssociateContactWithAddressBook": "<p>Associates a contact with a given address book.</p>",
     "AssociateDeviceWithRoom": "<p>Associates a device with a given room. This applies all the settings from the room profile to the device, and all the skills in any skill groups added to that room. This operation requires the device to be online, or else a manual sync is required. </p>",
     "AssociateSkillGroupWithRoom": "<p>Associates a skill group with a given room. This enables all skills in the associated skill group on all devices in the room.</p>",
+    "AssociateSkillWithSkillGroup": "<p>Associates a skill with a skill group.</p>",
     "CreateAddressBook": "<p>Creates an address book with the specified details.</p>",
+    "CreateConferenceProvider": "<p>Adds a new conference provider under the user's AWS account.</p>",
     "CreateContact": "<p>Creates a contact with the specified details.</p>",
     "CreateProfile": "<p>Creates a new room profile with the specified details.</p>",
     "CreateRoom": "<p>Creates a room with the specified details.</p>",
     "CreateSkillGroup": "<p>Creates a skill group with a specified name and description.</p>",
     "CreateUser": "<p>Creates a user.</p>",
     "DeleteAddressBook": "<p>Deletes an address book by the address book ARN.</p>",
+    "DeleteConferenceProvider": "<p>Deletes a conference provider.</p>",
     "DeleteContact": "<p>Deletes a contact by the contact ARN.</p>",
+    "DeleteDevice": "<p>Removes a device from Alexa For Business.</p>",
     "DeleteProfile": "<p>Deletes a room profile by the profile ARN.</p>",
     "DeleteRoom": "<p>Deletes a room by the room ARN.</p>",
     "DeleteRoomSkillParameter": "<p>Deletes room skill parameter details by room, skill, and parameter key ID.</p>",
+    "DeleteSkillAuthorization": "<p>Unlinks a third-party account from a skill.</p>",
     "DeleteSkillGroup": "<p>Deletes a skill group by skill group ARN.</p>",
     "DeleteUser": "<p>Deletes a specified user by user ARN and enrollment ARN.</p>",
     "DisassociateContactFromAddressBook": "<p>Disassociates a contact from a given address book.</p>",
     "DisassociateDeviceFromRoom": "<p>Disassociates a device from its current room. The device continues to be connected to the Wi-Fi network and is still registered to the account. The device settings and skills are removed from the room.</p>",
+    "DisassociateSkillFromSkillGroup": "<p>Disassociates a skill from a skill group.</p>",
     "DisassociateSkillGroupFromRoom": "<p>Disassociates a skill group from a specified room. This disables all skills in the skill group on all devices in the room.</p>",
+    "ForgetSmartHomeAppliances": "<p>Forgets smart home appliances associated to a room.</p>",
     "GetAddressBook": "<p>Gets address the book details by the address book ARN.</p>",
+    "GetConferencePreference": "<p>Retrieves the existing conference preferences.</p>",
+    "GetConferenceProvider": "<p>Gets details about a specific conference provider.</p>",
     "GetContact": "<p>Gets the contact details by the contact ARN.</p>",
     "GetDevice": "<p>Gets the details of a device by device ARN.</p>",
     "GetProfile": "<p>Gets the details of a room profile by profile ARN.</p>",
     "GetRoom": "<p>Gets room details by room ARN.</p>",
     "GetRoomSkillParameter": "<p>Gets room skill parameter details by room, skill, and parameter key ARN.</p>",
     "GetSkillGroup": "<p>Gets skill group details by skill group ARN.</p>",
+    "ListConferenceProviders": "<p>Lists conference providers under a specific AWS account.</p>",
     "ListDeviceEvents": "<p>Lists the device event history, including device connection status, for up to 30 days.</p>",
     "ListSkills": "<p>Lists all enabled skills in a specific skill group.</p>",
+    "ListSkillsStoreCategories": "<p>Lists all categories in the Alexa skill store.</p>",
+    "ListSkillsStoreSkillsByCategory": "<p>Lists all skills in the Alexa skill store by category.</p>",
+    "ListSmartHomeAppliances": "<p>Lists all of the smart home appliances associated with a room.</p>",
     "ListTags": "<p>Lists all tags for the specified resource.</p>",
+    "PutConferencePreference": "<p>Sets the conference preferences on a specific conference provider at the account level.</p>",
     "PutRoomSkillParameter": "<p>Updates room skill parameter details by room, skill, and parameter key ID. Not all skills have a room skill parameter.</p>",
+    "PutSkillAuthorization": "<p>Links a user's account to a third-party skill provider. If this API operation is called by an assumed IAM role, the skill being linked must be a private skill. Also, the skill must be owned by the AWS account that assumed the IAM role.</p>",
+    "RegisterAVSDevice": "<p>Registers an Alexa-enabled device built by an Original Equipment Manufacturer (OEM) using Alexa Voice Service (AVS).</p>",
+    "RejectSkill": "<p>Disassociates a skill from the organization under a user's AWS account. If the skill is a private skill, it moves to an AcceptStatus of PENDING. Any private or public skill that is rejected can be added later by calling the ApproveSkill API. </p>",
     "ResolveRoom": "<p>Determines the details for the room from which a skill request was invoked. This operation is used by skill developers.</p>",
     "RevokeInvitation": "<p>Revokes an invitation and invalidates the enrollment URL.</p>",
     "SearchAddressBooks": "<p>Searches address books and lists the ones that meet a set of filter and sort criteria.</p>",
@@ -43,9 +61,11 @@
     "SearchUsers": "<p>Searches users and lists the ones that meet a set of filter and sort criteria.</p>",
     "SendInvitation": "<p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 72 hours or until you call this operation again, whichever comes first. </p>",
     "StartDeviceSync": "<p>Resets a device and its account to the known default settings, by clearing all information and settings set by previous users.</p>",
+    "StartSmartHomeApplianceDiscovery": "<p>Initiates the discovery of any smart home appliances associated with the room.</p>",
     "TagResource": "<p>Adds metadata tags to a specified resource.</p>",
     "UntagResource": "<p>Removes metadata tags from a specified resource.</p>",
     "UpdateAddressBook": "<p>Updates address book details by the address book ARN.</p>",
+    "UpdateConferenceProvider": "<p>Updates an existing conference provider's settings.</p>",
     "UpdateContact": "<p>Updates the contact details by the contact ARN.</p>",
     "UpdateDevice": "<p>Updates the device name by device ARN.</p>",
     "UpdateProfile": "<p>Updates an existing room profile by room profile ARN.</p>",
@@ -99,7 +119,41 @@
       }
     },
     "AlreadyExistsException": {
-      "base": "<p>The resource being created already exists. HTTP Status Code: 400</p>",
+      "base": "<p>The resource being created already exists.</p>",
+      "refs": {
+      }
+    },
+    "AmazonId": {
+      "base": null,
+      "refs": {
+        "RegisterAVSDeviceRequest$AmazonId": "<p>The device type ID for your AVS device generated by Amazon when the OEM creates a new product on Amazon's Developer Console.</p>"
+      }
+    },
+    "ApplianceDescription": {
+      "base": null,
+      "refs": {
+        "SmartHomeAppliance$Description": "<p>The description of the smart home appliance.</p>"
+      }
+    },
+    "ApplianceFriendlyName": {
+      "base": null,
+      "refs": {
+        "SmartHomeAppliance$FriendlyName": "<p>The friendly name of the smart home appliance.</p>"
+      }
+    },
+    "ApplianceManufacturerName": {
+      "base": null,
+      "refs": {
+        "SmartHomeAppliance$ManufacturerName": "<p>The name of the manufacturer of the smart home appliance.</p>"
+      }
+    },
+    "ApproveSkillRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ApproveSkillResponse": {
+      "base": null,
       "refs": {
       }
     },
@@ -114,9 +168,13 @@
         "AssociateDeviceWithRoomRequest$RoomArn": "<p>The ARN of the room with which to associate the device. Required.</p>",
         "AssociateSkillGroupWithRoomRequest$SkillGroupArn": "<p>The ARN of the skill group to associate with a room. Required.</p>",
         "AssociateSkillGroupWithRoomRequest$RoomArn": "<p>The ARN of the room with which to associate the skill group. Required.</p>",
+        "AssociateSkillWithSkillGroupRequest$SkillGroupArn": "<p>The ARN of the skill group to associate the skill to. Required.</p>",
+        "ConferencePreference$DefaultConferenceProviderArn": "<p>The ARN of the default conference provider.</p>",
+        "ConferenceProvider$Arn": "<p>The ARN of the newly created conference provider.</p>",
         "Contact$ContactArn": "<p>The ARN of the contact.</p>",
         "ContactData$ContactArn": "<p>The ARN of the contact.</p>",
         "CreateAddressBookResponse$AddressBookArn": "<p>The ARN of the newly created address book.</p>",
+        "CreateConferenceProviderResponse$ConferenceProviderArn": "<p>The ARN of the newly-created conference provider.</p>",
         "CreateContactResponse$ContactArn": "<p>The ARN of the newly created address book.</p>",
         "CreateProfileResponse$ProfileArn": "<p>The ARN of the newly created room profile in the response.</p>",
         "CreateRoomRequest$ProfileArn": "<p>The profile ARN for the room.</p>",
@@ -124,10 +182,13 @@
         "CreateSkillGroupResponse$SkillGroupArn": "<p>The ARN of the newly created skill group in the response.</p>",
         "CreateUserResponse$UserArn": "<p>The ARN of the newly created user in the response.</p>",
         "DeleteAddressBookRequest$AddressBookArn": "<p>The ARN of the address book to delete.</p>",
+        "DeleteConferenceProviderRequest$ConferenceProviderArn": "<p>The ARN of the conference provider.</p>",
         "DeleteContactRequest$ContactArn": "<p>The ARN of the contact to delete.</p>",
+        "DeleteDeviceRequest$DeviceArn": "<p>The ARN of the device for which to request details.</p>",
         "DeleteProfileRequest$ProfileArn": "<p>The ARN of the room profile to delete. Required.</p>",
         "DeleteRoomRequest$RoomArn": "<p>The ARN of the room to delete. Required.</p>",
         "DeleteRoomSkillParameterRequest$RoomArn": "<p>The ARN of the room from which to remove the room skill parameter details.</p>",
+        "DeleteSkillAuthorizationRequest$RoomArn": "<p>The room that the skill is authorized for.</p>",
         "DeleteSkillGroupRequest$SkillGroupArn": "<p>The ARN of the skill group to delete. Required.</p>",
         "DeleteUserRequest$UserArn": "<p>The ARN of the user to delete in the organization. Required.</p>",
         "Device$DeviceArn": "<p>The ARN of a device.</p>",
@@ -137,9 +198,12 @@
         "DisassociateContactFromAddressBookRequest$ContactArn": "<p>The ARN of the contact to disassociate from an address book.</p>",
         "DisassociateContactFromAddressBookRequest$AddressBookArn": "<p>The ARN of the address from which to disassociate the contact.</p>",
         "DisassociateDeviceFromRoomRequest$DeviceArn": "<p>The ARN of the device to disassociate from a room. Required.</p>",
+        "DisassociateSkillFromSkillGroupRequest$SkillGroupArn": "<p>The unique identifier of a skill. Required.</p>",
         "DisassociateSkillGroupFromRoomRequest$SkillGroupArn": "<p>The ARN of the skill group to disassociate from a room. Required.</p>",
         "DisassociateSkillGroupFromRoomRequest$RoomArn": "<p>The ARN of the room from which the skill group is to be disassociated. Required.</p>",
+        "ForgetSmartHomeAppliancesRequest$RoomArn": "<p>The room that the appliances are associated with.</p>",
         "GetAddressBookRequest$AddressBookArn": "<p>The ARN of the address book for which to request details.</p>",
+        "GetConferenceProviderRequest$ConferenceProviderArn": "<p>The ARN of the newly created conference provider.</p>",
         "GetContactRequest$ContactArn": "<p>The ARN of the contact for which to request details.</p>",
         "GetDeviceRequest$DeviceArn": "<p>The ARN of the device for which to request details. Required.</p>",
         "GetProfileRequest$ProfileArn": "<p>The ARN of the room profile for which to request details. Required.</p>",
@@ -148,10 +212,14 @@
         "GetSkillGroupRequest$SkillGroupArn": "<p>The ARN of the skill group for which to get details. Required.</p>",
         "ListDeviceEventsRequest$DeviceArn": "<p>The ARN of a device.</p>",
         "ListSkillsRequest$SkillGroupArn": "<p>The ARN of the skill group for which to list enabled skills. Required.</p>",
+        "ListSmartHomeAppliancesRequest$RoomArn": "<p>The room that the appliances are associated with.</p>",
         "ListTagsRequest$Arn": "<p>The ARN of the specified resource for which to list tags.</p>",
         "Profile$ProfileArn": "<p>The ARN of a room profile.</p>",
+        "Profile$AddressBookArn": "<p>The ARN of the address book.</p>",
         "ProfileData$ProfileArn": "<p>The ARN of a room profile.</p>",
         "PutRoomSkillParameterRequest$RoomArn": "<p>The ARN of the room associated with the room skill parameter. Required.</p>",
+        "PutSkillAuthorizationRequest$RoomArn": "<p>The room that the skill is authorized for.</p>",
+        "RegisterAVSDeviceResponse$DeviceArn": "<p>The ARN of the device.</p>",
         "ResolveRoomResponse$RoomArn": "<p>The ARN of the room from which the skill request was invoked.</p>",
         "RevokeInvitationRequest$UserArn": "<p>The ARN of the user for whom to revoke an enrollment invitation. Required.</p>",
         "Room$RoomArn": "<p>The ARN of a room.</p>",
@@ -163,9 +231,11 @@
         "SkillGroupData$SkillGroupArn": "<p>The skill group ARN of a skill group.</p>",
         "StartDeviceSyncRequest$RoomArn": "<p>The ARN of the room with which the device to sync is associated. Required.</p>",
         "StartDeviceSyncRequest$DeviceArn": "<p>The ARN of the device to sync. Required.</p>",
+        "StartSmartHomeApplianceDiscoveryRequest$RoomArn": "<p>The room where smart home appliance discovery was initiated.</p>",
         "TagResourceRequest$Arn": "<p>The ARN of the resource to which to add metadata tags. Required. </p>",
         "UntagResourceRequest$Arn": "<p>The ARN of the resource from which to remove metadata tags. Required. </p>",
         "UpdateAddressBookRequest$AddressBookArn": "<p>The ARN of the room to update.</p>",
+        "UpdateConferenceProviderRequest$ConferenceProviderArn": "<p>The ARN of the conference provider.</p>",
         "UpdateContactRequest$ContactArn": "<p>The ARN of the contact to update.</p>",
         "UpdateDeviceRequest$DeviceArn": "<p>The ARN of the device to update. Required.</p>",
         "UpdateProfileRequest$ProfileArn": "<p>The ARN of the room profile to update. Required.</p>",
@@ -205,27 +275,137 @@
       "refs": {
       }
     },
+    "AssociateSkillWithSkillGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "AssociateSkillWithSkillGroupResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "AuthorizationResult": {
+      "base": null,
+      "refs": {
+        "PutSkillAuthorizationRequest$AuthorizationResult": "<p>The authorization result specific to OAUTH code grant output. \"Code” must be populated in the AuthorizationResult map to establish the authorization.</p>"
+      }
+    },
     "Boolean": {
       "base": null,
       "refs": {
         "CreateProfileRequest$SetupModeDisabled": "<p>Whether room profile setup is enabled.</p>",
         "CreateProfileRequest$PSTNEnabled": "<p>Whether PSTN calling is enabled.</p>",
+        "Profile$IsDefault": "<p>Retrieves if the profile is default or not.</p>",
         "Profile$SetupModeDisabled": "<p>The setup mode of a room profile.</p>",
         "Profile$PSTNEnabled": "<p>The PSTN setting of a room profile.</p>",
+        "ProfileData$IsDefault": "<p>Retrieves if the profile data is default or not.</p>",
+        "UpdateProfileRequest$IsDefault": "<p>Sets the profile as default if selected. If this is missing, no update is done to the default status.</p>",
         "UpdateProfileRequest$SetupModeDisabled": "<p>Whether the setup mode of the profile is enabled.</p>",
         "UpdateProfileRequest$PSTNEnabled": "<p>Whether the PSTN setting of the room profile is enabled.</p>"
+      }
+    },
+    "BulletPoint": {
+      "base": null,
+      "refs": {
+        "BulletPoints$member": null,
+        "NewInThisVersionBulletPoints$member": null
+      }
+    },
+    "BulletPoints": {
+      "base": null,
+      "refs": {
+        "SkillDetails$BulletPoints": "<p>The details about what the skill supports organized as bullet points.</p>"
+      }
+    },
+    "Category": {
+      "base": "<p>The skill store category that is shown. Alexa skills are assigned a specific skill category during creation, such as News, Social, and Sports.</p>",
+      "refs": {
+        "CategoryList$member": null
+      }
+    },
+    "CategoryId": {
+      "base": null,
+      "refs": {
+        "Category$CategoryId": "<p>The ID of the skill store category.</p>",
+        "ListSkillsStoreSkillsByCategoryRequest$CategoryId": "<p>The category ID for which the skills are being retrieved from the skill store.</p>"
+      }
+    },
+    "CategoryList": {
+      "base": null,
+      "refs": {
+        "ListSkillsStoreCategoriesResponse$CategoryList": "<p>The list of categories.</p>"
+      }
+    },
+    "CategoryName": {
+      "base": null,
+      "refs": {
+        "Category$CategoryName": "<p>The name of the skill store category.</p>"
+      }
+    },
+    "ClientId": {
+      "base": null,
+      "refs": {
+        "RegisterAVSDeviceRequest$ClientId": "<p>The client ID of the OEM used for code-based linking authorization on an AVS device.</p>"
       }
     },
     "ClientRequestToken": {
       "base": "User specified token that is used to support idempotency during Create Resource",
       "refs": {
         "CreateAddressBookRequest$ClientRequestToken": "<p>A unique, user-specified identifier for the request that ensures idempotency.</p>",
+        "CreateConferenceProviderRequest$ClientRequestToken": "<p>The request token of the client.</p>",
         "CreateContactRequest$ClientRequestToken": "<p>A unique, user-specified identifier for this request that ensures idempotency.</p>",
         "CreateProfileRequest$ClientRequestToken": "<p>The user-specified token that is used during the creation of a profile.</p>",
         "CreateRoomRequest$ClientRequestToken": "<p>A unique, user-specified identifier for this request that ensures idempotency. </p>",
         "CreateSkillGroupRequest$ClientRequestToken": "<p>A unique, user-specified identifier for this request that ensures idempotency. </p>",
         "CreateUserRequest$ClientRequestToken": "<p>A unique, user-specified identifier for this request that ensures idempotency. </p>",
         "ResourceInUseException$ClientRequestToken": null
+      }
+    },
+    "CommsProtocol": {
+      "base": null,
+      "refs": {
+        "IPDialIn$CommsProtocol": "<p>The protocol, including SIP, SIPS, and H323.</p>"
+      }
+    },
+    "ConcurrentModificationException": {
+      "base": "Concurrent modification of resources. HTTP Status Code: 400.",
+      "refs": {
+      }
+    },
+    "ConferencePreference": {
+      "base": "<p>The default conference provider that is used if no other scheduled meetings are detected.</p>",
+      "refs": {
+        "GetConferencePreferenceResponse$Preference": "<p>The conference preference.</p>",
+        "PutConferencePreferenceRequest$ConferencePreference": "<p>The conference preference of a specific conference provider.</p>"
+      }
+    },
+    "ConferenceProvider": {
+      "base": "<p>An entity that provides a conferencing solution. Alexa for Business acts as the voice interface and mediator that connects users to their preferred conference provider. Examples of conference providers include Amazon Chime, Zoom, Cisco, and Polycom. </p>",
+      "refs": {
+        "ConferenceProvidersList$member": null,
+        "GetConferenceProviderResponse$ConferenceProvider": "<p>The conference provider.</p>"
+      }
+    },
+    "ConferenceProviderName": {
+      "base": null,
+      "refs": {
+        "ConferenceProvider$Name": "<p>The name of the conference provider.</p>",
+        "CreateConferenceProviderRequest$ConferenceProviderName": "<p>The name of the conference provider.</p>"
+      }
+    },
+    "ConferenceProviderType": {
+      "base": null,
+      "refs": {
+        "ConferenceProvider$Type": "<p>The type of conference providers.</p>",
+        "CreateConferenceProviderRequest$ConferenceProviderType": "<p>Represents a type within a list of predefined types.</p>",
+        "UpdateConferenceProviderRequest$ConferenceProviderType": "<p>The type of the conference provider.</p>"
+      }
+    },
+    "ConferenceProvidersList": {
+      "base": null,
+      "refs": {
+        "ListConferenceProvidersResponse$ConferenceProviders": "<p>The conference providers.</p>"
       }
     },
     "ConnectionStatus": {
@@ -269,12 +449,28 @@
         "UpdateContactRequest$LastName": "<p>The updated last name of the contact.</p>"
       }
     },
+    "CountryCode": {
+      "base": null,
+      "refs": {
+        "PSTNDialIn$CountryCode": "<p>The zip code.</p>"
+      }
+    },
     "CreateAddressBookRequest": {
       "base": null,
       "refs": {
       }
     },
     "CreateAddressBookResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateConferenceProviderRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateConferenceProviderResponse": {
       "base": null,
       "refs": {
       }
@@ -339,12 +535,32 @@
       "refs": {
       }
     },
+    "DeleteConferenceProviderRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteConferenceProviderResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DeleteContactRequest": {
       "base": null,
       "refs": {
       }
     },
     "DeleteContactResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteDeviceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteDeviceResponse": {
       "base": null,
       "refs": {
       }
@@ -379,6 +595,16 @@
       "refs": {
       }
     },
+    "DeleteSkillAuthorizationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteSkillAuthorizationResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DeleteSkillGroupRequest": {
       "base": null,
       "refs": {
@@ -397,6 +623,18 @@
     "DeleteUserResponse": {
       "base": null,
       "refs": {
+      }
+    },
+    "DeveloperInfo": {
+      "base": "<p>The details about the developer that published the skill.</p>",
+      "refs": {
+        "SkillDetails$DeveloperInfo": "<p>The details about the developer that published the skill.</p>"
+      }
+    },
+    "DeveloperName": {
+      "base": null,
+      "refs": {
+        "DeveloperInfo$DeveloperName": "<p>The name of the developer.</p>"
       }
     },
     "Device": {
@@ -462,6 +700,12 @@
         "DeviceData$DeviceSerialNumber": "<p>The serial number of a device.</p>"
       }
     },
+    "DeviceSerialNumberForAVS": {
+      "base": null,
+      "refs": {
+        "RegisterAVSDeviceRequest$DeviceSerialNumber": "<p>The key generated by the OEM that uniquely identifies a specified instance of your AVS device.</p>"
+      }
+    },
     "DeviceStatus": {
       "base": null,
       "refs": {
@@ -521,6 +765,16 @@
       "refs": {
       }
     },
+    "DisassociateSkillFromSkillGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DisassociateSkillFromSkillGroupResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DisassociateSkillGroupFromRoomRequest": {
       "base": null,
       "refs": {
@@ -553,7 +807,32 @@
       "base": null,
       "refs": {
         "CreateUserRequest$Email": "<p>The email address for the user.</p>",
+        "DeveloperInfo$Email": "<p>The email of the developer.</p>",
         "UserData$Email": "<p>The email of a user.</p>"
+      }
+    },
+    "EnablementType": {
+      "base": null,
+      "refs": {
+        "SkillSummary$EnablementType": "<p>Whether the skill is enabled under the user's account, or if it requires linking to be used.</p>"
+      }
+    },
+    "EnablementTypeFilter": {
+      "base": null,
+      "refs": {
+        "ListSkillsRequest$EnablementType": "<p>Whether the skill is enabled under the user's account, or if it requires linking to be used.</p>"
+      }
+    },
+    "EndUserLicenseAgreement": {
+      "base": null,
+      "refs": {
+        "SkillDetails$EndUserLicenseAgreement": "<p>The URL of the end user license agreement.</p>"
+      }
+    },
+    "Endpoint": {
+      "base": null,
+      "refs": {
+        "IPDialIn$Endpoint": "<p>The IP address.</p>"
       }
     },
     "EnrollmentId": {
@@ -574,12 +853,16 @@
       "base": null,
       "refs": {
         "AlreadyExistsException$Message": null,
+        "ConcurrentModificationException$Message": null,
         "DeviceNotRegisteredException$Message": null,
+        "InvalidCertificateAuthorityException$Message": null,
+        "InvalidDeviceException$Message": null,
         "InvalidUserStatusException$Message": null,
         "LimitExceededException$Message": null,
         "NameInUseException$Message": null,
         "NotFoundException$Message": null,
-        "ResourceInUseException$Message": null
+        "ResourceInUseException$Message": null,
+        "UnauthorizedException$Message": null
       }
     },
     "Feature": {
@@ -630,12 +913,54 @@
         "Filter$Values": "<p>The values of a filter.</p>"
       }
     },
+    "ForgetSmartHomeAppliancesRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ForgetSmartHomeAppliancesResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GenericKeyword": {
+      "base": null,
+      "refs": {
+        "GenericKeywords$member": null
+      }
+    },
+    "GenericKeywords": {
+      "base": null,
+      "refs": {
+        "SkillDetails$GenericKeywords": "<p>The generic keywords associated with the skill that can be used to find a skill.</p>"
+      }
+    },
     "GetAddressBookRequest": {
       "base": null,
       "refs": {
       }
     },
     "GetAddressBookResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetConferencePreferenceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetConferencePreferenceResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetConferenceProviderRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetConferenceProviderResponse": {
       "base": null,
       "refs": {
       }
@@ -700,13 +1025,59 @@
       "refs": {
       }
     },
-    "InvalidUserStatusException": {
-      "base": "<p>The attempt to update a user is invalid due to the user's current status. HTTP Status Code: 400</p>",
+    "IPDialIn": {
+      "base": "<p>The IP endpoint and protocol for calling.</p>",
+      "refs": {
+        "ConferenceProvider$IPDialIn": "<p>The IP endpoint and protocol for calling.</p>",
+        "CreateConferenceProviderRequest$IPDialIn": "<p>The IP endpoint and protocol for calling.</p>",
+        "UpdateConferenceProviderRequest$IPDialIn": "<p>The IP endpoint and protocol for calling.</p>"
+      }
+    },
+    "IconUrl": {
+      "base": null,
+      "refs": {
+        "SkillsStoreSkill$IconUrl": "<p>The URL where the skill icon resides.</p>"
+      }
+    },
+    "InvalidCertificateAuthorityException": {
+      "base": "<p>The Certificate Authority can't issue or revoke a certificate.</p>",
       "refs": {
       }
     },
+    "InvalidDeviceException": {
+      "base": "<p>The device is in an invalid state.</p>",
+      "refs": {
+      }
+    },
+    "InvalidUserStatusException": {
+      "base": "<p>The attempt to update a user is invalid due to the user's current status.</p>",
+      "refs": {
+      }
+    },
+    "InvocationPhrase": {
+      "base": null,
+      "refs": {
+        "SkillDetails$InvocationPhrase": "<p>The phrase used to trigger the skill.</p>"
+      }
+    },
+    "Key": {
+      "base": null,
+      "refs": {
+        "AuthorizationResult$key": null
+      }
+    },
     "LimitExceededException": {
-      "base": "<p>You are performing an action that would put you beyond your account's limits. HTTP Status Code: 400</p>",
+      "base": "<p>You are performing an action that would put you beyond your account's limits.</p>",
+      "refs": {
+      }
+    },
+    "ListConferenceProvidersRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListConferenceProvidersResponse": {
+      "base": null,
       "refs": {
       }
     },
@@ -726,6 +1097,36 @@
       }
     },
     "ListSkillsResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListSkillsStoreCategoriesRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListSkillsStoreCategoriesResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListSkillsStoreSkillsByCategoryRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListSkillsStoreSkillsByCategoryResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListSmartHomeAppliancesRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListSmartHomeAppliancesResponse": {
       "base": null,
       "refs": {
       }
@@ -750,7 +1151,10 @@
     "MaxResults": {
       "base": null,
       "refs": {
+        "ListConferenceProvidersRequest$MaxResults": "<p>The maximum number of conference providers to be returned, per paginated calls.</p>",
         "ListDeviceEventsRequest$MaxResults": "<p>The maximum number of results to include in the response. The default value is 50. If more results exist than the specified MaxResults value, a token is included in the response so that the remaining results can be retrieved. </p>",
+        "ListSkillsStoreCategoriesRequest$MaxResults": "<p>The maximum number of categories returned, per paginated calls.</p>",
+        "ListSmartHomeAppliancesRequest$MaxResults": "<p>The maximum number of appliances to be returned, per paginated calls.</p>",
         "ListTagsRequest$MaxResults": "<p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p>",
         "SearchAddressBooksRequest$MaxResults": "<p>The maximum number of results to include in the response. If more results exist than the specified MaxResults value, a token is included in the response so that the remaining results can be retrieved.</p>",
         "SearchContactsRequest$MaxResults": "<p>The maximum number of results to include in the response. If more results exist than the specified MaxResults value, a token is included in the response so that the remaining results can be retrieved.</p>",
@@ -769,18 +1173,40 @@
         "UpdateProfileRequest$MaxVolumeLimit": "<p>The updated maximum volume limit for the room profile.</p>"
       }
     },
-    "NameInUseException": {
-      "base": "<p>The name sent in the request is already in use. HTTP Status Code: 400</p>",
+    "MeetingSetting": {
+      "base": "<p>The values that indicate whether a pin is always required (YES), never required (NO), or OPTIONAL.</p> <ul> <li> <p>If YES, Alexa will always ask for a meeting pin.</p> </li> <li> <p>If NO, Alexa will never ask for a meeting pin.</p> </li> <li> <p>If OPTIONAL, Alexa will ask if you have a meeting pin and if the customer responds with yes, it will ask for the meeting pin.</p> </li> </ul>",
       "refs": {
+        "ConferenceProvider$MeetingSetting": "<p>The meeting settings for the conference provider.</p>",
+        "CreateConferenceProviderRequest$MeetingSetting": "<p>The meeting settings for the conference provider.</p>",
+        "UpdateConferenceProviderRequest$MeetingSetting": "<p>The meeting settings for the conference provider.</p>"
+      }
+    },
+    "NameInUseException": {
+      "base": "<p>The name sent in the request is already in use.</p>",
+      "refs": {
+      }
+    },
+    "NewInThisVersionBulletPoints": {
+      "base": null,
+      "refs": {
+        "SkillDetails$NewInThisVersionBulletPoints": "<p>The updates added in bullet points.</p>"
       }
     },
     "NextToken": {
       "base": null,
       "refs": {
+        "ListConferenceProvidersRequest$NextToken": "<p>The tokens used for pagination.</p>",
+        "ListConferenceProvidersResponse$NextToken": "<p>The tokens used for pagination.</p>",
         "ListDeviceEventsRequest$NextToken": "<p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response only includes results beyond the token, up to the value specified by MaxResults. When the end of results is reached, the response has a value of null.</p>",
         "ListDeviceEventsResponse$NextToken": "<p>The token returned to indicate that there is more data available.</p>",
         "ListSkillsRequest$NextToken": "<p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>. Required.</p>",
         "ListSkillsResponse$NextToken": "<p>The token returned to indicate that there is more data available.</p>",
+        "ListSkillsStoreCategoriesRequest$NextToken": "<p>The tokens used for pagination.</p>",
+        "ListSkillsStoreCategoriesResponse$NextToken": "<p>The tokens used for pagination.</p>",
+        "ListSkillsStoreSkillsByCategoryRequest$NextToken": "<p>The tokens used for pagination.</p>",
+        "ListSkillsStoreSkillsByCategoryResponse$NextToken": "<p>The tokens used for pagination.</p>",
+        "ListSmartHomeAppliancesRequest$NextToken": "<p>The tokens used for pagination.</p>",
+        "ListSmartHomeAppliancesResponse$NextToken": "<p>The tokens used for pagination.</p>",
         "ListTagsRequest$NextToken": "<p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>. </p>",
         "ListTagsResponse$NextToken": "<p>The token returned to indicate that there is more data available.</p>",
         "SearchAddressBooksRequest$NextToken": "<p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response only includes results beyond the token, up to the value specified by MaxResults.</p>",
@@ -800,8 +1226,52 @@
       }
     },
     "NotFoundException": {
-      "base": "<p>The resource is not found. HTTP Status Code: 400</p>",
+      "base": "<p>The resource is not found.</p>",
       "refs": {
+      }
+    },
+    "OneClickIdDelay": {
+      "base": null,
+      "refs": {
+        "PSTNDialIn$OneClickIdDelay": "<p>The delay duration before Alexa enters the conference ID with dual-tone multi-frequency (DTMF). Each number on the dial pad corresponds to a DTMF tone, which is how we send data over the telephone network.</p>"
+      }
+    },
+    "OneClickPinDelay": {
+      "base": null,
+      "refs": {
+        "PSTNDialIn$OneClickPinDelay": "<p>The delay duration before Alexa enters the conference pin with dual-tone multi-frequency (DTMF). Each number on the dial pad corresponds to a DTMF tone, which is how we send data over the telephone network.</p>"
+      }
+    },
+    "PSTNDialIn": {
+      "base": "<p>The information for public switched telephone network (PSTN) conferencing.</p>",
+      "refs": {
+        "ConferenceProvider$PSTNDialIn": "<p>The information for PSTN conferencing.</p>",
+        "CreateConferenceProviderRequest$PSTNDialIn": "<p>The information for PSTN conferencing.</p>",
+        "UpdateConferenceProviderRequest$PSTNDialIn": "<p>The information for PSTN conferencing.</p>"
+      }
+    },
+    "PhoneNumber": {
+      "base": null,
+      "refs": {
+        "PSTNDialIn$PhoneNumber": "<p>The phone number to call to join the conference.</p>"
+      }
+    },
+    "PrivacyPolicy": {
+      "base": null,
+      "refs": {
+        "DeveloperInfo$PrivacyPolicy": "<p>The URL of the privacy policy.</p>"
+      }
+    },
+    "ProductDescription": {
+      "base": null,
+      "refs": {
+        "SkillDetails$ProductDescription": "<p>The description of the product.</p>"
+      }
+    },
+    "ProductId": {
+      "base": null,
+      "refs": {
+        "RegisterAVSDeviceRequest$ProductId": "<p>The product ID used to identify your AVS device during authorization.</p>"
       }
     },
     "Profile": {
@@ -841,6 +1311,16 @@
         "UpdateRoomRequest$ProviderCalendarId": "<p>The updated provider calendar ARN for the room.</p>"
       }
     },
+    "PutConferencePreferenceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "PutConferencePreferenceResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "PutRoomSkillParameterRequest": {
       "base": null,
       "refs": {
@@ -849,6 +1329,48 @@
     "PutRoomSkillParameterResponse": {
       "base": null,
       "refs": {
+      }
+    },
+    "PutSkillAuthorizationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "PutSkillAuthorizationResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "RegisterAVSDeviceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "RegisterAVSDeviceResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "RejectSkillRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "RejectSkillResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ReleaseDate": {
+      "base": null,
+      "refs": {
+        "SkillDetails$ReleaseDate": "<p>The date when the skill was released.</p>"
+      }
+    },
+    "RequirePin": {
+      "base": null,
+      "refs": {
+        "MeetingSetting$RequirePin": "<p>The values that indicate whether the pin is always required.</p>"
       }
     },
     "ResolveRoomRequest": {
@@ -862,8 +1384,26 @@
       }
     },
     "ResourceInUseException": {
-      "base": "<p>The resource in the request is already in use. HTTP Status Code: 400</p>",
+      "base": "<p>The resource in the request is already in use.</p>",
       "refs": {
+      }
+    },
+    "ReviewKey": {
+      "base": null,
+      "refs": {
+        "Reviews$key": null
+      }
+    },
+    "ReviewValue": {
+      "base": null,
+      "refs": {
+        "Reviews$value": null
+      }
+    },
+    "Reviews": {
+      "base": null,
+      "refs": {
+        "SkillDetails$Reviews": "<p>The list of reviews for the skill, including Key and Value pair.</p>"
       }
     },
     "RevokeInvitationRequest": {
@@ -940,6 +1480,12 @@
       "base": null,
       "refs": {
         "ResolveRoomResponse$RoomSkillParameters": "<p>Response to get the room profile request. Required.</p>"
+      }
+    },
+    "SampleUtterances": {
+      "base": null,
+      "refs": {
+        "SkillsStoreSkill$SampleUtterances": "<p>Sample utterances that interact with the skill.</p>"
       }
     },
     "SearchAddressBooksRequest": {
@@ -1022,6 +1568,18 @@
       "refs": {
       }
     },
+    "ShortDescription": {
+      "base": null,
+      "refs": {
+        "SkillsStoreSkill$ShortDescription": "<p>Short description about the skill.</p>"
+      }
+    },
+    "SkillDetails": {
+      "base": "<p>Granular information about the skill.</p>",
+      "refs": {
+        "SkillsStoreSkill$SkillDetails": "<p>Information about the skill.</p>"
+      }
+    },
     "SkillGroup": {
       "base": "<p>A skill group with attributes.</p>",
       "refs": {
@@ -1061,23 +1619,38 @@
     "SkillId": {
       "base": null,
       "refs": {
+        "ApproveSkillRequest$SkillId": "<p>The unique identifier of the skill.</p>",
+        "AssociateSkillWithSkillGroupRequest$SkillId": "<p>The unique identifier of the skill.</p>",
         "DeleteRoomSkillParameterRequest$SkillId": "<p>The ID of the skill from which to remove the room skill parameter details.</p>",
+        "DeleteSkillAuthorizationRequest$SkillId": "<p>The unique identifier of a skill.</p>",
+        "DisassociateSkillFromSkillGroupRequest$SkillId": "<p>The ARN of a skill group to associate to a skill.</p>",
         "GetRoomSkillParameterRequest$SkillId": "<p>The ARN of the skill from which to get the room skill parameter details. Required.</p>",
         "PutRoomSkillParameterRequest$SkillId": "<p>The ARN of the skill associated with the room skill parameter. Required.</p>",
+        "PutSkillAuthorizationRequest$SkillId": "<p>The unique identifier of a skill.</p>",
+        "RejectSkillRequest$SkillId": "<p>The unique identifier of the skill.</p>",
         "ResolveRoomRequest$SkillId": "<p>The ARN of the skill that was requested. Required.</p>",
-        "SkillSummary$SkillId": "<p>The ARN of the skill summary.</p>"
+        "SkillSummary$SkillId": "<p>The ARN of the skill summary.</p>",
+        "SkillsStoreSkill$SkillId": "<p>The ARN of the skill.</p>"
       }
     },
     "SkillListMaxResults": {
       "base": null,
       "refs": {
-        "ListSkillsRequest$MaxResults": "<p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved. Required.</p>"
+        "ListSkillsRequest$MaxResults": "<p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved. Required.</p>",
+        "ListSkillsStoreSkillsByCategoryRequest$MaxResults": "<p>The maximum number of skills returned per paginated calls.</p>"
       }
     },
     "SkillName": {
       "base": null,
       "refs": {
-        "SkillSummary$SkillName": "<p>The name of the skill.</p>"
+        "SkillSummary$SkillName": "<p>The name of the skill.</p>",
+        "SkillsStoreSkill$SkillName": "<p>The name of the skill.</p>"
+      }
+    },
+    "SkillStoreType": {
+      "base": null,
+      "refs": {
+        "SkillTypes$member": null
       }
     },
     "SkillSummary": {
@@ -1090,6 +1663,48 @@
       "base": null,
       "refs": {
         "ListSkillsResponse$SkillSummaries": "<p>The list of enabled skills requested. Required.</p>"
+      }
+    },
+    "SkillType": {
+      "base": null,
+      "refs": {
+        "SkillSummary$SkillType": "<p>Whether the skill is publicly available or is a private skill.</p>"
+      }
+    },
+    "SkillTypeFilter": {
+      "base": null,
+      "refs": {
+        "ListSkillsRequest$SkillType": "<p>Whether the skill is publicly available or is a private skill.</p>"
+      }
+    },
+    "SkillTypes": {
+      "base": null,
+      "refs": {
+        "SkillDetails$SkillTypes": "<p>The types of skills.</p>"
+      }
+    },
+    "SkillsStoreSkill": {
+      "base": "<p>The detailed information about an Alexa skill.</p>",
+      "refs": {
+        "SkillsStoreSkillList$member": null
+      }
+    },
+    "SkillsStoreSkillList": {
+      "base": null,
+      "refs": {
+        "ListSkillsStoreSkillsByCategoryResponse$SkillsStoreSkills": "<p>The skill store skills.</p>"
+      }
+    },
+    "SmartHomeAppliance": {
+      "base": "<p>A smart home appliance that can connect to a central system. Any domestic device can be a smart appliance. </p>",
+      "refs": {
+        "SmartHomeApplianceList$member": null
+      }
+    },
+    "SmartHomeApplianceList": {
+      "base": null,
+      "refs": {
+        "ListSmartHomeAppliancesResponse$SmartHomeAppliances": "<p>The smart home appliances.</p>"
       }
     },
     "SoftwareVersion": {
@@ -1135,6 +1750,16 @@
       }
     },
     "StartDeviceSyncResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "StartSmartHomeApplianceDiscoveryRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "StartSmartHomeApplianceDiscoveryResponse": {
       "base": null,
       "refs": {
       }
@@ -1219,6 +1844,11 @@
         "SearchUsersResponse$TotalCount": "<p>The total number of users returned.</p>"
       }
     },
+    "UnauthorizedException": {
+      "base": "<p>The caller has no permissions to operate on the resource involved in the API call.</p>",
+      "refs": {
+      }
+    },
     "UntagResourceRequest": {
       "base": null,
       "refs": {
@@ -1235,6 +1865,16 @@
       }
     },
     "UpdateAddressBookResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateConferenceProviderRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateConferenceProviderResponse": {
       "base": null,
       "refs": {
       }
@@ -1289,6 +1929,18 @@
       "refs": {
       }
     },
+    "Url": {
+      "base": null,
+      "refs": {
+        "DeveloperInfo$Url": "<p>The website of the developer.</p>"
+      }
+    },
+    "UserCode": {
+      "base": null,
+      "refs": {
+        "RegisterAVSDeviceRequest$UserCode": "<p>The code that is obtained after your AVS device has made a POST request to LWA as a part of the Device Authorization Request component of the OAuth code-based linking specification.</p>"
+      }
+    },
     "UserData": {
       "base": "<p>Information related to a user.</p>",
       "refs": {
@@ -1307,6 +1959,18 @@
         "ResolveRoomRequest$UserId": "<p>The ARN of the user. Required.</p>"
       }
     },
+    "Utterance": {
+      "base": null,
+      "refs": {
+        "SampleUtterances$member": null
+      }
+    },
+    "Value": {
+      "base": null,
+      "refs": {
+        "AuthorizationResult$value": null
+      }
+    },
     "WakeWord": {
       "base": null,
       "refs": {
@@ -1319,7 +1983,8 @@
     "boolean": {
       "base": null,
       "refs": {
-        "SkillSummary$SupportsLinking": "<p>Linking support for a skill.</p>"
+        "SkillSummary$SupportsLinking": "<p>Linking support for a skill.</p>",
+        "SkillsStoreSkill$SupportsLinking": "<p>Linking support for a skill.</p>"
       }
     },
     "user_FirstName": {

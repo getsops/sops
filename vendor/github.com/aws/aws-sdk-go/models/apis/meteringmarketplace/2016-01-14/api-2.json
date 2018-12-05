@@ -1,15 +1,16 @@
 {
   "version":"2.0",
   "metadata":{
-    "uid":"meteringmarketplace-2016-01-14",
     "apiVersion":"2016-01-14",
     "endpointPrefix":"metering.marketplace",
     "jsonVersion":"1.1",
     "protocol":"json",
     "serviceFullName":"AWSMarketplace Metering",
+    "serviceId":"Marketplace Metering",
     "signatureVersion":"v4",
     "signingName":"aws-marketplace",
-    "targetPrefix":"AWSMPMeteringService"
+    "targetPrefix":"AWSMPMeteringService",
+    "uid":"meteringmarketplace-2016-01-14"
   },
   "operations":{
     "BatchMeterUsage":{
@@ -26,7 +27,8 @@
         {"shape":"InvalidUsageDimensionException"},
         {"shape":"InvalidCustomerIdentifierException"},
         {"shape":"TimestampOutOfBoundsException"},
-        {"shape":"ThrottlingException"}
+        {"shape":"ThrottlingException"},
+        {"shape":"DisabledApiException"}
       ]
     },
     "MeterUsage":{
@@ -47,6 +49,25 @@
         {"shape":"ThrottlingException"}
       ]
     },
+    "RegisterUsage":{
+      "name":"RegisterUsage",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"RegisterUsageRequest"},
+      "output":{"shape":"RegisterUsageResult"},
+      "errors":[
+        {"shape":"InvalidProductCodeException"},
+        {"shape":"InvalidRegionException"},
+        {"shape":"InvalidPublicKeyVersionException"},
+        {"shape":"PlatformNotSupportedException"},
+        {"shape":"CustomerNotEntitledException"},
+        {"shape":"ThrottlingException"},
+        {"shape":"InternalServiceErrorException"},
+        {"shape":"DisabledApiException"}
+      ]
+    },
     "ResolveCustomer":{
       "name":"ResolveCustomer",
       "http":{
@@ -59,7 +80,8 @@
         {"shape":"InvalidTokenException"},
         {"shape":"ExpiredTokenException"},
         {"shape":"ThrottlingException"},
-        {"shape":"InternalServiceErrorException"}
+        {"shape":"InternalServiceErrorException"},
+        {"shape":"DisabledApiException"}
       ]
     }
   },
@@ -87,6 +109,20 @@
       "type":"string",
       "max":255,
       "min":1
+    },
+    "CustomerNotEntitledException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true
+    },
+    "DisabledApiException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true
     },
     "DuplicateRequestException":{
       "type":"structure",
@@ -125,6 +161,20 @@
       "exception":true
     },
     "InvalidProductCodeException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true
+    },
+    "InvalidPublicKeyVersionException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true
+    },
+    "InvalidRegionException":{
       "type":"structure",
       "members":{
         "message":{"shape":"errorMessage"}
@@ -172,10 +222,40 @@
       "type":"string",
       "pattern":"\\S+"
     },
+    "Nonce":{
+      "type":"string",
+      "max":255
+    },
+    "PlatformNotSupportedException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true
+    },
     "ProductCode":{
       "type":"string",
       "max":255,
       "min":1
+    },
+    "RegisterUsageRequest":{
+      "type":"structure",
+      "required":[
+        "ProductCode",
+        "PublicKeyVersion"
+      ],
+      "members":{
+        "ProductCode":{"shape":"ProductCode"},
+        "PublicKeyVersion":{"shape":"VersionInteger"},
+        "Nonce":{"shape":"Nonce"}
+      }
+    },
+    "RegisterUsageResult":{
+      "type":"structure",
+      "members":{
+        "PublicKeyRotationTimestamp":{"shape":"Timestamp"},
+        "Signature":{"shape":"NonEmptyString"}
+      }
     },
     "ResolveCustomerRequest":{
       "type":"structure",
@@ -257,6 +337,10 @@
         "CustomerNotSubscribed",
         "DuplicateRecord"
       ]
+    },
+    "VersionInteger":{
+      "type":"integer",
+      "min":1
     },
     "errorMessage":{"type":"string"}
   }

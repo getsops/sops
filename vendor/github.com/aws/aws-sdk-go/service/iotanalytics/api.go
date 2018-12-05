@@ -18,7 +18,7 @@ const opBatchPutMessage = "BatchPutMessage"
 // BatchPutMessageRequest generates a "aws/request.Request" representing the
 // client's request for the BatchPutMessage operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -109,7 +109,7 @@ const opCancelPipelineReprocessing = "CancelPipelineReprocessing"
 // CancelPipelineReprocessingRequest generates a "aws/request.Request" representing the
 // client's request for the CancelPipelineReprocessing operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -200,7 +200,7 @@ const opCreateChannel = "CreateChannel"
 // CreateChannelRequest generates a "aws/request.Request" representing the
 // client's request for the CreateChannel operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -295,7 +295,7 @@ const opCreateDataset = "CreateDataset"
 // CreateDatasetRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDataset operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -393,7 +393,7 @@ const opCreateDatasetContent = "CreateDatasetContent"
 // CreateDatasetContentRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDatasetContent operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -484,7 +484,7 @@ const opCreateDatastore = "CreateDatastore"
 // CreateDatastoreRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDatastore operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -578,7 +578,7 @@ const opCreatePipeline = "CreatePipeline"
 // CreatePipelineRequest generates a "aws/request.Request" representing the
 // client's request for the CreatePipeline operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -673,7 +673,7 @@ const opDeleteChannel = "DeleteChannel"
 // DeleteChannelRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteChannel operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -766,7 +766,7 @@ const opDeleteDataset = "DeleteDataset"
 // DeleteDatasetRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDataset operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -862,7 +862,7 @@ const opDeleteDatasetContent = "DeleteDatasetContent"
 // DeleteDatasetContentRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDatasetContent operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -955,7 +955,7 @@ const opDeleteDatastore = "DeleteDatastore"
 // DeleteDatastoreRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDatastore operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1048,7 +1048,7 @@ const opDeletePipeline = "DeletePipeline"
 // DeletePipelineRequest generates a "aws/request.Request" representing the
 // client's request for the DeletePipeline operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1141,7 +1141,7 @@ const opDescribeChannel = "DescribeChannel"
 // DescribeChannelRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeChannel operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1232,7 +1232,7 @@ const opDescribeDataset = "DescribeDataset"
 // DescribeDatasetRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDataset operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1323,7 +1323,7 @@ const opDescribeDatastore = "DescribeDatastore"
 // DescribeDatastoreRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDatastore operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1414,7 +1414,7 @@ const opDescribeLoggingOptions = "DescribeLoggingOptions"
 // DescribeLoggingOptionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeLoggingOptions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1505,7 +1505,7 @@ const opDescribePipeline = "DescribePipeline"
 // DescribePipelineRequest generates a "aws/request.Request" representing the
 // client's request for the DescribePipeline operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1596,7 +1596,7 @@ const opGetDatasetContent = "GetDatasetContent"
 // GetDatasetContentRequest generates a "aws/request.Request" representing the
 // client's request for the GetDatasetContent operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1687,7 +1687,7 @@ const opListChannels = "ListChannels"
 // ListChannelsRequest generates a "aws/request.Request" representing the
 // client's request for the ListChannels operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1831,7 +1831,7 @@ const opListDatasetContents = "ListDatasetContents"
 // ListDatasetContentsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDatasetContents operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1978,7 +1978,7 @@ const opListDatasets = "ListDatasets"
 // ListDatasetsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDatasets operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2122,7 +2122,7 @@ const opListDatastores = "ListDatastores"
 // ListDatastoresRequest generates a "aws/request.Request" representing the
 // client's request for the ListDatastores operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2266,7 +2266,7 @@ const opListPipelines = "ListPipelines"
 // ListPipelinesRequest generates a "aws/request.Request" representing the
 // client's request for the ListPipelines operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2410,7 +2410,7 @@ const opListTagsForResource = "ListTagsForResource"
 // ListTagsForResourceRequest generates a "aws/request.Request" representing the
 // client's request for the ListTagsForResource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2504,7 +2504,7 @@ const opPutLoggingOptions = "PutLoggingOptions"
 // PutLoggingOptionsRequest generates a "aws/request.Request" representing the
 // client's request for the PutLoggingOptions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2600,7 +2600,7 @@ const opRunPipelineActivity = "RunPipelineActivity"
 // RunPipelineActivityRequest generates a "aws/request.Request" representing the
 // client's request for the RunPipelineActivity operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2688,7 +2688,7 @@ const opSampleChannelData = "SampleChannelData"
 // SampleChannelDataRequest generates a "aws/request.Request" representing the
 // client's request for the SampleChannelData operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2780,7 +2780,7 @@ const opStartPipelineReprocessing = "StartPipelineReprocessing"
 // StartPipelineReprocessingRequest generates a "aws/request.Request" representing the
 // client's request for the StartPipelineReprocessing operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2874,7 +2874,7 @@ const opTagResource = "TagResource"
 // TagResourceRequest generates a "aws/request.Request" representing the
 // client's request for the TagResource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2969,7 +2969,7 @@ const opUntagResource = "UntagResource"
 // UntagResourceRequest generates a "aws/request.Request" representing the
 // client's request for the UntagResource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3063,7 +3063,7 @@ const opUpdateChannel = "UpdateChannel"
 // UpdateChannelRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateChannel operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3156,7 +3156,7 @@ const opUpdateDataset = "UpdateDataset"
 // UpdateDatasetRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDataset operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3249,7 +3249,7 @@ const opUpdateDatastore = "UpdateDatastore"
 // UpdateDatastoreRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDatastore operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3342,7 +3342,7 @@ const opUpdatePipeline = "UpdatePipeline"
 // UpdatePipelineRequest generates a "aws/request.Request" representing the
 // client's request for the UpdatePipeline operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3676,6 +3676,9 @@ func (s *CancelPipelineReprocessingInput) Validate() error {
 	}
 	if s.ReprocessingId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ReprocessingId"))
+	}
+	if s.ReprocessingId != nil && len(*s.ReprocessingId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ReprocessingId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -4218,6 +4221,8 @@ type CreateDatasetInput struct {
 	// Actions is a required field
 	Actions []*DatasetAction `locationName:"actions" min:"1" type:"list" required:"true"`
 
+	ContentDeliveryRules []*DatasetContentDeliveryRule `locationName:"contentDeliveryRules" type:"list"`
+
 	// The name of the data set.
 	//
 	// DatasetName is a required field
@@ -4276,6 +4281,16 @@ func (s *CreateDatasetInput) Validate() error {
 			}
 		}
 	}
+	if s.ContentDeliveryRules != nil {
+		for i, v := range s.ContentDeliveryRules {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ContentDeliveryRules", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.RetentionPeriod != nil {
 		if err := s.RetentionPeriod.Validate(); err != nil {
 			invalidParams.AddNested("RetentionPeriod", err.(request.ErrInvalidParams))
@@ -4311,6 +4326,12 @@ func (s *CreateDatasetInput) Validate() error {
 // SetActions sets the Actions field's value.
 func (s *CreateDatasetInput) SetActions(v []*DatasetAction) *CreateDatasetInput {
 	s.Actions = v
+	return s
+}
+
+// SetContentDeliveryRules sets the ContentDeliveryRules field's value.
+func (s *CreateDatasetInput) SetContentDeliveryRules(v []*DatasetContentDeliveryRule) *CreateDatasetInput {
+	s.ContentDeliveryRules = v
 	return s
 }
 
@@ -4635,6 +4656,8 @@ type Dataset struct {
 	// The ARN of the data set.
 	Arn *string `locationName:"arn" type:"string"`
 
+	ContentDeliveryRules []*DatasetContentDeliveryRule `locationName:"contentDeliveryRules" type:"list"`
+
 	// When the data set was created.
 	CreationTime *time.Time `locationName:"creationTime" type:"timestamp"`
 
@@ -4674,6 +4697,12 @@ func (s *Dataset) SetActions(v []*DatasetAction) *Dataset {
 // SetArn sets the Arn field's value.
 func (s *Dataset) SetArn(v string) *Dataset {
 	s.Arn = &v
+	return s
+}
+
+// SetContentDeliveryRules sets the ContentDeliveryRules field's value.
+func (s *Dataset) SetContentDeliveryRules(v []*DatasetContentDeliveryRule) *Dataset {
+	s.ContentDeliveryRules = v
 	return s
 }
 
@@ -4811,6 +4840,92 @@ func (s *DatasetActionSummary) SetActionName(v string) *DatasetActionSummary {
 // SetActionType sets the ActionType field's value.
 func (s *DatasetActionSummary) SetActionType(v string) *DatasetActionSummary {
 	s.ActionType = &v
+	return s
+}
+
+type DatasetContentDeliveryDestination struct {
+	_ struct{} `type:"structure"`
+
+	IotEventsDestinationConfiguration *IotEventsDestinationConfiguration `locationName:"iotEventsDestinationConfiguration" type:"structure"`
+}
+
+// String returns the string representation
+func (s DatasetContentDeliveryDestination) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DatasetContentDeliveryDestination) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DatasetContentDeliveryDestination) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DatasetContentDeliveryDestination"}
+	if s.IotEventsDestinationConfiguration != nil {
+		if err := s.IotEventsDestinationConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("IotEventsDestinationConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIotEventsDestinationConfiguration sets the IotEventsDestinationConfiguration field's value.
+func (s *DatasetContentDeliveryDestination) SetIotEventsDestinationConfiguration(v *IotEventsDestinationConfiguration) *DatasetContentDeliveryDestination {
+	s.IotEventsDestinationConfiguration = v
+	return s
+}
+
+type DatasetContentDeliveryRule struct {
+	_ struct{} `type:"structure"`
+
+	// Destination is a required field
+	Destination *DatasetContentDeliveryDestination `locationName:"destination" type:"structure" required:"true"`
+
+	EntryName *string `locationName:"entryName" type:"string"`
+}
+
+// String returns the string representation
+func (s DatasetContentDeliveryRule) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DatasetContentDeliveryRule) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DatasetContentDeliveryRule) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DatasetContentDeliveryRule"}
+	if s.Destination == nil {
+		invalidParams.Add(request.NewErrParamRequired("Destination"))
+	}
+	if s.Destination != nil {
+		if err := s.Destination.Validate(); err != nil {
+			invalidParams.AddNested("Destination", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDestination sets the Destination field's value.
+func (s *DatasetContentDeliveryRule) SetDestination(v *DatasetContentDeliveryDestination) *DatasetContentDeliveryRule {
+	s.Destination = v
+	return s
+}
+
+// SetEntryName sets the EntryName field's value.
+func (s *DatasetContentDeliveryRule) SetEntryName(v string) *DatasetContentDeliveryRule {
+	s.EntryName = &v
 	return s
 }
 
@@ -6399,6 +6514,60 @@ func (s *GetDatasetContentOutput) SetStatus(v *DatasetContentStatus) *GetDataset
 // SetTimestamp sets the Timestamp field's value.
 func (s *GetDatasetContentOutput) SetTimestamp(v time.Time) *GetDatasetContentOutput {
 	s.Timestamp = &v
+	return s
+}
+
+type IotEventsDestinationConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// InputName is a required field
+	InputName *string `locationName:"inputName" min:"1" type:"string" required:"true"`
+
+	// RoleArn is a required field
+	RoleArn *string `locationName:"roleArn" min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s IotEventsDestinationConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s IotEventsDestinationConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IotEventsDestinationConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "IotEventsDestinationConfiguration"}
+	if s.InputName == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputName"))
+	}
+	if s.InputName != nil && len(*s.InputName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputName", 1))
+	}
+	if s.RoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
+	}
+	if s.RoleArn != nil && len(*s.RoleArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputName sets the InputName field's value.
+func (s *IotEventsDestinationConfiguration) SetInputName(v string) *IotEventsDestinationConfiguration {
+	s.InputName = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *IotEventsDestinationConfiguration) SetRoleArn(v string) *IotEventsDestinationConfiguration {
+	s.RoleArn = &v
 	return s
 }
 
@@ -8610,6 +8779,8 @@ type UpdateDatasetInput struct {
 	// Actions is a required field
 	Actions []*DatasetAction `locationName:"actions" min:"1" type:"list" required:"true"`
 
+	ContentDeliveryRules []*DatasetContentDeliveryRule `locationName:"contentDeliveryRules" type:"list"`
+
 	// The name of the data set to update.
 	//
 	// DatasetName is a required field
@@ -8658,6 +8829,16 @@ func (s *UpdateDatasetInput) Validate() error {
 			}
 		}
 	}
+	if s.ContentDeliveryRules != nil {
+		for i, v := range s.ContentDeliveryRules {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ContentDeliveryRules", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.RetentionPeriod != nil {
 		if err := s.RetentionPeriod.Validate(); err != nil {
 			invalidParams.AddNested("RetentionPeriod", err.(request.ErrInvalidParams))
@@ -8683,6 +8864,12 @@ func (s *UpdateDatasetInput) Validate() error {
 // SetActions sets the Actions field's value.
 func (s *UpdateDatasetInput) SetActions(v []*DatasetAction) *UpdateDatasetInput {
 	s.Actions = v
+	return s
+}
+
+// SetContentDeliveryRules sets the ContentDeliveryRules field's value.
+func (s *UpdateDatasetInput) SetContentDeliveryRules(v []*DatasetContentDeliveryRule) *UpdateDatasetInput {
+	s.ContentDeliveryRules = v
 	return s
 }
 

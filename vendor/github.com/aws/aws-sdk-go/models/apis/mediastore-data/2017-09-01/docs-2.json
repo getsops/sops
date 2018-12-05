@@ -6,7 +6,7 @@
     "DescribeObject": "<p>Gets the headers for an object at the specified path.</p>",
     "GetObject": "<p>Downloads the object at the specified path.</p>",
     "ListItems": "<p>Provides a list of metadata entries about folders and objects in the specified folder.</p>",
-    "PutObject": "<p>Uploads an object to the specified path. Object sizes are limited to 10 MB.</p>"
+    "PutObject": "<p>Uploads an object to the specified path. Object sizes are limited to 25 MB.</p>"
   },
   "shapes": {
     "ContainerNotFoundException": {
@@ -91,7 +91,7 @@
     "ItemList": {
       "base": null,
       "refs": {
-        "ListItemsResponse$Items": "<p>Metadata entries for the folders and objects at the requested path.</p>"
+        "ListItemsResponse$Items": "<p>The metadata entries for the folders and objects at the requested path.</p>"
       }
     },
     "ItemName": {
@@ -119,7 +119,7 @@
     "ListLimit": {
       "base": null,
       "refs": {
-        "ListItemsRequest$MaxResults": "<p>The maximum results to return. The service might return fewer results.</p>"
+        "ListItemsRequest$MaxResults": "<p>The maximum number of results to return per API request. For example, you submit a <code>ListItems</code> request with <code>MaxResults</code> set at 500. Although 2,000 items match your request, the service returns no more than the first 500 items. (The service also returns a <code>NextToken</code> value that you can use to fetch the next batch of results.) The service might return fewer results than the <code>MaxResults</code> value.</p> <p>If <code>MaxResults</code> is not included in the request, the service defaults to pagination with a maximum of 1,000 results per page.</p>"
       }
     },
     "ListPathNaming": {
@@ -144,8 +144,8 @@
     "PaginationToken": {
       "base": null,
       "refs": {
-        "ListItemsRequest$NextToken": "<p>The <code>NextToken</code> received in the <code>ListItemsResponse</code> for the same container and path. Tokens expire after 15 minutes.</p>",
-        "ListItemsResponse$NextToken": "<p>The <code>NextToken</code> used to request the next page of results using <code>ListItems</code>.</p>"
+        "ListItemsRequest$NextToken": "<p>The token that identifies which batch of results that you want to see. For example, you submit a <code>ListItems</code> request with <code>MaxResults</code> set at 500. The service returns the first batch of results (up to 500) and a <code>NextToken</code> value. To see the next batch of results, you can submit the <code>ListItems</code> request a second time and specify the <code>NextToken</code> value.</p> <p>Tokens expire after 15 minutes.</p>",
+        "ListItemsResponse$NextToken": "<p>The token that can be used in a request to view the next set of results. For example, you submit a <code>ListItems</code> request that matches 2,000 items with <code>MaxResults</code> set at 500. The service returns the first batch of results (up to 500) and a <code>NextToken</code> value that can be used to fetch the next batch of results.</p>"
       }
     },
     "PathNaming": {
@@ -195,7 +195,7 @@
       "base": null,
       "refs": {
         "PutObjectRequest$StorageClass": "<p>Indicates the storage class of a <code>Put</code> request. Defaults to high-performance temporal storage class, and objects are persisted into durable storage shortly after being received.</p>",
-        "PutObjectResponse$StorageClass": "<p>The storage class where the object was persisted. Should be “Temporal”.</p>"
+        "PutObjectResponse$StorageClass": "<p>The storage class where the object was persisted. The class should be “Temporal”.</p>"
       }
     },
     "StringPrimitive": {

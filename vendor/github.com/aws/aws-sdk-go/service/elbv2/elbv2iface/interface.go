@@ -130,6 +130,10 @@ type ELBV2API interface {
 	DescribeLoadBalancersPages(*elbv2.DescribeLoadBalancersInput, func(*elbv2.DescribeLoadBalancersOutput, bool) bool) error
 	DescribeLoadBalancersPagesWithContext(aws.Context, *elbv2.DescribeLoadBalancersInput, func(*elbv2.DescribeLoadBalancersOutput, bool) bool, ...request.Option) error
 
+	DescribeProvisionedCapacity(*elbv2.DescribeProvisionedCapacityInput) (*elbv2.DescribeProvisionedCapacityOutput, error)
+	DescribeProvisionedCapacityWithContext(aws.Context, *elbv2.DescribeProvisionedCapacityInput, ...request.Option) (*elbv2.DescribeProvisionedCapacityOutput, error)
+	DescribeProvisionedCapacityRequest(*elbv2.DescribeProvisionedCapacityInput) (*request.Request, *elbv2.DescribeProvisionedCapacityOutput)
+
 	DescribeRules(*elbv2.DescribeRulesInput) (*elbv2.DescribeRulesOutput, error)
 	DescribeRulesWithContext(aws.Context, *elbv2.DescribeRulesInput, ...request.Option) (*elbv2.DescribeRulesOutput, error)
 	DescribeRulesRequest(*elbv2.DescribeRulesInput) (*request.Request, *elbv2.DescribeRulesOutput)
@@ -164,6 +168,10 @@ type ELBV2API interface {
 	ModifyLoadBalancerAttributes(*elbv2.ModifyLoadBalancerAttributesInput) (*elbv2.ModifyLoadBalancerAttributesOutput, error)
 	ModifyLoadBalancerAttributesWithContext(aws.Context, *elbv2.ModifyLoadBalancerAttributesInput, ...request.Option) (*elbv2.ModifyLoadBalancerAttributesOutput, error)
 	ModifyLoadBalancerAttributesRequest(*elbv2.ModifyLoadBalancerAttributesInput) (*request.Request, *elbv2.ModifyLoadBalancerAttributesOutput)
+
+	ModifyProvisionedCapacity(*elbv2.ModifyProvisionedCapacityInput) (*elbv2.ModifyProvisionedCapacityOutput, error)
+	ModifyProvisionedCapacityWithContext(aws.Context, *elbv2.ModifyProvisionedCapacityInput, ...request.Option) (*elbv2.ModifyProvisionedCapacityOutput, error)
+	ModifyProvisionedCapacityRequest(*elbv2.ModifyProvisionedCapacityInput) (*request.Request, *elbv2.ModifyProvisionedCapacityOutput)
 
 	ModifyRule(*elbv2.ModifyRuleInput) (*elbv2.ModifyRuleOutput, error)
 	ModifyRuleWithContext(aws.Context, *elbv2.ModifyRuleInput, ...request.Option) (*elbv2.ModifyRuleOutput, error)

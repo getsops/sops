@@ -2,12 +2,6 @@
 
 
 [[projects]]
-  name = "github.com/go-ini/ini"
-  packages = ["."]
-  revision = "300e940a926eb277d3901b20bdfcc54928ad3642"
-  version = "v1.25.4"
-
-[[projects]]
   name = "github.com/jmespath/go-jmespath"
   packages = ["."]
   revision = "0b12d6b5"

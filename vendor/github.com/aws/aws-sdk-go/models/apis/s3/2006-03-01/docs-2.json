@@ -9,22 +9,23 @@
     "CreateMultipartUpload": "<p>Initiates a multipart upload and returns an upload ID.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>",
     "DeleteBucket": "<p>Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted.</p>",
     "DeleteBucketAnalyticsConfiguration": "<p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p>",
-    "DeleteBucketCors": "<p>Deletes the cors configuration information set for the bucket.</p>",
+    "DeleteBucketCors": "<p>Deletes the CORS configuration information set for the bucket.</p>",
     "DeleteBucketEncryption": "<p>Deletes the server-side encryption configuration from the bucket.</p>",
     "DeleteBucketInventoryConfiguration": "<p>Deletes an inventory configuration (identified by the inventory ID) from the bucket.</p>",
     "DeleteBucketLifecycle": "<p>Deletes the lifecycle configuration from the bucket.</p>",
     "DeleteBucketMetricsConfiguration": "<p>Deletes a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>",
     "DeleteBucketPolicy": "<p>Deletes the policy from the bucket.</p>",
-    "DeleteBucketReplication": "<p>Deletes the replication configuration from the bucket.</p>",
+    "DeleteBucketReplication": "<p> Deletes the replication configuration from the bucket. For information about replication configuration, see <a href=\" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html\">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>",
     "DeleteBucketTagging": "<p>Deletes the tags from the bucket.</p>",
     "DeleteBucketWebsite": "<p>This operation removes the website configuration from the bucket.</p>",
     "DeleteObject": "<p>Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn't a null version, Amazon S3 does not remove any objects.</p>",
     "DeleteObjectTagging": "<p>Removes the tag-set from an existing object.</p>",
     "DeleteObjects": "<p>This operation enables you to delete multiple objects from a bucket using a single HTTP request. You may specify up to 1000 keys.</p>",
+    "DeletePublicAccessBlock": "<p>Removes the <code>PublicAccessBlock</code> configuration from an Amazon S3 bucket.</p>",
     "GetBucketAccelerateConfiguration": "<p>Returns the accelerate configuration of a bucket.</p>",
     "GetBucketAcl": "<p>Gets the access control policy for the bucket.</p>",
     "GetBucketAnalyticsConfiguration": "<p>Gets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>",
-    "GetBucketCors": "<p>Returns the cors configuration for the bucket.</p>",
+    "GetBucketCors": "<p>Returns the CORS configuration for the bucket.</p>",
     "GetBucketEncryption": "<p>Returns the server-side encryption configuration of a bucket.</p>",
     "GetBucketInventoryConfiguration": "<p>Returns an inventory configuration (identified by the inventory ID) from the bucket.</p>",
     "GetBucketLifecycle": "<p>Deprecated, see the GetBucketLifecycleConfiguration operation.</p>",
@@ -35,15 +36,20 @@
     "GetBucketNotification": "<p>Deprecated, see the GetBucketNotificationConfiguration operation.</p>",
     "GetBucketNotificationConfiguration": "<p>Returns the notification configuration of a bucket.</p>",
     "GetBucketPolicy": "<p>Returns the policy of a specified bucket.</p>",
-    "GetBucketReplication": "<p>Returns the replication configuration of a bucket.</p>",
+    "GetBucketPolicyStatus": "<p>Retrieves the policy status for an Amazon S3 bucket, indicating whether the bucket is public.</p>",
+    "GetBucketReplication": "<p>Returns the replication configuration of a bucket.</p> <note> <p> It can take a while to propagate the put or delete a replication configuration to all Amazon S3 systems. Therefore, a get request soon after put or delete can return a wrong result. </p> </note>",
     "GetBucketRequestPayment": "<p>Returns the request payment configuration of a bucket.</p>",
     "GetBucketTagging": "<p>Returns the tag set associated with the bucket.</p>",
     "GetBucketVersioning": "<p>Returns the versioning state of a bucket.</p>",
     "GetBucketWebsite": "<p>Returns the website configuration for a bucket.</p>",
     "GetObject": "<p>Retrieves objects from Amazon S3.</p>",
     "GetObjectAcl": "<p>Returns the access control list (ACL) of an object.</p>",
+    "GetObjectLegalHold": "<p>Gets an object's current Legal Hold status.</p>",
+    "GetObjectLockConfiguration": "<p>Gets the Object Lock configuration for a bucket. The rule specified in the Object Lock configuration will be applied by default to every new object placed in the specified bucket.</p>",
+    "GetObjectRetention": "<p>Retrieves an object's retention settings.</p>",
     "GetObjectTagging": "<p>Returns the tag-set of an object.</p>",
     "GetObjectTorrent": "<p>Return torrent files from a bucket.</p>",
+    "GetPublicAccessBlock": "<p>Retrieves the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket.</p>",
     "HeadBucket": "<p>This operation is useful to determine if a bucket exists and you have permission to access it.</p>",
     "HeadObject": "<p>The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you're only interested in an object's metadata. To use HEAD, you must have READ access to the object.</p>",
     "ListBucketAnalyticsConfigurations": "<p>Lists the analytics configurations for the bucket.</p>",
@@ -58,7 +64,7 @@
     "PutBucketAccelerateConfiguration": "<p>Sets the accelerate configuration of an existing bucket.</p>",
     "PutBucketAcl": "<p>Sets the permissions on a bucket using access control lists (ACL).</p>",
     "PutBucketAnalyticsConfiguration": "<p>Sets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>",
-    "PutBucketCors": "<p>Sets the cors configuration for a bucket.</p>",
+    "PutBucketCors": "<p>Sets the CORS configuration for a bucket.</p>",
     "PutBucketEncryption": "<p>Creates a new server-side encryption configuration (or replaces an existing one, if present).</p>",
     "PutBucketInventoryConfiguration": "<p>Adds an inventory configuration (identified by the inventory ID) from the bucket.</p>",
     "PutBucketLifecycle": "<p>Deprecated, see the PutBucketLifecycleConfiguration operation.</p>",
@@ -68,14 +74,18 @@
     "PutBucketNotification": "<p>Deprecated, see the PutBucketNotificationConfiguraiton operation.</p>",
     "PutBucketNotificationConfiguration": "<p>Enables notifications of specified events for a bucket.</p>",
     "PutBucketPolicy": "<p>Replaces a policy on a bucket. If the bucket already has a policy, the one in this request completely replaces it.</p>",
-    "PutBucketReplication": "<p>Creates a new replication configuration (or replaces an existing one, if present).</p>",
+    "PutBucketReplication": "<p> Creates a replication configuration or replaces an existing one. For more information, see <a href=\" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html\">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>",
     "PutBucketRequestPayment": "<p>Sets the request payment configuration for a bucket. By default, the bucket owner pays for downloads from the bucket. This configuration parameter enables the bucket owner (only) to specify that the person requesting the download will be charged for the download. Documentation on requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html</p>",
     "PutBucketTagging": "<p>Sets the tags for a bucket.</p>",
     "PutBucketVersioning": "<p>Sets the versioning state of an existing bucket. To set the versioning state, you must be the bucket owner.</p>",
     "PutBucketWebsite": "<p>Set the website configuration for a bucket.</p>",
     "PutObject": "<p>Adds an object to a bucket.</p>",
     "PutObjectAcl": "<p>uses the acl subresource to set the access control list (ACL) permissions for an object that already exists in a bucket</p>",
+    "PutObjectLegalHold": "<p>Applies a Legal Hold configuration to the specified object.</p>",
+    "PutObjectLockConfiguration": "<p>Places an Object Lock configuration on the specified bucket. The rule specified in the Object Lock configuration will be applied by default to every new object placed in the specified bucket.</p>",
+    "PutObjectRetention": "<p>Places an Object Retention configuration on an object.</p>",
     "PutObjectTagging": "<p>Sets the supplied tag-set to an object that already exists in a bucket</p>",
+    "PutPublicAccessBlock": "<p>Creates or modifies the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket.</p>",
     "RestoreObject": "<p>Restores an archived copy of an object back into Amazon S3</p>",
     "SelectObjectContent": "<p>This operation filters the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response.</p>",
     "UploadPart": "<p>Uploads a part in a multipart upload.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>",
@@ -134,16 +144,16 @@
       }
     },
     "AccessControlTranslation": {
-      "base": "<p>Container for information regarding the access control for replicas.</p>",
+      "base": "<p>A container for information about access control for replicas.</p>",
       "refs": {
-        "Destination$AccessControlTranslation": "<p>Container for information regarding the access control for replicas.</p>"
+        "Destination$AccessControlTranslation": "<p>A container for information about access control for replicas. </p> <p>Use this element only in a cross-account scenario where source and destination bucket owners are not the same to change replica ownership to the AWS account that owns the destination bucket. If you don't add this element to the replication configuration, the replicas are owned by same AWS account that owns the source object. </p>"
       }
     },
     "AccountId": {
       "base": null,
       "refs": {
         "AnalyticsS3BucketDestination$BucketAccountId": "<p>The account ID that owns the destination bucket. If no account ID is provided, the owner will not be validated prior to exporting data.</p>",
-        "Destination$Account": "<p>Account ID of the destination bucket. Currently this is only being verified if Access Control Translation is enabled</p>",
+        "Destination$Account": "<p>The account ID of the destination bucket. Currently, Amazon S3 verifies this value only if Access Control Translation is enabled. </p> <p>In a cross-account scenario, if you change replica ownership to the AWS account that owns the destination bucket by adding the <code>AccessControlTranslation</code> element, this is the account ID of the owner of the destination bucket. </p>",
         "InventoryS3BucketDestination$AccountId": "<p>The ID of the account that owns the destination bucket.</p>"
       }
     },
@@ -326,14 +336,15 @@
         "DeleteBucketLifecycleRequest$Bucket": null,
         "DeleteBucketMetricsConfigurationRequest$Bucket": "<p>The name of the bucket containing the metrics configuration to delete.</p>",
         "DeleteBucketPolicyRequest$Bucket": null,
-        "DeleteBucketReplicationRequest$Bucket": null,
+        "DeleteBucketReplicationRequest$Bucket": "<p> The bucket name. </p> <note> <p>It can take a while to propagate the deletion of a replication configuration to all Amazon S3 systems.</p> </note>",
         "DeleteBucketRequest$Bucket": null,
         "DeleteBucketTaggingRequest$Bucket": null,
         "DeleteBucketWebsiteRequest$Bucket": null,
         "DeleteObjectRequest$Bucket": null,
         "DeleteObjectTaggingRequest$Bucket": null,
         "DeleteObjectsRequest$Bucket": null,
-        "Destination$Bucket": "<p>Amazon resource name (ARN) of the bucket where you want Amazon S3 to store replicas of the object identified by the rule.</p>",
+        "DeletePublicAccessBlockRequest$Bucket": "<p>The Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to delete. </p>",
+        "Destination$Bucket": "<p> The Amazon Resource Name (ARN) of the bucket where you want Amazon S3 to store replicas of the object identified by the rule. </p> <p> If there are multiple rules in your replication configuration, all rules must specify the same bucket as the destination. A replication configuration can replicate objects to only one destination bucket. </p>",
         "GetBucketAccelerateConfigurationRequest$Bucket": "<p>Name of the bucket for which the accelerate configuration is retrieved.</p>",
         "GetBucketAclRequest$Bucket": null,
         "GetBucketAnalyticsConfigurationRequest$Bucket": "<p>The name of the bucket from which an analytics configuration is retrieved.</p>",
@@ -347,15 +358,20 @@
         "GetBucketMetricsConfigurationRequest$Bucket": "<p>The name of the bucket containing the metrics configuration to retrieve.</p>",
         "GetBucketNotificationConfigurationRequest$Bucket": "<p>Name of the bucket to get the notification configuration for.</p>",
         "GetBucketPolicyRequest$Bucket": null,
+        "GetBucketPolicyStatusRequest$Bucket": "<p>The name of the Amazon S3 bucket whose policy status you want to retrieve.</p>",
         "GetBucketReplicationRequest$Bucket": null,
         "GetBucketRequestPaymentRequest$Bucket": null,
         "GetBucketTaggingRequest$Bucket": null,
         "GetBucketVersioningRequest$Bucket": null,
         "GetBucketWebsiteRequest$Bucket": null,
         "GetObjectAclRequest$Bucket": null,
+        "GetObjectLegalHoldRequest$Bucket": "<p>The bucket containing the object whose Legal Hold status you want to retrieve.</p>",
+        "GetObjectLockConfigurationRequest$Bucket": "<p>The bucket whose Object Lock configuration you want to retrieve.</p>",
         "GetObjectRequest$Bucket": null,
+        "GetObjectRetentionRequest$Bucket": "<p>The bucket containing the object whose retention settings you want to retrieve.</p>",
         "GetObjectTaggingRequest$Bucket": null,
         "GetObjectTorrentRequest$Bucket": null,
+        "GetPublicAccessBlockRequest$Bucket": "<p>The name of the Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to retrieve. </p>",
         "HeadBucketRequest$Bucket": null,
         "HeadObjectRequest$Bucket": null,
         "InventoryS3BucketDestination$Bucket": "<p>The Amazon resource name (ARN) of the bucket where inventory results will be published.</p>",
@@ -391,11 +407,15 @@
         "PutBucketVersioningRequest$Bucket": null,
         "PutBucketWebsiteRequest$Bucket": null,
         "PutObjectAclRequest$Bucket": null,
+        "PutObjectLegalHoldRequest$Bucket": "<p>The bucket containing the object that you want to place a Legal Hold on.</p>",
+        "PutObjectLockConfigurationRequest$Bucket": "<p>The bucket whose Object Lock configuration you want to create or replace.</p>",
         "PutObjectRequest$Bucket": "<p>Name of the bucket to which the PUT operation was initiated.</p>",
+        "PutObjectRetentionRequest$Bucket": "<p>The bucket that contains the object you want to apply this Object Retention configuration to.</p>",
         "PutObjectTaggingRequest$Bucket": null,
+        "PutPublicAccessBlockRequest$Bucket": "<p>The name of the Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to set.</p>",
         "RestoreObjectRequest$Bucket": null,
         "S3Location$BucketName": "<p>The name of the bucket where the restore results will be placed.</p>",
-        "SelectObjectContentRequest$Bucket": "<p>The S3 Bucket.</p>",
+        "SelectObjectContentRequest$Bucket": "<p>The S3 bucket.</p>",
         "UploadPartCopyRequest$Bucket": null,
         "UploadPartRequest$Bucket": "<p>Name of the bucket to which the multipart upload was initiated.</p>"
       }
@@ -413,25 +433,33 @@
         "ListBucketsOutput$Buckets": null
       }
     },
+    "BypassGovernanceRetention": {
+      "base": null,
+      "refs": {
+        "DeleteObjectRequest$BypassGovernanceRetention": "<p>Indicates whether S3 Object Lock should bypass Governance-mode restrictions to process this operation.</p>",
+        "DeleteObjectsRequest$BypassGovernanceRetention": "<p>Specifies whether you want to delete this object even if it has a Governance-type Object Lock in place. You must have sufficient permissions to perform this operation.</p>",
+        "PutObjectRetentionRequest$BypassGovernanceRetention": "<p>Indicates whether this operation should bypass Governance-mode restrictions.j</p>"
+      }
+    },
     "BytesProcessed": {
       "base": null,
       "refs": {
-        "Progress$BytesProcessed": "<p>Current number of uncompressed object bytes processed.</p>",
-        "Stats$BytesProcessed": "<p>Total number of uncompressed object bytes processed.</p>"
+        "Progress$BytesProcessed": "<p>The current number of uncompressed object bytes processed.</p>",
+        "Stats$BytesProcessed": "<p>The total number of uncompressed object bytes processed.</p>"
       }
     },
     "BytesReturned": {
       "base": null,
       "refs": {
-        "Progress$BytesReturned": "<p>Current number of bytes of records payload data returned.</p>",
-        "Stats$BytesReturned": "<p>Total number of bytes of records payload data returned.</p>"
+        "Progress$BytesReturned": "<p>The current number of bytes of records payload data returned.</p>",
+        "Stats$BytesReturned": "<p>The total number of bytes of records payload data returned.</p>"
       }
     },
     "BytesScanned": {
       "base": null,
       "refs": {
-        "Progress$BytesScanned": "<p>Current number of object bytes scanned.</p>",
-        "Stats$BytesScanned": "<p>Total number of object bytes scanned.</p>"
+        "Progress$BytesScanned": "<p>The current number of object bytes scanned.</p>",
+        "Stats$BytesScanned": "<p>The total number of object bytes scanned.</p>"
       }
     },
     "CORSConfiguration": {
@@ -502,7 +530,7 @@
     "Comments": {
       "base": null,
       "refs": {
-        "CSVInput$Comments": "<p>Single character used to indicate a row should be ignored when present at the start of a row.</p>"
+        "CSVInput$Comments": "<p>The single character used to indicate a row should be ignored when present at the start of a row.</p>"
       }
     },
     "CommonPrefix": {
@@ -621,8 +649,12 @@
         "PutBucketVersioningRequest$ContentMD5": null,
         "PutBucketWebsiteRequest$ContentMD5": null,
         "PutObjectAclRequest$ContentMD5": null,
+        "PutObjectLegalHoldRequest$ContentMD5": "<p>The MD5 hash for the request body.</p>",
+        "PutObjectLockConfigurationRequest$ContentMD5": "<p>The MD5 hash for the request body.</p>",
         "PutObjectRequest$ContentMD5": "<p>The base64-encoded 128-bit MD5 digest of the part data.</p>",
+        "PutObjectRetentionRequest$ContentMD5": "<p>The MD5 hash for the request body.</p>",
         "PutObjectTaggingRequest$ContentMD5": null,
+        "PutPublicAccessBlockRequest$ContentMD5": "<p>The MD5 hash of the <code>PutPublicAccessBlock</code> request body. </p>",
         "UploadPartRequest$ContentMD5": "<p>The base64-encoded 128-bit MD5 digest of the part data.</p>"
       }
     },
@@ -775,12 +807,14 @@
       "base": null,
       "refs": {
         "LifecycleExpiration$Date": "<p>Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601 Format.</p>",
+        "ObjectLockRetention$RetainUntilDate": "<p>The date on which this Object Lock Retention will expire.</p>",
         "Transition$Date": "<p>Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601 Format.</p>"
       }
     },
     "Days": {
       "base": null,
       "refs": {
+        "DefaultRetention$Days": "<p>The number of days that you want to specify for the default retention period.</p>",
         "LifecycleExpiration$Days": "<p>Indicates the lifetime, in days, of the objects that are subject to the rule. The value must be a non-zero positive integer.</p>",
         "NoncurrentVersionExpiration$NoncurrentDays": "<p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html\">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide.</p>",
         "NoncurrentVersionTransition$NoncurrentDays": "<p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html\">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide.</p>",
@@ -792,6 +826,12 @@
       "base": null,
       "refs": {
         "AbortIncompleteMultipartUpload$DaysAfterInitiation": "<p>Indicates the number of days that must pass since initiation for Lifecycle to abort an Incomplete Multipart Upload.</p>"
+      }
+    },
+    "DefaultRetention": {
+      "base": "<p>The container element for specifying the default Object Lock retention settings for new objects placed in the specified bucket.</p>",
+      "refs": {
+        "ObjectLockRule$DefaultRetention": "<p>The default retention period that you want to apply to new objects placed in the specified bucket.</p>"
       }
     },
     "Delete": {
@@ -870,6 +910,18 @@
         "DeleteMarkers$member": null
       }
     },
+    "DeleteMarkerReplication": {
+      "base": "<p>Specifies whether Amazon S3 should replicate delete makers.</p>",
+      "refs": {
+        "ReplicationRule$DeleteMarkerReplication": null
+      }
+    },
+    "DeleteMarkerReplicationStatus": {
+      "base": null,
+      "refs": {
+        "DeleteMarkerReplication$Status": "<p>The status of the delete marker replication.</p> <note> <p> In the current implementation, Amazon S3 doesn't replicate the delete markers. The status must be <code>Disabled</code>. </p> </note>"
+      }
+    },
     "DeleteMarkerVersionId": {
       "base": null,
       "refs": {
@@ -912,6 +964,11 @@
       "refs": {
       }
     },
+    "DeletePublicAccessBlockRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DeletedObject": {
       "base": null,
       "refs": {
@@ -944,9 +1001,9 @@
       }
     },
     "Destination": {
-      "base": "<p>Container for replication destination information.</p>",
+      "base": "<p>A container for information about the replication destination.</p>",
       "refs": {
-        "ReplicationRule$Destination": "<p>Container for replication destination information.</p>"
+        "ReplicationRule$Destination": "<p>A container for information about the replication destination.</p>"
       }
     },
     "DisplayName": {
@@ -1005,9 +1062,9 @@
       }
     },
     "EncryptionConfiguration": {
-      "base": "<p>Container for information regarding encryption based configuration for replicas.</p>",
+      "base": "<p>A container for information about the encryption-based configuration for replicas.</p>",
       "refs": {
-        "Destination$EncryptionConfiguration": "<p>Container for information regarding encryption based configuration for replicas.</p>"
+        "Destination$EncryptionConfiguration": "<p>A container that provides information about encryption. If <code>SourceSelectionCriteria</code> is specified, you must specify this element. </p>"
       }
     },
     "EndEvent": {
@@ -1036,7 +1093,7 @@
       }
     },
     "Event": {
-      "base": "<p>Bucket event for which to send notifications.</p>",
+      "base": "<p>The bucket event for which to send notifications.</p>",
       "refs": {
         "CloudFunctionConfiguration$Event": null,
         "EventList$member": null,
@@ -1110,7 +1167,7 @@
     "ExpressionType": {
       "base": null,
       "refs": {
-        "SelectObjectContentRequest$ExpressionType": "<p>The type of the provided expression (e.g., SQL).</p>",
+        "SelectObjectContentRequest$ExpressionType": "<p>The type of the provided expression (for example., SQL).</p>",
         "SelectParameters$ExpressionType": "<p>The type of the provided expression (e.g., SQL).</p>"
       }
     },
@@ -1123,8 +1180,8 @@
     "FieldDelimiter": {
       "base": null,
       "refs": {
-        "CSVInput$FieldDelimiter": "<p>Value used to separate individual fields in a record.</p>",
-        "CSVOutput$FieldDelimiter": "<p>Value used to separate individual fields in a record.</p>"
+        "CSVInput$FieldDelimiter": "<p>The value used to separate individual fields in a record.</p>",
+        "CSVOutput$FieldDelimiter": "<p>The value used to separate individual fields in a record.</p>"
       }
     },
     "FileHeaderInfo": {
@@ -1134,13 +1191,13 @@
       }
     },
     "FilterRule": {
-      "base": "<p>Container for key value pair that defines the criteria for the filter rule.</p>",
+      "base": "<p>A container for a key value pair that defines the criteria for the filter rule.</p>",
       "refs": {
         "FilterRuleList$member": null
       }
     },
     "FilterRuleList": {
-      "base": "<p>A list of containers for key value pair that defines the criteria for the filter rule.</p>",
+      "base": "<p>A list of containers for the key value pair that defines the criteria for the filter rule.</p>",
       "refs": {
         "S3KeyFilter$FilterRules": null
       }
@@ -1148,7 +1205,7 @@
     "FilterRuleName": {
       "base": null,
       "refs": {
-        "FilterRule$Name": "<p>Object key name prefix or suffix identifying one or more objects to which the filtering rule applies. Maximum prefix length can be up to 1,024 characters. Overlapping prefixes and suffixes are not supported. For more information, go to <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html\">Configuring Event Notifications</a> in the Amazon Simple Storage Service Developer Guide.</p>"
+        "FilterRule$Name": "<p>The object key name prefix or suffix identifying one or more objects to which the filtering rule applies. The maximum prefix length is 1,024 characters. Overlapping prefixes and suffixes are not supported. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html\">Configuring Event Notifications</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>"
       }
     },
     "FilterRuleValue": {
@@ -1282,6 +1339,16 @@
       "refs": {
       }
     },
+    "GetBucketPolicyStatusOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetBucketPolicyStatusRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
     "GetBucketReplicationOutput": {
       "base": null,
       "refs": {
@@ -1342,12 +1409,42 @@
       "refs": {
       }
     },
+    "GetObjectLegalHoldOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetObjectLegalHoldRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetObjectLockConfigurationOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetObjectLockConfigurationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
     "GetObjectOutput": {
       "base": null,
       "refs": {
       }
     },
     "GetObjectRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetObjectRetentionOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetObjectRetentionRequest": {
       "base": null,
       "refs": {
       }
@@ -1368,6 +1465,16 @@
       }
     },
     "GetObjectTorrentRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetPublicAccessBlockOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetPublicAccessBlockRequest": {
       "base": null,
       "refs": {
       }
@@ -1493,7 +1600,7 @@
         "Initiator$ID": "<p>If the principal is an AWS account, it provides the Canonical User ID. If the principal is an IAM User, it provides a user ARN value.</p>",
         "LifecycleRule$ID": "<p>Unique identifier for the rule. The value cannot be longer than 255 characters.</p>",
         "Owner$ID": null,
-        "ReplicationRule$ID": "<p>Unique identifier for the rule. The value cannot be longer than 255 characters.</p>",
+        "ReplicationRule$ID": "<p>A unique identifier for the rule. The maximum value is 255 characters.</p>",
         "Rule$ID": "<p>Unique identifier for the rule. The value cannot be longer than 255 characters.</p>"
       }
     },
@@ -1648,6 +1755,12 @@
         "ObjectVersion$IsLatest": "<p>Specifies whether the object is (true) or is not (false) the latest version of an object.</p>"
       }
     },
+    "IsPublic": {
+      "base": null,
+      "refs": {
+        "PolicyStatus$IsPublic": "<p>The policy status for this bucket. <code>TRUE</code> indicates that this bucket is public. <code>FALSE</code> indicates that the bucket is not public.</p>"
+      }
+    },
     "IsTruncated": {
       "base": null,
       "refs": {
@@ -1709,11 +1822,11 @@
     "LambdaFunctionArn": {
       "base": null,
       "refs": {
-        "LambdaFunctionConfiguration$LambdaFunctionArn": "<p>Lambda cloud function ARN that Amazon S3 can invoke when it detects events of the specified type.</p>"
+        "LambdaFunctionConfiguration$LambdaFunctionArn": "<p>The Amazon Resource Name (ARN) of the Lambda cloud function that Amazon S3 can invoke when it detects events of the specified type.</p>"
       }
     },
     "LambdaFunctionConfiguration": {
-      "base": "<p>Container for specifying the AWS Lambda notification configuration.</p>",
+      "base": "<p>A container for specifying the configuration for AWS Lambda notifications.</p>",
       "refs": {
         "LambdaFunctionConfigurationList$member": null
       }
@@ -2110,7 +2223,7 @@
       }
     },
     "NoncurrentVersionTransition": {
-      "base": "<p>Container for the transition rule that describes when noncurrent objects transition to the STANDARD_IA, ONEZONE_IA or GLACIER storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to the STANDARD_IA, ONEZONE_IA or GLACIER storage class at a specific period in the object's lifetime.</p>",
+      "base": "<p>Container for the transition rule that describes when noncurrent objects transition to the STANDARD_IA, ONEZONE_IA, INTELLIGENT_TIERING or GLACIER storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to the STANDARD_IA, ONEZONE_IA, INTELLIGENT_TIERING or GLACIER storage class at a specific period in the object's lifetime.</p>",
       "refs": {
         "NoncurrentVersionTransitionList$member": null,
         "Rule$NoncurrentVersionTransition": null
@@ -2123,7 +2236,7 @@
       }
     },
     "NotificationConfiguration": {
-      "base": "<p>Container for specifying the notification configuration of the bucket. If this element is empty, notifications are turned off on the bucket.</p>",
+      "base": "<p>A container for specifying the notification configuration of the bucket. If this element is empty, notifications are turned off for the bucket.</p>",
       "refs": {
         "PutBucketNotificationConfigurationRequest$NotificationConfiguration": null
       }
@@ -2135,7 +2248,7 @@
       }
     },
     "NotificationConfigurationFilter": {
-      "base": "<p>Container for object key name filtering rules. For information about key name filtering, go to <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html\">Configuring Event Notifications</a> in the Amazon Simple Storage Service Developer Guide.</p>",
+      "base": "<p>A container for object key name filtering rules. For information about key name filtering, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html\">Configuring Event Notifications</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>",
       "refs": {
         "LambdaFunctionConfiguration$Filter": null,
         "QueueConfiguration$Filter": null,
@@ -2143,7 +2256,7 @@
       }
     },
     "NotificationId": {
-      "base": "<p>Optional unique identifier for configurations in a notification configuration. If you don't provide one, Amazon S3 will assign an ID.</p>",
+      "base": "<p>An optional unique identifier for configurations in a notification configuration. If you don't provide one, Amazon S3 will assign an ID.</p>",
       "refs": {
         "CloudFunctionConfiguration$Id": null,
         "LambdaFunctionConfiguration$Id": null,
@@ -2202,7 +2315,9 @@
         "Error$Key": null,
         "ErrorDocument$Key": "<p>The object key name to use when a 4XX class error occurs.</p>",
         "GetObjectAclRequest$Key": null,
+        "GetObjectLegalHoldRequest$Key": "<p>The key name for the object whose Legal Hold status you want to retrieve.</p>",
         "GetObjectRequest$Key": null,
+        "GetObjectRetentionRequest$Key": "<p>The key name for the object whose retention settings you want to retrieve.</p>",
         "GetObjectTaggingRequest$Key": null,
         "GetObjectTorrentRequest$Key": null,
         "HeadObjectRequest$Key": null,
@@ -2213,10 +2328,12 @@
         "ObjectIdentifier$Key": "<p>Key name of the object to delete.</p>",
         "ObjectVersion$Key": "<p>The object key.</p>",
         "PutObjectAclRequest$Key": null,
+        "PutObjectLegalHoldRequest$Key": "<p>The key name for the object that you want to place a Legal Hold on.</p>",
         "PutObjectRequest$Key": "<p>Object key for which the PUT operation was initiated.</p>",
+        "PutObjectRetentionRequest$Key": "<p>The key name for the object that you want to apply this Object Retention configuration to.</p>",
         "PutObjectTaggingRequest$Key": null,
         "RestoreObjectRequest$Key": null,
-        "SelectObjectContentRequest$Key": "<p>The Object Key.</p>",
+        "SelectObjectContentRequest$Key": "<p>The object key.</p>",
         "Tag$Key": "<p>Name of the tag.</p>",
         "UploadPartCopyRequest$Key": null,
         "UploadPartRequest$Key": "<p>Object key for which the multipart upload was initiated.</p>"
@@ -2227,6 +2344,89 @@
       "refs": {
         "ListObjectsOutput$Contents": null,
         "ListObjectsV2Output$Contents": "<p>Metadata about each object returned.</p>"
+      }
+    },
+    "ObjectLockConfiguration": {
+      "base": "<p>The container element for Object Lock configuration parameters.</p>",
+      "refs": {
+        "GetObjectLockConfigurationOutput$ObjectLockConfiguration": "<p>The specified bucket's Object Lock configuration.</p>",
+        "PutObjectLockConfigurationRequest$ObjectLockConfiguration": "<p>The Object Lock configuration that you want to apply to the specified bucket.</p>"
+      }
+    },
+    "ObjectLockEnabled": {
+      "base": null,
+      "refs": {
+        "ObjectLockConfiguration$ObjectLockEnabled": "<p>Indicates whether this bucket has an Object Lock configuration enabled.</p>"
+      }
+    },
+    "ObjectLockEnabledForBucket": {
+      "base": null,
+      "refs": {
+        "CreateBucketRequest$ObjectLockEnabledForBucket": "<p>Specifies whether you want S3 Object Lock to be enabled for the new bucket.</p>"
+      }
+    },
+    "ObjectLockLegalHold": {
+      "base": "<p>A Legal Hold configuration for an object.</p>",
+      "refs": {
+        "GetObjectLegalHoldOutput$LegalHold": "<p>The current Legal Hold status for the specified object.</p>",
+        "PutObjectLegalHoldRequest$LegalHold": "<p>Container element for the Legal Hold configuration you want to apply to the specified object.</p>"
+      }
+    },
+    "ObjectLockLegalHoldStatus": {
+      "base": null,
+      "refs": {
+        "CopyObjectRequest$ObjectLockLegalHoldStatus": "<p>Specifies whether you want to apply a Legal Hold to the copied object.</p>",
+        "CreateMultipartUploadRequest$ObjectLockLegalHoldStatus": "<p>Specifies whether you want to apply a Legal Hold to the uploaded object.</p>",
+        "GetObjectOutput$ObjectLockLegalHoldStatus": "<p>Indicates whether this object has an active legal hold. This field is only returned if you have permission to view an object's legal hold status.</p>",
+        "HeadObjectOutput$ObjectLockLegalHoldStatus": "<p>The Legal Hold status for the specified object.</p>",
+        "ObjectLockLegalHold$Status": "<p>Indicates whether the specified object has a Legal Hold in place.</p>",
+        "PutObjectRequest$ObjectLockLegalHoldStatus": "<p>The Legal Hold status that you want to apply to the specified object.</p>"
+      }
+    },
+    "ObjectLockMode": {
+      "base": null,
+      "refs": {
+        "CopyObjectRequest$ObjectLockMode": "<p>The Object Lock mode that you want to apply to the copied object.</p>",
+        "CreateMultipartUploadRequest$ObjectLockMode": "<p>Specifies the Object Lock mode that you want to apply to the uploaded object.</p>",
+        "GetObjectOutput$ObjectLockMode": "<p>The Object Lock mode currently in place for this object.</p>",
+        "HeadObjectOutput$ObjectLockMode": "<p>The Object Lock mode currently in place for this object.</p>",
+        "PutObjectRequest$ObjectLockMode": "<p>The Object Lock mode that you want to apply to this object.</p>"
+      }
+    },
+    "ObjectLockRetainUntilDate": {
+      "base": null,
+      "refs": {
+        "CopyObjectRequest$ObjectLockRetainUntilDate": "<p>The date and time when you want the copied object's Object Lock to expire.</p>",
+        "CreateMultipartUploadRequest$ObjectLockRetainUntilDate": "<p>Specifies the date and time when you want the Object Lock to expire.</p>",
+        "GetObjectOutput$ObjectLockRetainUntilDate": "<p>The date and time when this object's Object Lock will expire.</p>",
+        "HeadObjectOutput$ObjectLockRetainUntilDate": "<p>The date and time when this object's Object Lock will expire.</p>",
+        "PutObjectRequest$ObjectLockRetainUntilDate": "<p>The date and time when you want this object's Object Lock to expire.</p>"
+      }
+    },
+    "ObjectLockRetention": {
+      "base": "<p>A Retention configuration for an object.</p>",
+      "refs": {
+        "GetObjectRetentionOutput$Retention": "<p>The container element for an object's retention settings.</p>",
+        "PutObjectRetentionRequest$Retention": "<p>The container element for the Object Retention configuration.</p>"
+      }
+    },
+    "ObjectLockRetentionMode": {
+      "base": null,
+      "refs": {
+        "DefaultRetention$Mode": "<p>The default Object Lock retention mode you want to apply to new objects placed in the specified bucket.</p>",
+        "ObjectLockRetention$Mode": "<p>Indicates the Retention mode for the specified object.</p>"
+      }
+    },
+    "ObjectLockRule": {
+      "base": "<p>The container element for an Object Lock rule.</p>",
+      "refs": {
+        "ObjectLockConfiguration$Rule": "<p>The Object Lock rule in place for the specified object.</p>"
+      }
+    },
+    "ObjectLockToken": {
+      "base": null,
+      "refs": {
+        "PutObjectLockConfigurationRequest$Token": null
       }
     },
     "ObjectNotInActiveTierError": {
@@ -2259,8 +2459,10 @@
         "DeletedObject$VersionId": null,
         "Error$VersionId": null,
         "GetObjectAclRequest$VersionId": "<p>VersionId used to reference a specific version of the object.</p>",
+        "GetObjectLegalHoldRequest$VersionId": "<p>The version ID of the object whose Legal Hold status you want to retrieve.</p>",
         "GetObjectOutput$VersionId": "<p>Version of the object.</p>",
         "GetObjectRequest$VersionId": "<p>VersionId used to reference a specific version of the object.</p>",
+        "GetObjectRetentionRequest$VersionId": "<p>The version ID for the object whose retention settings you want to retrieve.</p>",
         "GetObjectTaggingOutput$VersionId": null,
         "GetObjectTaggingRequest$VersionId": null,
         "HeadObjectOutput$VersionId": "<p>Version of the object.</p>",
@@ -2268,7 +2470,9 @@
         "ObjectIdentifier$VersionId": "<p>VersionId for the specific version of the object to delete.</p>",
         "ObjectVersion$VersionId": "<p>Version ID of an object.</p>",
         "PutObjectAclRequest$VersionId": "<p>VersionId used to reference a specific version of the object.</p>",
+        "PutObjectLegalHoldRequest$VersionId": "<p>The version ID of the object that you want to place a Legal Hold on.</p>",
         "PutObjectOutput$VersionId": "<p>Version of the object.</p>",
+        "PutObjectRetentionRequest$VersionId": "<p>The version ID for the object that you want to apply this Object Retention configuration to.</p>",
         "PutObjectTaggingOutput$VersionId": null,
         "PutObjectTaggingRequest$VersionId": null,
         "RestoreObjectRequest$VersionId": null
@@ -2382,6 +2586,12 @@
         "PutBucketPolicyRequest$Policy": "<p>The bucket policy as a JSON document.</p>"
       }
     },
+    "PolicyStatus": {
+      "base": "<p>The container element for a bucket's policy status.</p>",
+      "refs": {
+        "GetBucketPolicyStatusOutput$PolicyStatus": "<p>The policy status for the specified bucket.</p>"
+      }
+    },
     "Prefix": {
       "base": null,
       "refs": {
@@ -2404,8 +2614,16 @@
         "ListObjectsV2Request$Prefix": "<p>Limits the response to keys that begin with the specified prefix.</p>",
         "MetricsAndOperator$Prefix": "<p>The prefix used when evaluating an AND predicate.</p>",
         "MetricsFilter$Prefix": "<p>The prefix used when evaluating a metrics filter.</p>",
-        "ReplicationRule$Prefix": "<p>Object keyname prefix identifying one or more objects to which the rule applies. Maximum prefix length can be up to 1,024 characters. Overlapping prefixes are not supported.</p>",
+        "ReplicationRule$Prefix": "<p>An object keyname prefix that identifies the object or objects to which the rule applies. The maximum prefix length is 1,024 characters. </p>",
+        "ReplicationRuleAndOperator$Prefix": null,
+        "ReplicationRuleFilter$Prefix": "<p>An object keyname prefix that identifies the subset of objects to which the rule applies.</p>",
         "Rule$Prefix": "<p>Prefix identifying one or more objects to which the rule applies.</p>"
+      }
+    },
+    "Priority": {
+      "base": null,
+      "refs": {
+        "ReplicationRule$Priority": "<p>The priority associated with the rule. If you specify multiple rules in a replication configuration, Amazon S3 prioritizes the rules to prevent conflicts when filtering. If two or more rules identify the same object based on a specified filter, the rule with higher priority takes precedence. For example:</p> <ul> <li> <p>Same object quality prefix based filter criteria If prefixes you specified in multiple rules overlap </p> </li> <li> <p>Same object qualify tag based filter criteria specified in multiple rules</p> </li> </ul> <p>For more information, see <a href=\" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html\">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>.</p>"
       }
     },
     "Progress": {
@@ -2425,6 +2643,13 @@
       "refs": {
         "Redirect$Protocol": "<p>Protocol to use (http, https) when redirecting requests. The default is the protocol that is used in the original request.</p>",
         "RedirectAllRequestsTo$Protocol": "<p>Protocol to use (http, https) when redirecting requests. The default is the protocol that is used in the original request.</p>"
+      }
+    },
+    "PublicAccessBlockConfiguration": {
+      "base": null,
+      "refs": {
+        "GetPublicAccessBlockOutput$PublicAccessBlockConfiguration": "<p>The <code>PublicAccessBlock</code> configuration currently in effect for this Amazon S3 bucket.</p>",
+        "PutPublicAccessBlockRequest$PublicAccessBlockConfiguration": "<p>The <code>PublicAccessBlock</code> configuration that you want to apply to this Amazon S3 bucket. You can enable the configuration options in any combination. For more information about when Amazon S3 considers a bucket or object public, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html#access-control-block-public-access-policy-status\">The Meaning of \"Public\"</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>"
       }
     },
     "PutBucketAccelerateConfigurationRequest": {
@@ -2527,12 +2752,42 @@
       "refs": {
       }
     },
+    "PutObjectLegalHoldOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "PutObjectLegalHoldRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "PutObjectLockConfigurationOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "PutObjectLockConfigurationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
     "PutObjectOutput": {
       "base": null,
       "refs": {
       }
     },
     "PutObjectRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "PutObjectRetentionOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "PutObjectRetentionRequest": {
       "base": null,
       "refs": {
       }
@@ -2547,15 +2802,20 @@
       "refs": {
       }
     },
+    "PutPublicAccessBlockRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
     "QueueArn": {
       "base": null,
       "refs": {
-        "QueueConfiguration$QueueArn": "<p>Amazon SQS queue ARN to which Amazon S3 will publish a message when it detects events of specified type.</p>",
+        "QueueConfiguration$QueueArn": "<p>The Amazon Resource Name (ARN) of the Amazon SQS queue to which Amazon S3 will publish a message when it detects events of the specified type.</p>",
         "QueueConfigurationDeprecated$Queue": null
       }
     },
     "QueueConfiguration": {
-      "base": "<p>Container for specifying an configuration when you want Amazon S3 to publish events to an Amazon Simple Queue Service (Amazon SQS) queue.</p>",
+      "base": "<p>A container for specifying the configuration for publication of messages to an Amazon Simple Queue Service (Amazon SQS) queue.when Amazon S3 detects specified events.</p>",
       "refs": {
         "QueueConfigurationList$member": null
       }
@@ -2582,14 +2842,14 @@
       "base": null,
       "refs": {
         "CSVInput$QuoteCharacter": "<p>Value used for escaping where the field delimiter is part of the value.</p>",
-        "CSVOutput$QuoteCharacter": "<p>Value used for escaping where the field delimiter is part of the value.</p>"
+        "CSVOutput$QuoteCharacter": "<p>The value used for escaping where the field delimiter is part of the value.</p>"
       }
     },
     "QuoteEscapeCharacter": {
       "base": null,
       "refs": {
-        "CSVInput$QuoteEscapeCharacter": "<p>Single character used for escaping the quote character inside an already escaped value.</p>",
-        "CSVOutput$QuoteEscapeCharacter": "<p>Single character used for escaping the quote character inside an already escaped value.</p>"
+        "CSVInput$QuoteEscapeCharacter": "<p>The single character used for escaping the quote character inside an already escaped value.</p>",
+        "CSVOutput$QuoteEscapeCharacter": "<p>Th single character used for escaping the quote character inside an already escaped value.</p>"
       }
     },
     "QuoteFields": {
@@ -2608,8 +2868,8 @@
     "RecordDelimiter": {
       "base": null,
       "refs": {
-        "CSVInput$RecordDelimiter": "<p>Value used to separate individual records.</p>",
-        "CSVOutput$RecordDelimiter": "<p>Value used to separate individual records.</p>",
+        "CSVInput$RecordDelimiter": "<p>The value used to separate individual records.</p>",
+        "CSVOutput$RecordDelimiter": "<p>The value used to separate individual records.</p>",
         "JSONOutput$RecordDelimiter": "<p>The value used to separate individual records in the output.</p>"
       }
     },
@@ -2622,7 +2882,7 @@
     "Redirect": {
       "base": null,
       "refs": {
-        "RoutingRule$Redirect": "<p>Container for redirect information. You can redirect requests to another host, to another page, or with another protocol. In the event of an error, you can can specify a different error code to return.</p>"
+        "RoutingRule$Redirect": "<p>Container for redirect information. You can redirect requests to another host, to another page, or with another protocol. In the event of an error, you can specify a different error code to return.</p>"
       }
     },
     "RedirectAllRequestsTo": {
@@ -2647,32 +2907,44 @@
     "ReplicaKmsKeyID": {
       "base": null,
       "refs": {
-        "EncryptionConfiguration$ReplicaKmsKeyID": "<p>The id of the KMS key used to encrypt the replica object.</p>"
+        "EncryptionConfiguration$ReplicaKmsKeyID": "<p>The ID of the AWS KMS key for the AWS Region where the destination bucket resides. Amazon S3 uses this key to encrypt the replica object. </p>"
       }
     },
     "ReplicationConfiguration": {
-      "base": "<p>Container for replication rules. You can add as many as 1,000 rules. Total replication configuration size can be up to 2 MB.</p>",
+      "base": "<p>A container for replication rules. You can add up to 1,000 rules. The maximum size of a replication configuration is 2 MB.</p>",
       "refs": {
         "GetBucketReplicationOutput$ReplicationConfiguration": null,
         "PutBucketReplicationRequest$ReplicationConfiguration": null
       }
     },
     "ReplicationRule": {
-      "base": "<p>Container for information about a particular replication rule.</p>",
+      "base": "<p>A container for information about a specific replication rule.</p>",
       "refs": {
         "ReplicationRules$member": null
+      }
+    },
+    "ReplicationRuleAndOperator": {
+      "base": null,
+      "refs": {
+        "ReplicationRuleFilter$And": "<p>A container for specifying rule filters. The filters determine the subset of objects to which the rule applies. This element is required only if you specify more than one filter. For example: </p> <ul> <li> <p>If you specify both a <code>Prefix</code> and a <code>Tag</code> filter, wrap these filters in an <code>And</code> tag.</p> </li> <li> <p>If you specify a filter based on multiple tags, wrap the <code>Tag</code> elements in an <code>And</code> tag.</p> </li> </ul>"
+      }
+    },
+    "ReplicationRuleFilter": {
+      "base": "<p>A filter that identifies the subset of objects to which the replication rule applies. A <code>Filter</code> must specify exactly one <code>Prefix</code>, <code>Tag</code>, or an <code>And</code> child element.</p>",
+      "refs": {
+        "ReplicationRule$Filter": null
       }
     },
     "ReplicationRuleStatus": {
       "base": null,
       "refs": {
-        "ReplicationRule$Status": "<p>The rule is ignored if status is not Enabled.</p>"
+        "ReplicationRule$Status": "<p>If status isn't enabled, the rule is ignored.</p>"
       }
     },
     "ReplicationRules": {
       "base": null,
       "refs": {
-        "ReplicationConfiguration$Rules": "<p>Container for information about a particular replication rule. Replication configuration must have at least one rule and can contain up to 1,000 rules.</p>"
+        "ReplicationConfiguration$Rules": "<p>A container for one or more replication rules. A replication configuration must have at least one rule and can contain a maximum of 1,000 rules. </p>"
       }
     },
     "ReplicationStatus": {
@@ -2697,7 +2969,10 @@
         "HeadObjectOutput$RequestCharged": null,
         "ListPartsOutput$RequestCharged": null,
         "PutObjectAclOutput$RequestCharged": null,
+        "PutObjectLegalHoldOutput$RequestCharged": null,
+        "PutObjectLockConfigurationOutput$RequestCharged": null,
         "PutObjectOutput$RequestCharged": null,
+        "PutObjectRetentionOutput$RequestCharged": null,
         "RestoreObjectOutput$RequestCharged": null,
         "UploadPartCopyOutput$RequestCharged": null,
         "UploadPartOutput$RequestCharged": null
@@ -2713,14 +2988,19 @@
         "DeleteObjectRequest$RequestPayer": null,
         "DeleteObjectsRequest$RequestPayer": null,
         "GetObjectAclRequest$RequestPayer": null,
+        "GetObjectLegalHoldRequest$RequestPayer": null,
         "GetObjectRequest$RequestPayer": null,
+        "GetObjectRetentionRequest$RequestPayer": null,
         "GetObjectTorrentRequest$RequestPayer": null,
         "HeadObjectRequest$RequestPayer": null,
         "ListObjectsRequest$RequestPayer": "<p>Confirms that the requester knows that she or he will be charged for the list objects request. Bucket owners need not specify this parameter in their requests.</p>",
         "ListObjectsV2Request$RequestPayer": "<p>Confirms that the requester knows that she or he will be charged for the list objects request in V2 style. Bucket owners need not specify this parameter in their requests.</p>",
         "ListPartsRequest$RequestPayer": null,
         "PutObjectAclRequest$RequestPayer": null,
+        "PutObjectLegalHoldRequest$RequestPayer": null,
+        "PutObjectLockConfigurationRequest$RequestPayer": null,
         "PutObjectRequest$RequestPayer": null,
+        "PutObjectRetentionRequest$RequestPayer": null,
         "RestoreObjectRequest$RequestPayer": null,
         "UploadPartCopyRequest$RequestPayer": null,
         "UploadPartRequest$RequestPayer": null
@@ -2812,7 +3092,7 @@
     "Role": {
       "base": null,
       "refs": {
-        "ReplicationConfiguration$Role": "<p>Amazon Resource Name (ARN) of an IAM role for Amazon S3 to assume when replicating the objects.</p>"
+        "ReplicationConfiguration$Role": "<p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that Amazon S3 can assume when replicating the objects.</p>"
       }
     },
     "RoutingRule": {
@@ -2842,7 +3122,7 @@
       }
     },
     "S3KeyFilter": {
-      "base": "<p>Container for object key name prefix and suffix filtering rules.</p>",
+      "base": "<p>A container for object key name prefix and suffix filtering rules.</p>",
       "refs": {
         "NotificationConfigurationFilter$Key": null
       }
@@ -2866,7 +3146,7 @@
         "HeadObjectRequest$SSECustomerAlgorithm": "<p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>",
         "PutObjectOutput$SSECustomerAlgorithm": "<p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>",
         "PutObjectRequest$SSECustomerAlgorithm": "<p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>",
-        "SelectObjectContentRequest$SSECustomerAlgorithm": "<p>The SSE Algorithm used to encrypt the object. For more information, go to <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html\"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>. </p>",
+        "SelectObjectContentRequest$SSECustomerAlgorithm": "<p>The SSE Algorithm used to encrypt the object. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html\"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>. </p>",
         "UploadPartCopyOutput$SSECustomerAlgorithm": "<p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>",
         "UploadPartCopyRequest$SSECustomerAlgorithm": "<p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>",
         "UploadPartOutput$SSECustomerAlgorithm": "<p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>",
@@ -2881,7 +3161,7 @@
         "GetObjectRequest$SSECustomerKey": "<p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header.</p>",
         "HeadObjectRequest$SSECustomerKey": "<p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header.</p>",
         "PutObjectRequest$SSECustomerKey": "<p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header.</p>",
-        "SelectObjectContentRequest$SSECustomerKey": "<p>The SSE Customer Key. For more information, go to <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html\"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>. </p>",
+        "SelectObjectContentRequest$SSECustomerKey": "<p>The SSE Customer Key. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html\"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>. </p>",
         "UploadPartCopyRequest$SSECustomerKey": "<p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header. This must be the same encryption key specified in the initiate multipart upload request.</p>",
         "UploadPartRequest$SSECustomerKey": "<p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header. This must be the same encryption key specified in the initiate multipart upload request.</p>"
       }
@@ -2899,7 +3179,7 @@
         "HeadObjectRequest$SSECustomerKeyMD5": "<p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>",
         "PutObjectOutput$SSECustomerKeyMD5": "<p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>",
         "PutObjectRequest$SSECustomerKeyMD5": "<p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>",
-        "SelectObjectContentRequest$SSECustomerKeyMD5": "<p>The SSE Customer Key MD5. For more information, go to <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html\"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>. </p>",
+        "SelectObjectContentRequest$SSECustomerKeyMD5": "<p>The SSE Customer Key MD5. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html\"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>. </p>",
         "UploadPartCopyOutput$SSECustomerKeyMD5": "<p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>",
         "UploadPartCopyRequest$SSECustomerKeyMD5": "<p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>",
         "UploadPartOutput$SSECustomerKeyMD5": "<p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>",
@@ -2907,9 +3187,9 @@
       }
     },
     "SSEKMS": {
-      "base": "<p>Specifies the use of SSE-KMS to encrypt delievered Inventory reports.</p>",
+      "base": "<p>Specifies the use of SSE-KMS to encrypt delivered Inventory reports.</p>",
       "refs": {
-        "InventoryEncryption$SSEKMS": "<p>Specifies the use of SSE-KMS to encrypt delievered Inventory reports.</p>"
+        "InventoryEncryption$SSEKMS": "<p>Specifies the use of SSE-KMS to encrypt delivered Inventory reports.</p>"
       }
     },
     "SSEKMSKeyId": {
@@ -2932,9 +3212,9 @@
       }
     },
     "SSES3": {
-      "base": "<p>Specifies the use of SSE-S3 to encrypt delievered Inventory reports.</p>",
+      "base": "<p>Specifies the use of SSE-S3 to encrypt delivered Inventory reports.</p>",
       "refs": {
-        "InventoryEncryption$SSES3": "<p>Specifies the use of SSE-S3 to encrypt delievered Inventory reports.</p>"
+        "InventoryEncryption$SSES3": "<p>Specifies the use of SSE-S3 to encrypt delivered Inventory reports.</p>"
       }
     },
     "SelectObjectContentEventStream": {
@@ -2949,7 +3229,7 @@
       }
     },
     "SelectObjectContentRequest": {
-      "base": "<p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response. For more information, go to <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html\">S3Select API Documentation</a>.</p>",
+      "base": "<p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records. It returns only records that match the specified SQL expression. You must also specify the data serialization format for the response. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html\">S3Select API Documentation</a>.</p>",
       "refs": {
       }
     },
@@ -3002,30 +3282,39 @@
         "ServerSideEncryptionConfiguration$Rules": "<p>Container for information about a particular server-side encryption configuration rule.</p>"
       }
     },
+    "Setting": {
+      "base": null,
+      "refs": {
+        "PublicAccessBlockConfiguration$BlockPublicAcls": "<p>Specifies whether Amazon S3 should block public access control lists (ACLs) for this bucket and objects in this bucket. Setting this element to <code>TRUE</code> causes the following behavior:</p> <ul> <li> <p>PUT Bucket acl and PUT Object acl calls fail if the specified ACL is public.</p> </li> <li> <p>PUT Object calls fail if the request includes a public ACL.</p> </li> </ul> <p>Enabling this setting doesn't affect existing policies or ACLs.</p>",
+        "PublicAccessBlockConfiguration$IgnorePublicAcls": "<p>Specifies whether Amazon S3 should ignore public ACLs for this bucket and objects in this bucket. Setting this element to <code>TRUE</code> causes Amazon S3 to ignore all public ACLs on this bucket and objects in this bucket.</p> <p>Enabling this setting doesn't affect the persistence of any existing ACLs and doesn't prevent new public ACLs from being set.</p>",
+        "PublicAccessBlockConfiguration$BlockPublicPolicy": "<p>Specifies whether Amazon S3 should block public bucket policies for this bucket. Setting this element to <code>TRUE</code> causes Amazon S3 to reject calls to PUT Bucket policy if the specified bucket policy allows public access. </p> <p>Enabling this setting doesn't affect existing bucket policies.</p>",
+        "PublicAccessBlockConfiguration$RestrictPublicBuckets": "<p>Specifies whether Amazon S3 should restrict public bucket policies for this bucket. Setting this element to <code>TRUE</code> restricts access to this bucket to only AWS services and authorized users within this account if the bucket has a public policy.</p> <p>Enabling this setting doesn't affect previously stored bucket policies, except that public and cross-account access within any public bucket policy, including non-public delegation to specific accounts, is blocked.</p>"
+      }
+    },
     "Size": {
       "base": null,
       "refs": {
         "Object$Size": null,
         "ObjectVersion$Size": "<p>Size in bytes of the object.</p>",
-        "Part$Size": "<p>Size of the uploaded part data.</p>"
+        "Part$Size": "<p>Size in bytes of the uploaded part data.</p>"
       }
     },
     "SourceSelectionCriteria": {
-      "base": "<p>Container for filters that define which source objects should be replicated.</p>",
+      "base": "<p>A container for filters that define which source objects should be replicated.</p>",
       "refs": {
-        "ReplicationRule$SourceSelectionCriteria": "<p>Container for filters that define which source objects should be replicated.</p>"
+        "ReplicationRule$SourceSelectionCriteria": "<p>A container that describes additional filters for identifying the source objects that you want to replicate. You can choose to enable or disable the replication of these objects. Currently, Amazon S3 supports only the filter that you can specify for objects created with server-side encryption using an AWS KMS-Managed Key (SSE-KMS). </p> <p> If you want Amazon S3 to replicate objects created with server-side encryption using AWS KMS-Managed Keys. </p>"
       }
     },
     "SseKmsEncryptedObjects": {
-      "base": "<p>Container for filter information of selection of KMS Encrypted S3 objects.</p>",
+      "base": "<p>A container for filter information for the selection of S3 objects encrypted with AWS KMS.</p>",
       "refs": {
-        "SourceSelectionCriteria$SseKmsEncryptedObjects": "<p>Container for filter information of selection of KMS Encrypted S3 objects.</p>"
+        "SourceSelectionCriteria$SseKmsEncryptedObjects": "<p> A container for filter information for the selection of S3 objects encrypted with AWS KMS. If you include <code>SourceSelectionCriteria</code> in the replication configuration, this element is required. </p>"
       }
     },
     "SseKmsEncryptedObjectsStatus": {
       "base": null,
       "refs": {
-        "SseKmsEncryptedObjects$Status": "<p>The replication for KMS encrypted S3 objects is disabled if status is not Enabled.</p>"
+        "SseKmsEncryptedObjects$Status": "<p> If the status is not <code>Enabled</code>, replication for S3 objects encrypted with AWS KMS is disabled.</p>"
       }
     },
     "StartAfter": {
@@ -3052,7 +3341,7 @@
       "refs": {
         "CopyObjectRequest$StorageClass": "<p>The type of storage to use for the object. Defaults to 'STANDARD'.</p>",
         "CreateMultipartUploadRequest$StorageClass": "<p>The type of storage to use for the object. Defaults to 'STANDARD'.</p>",
-        "Destination$StorageClass": "<p>The class of storage used to store the object.</p>",
+        "Destination$StorageClass": "<p> The class of storage used to store the object. By default Amazon S3 uses storage class of the source object when creating a replica. </p>",
         "GetObjectOutput$StorageClass": null,
         "HeadObjectOutput$StorageClass": null,
         "ListPartsOutput$StorageClass": "<p>The class of storage used to store the object.</p>",
@@ -3091,6 +3380,7 @@
         "AnalyticsFilter$Tag": "<p>The tag to use when evaluating an analytics filter.</p>",
         "LifecycleRuleFilter$Tag": "<p>This tag must exist in the object's tag set in order for the rule to apply.</p>",
         "MetricsFilter$Tag": "<p>The tag used when evaluating a metrics filter.</p>",
+        "ReplicationRuleFilter$Tag": "<p>A container for specifying a tag key and value. </p> <p>The rule applies only to objects that have the tag in their tag set.</p>",
         "TagSet$member": null
       }
     },
@@ -3108,6 +3398,7 @@
         "GetObjectTaggingOutput$TagSet": null,
         "LifecycleRuleAndOperator$Tags": "<p>All of these tags must exist in the object's tag set in order for the rule to apply.</p>",
         "MetricsAndOperator$Tags": "<p>The list of tags used when evaluating an AND predicate.</p>",
+        "ReplicationRuleAndOperator$Tags": null,
         "Tagging$TagSet": null
       }
     },
@@ -3130,7 +3421,7 @@
       "refs": {
         "CopyObjectRequest$Tagging": "<p>The tag-set for the object destination object this value must be used in conjunction with the TaggingDirective. The tag-set must be encoded as URL Query parameters</p>",
         "CreateMultipartUploadRequest$Tagging": "<p>The tag-set for the object. The tag-set must be encoded as URL Query parameters</p>",
-        "PutObjectRequest$Tagging": "<p>The tag-set for the object. The tag-set must be encoded as URL Query parameters</p>"
+        "PutObjectRequest$Tagging": "<p>The tag-set for the object. The tag-set must be encoded as URL Query parameters. (For example, \"Key1=Value1\")</p>"
       }
     },
     "TargetBucket": {
@@ -3180,12 +3471,12 @@
     "TopicArn": {
       "base": null,
       "refs": {
-        "TopicConfiguration$TopicArn": "<p>Amazon SNS topic ARN to which Amazon S3 will publish a message when it detects events of specified type.</p>",
+        "TopicConfiguration$TopicArn": "<p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which Amazon S3 will publish a message when it detects events of the specified type.</p>",
         "TopicConfigurationDeprecated$Topic": "<p>Amazon SNS topic to which Amazon S3 will publish a message to report the specified events for the bucket.</p>"
       }
     },
     "TopicConfiguration": {
-      "base": "<p>Container for specifying the configuration when you want Amazon S3 to publish events to an Amazon Simple Notification Service (Amazon SNS) topic.</p>",
+      "base": "<p>A container for specifying the configuration for publication of messages to an Amazon Simple Notification Service (Amazon SNS) topic.when Amazon S3 detects specified events.</p>",
       "refs": {
         "TopicConfigurationList$member": null
       }
@@ -3300,6 +3591,12 @@
         "GetObjectOutput$WebsiteRedirectLocation": "<p>If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.</p>",
         "HeadObjectOutput$WebsiteRedirectLocation": "<p>If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.</p>",
         "PutObjectRequest$WebsiteRedirectLocation": "<p>If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.</p>"
+      }
+    },
+    "Years": {
+      "base": null,
+      "refs": {
+        "DefaultRetention$Years": "<p>The number of years that you want to specify for the default retention period.</p>"
       }
     }
   }

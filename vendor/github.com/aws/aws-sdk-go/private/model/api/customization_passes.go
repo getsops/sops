@@ -27,10 +27,24 @@ var mergeServices = map[string]service{
 	},
 }
 
+var serviceAliaseNames = map[string]string{
+	"costandusagereportservice": "CostandUsageReportService",
+	"elasticloadbalancing":      "ELB",
+	"elasticloadbalancingv2":    "ELBV2",
+	"config":                    "ConfigService",
+}
+
+func (a *API) setServiceAliaseName() {
+	if newName, ok := serviceAliaseNames[a.PackageName()]; ok {
+		a.name = newName
+	}
+}
+
 // customizationPasses Executes customization logic for the API by package name.
 func (a *API) customizationPasses() {
 	var svcCustomizations = map[string]func(*API){
 		"s3":         s3Customizations,
+		"s3control":  s3ControlCustomizations,
 		"cloudfront": cloudfrontCustomizations,
 		"rds":        rdsCustomizations,
 
@@ -38,6 +52,10 @@ func (a *API) customizationPasses() {
 		// to provide endpoint them selves.
 		"cloudsearchdomain": disableEndpointResolving,
 		"iotdataplane":      disableEndpointResolving,
+
+		// MTurk smoke test is invalid. The service requires AWS account to be
+		// linked to Amazon Mechanical Turk Account.
+		"mturk": supressSmokeTest,
 	}
 
 	for k := range mergeServices {
@@ -47,6 +65,10 @@ func (a *API) customizationPasses() {
 	if fn := svcCustomizations[a.PackageName()]; fn != nil {
 		fn(a)
 	}
+}
+
+func supressSmokeTest(a *API) {
+	a.SmokeTests.TestCases = []SmokeTestCase{}
 }
 
 // s3Customizations customizes the API generation to replace values specific to S3.
@@ -110,6 +132,20 @@ func s3CustRemoveHeadObjectModeledErrors(a *API) {
 	op.ErrorRefs = []ShapeRef{}
 }
 
+// S3 service operations with an AccountId need accessors to be generated for
+// them so the fields can be dynamically accessed without reflection.
+func s3ControlCustomizations(a *API) {
+	for _, op := range a.Operations {
+		// Add moving AccountId into the hostname instead of header.
+		if _, ok := op.InputRef.Shape.MemberRefs["AccountId"]; ok {
+			op.CustomBuildHandlers = append(op.CustomBuildHandlers,
+				`buildPrefixHostHandler("AccountID", aws.StringValue(input.AccountId))`,
+				`buildRemoveHeaderHandler("X-Amz-Account-Id")`,
+			)
+		}
+	}
+}
+
 // cloudfrontCustomizations customized the API generation to replace values
 // specific to CloudFront.
 func cloudfrontCustomizations(a *API) {
@@ -129,7 +165,7 @@ func mergeServicesCustomizations(a *API) {
 	p := strings.Replace(a.path, info.srcName, info.dstName, -1)
 
 	if info.serviceVersion != "" {
-		index := strings.LastIndex(p, "/")
+		index := strings.LastIndex(p, string(filepath.Separator))
 		files, _ := ioutil.ReadDir(p[:index])
 		if len(files) > 1 {
 			panic("New version was introduced")
