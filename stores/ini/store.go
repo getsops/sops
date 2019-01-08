@@ -7,11 +7,10 @@ import (
 
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/stores"
-	"strconv"
-	"reflect"
 	"gopkg.in/ini.v1"
+	"reflect"
+	"strconv"
 	"strings"
-	"sort"
 )
 
 // Store handles storage of ini data.
@@ -179,73 +178,18 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 
 func (store *Store) iniSectionToMetadata(sopsSection *ini.Section) (stores.Metadata, error) {
 
-	metadata := stores.Metadata{}
-	m := reflect.ValueOf(&metadata).Elem()
-
-	for _, key := range sopsSection.Keys() {
-
-		if strings.Contains(key.Name(), ".") {
-			parts := strings.SplitN(key.Name(), ".", 2)
-			if len(parts) != 2 {
-				return metadata, fmt.Errorf("Bad metadata format: key %s makes no sense", key.Name())
-			}
-			prefix := parts[0]
-			remainder := parts[1]
-			// Is a slice
-			if strings.Contains(prefix, "[") {
-				k, i, err := parseSliceKey(prefix)
-				if err != nil {
-					return metadata, fmt.Errorf("Bad metadata format: %s", err)
-				}
-
-				f := m.FieldByName(k)
-				ensureReflectedSliceLength(f, i+1)
-				sliceItem := f.Index(i)
-				setMetadataField(sliceItem, remainder, key)
-			} else {
-				return metadata, fmt.Errorf("Bad metadata format: expected array but have %s", prefix)
-			}
-		} else {
-			err := setMetadataField(m, key.Name(), key)
-			if err != nil {
-				return metadata, err
-			}
-		}
+	metadataHash := make(map[string]interface{})
+	for k, v := range sopsSection.KeysHash() {
+		metadataHash[k] = strings.Replace(v, "\\n", "\n", -1)
 	}
-
-	return metadata, nil
-}
-
-func ensureReflectedSliceLength(slice reflect.Value, length int) {
-	if slice.Len() < length  {
-		expanded := reflect.MakeSlice(slice.Type(), slice.Len()+1, slice.Cap()+1)
-		reflect.Copy(expanded, slice)
-		slice.Set(expanded)
+	m := stores.Unflatten(metadataHash)
+	var md stores.Metadata
+	inrec, err := json.Marshal(m)
+	if err != nil {
+		return md, err
 	}
-}
-
-func setMetadataField(m reflect.Value, name string, iniKey *ini.Key) error {
-	f := m.FieldByName(name)
-	switch f.Kind() {
-	case reflect.String:
-		f.SetString(strings.Replace(iniKey.String(), "\\n", "\n", -1))
-	case reflect.Int:
-		val, err := iniKey.Int64()
-		if err != nil {
-			return err
-		}
-		f.SetInt(val)
-	}
-	return nil
-}
-
-func parseSliceKey(key string) (string, int, error) {
-	openBracket := strings.IndexRune(key, '[')
-	closeBracket := strings.IndexRune(key, ']')
-	name := key[:openBracket]
-	indexStr := key[openBracket+1:closeBracket]
-	i, err := strconv.Atoi(indexStr)
-	return name, i, err
+	err = json.Unmarshal(inrec, &md)
+	return md, err
 }
 
 func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
@@ -259,7 +203,7 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 
 	metadata := stores.MetadataFromInternal(in.Metadata)
-	newBranch, err := store.encodeMetadataToIniBranch(metadata, "sops")
+	newBranch, err := store.encodeMetadataToIniBranch(metadata)
 	if err != nil {
 		return nil, err
 	}
@@ -275,25 +219,33 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	return out, nil
 }
 
-func (store *Store) encodeMetadataToIniBranch(metadata interface{}, prefix string) (sops.TreeBranch, error) {
-
+func (store *Store) encodeMetadataToIniBranch(md stores.Metadata) (sops.TreeBranch, error) {
+	var mdMap map[string]interface{}
+	inrec, err := json.Marshal(md)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(inrec, &mdMap)
+	if err != nil {
+		return nil, err
+	}
+	flat := stores.Flatten(mdMap)
+	for k, v := range flat {
+		if s, ok := v.(string); ok {
+			flat[k] = strings.Replace(s, "\n", "\\n", -1)
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
 	branch := sops.TreeBranch{}
-
-	m := reflect.ValueOf(metadata)
-	r, err := encodeMetadataItem("", m.Type().Kind(), m)
-
-	// Keys are sorted so sops section is stable (for nice diffs)
-	var keys []string
-	for k := range r {
-		keys = append(keys, k)
+	for key, value := range flat {
+		if value == nil {
+			continue
+		}
+		branch = append(branch, sops.TreeItem{Key: key, Value: value})
 	}
-	sort.Strings(keys)
-
-	for _, k := range keys {
-		branch = append(branch, sops.TreeItem{Key: k, Value: r[k]})
-	}
-
-	return branch, err
+	return branch, nil
 }
 
 func encodeMetadataItem(prefix string, kind reflect.Kind, field reflect.Value) (map[string]interface{}, error) {
