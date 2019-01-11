@@ -27,7 +27,7 @@ type SopsFile struct {
 	// in the SOPS file by checking for nil. This way we can show the user a
 	// helpful error message indicating that the metadata wasn't found, instead
 	// of showing a cryptic parsing error
-	Metadata *Metadata `yaml:"sops" json:"sops"`
+	Metadata *Metadata `yaml:"sops" json:"sops" ini:"sops"`
 }
 
 // Metadata is stored in SOPS encrypted files, and it contains the information necessary to decrypt the file.

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"go.mozilla.org/sops/stores/ini"
 	"io/ioutil"
 	"os"
 
@@ -87,6 +88,12 @@ func editExample(opts editExampleOpts) ([]byte, error) {
 	if _, ok := opts.InputStore.(*json.BinaryStore); ok {
 		// Get the value under the first key of the first (possibly only) doc
 		fileBytes = []byte(exampleTree.Branches[0][0].Value.(string))
+	} else if _, ok := opts.InputStore.(*ini.Store); ok {
+		var err error
+		fileBytes, err = opts.InputStore.EmitPlainFile(ini.ExampleTree.Branches)
+		if err != nil {
+			return nil, err
+		}
 	} else {
 		var err error
 		fileBytes, err = opts.InputStore.EmitPlainFile(exampleTree.Branches)
