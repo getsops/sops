@@ -13,6 +13,7 @@ import (
 	"go.mozilla.org/sops/stores/json"
 	"go.mozilla.org/sops/stores/yaml"
 	"go.mozilla.org/sops/stores/dotenv"
+	"go.mozilla.org/sops/stores/ini"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -109,6 +110,10 @@ func IsEnvFile(path string) bool {
 	return strings.HasSuffix(path, ".env")
 }
 
+func IsIniFile(path string) bool {
+	return strings.HasSuffix(path, ".ini")
+}
+
 func DefaultStoreForPath(path string) sops.Store {
 	if IsYAMLFile(path) {
 		return &yaml.Store{}
@@ -116,6 +121,8 @@ func DefaultStoreForPath(path string) sops.Store {
 		return &json.Store{}
 	} else if IsEnvFile(path) {
 		return &dotenv.Store{}
+	} else if IsIniFile(path) {
+		return &ini.Store{}
 	}
 	return &json.BinaryStore{}
 }
