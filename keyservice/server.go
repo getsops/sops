@@ -37,6 +37,7 @@ func (ks *Server) encryptWithKms(key *KmsKey, plaintext []byte) ([]byte, error) 
 		Arn:               key.Arn,
 		Role:              key.Role,
 		EncryptionContext: ctx,
+		AwsProfile:        key.AwsProfile,
 	}
 	err := kmsKey.Encrypt(plaintext)
 	if err != nil {
@@ -85,6 +86,7 @@ func (ks *Server) decryptWithKms(key *KmsKey, ciphertext []byte) ([]byte, error)
 		Arn:               key.Arn,
 		Role:              key.Role,
 		EncryptionContext: ctx,
+		AwsProfile:        key.AwsProfile,
 	}
 	kmsKey.EncryptedKey = string(ciphertext)
 	plaintext, err := kmsKey.Decrypt()

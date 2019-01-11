@@ -161,6 +161,10 @@ func main() {
 							Usage: "the KMS ARNs the new group should contain. Can be specified more than once",
 						},
 						cli.StringSliceFlag{
+							Name:  "aws_profile",
+							Usage: "The single aws profile to use with KMS",
+						},
+						cli.StringSliceFlag{
 							Name:  "gcp-kms",
 							Usage: "the GCP KMS Resource ID the new group should contain. Can be specified more than once",
 						},
@@ -184,6 +188,7 @@ func main() {
 					Action: func(c *cli.Context) error {
 						pgpFps := c.StringSlice("pgp")
 						kmsArns := c.StringSlice("kms")
+						awsProfiles := c.StringSlice("aws_profile")
 						gcpKmses := c.StringSlice("gcp-kms")
 						azkvs := c.StringSlice("azure-kv")
 						var group sops.KeyGroup
@@ -191,7 +196,9 @@ func main() {
 							group = append(group, pgp.NewMasterKeyFromFingerprint(fp))
 						}
 						for _, arn := range kmsArns {
-							group = append(group, kms.NewMasterKeyFromArn(arn, kms.ParseKMSContext(c.String("encryption-context"))))
+							for _, awsProfile := range awsProfiles {
+								group = append(group, kms.NewMasterKeyFromArn(arn, kms.ParseKMSContext(c.String("encryption-context")), awsProfile))
+							}
 						}
 						for _, kms := range gcpKmses {
 							group = append(group, gcpkms.NewMasterKeyFromResourceID(kms))
@@ -501,7 +508,7 @@ func main() {
 		if c.Bool("rotate") {
 			var addMasterKeys []keys.MasterKey
 			kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
-			for _, k := range kms.MasterKeysFromArnString(c.String("add-kms"), kmsEncryptionContext) {
+			for _, k := range kms.MasterKeysFromArnString(c.String("add-kms"), kmsEncryptionContext, c.String("aws-profile")) {
 				addMasterKeys = append(addMasterKeys, k)
 			}
 			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("add-pgp")) {
@@ -519,7 +526,7 @@ func main() {
 			}
 
 			var rmMasterKeys []keys.MasterKey
-			for _, k := range kms.MasterKeysFromArnString(c.String("rm-kms"), kmsEncryptionContext) {
+			for _, k := range kms.MasterKeysFromArnString(c.String("rm-kms"), kmsEncryptionContext, c.String("aws-profile")) {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("rm-pgp")) {
@@ -749,7 +756,10 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		return nil, common.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
 	}
 	if c.String("kms") != "" {
-		for _, k := range kms.MasterKeysFromArnString(c.String("kms"), kmsEncryptionContext) {
+
+		awsprofile := c.String("aws_profile")
+
+		for _, k := range kms.MasterKeysFromArnString(c.String("kms"), kmsEncryptionContext, awsprofile) {
 			kmsKeys = append(kmsKeys, k)
 		}
 	}
