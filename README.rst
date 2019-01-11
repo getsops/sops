@@ -273,11 +273,11 @@ Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 When creating new files, ``sops`` uses the PGP, KMS and GCP KMS defined in the
-command line arguments ``--kms``, ``--pgp``, ``--gcp-kms`` or ``--azure-kv``, or from
-the environment variables ``SOPS_KMS_ARN``, ``SOPS_PGP_FP``, ``SOPS_GCP_KMS_IDS``,
-``SOPS_AZURE_KEYVAULT_URL``. That information is stored in the file under the
-``sops`` section, such that decrypting files does not require providing those
-parameters again.
+command line arguments ``--kms``, ``--aws-profile``, ``--pgp``, ``--gcp-kms`` or
+``--azure-kv``, or from the environment variables ``SOPS_KMS_ARN``,
+``SOPS_PGP_FP``, ``SOPS_GCP_KMS_IDS``, ``SOPS_AZURE_KEYVAULT_URL``. That
+information is stored in the file under the ``sops`` section, such that decrypting
+files does not require providing those parameters again.
 
 Master PGP and KMS keys can be added and removed from a ``sops`` file in one of
 two ways: by using command line flag, or by editing the file directly.
@@ -285,8 +285,8 @@ two ways: by using command line flag, or by editing the file directly.
 Command line flag ``--add-kms``, ``--add-pgp``, ``--add-gcp-kms``, ``--add-azure-kv``,
 ``--rm-kms``, ``--rm-pgp``, ``--rm-gcp-kms`` and ``--rm-azure-kv`` can be used to add
 and remove keys from a file.
-These flags use the comma separated syntax as the ``--kms``, ``--pgp``, ``--gcp-kms``
-and ``--azure-kv`` arguments when creating new files.
+These flags use the comma separated syntax as the ``--kms``, ``aws-profile``, ``--pgp``,
+``--gcp-kms`` and ``--azure-kv`` arguments when creating new files.
 
 .. code:: bash
 
@@ -309,6 +309,9 @@ editing:
 	sops:
 	    kms:
 	    - arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
+          aws_profile: foo
+
+If no aws_profile is specified `default` is used for KMS.
 
 And, similarly, to add a PGP master key, we add its fingerprint:
 
@@ -462,11 +465,13 @@ can manage the three sets of configurations for the three types of files:
 		# KMS set A is used
 		- path_regex: \.dev\.yaml$
 		  kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod'
+          aws_profile: foo
 		  pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
 
 		# prod files use KMS set B in the PROD IAM
 		- path_regex: \.prod\.yaml$
 		  kms: 'arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod,arn:aws:kms:eu-central-1:361527076523:key/cb1fab90-8d17-42a1-a9d8-334968904f94+arn:aws:iam::361527076523:role/hiera-sops-prod'
+          aws_profile: bar
 		  pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
 
 		# gcp files using GCP KMS
@@ -484,6 +489,8 @@ a subdirectory, sops will recursively look for a ``.sops.yaml`` file. If one is
 found, the filename of the file being created is compared with the filename
 regexes of the configuration file. The first regex that matches is selected,
 and its KMS and PGP keys are used to encrypt the file.
+
+If no aws_profile is specified `default` is used for KMS.
 
 Creating a new file with the right keys is now as simple as
 
@@ -537,7 +544,9 @@ file ``my_file.yaml``:
 
 .. code:: bash
 
-    $ sops groups add --file my_file.yaml --pgp fingerprint1 --pgp fingerprint2 --pgp fingerprint3 --kms arn1 --kms arn2 --kms arn3
+    $ sops groups add --file my_file.yaml --pgp fingerprint1 --pgp fingerprint2 --pgp fingerprint3 --kms arn1 --kms arn2 --kms arn3 --aws-profile bar
+
+If no aws-profile is specified `default` is used for KMS.
 
 Or you can delete the 1st group (group number 0, as groups are zero-indexed)
 from ``my_file.yaml``:
@@ -561,6 +570,7 @@ like so:
             kms:
             - arn: arn1
               role: role1
+              aws_profile: foo
               context:
                 foo: bar
             - arn: arn2
@@ -603,6 +613,7 @@ with ``shamir_threshold``:
             kms:
             - arn: arn1
               role: role1
+              aws_profile: foo
               context:
                 foo: bar
             - arn: arn2
@@ -870,6 +881,7 @@ encrypt the file, and redirect the output to a destination file.
 	$ export SOPS_KMS_ARN="arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500"
 	$ export SOPS_PGP_FP="C9CAB0AF1165060DB58D6D6B2653B624D620786D"
 	$ sops -e /path/to/existing/file.yaml > /path/to/new/encrypted/file.yaml
+	$ sops --aws-profile foo -e /path/to/existing/file.yaml > /path/to/new/encrypted/file.yaml
 
 Decrypt the file with ``-d``.
 

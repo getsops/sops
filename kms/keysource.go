@@ -167,10 +167,13 @@ func (key MasterKey) createStsSession(config aws.Config, sess *session.Session) 
 	}
 	stsService := sts.New(sess)
 	name := "sops@" + hostname
-	_, err = stsService.AssumeRole(&sts.AssumeRoleInput{RoleArn: &key.Role, RoleSessionName: &name})
+	out, err := stsService.AssumeRole(&sts.AssumeRoleInput{
+		RoleArn: &key.Role, RoleSessionName: &name})
 	if err != nil {
 		return nil, fmt.Errorf("Failed to assume role %q: %v", key.Role, err)
 	}
+	config.Credentials = credentials.NewStaticCredentials(*out.Credentials.AccessKeyId,
+		*out.Credentials.SecretAccessKey, *out.Credentials.SessionToken)
 	sess, err = session.NewSession(&config)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to create new aws session: %v", err)
