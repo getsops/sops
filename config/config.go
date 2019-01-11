@@ -75,9 +75,10 @@ type gcpKmsKey struct {
 }
 
 type kmsKey struct {
-	Arn     string             `yaml:"arn"`
-	Role    string             `yaml:"role,omitempty"`
-	Context map[string]*string `yaml:"context"`
+	Arn        string             `yaml:"arn"`
+	Role       string             `yaml:"role,omitempty"`
+	Context    map[string]*string `yaml:"context"`
+	AwsProfile string             `yaml:"aws_profile"`
 }
 
 type azureKVKey struct {
