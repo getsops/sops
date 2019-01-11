@@ -160,8 +160,8 @@ func main() {
 							Name:  "kms",
 							Usage: "the KMS ARNs the new group should contain. Can be specified more than once",
 						},
-						cli.StringSliceFlag{
-							Name:  "aws_profile",
+						cli.StringFlag{
+							Name:  "aws-profile",
 							Usage: "The single aws profile to use with KMS",
 						},
 						cli.StringSliceFlag{
@@ -188,7 +188,7 @@ func main() {
 					Action: func(c *cli.Context) error {
 						pgpFps := c.StringSlice("pgp")
 						kmsArns := c.StringSlice("kms")
-						awsProfile := c.String("aws_profile")
+						awsProfile := c.String("aws-profile")
 						gcpKmses := c.StringSlice("gcp-kms")
 						azkvs := c.StringSlice("azure-kv")
 						var group sops.KeyGroup
