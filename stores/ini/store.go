@@ -14,6 +14,30 @@ import (
 	"gopkg.in/ini.v1"
 )
 
+var ExampleTree = sops.Tree{
+	Branches: sops.TreeBranches{
+		sops.TreeBranch{
+			sops.TreeItem{
+				Key: "Welcome!",
+				Value: sops.TreeBranch{
+					sops.TreeItem{
+						Key:   sops.Comment{Value: "This is an example ini file."},
+						Value: nil,
+					},
+					sops.TreeItem{
+						Key:   "hello",
+						Value: "Welcome to SOPS! Edit this file as you please!",
+					},
+					sops.TreeItem{
+						Key:   "example_key",
+						Value: "example_value",
+					},
+				},
+			},
+		},
+	},
+}
+
 // Store handles storage of ini data.
 type Store struct {
 }
