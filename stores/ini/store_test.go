@@ -133,4 +133,3 @@ func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
 	_, err := store.LoadEncryptedFile(data)
 	assert.Equal(t, sops.MetadataNotFound, err)
 }
-

@@ -5,12 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"go.mozilla.org/sops"
-	"go.mozilla.org/sops/stores"
-	"gopkg.in/ini.v1"
 	"reflect"
 	"strconv"
 	"strings"
+
+	"go.mozilla.org/sops"
+	"go.mozilla.org/sops/stores"
+	"gopkg.in/ini.v1"
 )
 
 // Store handles storage of ini data.
@@ -120,7 +121,7 @@ func (store Store) treeItemFromSection(section *ini.Section) (sops.TreeItem, err
 	}
 
 	for _, key := range section.Keys() {
-		item := sops.TreeItem{Key:key.Name(), Value:key.Value()}
+		item := sops.TreeItem{Key: key.Name(), Value: key.Value()}
 		items = append(items, item)
 		if key.Comment != "" {
 			items = append(items, sops.TreeItem{
@@ -134,7 +135,6 @@ func (store Store) treeItemFromSection(section *ini.Section) (sops.TreeItem, err
 	sectionItem.Value = items
 	return sectionItem, nil
 }
-
 
 func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	iniFileOuter, err := ini.Load(in)
@@ -164,7 +164,7 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	// Discard metadata, as we already loaded it.
 	for bi, branch := range branches {
 		for s, sectionBranch := range branch {
-			if sectionBranch.Key == "sops"{
+			if sectionBranch.Key == "sops" {
 				branch = append(branch[:s], branch[s+1:]...)
 				branches[bi] = branch
 			}
@@ -297,7 +297,6 @@ func encodeMetadataItem(prefix string, kind reflect.Kind, field reflect.Value) (
 
 	return result, nil
 }
-
 
 func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 	out, err := store.iniFromTreeBranches(in)
