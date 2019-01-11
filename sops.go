@@ -100,6 +100,9 @@ type TreeItem struct {
 // TreeBranch is a branch inside sops's tree. It is a slice of TreeItems and is therefore ordered
 type TreeBranch []TreeItem
 
+// Trees usually have more than one branch
+type TreeBranches []TreeBranch
+
 func valueFromPathAndLeaf(path []interface{}, leaf interface{}) interface{} {
 	switch component := path[0].(type) {
 	case int:
@@ -178,8 +181,8 @@ func (branch TreeBranch) Set(path []interface{}, value interface{}) TreeBranch {
 
 // Tree is the data structure used by sops to represent documents internally
 type Tree struct {
-	Branch   TreeBranch
 	Metadata Metadata
+	Branches TreeBranches
 	// FilePath is the path of the file this struct represents
 	FilePath string
 }
@@ -284,52 +287,62 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(
 	return in, nil
 }
 
-// Encrypt walks over the tree and encrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct, or those not ending with EncryptedSuffix, if EncryptedSuffix is provided (by default it is not).
-// If encryption is successful, it returns the MAC for the encrypted tree.
+// Encrypt walks over the tree and encrypts all values with the provided cipher,
+// except those whose key ends with the UnencryptedSuffix specified on the
+// Metadata struct, or those not ending with EncryptedSuffix, if EncryptedSuffix
+// is provided (by default it is not).  If encryption is successful, it returns
+// the MAC for the encrypted tree.
 func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 	audit.SubmitEvent(audit.EncryptEvent{
 		File: tree.FilePath,
 	})
 	hash := sha512.New()
-	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
-		// Only add to MAC if not a comment
-		if _, ok := in.(Comment); !ok {
-			bytes, err := ToBytes(in)
-			if err != nil {
-				return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
+	walk := func(branch TreeBranch) error {
+		_, err := branch.walkBranch(branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
+			// Only add to MAC if not a comment
+			if _, ok := in.(Comment); !ok {
+				bytes, err := ToBytes(in)
+				if err != nil {
+					return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
+				}
+				hash.Write(bytes)
 			}
-			hash.Write(bytes)
-		}
-		encrypted := true
-		if tree.Metadata.UnencryptedSuffix != "" {
-			for _, v := range path {
-				if strings.HasSuffix(v, tree.Metadata.UnencryptedSuffix) {
-					encrypted = false
-					break
+			encrypted := true
+			if tree.Metadata.UnencryptedSuffix != "" {
+				for _, v := range path {
+					if strings.HasSuffix(v, tree.Metadata.UnencryptedSuffix) {
+						encrypted = false
+						break
+					}
 				}
 			}
-		}
-		if tree.Metadata.EncryptedSuffix != "" {
-			encrypted = false
-			for _, v := range path {
-				if strings.HasSuffix(v, tree.Metadata.EncryptedSuffix) {
-					encrypted = true
-					break
+			if tree.Metadata.EncryptedSuffix != "" {
+				encrypted = false
+				for _, v := range path {
+					if strings.HasSuffix(v, tree.Metadata.EncryptedSuffix) {
+						encrypted = true
+						break
+					}
 				}
 			}
-		}
-		if encrypted {
-			var err error
-			pathString := strings.Join(path, ":") + ":"
-			in, err = cipher.Encrypt(in, key, pathString)
-			if err != nil {
-				return nil, fmt.Errorf("Could not encrypt value: %s", err)
+			if encrypted {
+				var err error
+				pathString := strings.Join(path, ":") + ":"
+				in, err = cipher.Encrypt(in, key, pathString)
+				if err != nil {
+					return nil, fmt.Errorf("Could not encrypt value: %s", err)
+				}
 			}
+			return in, nil
+		})
+		return err
+	}
+
+	for _, branch := range tree.Branches {
+		err := walk(branch)
+		if err != nil {
+			return "", fmt.Errorf("Error walking tree: %s", err)
 		}
-		return in, nil
-	})
-	if err != nil {
-		return "", fmt.Errorf("Error walking tree: %s", err)
 	}
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
 }
@@ -342,61 +355,67 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 		File: tree.FilePath,
 	})
 	hash := sha512.New()
-	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
-		encrypted := true
-		if tree.Metadata.UnencryptedSuffix != "" {
-			for _, p := range path {
-				if strings.HasSuffix(p, tree.Metadata.UnencryptedSuffix) {
-					encrypted = false
-					break
+	walk := func(branch TreeBranch) error {
+		_, err := branch.walkBranch(branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
+			encrypted := true
+			if tree.Metadata.UnencryptedSuffix != "" {
+				for _, p := range path {
+					if strings.HasSuffix(p, tree.Metadata.UnencryptedSuffix) {
+						encrypted = false
+						break
+					}
 				}
 			}
-		}
-		if tree.Metadata.EncryptedSuffix != "" {
-			encrypted = false
-			for _, p := range path {
-				if strings.HasSuffix(p, tree.Metadata.EncryptedSuffix) {
-					encrypted = true
-					break
+			if tree.Metadata.EncryptedSuffix != "" {
+				encrypted = false
+				for _, p := range path {
+					if strings.HasSuffix(p, tree.Metadata.EncryptedSuffix) {
+						encrypted = true
+						break
+					}
 				}
 			}
-		}
-		var v interface{}
-		if encrypted {
-			var err error
-			pathString := strings.Join(path, ":") + ":"
-			if c, ok := in.(Comment); ok {
-				v, err = cipher.Decrypt(c.Value, key, pathString)
-				if err != nil {
-					// Assume the comment was not encrypted in the first place
-					log.WithField("comment", c.Value).
-						Warn("Found possibly unencrypted comment in file. " +
-							"This is to be expected if the file being " +
-							"decrypted was created with an older version of " +
-							"SOPS.")
-					v = c
+			var v interface{}
+			if encrypted {
+				var err error
+				pathString := strings.Join(path, ":") + ":"
+				if c, ok := in.(Comment); ok {
+					v, err = cipher.Decrypt(c.Value, key, pathString)
+					if err != nil {
+						// Assume the comment was not encrypted in the first place
+						log.WithField("comment", c.Value).
+							Warn("Found possibly unencrypted comment in file. " +
+								"This is to be expected if the file being " +
+								"decrypted was created with an older version of " +
+								"SOPS.")
+						v = c
+					}
+				} else {
+					v, err = cipher.Decrypt(in.(string), key, pathString)
+					if err != nil {
+						return nil, fmt.Errorf("Could not decrypt value: %s", err)
+					}
 				}
 			} else {
-				v, err = cipher.Decrypt(in.(string), key, pathString)
+				v = in
+			}
+			// Only add to MAC if not a comment
+			if _, ok := v.(Comment); !ok {
+				bytes, err := ToBytes(v)
 				if err != nil {
-					return nil, fmt.Errorf("Could not decrypt value: %s", err)
+					return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
 				}
+				hash.Write(bytes)
 			}
-		} else {
-			v = in
+			return v, nil
+		})
+		return err
+	}
+	for _, branch := range tree.Branches {
+		err := walk(branch)
+		if err != nil {
+			return "", fmt.Errorf("Error walking tree: %s", err)
 		}
-		// Only add to MAC if not a comment
-		if _, ok := v.(Comment); !ok {
-			bytes, err := ToBytes(v)
-			if err != nil {
-				return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
-			}
-			hash.Write(bytes)
-		}
-		return v, nil
-	})
-	if err != nil {
-		return "", fmt.Errorf("Error walking tree: %s", err)
 	}
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
 }
@@ -451,7 +470,7 @@ type EncryptedFileLoader interface {
 // way to load unencrypted files into SOPS. Because the files it loads are
 // unencrypted, the returned data structure does not contain any metadata.
 type PlainFileLoader interface {
-	LoadPlainFile(in []byte) (TreeBranch, error)
+	LoadPlainFile(in []byte) (TreeBranches, error)
 }
 
 // EncryptedFileEmitter is the interface for emitting encrypting files. It provides a
@@ -464,7 +483,7 @@ type EncryptedFileEmitter interface {
 // to emit plain text files from the internal SOPS representation so that they can be
 // shown
 type PlainFileEmitter interface {
-	EmitPlainFile(TreeBranch) ([]byte, error)
+	EmitPlainFile(TreeBranches) ([]byte, error)
 }
 
 type ValueEmitter interface {

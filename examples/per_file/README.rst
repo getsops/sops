@@ -19,7 +19,7 @@ To use this example, run the following
 
     # From the `sops` root directory
     # Import the test key
-    gpg --import tests/sops_functional_tests_key.asc
+    gpg --import pgp/sops_functional_tests_key.asc
 
     # Navigate to our example directory
     cd examples/per_file

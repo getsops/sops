@@ -98,7 +98,7 @@ func unmarshalDocuments(in []byte, out interface{}, withComments bool) (err erro
 			p.destroy()
 			return &TypeError{d.terrors}
 		}
-		in = yaml_parser_remaining_buffer(&p.parser)
+		in = yaml_parser_remaining_bytes(&p.parser)
 		p.destroy()
 		if len(in) == 0 {
 			break

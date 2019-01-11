@@ -246,7 +246,7 @@ func (key *MasterKey) gpgHome() string {
 	if dir == "" {
 		usr, err := user.Current()
 		if err != nil {
-			return "~/.gnupg"
+			return path.Join(os.Getenv("HOME"), "/.gnupg")
 		}
 		return path.Join(usr.HomeDir, ".gnupg")
 	}

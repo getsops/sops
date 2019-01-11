@@ -783,19 +783,18 @@ JSON and TEXT file types do not support anchors and thus have no such limitation
 YAML Streams
 ~~~~~~~~~~~~
 
-``YAML`` supports having more than one document in a single file. ``sops`` does not. For this
-reason, the following file won't work in ``sops``:
+``YAML`` supports having more than one "document" in a single file, while
+formats like ``JSON`` do not. ``sops`` is able to handle both. This means the
+following multi-document will be encrypted as expected:
 
 .. code:: yaml
-
 	---
 	data: foo
 	---
 	data: bar
 
-If you try to encrypt this file with ``sops``, it will ignore all documents except the first,
-effectively deleting them. ``sops`` does not support multi-document files, and until our YAML
-parser does, it is unlikely it will.
+Note that the ``sops`` metadata, i.e. the hash, etc, is computed for the physical
+file rather than each internal "document".
 
 Top-level arrays
 ~~~~~~~~~~~~~~~~
@@ -992,6 +991,10 @@ You can import sops as a module and use it in your python program.
 	sops_key, tree = sops.get_key(tree)
 	tree = sops.walk_and_decrypt(tree, sops_key)
 	sops.write_file(tree, path=path, filetype=pathtype)
+
+Note: this uses the previous implemenation of `sops` written in python, 
+and so doesn't support newer features such as GCP-KMS. 
+To use the current version, call out to `sops` using `subprocess.check_output`
 
 Showing diffs in cleartext in git
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

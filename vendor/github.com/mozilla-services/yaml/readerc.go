@@ -4,13 +4,14 @@ import (
 	"io"
 )
 
-func yaml_parser_remaining_buffer(parser *yaml_parser_t) []byte {
+func yaml_parser_remaining_bytes(parser *yaml_parser_t) []byte {
 	if parser.unread > 0 {
 		offset := len(parser.buffer) - parser.unread
 		if int(parser.buffer[offset]) == 0 {
 			return []byte{}
 		}
-		return parser.buffer[offset:]
+		remaining := append(parser.buffer[offset:], parser.input[parser.input_pos:]...)
+		return remaining
 	}
 	return []byte{}
 }
