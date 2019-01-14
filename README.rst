@@ -1,7 +1,7 @@
 SOPS: Secrets OPerationS
 ========================
 
-**sops** is an editor of encrypted files that supports YAML, JSON and BINARY
+**sops** is an editor of encrypted files that supports YAML, JSON, ENV, INI and BINARY
 formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault and PGP.
 (`demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_)
 
@@ -751,7 +751,7 @@ YAML and JSON type extensions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``sops`` uses the file extension to decide which encryption method to use on the file
-content. ``YAML`` and ``JSON`` files are treated as trees of data, and key/values are
+content. ``YAML``, ``JSON``, ``ENV``, and ``INI`` files are treated as trees of data, and key/values are
 extracted from the files to only encrypt the leaf values. The tree structure is also
 used to check the integrity of the file.
 

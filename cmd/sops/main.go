@@ -33,6 +33,7 @@ import (
 	yamlstores "go.mozilla.org/sops/stores/yaml"
 	"google.golang.org/grpc"
 	"gopkg.in/urfave/cli.v1"
+	"go.mozilla.org/sops/stores/ini"
 )
 
 var log *logrus.Logger
@@ -698,6 +699,8 @@ func inputStore(context *cli.Context, path string) sops.Store {
 		return &json.Store{}
 	case "dotenv":
 		return &dotenv.Store{}
+	case "ini":
+		return &ini.Store{}
 	case "binary":
 		return &json.BinaryStore{}
 	default:
@@ -713,6 +716,8 @@ func outputStore(context *cli.Context, path string) sops.Store {
 		return &json.Store{}
 	case "dotenv":
 		return &dotenv.Store{}
+	case "ini":
+		return &ini.Store{}
 	case "binary":
 		return &json.BinaryStore{}
 	default:
