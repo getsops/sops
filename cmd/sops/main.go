@@ -162,7 +162,7 @@ func main() {
 						},
 						cli.StringFlag{
 							Name:  "aws-profile",
-							Usage: "The single aws profile to use with KMS",
+							Usage: "The AWS profile to use for requests to AWS",
 						},
 						cli.StringSliceFlag{
 							Name:  "gcp-kms",
@@ -188,7 +188,6 @@ func main() {
 					Action: func(c *cli.Context) error {
 						pgpFps := c.StringSlice("pgp")
 						kmsArns := c.StringSlice("kms")
-						awsProfile := c.String("aws-profile")
 						gcpKmses := c.StringSlice("gcp-kms")
 						azkvs := c.StringSlice("azure-kv")
 						var group sops.KeyGroup
@@ -196,7 +195,7 @@ func main() {
 							group = append(group, pgp.NewMasterKeyFromFingerprint(fp))
 						}
 						for _, arn := range kmsArns {
-							group = append(group, kms.NewMasterKeyFromArn(arn, kms.ParseKMSContext(c.String("encryption-context")), awsProfile))
+							group = append(group, kms.NewMasterKeyFromArn(arn, kms.ParseKMSContext(c.String("encryption-context")), c.String("aws-profile")))
 						}
 						for _, kms := range gcpKmses {
 							group = append(group, gcpkms.NewMasterKeyFromResourceID(kms))
@@ -311,7 +310,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "aws-profile",
-			Usage: "The single aws profile to use with KMS",
+			Usage: "The AWS profile to use for requests to AWS",
 		},
 		cli.StringFlag{
 			Name:   "gcp-kms",
@@ -758,10 +757,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		return nil, common.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
 	}
 	if c.String("kms") != "" {
-
-		awsprofile := c.String("aws-profile")
-
-		for _, k := range kms.MasterKeysFromArnString(c.String("kms"), kmsEncryptionContext, awsprofile) {
+		for _, k := range kms.MasterKeysFromArnString(c.String("kms"), kmsEncryptionContext, c.String("aws-profile")) {
 			kmsKeys = append(kmsKeys, k)
 		}
 	}
