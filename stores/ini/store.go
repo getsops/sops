@@ -14,30 +14,6 @@ import (
 	"gopkg.in/ini.v1"
 )
 
-var ExampleTree = sops.Tree{
-	Branches: sops.TreeBranches{
-		sops.TreeBranch{
-			sops.TreeItem{
-				Key: "Welcome!",
-				Value: sops.TreeBranch{
-					sops.TreeItem{
-						Key:   sops.Comment{Value: "This is an example ini file."},
-						Value: nil,
-					},
-					sops.TreeItem{
-						Key:   "hello",
-						Value: "Welcome to SOPS! Edit this file as you please!",
-					},
-					sops.TreeItem{
-						Key:   "example_key",
-						Value: "example_value",
-					},
-				},
-			},
-		},
-	},
-}
-
 // Store handles storage of ini data.
 type Store struct {
 }
@@ -341,4 +317,12 @@ func (store Store) encodeValue(v interface{}) ([]byte, error) {
 
 func (store *Store) EmitValue(v interface{}) ([]byte, error) {
 	return store.encodeValue(v)
+}
+
+func (store *Store) EmitExample() []byte {
+	bytes, err := store.EmitPlainFile(stores.ExampleSimpleTree.Branches)
+	if err != nil {
+		panic(err)
+	}
+	return bytes
 }

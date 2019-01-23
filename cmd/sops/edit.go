@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"go.mozilla.org/sops/stores/ini"
 	"io/ioutil"
 	"os"
 
@@ -23,13 +22,12 @@ import (
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/cmd/sops/common"
 	"go.mozilla.org/sops/keyservice"
-	"go.mozilla.org/sops/stores/json"
 )
 
 type editOpts struct {
 	Cipher         sops.Cipher
-	InputStore     sops.Store
-	OutputStore    sops.Store
+	InputStore     common.Store
+	OutputStore    common.Store
 	InputPath      string
 	IgnoreMAC      bool
 	KeyServices    []keyservice.KeyServiceClient
@@ -44,36 +42,6 @@ type editExampleOpts struct {
 	GroupThreshold    int
 }
 
-var exampleTree = sops.Tree{
-	Branches: sops.TreeBranches{
-		sops.TreeBranch{
-			sops.TreeItem{
-				Key:   "hello",
-				Value: `Welcome to SOPS! Edit this file as you please!`,
-			},
-			sops.TreeItem{
-				Key:   "example_key",
-				Value: "example_value",
-			},
-			sops.TreeItem{
-				Key: "example_array",
-				Value: []interface{}{
-					"example_value1",
-					"example_value2",
-				},
-			},
-			sops.TreeItem{
-				Key:   "example_number",
-				Value: 1234.56789,
-			},
-			sops.TreeItem{
-				Key:   "example_booleans",
-				Value: []interface{}{true, false},
-			},
-		},
-	},
-}
-
 type runEditorUntilOkOpts struct {
 	TmpFile        *os.File
 	OriginalHash   []byte
@@ -83,24 +51,7 @@ type runEditorUntilOkOpts struct {
 }
 
 func editExample(opts editExampleOpts) ([]byte, error) {
-	// Load the example file
-	var fileBytes []byte
-	if _, ok := opts.InputStore.(*json.BinaryStore); ok {
-		// Get the value under the first key of the first (possibly only) doc
-		fileBytes = []byte(exampleTree.Branches[0][0].Value.(string))
-	} else if _, ok := opts.InputStore.(*ini.Store); ok {
-		var err error
-		fileBytes, err = opts.InputStore.EmitPlainFile(ini.ExampleTree.Branches)
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		var err error
-		fileBytes, err = opts.InputStore.EmitPlainFile(exampleTree.Branches)
-		if err != nil {
-			return nil, err
-		}
-	}
+	fileBytes := opts.InputStore.EmitExample()
 	branches, err := opts.InputStore.LoadPlainFile(fileBytes)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)

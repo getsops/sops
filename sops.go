@@ -490,6 +490,7 @@ type ValueEmitter interface {
 	EmitValue(interface{}) ([]byte, error)
 }
 
+// Store is used to interact with files, both encrypted and unencrypted.
 type Store interface {
 	EncryptedFileLoader
 	PlainFileLoader
