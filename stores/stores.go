@@ -67,7 +67,6 @@ type kmskey struct {
 	Context          map[string]*string `yaml:"context,omitempty" json:"context,omitempty"`
 	CreatedAt        string             `yaml:"created_at" json:"created_at"`
 	EncryptedDataKey string             `yaml:"enc" json:"enc"`
-	AwsProfile       string             `yaml:"aws_profile" json:"aws_profile"`
 }
 
 type gcpkmskey struct {
@@ -136,7 +135,6 @@ func kmsKeysFromGroup(group sops.KeyGroup) (keys []kmskey) {
 				EncryptedDataKey: key.EncryptedKey,
 				Context:          key.EncryptionContext,
 				Role:             key.Role,
-				AwsProfile:       key.AwsProfile,
 			})
 		}
 	}
@@ -267,7 +265,6 @@ func (kmsKey *kmskey) toInternal() (*kms.MasterKey, error) {
 		EncryptedKey:      kmsKey.EncryptedDataKey,
 		CreationDate:      creationDate,
 		Arn:               kmsKey.Arn,
-		AwsProfile:        kmsKey.AwsProfile,
 	}, nil
 }
 
