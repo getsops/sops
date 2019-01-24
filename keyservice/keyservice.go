@@ -41,10 +41,9 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 		return Key{
 			KeyType: &Key_KmsKey{
 				KmsKey: &KmsKey{
-					Arn:        mk.Arn,
-					Role:       mk.Role,
-					Context:    ctx,
-					AwsProfile: mk.AwsProfile,
+					Arn:     mk.Arn,
+					Role:    mk.Role,
+					Context: ctx,
 				},
 			},
 		}
