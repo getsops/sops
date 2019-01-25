@@ -26,22 +26,26 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // TriggersClient is the the Azure Data Factory V2 management API provides a RESTful set of web services that interact
 // with Azure Data Factory V2 services.
 type TriggersClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // NewTriggersClient creates an instance of the TriggersClient client.
 func NewTriggersClient(subscriptionID string) TriggersClient {
 	return NewTriggersClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // NewTriggersClientWithBaseURI creates an instance of the TriggersClient client.
 func NewTriggersClientWithBaseURI(baseURI string, subscriptionID string) TriggersClient {
 	return TriggersClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // CreateOrUpdate creates or updates a trigger.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -90,6 +94,7 @@ func (client TriggersClient) CreateOrUpdate(ctx context.Context, resourceGroupNa
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
 func (client TriggersClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, trigger TriggerResource, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -118,6 +123,7 @@ func (client TriggersClient) CreateOrUpdatePreparer(ctx context.Context, resourc
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client TriggersClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
@@ -125,6 +131,7 @@ func (client TriggersClient) CreateOrUpdateSender(req *http.Request) (*http.Resp
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
 // closes the http.Response Body.
 func (client TriggersClient) CreateOrUpdateResponder(resp *http.Response) (result TriggerResource, err error) {
@@ -138,6 +145,7 @@ func (client TriggersClient) CreateOrUpdateResponder(resp *http.Response) (resul
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // Delete deletes a trigger.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -181,6 +189,7 @@ func (client TriggersClient) Delete(ctx context.Context, resourceGroupName strin
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // DeletePreparer prepares the Delete request.
 func (client TriggersClient) DeletePreparer(ctx context.Context, resourceGroupName string, factoryName string, triggerName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -203,6 +212,7 @@ func (client TriggersClient) DeletePreparer(ctx context.Context, resourceGroupNa
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client TriggersClient) DeleteSender(req *http.Request) (*http.Response, error) {
@@ -210,6 +220,7 @@ func (client TriggersClient) DeleteSender(req *http.Request) (*http.Response, er
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // DeleteResponder handles the response to the Delete request. The method always
 // closes the http.Response Body.
 func (client TriggersClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -222,6 +233,7 @@ func (client TriggersClient) DeleteResponder(resp *http.Response) (result autore
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // Get gets a trigger.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -265,6 +277,7 @@ func (client TriggersClient) Get(ctx context.Context, resourceGroupName string, 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetPreparer prepares the Get request.
 func (client TriggersClient) GetPreparer(ctx context.Context, resourceGroupName string, factoryName string, triggerName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -287,6 +300,7 @@ func (client TriggersClient) GetPreparer(ctx context.Context, resourceGroupName 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client TriggersClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -294,6 +308,7 @@ func (client TriggersClient) GetSender(req *http.Request) (*http.Response, error
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client TriggersClient) GetResponder(resp *http.Response) (result TriggerResource, err error) {
@@ -307,6 +322,7 @@ func (client TriggersClient) GetResponder(resp *http.Response) (result TriggerRe
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListByFactory lists triggers.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -346,6 +362,7 @@ func (client TriggersClient) ListByFactory(ctx context.Context, resourceGroupNam
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListByFactoryPreparer prepares the ListByFactory request.
 func (client TriggersClient) ListByFactoryPreparer(ctx context.Context, resourceGroupName string, factoryName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -367,6 +384,7 @@ func (client TriggersClient) ListByFactoryPreparer(ctx context.Context, resource
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListByFactorySender sends the ListByFactory request. The method will close the
 // http.Response Body if it receives an error.
 func (client TriggersClient) ListByFactorySender(req *http.Request) (*http.Response, error) {
@@ -374,6 +392,7 @@ func (client TriggersClient) ListByFactorySender(req *http.Request) (*http.Respo
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListByFactoryResponder handles the response to the ListByFactory request. The method always
 // closes the http.Response Body.
 func (client TriggersClient) ListByFactoryResponder(resp *http.Response) (result TriggerListResponse, err error) {
@@ -408,12 +427,14 @@ func (client TriggersClient) listByFactoryNextResults(lastResults TriggerListRes
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListByFactoryComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TriggersClient) ListByFactoryComplete(ctx context.Context, resourceGroupName string, factoryName string) (result TriggerListResponseIterator, err error) {
 	result.page, err = client.ListByFactory(ctx, resourceGroupName, factoryName)
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListRuns list trigger runs.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -460,6 +481,7 @@ func (client TriggersClient) ListRuns(ctx context.Context, resourceGroupName str
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListRunsPreparer prepares the ListRuns request.
 func (client TriggersClient) ListRunsPreparer(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, startTime date.Time, endTime date.Time) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -484,6 +506,7 @@ func (client TriggersClient) ListRunsPreparer(ctx context.Context, resourceGroup
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListRunsSender sends the ListRuns request. The method will close the
 // http.Response Body if it receives an error.
 func (client TriggersClient) ListRunsSender(req *http.Request) (*http.Response, error) {
@@ -491,6 +514,7 @@ func (client TriggersClient) ListRunsSender(req *http.Request) (*http.Response, 
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListRunsResponder handles the response to the ListRuns request. The method always
 // closes the http.Response Body.
 func (client TriggersClient) ListRunsResponder(resp *http.Response) (result TriggerRunListResponse, err error) {
@@ -525,12 +549,14 @@ func (client TriggersClient) listRunsNextResults(lastResults TriggerRunListRespo
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListRunsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TriggersClient) ListRunsComplete(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, startTime date.Time, endTime date.Time) (result TriggerRunListResponseIterator, err error) {
 	result.page, err = client.ListRuns(ctx, resourceGroupName, factoryName, triggerName, startTime, endTime)
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // Start starts a trigger.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -568,6 +594,7 @@ func (client TriggersClient) Start(ctx context.Context, resourceGroupName string
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // StartPreparer prepares the Start request.
 func (client TriggersClient) StartPreparer(ctx context.Context, resourceGroupName string, factoryName string, triggerName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -590,6 +617,7 @@ func (client TriggersClient) StartPreparer(ctx context.Context, resourceGroupNam
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // StartSender sends the Start request. The method will close the
 // http.Response Body if it receives an error.
 func (client TriggersClient) StartSender(req *http.Request) (future TriggersStartFuture, err error) {
@@ -605,6 +633,7 @@ func (client TriggersClient) StartSender(req *http.Request) (future TriggersStar
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // StartResponder handles the response to the Start request. The method always
 // closes the http.Response Body.
 func (client TriggersClient) StartResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -617,6 +646,7 @@ func (client TriggersClient) StartResponder(resp *http.Response) (result autores
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // Stop stops a trigger.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -654,6 +684,7 @@ func (client TriggersClient) Stop(ctx context.Context, resourceGroupName string,
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // StopPreparer prepares the Stop request.
 func (client TriggersClient) StopPreparer(ctx context.Context, resourceGroupName string, factoryName string, triggerName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -676,6 +707,7 @@ func (client TriggersClient) StopPreparer(ctx context.Context, resourceGroupName
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // StopSender sends the Stop request. The method will close the
 // http.Response Body if it receives an error.
 func (client TriggersClient) StopSender(req *http.Request) (future TriggersStopFuture, err error) {
@@ -691,6 +723,7 @@ func (client TriggersClient) StopSender(req *http.Request) (future TriggersStopF
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // StopResponder handles the response to the Stop request. The method always
 // closes the http.Response Body.
 func (client TriggersClient) StopResponder(resp *http.Response) (result autorest.Response, err error) {

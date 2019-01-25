@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -41,6 +42,16 @@ func NewResourceProviderCommonClientWithBaseURI(baseURI string, subscriptionID s
 
 // GetSubscriptionQuota get the number of free and paid iot hubs in the subscription
 func (client ResourceProviderCommonClient) GetSubscriptionQuota(ctx context.Context) (result UserSubscriptionQuotaListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceProviderCommonClient.GetSubscriptionQuota")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetSubscriptionQuotaPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.ResourceProviderCommonClient", "GetSubscriptionQuota", nil, "Failure preparing request")

@@ -22,24 +22,29 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // APIRevisionsClient is the apiManagement Client
 type APIRevisionsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewAPIRevisionsClient creates an instance of the APIRevisionsClient client.
 func NewAPIRevisionsClient(subscriptionID string) APIRevisionsClient {
 	return NewAPIRevisionsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewAPIRevisionsClientWithBaseURI creates an instance of the APIRevisionsClient client.
 func NewAPIRevisionsClientWithBaseURI(baseURI string, subscriptionID string) APIRevisionsClient {
 	return APIRevisionsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // List lists all revisions of an API.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -52,6 +57,16 @@ func NewAPIRevisionsClientWithBaseURI(baseURI string, subscriptionID string) API
 // top - number of records to return.
 // skip - number of records to skip.
 func (client APIRevisionsClient) List(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result APIRevisionCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIRevisionsClient.List")
+		defer func() {
+			sc := -1
+			if result.arc.Response.Response != nil {
+				sc = result.arc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -92,6 +107,7 @@ func (client APIRevisionsClient) List(ctx context.Context, resourceGroupName str
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListPreparer prepares the List request.
 func (client APIRevisionsClient) ListPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -123,6 +139,7 @@ func (client APIRevisionsClient) ListPreparer(ctx context.Context, resourceGroup
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIRevisionsClient) ListSender(req *http.Request) (*http.Response, error) {
@@ -130,6 +147,7 @@ func (client APIRevisionsClient) ListSender(req *http.Request) (*http.Response, 
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListResponder handles the response to the List request. The method always
 // closes the http.Response Body.
 func (client APIRevisionsClient) ListResponder(resp *http.Response) (result APIRevisionCollection, err error) {
@@ -144,8 +162,8 @@ func (client APIRevisionsClient) ListResponder(resp *http.Response) (result APIR
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client APIRevisionsClient) listNextResults(lastResults APIRevisionCollection) (result APIRevisionCollection, err error) {
-	req, err := lastResults.aPIRevisionCollectionPreparer()
+func (client APIRevisionsClient) listNextResults(ctx context.Context, lastResults APIRevisionCollection) (result APIRevisionCollection, err error) {
+	req, err := lastResults.aPIRevisionCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.APIRevisionsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -164,8 +182,19 @@ func (client APIRevisionsClient) listNextResults(lastResults APIRevisionCollecti
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client APIRevisionsClient) ListComplete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result APIRevisionCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIRevisionsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, serviceName, apiid, filter, top, skip)
 	return
 }

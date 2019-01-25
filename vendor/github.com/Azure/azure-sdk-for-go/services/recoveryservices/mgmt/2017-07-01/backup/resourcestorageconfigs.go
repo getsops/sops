@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewResourceStorageConfigsClientWithBaseURI(baseURI string, subscriptionID s
 // vaultName - the name of the recovery services vault.
 // resourceGroupName - the name of the resource group where the recovery services vault is present.
 func (client ResourceStorageConfigsClient) Get(ctx context.Context, vaultName string, resourceGroupName string) (result ResourceConfigResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceStorageConfigsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, vaultName, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.ResourceStorageConfigsClient", "Get", nil, "Failure preparing request")
@@ -112,6 +123,16 @@ func (client ResourceStorageConfigsClient) GetResponder(resp *http.Response) (re
 // resourceGroupName - the name of the resource group where the recovery services vault is present.
 // parameters - vault storage config request
 func (client ResourceStorageConfigsClient) Update(ctx context.Context, vaultName string, resourceGroupName string, parameters ResourceConfigResource) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceStorageConfigsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, vaultName, resourceGroupName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.ResourceStorageConfigsClient", "Update", nil, "Failure preparing request")

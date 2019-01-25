@@ -18,14 +18,19 @@ package timeseriesinsights
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/timeseriesinsights/mgmt/2017-02-28-preview/timeseriesinsights"
 
 // AccessPolicyRole enumerates the values for access policy role.
 type AccessPolicyRole string
@@ -210,7 +215,8 @@ type AccessPolicyListResponse struct {
 	Value *[]AccessPolicyResource `json:"value,omitempty"`
 }
 
-// AccessPolicyMutableProperties an object that represents a set of mutable access policy resource properties.
+// AccessPolicyMutableProperties an object that represents a set of mutable access policy resource
+// properties.
 type AccessPolicyMutableProperties struct {
 	// Description - An description of the access policy.
 	Description *string `json:"description,omitempty"`
@@ -218,9 +224,9 @@ type AccessPolicyMutableProperties struct {
 	Roles *[]AccessPolicyRole `json:"roles,omitempty"`
 }
 
-// AccessPolicyResource an access policy is used to grant users and applications access to the environment. Roles
-// are assigned to service principals in Azure Active Directory. These roles define the actions the principal can
-// perform through the Time Series Insights data plane APIs.
+// AccessPolicyResource an access policy is used to grant users and applications access to the environment.
+// Roles are assigned to service principals in Azure Active Directory. These roles define the actions the
+// principal can perform through the Time Series Insights data plane APIs.
 type AccessPolicyResource struct {
 	autorest.Response               `json:"-"`
 	*AccessPolicyResourceProperties `json:"properties,omitempty"`
@@ -349,7 +355,8 @@ func (apup *AccessPolicyUpdateParameters) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// AzureEventSourceProperties properties of an event source that reads events from an event broker in Azure.
+// AzureEventSourceProperties properties of an event source that reads events from an event broker in
+// Azure.
 type AzureEventSourceProperties struct {
 	// EventSourceResourceID - The resource id of the event source in Azure Resource Manager.
 	EventSourceResourceID *string `json:"eventSourceResourceId,omitempty"`
@@ -368,7 +375,7 @@ type CloudError struct {
 
 // CloudErrorBody describes a particular API error with an error code and a message.
 type CloudErrorBody struct {
-	// Code - An error code that describes the error condition more precisely than an HTTP status code. Can be used to programatically handle specific error cases.
+	// Code - An error code that describes the error condition more precisely than an HTTP status code. Can be used to programmatically handle specific error cases.
 	Code *string `json:"code,omitempty"`
 	// Message - A message that describes the error in detail and provides debugging information.
 	Message *string `json:"message,omitempty"`
@@ -378,8 +385,8 @@ type CloudErrorBody struct {
 	Details *[]CloudErrorBody `json:"details,omitempty"`
 }
 
-// CreateOrUpdateTrackedResourceProperties properties required to create any resource tracked by Azure Resource
-// Manager.
+// CreateOrUpdateTrackedResourceProperties properties required to create any resource tracked by Azure
+// Resource Manager.
 type CreateOrUpdateTrackedResourceProperties struct {
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -499,8 +506,8 @@ type EnvironmentMutableProperties struct {
 	DataRetentionTime *string `json:"dataRetentionTime,omitempty"`
 }
 
-// EnvironmentResource an environment is a set of time-series data avaliable for query, and is the top level Azure
-// Time Series Insights resource.
+// EnvironmentResource an environment is a set of time-series data available for query, and is the top
+// level Azure Time Series Insights resource.
 type EnvironmentResource struct {
 	autorest.Response              `json:"-"`
 	Sku                            *Sku `json:"sku,omitempty"`
@@ -638,8 +645,8 @@ type EnvironmentResourceProperties struct {
 	DataAccessFqdn *string `json:"dataAccessFqdn,omitempty"`
 }
 
-// EnvironmentsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// EnvironmentsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type EnvironmentsCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -667,7 +674,8 @@ func (future *EnvironmentsCreateOrUpdateFuture) Result(client EnvironmentsClient
 	return
 }
 
-// EnvironmentsUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// EnvironmentsUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type EnvironmentsUpdateFuture struct {
 	azure.Future
 }
@@ -782,8 +790,8 @@ type EventHubEventSourceCommonProperties struct {
 	CreationTime *date.Time `json:"creationTime,omitempty"`
 }
 
-// EventHubEventSourceCreateOrUpdateParameters parameters supplied to the Create or Update Event Source operation
-// for an EventHub event source.
+// EventHubEventSourceCreateOrUpdateParameters parameters supplied to the Create or Update Event Source
+// operation for an EventHub event source.
 type EventHubEventSourceCreateOrUpdateParameters struct {
 	*EventHubEventSourceCreationProperties `json:"properties,omitempty"`
 	// Location - The location of the resource.
@@ -884,8 +892,8 @@ func (ehescoup *EventHubEventSourceCreateOrUpdateParameters) UnmarshalJSON(body 
 	return nil
 }
 
-// EventHubEventSourceCreationProperties properties of the EventHub event source that are required on create or
-// update requests.
+// EventHubEventSourceCreationProperties properties of the EventHub event source that are required on
+// create or update requests.
 type EventHubEventSourceCreationProperties struct {
 	// SharedAccessKey - The value of the shared access key that grants the Time Series Insights service read access to the event hub. This property is not shown in event source responses.
 	SharedAccessKey *string `json:"sharedAccessKey,omitempty"`
@@ -907,8 +915,8 @@ type EventHubEventSourceCreationProperties struct {
 	CreationTime *date.Time `json:"creationTime,omitempty"`
 }
 
-// EventHubEventSourceMutableProperties an object that represents a set of mutable EventHub event source resource
-// properties.
+// EventHubEventSourceMutableProperties an object that represents a set of mutable EventHub event source
+// resource properties.
 type EventHubEventSourceMutableProperties struct {
 	// SharedAccessKey - The value of the shared access key that grants the Time Series Insights service read access to the event hub. This property is not shown in event source responses.
 	SharedAccessKey *string `json:"sharedAccessKey,omitempty"`
@@ -1080,8 +1088,8 @@ type EventHubEventSourceResourceProperties struct {
 	CreationTime *date.Time `json:"creationTime,omitempty"`
 }
 
-// EventHubEventSourceUpdateParameters parameters supplied to the Update Event Source operation to update an
-// EventHub event source.
+// EventHubEventSourceUpdateParameters parameters supplied to the Update Event Source operation to update
+// an EventHub event source.
 type EventHubEventSourceUpdateParameters struct {
 	// EventHubEventSourceMutableProperties - Properties of the EventHub event source.
 	*EventHubEventSourceMutableProperties `json:"properties,omitempty"`
@@ -1268,7 +1276,8 @@ func (eslr *EventSourceListResponse) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// EventSourceMutableProperties an object that represents a set of mutable event source resource properties.
+// EventSourceMutableProperties an object that represents a set of mutable event source resource
+// properties.
 type EventSourceMutableProperties struct {
 	// TimestampPropertyName - The event property that will be used as the event source's timestamp. If a value isn't specified for timestampPropertyName, or if null or empty-string is specified, the event creation time will be used.
 	TimestampPropertyName *string         `json:"timestampPropertyName,omitempty"`
@@ -1439,8 +1448,8 @@ type IoTHubEventSourceCommonProperties struct {
 	CreationTime *date.Time `json:"creationTime,omitempty"`
 }
 
-// IoTHubEventSourceCreateOrUpdateParameters parameters supplied to the Create or Update Event Source operation for
-// an IoTHub event source.
+// IoTHubEventSourceCreateOrUpdateParameters parameters supplied to the Create or Update Event Source
+// operation for an IoTHub event source.
 type IoTHubEventSourceCreateOrUpdateParameters struct {
 	*IoTHubEventSourceCreationProperties `json:"properties,omitempty"`
 	// Kind - Possible values include: 'KindEventSourceCreateOrUpdateParameters', 'KindMicrosoftEventHub', 'KindMicrosoftIoTHub'
@@ -1541,8 +1550,8 @@ func (ithescoup *IoTHubEventSourceCreateOrUpdateParameters) UnmarshalJSON(body [
 	return nil
 }
 
-// IoTHubEventSourceCreationProperties properties of the IoTHub event source that are required on create or update
-// requests.
+// IoTHubEventSourceCreationProperties properties of the IoTHub event source that are required on create or
+// update requests.
 type IoTHubEventSourceCreationProperties struct {
 	// SharedAccessKey - The value of the Shared Access Policy key that grants the Time Series Insights service read access to the iot hub. This property is not shown in event source responses.
 	SharedAccessKey *string `json:"sharedAccessKey,omitempty"`
@@ -1562,8 +1571,8 @@ type IoTHubEventSourceCreationProperties struct {
 	CreationTime *date.Time `json:"creationTime,omitempty"`
 }
 
-// IoTHubEventSourceMutableProperties an object that represents a set of mutable IoTHub event source resource
-// properties.
+// IoTHubEventSourceMutableProperties an object that represents a set of mutable IoTHub event source
+// resource properties.
 type IoTHubEventSourceMutableProperties struct {
 	// SharedAccessKey - The value of the shared access key that grants the Time Series Insights service read access to the iot hub. This property is not shown in event source responses.
 	SharedAccessKey *string `json:"sharedAccessKey,omitempty"`
@@ -1733,8 +1742,8 @@ type IoTHubEventSourceResourceProperties struct {
 	CreationTime *date.Time `json:"creationTime,omitempty"`
 }
 
-// IoTHubEventSourceUpdateParameters parameters supplied to the Update Event Source operation to update an IoTHub
-// event source.
+// IoTHubEventSourceUpdateParameters parameters supplied to the Update Event Source operation to update an
+// IoTHub event source.
 type IoTHubEventSourceUpdateParameters struct {
 	// IoTHubEventSourceMutableProperties - Properties of the IoTHub event source.
 	*IoTHubEventSourceMutableProperties `json:"properties,omitempty"`
@@ -1787,9 +1796,10 @@ func (ithesup *IoTHubEventSourceUpdateParameters) UnmarshalJSON(body []byte) err
 	return nil
 }
 
-// LocalTimestamp an object that represents the local timestamp property. It contains the format of local timestamp
-// that needs to be used and the corresponding timezone offset information. If a value isn't specified for
-// localTimestamp, or if null, then the local timestamp will not be ingressed with the events.
+// LocalTimestamp an object that represents the local timestamp property. It contains the format of local
+// timestamp that needs to be used and the corresponding timezone offset information. If a value isn't
+// specified for localTimestamp, or if null, then the local timestamp will not be ingressed with the
+// events.
 type LocalTimestamp struct {
 	// Format - An enum that represents the format of the local timestamp property that needs to be set. Possible values include: 'Embedded', 'Iana', 'TimeSpan'
 	Format LocalTimestampFormat `json:"format,omitempty"`
@@ -1797,8 +1807,8 @@ type LocalTimestamp struct {
 	TimeZoneOffset *LocalTimestampTimeZoneOffset `json:"timeZoneOffset,omitempty"`
 }
 
-// LocalTimestampTimeZoneOffset an object that represents the offset information for the local timestamp format
-// specified. Should not be specified for LocalTimestampFormat - Embedded.
+// LocalTimestampTimeZoneOffset an object that represents the offset information for the local timestamp
+// format specified. Should not be specified for LocalTimestampFormat - Embedded.
 type LocalTimestampTimeZoneOffset struct {
 	// PropertyName - The event property that will be contain the offset information to calculate the local timestamp. When the LocalTimestampFormat is Iana, the property name will contain the name of the column which contains IANA Timezone Name (eg: Americas/Los Angeles). When LocalTimestampFormat is Timespan, it contains the name of property which contains values representing the offset (eg: P1D or 1.00:00:00)
 	PropertyName *string `json:"propertyName,omitempty"`
@@ -1840,20 +1850,37 @@ type OperationListResultIterator struct {
 	page OperationListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OperationListResultIterator) Next() error {
+func (iter *OperationListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *OperationListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1875,6 +1902,11 @@ func (iter OperationListResultIterator) Value() Operation {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the OperationListResultIterator type.
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return OperationListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (olr OperationListResult) IsEmpty() bool {
 	return olr.Value == nil || len(*olr.Value) == 0
@@ -1882,11 +1914,11 @@ func (olr OperationListResult) IsEmpty() bool {
 
 // operationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (olr OperationListResult) operationListResultPreparer() (*http.Request, error) {
+func (olr OperationListResult) operationListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if olr.NextLink == nil || len(to.String(olr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(olr.NextLink)))
@@ -1894,19 +1926,36 @@ func (olr OperationListResult) operationListResultPreparer() (*http.Request, err
 
 // OperationListResultPage contains a page of Operation values.
 type OperationListResultPage struct {
-	fn  func(OperationListResult) (OperationListResult, error)
+	fn  func(context.Context, OperationListResult) (OperationListResult, error)
 	olr OperationListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OperationListResultPage) Next() error {
-	next, err := page.fn(page.olr)
+func (page *OperationListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.olr)
 	if err != nil {
 		return err
 	}
 	page.olr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *OperationListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1925,6 +1974,11 @@ func (page OperationListResultPage) Values() []Operation {
 		return nil
 	}
 	return *page.olr.Value
+}
+
+// Creates a new instance of the OperationListResultPage type.
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return OperationListResultPage{fn: getNextPage}
 }
 
 // ReferenceDataSetCreateOrUpdateParameters ...
@@ -1999,8 +2053,8 @@ type ReferenceDataSetCreationProperties struct {
 	KeyProperties *[]ReferenceDataSetKeyProperty `json:"keyProperties,omitempty"`
 }
 
-// ReferenceDataSetKeyProperty a key property for the reference data set. A reference data set can have multiple
-// key properties.
+// ReferenceDataSetKeyProperty a key property for the reference data set. A reference data set can have
+// multiple key properties.
 type ReferenceDataSetKeyProperty struct {
 	// Name - The name of the key property.
 	Name *string `json:"name,omitempty"`
@@ -2015,9 +2069,10 @@ type ReferenceDataSetListResponse struct {
 	Value *[]ReferenceDataSetResource `json:"value,omitempty"`
 }
 
-// ReferenceDataSetResource a reference data set provides metadata about the events in an environment. Metadata in
-// the reference data set will be joined with events as they are read from event sources. The metadata that makes
-// up the reference data set is uploaded or modified through the Time Series Insights data plane APIs.
+// ReferenceDataSetResource a reference data set provides metadata about the events in an environment.
+// Metadata in the reference data set will be joined with events as they are read from event sources. The
+// metadata that makes up the reference data set is uploaded or modified through the Time Series Insights
+// data plane APIs.
 type ReferenceDataSetResource struct {
 	autorest.Response                   `json:"-"`
 	*ReferenceDataSetResourceProperties `json:"properties,omitempty"`
@@ -2169,8 +2224,8 @@ type ResourceProperties struct {
 	CreationTime *date.Time `json:"creationTime,omitempty"`
 }
 
-// Sku the sku determines the capacity of the environment, the SLA (in queries-per-minute and total capacity), and
-// the billing rate.
+// Sku the sku determines the capacity of the environment, the SLA (in queries-per-minute and total
+// capacity), and the billing rate.
 type Sku struct {
 	// Name - The name of this SKU. Possible values include: 'S1', 'S2'
 	Name SkuName `json:"name,omitempty"`

@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionLoadsClient is the client for the PartitionLoads methods of the Servicefabric service.
 type PartitionLoadsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewPartitionLoadsClient creates an instance of the PartitionLoadsClient client.
 func NewPartitionLoadsClient(timeout *int32) PartitionLoadsClient {
 	return NewPartitionLoadsClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewPartitionLoadsClientWithBaseURI creates an instance of the PartitionLoadsClient client.
 func NewPartitionLoadsClientWithBaseURI(baseURI string, timeout *int32) PartitionLoadsClient {
 	return PartitionLoadsClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Reset reset partition loads
 // Parameters:
 // partitionID - the id of the partition
@@ -64,6 +68,7 @@ func (client PartitionLoadsClient) Reset(ctx context.Context, partitionID string
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResetPreparer prepares the Reset request.
 func (client PartitionLoadsClient) ResetPreparer(ctx context.Context, partitionID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -86,6 +91,7 @@ func (client PartitionLoadsClient) ResetPreparer(ctx context.Context, partitionI
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResetSender sends the Reset request. The method will close the
 // http.Response Body if it receives an error.
 func (client PartitionLoadsClient) ResetSender(req *http.Request) (*http.Response, error) {
@@ -93,6 +99,7 @@ func (client PartitionLoadsClient) ResetSender(req *http.Request) (*http.Respons
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResetResponder handles the response to the Reset request. The method always
 // closes the http.Response Body.
 func (client PartitionLoadsClient) ResetResponder(resp *http.Response) (result String, err error) {

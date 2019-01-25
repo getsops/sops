@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewWorkbooksClientWithBaseURI(baseURI string, subscriptionID string) Workbo
 // resourceName - the name of the Application Insights component resource.
 // workbookProperties - properties that need to be specified to create a new workbook.
 func (client WorkbooksClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, workbookProperties Workbook) (result Workbook, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkbooksClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: workbookProperties,
 			Constraints: []validation.Constraint{{Target: "workbookProperties.WorkbookProperties", Name: validation.Null, Rule: false,
@@ -127,6 +138,16 @@ func (client WorkbooksClient) CreateOrUpdateResponder(resp *http.Response) (resu
 // resourceGroupName - the name of the resource group.
 // resourceName - the name of the Application Insights component resource.
 func (client WorkbooksClient) Delete(ctx context.Context, resourceGroupName string, resourceName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkbooksClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.WorkbooksClient", "Delete", nil, "Failure preparing request")
@@ -193,6 +214,16 @@ func (client WorkbooksClient) DeleteResponder(resp *http.Response) (result autor
 // resourceGroupName - the name of the resource group.
 // resourceName - the name of the Application Insights component resource.
 func (client WorkbooksClient) Get(ctx context.Context, resourceGroupName string, resourceName string) (result Workbook, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkbooksClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.WorkbooksClient", "Get", nil, "Failure preparing request")
@@ -263,6 +294,16 @@ func (client WorkbooksClient) GetResponder(resp *http.Response) (result Workbook
 // canFetchContent - flag indicating whether or not to return the full content for each applicable workbook. If
 // false, only return summary content for workbooks.
 func (client WorkbooksClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, category CategoryType, tags []string, canFetchContent *bool) (result WorkbooksListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkbooksClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName, category, tags, canFetchContent)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.WorkbooksClient", "ListByResourceGroup", nil, "Failure preparing request")
@@ -337,6 +378,16 @@ func (client WorkbooksClient) ListByResourceGroupResponder(resp *http.Response) 
 // resourceName - the name of the Application Insights component resource.
 // workbookProperties - properties that need to be specified to create a new workbook.
 func (client WorkbooksClient) Update(ctx context.Context, resourceGroupName string, resourceName string, workbookProperties Workbook) (result Workbook, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkbooksClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, resourceName, workbookProperties)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.WorkbooksClient", "Update", nil, "Failure preparing request")

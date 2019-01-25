@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,20 +19,23 @@
 
 package services
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/machinelearning/mgmt/2018-03-01-preview/services"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/preview/machinelearning/mgmt/2018-03-01-preview/services"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type MachineLearningComputeClient = original.MachineLearningComputeClient
 type ComputeType = original.ComputeType
 
 const (
 	ComputeTypeAKS            ComputeType = original.ComputeTypeAKS
 	ComputeTypeBatchAI        ComputeType = original.ComputeTypeBatchAI
 	ComputeTypeDataFactory    ComputeType = original.ComputeTypeDataFactory
+	ComputeTypeHDInsight      ComputeType = original.ComputeTypeHDInsight
 	ComputeTypeVirtualMachine ComputeType = original.ComputeTypeVirtualMachine
 )
 
@@ -43,6 +46,7 @@ const (
 	ComputeTypeBatchAI1        ComputeTypeBasicCompute = original.ComputeTypeBatchAI1
 	ComputeTypeCompute         ComputeTypeBasicCompute = original.ComputeTypeCompute
 	ComputeTypeDataFactory1    ComputeTypeBasicCompute = original.ComputeTypeDataFactory1
+	ComputeTypeHDInsight1      ComputeTypeBasicCompute = original.ComputeTypeHDInsight1
 	ComputeTypeVirtualMachine1 ComputeTypeBasicCompute = original.ComputeTypeVirtualMachine1
 )
 
@@ -80,27 +84,33 @@ const (
 )
 
 type AKS = original.AKS
-type AksComputeSecrets = original.AksComputeSecrets
 type AKSProperties = original.AKSProperties
+type AksComputeSecrets = original.AksComputeSecrets
+type BaseClient = original.BaseClient
+type BasicCompute = original.BasicCompute
+type BasicComputeSecrets = original.BasicComputeSecrets
 type BatchAI = original.BatchAI
 type BatchAIProperties = original.BatchAIProperties
-type BasicCompute = original.BasicCompute
 type Compute = original.Compute
 type ComputeResource = original.ComputeResource
-type BasicComputeSecrets = original.BasicComputeSecrets
 type ComputeSecrets = original.ComputeSecrets
 type ComputeSecretsModel = original.ComputeSecretsModel
 type DataFactory = original.DataFactory
 type ErrorDetail = original.ErrorDetail
 type ErrorResponse = original.ErrorResponse
+type HDInsight = original.HDInsight
+type HDInsightProperties = original.HDInsightProperties
 type Identity = original.Identity
 type ListWorkspaceKeysResult = original.ListWorkspaceKeysResult
+type MachineLearningComputeClient = original.MachineLearningComputeClient
 type MachineLearningComputeCreateOrUpdateFuture = original.MachineLearningComputeCreateOrUpdateFuture
 type MachineLearningComputeDeleteFuture = original.MachineLearningComputeDeleteFuture
+type MachineLearningComputeSystemUpdateFuture = original.MachineLearningComputeSystemUpdateFuture
 type MachineLearningServiceError = original.MachineLearningServiceError
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
+type OperationsClient = original.OperationsClient
 type PaginatedComputeResourcesList = original.PaginatedComputeResourcesList
 type PaginatedComputeResourcesListIterator = original.PaginatedComputeResourcesListIterator
 type PaginatedComputeResourcesListPage = original.PaginatedComputeResourcesListPage
@@ -113,8 +123,8 @@ type SslConfiguration = original.SslConfiguration
 type SystemService = original.SystemService
 type VirtualMachine = original.VirtualMachine
 type VirtualMachineProperties = original.VirtualMachineProperties
-type VirtualMachineSecrets = original.VirtualMachineSecrets
 type VirtualMachineSSHCredentials = original.VirtualMachineSSHCredentials
+type VirtualMachineSecrets = original.VirtualMachineSecrets
 type Workspace = original.Workspace
 type WorkspaceListResult = original.WorkspaceListResult
 type WorkspaceListResultIterator = original.WorkspaceListResultIterator
@@ -122,14 +132,10 @@ type WorkspaceListResultPage = original.WorkspaceListResultPage
 type WorkspaceProperties = original.WorkspaceProperties
 type WorkspacePropertiesUpdateParameters = original.WorkspacePropertiesUpdateParameters
 type WorkspaceUpdateParameters = original.WorkspaceUpdateParameters
-type OperationsClient = original.OperationsClient
 type WorkspacesClient = original.WorkspacesClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewMachineLearningComputeClient(subscriptionID string) MachineLearningComputeClient {
 	return original.NewMachineLearningComputeClient(subscriptionID)
@@ -137,14 +143,41 @@ func NewMachineLearningComputeClient(subscriptionID string) MachineLearningCompu
 func NewMachineLearningComputeClientWithBaseURI(baseURI string, subscriptionID string) MachineLearningComputeClient {
 	return original.NewMachineLearningComputeClientWithBaseURI(baseURI, subscriptionID)
 }
-func PossibleComputeTypeValues() []ComputeType {
-	return original.PossibleComputeTypeValues()
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewPaginatedComputeResourcesListIterator(page PaginatedComputeResourcesListPage) PaginatedComputeResourcesListIterator {
+	return original.NewPaginatedComputeResourcesListIterator(page)
+}
+func NewPaginatedComputeResourcesListPage(getNextPage func(context.Context, PaginatedComputeResourcesList) (PaginatedComputeResourcesList, error)) PaginatedComputeResourcesListPage {
+	return original.NewPaginatedComputeResourcesListPage(getNextPage)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
+}
+func NewWorkspaceListResultIterator(page WorkspaceListResultPage) WorkspaceListResultIterator {
+	return original.NewWorkspaceListResultIterator(page)
+}
+func NewWorkspaceListResultPage(getNextPage func(context.Context, WorkspaceListResult) (WorkspaceListResult, error)) WorkspaceListResultPage {
+	return original.NewWorkspaceListResultPage(getNextPage)
+}
+func NewWorkspacesClient(subscriptionID string) WorkspacesClient {
+	return original.NewWorkspacesClient(subscriptionID)
+}
+func NewWorkspacesClientWithBaseURI(baseURI string, subscriptionID string) WorkspacesClient {
+	return original.NewWorkspacesClientWithBaseURI(baseURI, subscriptionID)
+}
+func PossibleComputeTypeBasicComputeSecretsValues() []ComputeTypeBasicComputeSecrets {
+	return original.PossibleComputeTypeBasicComputeSecretsValues()
 }
 func PossibleComputeTypeBasicComputeValues() []ComputeTypeBasicCompute {
 	return original.PossibleComputeTypeBasicComputeValues()
 }
-func PossibleComputeTypeBasicComputeSecretsValues() []ComputeTypeBasicComputeSecrets {
-	return original.PossibleComputeTypeBasicComputeSecretsValues()
+func PossibleComputeTypeValues() []ComputeType {
+	return original.PossibleComputeTypeValues()
 }
 func PossibleProvisioningStateValues() []ProvisioningState {
 	return original.PossibleProvisioningStateValues()
@@ -155,21 +188,9 @@ func PossibleResourceIdentityTypeValues() []ResourceIdentityType {
 func PossibleStatusValues() []Status {
 	return original.PossibleStatusValues()
 }
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"
 }
 func Version() string {
 	return original.Version()
-}
-func NewWorkspacesClient(subscriptionID string) WorkspacesClient {
-	return original.NewWorkspacesClient(subscriptionID)
-}
-func NewWorkspacesClientWithBaseURI(baseURI string, subscriptionID string) WorkspacesClient {
-	return original.NewWorkspacesClientWithBaseURI(baseURI, subscriptionID)
 }

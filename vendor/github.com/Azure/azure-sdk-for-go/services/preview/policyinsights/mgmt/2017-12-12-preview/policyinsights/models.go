@@ -23,6 +23,9 @@ import (
 	"github.com/Azure/go-autorest/autorest/date"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/policyinsights/mgmt/2017-12-12-preview/policyinsights"
+
 // PolicyStatesResource enumerates the values for policy states resource.
 type PolicyStatesResource string
 
@@ -143,7 +146,7 @@ type PolicyEvent struct {
 	PolicySetDefinitionCategory *string `json:"policySetDefinitionCategory,omitempty"`
 	// PolicySetDefinitionParameters - Policy set definition parameters, if the policy assignment is for a policy set.
 	PolicySetDefinitionParameters *string `json:"policySetDefinitionParameters,omitempty"`
-	// ManagementGroupIds - Comma seperated list of management group IDs, which represent the hierarchy of the management groups the resource is under.
+	// ManagementGroupIds - Comma separated list of management group IDs, which represent the hierarchy of the management groups the resource is under.
 	ManagementGroupIds *string `json:"managementGroupIds,omitempty"`
 	// PolicyDefinitionReferenceID - Reference ID for the policy definition inside the policy set, if the policy assignment is for a policy set.
 	PolicyDefinitionReferenceID *string `json:"policyDefinitionReferenceId,omitempty"`
@@ -249,6 +252,294 @@ func (peVar PolicyEvent) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// UnmarshalJSON is the custom unmarshaler for PolicyEvent struct.
+func (peVar *PolicyEvent) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if peVar.AdditionalProperties == nil {
+					peVar.AdditionalProperties = make(map[string]interface{})
+				}
+				peVar.AdditionalProperties[k] = additionalProperties
+			}
+		case "@odata.id":
+			if v != nil {
+				var odataID string
+				err = json.Unmarshal(*v, &odataID)
+				if err != nil {
+					return err
+				}
+				peVar.OdataID = &odataID
+			}
+		case "@odata.context":
+			if v != nil {
+				var odataContext string
+				err = json.Unmarshal(*v, &odataContext)
+				if err != nil {
+					return err
+				}
+				peVar.OdataContext = &odataContext
+			}
+		case "timestamp":
+			if v != nil {
+				var timestamp date.Time
+				err = json.Unmarshal(*v, &timestamp)
+				if err != nil {
+					return err
+				}
+				peVar.Timestamp = &timestamp
+			}
+		case "resourceId":
+			if v != nil {
+				var resourceID string
+				err = json.Unmarshal(*v, &resourceID)
+				if err != nil {
+					return err
+				}
+				peVar.ResourceID = &resourceID
+			}
+		case "policyAssignmentId":
+			if v != nil {
+				var policyAssignmentID string
+				err = json.Unmarshal(*v, &policyAssignmentID)
+				if err != nil {
+					return err
+				}
+				peVar.PolicyAssignmentID = &policyAssignmentID
+			}
+		case "policyDefinitionId":
+			if v != nil {
+				var policyDefinitionID string
+				err = json.Unmarshal(*v, &policyDefinitionID)
+				if err != nil {
+					return err
+				}
+				peVar.PolicyDefinitionID = &policyDefinitionID
+			}
+		case "effectiveParameters":
+			if v != nil {
+				var effectiveParameters string
+				err = json.Unmarshal(*v, &effectiveParameters)
+				if err != nil {
+					return err
+				}
+				peVar.EffectiveParameters = &effectiveParameters
+			}
+		case "isCompliant":
+			if v != nil {
+				var isCompliant bool
+				err = json.Unmarshal(*v, &isCompliant)
+				if err != nil {
+					return err
+				}
+				peVar.IsCompliant = &isCompliant
+			}
+		case "subscriptionId":
+			if v != nil {
+				var subscriptionID string
+				err = json.Unmarshal(*v, &subscriptionID)
+				if err != nil {
+					return err
+				}
+				peVar.SubscriptionID = &subscriptionID
+			}
+		case "resourceType":
+			if v != nil {
+				var resourceType string
+				err = json.Unmarshal(*v, &resourceType)
+				if err != nil {
+					return err
+				}
+				peVar.ResourceType = &resourceType
+			}
+		case "resourceLocation":
+			if v != nil {
+				var resourceLocation string
+				err = json.Unmarshal(*v, &resourceLocation)
+				if err != nil {
+					return err
+				}
+				peVar.ResourceLocation = &resourceLocation
+			}
+		case "resourceGroup":
+			if v != nil {
+				var resourceGroup string
+				err = json.Unmarshal(*v, &resourceGroup)
+				if err != nil {
+					return err
+				}
+				peVar.ResourceGroup = &resourceGroup
+			}
+		case "resourceTags":
+			if v != nil {
+				var resourceTags string
+				err = json.Unmarshal(*v, &resourceTags)
+				if err != nil {
+					return err
+				}
+				peVar.ResourceTags = &resourceTags
+			}
+		case "policyAssignmentName":
+			if v != nil {
+				var policyAssignmentName string
+				err = json.Unmarshal(*v, &policyAssignmentName)
+				if err != nil {
+					return err
+				}
+				peVar.PolicyAssignmentName = &policyAssignmentName
+			}
+		case "policyAssignmentOwner":
+			if v != nil {
+				var policyAssignmentOwner string
+				err = json.Unmarshal(*v, &policyAssignmentOwner)
+				if err != nil {
+					return err
+				}
+				peVar.PolicyAssignmentOwner = &policyAssignmentOwner
+			}
+		case "policyAssignmentParameters":
+			if v != nil {
+				var policyAssignmentParameters string
+				err = json.Unmarshal(*v, &policyAssignmentParameters)
+				if err != nil {
+					return err
+				}
+				peVar.PolicyAssignmentParameters = &policyAssignmentParameters
+			}
+		case "policyAssignmentScope":
+			if v != nil {
+				var policyAssignmentScope string
+				err = json.Unmarshal(*v, &policyAssignmentScope)
+				if err != nil {
+					return err
+				}
+				peVar.PolicyAssignmentScope = &policyAssignmentScope
+			}
+		case "policyDefinitionName":
+			if v != nil {
+				var policyDefinitionName string
+				err = json.Unmarshal(*v, &policyDefinitionName)
+				if err != nil {
+					return err
+				}
+				peVar.PolicyDefinitionName = &policyDefinitionName
+			}
+		case "policyDefinitionAction":
+			if v != nil {
+				var policyDefinitionAction string
+				err = json.Unmarshal(*v, &policyDefinitionAction)
+				if err != nil {
+					return err
+				}
+				peVar.PolicyDefinitionAction = &policyDefinitionAction
+			}
+		case "policyDefinitionCategory":
+			if v != nil {
+				var policyDefinitionCategory string
+				err = json.Unmarshal(*v, &policyDefinitionCategory)
+				if err != nil {
+					return err
+				}
+				peVar.PolicyDefinitionCategory = &policyDefinitionCategory
+			}
+		case "policySetDefinitionId":
+			if v != nil {
+				var policySetDefinitionID string
+				err = json.Unmarshal(*v, &policySetDefinitionID)
+				if err != nil {
+					return err
+				}
+				peVar.PolicySetDefinitionID = &policySetDefinitionID
+			}
+		case "policySetDefinitionName":
+			if v != nil {
+				var policySetDefinitionName string
+				err = json.Unmarshal(*v, &policySetDefinitionName)
+				if err != nil {
+					return err
+				}
+				peVar.PolicySetDefinitionName = &policySetDefinitionName
+			}
+		case "policySetDefinitionOwner":
+			if v != nil {
+				var policySetDefinitionOwner string
+				err = json.Unmarshal(*v, &policySetDefinitionOwner)
+				if err != nil {
+					return err
+				}
+				peVar.PolicySetDefinitionOwner = &policySetDefinitionOwner
+			}
+		case "policySetDefinitionCategory":
+			if v != nil {
+				var policySetDefinitionCategory string
+				err = json.Unmarshal(*v, &policySetDefinitionCategory)
+				if err != nil {
+					return err
+				}
+				peVar.PolicySetDefinitionCategory = &policySetDefinitionCategory
+			}
+		case "policySetDefinitionParameters":
+			if v != nil {
+				var policySetDefinitionParameters string
+				err = json.Unmarshal(*v, &policySetDefinitionParameters)
+				if err != nil {
+					return err
+				}
+				peVar.PolicySetDefinitionParameters = &policySetDefinitionParameters
+			}
+		case "managementGroupIds":
+			if v != nil {
+				var managementGroupIds string
+				err = json.Unmarshal(*v, &managementGroupIds)
+				if err != nil {
+					return err
+				}
+				peVar.ManagementGroupIds = &managementGroupIds
+			}
+		case "policyDefinitionReferenceId":
+			if v != nil {
+				var policyDefinitionReferenceID string
+				err = json.Unmarshal(*v, &policyDefinitionReferenceID)
+				if err != nil {
+					return err
+				}
+				peVar.PolicyDefinitionReferenceID = &policyDefinitionReferenceID
+			}
+		case "tenantId":
+			if v != nil {
+				var tenantID string
+				err = json.Unmarshal(*v, &tenantID)
+				if err != nil {
+					return err
+				}
+				peVar.TenantID = &tenantID
+			}
+		case "principalOid":
+			if v != nil {
+				var principalOid string
+				err = json.Unmarshal(*v, &principalOid)
+				if err != nil {
+					return err
+				}
+				peVar.PrincipalOid = &principalOid
+			}
+		}
+	}
+
+	return nil
+}
+
 // PolicyEventsQueryResults query results.
 type PolicyEventsQueryResults struct {
 	autorest.Response `json:"-"`
@@ -314,7 +605,7 @@ type PolicyState struct {
 	PolicySetDefinitionCategory *string `json:"policySetDefinitionCategory,omitempty"`
 	// PolicySetDefinitionParameters - Policy set definition parameters, if the policy assignment is for a policy set.
 	PolicySetDefinitionParameters *string `json:"policySetDefinitionParameters,omitempty"`
-	// ManagementGroupIds - Comma seperated list of management group IDs, which represent the hierarchy of the management groups the resource is under.
+	// ManagementGroupIds - Comma separated list of management group IDs, which represent the hierarchy of the management groups the resource is under.
 	ManagementGroupIds *string `json:"managementGroupIds,omitempty"`
 	// PolicyDefinitionReferenceID - Reference ID for the policy definition inside the policy set, if the policy assignment is for a policy set.
 	PolicyDefinitionReferenceID *string `json:"policyDefinitionReferenceId,omitempty"`
@@ -408,6 +699,276 @@ func (ps PolicyState) MarshalJSON() ([]byte, error) {
 		objectMap[k] = v
 	}
 	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for PolicyState struct.
+func (ps *PolicyState) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ps.AdditionalProperties == nil {
+					ps.AdditionalProperties = make(map[string]interface{})
+				}
+				ps.AdditionalProperties[k] = additionalProperties
+			}
+		case "@odata.id":
+			if v != nil {
+				var odataID string
+				err = json.Unmarshal(*v, &odataID)
+				if err != nil {
+					return err
+				}
+				ps.OdataID = &odataID
+			}
+		case "@odata.context":
+			if v != nil {
+				var odataContext string
+				err = json.Unmarshal(*v, &odataContext)
+				if err != nil {
+					return err
+				}
+				ps.OdataContext = &odataContext
+			}
+		case "timestamp":
+			if v != nil {
+				var timestamp date.Time
+				err = json.Unmarshal(*v, &timestamp)
+				if err != nil {
+					return err
+				}
+				ps.Timestamp = &timestamp
+			}
+		case "resourceId":
+			if v != nil {
+				var resourceID string
+				err = json.Unmarshal(*v, &resourceID)
+				if err != nil {
+					return err
+				}
+				ps.ResourceID = &resourceID
+			}
+		case "policyAssignmentId":
+			if v != nil {
+				var policyAssignmentID string
+				err = json.Unmarshal(*v, &policyAssignmentID)
+				if err != nil {
+					return err
+				}
+				ps.PolicyAssignmentID = &policyAssignmentID
+			}
+		case "policyDefinitionId":
+			if v != nil {
+				var policyDefinitionID string
+				err = json.Unmarshal(*v, &policyDefinitionID)
+				if err != nil {
+					return err
+				}
+				ps.PolicyDefinitionID = &policyDefinitionID
+			}
+		case "effectiveParameters":
+			if v != nil {
+				var effectiveParameters string
+				err = json.Unmarshal(*v, &effectiveParameters)
+				if err != nil {
+					return err
+				}
+				ps.EffectiveParameters = &effectiveParameters
+			}
+		case "isCompliant":
+			if v != nil {
+				var isCompliant bool
+				err = json.Unmarshal(*v, &isCompliant)
+				if err != nil {
+					return err
+				}
+				ps.IsCompliant = &isCompliant
+			}
+		case "subscriptionId":
+			if v != nil {
+				var subscriptionID string
+				err = json.Unmarshal(*v, &subscriptionID)
+				if err != nil {
+					return err
+				}
+				ps.SubscriptionID = &subscriptionID
+			}
+		case "resourceType":
+			if v != nil {
+				var resourceType string
+				err = json.Unmarshal(*v, &resourceType)
+				if err != nil {
+					return err
+				}
+				ps.ResourceType = &resourceType
+			}
+		case "resourceLocation":
+			if v != nil {
+				var resourceLocation string
+				err = json.Unmarshal(*v, &resourceLocation)
+				if err != nil {
+					return err
+				}
+				ps.ResourceLocation = &resourceLocation
+			}
+		case "resourceGroup":
+			if v != nil {
+				var resourceGroup string
+				err = json.Unmarshal(*v, &resourceGroup)
+				if err != nil {
+					return err
+				}
+				ps.ResourceGroup = &resourceGroup
+			}
+		case "resourceTags":
+			if v != nil {
+				var resourceTags string
+				err = json.Unmarshal(*v, &resourceTags)
+				if err != nil {
+					return err
+				}
+				ps.ResourceTags = &resourceTags
+			}
+		case "policyAssignmentName":
+			if v != nil {
+				var policyAssignmentName string
+				err = json.Unmarshal(*v, &policyAssignmentName)
+				if err != nil {
+					return err
+				}
+				ps.PolicyAssignmentName = &policyAssignmentName
+			}
+		case "policyAssignmentOwner":
+			if v != nil {
+				var policyAssignmentOwner string
+				err = json.Unmarshal(*v, &policyAssignmentOwner)
+				if err != nil {
+					return err
+				}
+				ps.PolicyAssignmentOwner = &policyAssignmentOwner
+			}
+		case "policyAssignmentParameters":
+			if v != nil {
+				var policyAssignmentParameters string
+				err = json.Unmarshal(*v, &policyAssignmentParameters)
+				if err != nil {
+					return err
+				}
+				ps.PolicyAssignmentParameters = &policyAssignmentParameters
+			}
+		case "policyAssignmentScope":
+			if v != nil {
+				var policyAssignmentScope string
+				err = json.Unmarshal(*v, &policyAssignmentScope)
+				if err != nil {
+					return err
+				}
+				ps.PolicyAssignmentScope = &policyAssignmentScope
+			}
+		case "policyDefinitionName":
+			if v != nil {
+				var policyDefinitionName string
+				err = json.Unmarshal(*v, &policyDefinitionName)
+				if err != nil {
+					return err
+				}
+				ps.PolicyDefinitionName = &policyDefinitionName
+			}
+		case "policyDefinitionAction":
+			if v != nil {
+				var policyDefinitionAction string
+				err = json.Unmarshal(*v, &policyDefinitionAction)
+				if err != nil {
+					return err
+				}
+				ps.PolicyDefinitionAction = &policyDefinitionAction
+			}
+		case "policyDefinitionCategory":
+			if v != nil {
+				var policyDefinitionCategory string
+				err = json.Unmarshal(*v, &policyDefinitionCategory)
+				if err != nil {
+					return err
+				}
+				ps.PolicyDefinitionCategory = &policyDefinitionCategory
+			}
+		case "policySetDefinitionId":
+			if v != nil {
+				var policySetDefinitionID string
+				err = json.Unmarshal(*v, &policySetDefinitionID)
+				if err != nil {
+					return err
+				}
+				ps.PolicySetDefinitionID = &policySetDefinitionID
+			}
+		case "policySetDefinitionName":
+			if v != nil {
+				var policySetDefinitionName string
+				err = json.Unmarshal(*v, &policySetDefinitionName)
+				if err != nil {
+					return err
+				}
+				ps.PolicySetDefinitionName = &policySetDefinitionName
+			}
+		case "policySetDefinitionOwner":
+			if v != nil {
+				var policySetDefinitionOwner string
+				err = json.Unmarshal(*v, &policySetDefinitionOwner)
+				if err != nil {
+					return err
+				}
+				ps.PolicySetDefinitionOwner = &policySetDefinitionOwner
+			}
+		case "policySetDefinitionCategory":
+			if v != nil {
+				var policySetDefinitionCategory string
+				err = json.Unmarshal(*v, &policySetDefinitionCategory)
+				if err != nil {
+					return err
+				}
+				ps.PolicySetDefinitionCategory = &policySetDefinitionCategory
+			}
+		case "policySetDefinitionParameters":
+			if v != nil {
+				var policySetDefinitionParameters string
+				err = json.Unmarshal(*v, &policySetDefinitionParameters)
+				if err != nil {
+					return err
+				}
+				ps.PolicySetDefinitionParameters = &policySetDefinitionParameters
+			}
+		case "managementGroupIds":
+			if v != nil {
+				var managementGroupIds string
+				err = json.Unmarshal(*v, &managementGroupIds)
+				if err != nil {
+					return err
+				}
+				ps.ManagementGroupIds = &managementGroupIds
+			}
+		case "policyDefinitionReferenceId":
+			if v != nil {
+				var policyDefinitionReferenceID string
+				err = json.Unmarshal(*v, &policyDefinitionReferenceID)
+				if err != nil {
+					return err
+				}
+				ps.PolicyDefinitionReferenceID = &policyDefinitionReferenceID
+			}
+		}
+	}
+
+	return nil
 }
 
 // PolicyStatesQueryResults query results.

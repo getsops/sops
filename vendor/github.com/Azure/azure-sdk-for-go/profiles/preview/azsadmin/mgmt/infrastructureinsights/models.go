@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,13 +21,10 @@ package infrastructureinsights
 
 import original "github.com/Azure/azure-sdk-for-go/services/azsadmin/mgmt/2016-05-01/infrastructureinsights"
 
-type AlertsClient = original.AlertsClient
-
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type MetricsSourceType = original.MetricsSourceType
 
 const (
@@ -54,6 +51,8 @@ type AlertListIterator = original.AlertListIterator
 type AlertListPage = original.AlertListPage
 type AlertModel = original.AlertModel
 type AlertSummary = original.AlertSummary
+type AlertsClient = original.AlertsClient
+type BaseClient = original.BaseClient
 type BaseHealth = original.BaseHealth
 type Metrics = original.Metrics
 type RegionHealth = original.RegionHealth
@@ -61,39 +60,30 @@ type RegionHealthList = original.RegionHealthList
 type RegionHealthListIterator = original.RegionHealthListIterator
 type RegionHealthListPage = original.RegionHealthListPage
 type RegionHealthModel = original.RegionHealthModel
+type RegionHealthsClient = original.RegionHealthsClient
 type Resource = original.Resource
 type ResourceHealth = original.ResourceHealth
 type ResourceHealthList = original.ResourceHealthList
 type ResourceHealthListIterator = original.ResourceHealthListIterator
 type ResourceHealthListPage = original.ResourceHealthListPage
 type ResourceHealthModel = original.ResourceHealthModel
+type ResourceHealthsClient = original.ResourceHealthsClient
 type ServiceHealth = original.ServiceHealth
 type ServiceHealthList = original.ServiceHealthList
 type ServiceHealthListIterator = original.ServiceHealthListIterator
 type ServiceHealthListPage = original.ServiceHealthListPage
 type ServiceHealthModel = original.ServiceHealthModel
-type UsageMetrics = original.UsageMetrics
-type RegionHealthsClient = original.RegionHealthsClient
-type ResourceHealthsClient = original.ResourceHealthsClient
 type ServiceHealthsClient = original.ServiceHealthsClient
+type UsageMetrics = original.UsageMetrics
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
 func NewAlertsClient(subscriptionID string) AlertsClient {
 	return original.NewAlertsClient(subscriptionID)
 }
 func NewAlertsClientWithBaseURI(baseURI string, subscriptionID string) AlertsClient {
 	return original.NewAlertsClientWithBaseURI(baseURI, subscriptionID)
-}
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
-}
-func PossibleMetricsSourceTypeValues() []MetricsSourceType {
-	return original.PossibleMetricsSourceTypeValues()
-}
-func PossibleMetricsUnitValues() []MetricsUnit {
-	return original.PossibleMetricsUnitValues()
 }
 func NewRegionHealthsClient(subscriptionID string) RegionHealthsClient {
 	return original.NewRegionHealthsClient(subscriptionID)
@@ -112,6 +102,15 @@ func NewServiceHealthsClient(subscriptionID string) ServiceHealthsClient {
 }
 func NewServiceHealthsClientWithBaseURI(baseURI string, subscriptionID string) ServiceHealthsClient {
 	return original.NewServiceHealthsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
+}
+func PossibleMetricsSourceTypeValues() []MetricsSourceType {
+	return original.PossibleMetricsSourceTypeValues()
+}
+func PossibleMetricsUnitValues() []MetricsUnit {
+	return original.PossibleMetricsUnitValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

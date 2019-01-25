@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,8 +48,18 @@ func NewExpressRouteCircuitConnectionsClientWithBaseURI(baseURI string, subscrip
 // peeringName - the name of the peering.
 // connectionName - the name of the express route circuit connection.
 // expressRouteCircuitConnectionParameters - parameters supplied to the create or update express route circuit
-// circuit connection operation.
+// connection operation.
 func (client ExpressRouteCircuitConnectionsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, circuitName string, peeringName string, connectionName string, expressRouteCircuitConnectionParameters ExpressRouteCircuitConnection) (result ExpressRouteCircuitConnectionsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExpressRouteCircuitConnectionsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, circuitName, peeringName, connectionName, expressRouteCircuitConnectionParameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.ExpressRouteCircuitConnectionsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -98,10 +109,6 @@ func (client ExpressRouteCircuitConnectionsClient) CreateOrUpdateSender(req *htt
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -126,6 +133,16 @@ func (client ExpressRouteCircuitConnectionsClient) CreateOrUpdateResponder(resp 
 // peeringName - the name of the peering.
 // connectionName - the name of the express route circuit connection.
 func (client ExpressRouteCircuitConnectionsClient) Delete(ctx context.Context, resourceGroupName string, circuitName string, peeringName string, connectionName string) (result ExpressRouteCircuitConnectionsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExpressRouteCircuitConnectionsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, circuitName, peeringName, connectionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.ExpressRouteCircuitConnectionsClient", "Delete", nil, "Failure preparing request")
@@ -173,10 +190,6 @@ func (client ExpressRouteCircuitConnectionsClient) DeleteSender(req *http.Reques
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -200,6 +213,16 @@ func (client ExpressRouteCircuitConnectionsClient) DeleteResponder(resp *http.Re
 // peeringName - the name of the peering.
 // connectionName - the name of the express route circuit connection.
 func (client ExpressRouteCircuitConnectionsClient) Get(ctx context.Context, resourceGroupName string, circuitName string, peeringName string, connectionName string) (result ExpressRouteCircuitConnection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExpressRouteCircuitConnectionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, circuitName, peeringName, connectionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.ExpressRouteCircuitConnectionsClient", "Get", nil, "Failure preparing request")

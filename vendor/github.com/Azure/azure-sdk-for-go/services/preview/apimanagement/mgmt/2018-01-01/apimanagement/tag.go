@@ -22,24 +22,29 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // TagClient is the apiManagement Client
 type TagClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewTagClient creates an instance of the TagClient client.
 func NewTagClient(subscriptionID string) TagClient {
 	return NewTagClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewTagClientWithBaseURI creates an instance of the TagClient client.
 func NewTagClientWithBaseURI(baseURI string, subscriptionID string) TagClient {
 	return TagClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // AssignToAPI assign tag to the Api.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -49,6 +54,16 @@ func NewTagClientWithBaseURI(baseURI string, subscriptionID string) TagClient {
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 // ifMatch - eTag of the Entity. Not required when creating an entity, but required when updating an entity.
 func (client TagClient) AssignToAPI(ctx context.Context, resourceGroupName string, serviceName string, apiid string, tagID string, ifMatch string) (result TagContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.AssignToAPI")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -86,6 +101,7 @@ func (client TagClient) AssignToAPI(ctx context.Context, resourceGroupName strin
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // AssignToAPIPreparer prepares the AssignToAPI request.
 func (client TagClient) AssignToAPIPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, tagID string, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -113,6 +129,7 @@ func (client TagClient) AssignToAPIPreparer(ctx context.Context, resourceGroupNa
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // AssignToAPISender sends the AssignToAPI request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) AssignToAPISender(req *http.Request) (*http.Response, error) {
@@ -120,6 +137,7 @@ func (client TagClient) AssignToAPISender(req *http.Request) (*http.Response, er
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // AssignToAPIResponder handles the response to the AssignToAPI request. The method always
 // closes the http.Response Body.
 func (client TagClient) AssignToAPIResponder(resp *http.Response) (result TagContract, err error) {
@@ -133,6 +151,7 @@ func (client TagClient) AssignToAPIResponder(resp *http.Response) (result TagCon
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // AssignToOperation assign tag to the Operation.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -144,6 +163,16 @@ func (client TagClient) AssignToAPIResponder(resp *http.Response) (result TagCon
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 // ifMatch - eTag of the Entity. Not required when creating an entity, but required when updating an entity.
 func (client TagClient) AssignToOperation(ctx context.Context, resourceGroupName string, serviceName string, apiid string, operationID string, tagID string, ifMatch string) (result TagContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.AssignToOperation")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -185,6 +214,7 @@ func (client TagClient) AssignToOperation(ctx context.Context, resourceGroupName
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // AssignToOperationPreparer prepares the AssignToOperation request.
 func (client TagClient) AssignToOperationPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, operationID string, tagID string, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -213,6 +243,7 @@ func (client TagClient) AssignToOperationPreparer(ctx context.Context, resourceG
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // AssignToOperationSender sends the AssignToOperation request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) AssignToOperationSender(req *http.Request) (*http.Response, error) {
@@ -220,6 +251,7 @@ func (client TagClient) AssignToOperationSender(req *http.Request) (*http.Respon
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // AssignToOperationResponder handles the response to the AssignToOperation request. The method always
 // closes the http.Response Body.
 func (client TagClient) AssignToOperationResponder(resp *http.Response) (result TagContract, err error) {
@@ -233,6 +265,7 @@ func (client TagClient) AssignToOperationResponder(resp *http.Response) (result 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // AssignToProduct assign tag to the Product.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -241,6 +274,16 @@ func (client TagClient) AssignToOperationResponder(resp *http.Response) (result 
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 // ifMatch - eTag of the Entity. Not required when creating an entity, but required when updating an entity.
 func (client TagClient) AssignToProduct(ctx context.Context, resourceGroupName string, serviceName string, productID string, tagID string, ifMatch string) (result TagContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.AssignToProduct")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -278,6 +321,7 @@ func (client TagClient) AssignToProduct(ctx context.Context, resourceGroupName s
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // AssignToProductPreparer prepares the AssignToProduct request.
 func (client TagClient) AssignToProductPreparer(ctx context.Context, resourceGroupName string, serviceName string, productID string, tagID string, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -305,6 +349,7 @@ func (client TagClient) AssignToProductPreparer(ctx context.Context, resourceGro
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // AssignToProductSender sends the AssignToProduct request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) AssignToProductSender(req *http.Request) (*http.Response, error) {
@@ -312,6 +357,7 @@ func (client TagClient) AssignToProductSender(req *http.Request) (*http.Response
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // AssignToProductResponder handles the response to the AssignToProduct request. The method always
 // closes the http.Response Body.
 func (client TagClient) AssignToProductResponder(resp *http.Response) (result TagContract, err error) {
@@ -325,6 +371,7 @@ func (client TagClient) AssignToProductResponder(resp *http.Response) (result Ta
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdate creates a tag.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -332,6 +379,16 @@ func (client TagClient) AssignToProductResponder(resp *http.Response) (result Ta
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 // parameters - create parameters.
 func (client TagClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, tagID string, parameters TagCreateUpdateParameters) (result TagContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -372,6 +429,7 @@ func (client TagClient) CreateOrUpdate(ctx context.Context, resourceGroupName st
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
 func (client TagClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, tagID string, parameters TagCreateUpdateParameters) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -396,6 +454,7 @@ func (client TagClient) CreateOrUpdatePreparer(ctx context.Context, resourceGrou
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
@@ -403,6 +462,7 @@ func (client TagClient) CreateOrUpdateSender(req *http.Request) (*http.Response,
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
 // closes the http.Response Body.
 func (client TagClient) CreateOrUpdateResponder(resp *http.Response) (result TagContract, err error) {
@@ -416,6 +476,7 @@ func (client TagClient) CreateOrUpdateResponder(resp *http.Response) (result Tag
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Delete deletes specific tag of the API Management service instance.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -424,6 +485,16 @@ func (client TagClient) CreateOrUpdateResponder(resp *http.Response) (result Tag
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client TagClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, tagID string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -457,6 +528,7 @@ func (client TagClient) Delete(ctx context.Context, resourceGroupName string, se
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeletePreparer prepares the Delete request.
 func (client TagClient) DeletePreparer(ctx context.Context, resourceGroupName string, serviceName string, tagID string, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -480,6 +552,7 @@ func (client TagClient) DeletePreparer(ctx context.Context, resourceGroupName st
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) DeleteSender(req *http.Request) (*http.Response, error) {
@@ -487,6 +560,7 @@ func (client TagClient) DeleteSender(req *http.Request) (*http.Response, error) 
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteResponder handles the response to the Delete request. The method always
 // closes the http.Response Body.
 func (client TagClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -499,6 +573,7 @@ func (client TagClient) DeleteResponder(resp *http.Response) (result autorest.Re
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DetachFromAPI detach the tag from the Api.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -509,6 +584,16 @@ func (client TagClient) DeleteResponder(resp *http.Response) (result autorest.Re
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client TagClient) DetachFromAPI(ctx context.Context, resourceGroupName string, serviceName string, apiid string, tagID string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.DetachFromAPI")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -546,6 +631,7 @@ func (client TagClient) DetachFromAPI(ctx context.Context, resourceGroupName str
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DetachFromAPIPreparer prepares the DetachFromAPI request.
 func (client TagClient) DetachFromAPIPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, tagID string, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -570,6 +656,7 @@ func (client TagClient) DetachFromAPIPreparer(ctx context.Context, resourceGroup
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DetachFromAPISender sends the DetachFromAPI request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) DetachFromAPISender(req *http.Request) (*http.Response, error) {
@@ -577,6 +664,7 @@ func (client TagClient) DetachFromAPISender(req *http.Request) (*http.Response, 
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DetachFromAPIResponder handles the response to the DetachFromAPI request. The method always
 // closes the http.Response Body.
 func (client TagClient) DetachFromAPIResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -589,6 +677,7 @@ func (client TagClient) DetachFromAPIResponder(resp *http.Response) (result auto
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DetachFromOperation detach the tag from the Operation.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -601,6 +690,16 @@ func (client TagClient) DetachFromAPIResponder(resp *http.Response) (result auto
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client TagClient) DetachFromOperation(ctx context.Context, resourceGroupName string, serviceName string, apiid string, operationID string, tagID string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.DetachFromOperation")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -642,6 +741,7 @@ func (client TagClient) DetachFromOperation(ctx context.Context, resourceGroupNa
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DetachFromOperationPreparer prepares the DetachFromOperation request.
 func (client TagClient) DetachFromOperationPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, operationID string, tagID string, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -667,6 +767,7 @@ func (client TagClient) DetachFromOperationPreparer(ctx context.Context, resourc
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DetachFromOperationSender sends the DetachFromOperation request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) DetachFromOperationSender(req *http.Request) (*http.Response, error) {
@@ -674,6 +775,7 @@ func (client TagClient) DetachFromOperationSender(req *http.Request) (*http.Resp
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DetachFromOperationResponder handles the response to the DetachFromOperation request. The method always
 // closes the http.Response Body.
 func (client TagClient) DetachFromOperationResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -686,6 +788,7 @@ func (client TagClient) DetachFromOperationResponder(resp *http.Response) (resul
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DetachFromProduct detach the tag from the Product.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -695,6 +798,16 @@ func (client TagClient) DetachFromOperationResponder(resp *http.Response) (resul
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client TagClient) DetachFromProduct(ctx context.Context, resourceGroupName string, serviceName string, productID string, tagID string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.DetachFromProduct")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -732,6 +845,7 @@ func (client TagClient) DetachFromProduct(ctx context.Context, resourceGroupName
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DetachFromProductPreparer prepares the DetachFromProduct request.
 func (client TagClient) DetachFromProductPreparer(ctx context.Context, resourceGroupName string, serviceName string, productID string, tagID string, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -756,6 +870,7 @@ func (client TagClient) DetachFromProductPreparer(ctx context.Context, resourceG
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DetachFromProductSender sends the DetachFromProduct request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) DetachFromProductSender(req *http.Request) (*http.Response, error) {
@@ -763,6 +878,7 @@ func (client TagClient) DetachFromProductSender(req *http.Request) (*http.Respon
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DetachFromProductResponder handles the response to the DetachFromProduct request. The method always
 // closes the http.Response Body.
 func (client TagClient) DetachFromProductResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -775,12 +891,23 @@ func (client TagClient) DetachFromProductResponder(resp *http.Response) (result 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Get gets the details of the tag specified by its identifier.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 func (client TagClient) Get(ctx context.Context, resourceGroupName string, serviceName string, tagID string) (result TagContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -814,6 +941,7 @@ func (client TagClient) Get(ctx context.Context, resourceGroupName string, servi
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetPreparer prepares the Get request.
 func (client TagClient) GetPreparer(ctx context.Context, resourceGroupName string, serviceName string, tagID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -836,6 +964,7 @@ func (client TagClient) GetPreparer(ctx context.Context, resourceGroupName strin
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -843,6 +972,7 @@ func (client TagClient) GetSender(req *http.Request) (*http.Response, error) {
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client TagClient) GetResponder(resp *http.Response) (result TagContract, err error) {
@@ -856,6 +986,7 @@ func (client TagClient) GetResponder(resp *http.Response) (result TagContract, e
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetByAPI get tag associated with the API.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -864,6 +995,16 @@ func (client TagClient) GetResponder(resp *http.Response) (result TagContract, e
 // revision has ;rev=n as a suffix where n is the revision number.
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 func (client TagClient) GetByAPI(ctx context.Context, resourceGroupName string, serviceName string, apiid string, tagID string) (result TagContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.GetByAPI")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -901,6 +1042,7 @@ func (client TagClient) GetByAPI(ctx context.Context, resourceGroupName string, 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetByAPIPreparer prepares the GetByAPI request.
 func (client TagClient) GetByAPIPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, tagID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -924,6 +1066,7 @@ func (client TagClient) GetByAPIPreparer(ctx context.Context, resourceGroupName 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetByAPISender sends the GetByAPI request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) GetByAPISender(req *http.Request) (*http.Response, error) {
@@ -931,6 +1074,7 @@ func (client TagClient) GetByAPISender(req *http.Request) (*http.Response, error
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetByAPIResponder handles the response to the GetByAPI request. The method always
 // closes the http.Response Body.
 func (client TagClient) GetByAPIResponder(resp *http.Response) (result TagContract, err error) {
@@ -944,6 +1088,7 @@ func (client TagClient) GetByAPIResponder(resp *http.Response) (result TagContra
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetByOperation get tag associated with the Operation.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -954,6 +1099,16 @@ func (client TagClient) GetByAPIResponder(resp *http.Response) (result TagContra
 // instance.
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 func (client TagClient) GetByOperation(ctx context.Context, resourceGroupName string, serviceName string, apiid string, operationID string, tagID string) (result TagContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.GetByOperation")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -995,6 +1150,7 @@ func (client TagClient) GetByOperation(ctx context.Context, resourceGroupName st
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetByOperationPreparer prepares the GetByOperation request.
 func (client TagClient) GetByOperationPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, operationID string, tagID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1019,6 +1175,7 @@ func (client TagClient) GetByOperationPreparer(ctx context.Context, resourceGrou
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetByOperationSender sends the GetByOperation request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) GetByOperationSender(req *http.Request) (*http.Response, error) {
@@ -1026,6 +1183,7 @@ func (client TagClient) GetByOperationSender(req *http.Request) (*http.Response,
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetByOperationResponder handles the response to the GetByOperation request. The method always
 // closes the http.Response Body.
 func (client TagClient) GetByOperationResponder(resp *http.Response) (result TagContract, err error) {
@@ -1039,6 +1197,7 @@ func (client TagClient) GetByOperationResponder(resp *http.Response) (result Tag
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetByProduct get tag associated with the Product.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -1046,6 +1205,16 @@ func (client TagClient) GetByOperationResponder(resp *http.Response) (result Tag
 // productID - product identifier. Must be unique in the current API Management service instance.
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 func (client TagClient) GetByProduct(ctx context.Context, resourceGroupName string, serviceName string, productID string, tagID string) (result TagContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.GetByProduct")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1083,6 +1252,7 @@ func (client TagClient) GetByProduct(ctx context.Context, resourceGroupName stri
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetByProductPreparer prepares the GetByProduct request.
 func (client TagClient) GetByProductPreparer(ctx context.Context, resourceGroupName string, serviceName string, productID string, tagID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1106,6 +1276,7 @@ func (client TagClient) GetByProductPreparer(ctx context.Context, resourceGroupN
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetByProductSender sends the GetByProduct request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) GetByProductSender(req *http.Request) (*http.Response, error) {
@@ -1113,6 +1284,7 @@ func (client TagClient) GetByProductSender(req *http.Request) (*http.Response, e
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetByProductResponder handles the response to the GetByProduct request. The method always
 // closes the http.Response Body.
 func (client TagClient) GetByProductResponder(resp *http.Response) (result TagContract, err error) {
@@ -1126,12 +1298,23 @@ func (client TagClient) GetByProductResponder(resp *http.Response) (result TagCo
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityState gets the entity state version of the tag specified by its identifier.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 func (client TagClient) GetEntityState(ctx context.Context, resourceGroupName string, serviceName string, tagID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.GetEntityState")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1165,6 +1348,7 @@ func (client TagClient) GetEntityState(ctx context.Context, resourceGroupName st
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityStatePreparer prepares the GetEntityState request.
 func (client TagClient) GetEntityStatePreparer(ctx context.Context, resourceGroupName string, serviceName string, tagID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1187,6 +1371,7 @@ func (client TagClient) GetEntityStatePreparer(ctx context.Context, resourceGrou
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityStateSender sends the GetEntityState request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) GetEntityStateSender(req *http.Request) (*http.Response, error) {
@@ -1194,6 +1379,7 @@ func (client TagClient) GetEntityStateSender(req *http.Request) (*http.Response,
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityStateResponder handles the response to the GetEntityState request. The method always
 // closes the http.Response Body.
 func (client TagClient) GetEntityStateResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -1206,6 +1392,7 @@ func (client TagClient) GetEntityStateResponder(resp *http.Response) (result aut
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityStateByAPI gets the entity state version of the tag specified by its identifier.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -1214,6 +1401,16 @@ func (client TagClient) GetEntityStateResponder(resp *http.Response) (result aut
 // revision has ;rev=n as a suffix where n is the revision number.
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 func (client TagClient) GetEntityStateByAPI(ctx context.Context, resourceGroupName string, serviceName string, apiid string, tagID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.GetEntityStateByAPI")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1251,6 +1448,7 @@ func (client TagClient) GetEntityStateByAPI(ctx context.Context, resourceGroupNa
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityStateByAPIPreparer prepares the GetEntityStateByAPI request.
 func (client TagClient) GetEntityStateByAPIPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, tagID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1274,6 +1472,7 @@ func (client TagClient) GetEntityStateByAPIPreparer(ctx context.Context, resourc
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityStateByAPISender sends the GetEntityStateByAPI request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) GetEntityStateByAPISender(req *http.Request) (*http.Response, error) {
@@ -1281,6 +1480,7 @@ func (client TagClient) GetEntityStateByAPISender(req *http.Request) (*http.Resp
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityStateByAPIResponder handles the response to the GetEntityStateByAPI request. The method always
 // closes the http.Response Body.
 func (client TagClient) GetEntityStateByAPIResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -1293,6 +1493,7 @@ func (client TagClient) GetEntityStateByAPIResponder(resp *http.Response) (resul
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityStateByOperation gets the entity state version of the tag specified by its identifier.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -1303,6 +1504,16 @@ func (client TagClient) GetEntityStateByAPIResponder(resp *http.Response) (resul
 // instance.
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 func (client TagClient) GetEntityStateByOperation(ctx context.Context, resourceGroupName string, serviceName string, apiid string, operationID string, tagID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.GetEntityStateByOperation")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1344,6 +1555,7 @@ func (client TagClient) GetEntityStateByOperation(ctx context.Context, resourceG
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityStateByOperationPreparer prepares the GetEntityStateByOperation request.
 func (client TagClient) GetEntityStateByOperationPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, operationID string, tagID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1368,6 +1580,7 @@ func (client TagClient) GetEntityStateByOperationPreparer(ctx context.Context, r
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityStateByOperationSender sends the GetEntityStateByOperation request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) GetEntityStateByOperationSender(req *http.Request) (*http.Response, error) {
@@ -1375,6 +1588,7 @@ func (client TagClient) GetEntityStateByOperationSender(req *http.Request) (*htt
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityStateByOperationResponder handles the response to the GetEntityStateByOperation request. The method always
 // closes the http.Response Body.
 func (client TagClient) GetEntityStateByOperationResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -1387,6 +1601,7 @@ func (client TagClient) GetEntityStateByOperationResponder(resp *http.Response) 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityStateByProduct gets the entity state version of the tag specified by its identifier.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -1394,6 +1609,16 @@ func (client TagClient) GetEntityStateByOperationResponder(resp *http.Response) 
 // productID - product identifier. Must be unique in the current API Management service instance.
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 func (client TagClient) GetEntityStateByProduct(ctx context.Context, resourceGroupName string, serviceName string, productID string, tagID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.GetEntityStateByProduct")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1431,6 +1656,7 @@ func (client TagClient) GetEntityStateByProduct(ctx context.Context, resourceGro
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityStateByProductPreparer prepares the GetEntityStateByProduct request.
 func (client TagClient) GetEntityStateByProductPreparer(ctx context.Context, resourceGroupName string, serviceName string, productID string, tagID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1454,6 +1680,7 @@ func (client TagClient) GetEntityStateByProductPreparer(ctx context.Context, res
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityStateByProductSender sends the GetEntityStateByProduct request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) GetEntityStateByProductSender(req *http.Request) (*http.Response, error) {
@@ -1461,6 +1688,7 @@ func (client TagClient) GetEntityStateByProductSender(req *http.Request) (*http.
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityStateByProductResponder handles the response to the GetEntityStateByProduct request. The method always
 // closes the http.Response Body.
 func (client TagClient) GetEntityStateByProductResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -1473,6 +1701,7 @@ func (client TagClient) GetEntityStateByProductResponder(resp *http.Response) (r
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByAPI lists all Tags associated with the API.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -1486,6 +1715,16 @@ func (client TagClient) GetEntityStateByProductResponder(resp *http.Response) (r
 // top - number of records to return.
 // skip - number of records to skip.
 func (client TagClient) ListByAPI(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result TagCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.ListByAPI")
+		defer func() {
+			sc := -1
+			if result.tc.Response.Response != nil {
+				sc = result.tc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1526,6 +1765,7 @@ func (client TagClient) ListByAPI(ctx context.Context, resourceGroupName string,
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByAPIPreparer prepares the ListByAPI request.
 func (client TagClient) ListByAPIPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1557,6 +1797,7 @@ func (client TagClient) ListByAPIPreparer(ctx context.Context, resourceGroupName
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByAPISender sends the ListByAPI request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) ListByAPISender(req *http.Request) (*http.Response, error) {
@@ -1564,6 +1805,7 @@ func (client TagClient) ListByAPISender(req *http.Request) (*http.Response, erro
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByAPIResponder handles the response to the ListByAPI request. The method always
 // closes the http.Response Body.
 func (client TagClient) ListByAPIResponder(resp *http.Response) (result TagCollection, err error) {
@@ -1578,8 +1820,8 @@ func (client TagClient) ListByAPIResponder(resp *http.Response) (result TagColle
 }
 
 // listByAPINextResults retrieves the next set of results, if any.
-func (client TagClient) listByAPINextResults(lastResults TagCollection) (result TagCollection, err error) {
-	req, err := lastResults.tagCollectionPreparer()
+func (client TagClient) listByAPINextResults(ctx context.Context, lastResults TagCollection) (result TagCollection, err error) {
+	req, err := lastResults.tagCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.TagClient", "listByAPINextResults", nil, "Failure preparing next results request")
 	}
@@ -1598,12 +1840,24 @@ func (client TagClient) listByAPINextResults(lastResults TagCollection) (result 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByAPIComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TagClient) ListByAPIComplete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result TagCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.ListByAPI")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByAPI(ctx, resourceGroupName, serviceName, apiid, filter, top, skip)
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByOperation lists all Tags associated with the Operation.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -1622,6 +1876,16 @@ func (client TagClient) ListByAPIComplete(ctx context.Context, resourceGroupName
 // top - number of records to return.
 // skip - number of records to skip.
 func (client TagClient) ListByOperation(ctx context.Context, resourceGroupName string, serviceName string, apiid string, operationID string, filter string, top *int32, skip *int32) (result TagCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.ListByOperation")
+		defer func() {
+			sc := -1
+			if result.tc.Response.Response != nil {
+				sc = result.tc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1666,6 +1930,7 @@ func (client TagClient) ListByOperation(ctx context.Context, resourceGroupName s
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByOperationPreparer prepares the ListByOperation request.
 func (client TagClient) ListByOperationPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, operationID string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1698,6 +1963,7 @@ func (client TagClient) ListByOperationPreparer(ctx context.Context, resourceGro
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByOperationSender sends the ListByOperation request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) ListByOperationSender(req *http.Request) (*http.Response, error) {
@@ -1705,6 +1971,7 @@ func (client TagClient) ListByOperationSender(req *http.Request) (*http.Response
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByOperationResponder handles the response to the ListByOperation request. The method always
 // closes the http.Response Body.
 func (client TagClient) ListByOperationResponder(resp *http.Response) (result TagCollection, err error) {
@@ -1719,8 +1986,8 @@ func (client TagClient) ListByOperationResponder(resp *http.Response) (result Ta
 }
 
 // listByOperationNextResults retrieves the next set of results, if any.
-func (client TagClient) listByOperationNextResults(lastResults TagCollection) (result TagCollection, err error) {
-	req, err := lastResults.tagCollectionPreparer()
+func (client TagClient) listByOperationNextResults(ctx context.Context, lastResults TagCollection) (result TagCollection, err error) {
+	req, err := lastResults.tagCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.TagClient", "listByOperationNextResults", nil, "Failure preparing next results request")
 	}
@@ -1739,12 +2006,24 @@ func (client TagClient) listByOperationNextResults(lastResults TagCollection) (r
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByOperationComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TagClient) ListByOperationComplete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, operationID string, filter string, top *int32, skip *int32) (result TagCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.ListByOperation")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByOperation(ctx, resourceGroupName, serviceName, apiid, operationID, filter, top, skip)
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByProduct lists all Tags associated with the Product.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -1757,6 +2036,16 @@ func (client TagClient) ListByOperationComplete(ctx context.Context, resourceGro
 // top - number of records to return.
 // skip - number of records to skip.
 func (client TagClient) ListByProduct(ctx context.Context, resourceGroupName string, serviceName string, productID string, filter string, top *int32, skip *int32) (result TagCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.ListByProduct")
+		defer func() {
+			sc := -1
+			if result.tc.Response.Response != nil {
+				sc = result.tc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1797,6 +2086,7 @@ func (client TagClient) ListByProduct(ctx context.Context, resourceGroupName str
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByProductPreparer prepares the ListByProduct request.
 func (client TagClient) ListByProductPreparer(ctx context.Context, resourceGroupName string, serviceName string, productID string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1828,6 +2118,7 @@ func (client TagClient) ListByProductPreparer(ctx context.Context, resourceGroup
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByProductSender sends the ListByProduct request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) ListByProductSender(req *http.Request) (*http.Response, error) {
@@ -1835,6 +2126,7 @@ func (client TagClient) ListByProductSender(req *http.Request) (*http.Response, 
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByProductResponder handles the response to the ListByProduct request. The method always
 // closes the http.Response Body.
 func (client TagClient) ListByProductResponder(resp *http.Response) (result TagCollection, err error) {
@@ -1849,8 +2141,8 @@ func (client TagClient) ListByProductResponder(resp *http.Response) (result TagC
 }
 
 // listByProductNextResults retrieves the next set of results, if any.
-func (client TagClient) listByProductNextResults(lastResults TagCollection) (result TagCollection, err error) {
-	req, err := lastResults.tagCollectionPreparer()
+func (client TagClient) listByProductNextResults(ctx context.Context, lastResults TagCollection) (result TagCollection, err error) {
+	req, err := lastResults.tagCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.TagClient", "listByProductNextResults", nil, "Failure preparing next results request")
 	}
@@ -1869,12 +2161,24 @@ func (client TagClient) listByProductNextResults(lastResults TagCollection) (res
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByProductComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TagClient) ListByProductComplete(ctx context.Context, resourceGroupName string, serviceName string, productID string, filter string, top *int32, skip *int32) (result TagCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.ListByProduct")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByProduct(ctx, resourceGroupName, serviceName, productID, filter, top, skip)
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByService lists a collection of tags defined within a service instance.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -1886,6 +2190,16 @@ func (client TagClient) ListByProductComplete(ctx context.Context, resourceGroup
 // top - number of records to return.
 // skip - number of records to skip.
 func (client TagClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result TagCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.tc.Response.Response != nil {
+				sc = result.tc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1922,6 +2236,7 @@ func (client TagClient) ListByService(ctx context.Context, resourceGroupName str
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServicePreparer prepares the ListByService request.
 func (client TagClient) ListByServicePreparer(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1952,6 +2267,7 @@ func (client TagClient) ListByServicePreparer(ctx context.Context, resourceGroup
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceSender sends the ListByService request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) ListByServiceSender(req *http.Request) (*http.Response, error) {
@@ -1959,6 +2275,7 @@ func (client TagClient) ListByServiceSender(req *http.Request) (*http.Response, 
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceResponder handles the response to the ListByService request. The method always
 // closes the http.Response Body.
 func (client TagClient) ListByServiceResponder(resp *http.Response) (result TagCollection, err error) {
@@ -1973,8 +2290,8 @@ func (client TagClient) ListByServiceResponder(resp *http.Response) (result TagC
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client TagClient) listByServiceNextResults(lastResults TagCollection) (result TagCollection, err error) {
-	req, err := lastResults.tagCollectionPreparer()
+func (client TagClient) listByServiceNextResults(ctx context.Context, lastResults TagCollection) (result TagCollection, err error) {
+	req, err := lastResults.tagCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.TagClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -1993,12 +2310,24 @@ func (client TagClient) listByServiceNextResults(lastResults TagCollection) (res
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TagClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result TagCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Update updates the details of the tag specified by its identifier.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -2008,6 +2337,16 @@ func (client TagClient) ListByServiceComplete(ctx context.Context, resourceGroup
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client TagClient) Update(ctx context.Context, resourceGroupName string, serviceName string, tagID string, parameters TagCreateUpdateParameters, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -2041,6 +2380,7 @@ func (client TagClient) Update(ctx context.Context, resourceGroupName string, se
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdatePreparer prepares the Update request.
 func (client TagClient) UpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, tagID string, parameters TagCreateUpdateParameters, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -2066,6 +2406,7 @@ func (client TagClient) UpdatePreparer(ctx context.Context, resourceGroupName st
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagClient) UpdateSender(req *http.Request) (*http.Response, error) {
@@ -2073,6 +2414,7 @@ func (client TagClient) UpdateSender(req *http.Request) (*http.Response, error) 
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateResponder handles the response to the Update request. The method always
 // closes the http.Response Body.
 func (client TagClient) UpdateResponder(resp *http.Response) (result autorest.Response, err error) {

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewProductAPIClientWithBaseURI(baseURI string, subscriptionID string) Produ
 // apiid - API revision identifier. Must be unique in the current API Management service instance. Non-current
 // revision has ;rev=n as a suffix where n is the revision number.
 func (client ProductAPIClient) CheckEntityExists(ctx context.Context, resourceGroupName string, serviceName string, productID string, apiid string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProductAPIClient.CheckEntityExists")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -135,6 +146,16 @@ func (client ProductAPIClient) CheckEntityExistsResponder(resp *http.Response) (
 // apiid - API revision identifier. Must be unique in the current API Management service instance. Non-current
 // revision has ;rev=n as a suffix where n is the revision number.
 func (client ProductAPIClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, productID string, apiid string) (result APIContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProductAPIClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -223,6 +244,16 @@ func (client ProductAPIClient) CreateOrUpdateResponder(resp *http.Response) (res
 // apiid - API revision identifier. Must be unique in the current API Management service instance. Non-current
 // revision has ;rev=n as a suffix where n is the revision number.
 func (client ProductAPIClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, productID string, apiid string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProductAPIClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -317,6 +348,16 @@ func (client ProductAPIClient) DeleteResponder(resp *http.Response) (result auto
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ProductAPIClient) ListByProduct(ctx context.Context, resourceGroupName string, serviceName string, productID string, filter string, top *int32, skip *int32) (result APICollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProductAPIClient.ListByProduct")
+		defer func() {
+			sc := -1
+			if result.ac.Response.Response != nil {
+				sc = result.ac.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -409,8 +450,8 @@ func (client ProductAPIClient) ListByProductResponder(resp *http.Response) (resu
 }
 
 // listByProductNextResults retrieves the next set of results, if any.
-func (client ProductAPIClient) listByProductNextResults(lastResults APICollection) (result APICollection, err error) {
-	req, err := lastResults.aPICollectionPreparer()
+func (client ProductAPIClient) listByProductNextResults(ctx context.Context, lastResults APICollection) (result APICollection, err error) {
+	req, err := lastResults.aPICollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ProductAPIClient", "listByProductNextResults", nil, "Failure preparing next results request")
 	}
@@ -431,6 +472,16 @@ func (client ProductAPIClient) listByProductNextResults(lastResults APICollectio
 
 // ListByProductComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ProductAPIClient) ListByProductComplete(ctx context.Context, resourceGroupName string, serviceName string, productID string, filter string, top *int32, skip *int32) (result APICollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProductAPIClient.ListByProduct")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByProduct(ctx, resourceGroupName, serviceName, productID, filter, top, skip)
 	return
 }

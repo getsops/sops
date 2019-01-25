@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,14 +19,16 @@
 
 package compute
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/machinelearning/mgmt/2017-08-01-preview/compute"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/preview/machinelearning/mgmt/2017-08-01-preview/compute"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type MachineLearningComputeClient = original.MachineLearningComputeClient
 type AgentVMSizeTypes = original.AgentVMSizeTypes
 
 const (
@@ -132,6 +134,7 @@ type AppInsightsCredentials = original.AppInsightsCredentials
 type AppInsightsProperties = original.AppInsightsProperties
 type AutoScaleConfiguration = original.AutoScaleConfiguration
 type AvailableOperations = original.AvailableOperations
+type BaseClient = original.BaseClient
 type CheckSystemServicesUpdatesAvailableResponse = original.CheckSystemServicesUpdatesAvailableResponse
 type ContainerRegistryCredentials = original.ContainerRegistryCredentials
 type ContainerRegistryProperties = original.ContainerRegistryProperties
@@ -141,13 +144,15 @@ type ErrorResponse = original.ErrorResponse
 type ErrorResponseWrapper = original.ErrorResponseWrapper
 type GlobalServiceConfiguration = original.GlobalServiceConfiguration
 type KubernetesClusterProperties = original.KubernetesClusterProperties
+type MachineLearningComputeClient = original.MachineLearningComputeClient
 type OperationalizationCluster = original.OperationalizationCluster
 type OperationalizationClusterCredentials = original.OperationalizationClusterCredentials
 type OperationalizationClusterProperties = original.OperationalizationClusterProperties
+type OperationalizationClusterUpdateParameters = original.OperationalizationClusterUpdateParameters
+type OperationalizationClustersClient = original.OperationalizationClustersClient
 type OperationalizationClustersCreateOrUpdateFuture = original.OperationalizationClustersCreateOrUpdateFuture
 type OperationalizationClustersDeleteFuture = original.OperationalizationClustersDeleteFuture
 type OperationalizationClustersUpdateSystemServicesFuture = original.OperationalizationClustersUpdateSystemServicesFuture
-type OperationalizationClusterUpdateParameters = original.OperationalizationClusterUpdateParameters
 type PaginatedOperationalizationClustersList = original.PaginatedOperationalizationClustersList
 type PaginatedOperationalizationClustersListIterator = original.PaginatedOperationalizationClustersListIterator
 type PaginatedOperationalizationClustersListPage = original.PaginatedOperationalizationClustersListPage
@@ -161,19 +166,30 @@ type StorageAccountCredentials = original.StorageAccountCredentials
 type StorageAccountProperties = original.StorageAccountProperties
 type SystemService = original.SystemService
 type UpdateSystemServicesResponse = original.UpdateSystemServicesResponse
-type OperationalizationClustersClient = original.OperationalizationClustersClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewMachineLearningComputeClient(subscriptionID string) MachineLearningComputeClient {
 	return original.NewMachineLearningComputeClient(subscriptionID)
 }
 func NewMachineLearningComputeClientWithBaseURI(baseURI string, subscriptionID string) MachineLearningComputeClient {
 	return original.NewMachineLearningComputeClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewOperationalizationClustersClient(subscriptionID string) OperationalizationClustersClient {
+	return original.NewOperationalizationClustersClient(subscriptionID)
+}
+func NewOperationalizationClustersClientWithBaseURI(baseURI string, subscriptionID string) OperationalizationClustersClient {
+	return original.NewOperationalizationClustersClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewPaginatedOperationalizationClustersListIterator(page PaginatedOperationalizationClustersListPage) PaginatedOperationalizationClustersListIterator {
+	return original.NewPaginatedOperationalizationClustersListIterator(page)
+}
+func NewPaginatedOperationalizationClustersListPage(getNextPage func(context.Context, PaginatedOperationalizationClustersList) (PaginatedOperationalizationClustersList, error)) PaginatedOperationalizationClustersListPage {
+	return original.NewPaginatedOperationalizationClustersListPage(getNextPage)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleAgentVMSizeTypesValues() []AgentVMSizeTypes {
 	return original.PossibleAgentVMSizeTypesValues()
@@ -195,12 +211,6 @@ func PossibleSystemServiceTypeValues() []SystemServiceType {
 }
 func PossibleUpdatesAvailableValues() []UpdatesAvailable {
 	return original.PossibleUpdatesAvailableValues()
-}
-func NewOperationalizationClustersClient(subscriptionID string) OperationalizationClustersClient {
-	return original.NewOperationalizationClustersClient(subscriptionID)
-}
-func NewOperationalizationClustersClientWithBaseURI(baseURI string, subscriptionID string) OperationalizationClustersClient {
-	return original.NewOperationalizationClustersClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

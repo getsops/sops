@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,14 +46,22 @@ func NewContactsClientWithBaseURI(baseURI string, subscriptionID string, ascLoca
 // securityContactName - name of the security contact object
 // securityContact - security contact object
 func (client ContactsClient) Create(ctx context.Context, securityContactName string, securityContact Contact) (result Contact, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContactsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
 		{TargetValue: securityContact,
 			Constraints: []validation.Constraint{{Target: "securityContact.ContactProperties", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "securityContact.ContactProperties.Email", Name: validation.Null, Rule: true, Chain: nil},
-					{Target: "securityContact.ContactProperties.Phone", Name: validation.Null, Rule: true, Chain: nil},
-				}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "securityContact.ContactProperties.Email", Name: validation.Null, Rule: true, Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("security.ContactsClient", "Create", err.Error())
 	}
 
@@ -123,6 +132,16 @@ func (client ContactsClient) CreateResponder(resp *http.Response) (result Contac
 // Parameters:
 // securityContactName - name of the security contact object
 func (client ContactsClient) Delete(ctx context.Context, securityContactName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContactsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -193,6 +212,16 @@ func (client ContactsClient) DeleteResponder(resp *http.Response) (result autore
 // Parameters:
 // securityContactName - name of the security contact object
 func (client ContactsClient) Get(ctx context.Context, securityContactName string) (result Contact, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContactsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -262,6 +291,16 @@ func (client ContactsClient) GetResponder(resp *http.Response) (result Contact, 
 
 // List security contact configurations for the subscription
 func (client ContactsClient) List(ctx context.Context) (result ContactListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContactsClient.List")
+		defer func() {
+			sc := -1
+			if result.cl.Response.Response != nil {
+				sc = result.cl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -330,8 +369,8 @@ func (client ContactsClient) ListResponder(resp *http.Response) (result ContactL
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ContactsClient) listNextResults(lastResults ContactList) (result ContactList, err error) {
-	req, err := lastResults.contactListPreparer()
+func (client ContactsClient) listNextResults(ctx context.Context, lastResults ContactList) (result ContactList, err error) {
+	req, err := lastResults.contactListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.ContactsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -352,6 +391,16 @@ func (client ContactsClient) listNextResults(lastResults ContactList) (result Co
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ContactsClient) ListComplete(ctx context.Context) (result ContactListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContactsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -361,6 +410,16 @@ func (client ContactsClient) ListComplete(ctx context.Context) (result ContactLi
 // securityContactName - name of the security contact object
 // securityContact - security contact object
 func (client ContactsClient) Update(ctx context.Context, securityContactName string, securityContact Contact) (result Contact, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContactsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {

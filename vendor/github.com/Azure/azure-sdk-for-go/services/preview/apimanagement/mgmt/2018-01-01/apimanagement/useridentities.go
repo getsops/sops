@@ -22,30 +22,45 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UserIdentitiesClient is the apiManagement Client
 type UserIdentitiesClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewUserIdentitiesClient creates an instance of the UserIdentitiesClient client.
 func NewUserIdentitiesClient(subscriptionID string) UserIdentitiesClient {
 	return NewUserIdentitiesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewUserIdentitiesClientWithBaseURI creates an instance of the UserIdentitiesClient client.
 func NewUserIdentitiesClientWithBaseURI(baseURI string, subscriptionID string) UserIdentitiesClient {
 	return UserIdentitiesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // List lists all user identities.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // UID - user identifier. Must be unique in the current API Management service instance.
 func (client UserIdentitiesClient) List(ctx context.Context, resourceGroupName string, serviceName string, UID string) (result UserIdentityCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UserIdentitiesClient.List")
+		defer func() {
+			sc := -1
+			if result.uic.Response.Response != nil {
+				sc = result.uic.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -80,6 +95,7 @@ func (client UserIdentitiesClient) List(ctx context.Context, resourceGroupName s
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListPreparer prepares the List request.
 func (client UserIdentitiesClient) ListPreparer(ctx context.Context, resourceGroupName string, serviceName string, UID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -102,6 +118,7 @@ func (client UserIdentitiesClient) ListPreparer(ctx context.Context, resourceGro
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client UserIdentitiesClient) ListSender(req *http.Request) (*http.Response, error) {
@@ -109,6 +126,7 @@ func (client UserIdentitiesClient) ListSender(req *http.Request) (*http.Response
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListResponder handles the response to the List request. The method always
 // closes the http.Response Body.
 func (client UserIdentitiesClient) ListResponder(resp *http.Response) (result UserIdentityCollection, err error) {
@@ -123,8 +141,8 @@ func (client UserIdentitiesClient) ListResponder(resp *http.Response) (result Us
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client UserIdentitiesClient) listNextResults(lastResults UserIdentityCollection) (result UserIdentityCollection, err error) {
-	req, err := lastResults.userIdentityCollectionPreparer()
+func (client UserIdentitiesClient) listNextResults(ctx context.Context, lastResults UserIdentityCollection) (result UserIdentityCollection, err error) {
+	req, err := lastResults.userIdentityCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.UserIdentitiesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -143,8 +161,19 @@ func (client UserIdentitiesClient) listNextResults(lastResults UserIdentityColle
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client UserIdentitiesClient) ListComplete(ctx context.Context, resourceGroupName string, serviceName string, UID string) (result UserIdentityCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UserIdentitiesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, serviceName, UID)
 	return
 }

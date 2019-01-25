@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationsClient is the client for the Applications methods of the Servicefabric service.
 type ApplicationsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewApplicationsClient creates an instance of the ApplicationsClient client.
 func NewApplicationsClient(timeout *int32) ApplicationsClient {
 	return NewApplicationsClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewApplicationsClientWithBaseURI creates an instance of the ApplicationsClient client.
 func NewApplicationsClientWithBaseURI(baseURI string, timeout *int32) ApplicationsClient {
 	return ApplicationsClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Create create applications
 // Parameters:
 // applicationDescription - the description of the application
@@ -64,6 +68,7 @@ func (client ApplicationsClient) Create(ctx context.Context, applicationDescript
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreatePreparer prepares the Create request.
 func (client ApplicationsClient) CreatePreparer(ctx context.Context, applicationDescription ApplicationDescription) (*http.Request, error) {
 	const APIVersion = "1.0.0"
@@ -84,6 +89,7 @@ func (client ApplicationsClient) CreatePreparer(ctx context.Context, application
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateSender sends the Create request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationsClient) CreateSender(req *http.Request) (*http.Response, error) {
@@ -91,6 +97,7 @@ func (client ApplicationsClient) CreateSender(req *http.Request) (*http.Response
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateResponder handles the response to the Create request. The method always
 // closes the http.Response Body.
 func (client ApplicationsClient) CreateResponder(resp *http.Response) (result String, err error) {
@@ -104,6 +111,7 @@ func (client ApplicationsClient) CreateResponder(resp *http.Response) (result St
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get applications
 // Parameters:
 // applicationName - the name of the application
@@ -129,6 +137,7 @@ func (client ApplicationsClient) Get(ctx context.Context, applicationName string
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client ApplicationsClient) GetPreparer(ctx context.Context, applicationName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -151,6 +160,7 @@ func (client ApplicationsClient) GetPreparer(ctx context.Context, applicationNam
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationsClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -158,6 +168,7 @@ func (client ApplicationsClient) GetSender(req *http.Request) (*http.Response, e
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client ApplicationsClient) GetResponder(resp *http.Response) (result Application, err error) {
@@ -171,6 +182,7 @@ func (client ApplicationsClient) GetResponder(resp *http.Response) (result Appli
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // List list applications
 // Parameters:
 // continuationToken - the token of the continuation
@@ -196,6 +208,7 @@ func (client ApplicationsClient) List(ctx context.Context, continuationToken str
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListPreparer prepares the List request.
 func (client ApplicationsClient) ListPreparer(ctx context.Context, continuationToken string) (*http.Request, error) {
 	const APIVersion = "1.0.0"
@@ -217,6 +230,7 @@ func (client ApplicationsClient) ListPreparer(ctx context.Context, continuationT
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationsClient) ListSender(req *http.Request) (*http.Response, error) {
@@ -224,6 +238,7 @@ func (client ApplicationsClient) ListSender(req *http.Request) (*http.Response, 
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListResponder handles the response to the List request. The method always
 // closes the http.Response Body.
 func (client ApplicationsClient) ListResponder(resp *http.Response) (result ApplicationList, err error) {
@@ -237,6 +252,7 @@ func (client ApplicationsClient) ListResponder(resp *http.Response) (result Appl
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Remove remove applications
 // Parameters:
 // applicationName - the name of the application
@@ -263,6 +279,7 @@ func (client ApplicationsClient) Remove(ctx context.Context, applicationName str
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemovePreparer prepares the Remove request.
 func (client ApplicationsClient) RemovePreparer(ctx context.Context, applicationName string, forceRemove *bool) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -288,6 +305,7 @@ func (client ApplicationsClient) RemovePreparer(ctx context.Context, application
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveSender sends the Remove request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationsClient) RemoveSender(req *http.Request) (*http.Response, error) {
@@ -295,6 +313,7 @@ func (client ApplicationsClient) RemoveSender(req *http.Request) (*http.Response
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveResponder handles the response to the Remove request. The method always
 // closes the http.Response Body.
 func (client ApplicationsClient) RemoveResponder(resp *http.Response) (result String, err error) {

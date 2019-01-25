@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewProtectedItemsClientWithBaseURI(baseURI string, subscriptionID string) P
 // protectedItemName - the name of the backup item.
 // resourceProtectedItem - the resource backup item.
 func (client ProtectedItemsClient) CreateOrUpdate(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string, resourceProtectedItem ProtectedItemResource) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectedItemsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, vaultName, resourceGroupName, fabricName, containerName, protectedItemName, resourceProtectedItem)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.ProtectedItemsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -125,6 +136,16 @@ func (client ProtectedItemsClient) CreateOrUpdateResponder(resp *http.Response) 
 // containerName - the container name associated with the backup item.
 // protectedItemName - the backup item to be deleted.
 func (client ProtectedItemsClient) Delete(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectedItemsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, vaultName, resourceGroupName, fabricName, containerName, protectedItemName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.ProtectedItemsClient", "Delete", nil, "Failure preparing request")
@@ -197,9 +218,19 @@ func (client ProtectedItemsClient) DeleteResponder(resp *http.Response) (result 
 // fabricName - the fabric name associated with the backup item.
 // containerName - the container name associated with the backup item.
 // protectedItemName - the backup item name used in this GET operation.
-// filter - expand eq {extendedinfo}. This filter enables you to choose (or filter) specific items in the list
+// filter - expand eq {extendedInfo}. This filter enables you to choose (or filter) specific items in the list
 // of backup items.
 func (client ProtectedItemsClient) Get(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string, filter string) (result ProtectedItemResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectedItemsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, vaultName, resourceGroupName, fabricName, containerName, protectedItemName, filter)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.ProtectedItemsClient", "Get", nil, "Failure preparing request")
@@ -273,11 +304,21 @@ func (client ProtectedItemsClient) GetResponder(resp *http.Response) (result Pro
 // vaultName - the name of the Recovery Services vault.
 // resourceGroupName - the name of the resource group associated with the Recovery Services vault.
 // filter - itemType eq { VM , FileFolder , AzureSqlDb , SQLDB , Exchange , Sharepoint , DPMUnknown } and
-// providerType eq { AzureIaasVM, MAB, DPM, AzureBackupServer, AzureSql } and policyName eq {policyname} and
+// providerType eq { AzureIaasVM, MAB, DPM, AzureBackupServer, AzureSql } and policyName eq {policyName} and
 // containerName eq {containername} and backupManagementType eq { AzureIaasVM, MAB, DPM, AzureBackupServer,
 // AzureSql }.
 // skipToken - the Skip Token filter.
 func (client ProtectedItemsClient) List(ctx context.Context, vaultName string, resourceGroupName string, filter string, skipToken string) (result ProtectedItemResourceListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectedItemsClient.List")
+		defer func() {
+			sc := -1
+			if result.pirl.Response.Response != nil {
+				sc = result.pirl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, vaultName, resourceGroupName, filter, skipToken)
 	if err != nil {
@@ -348,8 +389,8 @@ func (client ProtectedItemsClient) ListResponder(resp *http.Response) (result Pr
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ProtectedItemsClient) listNextResults(lastResults ProtectedItemResourceList) (result ProtectedItemResourceList, err error) {
-	req, err := lastResults.protectedItemResourceListPreparer()
+func (client ProtectedItemsClient) listNextResults(ctx context.Context, lastResults ProtectedItemResourceList) (result ProtectedItemResourceList, err error) {
+	req, err := lastResults.protectedItemResourceListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "backup.ProtectedItemsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -370,6 +411,16 @@ func (client ProtectedItemsClient) listNextResults(lastResults ProtectedItemReso
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ProtectedItemsClient) ListComplete(ctx context.Context, vaultName string, resourceGroupName string, filter string, skipToken string) (result ProtectedItemResourceListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectedItemsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, vaultName, resourceGroupName, filter, skipToken)
 	return
 }

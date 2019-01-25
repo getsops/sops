@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeLoadInformationsClient is the client for the NodeLoadInformations methods of the Servicefabric service.
 type NodeLoadInformationsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewNodeLoadInformationsClient creates an instance of the NodeLoadInformationsClient client.
 func NewNodeLoadInformationsClient(timeout *int32) NodeLoadInformationsClient {
 	return NewNodeLoadInformationsClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewNodeLoadInformationsClientWithBaseURI creates an instance of the NodeLoadInformationsClient client.
 func NewNodeLoadInformationsClientWithBaseURI(baseURI string, timeout *int32) NodeLoadInformationsClient {
 	return NodeLoadInformationsClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get node load informations
 // Parameters:
 // nodeName - the name of the node
@@ -64,6 +68,7 @@ func (client NodeLoadInformationsClient) Get(ctx context.Context, nodeName strin
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client NodeLoadInformationsClient) GetPreparer(ctx context.Context, nodeName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -86,6 +91,7 @@ func (client NodeLoadInformationsClient) GetPreparer(ctx context.Context, nodeNa
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client NodeLoadInformationsClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -93,6 +99,7 @@ func (client NodeLoadInformationsClient) GetSender(req *http.Request) (*http.Res
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client NodeLoadInformationsClient) GetResponder(resp *http.Response) (result NodeLoadInformation, err error) {

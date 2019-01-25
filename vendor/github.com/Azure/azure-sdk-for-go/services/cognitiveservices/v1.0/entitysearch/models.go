@@ -22,6 +22,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v1.0/entitysearch"
+
 // AnswerType enumerates the values for answer type.
 type AnswerType string
 
@@ -9985,7 +9988,7 @@ type PostalAddress struct {
 	PostOfficeBoxNumber *string `json:"postOfficeBoxNumber,omitempty"`
 	// AddressCountry - The country/region where the street address is located. This could be the two-letter ISO code. For example, US, or the full name, United States.
 	AddressCountry *string `json:"addressCountry,omitempty"`
-	// CountryIso - The two letter ISO code of this countr. For example, US.
+	// CountryIso - The two letter ISO code of this country. For example, US.
 	CountryIso *string `json:"countryIso,omitempty"`
 	// Neighborhood - The neighborhood where the street address is located. For example, Westlake.
 	Neighborhood *string `json:"neighborhood,omitempty"`
@@ -10571,8 +10574,8 @@ type BasicResponse interface {
 	AsResponse() (*Response, bool)
 }
 
-// Response defines a response. All schemas that could be returned at the root of a response should inherit from
-// this
+// Response defines a response. All schemas that could be returned at the root of a response should inherit
+// from this
 type Response struct {
 	// ContractualRules - A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`

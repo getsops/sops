@@ -22,30 +22,45 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DelegationSettingsClient is the apiManagement Client
 type DelegationSettingsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewDelegationSettingsClient creates an instance of the DelegationSettingsClient client.
 func NewDelegationSettingsClient(subscriptionID string) DelegationSettingsClient {
 	return NewDelegationSettingsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewDelegationSettingsClientWithBaseURI creates an instance of the DelegationSettingsClient client.
 func NewDelegationSettingsClientWithBaseURI(baseURI string, subscriptionID string) DelegationSettingsClient {
 	return DelegationSettingsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdate create or Update Delegation settings.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // parameters - create or update parameters.
 func (client DelegationSettingsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, parameters PortalDelegationSettings) (result PortalDelegationSettings, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DelegationSettingsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -75,6 +90,7 @@ func (client DelegationSettingsClient) CreateOrUpdate(ctx context.Context, resou
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
 func (client DelegationSettingsClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, parameters PortalDelegationSettings) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -98,6 +114,7 @@ func (client DelegationSettingsClient) CreateOrUpdatePreparer(ctx context.Contex
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client DelegationSettingsClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
@@ -105,6 +122,7 @@ func (client DelegationSettingsClient) CreateOrUpdateSender(req *http.Request) (
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
 // closes the http.Response Body.
 func (client DelegationSettingsClient) CreateOrUpdateResponder(resp *http.Response) (result PortalDelegationSettings, err error) {
@@ -118,11 +136,22 @@ func (client DelegationSettingsClient) CreateOrUpdateResponder(resp *http.Respon
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Get get Delegation settings.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client DelegationSettingsClient) Get(ctx context.Context, resourceGroupName string, serviceName string) (result PortalDelegationSettings, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DelegationSettingsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -152,6 +181,7 @@ func (client DelegationSettingsClient) Get(ctx context.Context, resourceGroupNam
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetPreparer prepares the Get request.
 func (client DelegationSettingsClient) GetPreparer(ctx context.Context, resourceGroupName string, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -173,6 +203,7 @@ func (client DelegationSettingsClient) GetPreparer(ctx context.Context, resource
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client DelegationSettingsClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -180,6 +211,7 @@ func (client DelegationSettingsClient) GetSender(req *http.Request) (*http.Respo
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client DelegationSettingsClient) GetResponder(resp *http.Response) (result PortalDelegationSettings, err error) {
@@ -193,11 +225,22 @@ func (client DelegationSettingsClient) GetResponder(resp *http.Response) (result
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTag gets the entity state (Etag) version of the DelegationSettings.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client DelegationSettingsClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DelegationSettingsClient.GetEntityTag")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -227,6 +270,7 @@ func (client DelegationSettingsClient) GetEntityTag(ctx context.Context, resourc
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagPreparer prepares the GetEntityTag request.
 func (client DelegationSettingsClient) GetEntityTagPreparer(ctx context.Context, resourceGroupName string, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -248,6 +292,7 @@ func (client DelegationSettingsClient) GetEntityTagPreparer(ctx context.Context,
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagSender sends the GetEntityTag request. The method will close the
 // http.Response Body if it receives an error.
 func (client DelegationSettingsClient) GetEntityTagSender(req *http.Request) (*http.Response, error) {
@@ -255,6 +300,7 @@ func (client DelegationSettingsClient) GetEntityTagSender(req *http.Request) (*h
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagResponder handles the response to the GetEntityTag request. The method always
 // closes the http.Response Body.
 func (client DelegationSettingsClient) GetEntityTagResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -267,6 +313,7 @@ func (client DelegationSettingsClient) GetEntityTagResponder(resp *http.Response
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Update update Delegation settings.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -275,6 +322,16 @@ func (client DelegationSettingsClient) GetEntityTagResponder(resp *http.Response
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client DelegationSettingsClient) Update(ctx context.Context, resourceGroupName string, serviceName string, parameters PortalDelegationSettings, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DelegationSettingsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -304,6 +361,7 @@ func (client DelegationSettingsClient) Update(ctx context.Context, resourceGroup
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdatePreparer prepares the Update request.
 func (client DelegationSettingsClient) UpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, parameters PortalDelegationSettings, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -328,6 +386,7 @@ func (client DelegationSettingsClient) UpdatePreparer(ctx context.Context, resou
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client DelegationSettingsClient) UpdateSender(req *http.Request) (*http.Response, error) {
@@ -335,6 +394,7 @@ func (client DelegationSettingsClient) UpdateSender(req *http.Request) (*http.Re
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateResponder handles the response to the Update request. The method always
 // closes the http.Response Body.
 func (client DelegationSettingsClient) UpdateResponder(resp *http.Response) (result autorest.Response, err error) {

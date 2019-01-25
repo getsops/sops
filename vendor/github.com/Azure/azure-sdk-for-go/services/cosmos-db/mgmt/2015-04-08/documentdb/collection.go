@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -40,13 +41,23 @@ func NewCollectionClientWithBaseURI(baseURI string, subscriptionID string) Colle
 	return CollectionClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
-// ListMetricDefinitions retrieves metric defintions for the given collection.
+// ListMetricDefinitions retrieves metric definitions for the given collection.
 // Parameters:
 // resourceGroupName - name of an Azure resource group.
 // accountName - cosmos DB database account name.
 // databaseRid - cosmos DB database rid.
 // collectionRid - cosmos DB collection rid.
 func (client CollectionClient) ListMetricDefinitions(ctx context.Context, resourceGroupName string, accountName string, databaseRid string, collectionRid string) (result MetricDefinitionsListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CollectionClient.ListMetricDefinitions")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -132,6 +143,16 @@ func (client CollectionClient) ListMetricDefinitionsResponder(resp *http.Respons
 // filtered are name.value (name of the metric, can have an or of multiple names), startTime, endTime, and
 // timeGrain. The supported operator is eq.
 func (client CollectionClient) ListMetrics(ctx context.Context, resourceGroupName string, accountName string, databaseRid string, collectionRid string, filter string) (result MetricListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CollectionClient.ListMetrics")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -217,6 +238,16 @@ func (client CollectionClient) ListMetricsResponder(resp *http.Response) (result
 // filter - an OData filter expression that describes a subset of usages to return. The supported parameter is
 // name.value (name of the metric, can have an or of multiple names).
 func (client CollectionClient) ListUsages(ctx context.Context, resourceGroupName string, accountName string, databaseRid string, collectionRid string, filter string) (result UsagesResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CollectionClient.ListUsages")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

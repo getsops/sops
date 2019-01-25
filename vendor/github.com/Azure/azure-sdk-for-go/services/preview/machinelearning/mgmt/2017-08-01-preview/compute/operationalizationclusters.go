@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewOperationalizationClustersClientWithBaseURI(baseURI string, subscription
 // resourceGroupName - name of the resource group in which the cluster is located.
 // clusterName - the name of the cluster.
 func (client OperationalizationClustersClient) CheckSystemServicesUpdatesAvailable(ctx context.Context, resourceGroupName string, clusterName string) (result CheckSystemServicesUpdatesAvailableResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationalizationClustersClient.CheckSystemServicesUpdatesAvailable")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -129,6 +140,16 @@ func (client OperationalizationClustersClient) CheckSystemServicesUpdatesAvailab
 // clusterName - the name of the cluster.
 // parameters - parameters supplied to create or update an Operationalization cluster.
 func (client OperationalizationClustersClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, parameters OperationalizationCluster) (result OperationalizationClustersCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationalizationClustersClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -219,10 +240,6 @@ func (client OperationalizationClustersClient) CreateOrUpdateSender(req *http.Re
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -246,6 +263,16 @@ func (client OperationalizationClustersClient) CreateOrUpdateResponder(resp *htt
 // clusterName - the name of the cluster.
 // deleteAll - if true, deletes all resources associated with this cluster.
 func (client OperationalizationClustersClient) Delete(ctx context.Context, resourceGroupName string, clusterName string, deleteAll *bool) (result OperationalizationClustersDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationalizationClustersClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -306,10 +333,6 @@ func (client OperationalizationClustersClient) DeleteSender(req *http.Request) (
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -332,6 +355,16 @@ func (client OperationalizationClustersClient) DeleteResponder(resp *http.Respon
 // resourceGroupName - name of the resource group in which the cluster is located.
 // clusterName - the name of the cluster.
 func (client OperationalizationClustersClient) Get(ctx context.Context, resourceGroupName string, clusterName string) (result OperationalizationCluster, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationalizationClustersClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -411,6 +444,16 @@ func (client OperationalizationClustersClient) GetResponder(resp *http.Response)
 // resourceGroupName - name of the resource group in which the cluster is located.
 // skiptoken - continuation token for pagination.
 func (client OperationalizationClustersClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, skiptoken string) (result PaginatedOperationalizationClustersListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationalizationClustersClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.pocl.Response.Response != nil {
+				sc = result.pocl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -485,8 +528,8 @@ func (client OperationalizationClustersClient) ListByResourceGroupResponder(resp
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client OperationalizationClustersClient) listByResourceGroupNextResults(lastResults PaginatedOperationalizationClustersList) (result PaginatedOperationalizationClustersList, err error) {
-	req, err := lastResults.paginatedOperationalizationClustersListPreparer()
+func (client OperationalizationClustersClient) listByResourceGroupNextResults(ctx context.Context, lastResults PaginatedOperationalizationClustersList) (result PaginatedOperationalizationClustersList, err error) {
+	req, err := lastResults.paginatedOperationalizationClustersListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "compute.OperationalizationClustersClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -507,6 +550,16 @@ func (client OperationalizationClustersClient) listByResourceGroupNextResults(la
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client OperationalizationClustersClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string, skiptoken string) (result PaginatedOperationalizationClustersListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationalizationClustersClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName, skiptoken)
 	return
 }
@@ -515,6 +568,16 @@ func (client OperationalizationClustersClient) ListByResourceGroupComplete(ctx c
 // Parameters:
 // skiptoken - continuation token for pagination.
 func (client OperationalizationClustersClient) ListBySubscriptionID(ctx context.Context, skiptoken string) (result PaginatedOperationalizationClustersListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationalizationClustersClient.ListBySubscriptionID")
+		defer func() {
+			sc := -1
+			if result.pocl.Response.Response != nil {
+				sc = result.pocl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listBySubscriptionIDNextResults
 	req, err := client.ListBySubscriptionIDPreparer(ctx, skiptoken)
 	if err != nil {
@@ -580,8 +643,8 @@ func (client OperationalizationClustersClient) ListBySubscriptionIDResponder(res
 }
 
 // listBySubscriptionIDNextResults retrieves the next set of results, if any.
-func (client OperationalizationClustersClient) listBySubscriptionIDNextResults(lastResults PaginatedOperationalizationClustersList) (result PaginatedOperationalizationClustersList, err error) {
-	req, err := lastResults.paginatedOperationalizationClustersListPreparer()
+func (client OperationalizationClustersClient) listBySubscriptionIDNextResults(ctx context.Context, lastResults PaginatedOperationalizationClustersList) (result PaginatedOperationalizationClustersList, err error) {
+	req, err := lastResults.paginatedOperationalizationClustersListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "compute.OperationalizationClustersClient", "listBySubscriptionIDNextResults", nil, "Failure preparing next results request")
 	}
@@ -602,6 +665,16 @@ func (client OperationalizationClustersClient) listBySubscriptionIDNextResults(l
 
 // ListBySubscriptionIDComplete enumerates all values, automatically crossing page boundaries as required.
 func (client OperationalizationClustersClient) ListBySubscriptionIDComplete(ctx context.Context, skiptoken string) (result PaginatedOperationalizationClustersListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationalizationClustersClient.ListBySubscriptionID")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBySubscriptionID(ctx, skiptoken)
 	return
 }
@@ -612,6 +685,16 @@ func (client OperationalizationClustersClient) ListBySubscriptionIDComplete(ctx 
 // resourceGroupName - name of the resource group in which the cluster is located.
 // clusterName - the name of the cluster.
 func (client OperationalizationClustersClient) ListKeys(ctx context.Context, resourceGroupName string, clusterName string) (result OperationalizationClusterCredentials, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationalizationClustersClient.ListKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -693,6 +776,16 @@ func (client OperationalizationClustersClient) ListKeysResponder(resp *http.Resp
 // clusterName - the name of the cluster.
 // parameters - the parameters supplied to patch the cluster.
 func (client OperationalizationClustersClient) Update(ctx context.Context, resourceGroupName string, clusterName string, parameters OperationalizationClusterUpdateParameters) (result OperationalizationCluster, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationalizationClustersClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -774,6 +867,16 @@ func (client OperationalizationClustersClient) UpdateResponder(resp *http.Respon
 // resourceGroupName - name of the resource group in which the cluster is located.
 // clusterName - the name of the cluster.
 func (client OperationalizationClustersClient) UpdateSystemServices(ctx context.Context, resourceGroupName string, clusterName string) (result OperationalizationClustersUpdateSystemServicesFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationalizationClustersClient.UpdateSystemServices")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -828,10 +931,6 @@ func (client OperationalizationClustersClient) UpdateSystemServicesSender(req *h
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

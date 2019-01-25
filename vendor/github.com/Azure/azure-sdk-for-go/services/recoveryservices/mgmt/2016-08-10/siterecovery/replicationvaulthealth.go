@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -41,6 +42,16 @@ func NewReplicationVaultHealthClientWithBaseURI(baseURI string, subscriptionID s
 
 // Get gets the health details of the vault.
 func (client ReplicationVaultHealthClient) Get(ctx context.Context) (result VaultHealthDetails, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationVaultHealthClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationVaultHealthClient", "Get", nil, "Failure preparing request")

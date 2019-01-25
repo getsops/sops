@@ -23,6 +23,9 @@ import (
 	"net/http"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/operationsmanagement/mgmt/2015-11-01-preview/operationsmanagement"
+
 // ArmTemplateParameter parameter to pass to ARM template
 type ArmTemplateParameter struct {
 	// Name - name of the parameter.
@@ -60,8 +63,8 @@ type ManagementAssociation struct {
 	Properties *ManagementAssociationProperties `json:"properties,omitempty"`
 }
 
-// ManagementAssociationProperties managementAssociation properties supported by the OperationsManagement resource
-// provider.
+// ManagementAssociationProperties managementAssociation properties supported by the OperationsManagement
+// resource provider.
 type ManagementAssociationProperties struct {
 	// ApplicationID - The applicationId of the appliance for this association.
 	ApplicationID *string `json:"applicationId,omitempty"`
@@ -70,7 +73,7 @@ type ManagementAssociationProperties struct {
 // ManagementAssociationPropertiesList the list of ManagementAssociation response
 type ManagementAssociationPropertiesList struct {
 	autorest.Response `json:"-"`
-	// Value - List of Management Association properites within the subscription.
+	// Value - List of Management Association properties within the subscription.
 	Value *[]ManagementAssociation `json:"value,omitempty"`
 }
 
@@ -89,8 +92,8 @@ type ManagementConfiguration struct {
 	Properties *ManagementConfigurationProperties `json:"properties,omitempty"`
 }
 
-// ManagementConfigurationProperties managementConfiguration properties supported by the OperationsManagement
-// resource provider.
+// ManagementConfigurationProperties managementConfiguration properties supported by the
+// OperationsManagement resource provider.
 type ManagementConfigurationProperties struct {
 	// ApplicationID - The applicationId of the appliance for this Management.
 	ApplicationID *string `json:"applicationId,omitempty"`
@@ -107,7 +110,7 @@ type ManagementConfigurationProperties struct {
 // ManagementConfigurationPropertiesList the list of ManagementConfiguration response
 type ManagementConfigurationPropertiesList struct {
 	autorest.Response `json:"-"`
-	// Value - List of Management Configuration properites within the subscription.
+	// Value - List of Management Configuration properties within the subscription.
 	Value *[]ManagementConfiguration `json:"value,omitempty"`
 }
 
@@ -180,7 +183,7 @@ type SolutionProperties struct {
 // SolutionPropertiesList the list of solution response
 type SolutionPropertiesList struct {
 	autorest.Response `json:"-"`
-	// Value - List of solution properites within the subscription.
+	// Value - List of solution properties within the subscription.
 	Value *[]Solution `json:"value,omitempty"`
 }
 
@@ -213,7 +216,8 @@ func (future *SolutionsCreateOrUpdateFuture) Result(client SolutionsClient) (s S
 	return
 }
 
-// SolutionsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// SolutionsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type SolutionsDeleteFuture struct {
 	azure.Future
 }

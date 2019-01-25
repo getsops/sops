@@ -22,24 +22,29 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NotificationRecipientUserClient is the apiManagement Client
 type NotificationRecipientUserClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewNotificationRecipientUserClient creates an instance of the NotificationRecipientUserClient client.
 func NewNotificationRecipientUserClient(subscriptionID string) NotificationRecipientUserClient {
 	return NewNotificationRecipientUserClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewNotificationRecipientUserClientWithBaseURI creates an instance of the NotificationRecipientUserClient client.
 func NewNotificationRecipientUserClientWithBaseURI(baseURI string, subscriptionID string) NotificationRecipientUserClient {
 	return NotificationRecipientUserClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CheckEntityExists determine if the Notification Recipient User is subscribed to the notification.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -47,6 +52,16 @@ func NewNotificationRecipientUserClientWithBaseURI(baseURI string, subscriptionI
 // notificationName - notification Name Identifier.
 // UID - user identifier. Must be unique in the current API Management service instance.
 func (client NotificationRecipientUserClient) CheckEntityExists(ctx context.Context, resourceGroupName string, serviceName string, notificationName NotificationName, UID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NotificationRecipientUserClient.CheckEntityExists")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -80,6 +95,7 @@ func (client NotificationRecipientUserClient) CheckEntityExists(ctx context.Cont
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CheckEntityExistsPreparer prepares the CheckEntityExists request.
 func (client NotificationRecipientUserClient) CheckEntityExistsPreparer(ctx context.Context, resourceGroupName string, serviceName string, notificationName NotificationName, UID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -103,6 +119,7 @@ func (client NotificationRecipientUserClient) CheckEntityExistsPreparer(ctx cont
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CheckEntityExistsSender sends the CheckEntityExists request. The method will close the
 // http.Response Body if it receives an error.
 func (client NotificationRecipientUserClient) CheckEntityExistsSender(req *http.Request) (*http.Response, error) {
@@ -110,6 +127,7 @@ func (client NotificationRecipientUserClient) CheckEntityExistsSender(req *http.
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CheckEntityExistsResponder handles the response to the CheckEntityExists request. The method always
 // closes the http.Response Body.
 func (client NotificationRecipientUserClient) CheckEntityExistsResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -122,6 +140,7 @@ func (client NotificationRecipientUserClient) CheckEntityExistsResponder(resp *h
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdate adds the API Management User to the list of Recipients for the Notification.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -129,6 +148,16 @@ func (client NotificationRecipientUserClient) CheckEntityExistsResponder(resp *h
 // notificationName - notification Name Identifier.
 // UID - user identifier. Must be unique in the current API Management service instance.
 func (client NotificationRecipientUserClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, notificationName NotificationName, UID string) (result RecipientUserContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NotificationRecipientUserClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -162,6 +191,7 @@ func (client NotificationRecipientUserClient) CreateOrUpdate(ctx context.Context
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
 func (client NotificationRecipientUserClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, notificationName NotificationName, UID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -185,6 +215,7 @@ func (client NotificationRecipientUserClient) CreateOrUpdatePreparer(ctx context
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client NotificationRecipientUserClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
@@ -192,6 +223,7 @@ func (client NotificationRecipientUserClient) CreateOrUpdateSender(req *http.Req
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
 // closes the http.Response Body.
 func (client NotificationRecipientUserClient) CreateOrUpdateResponder(resp *http.Response) (result RecipientUserContract, err error) {
@@ -205,6 +237,7 @@ func (client NotificationRecipientUserClient) CreateOrUpdateResponder(resp *http
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Delete removes the API Management user from the list of Notification.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -212,6 +245,16 @@ func (client NotificationRecipientUserClient) CreateOrUpdateResponder(resp *http
 // notificationName - notification Name Identifier.
 // UID - user identifier. Must be unique in the current API Management service instance.
 func (client NotificationRecipientUserClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, notificationName NotificationName, UID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NotificationRecipientUserClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -245,6 +288,7 @@ func (client NotificationRecipientUserClient) Delete(ctx context.Context, resour
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeletePreparer prepares the Delete request.
 func (client NotificationRecipientUserClient) DeletePreparer(ctx context.Context, resourceGroupName string, serviceName string, notificationName NotificationName, UID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -268,6 +312,7 @@ func (client NotificationRecipientUserClient) DeletePreparer(ctx context.Context
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client NotificationRecipientUserClient) DeleteSender(req *http.Request) (*http.Response, error) {
@@ -275,6 +320,7 @@ func (client NotificationRecipientUserClient) DeleteSender(req *http.Request) (*
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteResponder handles the response to the Delete request. The method always
 // closes the http.Response Body.
 func (client NotificationRecipientUserClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -287,12 +333,23 @@ func (client NotificationRecipientUserClient) DeleteResponder(resp *http.Respons
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByNotification gets the list of the Notification Recipient User subscribed to the notification.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // notificationName - notification Name Identifier.
 func (client NotificationRecipientUserClient) ListByNotification(ctx context.Context, resourceGroupName string, serviceName string, notificationName NotificationName) (result RecipientUserCollection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NotificationRecipientUserClient.ListByNotification")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -322,6 +379,7 @@ func (client NotificationRecipientUserClient) ListByNotification(ctx context.Con
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByNotificationPreparer prepares the ListByNotification request.
 func (client NotificationRecipientUserClient) ListByNotificationPreparer(ctx context.Context, resourceGroupName string, serviceName string, notificationName NotificationName) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -344,6 +402,7 @@ func (client NotificationRecipientUserClient) ListByNotificationPreparer(ctx con
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByNotificationSender sends the ListByNotification request. The method will close the
 // http.Response Body if it receives an error.
 func (client NotificationRecipientUserClient) ListByNotificationSender(req *http.Request) (*http.Response, error) {
@@ -351,6 +410,7 @@ func (client NotificationRecipientUserClient) ListByNotificationSender(req *http
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByNotificationResponder handles the response to the ListByNotification request. The method always
 // closes the http.Response Body.
 func (client NotificationRecipientUserClient) ListByNotificationResponder(resp *http.Response) (result RecipientUserCollection, err error) {

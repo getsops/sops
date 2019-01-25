@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewEnvironmentsClientWithBaseURI(baseURI string, subscriptionID string) Env
 // environmentName - name of the environment
 // parameters - parameters for creating an environment resource.
 func (client EnvironmentsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, environmentName string, parameters EnvironmentCreateOrUpdateParameters) (result EnvironmentsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EnvironmentsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: environmentName,
 			Constraints: []validation.Constraint{{Target: "environmentName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -110,10 +121,6 @@ func (client EnvironmentsClient) CreateOrUpdateSender(req *http.Request) (future
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusNotFound))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -137,6 +144,16 @@ func (client EnvironmentsClient) CreateOrUpdateResponder(resp *http.Response) (r
 // environmentName - the name of the Time Series Insights environment associated with the specified resource
 // group.
 func (client EnvironmentsClient) Delete(ctx context.Context, resourceGroupName string, environmentName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EnvironmentsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, environmentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.EnvironmentsClient", "Delete", nil, "Failure preparing request")
@@ -204,6 +221,16 @@ func (client EnvironmentsClient) DeleteResponder(resp *http.Response) (result au
 // environmentName - the name of the Time Series Insights environment associated with the specified resource
 // group.
 func (client EnvironmentsClient) Get(ctx context.Context, resourceGroupName string, environmentName string) (result EnvironmentResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EnvironmentsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, environmentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.EnvironmentsClient", "Get", nil, "Failure preparing request")
@@ -271,6 +298,16 @@ func (client EnvironmentsClient) GetResponder(resp *http.Response) (result Envir
 // Parameters:
 // resourceGroupName - name of an Azure Resource group.
 func (client EnvironmentsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result EnvironmentListResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EnvironmentsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.EnvironmentsClient", "ListByResourceGroup", nil, "Failure preparing request")
@@ -334,6 +371,16 @@ func (client EnvironmentsClient) ListByResourceGroupResponder(resp *http.Respons
 
 // ListBySubscription lists all the available environments within a subscription, irrespective of the resource groups.
 func (client EnvironmentsClient) ListBySubscription(ctx context.Context) (result EnvironmentListResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EnvironmentsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.EnvironmentsClient", "ListBySubscription", nil, "Failure preparing request")
@@ -401,6 +448,16 @@ func (client EnvironmentsClient) ListBySubscriptionResponder(resp *http.Response
 // group.
 // environmentUpdateParameters - request object that contains the updated information for the environment.
 func (client EnvironmentsClient) Update(ctx context.Context, resourceGroupName string, environmentName string, environmentUpdateParameters EnvironmentUpdateParameters) (result EnvironmentsUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EnvironmentsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, environmentName, environmentUpdateParameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.EnvironmentsClient", "Update", nil, "Failure preparing request")
@@ -445,10 +502,6 @@ func (client EnvironmentsClient) UpdateSender(req *http.Request) (future Environ
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK))
 	if err != nil {
 		return
 	}

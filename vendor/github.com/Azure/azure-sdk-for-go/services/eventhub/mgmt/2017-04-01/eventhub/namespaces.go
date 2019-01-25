@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewNamespacesClientWithBaseURI(baseURI string, subscriptionID string) Names
 // Parameters:
 // parameters - parameters to check availability of the given Namespace name
 func (client NamespacesClient) CheckNameAvailability(ctx context.Context, parameters CheckNameAvailabilityParameter) (result CheckNameAvailabilityResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.CheckNameAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Name", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -119,6 +130,16 @@ func (client NamespacesClient) CheckNameAvailabilityResponder(resp *http.Respons
 // namespaceName - the Namespace name
 // parameters - parameters for creating a namespace resource.
 func (client NamespacesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, namespaceName string, parameters EHNamespace) (result NamespacesCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -189,10 +210,6 @@ func (client NamespacesClient) CreateOrUpdateSender(req *http.Request) (future N
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -217,6 +234,16 @@ func (client NamespacesClient) CreateOrUpdateResponder(resp *http.Response) (res
 // authorizationRuleName - the authorization rule name.
 // parameters - the shared access AuthorizationRule.
 func (client NamespacesClient) CreateOrUpdateAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, authorizationRuleName string, parameters AuthorizationRule) (result AuthorizationRule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.CreateOrUpdateAuthorizationRule")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -302,6 +329,16 @@ func (client NamespacesClient) CreateOrUpdateAuthorizationRuleResponder(resp *ht
 // resourceGroupName - name of the resource group within the azure subscription.
 // namespaceName - the Namespace name
 func (client NamespacesClient) Delete(ctx context.Context, resourceGroupName string, namespaceName string) (result NamespacesDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -357,10 +394,6 @@ func (client NamespacesClient) DeleteSender(req *http.Request) (future Namespace
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -383,6 +416,16 @@ func (client NamespacesClient) DeleteResponder(resp *http.Response) (result auto
 // namespaceName - the Namespace name
 // authorizationRuleName - the authorization rule name.
 func (client NamespacesClient) DeleteAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, authorizationRuleName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.DeleteAuthorizationRule")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -462,6 +505,16 @@ func (client NamespacesClient) DeleteAuthorizationRuleResponder(resp *http.Respo
 // resourceGroupName - name of the resource group within the azure subscription.
 // namespaceName - the Namespace name
 func (client NamespacesClient) Get(ctx context.Context, resourceGroupName string, namespaceName string) (result EHNamespace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -540,6 +593,16 @@ func (client NamespacesClient) GetResponder(resp *http.Response) (result EHNames
 // namespaceName - the Namespace name
 // authorizationRuleName - the authorization rule name.
 func (client NamespacesClient) GetAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, authorizationRuleName string) (result AuthorizationRule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.GetAuthorizationRule")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -620,6 +683,16 @@ func (client NamespacesClient) GetAuthorizationRuleResponder(resp *http.Response
 // resourceGroupName - name of the resource group within the azure subscription.
 // namespaceName - the Namespace name
 func (client NamespacesClient) GetMessagingPlan(ctx context.Context, resourceGroupName string, namespaceName string) (result MessagingPlan, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.GetMessagingPlan")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -694,6 +767,16 @@ func (client NamespacesClient) GetMessagingPlanResponder(resp *http.Response) (r
 
 // List lists all the available Namespaces within a subscription, irrespective of the resource groups.
 func (client NamespacesClient) List(ctx context.Context) (result EHNamespaceListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.List")
+		defer func() {
+			sc := -1
+			if result.enlr.Response.Response != nil {
+				sc = result.enlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -756,8 +839,8 @@ func (client NamespacesClient) ListResponder(resp *http.Response) (result EHName
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client NamespacesClient) listNextResults(lastResults EHNamespaceListResult) (result EHNamespaceListResult, err error) {
-	req, err := lastResults.eHNamespaceListResultPreparer()
+func (client NamespacesClient) listNextResults(ctx context.Context, lastResults EHNamespaceListResult) (result EHNamespaceListResult, err error) {
+	req, err := lastResults.eHNamespaceListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "eventhub.NamespacesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -778,6 +861,16 @@ func (client NamespacesClient) listNextResults(lastResults EHNamespaceListResult
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client NamespacesClient) ListComplete(ctx context.Context) (result EHNamespaceListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -787,6 +880,16 @@ func (client NamespacesClient) ListComplete(ctx context.Context) (result EHNames
 // resourceGroupName - name of the resource group within the azure subscription.
 // namespaceName - the Namespace name
 func (client NamespacesClient) ListAuthorizationRules(ctx context.Context, resourceGroupName string, namespaceName string) (result AuthorizationRuleListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.ListAuthorizationRules")
+		defer func() {
+			sc := -1
+			if result.arlr.Response.Response != nil {
+				sc = result.arlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -861,8 +964,8 @@ func (client NamespacesClient) ListAuthorizationRulesResponder(resp *http.Respon
 }
 
 // listAuthorizationRulesNextResults retrieves the next set of results, if any.
-func (client NamespacesClient) listAuthorizationRulesNextResults(lastResults AuthorizationRuleListResult) (result AuthorizationRuleListResult, err error) {
-	req, err := lastResults.authorizationRuleListResultPreparer()
+func (client NamespacesClient) listAuthorizationRulesNextResults(ctx context.Context, lastResults AuthorizationRuleListResult) (result AuthorizationRuleListResult, err error) {
+	req, err := lastResults.authorizationRuleListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "eventhub.NamespacesClient", "listAuthorizationRulesNextResults", nil, "Failure preparing next results request")
 	}
@@ -883,6 +986,16 @@ func (client NamespacesClient) listAuthorizationRulesNextResults(lastResults Aut
 
 // ListAuthorizationRulesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client NamespacesClient) ListAuthorizationRulesComplete(ctx context.Context, resourceGroupName string, namespaceName string) (result AuthorizationRuleListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.ListAuthorizationRules")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListAuthorizationRules(ctx, resourceGroupName, namespaceName)
 	return
 }
@@ -891,6 +1004,16 @@ func (client NamespacesClient) ListAuthorizationRulesComplete(ctx context.Contex
 // Parameters:
 // resourceGroupName - name of the resource group within the azure subscription.
 func (client NamespacesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result EHNamespaceListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.enlr.Response.Response != nil {
+				sc = result.enlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -961,8 +1084,8 @@ func (client NamespacesClient) ListByResourceGroupResponder(resp *http.Response)
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client NamespacesClient) listByResourceGroupNextResults(lastResults EHNamespaceListResult) (result EHNamespaceListResult, err error) {
-	req, err := lastResults.eHNamespaceListResultPreparer()
+func (client NamespacesClient) listByResourceGroupNextResults(ctx context.Context, lastResults EHNamespaceListResult) (result EHNamespaceListResult, err error) {
+	req, err := lastResults.eHNamespaceListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "eventhub.NamespacesClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -983,6 +1106,16 @@ func (client NamespacesClient) listByResourceGroupNextResults(lastResults EHName
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client NamespacesClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result EHNamespaceListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -993,6 +1126,16 @@ func (client NamespacesClient) ListByResourceGroupComplete(ctx context.Context, 
 // namespaceName - the Namespace name
 // authorizationRuleName - the authorization rule name.
 func (client NamespacesClient) ListKeys(ctx context.Context, resourceGroupName string, namespaceName string, authorizationRuleName string) (result AccessKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.ListKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1075,6 +1218,16 @@ func (client NamespacesClient) ListKeysResponder(resp *http.Response) (result Ac
 // authorizationRuleName - the authorization rule name.
 // parameters - parameters required to regenerate the connection string.
 func (client NamespacesClient) RegenerateKeys(ctx context.Context, resourceGroupName string, namespaceName string, authorizationRuleName string, parameters RegenerateAccessKeyParameters) (result AccessKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.RegenerateKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1159,6 +1312,16 @@ func (client NamespacesClient) RegenerateKeysResponder(resp *http.Response) (res
 // namespaceName - the Namespace name
 // parameters - parameters for updating a namespace resource.
 func (client NamespacesClient) Update(ctx context.Context, resourceGroupName string, namespaceName string, parameters EHNamespace) (result EHNamespace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

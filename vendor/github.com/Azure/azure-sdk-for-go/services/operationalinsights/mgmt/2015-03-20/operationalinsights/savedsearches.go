@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -42,11 +43,21 @@ func NewSavedSearchesClientWithBaseURI(baseURI string, subscriptionID string, pu
 
 // CreateOrUpdate creates or updates a saved search for a given workspace.
 // Parameters:
-// resourceGroupName - the name of the resource group to get. The name is case insensitive.
-// workspaceName - log Analytics workspace name
-// savedSearchName - the id of the saved search.
+// resourceGroupName - the Resource Group name.
+// workspaceName - the Log Analytics Workspace name.
+// savedSearchID - the id of the saved search.
 // parameters - the parameters required to save a search.
-func (client SavedSearchesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchName string, parameters SavedSearch) (result SavedSearch, err error) {
+func (client SavedSearchesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchID string, parameters SavedSearch) (result SavedSearch, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SavedSearchesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -57,15 +68,15 @@ func (client SavedSearchesClient) CreateOrUpdate(ctx context.Context, resourceGr
 				Chain: []validation.Constraint{{Target: "parameters.SavedSearchProperties.Category", Name: validation.Null, Rule: true, Chain: nil},
 					{Target: "parameters.SavedSearchProperties.DisplayName", Name: validation.Null, Rule: true, Chain: nil},
 					{Target: "parameters.SavedSearchProperties.Query", Name: validation.Null, Rule: true, Chain: nil},
-					{Target: "parameters.SavedSearchProperties.Version", Name: validation.Null, Rule: true,
-						Chain: []validation.Constraint{{Target: "parameters.SavedSearchProperties.Version", Name: validation.InclusiveMaximum, Rule: int64(1), Chain: nil},
+					{Target: "parameters.SavedSearchProperties.Version", Name: validation.Null, Rule: false,
+						Chain: []validation.Constraint{{Target: "parameters.SavedSearchProperties.Version", Name: validation.InclusiveMaximum, Rule: int64(2), Chain: nil},
 							{Target: "parameters.SavedSearchProperties.Version", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
 						}},
 				}}}}}); err != nil {
 		return result, validation.NewError("operationalinsights.SavedSearchesClient", "CreateOrUpdate", err.Error())
 	}
 
-	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, workspaceName, savedSearchName, parameters)
+	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, workspaceName, savedSearchID, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "operationalinsights.SavedSearchesClient", "CreateOrUpdate", nil, "Failure preparing request")
 		return
@@ -87,10 +98,10 @@ func (client SavedSearchesClient) CreateOrUpdate(ctx context.Context, resourceGr
 }
 
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
-func (client SavedSearchesClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchName string, parameters SavedSearch) (*http.Request, error) {
+func (client SavedSearchesClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchID string, parameters SavedSearch) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"savedSearchName":   autorest.Encode("path", savedSearchName),
+		"savedSearchId":     autorest.Encode("path", savedSearchID),
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 		"workspaceName":     autorest.Encode("path", workspaceName),
 	}
@@ -104,7 +115,7 @@ func (client SavedSearchesClient) CreateOrUpdatePreparer(ctx context.Context, re
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/savedSearches/{savedSearchName}", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/savedSearches/{savedSearchId}", pathParameters),
 		autorest.WithJSON(parameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
@@ -132,10 +143,20 @@ func (client SavedSearchesClient) CreateOrUpdateResponder(resp *http.Response) (
 
 // Delete deletes the specified saved search in a given workspace.
 // Parameters:
-// resourceGroupName - the name of the resource group to get. The name is case insensitive.
-// workspaceName - log Analytics workspace name
-// savedSearchName - name of the saved search.
-func (client SavedSearchesClient) Delete(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchName string) (result autorest.Response, err error) {
+// resourceGroupName - the Resource Group name.
+// workspaceName - the Log Analytics Workspace name.
+// savedSearchID - the id of the saved search.
+func (client SavedSearchesClient) Delete(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SavedSearchesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -144,7 +165,7 @@ func (client SavedSearchesClient) Delete(ctx context.Context, resourceGroupName 
 		return result, validation.NewError("operationalinsights.SavedSearchesClient", "Delete", err.Error())
 	}
 
-	req, err := client.DeletePreparer(ctx, resourceGroupName, workspaceName, savedSearchName)
+	req, err := client.DeletePreparer(ctx, resourceGroupName, workspaceName, savedSearchID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "operationalinsights.SavedSearchesClient", "Delete", nil, "Failure preparing request")
 		return
@@ -166,10 +187,10 @@ func (client SavedSearchesClient) Delete(ctx context.Context, resourceGroupName 
 }
 
 // DeletePreparer prepares the Delete request.
-func (client SavedSearchesClient) DeletePreparer(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchName string) (*http.Request, error) {
+func (client SavedSearchesClient) DeletePreparer(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"savedSearchName":   autorest.Encode("path", savedSearchName),
+		"savedSearchId":     autorest.Encode("path", savedSearchID),
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 		"workspaceName":     autorest.Encode("path", workspaceName),
 	}
@@ -182,7 +203,7 @@ func (client SavedSearchesClient) DeletePreparer(ctx context.Context, resourceGr
 	preparer := autorest.CreatePreparer(
 		autorest.AsDelete(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/savedSearches/{savedSearchName}", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/savedSearches/{savedSearchId}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -208,10 +229,20 @@ func (client SavedSearchesClient) DeleteResponder(resp *http.Response) (result a
 
 // Get gets the specified saved search for a given workspace.
 // Parameters:
-// resourceGroupName - the name of the resource group to get. The name is case insensitive.
-// workspaceName - log Analytics workspace name
-// savedSearchName - the id of the saved search.
-func (client SavedSearchesClient) Get(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchName string) (result SavedSearch, err error) {
+// resourceGroupName - the Resource Group name.
+// workspaceName - the Log Analytics Workspace name.
+// savedSearchID - the id of the saved search.
+func (client SavedSearchesClient) Get(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchID string) (result SavedSearch, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SavedSearchesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -220,7 +251,7 @@ func (client SavedSearchesClient) Get(ctx context.Context, resourceGroupName str
 		return result, validation.NewError("operationalinsights.SavedSearchesClient", "Get", err.Error())
 	}
 
-	req, err := client.GetPreparer(ctx, resourceGroupName, workspaceName, savedSearchName)
+	req, err := client.GetPreparer(ctx, resourceGroupName, workspaceName, savedSearchID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "operationalinsights.SavedSearchesClient", "Get", nil, "Failure preparing request")
 		return
@@ -242,10 +273,10 @@ func (client SavedSearchesClient) Get(ctx context.Context, resourceGroupName str
 }
 
 // GetPreparer prepares the Get request.
-func (client SavedSearchesClient) GetPreparer(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchName string) (*http.Request, error) {
+func (client SavedSearchesClient) GetPreparer(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"savedSearchName":   autorest.Encode("path", savedSearchName),
+		"savedSearchId":     autorest.Encode("path", savedSearchID),
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 		"workspaceName":     autorest.Encode("path", workspaceName),
 	}
@@ -258,7 +289,7 @@ func (client SavedSearchesClient) GetPreparer(ctx context.Context, resourceGroup
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/savedSearches/{savedSearchName}", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/savedSearches/{savedSearchId}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -285,10 +316,20 @@ func (client SavedSearchesClient) GetResponder(resp *http.Response) (result Save
 
 // GetResults gets the results from a saved search for a given workspace.
 // Parameters:
-// resourceGroupName - the name of the resource group to get. The name is case insensitive.
-// workspaceName - log Analytics workspace name
-// savedSearchName - the name of the saved search.
-func (client SavedSearchesClient) GetResults(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchName string) (result SearchResultsResponse, err error) {
+// resourceGroupName - the Resource Group name.
+// workspaceName - the Log Analytics Workspace name.
+// savedSearchID - the id of the saved search.
+func (client SavedSearchesClient) GetResults(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchID string) (result SearchResultsResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SavedSearchesClient.GetResults")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -297,7 +338,7 @@ func (client SavedSearchesClient) GetResults(ctx context.Context, resourceGroupN
 		return result, validation.NewError("operationalinsights.SavedSearchesClient", "GetResults", err.Error())
 	}
 
-	req, err := client.GetResultsPreparer(ctx, resourceGroupName, workspaceName, savedSearchName)
+	req, err := client.GetResultsPreparer(ctx, resourceGroupName, workspaceName, savedSearchID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "operationalinsights.SavedSearchesClient", "GetResults", nil, "Failure preparing request")
 		return
@@ -319,10 +360,10 @@ func (client SavedSearchesClient) GetResults(ctx context.Context, resourceGroupN
 }
 
 // GetResultsPreparer prepares the GetResults request.
-func (client SavedSearchesClient) GetResultsPreparer(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchName string) (*http.Request, error) {
+func (client SavedSearchesClient) GetResultsPreparer(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"savedSearchName":   autorest.Encode("path", savedSearchName),
+		"savedSearchId":     autorest.Encode("path", savedSearchID),
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 		"workspaceName":     autorest.Encode("path", workspaceName),
 	}
@@ -335,7 +376,7 @@ func (client SavedSearchesClient) GetResultsPreparer(ctx context.Context, resour
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/savedSearches/{savedSearchName}/results", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/savedSearches/{savedSearchId}/results", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -362,9 +403,19 @@ func (client SavedSearchesClient) GetResultsResponder(resp *http.Response) (resu
 
 // ListByWorkspace gets the saved searches for a given Log Analytics Workspace
 // Parameters:
-// resourceGroupName - the name of the resource group to get. The name is case insensitive.
-// workspaceName - log Analytics workspace name
+// resourceGroupName - the Resource Group name.
+// workspaceName - the Log Analytics Workspace name.
 func (client SavedSearchesClient) ListByWorkspace(ctx context.Context, resourceGroupName string, workspaceName string) (result SavedSearchesListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SavedSearchesClient.ListByWorkspace")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewAPIReleaseClientWithBaseURI(baseURI string, subscriptionID string) APIRe
 // apiid - API identifier. Must be unique in the current API Management service instance.
 // releaseID - release identifier within an API. Must be unique in the current API Management service instance.
 func (client APIReleaseClient) Create(ctx context.Context, parameters APIReleaseContract, resourceGroupName string, serviceName string, apiid string, releaseID string) (result APIReleaseContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIReleaseClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -139,6 +150,16 @@ func (client APIReleaseClient) CreateResponder(resp *http.Response) (result APIR
 // apiid - API identifier. Must be unique in the current API Management service instance.
 // releaseID - release identifier within an API. Must be unique in the current API Management service instance.
 func (client APIReleaseClient) Delete(ctx context.Context, ifMatch string, resourceGroupName string, serviceName string, apiid string, releaseID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIReleaseClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -226,6 +247,16 @@ func (client APIReleaseClient) DeleteResponder(resp *http.Response) (result auto
 // apiid - API identifier. Must be unique in the current API Management service instance.
 // releaseID - release identifier within an API. Must be unique in the current API Management service instance.
 func (client APIReleaseClient) Get(ctx context.Context, resourceGroupName string, serviceName string, apiid string, releaseID string) (result APIReleaseContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIReleaseClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -320,6 +351,16 @@ func (client APIReleaseClient) GetResponder(resp *http.Response) (result APIRele
 // top - number of records to return.
 // skip - number of records to skip.
 func (client APIReleaseClient) List(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result APIReleaseCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIReleaseClient.List")
+		defer func() {
+			sc := -1
+			if result.arc.Response.Response != nil {
+				sc = result.arc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -412,8 +453,8 @@ func (client APIReleaseClient) ListResponder(resp *http.Response) (result APIRel
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client APIReleaseClient) listNextResults(lastResults APIReleaseCollection) (result APIReleaseCollection, err error) {
-	req, err := lastResults.aPIReleaseCollectionPreparer()
+func (client APIReleaseClient) listNextResults(ctx context.Context, lastResults APIReleaseCollection) (result APIReleaseCollection, err error) {
+	req, err := lastResults.aPIReleaseCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.APIReleaseClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -434,6 +475,16 @@ func (client APIReleaseClient) listNextResults(lastResults APIReleaseCollection)
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client APIReleaseClient) ListComplete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result APIReleaseCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIReleaseClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, serviceName, apiid, filter, top, skip)
 	return
 }
@@ -448,6 +499,16 @@ func (client APIReleaseClient) ListComplete(ctx context.Context, resourceGroupNa
 // apiid - API identifier. Must be unique in the current API Management service instance.
 // releaseID - release identifier within an API. Must be unique in the current API Management service instance.
 func (client APIReleaseClient) Update(ctx context.Context, parameters APIReleaseContract, ifMatch string, resourceGroupName string, serviceName string, apiid string, releaseID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIReleaseClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},

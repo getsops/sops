@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpgradeProgressesClient is the client for the UpgradeProgresses methods of the Servicefabric service.
 type UpgradeProgressesClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewUpgradeProgressesClient creates an instance of the UpgradeProgressesClient client.
 func NewUpgradeProgressesClient(timeout *int32) UpgradeProgressesClient {
 	return NewUpgradeProgressesClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewUpgradeProgressesClientWithBaseURI creates an instance of the UpgradeProgressesClient client.
 func NewUpgradeProgressesClientWithBaseURI(baseURI string, timeout *int32) UpgradeProgressesClient {
 	return UpgradeProgressesClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get upgrade progresses
 func (client UpgradeProgressesClient) Get(ctx context.Context) (result ClusterUpgradeProgress, err error) {
 	req, err := client.GetPreparer(ctx)
@@ -62,6 +66,7 @@ func (client UpgradeProgressesClient) Get(ctx context.Context) (result ClusterUp
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client UpgradeProgressesClient) GetPreparer(ctx context.Context) (*http.Request, error) {
 	const APIVersion = "1.0.0"
@@ -80,6 +85,7 @@ func (client UpgradeProgressesClient) GetPreparer(ctx context.Context) (*http.Re
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client UpgradeProgressesClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -87,6 +93,7 @@ func (client UpgradeProgressesClient) GetSender(req *http.Request) (*http.Respon
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client UpgradeProgressesClient) GetResponder(resp *http.Response) (result ClusterUpgradeProgress, err error) {

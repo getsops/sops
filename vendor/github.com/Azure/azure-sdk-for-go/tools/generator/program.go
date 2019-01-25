@@ -109,12 +109,12 @@ func main() {
 						return
 					}
 
-					matches := goConfigPattern.FindAllStringSubmatch(string(targetContents), -1)
+					matches := goConfigPattern.Copy().FindAllStringSubmatch(string(targetContents), -1)
 
 					if len(matches) == 0 {
 						statusLog.Printf("Skipping %q because there were no package tags with go configuration found.", subject.(string))
 					} else {
-						packageMatches := packageConfigPattern.FindAllStringSubmatch(string(targetContents), -1)
+						packageMatches := packageConfigPattern.Copy().FindAllStringSubmatch(string(targetContents), -1)
 						outputAPIFolders := map[string]string{}
 
 						for _, submatch := range matches {

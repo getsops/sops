@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewLocationsClientWithBaseURI(baseURI string, subscriptionID string, accept
 // Parameters:
 // locationName - the name of the location. For example, West US or westus.
 func (client LocationsClient) Get(ctx context.Context, locationName string) (result Location, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LocationsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, locationName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "storageimportexport.LocationsClient", "Get", nil, "Failure preparing request")
@@ -111,6 +122,16 @@ func (client LocationsClient) GetResponder(resp *http.Response) (result Location
 // List returns a list of locations to which you can ship the disks associated with an import or export job. A location
 // is a Microsoft data center region.
 func (client LocationsClient) List(ctx context.Context) (result LocationsResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LocationsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "storageimportexport.LocationsClient", "List", nil, "Failure preparing request")

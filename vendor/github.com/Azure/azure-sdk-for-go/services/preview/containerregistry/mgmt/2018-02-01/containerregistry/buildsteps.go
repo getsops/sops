@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewBuildStepsClientWithBaseURI(baseURI string, subscriptionID string) Build
 // stepName - the name of a build step for a container registry build task.
 // buildStepCreateParameters - the parameters for creating a build step.
 func (client BuildStepsClient) Create(ctx context.Context, resourceGroupName string, registryName string, buildTaskName string, stepName string, buildStepCreateParameters BuildStep) (result BuildStepsCreateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BuildStepsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -113,10 +124,6 @@ func (client BuildStepsClient) CreateSender(req *http.Request) (future BuildStep
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -141,6 +148,16 @@ func (client BuildStepsClient) CreateResponder(resp *http.Response) (result Buil
 // buildTaskName - the name of the container registry build task.
 // stepName - the name of a build step for a container registry build task.
 func (client BuildStepsClient) Delete(ctx context.Context, resourceGroupName string, registryName string, buildTaskName string, stepName string) (result BuildStepsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BuildStepsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -204,10 +221,6 @@ func (client BuildStepsClient) DeleteSender(req *http.Request) (future BuildStep
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -231,6 +244,16 @@ func (client BuildStepsClient) DeleteResponder(resp *http.Response) (result auto
 // buildTaskName - the name of the container registry build task.
 // stepName - the name of a build step for a container registry build task.
 func (client BuildStepsClient) Get(ctx context.Context, resourceGroupName string, registryName string, buildTaskName string, stepName string) (result BuildStep, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BuildStepsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -317,6 +340,16 @@ func (client BuildStepsClient) GetResponder(resp *http.Response) (result BuildSt
 // registryName - the name of the container registry.
 // buildTaskName - the name of the container registry build task.
 func (client BuildStepsClient) List(ctx context.Context, resourceGroupName string, registryName string, buildTaskName string) (result BuildStepListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BuildStepsClient.List")
+		defer func() {
+			sc := -1
+			if result.bsl.Response.Response != nil {
+				sc = result.bsl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -394,8 +427,8 @@ func (client BuildStepsClient) ListResponder(resp *http.Response) (result BuildS
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client BuildStepsClient) listNextResults(lastResults BuildStepList) (result BuildStepList, err error) {
-	req, err := lastResults.buildStepListPreparer()
+func (client BuildStepsClient) listNextResults(ctx context.Context, lastResults BuildStepList) (result BuildStepList, err error) {
+	req, err := lastResults.buildStepListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "containerregistry.BuildStepsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -416,6 +449,16 @@ func (client BuildStepsClient) listNextResults(lastResults BuildStepList) (resul
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client BuildStepsClient) ListComplete(ctx context.Context, resourceGroupName string, registryName string, buildTaskName string) (result BuildStepListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BuildStepsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, registryName, buildTaskName)
 	return
 }
@@ -427,6 +470,16 @@ func (client BuildStepsClient) ListComplete(ctx context.Context, resourceGroupNa
 // buildTaskName - the name of the container registry build task.
 // stepName - the name of a build step for a container registry build task.
 func (client BuildStepsClient) ListBuildArguments(ctx context.Context, resourceGroupName string, registryName string, buildTaskName string, stepName string) (result BuildArgumentListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BuildStepsClient.ListBuildArguments")
+		defer func() {
+			sc := -1
+			if result.bal.Response.Response != nil {
+				sc = result.bal.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -509,8 +562,8 @@ func (client BuildStepsClient) ListBuildArgumentsResponder(resp *http.Response) 
 }
 
 // listBuildArgumentsNextResults retrieves the next set of results, if any.
-func (client BuildStepsClient) listBuildArgumentsNextResults(lastResults BuildArgumentList) (result BuildArgumentList, err error) {
-	req, err := lastResults.buildArgumentListPreparer()
+func (client BuildStepsClient) listBuildArgumentsNextResults(ctx context.Context, lastResults BuildArgumentList) (result BuildArgumentList, err error) {
+	req, err := lastResults.buildArgumentListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "containerregistry.BuildStepsClient", "listBuildArgumentsNextResults", nil, "Failure preparing next results request")
 	}
@@ -531,6 +584,16 @@ func (client BuildStepsClient) listBuildArgumentsNextResults(lastResults BuildAr
 
 // ListBuildArgumentsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client BuildStepsClient) ListBuildArgumentsComplete(ctx context.Context, resourceGroupName string, registryName string, buildTaskName string, stepName string) (result BuildArgumentListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BuildStepsClient.ListBuildArguments")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBuildArguments(ctx, resourceGroupName, registryName, buildTaskName, stepName)
 	return
 }
@@ -543,6 +606,16 @@ func (client BuildStepsClient) ListBuildArgumentsComplete(ctx context.Context, r
 // stepName - the name of a build step for a container registry build task.
 // buildStepUpdateParameters - the parameters for updating a build step.
 func (client BuildStepsClient) Update(ctx context.Context, resourceGroupName string, registryName string, buildTaskName string, stepName string, buildStepUpdateParameters BuildStepUpdateParameters) (result BuildStepsUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BuildStepsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -605,10 +678,6 @@ func (client BuildStepsClient) UpdateSender(req *http.Request) (future BuildStep
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
 	if err != nil {
 		return
 	}

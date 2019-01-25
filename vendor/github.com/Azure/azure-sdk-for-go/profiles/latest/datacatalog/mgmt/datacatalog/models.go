@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,14 +21,10 @@ package datacatalog
 
 import original "github.com/Azure/azure-sdk-for-go/services/datacatalog/mgmt/2016-03-30/datacatalog"
 
-type ADCCatalogsClient = original.ADCCatalogsClient
-type ADCOperationsClient = original.ADCOperationsClient
-
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type SkuType = original.SkuType
 
 const (
@@ -38,14 +34,20 @@ const (
 
 type ADCCatalog = original.ADCCatalog
 type ADCCatalogProperties = original.ADCCatalogProperties
+type ADCCatalogsClient = original.ADCCatalogsClient
 type ADCCatalogsDeleteFuture = original.ADCCatalogsDeleteFuture
 type ADCCatalogsListResult = original.ADCCatalogsListResult
+type ADCOperationsClient = original.ADCOperationsClient
+type BaseClient = original.BaseClient
 type OperationDisplayInfo = original.OperationDisplayInfo
 type OperationEntity = original.OperationEntity
 type OperationEntityListResult = original.OperationEntityListResult
 type Principals = original.Principals
 type Resource = original.Resource
 
+func New(subscriptionID string, catalogName string) BaseClient {
+	return original.New(subscriptionID, catalogName)
+}
 func NewADCCatalogsClient(subscriptionID string, catalogName string) ADCCatalogsClient {
 	return original.NewADCCatalogsClient(subscriptionID, catalogName)
 }
@@ -57,9 +59,6 @@ func NewADCOperationsClient(subscriptionID string, catalogName string) ADCOperat
 }
 func NewADCOperationsClientWithBaseURI(baseURI string, subscriptionID string, catalogName string) ADCOperationsClient {
 	return original.NewADCOperationsClientWithBaseURI(baseURI, subscriptionID, catalogName)
-}
-func New(subscriptionID string, catalogName string) BaseClient {
-	return original.New(subscriptionID, catalogName)
 }
 func NewWithBaseURI(baseURI string, subscriptionID string, catalogName string) BaseClient {
 	return original.NewWithBaseURI(baseURI, subscriptionID, catalogName)

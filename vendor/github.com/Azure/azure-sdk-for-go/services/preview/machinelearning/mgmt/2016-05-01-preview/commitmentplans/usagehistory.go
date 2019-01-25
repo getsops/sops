@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewUsageHistoryClientWithBaseURI(baseURI string, subscriptionID string) Usa
 // commitmentPlanName - the Azure ML commitment plan name.
 // skipToken - continuation token for pagination.
 func (client UsageHistoryClient) List(ctx context.Context, resourceGroupName string, commitmentPlanName string, skipToken string) (result PlanUsageHistoryListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UsageHistoryClient.List")
+		defer func() {
+			sc := -1
+			if result.puhlr.Response.Response != nil {
+				sc = result.puhlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, commitmentPlanName, skipToken)
 	if err != nil {
@@ -115,8 +126,8 @@ func (client UsageHistoryClient) ListResponder(resp *http.Response) (result Plan
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client UsageHistoryClient) listNextResults(lastResults PlanUsageHistoryListResult) (result PlanUsageHistoryListResult, err error) {
-	req, err := lastResults.planUsageHistoryListResultPreparer()
+func (client UsageHistoryClient) listNextResults(ctx context.Context, lastResults PlanUsageHistoryListResult) (result PlanUsageHistoryListResult, err error) {
+	req, err := lastResults.planUsageHistoryListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "commitmentplans.UsageHistoryClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -137,6 +148,16 @@ func (client UsageHistoryClient) listNextResults(lastResults PlanUsageHistoryLis
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client UsageHistoryClient) ListComplete(ctx context.Context, resourceGroupName string, commitmentPlanName string, skipToken string) (result PlanUsageHistoryListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UsageHistoryClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, commitmentPlanName, skipToken)
 	return
 }

@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewAnalyticsItemsClientWithBaseURI(baseURI string, subscriptionID string) A
 // ID - the Id of a specific item defined in the Application Insights component
 // name - the name of a specific item defined in the Application Insights component
 func (client AnalyticsItemsClient) Delete(ctx context.Context, resourceGroupName string, resourceName string, scopePath ItemScopePath, ID string, name string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AnalyticsItemsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, resourceName, scopePath, ID, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.AnalyticsItemsClient", "Delete", nil, "Failure preparing request")
@@ -125,6 +136,16 @@ func (client AnalyticsItemsClient) DeleteResponder(resp *http.Response) (result 
 // ID - the Id of a specific item defined in the Application Insights component
 // name - the name of a specific item defined in the Application Insights component
 func (client AnalyticsItemsClient) Get(ctx context.Context, resourceGroupName string, resourceName string, scopePath ItemScopePath, ID string, name string) (result ApplicationInsightsComponentAnalyticsItem, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AnalyticsItemsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, resourceName, scopePath, ID, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.AnalyticsItemsClient", "Get", nil, "Failure preparing request")
@@ -206,6 +227,16 @@ func (client AnalyticsItemsClient) GetResponder(resp *http.Response) (result App
 // includeContent - flag indicating whether or not to return the content of each applicable item. If false,
 // only return the item information.
 func (client AnalyticsItemsClient) List(ctx context.Context, resourceGroupName string, resourceName string, scopePath ItemScopePath, scope ItemScope, typeParameter ItemTypeParameter, includeContent *bool) (result ListApplicationInsightsComponentAnalyticsItem, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AnalyticsItemsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, resourceGroupName, resourceName, scopePath, scope, typeParameter, includeContent)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.AnalyticsItemsClient", "List", nil, "Failure preparing request")
@@ -293,6 +324,16 @@ func (client AnalyticsItemsClient) ListResponder(resp *http.Response) (result Li
 // overrideItem - flag indicating whether or not to force save an item. This allows overriding an item if it
 // already exists.
 func (client AnalyticsItemsClient) Put(ctx context.Context, resourceGroupName string, resourceName string, scopePath ItemScopePath, itemProperties ApplicationInsightsComponentAnalyticsItem, overrideItem *bool) (result ApplicationInsightsComponentAnalyticsItem, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AnalyticsItemsClient.Put")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PutPreparer(ctx, resourceGroupName, resourceName, scopePath, itemProperties, overrideItem)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.AnalyticsItemsClient", "Put", nil, "Failure preparing request")

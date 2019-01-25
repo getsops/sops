@@ -27,7 +27,7 @@ import (
 	"time"
 
 	"github.com/Azure/go-autorest/autorest/mocks"
-	"github.com/Azure/go-autorest/version"
+	"github.com/Azure/go-autorest/tracing"
 )
 
 func TestLoggingInspectorWithInspection(t *testing.T) {
@@ -127,7 +127,7 @@ func TestLoggingInspectorByInspectingRestoresBody(t *testing.T) {
 func TestNewClientWithUserAgent(t *testing.T) {
 	ua := "UserAgent"
 	c := NewClientWithUserAgent(ua)
-	completeUA := fmt.Sprintf("%s %s", version.UserAgent(), ua)
+	completeUA := fmt.Sprintf("%s %s", UserAgent(), ua)
 
 	if c.UserAgent != completeUA {
 		t.Fatalf("autorest: NewClientWithUserAgent failed to set the UserAgent -- expected %s, received %s",
@@ -143,7 +143,7 @@ func TestAddToUserAgent(t *testing.T) {
 	if err != nil {
 		t.Fatalf("autorest: AddToUserAgent returned error -- expected nil, received %s", err)
 	}
-	completeUA := fmt.Sprintf("%s %s %s", version.UserAgent(), ua, ext)
+	completeUA := fmt.Sprintf("%s %s %s", UserAgent(), ua, ext)
 
 	if c.UserAgent != completeUA {
 		t.Fatalf("autorest: AddToUserAgent failed to add an extension to the UserAgent -- expected %s, received %s",
@@ -344,6 +344,18 @@ func TestClientByInspectingSetsDefault(t *testing.T) {
 
 	if !reflect.DeepEqual(r, &http.Response{}) {
 		t.Fatal("autorest: Client#ByInspecting failed to provide a default ResponseInspector")
+	}
+}
+
+func TestClientTracing(t *testing.T) {
+	c := Client{}
+
+	httpClient, ok := c.sender().(*http.Client)
+	if !ok {
+		t.Fatal("autorest: Client#sender failed to return http.Client by default")
+	}
+	if httpClient.Transport != tracing.Transport {
+		t.Fatal("autorest: Client.Sender Default transport is not the tracing transport")
 	}
 }
 

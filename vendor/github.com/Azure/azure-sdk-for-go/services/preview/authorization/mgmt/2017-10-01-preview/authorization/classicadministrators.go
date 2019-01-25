@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewClassicAdministratorsClientWithBaseURI(baseURI string, subscriptionID st
 
 // List gets service administrator, account administrator, and co-administrators for the subscription.
 func (client ClassicAdministratorsClient) List(ctx context.Context) (result ClassicAdministratorListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ClassicAdministratorsClient.List")
+		defer func() {
+			sc := -1
+			if result.calr.Response.Response != nil {
+				sc = result.calr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -106,8 +117,8 @@ func (client ClassicAdministratorsClient) ListResponder(resp *http.Response) (re
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ClassicAdministratorsClient) listNextResults(lastResults ClassicAdministratorListResult) (result ClassicAdministratorListResult, err error) {
-	req, err := lastResults.classicAdministratorListResultPreparer()
+func (client ClassicAdministratorsClient) listNextResults(ctx context.Context, lastResults ClassicAdministratorListResult) (result ClassicAdministratorListResult, err error) {
+	req, err := lastResults.classicAdministratorListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "authorization.ClassicAdministratorsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -128,6 +139,16 @@ func (client ClassicAdministratorsClient) listNextResults(lastResults ClassicAdm
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ClassicAdministratorsClient) ListComplete(ctx context.Context) (result ClassicAdministratorListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ClassicAdministratorsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }

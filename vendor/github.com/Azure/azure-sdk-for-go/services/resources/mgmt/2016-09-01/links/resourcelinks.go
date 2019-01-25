@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -51,6 +52,16 @@ func NewResourceLinksClientWithBaseURI(baseURI string, subscriptionID string) Re
 // /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myGroup/Microsoft.Web/sites/mySite/Microsoft.Resources/links/myLink
 // parameters - parameters for creating or updating a resource link.
 func (client ResourceLinksClient) CreateOrUpdate(ctx context.Context, linkID string, parameters ResourceLink) (result ResourceLink, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceLinksClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Properties", Name: validation.Null, Rule: false,
@@ -127,6 +138,16 @@ func (client ResourceLinksClient) CreateOrUpdateResponder(resp *http.Response) (
 // For example,
 // /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myGroup/Microsoft.Web/sites/mySite/Microsoft.Resources/links/myLink
 func (client ResourceLinksClient) Delete(ctx context.Context, linkID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceLinksClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, linkID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "links.ResourceLinksClient", "Delete", nil, "Failure preparing request")
@@ -191,6 +212,16 @@ func (client ResourceLinksClient) DeleteResponder(resp *http.Response) (result a
 // linkID - the fully qualified Id of the resource link. For example,
 // /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myGroup/Microsoft.Web/sites/mySite/Microsoft.Resources/links/myLink
 func (client ResourceLinksClient) Get(ctx context.Context, linkID string) (result ResourceLink, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceLinksClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, linkID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "links.ResourceLinksClient", "Get", nil, "Failure preparing request")
@@ -259,6 +290,16 @@ func (client ResourceLinksClient) GetResponder(resp *http.Response) (result Reso
 // filter - the filter to apply when getting resource links. To get links only at the specified scope (not
 // below the scope), use Filter.atScope().
 func (client ResourceLinksClient) ListAtSourceScope(ctx context.Context, scope string, filter Filter) (result ResourceLinkResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceLinksClient.ListAtSourceScope")
+		defer func() {
+			sc := -1
+			if result.rlr.Response.Response != nil {
+				sc = result.rlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listAtSourceScopeNextResults
 	req, err := client.ListAtSourceScopePreparer(ctx, scope, filter)
 	if err != nil {
@@ -324,8 +365,8 @@ func (client ResourceLinksClient) ListAtSourceScopeResponder(resp *http.Response
 }
 
 // listAtSourceScopeNextResults retrieves the next set of results, if any.
-func (client ResourceLinksClient) listAtSourceScopeNextResults(lastResults ResourceLinkResult) (result ResourceLinkResult, err error) {
-	req, err := lastResults.resourceLinkResultPreparer()
+func (client ResourceLinksClient) listAtSourceScopeNextResults(ctx context.Context, lastResults ResourceLinkResult) (result ResourceLinkResult, err error) {
+	req, err := lastResults.resourceLinkResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "links.ResourceLinksClient", "listAtSourceScopeNextResults", nil, "Failure preparing next results request")
 	}
@@ -346,6 +387,16 @@ func (client ResourceLinksClient) listAtSourceScopeNextResults(lastResults Resou
 
 // ListAtSourceScopeComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ResourceLinksClient) ListAtSourceScopeComplete(ctx context.Context, scope string, filter Filter) (result ResourceLinkResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceLinksClient.ListAtSourceScope")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListAtSourceScope(ctx, scope, filter)
 	return
 }
@@ -353,8 +404,18 @@ func (client ResourceLinksClient) ListAtSourceScopeComplete(ctx context.Context,
 // ListAtSubscription gets all the linked resources for the subscription.
 // Parameters:
 // filter - the filter to apply on the list resource links operation. The supported filter for list resource
-// links is targetid. For example, $filter=targetid eq {value}
+// links is targetId. For example, $filter=targetId eq {value}
 func (client ResourceLinksClient) ListAtSubscription(ctx context.Context, filter string) (result ResourceLinkResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceLinksClient.ListAtSubscription")
+		defer func() {
+			sc := -1
+			if result.rlr.Response.Response != nil {
+				sc = result.rlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listAtSubscriptionNextResults
 	req, err := client.ListAtSubscriptionPreparer(ctx, filter)
 	if err != nil {
@@ -420,8 +481,8 @@ func (client ResourceLinksClient) ListAtSubscriptionResponder(resp *http.Respons
 }
 
 // listAtSubscriptionNextResults retrieves the next set of results, if any.
-func (client ResourceLinksClient) listAtSubscriptionNextResults(lastResults ResourceLinkResult) (result ResourceLinkResult, err error) {
-	req, err := lastResults.resourceLinkResultPreparer()
+func (client ResourceLinksClient) listAtSubscriptionNextResults(ctx context.Context, lastResults ResourceLinkResult) (result ResourceLinkResult, err error) {
+	req, err := lastResults.resourceLinkResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "links.ResourceLinksClient", "listAtSubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -442,6 +503,16 @@ func (client ResourceLinksClient) listAtSubscriptionNextResults(lastResults Reso
 
 // ListAtSubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ResourceLinksClient) ListAtSubscriptionComplete(ctx context.Context, filter string) (result ResourceLinkResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceLinksClient.ListAtSubscription")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListAtSubscription(ctx, filter)
 	return
 }

@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeStatesClient is the client for the NodeStates methods of the Servicefabric service.
 type NodeStatesClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewNodeStatesClient creates an instance of the NodeStatesClient client.
 func NewNodeStatesClient(timeout *int32) NodeStatesClient {
 	return NewNodeStatesClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewNodeStatesClientWithBaseURI creates an instance of the NodeStatesClient client.
 func NewNodeStatesClientWithBaseURI(baseURI string, timeout *int32) NodeStatesClient {
 	return NodeStatesClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Remove remove node states
 // Parameters:
 // nodeName - the name of the node
@@ -64,6 +68,7 @@ func (client NodeStatesClient) Remove(ctx context.Context, nodeName string) (res
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemovePreparer prepares the Remove request.
 func (client NodeStatesClient) RemovePreparer(ctx context.Context, nodeName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -86,6 +91,7 @@ func (client NodeStatesClient) RemovePreparer(ctx context.Context, nodeName stri
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveSender sends the Remove request. The method will close the
 // http.Response Body if it receives an error.
 func (client NodeStatesClient) RemoveSender(req *http.Request) (*http.Response, error) {
@@ -93,6 +99,7 @@ func (client NodeStatesClient) RemoveSender(req *http.Request) (*http.Response, 
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveResponder handles the response to the Remove request. The method always
 // closes the http.Response Body.
 func (client NodeStatesClient) RemoveResponder(resp *http.Response) (result String, err error) {

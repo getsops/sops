@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewNodeReportsClientWithBaseURI(baseURI string, subscriptionID string) Node
 // nodeID - the Dsc node id.
 // reportID - the report id.
 func (client NodeReportsClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string, nodeID string, reportID string) (result DscNodeReport, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NodeReportsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -126,6 +137,16 @@ func (client NodeReportsClient) GetResponder(resp *http.Response) (result DscNod
 // nodeID - the Dsc node id.
 // reportID - the report id.
 func (client NodeReportsClient) GetContent(ctx context.Context, resourceGroupName string, automationAccountName string, nodeID string, reportID string) (result SetObject, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NodeReportsClient.GetContent")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -205,6 +226,16 @@ func (client NodeReportsClient) GetContentResponder(resp *http.Response) (result
 // nodeID - the parameters supplied to the list operation.
 // filter - the filter to apply on the operation.
 func (client NodeReportsClient) ListByNode(ctx context.Context, resourceGroupName string, automationAccountName string, nodeID string, filter string) (result DscNodeReportListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NodeReportsClient.ListByNode")
+		defer func() {
+			sc := -1
+			if result.dnrlr.Response.Response != nil {
+				sc = result.dnrlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -281,8 +312,8 @@ func (client NodeReportsClient) ListByNodeResponder(resp *http.Response) (result
 }
 
 // listByNodeNextResults retrieves the next set of results, if any.
-func (client NodeReportsClient) listByNodeNextResults(lastResults DscNodeReportListResult) (result DscNodeReportListResult, err error) {
-	req, err := lastResults.dscNodeReportListResultPreparer()
+func (client NodeReportsClient) listByNodeNextResults(ctx context.Context, lastResults DscNodeReportListResult) (result DscNodeReportListResult, err error) {
+	req, err := lastResults.dscNodeReportListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "automation.NodeReportsClient", "listByNodeNextResults", nil, "Failure preparing next results request")
 	}
@@ -303,6 +334,16 @@ func (client NodeReportsClient) listByNodeNextResults(lastResults DscNodeReportL
 
 // ListByNodeComplete enumerates all values, automatically crossing page boundaries as required.
 func (client NodeReportsClient) ListByNodeComplete(ctx context.Context, resourceGroupName string, automationAccountName string, nodeID string, filter string) (result DscNodeReportListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NodeReportsClient.ListByNode")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByNode(ctx, resourceGroupName, automationAccountName, nodeID, filter)
 	return
 }

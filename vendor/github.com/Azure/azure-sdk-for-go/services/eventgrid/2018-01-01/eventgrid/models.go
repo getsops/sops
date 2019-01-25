@@ -18,38 +18,131 @@ package eventgrid
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"encoding/json"
 	"github.com/Azure/go-autorest/autorest/date"
 )
 
-// JobState enumerates the values for job state.
-type JobState string
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/eventgrid/2018-01-01/eventgrid"
+
+// MediaJobErrorCategory enumerates the values for media job error category.
+type MediaJobErrorCategory string
+
+const (
+	// Configuration The error is configuration related.
+	Configuration MediaJobErrorCategory = "Configuration"
+	// Content The error is related to data in the input files.
+	Content MediaJobErrorCategory = "Content"
+	// Download The error is download related.
+	Download MediaJobErrorCategory = "Download"
+	// Service The error is service related.
+	Service MediaJobErrorCategory = "Service"
+	// Upload The error is upload related.
+	Upload MediaJobErrorCategory = "Upload"
+)
+
+// PossibleMediaJobErrorCategoryValues returns an array of possible values for the MediaJobErrorCategory const type.
+func PossibleMediaJobErrorCategoryValues() []MediaJobErrorCategory {
+	return []MediaJobErrorCategory{Configuration, Content, Download, Service, Upload}
+}
+
+// MediaJobErrorCode enumerates the values for media job error code.
+type MediaJobErrorCode string
+
+const (
+	// ConfigurationUnsupported There was a problem with the combination of input files and the configuration
+	// settings applied, fix the configuration settings and retry with the same input, or change input to match
+	// the configuration.
+	ConfigurationUnsupported MediaJobErrorCode = "ConfigurationUnsupported"
+	// ContentMalformed There was a problem with the input content (for example: zero byte files, or
+	// corrupt/non-decodable files), check the input files.
+	ContentMalformed MediaJobErrorCode = "ContentMalformed"
+	// ContentUnsupported There was a problem with the format of the input (not valid media file, or an
+	// unsupported file/codec), check the validity of the input files.
+	ContentUnsupported MediaJobErrorCode = "ContentUnsupported"
+	// DownloadNotAccessible While trying to download the input files, the files were not accessible, please
+	// check the availability of the source.
+	DownloadNotAccessible MediaJobErrorCode = "DownloadNotAccessible"
+	// DownloadTransientError While trying to download the input files, there was an issue during transfer
+	// (storage service, network errors), see details and check your source.
+	DownloadTransientError MediaJobErrorCode = "DownloadTransientError"
+	// ServiceError Fatal service error, please contact support.
+	ServiceError MediaJobErrorCode = "ServiceError"
+	// ServiceTransientError Transient error, please retry, if retry is unsuccessful, please contact support.
+	ServiceTransientError MediaJobErrorCode = "ServiceTransientError"
+	// UploadNotAccessible While trying to upload the output files, the destination was not reachable, please
+	// check the availability of the destination.
+	UploadNotAccessible MediaJobErrorCode = "UploadNotAccessible"
+	// UploadTransientError While trying to upload the output files, there was an issue during transfer
+	// (storage service, network errors), see details and check your destination.
+	UploadTransientError MediaJobErrorCode = "UploadTransientError"
+)
+
+// PossibleMediaJobErrorCodeValues returns an array of possible values for the MediaJobErrorCode const type.
+func PossibleMediaJobErrorCodeValues() []MediaJobErrorCode {
+	return []MediaJobErrorCode{ConfigurationUnsupported, ContentMalformed, ContentUnsupported, DownloadNotAccessible, DownloadTransientError, ServiceError, ServiceTransientError, UploadNotAccessible, UploadTransientError}
+}
+
+// MediaJobRetry enumerates the values for media job retry.
+type MediaJobRetry string
+
+const (
+	// DoNotRetry Issue needs to be investigated and then the job resubmitted with corrections or retried once
+	// the underlying issue has been corrected.
+	DoNotRetry MediaJobRetry = "DoNotRetry"
+	// MayRetry Issue may be resolved after waiting for a period of time and resubmitting the same Job.
+	MayRetry MediaJobRetry = "MayRetry"
+)
+
+// PossibleMediaJobRetryValues returns an array of possible values for the MediaJobRetry const type.
+func PossibleMediaJobRetryValues() []MediaJobRetry {
+	return []MediaJobRetry{DoNotRetry, MayRetry}
+}
+
+// MediaJobState enumerates the values for media job state.
+type MediaJobState string
 
 const (
 	// Canceled The job was canceled. This is a final state for the job.
-	Canceled JobState = "Canceled"
+	Canceled MediaJobState = "Canceled"
 	// Canceling The job is in the process of being canceled. This is a transient state for the job.
-	Canceling JobState = "Canceling"
+	Canceling MediaJobState = "Canceling"
 	// Error The job has encountered an error. This is a final state for the job.
-	Error JobState = "Error"
+	Error MediaJobState = "Error"
 	// Finished The job is finished. This is a final state for the job.
-	Finished JobState = "Finished"
+	Finished MediaJobState = "Finished"
 	// Processing The job is processing. This is a transient state for the job.
-	Processing JobState = "Processing"
+	Processing MediaJobState = "Processing"
 	// Queued The job is in a queued state, waiting for resources to become available. This is a transient
 	// state.
-	Queued JobState = "Queued"
+	Queued MediaJobState = "Queued"
 	// Scheduled The job is being scheduled to run on an available resource. This is a transient state, between
 	// queued and processing states.
-	Scheduled JobState = "Scheduled"
+	Scheduled MediaJobState = "Scheduled"
 )
 
-// PossibleJobStateValues returns an array of possible values for the JobState const type.
-func PossibleJobStateValues() []JobState {
-	return []JobState{Canceled, Canceling, Error, Finished, Processing, Queued, Scheduled}
+// PossibleMediaJobStateValues returns an array of possible values for the MediaJobState const type.
+func PossibleMediaJobStateValues() []MediaJobState {
+	return []MediaJobState{Canceled, Canceling, Error, Finished, Processing, Queued, Scheduled}
 }
 
-// ContainerRegistryEventActor the agent that initiated the event. For most situations, this could be from the
-// authorization context of the request.
+// OdataType enumerates the values for odata type.
+type OdataType string
+
+const (
+	// OdataTypeMediaJobOutput ...
+	OdataTypeMediaJobOutput OdataType = "MediaJobOutput"
+	// OdataTypeMicrosoftMediaJobOutputAsset ...
+	OdataTypeMicrosoftMediaJobOutputAsset OdataType = "#Microsoft.Media.JobOutputAsset"
+)
+
+// PossibleOdataTypeValues returns an array of possible values for the OdataType const type.
+func PossibleOdataTypeValues() []OdataType {
+	return []OdataType{OdataTypeMediaJobOutput, OdataTypeMicrosoftMediaJobOutputAsset}
+}
+
+// ContainerRegistryEventActor the agent that initiated the event. For most situations, this could be from
+// the authorization context of the request.
 type ContainerRegistryEventActor struct {
 	// Name - The subject or username associated with the request context that generated the event.
 	Name *string `json:"name,omitempty"`
@@ -87,8 +180,8 @@ type ContainerRegistryEventRequest struct {
 	Useragent *string `json:"useragent,omitempty"`
 }
 
-// ContainerRegistryEventSource the registry node that generated the event. Put differently, while the actor
-// initiates the event, the source generates it.
+// ContainerRegistryEventSource the registry node that generated the event. Put differently, while the
+// actor initiates the event, the source generates it.
 type ContainerRegistryEventSource struct {
 	// Addr - The IP or hostname and the port of the registry node that generated the event. Generally, this will be resolved by os.Hostname() along with the running port.
 	Addr *string `json:"addr,omitempty"`
@@ -158,8 +251,8 @@ type DeviceConnectionStateEventInfo struct {
 	SequenceNumber *string `json:"sequenceNumber,omitempty"`
 }
 
-// DeviceConnectionStateEventProperties schema of the Data property of an EventGridEvent for a device connection
-// state event (DeviceConnected, DeviceDisconnected).
+// DeviceConnectionStateEventProperties schema of the Data property of an EventGridEvent for a device
+// connection state event (DeviceConnected, DeviceDisconnected).
 type DeviceConnectionStateEventProperties struct {
 	// DeviceID - The unique identifier of the device. This case-sensitive string can be up to 128 characters long, and supports ASCII 7-bit alphanumeric characters plus the following special characters: - : . + % _ &#35; * ? ! ( ) , = @ ; $ '.
 	DeviceID *string `json:"deviceId,omitempty"`
@@ -171,8 +264,8 @@ type DeviceConnectionStateEventProperties struct {
 	DeviceConnectionStateEventInfo *DeviceConnectionStateEventInfo `json:"deviceConnectionStateEventInfo,omitempty"`
 }
 
-// DeviceLifeCycleEventProperties schema of the Data property of an EventGridEvent for a device life cycle event
-// (DeviceCreated, DeviceDeleted).
+// DeviceLifeCycleEventProperties schema of the Data property of an EventGridEvent for a device life cycle
+// event (DeviceCreated, DeviceDeleted).
 type DeviceLifeCycleEventProperties struct {
 	// DeviceID - The unique identifier of the device. This case-sensitive string can be up to 128 characters long, and supports ASCII 7-bit alphanumeric characters plus the following special characters: - : . + % _ &#35; * ? ! ( ) , = @ ; $ '.
 	DeviceID *string `json:"deviceId,omitempty"`
@@ -182,8 +275,8 @@ type DeviceLifeCycleEventProperties struct {
 	Twin *DeviceTwinInfo `json:"twin,omitempty"`
 }
 
-// DeviceTwinInfo information about the device twin, which is the cloud representation of application device
-// metadata.
+// DeviceTwinInfo information about the device twin, which is the cloud representation of application
+// device metadata.
 type DeviceTwinInfo struct {
 	// AuthenticationType - Authentication type used for this device: either SAS, SelfSigned, or CertificateAuthority.
 	AuthenticationType *string `json:"authenticationType,omitempty"`
@@ -217,9 +310,9 @@ type DeviceTwinInfoProperties struct {
 	Reported *DeviceTwinProperties `json:"reported,omitempty"`
 }
 
-// DeviceTwinInfoX509Thumbprint the thumbprint is a unique value for the x509 certificate, commonly used to find a
-// particular certificate in a certificate store. The thumbprint is dynamically generated using the SHA1 algorithm,
-// and does not physically exist in the certificate.
+// DeviceTwinInfoX509Thumbprint the thumbprint is a unique value for the x509 certificate, commonly used to
+// find a particular certificate in a certificate store. The thumbprint is dynamically generated using the
+// SHA1 algorithm, and does not physically exist in the certificate.
 type DeviceTwinInfoX509Thumbprint struct {
 	// PrimaryThumbprint - Primary thumbprint for the x509 certificate.
 	PrimaryThumbprint *string `json:"primaryThumbprint,omitempty"`
@@ -233,8 +326,8 @@ type DeviceTwinMetadata struct {
 	LastUpdated *string `json:"lastUpdated,omitempty"`
 }
 
-// DeviceTwinProperties a portion of the properties that can be written only by the application back-end, and read
-// by the device.
+// DeviceTwinProperties a portion of the properties that can be written only by the application back-end,
+// and read by the device.
 type DeviceTwinProperties struct {
 	// Metadata - Metadata information for the properties JSON document.
 	Metadata *DeviceTwinMetadata `json:"metadata,omitempty"`
@@ -329,17 +422,1125 @@ type IotHubDeviceDisconnectedEventData struct {
 	DeviceConnectionStateEventInfo *DeviceConnectionStateEventInfo `json:"deviceConnectionStateEventInfo,omitempty"`
 }
 
+// MediaJobCanceledEventData job canceled event data
+type MediaJobCanceledEventData struct {
+	// Outputs - Gets the Job outputs.
+	Outputs *[]BasicMediaJobOutput `json:"outputs,omitempty"`
+	// PreviousState - The previous state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	PreviousState MediaJobState `json:"previousState,omitempty"`
+	// State - The new state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	State MediaJobState `json:"state,omitempty"`
+	// CorrelationData - Gets the Job correlation data.
+	CorrelationData map[string]*string `json:"correlationData"`
+}
+
+// MarshalJSON is the custom marshaler for MediaJobCanceledEventData.
+func (mjced MediaJobCanceledEventData) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mjced.Outputs != nil {
+		objectMap["outputs"] = mjced.Outputs
+	}
+	if mjced.PreviousState != "" {
+		objectMap["previousState"] = mjced.PreviousState
+	}
+	if mjced.State != "" {
+		objectMap["state"] = mjced.State
+	}
+	if mjced.CorrelationData != nil {
+		objectMap["correlationData"] = mjced.CorrelationData
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for MediaJobCanceledEventData struct.
+func (mjced *MediaJobCanceledEventData) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "outputs":
+			if v != nil {
+				outputs, err := unmarshalBasicMediaJobOutputArray(*v)
+				if err != nil {
+					return err
+				}
+				mjced.Outputs = &outputs
+			}
+		case "previousState":
+			if v != nil {
+				var previousState MediaJobState
+				err = json.Unmarshal(*v, &previousState)
+				if err != nil {
+					return err
+				}
+				mjced.PreviousState = previousState
+			}
+		case "state":
+			if v != nil {
+				var state MediaJobState
+				err = json.Unmarshal(*v, &state)
+				if err != nil {
+					return err
+				}
+				mjced.State = state
+			}
+		case "correlationData":
+			if v != nil {
+				var correlationData map[string]*string
+				err = json.Unmarshal(*v, &correlationData)
+				if err != nil {
+					return err
+				}
+				mjced.CorrelationData = correlationData
+			}
+		}
+	}
+
+	return nil
+}
+
+// MediaJobCancelingEventData job canceling event data
+type MediaJobCancelingEventData struct {
+	// PreviousState - The previous state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	PreviousState MediaJobState `json:"previousState,omitempty"`
+	// State - The new state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	State MediaJobState `json:"state,omitempty"`
+	// CorrelationData - Gets the Job correlation data.
+	CorrelationData map[string]*string `json:"correlationData"`
+}
+
+// MarshalJSON is the custom marshaler for MediaJobCancelingEventData.
+func (mjced MediaJobCancelingEventData) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mjced.PreviousState != "" {
+		objectMap["previousState"] = mjced.PreviousState
+	}
+	if mjced.State != "" {
+		objectMap["state"] = mjced.State
+	}
+	if mjced.CorrelationData != nil {
+		objectMap["correlationData"] = mjced.CorrelationData
+	}
+	return json.Marshal(objectMap)
+}
+
+// MediaJobError details of JobOutput errors.
+type MediaJobError struct {
+	// Code - Error code describing the error. Possible values include: 'ServiceError', 'ServiceTransientError', 'DownloadNotAccessible', 'DownloadTransientError', 'UploadNotAccessible', 'UploadTransientError', 'ConfigurationUnsupported', 'ContentMalformed', 'ContentUnsupported'
+	Code MediaJobErrorCode `json:"code,omitempty"`
+	// Message - A human-readable language-dependent representation of the error.
+	Message *string `json:"message,omitempty"`
+	// Category - Helps with categorization of errors. Possible values include: 'Service', 'Download', 'Upload', 'Configuration', 'Content'
+	Category MediaJobErrorCategory `json:"category,omitempty"`
+	// Retry - Indicates that it may be possible to retry the Job. If retry is unsuccessful, please contact Azure support via Azure Portal. Possible values include: 'DoNotRetry', 'MayRetry'
+	Retry MediaJobRetry `json:"retry,omitempty"`
+	// Details - An array of details about specific errors that led to this reported error.
+	Details *[]MediaJobErrorDetail `json:"details,omitempty"`
+}
+
+// MediaJobErrorDetail details of JobOutput errors.
+type MediaJobErrorDetail struct {
+	// Code - Code describing the error detail.
+	Code *string `json:"code,omitempty"`
+	// Message - A human-readable representation of the error.
+	Message *string `json:"message,omitempty"`
+}
+
+// MediaJobErroredEventData job error state event data
+type MediaJobErroredEventData struct {
+	// Outputs - Gets the Job outputs.
+	Outputs *[]BasicMediaJobOutput `json:"outputs,omitempty"`
+	// PreviousState - The previous state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	PreviousState MediaJobState `json:"previousState,omitempty"`
+	// State - The new state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	State MediaJobState `json:"state,omitempty"`
+	// CorrelationData - Gets the Job correlation data.
+	CorrelationData map[string]*string `json:"correlationData"`
+}
+
+// MarshalJSON is the custom marshaler for MediaJobErroredEventData.
+func (mjeed MediaJobErroredEventData) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mjeed.Outputs != nil {
+		objectMap["outputs"] = mjeed.Outputs
+	}
+	if mjeed.PreviousState != "" {
+		objectMap["previousState"] = mjeed.PreviousState
+	}
+	if mjeed.State != "" {
+		objectMap["state"] = mjeed.State
+	}
+	if mjeed.CorrelationData != nil {
+		objectMap["correlationData"] = mjeed.CorrelationData
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for MediaJobErroredEventData struct.
+func (mjeed *MediaJobErroredEventData) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "outputs":
+			if v != nil {
+				outputs, err := unmarshalBasicMediaJobOutputArray(*v)
+				if err != nil {
+					return err
+				}
+				mjeed.Outputs = &outputs
+			}
+		case "previousState":
+			if v != nil {
+				var previousState MediaJobState
+				err = json.Unmarshal(*v, &previousState)
+				if err != nil {
+					return err
+				}
+				mjeed.PreviousState = previousState
+			}
+		case "state":
+			if v != nil {
+				var state MediaJobState
+				err = json.Unmarshal(*v, &state)
+				if err != nil {
+					return err
+				}
+				mjeed.State = state
+			}
+		case "correlationData":
+			if v != nil {
+				var correlationData map[string]*string
+				err = json.Unmarshal(*v, &correlationData)
+				if err != nil {
+					return err
+				}
+				mjeed.CorrelationData = correlationData
+			}
+		}
+	}
+
+	return nil
+}
+
+// MediaJobFinishedEventData job finished event data
+type MediaJobFinishedEventData struct {
+	// Outputs - Gets the Job outputs.
+	Outputs *[]BasicMediaJobOutput `json:"outputs,omitempty"`
+	// PreviousState - The previous state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	PreviousState MediaJobState `json:"previousState,omitempty"`
+	// State - The new state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	State MediaJobState `json:"state,omitempty"`
+	// CorrelationData - Gets the Job correlation data.
+	CorrelationData map[string]*string `json:"correlationData"`
+}
+
+// MarshalJSON is the custom marshaler for MediaJobFinishedEventData.
+func (mjfed MediaJobFinishedEventData) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mjfed.Outputs != nil {
+		objectMap["outputs"] = mjfed.Outputs
+	}
+	if mjfed.PreviousState != "" {
+		objectMap["previousState"] = mjfed.PreviousState
+	}
+	if mjfed.State != "" {
+		objectMap["state"] = mjfed.State
+	}
+	if mjfed.CorrelationData != nil {
+		objectMap["correlationData"] = mjfed.CorrelationData
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for MediaJobFinishedEventData struct.
+func (mjfed *MediaJobFinishedEventData) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "outputs":
+			if v != nil {
+				outputs, err := unmarshalBasicMediaJobOutputArray(*v)
+				if err != nil {
+					return err
+				}
+				mjfed.Outputs = &outputs
+			}
+		case "previousState":
+			if v != nil {
+				var previousState MediaJobState
+				err = json.Unmarshal(*v, &previousState)
+				if err != nil {
+					return err
+				}
+				mjfed.PreviousState = previousState
+			}
+		case "state":
+			if v != nil {
+				var state MediaJobState
+				err = json.Unmarshal(*v, &state)
+				if err != nil {
+					return err
+				}
+				mjfed.State = state
+			}
+		case "correlationData":
+			if v != nil {
+				var correlationData map[string]*string
+				err = json.Unmarshal(*v, &correlationData)
+				if err != nil {
+					return err
+				}
+				mjfed.CorrelationData = correlationData
+			}
+		}
+	}
+
+	return nil
+}
+
+// BasicMediaJobOutput the event data for a Job output.
+type BasicMediaJobOutput interface {
+	AsMediaJobOutputAsset() (*MediaJobOutputAsset, bool)
+	AsMediaJobOutput() (*MediaJobOutput, bool)
+}
+
+// MediaJobOutput the event data for a Job output.
+type MediaJobOutput struct {
+	// Error - Gets the Job output error.
+	Error *MediaJobError `json:"error,omitempty"`
+	// Label - Gets the Job output label.
+	Label *string `json:"label,omitempty"`
+	// Progress - Gets the Job output progress.
+	Progress *int64 `json:"progress,omitempty"`
+	// State - Gets the Job output state. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	State MediaJobState `json:"state,omitempty"`
+	// OdataType - Possible values include: 'OdataTypeMediaJobOutput', 'OdataTypeMicrosoftMediaJobOutputAsset'
+	OdataType OdataType `json:"@odata.type,omitempty"`
+}
+
+func unmarshalBasicMediaJobOutput(body []byte) (BasicMediaJobOutput, error) {
+	var m map[string]interface{}
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return nil, err
+	}
+
+	switch m["@odata.type"] {
+	case string(OdataTypeMicrosoftMediaJobOutputAsset):
+		var mjoa MediaJobOutputAsset
+		err := json.Unmarshal(body, &mjoa)
+		return mjoa, err
+	default:
+		var mjo MediaJobOutput
+		err := json.Unmarshal(body, &mjo)
+		return mjo, err
+	}
+}
+func unmarshalBasicMediaJobOutputArray(body []byte) ([]BasicMediaJobOutput, error) {
+	var rawMessages []*json.RawMessage
+	err := json.Unmarshal(body, &rawMessages)
+	if err != nil {
+		return nil, err
+	}
+
+	mjoArray := make([]BasicMediaJobOutput, len(rawMessages))
+
+	for index, rawMessage := range rawMessages {
+		mjo, err := unmarshalBasicMediaJobOutput(*rawMessage)
+		if err != nil {
+			return nil, err
+		}
+		mjoArray[index] = mjo
+	}
+	return mjoArray, nil
+}
+
+// MarshalJSON is the custom marshaler for MediaJobOutput.
+func (mjo MediaJobOutput) MarshalJSON() ([]byte, error) {
+	mjo.OdataType = OdataTypeMediaJobOutput
+	objectMap := make(map[string]interface{})
+	if mjo.Error != nil {
+		objectMap["error"] = mjo.Error
+	}
+	if mjo.Label != nil {
+		objectMap["label"] = mjo.Label
+	}
+	if mjo.Progress != nil {
+		objectMap["progress"] = mjo.Progress
+	}
+	if mjo.State != "" {
+		objectMap["state"] = mjo.State
+	}
+	if mjo.OdataType != "" {
+		objectMap["@odata.type"] = mjo.OdataType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsMediaJobOutputAsset is the BasicMediaJobOutput implementation for MediaJobOutput.
+func (mjo MediaJobOutput) AsMediaJobOutputAsset() (*MediaJobOutputAsset, bool) {
+	return nil, false
+}
+
+// AsMediaJobOutput is the BasicMediaJobOutput implementation for MediaJobOutput.
+func (mjo MediaJobOutput) AsMediaJobOutput() (*MediaJobOutput, bool) {
+	return &mjo, true
+}
+
+// AsBasicMediaJobOutput is the BasicMediaJobOutput implementation for MediaJobOutput.
+func (mjo MediaJobOutput) AsBasicMediaJobOutput() (BasicMediaJobOutput, bool) {
+	return &mjo, true
+}
+
+// MediaJobOutputAsset the event data for a Job output asset.
+type MediaJobOutputAsset struct {
+	// AssetName - Gets the Job output asset name.
+	AssetName *string `json:"assetName,omitempty"`
+	// Error - Gets the Job output error.
+	Error *MediaJobError `json:"error,omitempty"`
+	// Label - Gets the Job output label.
+	Label *string `json:"label,omitempty"`
+	// Progress - Gets the Job output progress.
+	Progress *int64 `json:"progress,omitempty"`
+	// State - Gets the Job output state. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	State MediaJobState `json:"state,omitempty"`
+	// OdataType - Possible values include: 'OdataTypeMediaJobOutput', 'OdataTypeMicrosoftMediaJobOutputAsset'
+	OdataType OdataType `json:"@odata.type,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for MediaJobOutputAsset.
+func (mjoa MediaJobOutputAsset) MarshalJSON() ([]byte, error) {
+	mjoa.OdataType = OdataTypeMicrosoftMediaJobOutputAsset
+	objectMap := make(map[string]interface{})
+	if mjoa.AssetName != nil {
+		objectMap["assetName"] = mjoa.AssetName
+	}
+	if mjoa.Error != nil {
+		objectMap["error"] = mjoa.Error
+	}
+	if mjoa.Label != nil {
+		objectMap["label"] = mjoa.Label
+	}
+	if mjoa.Progress != nil {
+		objectMap["progress"] = mjoa.Progress
+	}
+	if mjoa.State != "" {
+		objectMap["state"] = mjoa.State
+	}
+	if mjoa.OdataType != "" {
+		objectMap["@odata.type"] = mjoa.OdataType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsMediaJobOutputAsset is the BasicMediaJobOutput implementation for MediaJobOutputAsset.
+func (mjoa MediaJobOutputAsset) AsMediaJobOutputAsset() (*MediaJobOutputAsset, bool) {
+	return &mjoa, true
+}
+
+// AsMediaJobOutput is the BasicMediaJobOutput implementation for MediaJobOutputAsset.
+func (mjoa MediaJobOutputAsset) AsMediaJobOutput() (*MediaJobOutput, bool) {
+	return nil, false
+}
+
+// AsBasicMediaJobOutput is the BasicMediaJobOutput implementation for MediaJobOutputAsset.
+func (mjoa MediaJobOutputAsset) AsBasicMediaJobOutput() (BasicMediaJobOutput, bool) {
+	return &mjoa, true
+}
+
+// MediaJobOutputCanceledEventData job output canceled event data
+type MediaJobOutputCanceledEventData struct {
+	// PreviousState - The previous state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	PreviousState MediaJobState `json:"previousState,omitempty"`
+	// Output - Gets the output.
+	Output BasicMediaJobOutput `json:"output,omitempty"`
+	// JobCorrelationData - Gets the Job correlation data.
+	JobCorrelationData map[string]*string `json:"jobCorrelationData"`
+}
+
+// MarshalJSON is the custom marshaler for MediaJobOutputCanceledEventData.
+func (mjoced MediaJobOutputCanceledEventData) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mjoced.PreviousState != "" {
+		objectMap["previousState"] = mjoced.PreviousState
+	}
+	objectMap["output"] = mjoced.Output
+	if mjoced.JobCorrelationData != nil {
+		objectMap["jobCorrelationData"] = mjoced.JobCorrelationData
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for MediaJobOutputCanceledEventData struct.
+func (mjoced *MediaJobOutputCanceledEventData) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "previousState":
+			if v != nil {
+				var previousState MediaJobState
+				err = json.Unmarshal(*v, &previousState)
+				if err != nil {
+					return err
+				}
+				mjoced.PreviousState = previousState
+			}
+		case "output":
+			if v != nil {
+				output, err := unmarshalBasicMediaJobOutput(*v)
+				if err != nil {
+					return err
+				}
+				mjoced.Output = output
+			}
+		case "jobCorrelationData":
+			if v != nil {
+				var jobCorrelationData map[string]*string
+				err = json.Unmarshal(*v, &jobCorrelationData)
+				if err != nil {
+					return err
+				}
+				mjoced.JobCorrelationData = jobCorrelationData
+			}
+		}
+	}
+
+	return nil
+}
+
+// MediaJobOutputCancelingEventData job output canceling event data
+type MediaJobOutputCancelingEventData struct {
+	// PreviousState - The previous state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	PreviousState MediaJobState `json:"previousState,omitempty"`
+	// Output - Gets the output.
+	Output BasicMediaJobOutput `json:"output,omitempty"`
+	// JobCorrelationData - Gets the Job correlation data.
+	JobCorrelationData map[string]*string `json:"jobCorrelationData"`
+}
+
+// MarshalJSON is the custom marshaler for MediaJobOutputCancelingEventData.
+func (mjoced MediaJobOutputCancelingEventData) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mjoced.PreviousState != "" {
+		objectMap["previousState"] = mjoced.PreviousState
+	}
+	objectMap["output"] = mjoced.Output
+	if mjoced.JobCorrelationData != nil {
+		objectMap["jobCorrelationData"] = mjoced.JobCorrelationData
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for MediaJobOutputCancelingEventData struct.
+func (mjoced *MediaJobOutputCancelingEventData) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "previousState":
+			if v != nil {
+				var previousState MediaJobState
+				err = json.Unmarshal(*v, &previousState)
+				if err != nil {
+					return err
+				}
+				mjoced.PreviousState = previousState
+			}
+		case "output":
+			if v != nil {
+				output, err := unmarshalBasicMediaJobOutput(*v)
+				if err != nil {
+					return err
+				}
+				mjoced.Output = output
+			}
+		case "jobCorrelationData":
+			if v != nil {
+				var jobCorrelationData map[string]*string
+				err = json.Unmarshal(*v, &jobCorrelationData)
+				if err != nil {
+					return err
+				}
+				mjoced.JobCorrelationData = jobCorrelationData
+			}
+		}
+	}
+
+	return nil
+}
+
+// MediaJobOutputErroredEventData job output error event data
+type MediaJobOutputErroredEventData struct {
+	// PreviousState - The previous state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	PreviousState MediaJobState `json:"previousState,omitempty"`
+	// Output - Gets the output.
+	Output BasicMediaJobOutput `json:"output,omitempty"`
+	// JobCorrelationData - Gets the Job correlation data.
+	JobCorrelationData map[string]*string `json:"jobCorrelationData"`
+}
+
+// MarshalJSON is the custom marshaler for MediaJobOutputErroredEventData.
+func (mjoeed MediaJobOutputErroredEventData) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mjoeed.PreviousState != "" {
+		objectMap["previousState"] = mjoeed.PreviousState
+	}
+	objectMap["output"] = mjoeed.Output
+	if mjoeed.JobCorrelationData != nil {
+		objectMap["jobCorrelationData"] = mjoeed.JobCorrelationData
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for MediaJobOutputErroredEventData struct.
+func (mjoeed *MediaJobOutputErroredEventData) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "previousState":
+			if v != nil {
+				var previousState MediaJobState
+				err = json.Unmarshal(*v, &previousState)
+				if err != nil {
+					return err
+				}
+				mjoeed.PreviousState = previousState
+			}
+		case "output":
+			if v != nil {
+				output, err := unmarshalBasicMediaJobOutput(*v)
+				if err != nil {
+					return err
+				}
+				mjoeed.Output = output
+			}
+		case "jobCorrelationData":
+			if v != nil {
+				var jobCorrelationData map[string]*string
+				err = json.Unmarshal(*v, &jobCorrelationData)
+				if err != nil {
+					return err
+				}
+				mjoeed.JobCorrelationData = jobCorrelationData
+			}
+		}
+	}
+
+	return nil
+}
+
+// MediaJobOutputFinishedEventData job output finished event data
+type MediaJobOutputFinishedEventData struct {
+	// PreviousState - The previous state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	PreviousState MediaJobState `json:"previousState,omitempty"`
+	// Output - Gets the output.
+	Output BasicMediaJobOutput `json:"output,omitempty"`
+	// JobCorrelationData - Gets the Job correlation data.
+	JobCorrelationData map[string]*string `json:"jobCorrelationData"`
+}
+
+// MarshalJSON is the custom marshaler for MediaJobOutputFinishedEventData.
+func (mjofed MediaJobOutputFinishedEventData) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mjofed.PreviousState != "" {
+		objectMap["previousState"] = mjofed.PreviousState
+	}
+	objectMap["output"] = mjofed.Output
+	if mjofed.JobCorrelationData != nil {
+		objectMap["jobCorrelationData"] = mjofed.JobCorrelationData
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for MediaJobOutputFinishedEventData struct.
+func (mjofed *MediaJobOutputFinishedEventData) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "previousState":
+			if v != nil {
+				var previousState MediaJobState
+				err = json.Unmarshal(*v, &previousState)
+				if err != nil {
+					return err
+				}
+				mjofed.PreviousState = previousState
+			}
+		case "output":
+			if v != nil {
+				output, err := unmarshalBasicMediaJobOutput(*v)
+				if err != nil {
+					return err
+				}
+				mjofed.Output = output
+			}
+		case "jobCorrelationData":
+			if v != nil {
+				var jobCorrelationData map[string]*string
+				err = json.Unmarshal(*v, &jobCorrelationData)
+				if err != nil {
+					return err
+				}
+				mjofed.JobCorrelationData = jobCorrelationData
+			}
+		}
+	}
+
+	return nil
+}
+
+// MediaJobOutputProcessingEventData job output processing event data
+type MediaJobOutputProcessingEventData struct {
+	// PreviousState - The previous state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	PreviousState MediaJobState `json:"previousState,omitempty"`
+	// Output - Gets the output.
+	Output BasicMediaJobOutput `json:"output,omitempty"`
+	// JobCorrelationData - Gets the Job correlation data.
+	JobCorrelationData map[string]*string `json:"jobCorrelationData"`
+}
+
+// MarshalJSON is the custom marshaler for MediaJobOutputProcessingEventData.
+func (mjoped MediaJobOutputProcessingEventData) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mjoped.PreviousState != "" {
+		objectMap["previousState"] = mjoped.PreviousState
+	}
+	objectMap["output"] = mjoped.Output
+	if mjoped.JobCorrelationData != nil {
+		objectMap["jobCorrelationData"] = mjoped.JobCorrelationData
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for MediaJobOutputProcessingEventData struct.
+func (mjoped *MediaJobOutputProcessingEventData) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "previousState":
+			if v != nil {
+				var previousState MediaJobState
+				err = json.Unmarshal(*v, &previousState)
+				if err != nil {
+					return err
+				}
+				mjoped.PreviousState = previousState
+			}
+		case "output":
+			if v != nil {
+				output, err := unmarshalBasicMediaJobOutput(*v)
+				if err != nil {
+					return err
+				}
+				mjoped.Output = output
+			}
+		case "jobCorrelationData":
+			if v != nil {
+				var jobCorrelationData map[string]*string
+				err = json.Unmarshal(*v, &jobCorrelationData)
+				if err != nil {
+					return err
+				}
+				mjoped.JobCorrelationData = jobCorrelationData
+			}
+		}
+	}
+
+	return nil
+}
+
+// MediaJobOutputScheduledEventData job output scheduled event data
+type MediaJobOutputScheduledEventData struct {
+	// PreviousState - The previous state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	PreviousState MediaJobState `json:"previousState,omitempty"`
+	// Output - Gets the output.
+	Output BasicMediaJobOutput `json:"output,omitempty"`
+	// JobCorrelationData - Gets the Job correlation data.
+	JobCorrelationData map[string]*string `json:"jobCorrelationData"`
+}
+
+// MarshalJSON is the custom marshaler for MediaJobOutputScheduledEventData.
+func (mjosed MediaJobOutputScheduledEventData) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mjosed.PreviousState != "" {
+		objectMap["previousState"] = mjosed.PreviousState
+	}
+	objectMap["output"] = mjosed.Output
+	if mjosed.JobCorrelationData != nil {
+		objectMap["jobCorrelationData"] = mjosed.JobCorrelationData
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for MediaJobOutputScheduledEventData struct.
+func (mjosed *MediaJobOutputScheduledEventData) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "previousState":
+			if v != nil {
+				var previousState MediaJobState
+				err = json.Unmarshal(*v, &previousState)
+				if err != nil {
+					return err
+				}
+				mjosed.PreviousState = previousState
+			}
+		case "output":
+			if v != nil {
+				output, err := unmarshalBasicMediaJobOutput(*v)
+				if err != nil {
+					return err
+				}
+				mjosed.Output = output
+			}
+		case "jobCorrelationData":
+			if v != nil {
+				var jobCorrelationData map[string]*string
+				err = json.Unmarshal(*v, &jobCorrelationData)
+				if err != nil {
+					return err
+				}
+				mjosed.JobCorrelationData = jobCorrelationData
+			}
+		}
+	}
+
+	return nil
+}
+
+// MediaJobOutputStateChangeEventData schema of the Data property of an EventGridEvent for a
+// Microsoft.Media.JobOutputStateChange event.
+type MediaJobOutputStateChangeEventData struct {
+	// PreviousState - The previous state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	PreviousState MediaJobState `json:"previousState,omitempty"`
+	// Output - Gets the output.
+	Output BasicMediaJobOutput `json:"output,omitempty"`
+	// JobCorrelationData - Gets the Job correlation data.
+	JobCorrelationData map[string]*string `json:"jobCorrelationData"`
+}
+
+// MarshalJSON is the custom marshaler for MediaJobOutputStateChangeEventData.
+func (mjosced MediaJobOutputStateChangeEventData) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mjosced.PreviousState != "" {
+		objectMap["previousState"] = mjosced.PreviousState
+	}
+	objectMap["output"] = mjosced.Output
+	if mjosced.JobCorrelationData != nil {
+		objectMap["jobCorrelationData"] = mjosced.JobCorrelationData
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for MediaJobOutputStateChangeEventData struct.
+func (mjosced *MediaJobOutputStateChangeEventData) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "previousState":
+			if v != nil {
+				var previousState MediaJobState
+				err = json.Unmarshal(*v, &previousState)
+				if err != nil {
+					return err
+				}
+				mjosced.PreviousState = previousState
+			}
+		case "output":
+			if v != nil {
+				output, err := unmarshalBasicMediaJobOutput(*v)
+				if err != nil {
+					return err
+				}
+				mjosced.Output = output
+			}
+		case "jobCorrelationData":
+			if v != nil {
+				var jobCorrelationData map[string]*string
+				err = json.Unmarshal(*v, &jobCorrelationData)
+				if err != nil {
+					return err
+				}
+				mjosced.JobCorrelationData = jobCorrelationData
+			}
+		}
+	}
+
+	return nil
+}
+
+// MediaJobProcessingEventData job processing event data
+type MediaJobProcessingEventData struct {
+	// PreviousState - The previous state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	PreviousState MediaJobState `json:"previousState,omitempty"`
+	// State - The new state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	State MediaJobState `json:"state,omitempty"`
+	// CorrelationData - Gets the Job correlation data.
+	CorrelationData map[string]*string `json:"correlationData"`
+}
+
+// MarshalJSON is the custom marshaler for MediaJobProcessingEventData.
+func (mjped MediaJobProcessingEventData) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mjped.PreviousState != "" {
+		objectMap["previousState"] = mjped.PreviousState
+	}
+	if mjped.State != "" {
+		objectMap["state"] = mjped.State
+	}
+	if mjped.CorrelationData != nil {
+		objectMap["correlationData"] = mjped.CorrelationData
+	}
+	return json.Marshal(objectMap)
+}
+
+// MediaJobScheduledEventData job scheduled event data
+type MediaJobScheduledEventData struct {
+	// PreviousState - The previous state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	PreviousState MediaJobState `json:"previousState,omitempty"`
+	// State - The new state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
+	State MediaJobState `json:"state,omitempty"`
+	// CorrelationData - Gets the Job correlation data.
+	CorrelationData map[string]*string `json:"correlationData"`
+}
+
+// MarshalJSON is the custom marshaler for MediaJobScheduledEventData.
+func (mjsed MediaJobScheduledEventData) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mjsed.PreviousState != "" {
+		objectMap["previousState"] = mjsed.PreviousState
+	}
+	if mjsed.State != "" {
+		objectMap["state"] = mjsed.State
+	}
+	if mjsed.CorrelationData != nil {
+		objectMap["correlationData"] = mjsed.CorrelationData
+	}
+	return json.Marshal(objectMap)
+}
+
 // MediaJobStateChangeEventData schema of the Data property of an EventGridEvent for a
 // Microsoft.Media.JobStateChange event.
 type MediaJobStateChangeEventData struct {
 	// PreviousState - The previous state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
-	PreviousState JobState `json:"previousState,omitempty"`
+	PreviousState MediaJobState `json:"previousState,omitempty"`
 	// State - The new state of the Job. Possible values include: 'Canceled', 'Canceling', 'Error', 'Finished', 'Processing', 'Queued', 'Scheduled'
-	State JobState `json:"state,omitempty"`
+	State MediaJobState `json:"state,omitempty"`
+	// CorrelationData - Gets the Job correlation data.
+	CorrelationData map[string]*string `json:"correlationData"`
+}
+
+// MarshalJSON is the custom marshaler for MediaJobStateChangeEventData.
+func (mjsced MediaJobStateChangeEventData) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mjsced.PreviousState != "" {
+		objectMap["previousState"] = mjsced.PreviousState
+	}
+	if mjsced.State != "" {
+		objectMap["state"] = mjsced.State
+	}
+	if mjsced.CorrelationData != nil {
+		objectMap["correlationData"] = mjsced.CorrelationData
+	}
+	return json.Marshal(objectMap)
+}
+
+// MediaLiveEventConnectionRejectedEventData encoder connection rejected event data.
+type MediaLiveEventConnectionRejectedEventData struct {
+	// IngestURL - Gets the ingest URL provided by the live event.
+	IngestURL *string `json:"ingestUrl,omitempty"`
+	// StreamID - Gets the stream Id.
+	StreamID *string `json:"streamId,omitempty"`
+	// EncoderIP - Gets the remote IP.
+	EncoderIP *string `json:"encoderIp,omitempty"`
+	// EncoderPort - Gets the remote port.
+	EncoderPort *string `json:"encoderPort,omitempty"`
+	// ResultCode - Gets the result code.
+	ResultCode *string `json:"resultCode,omitempty"`
+}
+
+// MediaLiveEventEncoderConnectedEventData encoder connect event data.
+type MediaLiveEventEncoderConnectedEventData struct {
+	// IngestURL - Gets the ingest URL provided by the live event.
+	IngestURL *string `json:"ingestUrl,omitempty"`
+	// StreamID - Gets the stream Id.
+	StreamID *string `json:"streamId,omitempty"`
+	// EncoderIP - Gets the remote IP.
+	EncoderIP *string `json:"encoderIp,omitempty"`
+	// EncoderPort - Gets the remote port.
+	EncoderPort *string `json:"encoderPort,omitempty"`
+}
+
+// MediaLiveEventEncoderDisconnectedEventData encoder disconnected event data.
+type MediaLiveEventEncoderDisconnectedEventData struct {
+	// IngestURL - Gets the ingest URL provided by the live event.
+	IngestURL *string `json:"ingestUrl,omitempty"`
+	// StreamID - Gets the stream Id.
+	StreamID *string `json:"streamId,omitempty"`
+	// EncoderIP - Gets the remote IP.
+	EncoderIP *string `json:"encoderIp,omitempty"`
+	// EncoderPort - Gets the remote port.
+	EncoderPort *string `json:"encoderPort,omitempty"`
+	// ResultCode - Gets the result code.
+	ResultCode *string `json:"resultCode,omitempty"`
+}
+
+// MediaLiveEventIncomingDataChunkDroppedEventData ingest fragment dropped event data.
+type MediaLiveEventIncomingDataChunkDroppedEventData struct {
+	// Timestamp - Gets the timestamp of the data chunk dropped.
+	Timestamp *string `json:"timestamp,omitempty"`
+	// TrackType - Gets the type of the track (Audio / Video).
+	TrackType *string `json:"trackType,omitempty"`
+	// Bitrate - Gets the bitrate of the track.
+	Bitrate *int64 `json:"bitrate,omitempty"`
+	// Timescale - Gets the timescale of the Timestamp.
+	Timescale *string `json:"timescale,omitempty"`
+	// ResultCode - Gets the result code for fragment drop operation.
+	ResultCode *string `json:"resultCode,omitempty"`
+	// TrackName - Gets the name of the track for which fragment is dropped.
+	TrackName *string `json:"trackName,omitempty"`
+}
+
+// MediaLiveEventIncomingStreamReceivedEventData encoder connect event data.
+type MediaLiveEventIncomingStreamReceivedEventData struct {
+	// IngestURL - Gets the ingest URL provided by the live event.
+	IngestURL *string `json:"ingestUrl,omitempty"`
+	// TrackType - Gets the type of the track (Audio / Video).
+	TrackType *string `json:"trackType,omitempty"`
+	// TrackName - Gets the track name.
+	TrackName *string `json:"trackName,omitempty"`
+	// Bitrate - Gets the bitrate of the track.
+	Bitrate *int64 `json:"bitrate,omitempty"`
+	// EncoderIP - Gets the remote IP.
+	EncoderIP *string `json:"encoderIp,omitempty"`
+	// EncoderPort - Gets the remote port.
+	EncoderPort *string `json:"encoderPort,omitempty"`
+	// Timestamp - Gets the first timestamp of the data chunk received.
+	Timestamp *string `json:"timestamp,omitempty"`
+	// Duration - Gets the duration of the first data chunk.
+	Duration *string `json:"duration,omitempty"`
+	// Timescale - Gets the timescale in which timestamp is represented.
+	Timescale *string `json:"timescale,omitempty"`
+}
+
+// MediaLiveEventIncomingStreamsOutOfSyncEventData incoming streams out of sync event data.
+type MediaLiveEventIncomingStreamsOutOfSyncEventData struct {
+	// MinLastTimestamp - Gets the minimum last timestamp received.
+	MinLastTimestamp *string `json:"minLastTimestamp,omitempty"`
+	// TypeOfStreamWithMinLastTimestamp - Gets the type of stream with minimum last timestamp.
+	TypeOfStreamWithMinLastTimestamp *string `json:"typeOfStreamWithMinLastTimestamp,omitempty"`
+	// MaxLastTimestamp - Gets the maximum timestamp among all the tracks (audio or video).
+	MaxLastTimestamp *string `json:"maxLastTimestamp,omitempty"`
+	// TypeOfStreamWithMaxLastTimestamp - Gets the type of stream with maximum last timestamp.
+	TypeOfStreamWithMaxLastTimestamp *string `json:"typeOfStreamWithMaxLastTimestamp,omitempty"`
+	// TimescaleOfMinLastTimestamp - Gets the timescale in which "MinLastTimestamp" is represented.
+	TimescaleOfMinLastTimestamp *string `json:"timescaleOfMinLastTimestamp,omitempty"`
+	// TimescaleOfMaxLastTimestamp - Gets the timescale in which "MaxLastTimestamp" is represented.
+	TimescaleOfMaxLastTimestamp *string `json:"timescaleOfMaxLastTimestamp,omitempty"`
+}
+
+// MediaLiveEventIncomingVideoStreamsOutOfSyncEventData incoming video stream out of synch event data.
+type MediaLiveEventIncomingVideoStreamsOutOfSyncEventData struct {
+	// FirstTimestamp - Gets the first timestamp received for one of the quality levels.
+	FirstTimestamp *string `json:"firstTimestamp,omitempty"`
+	// FirstDuration - Gets the duration of the data chunk with first timestamp.
+	FirstDuration *string `json:"firstDuration,omitempty"`
+	// SecondTimestamp - Gets the timestamp received for some other quality levels.
+	SecondTimestamp *string `json:"secondTimestamp,omitempty"`
+	// SecondDuration - Gets the duration of the data chunk with second timestamp.
+	SecondDuration *string `json:"secondDuration,omitempty"`
+	// Timescale - Gets the timescale in which both the timestamps and durations are represented.
+	Timescale *string `json:"timescale,omitempty"`
+}
+
+// MediaLiveEventIngestHeartbeatEventData ingest fragment dropped event data.
+type MediaLiveEventIngestHeartbeatEventData struct {
+	// TrackType - Gets the type of the track (Audio / Video).
+	TrackType *string `json:"trackType,omitempty"`
+	// TrackName - Gets the track name.
+	TrackName *string `json:"trackName,omitempty"`
+	// Bitrate - Gets the bitrate of the track.
+	Bitrate *int64 `json:"bitrate,omitempty"`
+	// IncomingBitrate - Gets the incoming bitrate.
+	IncomingBitrate *int64 `json:"incomingBitrate,omitempty"`
+	// LastTimestamp - Gets the last timestamp.
+	LastTimestamp *string `json:"lastTimestamp,omitempty"`
+	// Timescale - Gets the timescale of the last timestamp.
+	Timescale *string `json:"timescale,omitempty"`
+	// OverlapCount - Gets the fragment Overlap count.
+	OverlapCount *int64 `json:"overlapCount,omitempty"`
+	// DiscontinuityCount - Gets the fragment Discontinuity count.
+	DiscontinuityCount *int64 `json:"discontinuityCount,omitempty"`
+	// NonincreasingCount - Gets Non increasing count.
+	NonincreasingCount *int64 `json:"nonincreasingCount,omitempty"`
+	// UnexpectedBitrate - Gets a value indicating whether unexpected bitrate is present or not.
+	UnexpectedBitrate *bool `json:"unexpectedBitrate,omitempty"`
+	// State - Gets the state of the live event.
+	State *string `json:"state,omitempty"`
+	// Healthy - Gets a value indicating whether preview is healthy or not.
+	Healthy *bool `json:"healthy,omitempty"`
+}
+
+// MediaLiveEventTrackDiscontinuityDetectedEventData ingest track discontinuity detected event data.
+type MediaLiveEventTrackDiscontinuityDetectedEventData struct {
+	// TrackType - Gets the type of the track (Audio / Video).
+	TrackType *string `json:"trackType,omitempty"`
+	// TrackName - Gets the track name.
+	TrackName *string `json:"trackName,omitempty"`
+	// Bitrate - Gets the bitrate.
+	Bitrate *int64 `json:"bitrate,omitempty"`
+	// PreviousTimestamp - Gets the timestamp of the previous fragment.
+	PreviousTimestamp *string `json:"previousTimestamp,omitempty"`
+	// NewTimestamp - Gets the timestamp of the current fragment.
+	NewTimestamp *string `json:"newTimestamp,omitempty"`
+	// Timescale - Gets the timescale in which both timestamps and discontinuity gap are represented.
+	Timescale *string `json:"timescale,omitempty"`
+	// DiscontinuityGap - Gets the discontinuity gap between PreviousTimestamp and NewTimestamp.
+	DiscontinuityGap *string `json:"discontinuityGap,omitempty"`
 }
 
 // ResourceActionCancelData schema of the Data property of an EventGridEvent for an
-// Microsoft.Resources.ResourceActionCancel event. This is raised when a resource action operation is canceled.
+// Microsoft.Resources.ResourceActionCancel event. This is raised when a resource action operation is
+// canceled.
 type ResourceActionCancelData struct {
 	// TenantID - The tenant ID of the resource.
 	TenantID *string `json:"tenantId,omitempty"`
@@ -393,7 +1594,8 @@ type ResourceActionFailureData struct {
 }
 
 // ResourceActionSuccessData schema of the Data property of an EventGridEvent for a
-// Microsoft.Resources.ResourceActionSuccess event. This is raised when a resource action operation succeeds.
+// Microsoft.Resources.ResourceActionSuccess event. This is raised when a resource action operation
+// succeeds.
 type ResourceActionSuccessData struct {
 	// TenantID - The tenant ID of the resource.
 	TenantID *string `json:"tenantId,omitempty"`
@@ -420,7 +1622,8 @@ type ResourceActionSuccessData struct {
 }
 
 // ResourceDeleteCancelData schema of the Data property of an EventGridEvent for an
-// Microsoft.Resources.ResourceDeleteCancel event. This is raised when a resource delete operation is canceled.
+// Microsoft.Resources.ResourceDeleteCancel event. This is raised when a resource delete operation is
+// canceled.
 type ResourceDeleteCancelData struct {
 	// TenantID - The tenant ID of the resource.
 	TenantID *string `json:"tenantId,omitempty"`
@@ -474,7 +1677,8 @@ type ResourceDeleteFailureData struct {
 }
 
 // ResourceDeleteSuccessData schema of the Data property of an EventGridEvent for a
-// Microsoft.Resources.ResourceDeleteSuccess event. This is raised when a resource delete operation succeeds.
+// Microsoft.Resources.ResourceDeleteSuccess event. This is raised when a resource delete operation
+// succeeds.
 type ResourceDeleteSuccessData struct {
 	// TenantID - The tenant ID of the resource.
 	TenantID *string `json:"tenantId,omitempty"`
@@ -501,8 +1705,8 @@ type ResourceDeleteSuccessData struct {
 }
 
 // ResourceWriteCancelData schema of the Data property of an EventGridEvent for a
-// Microsoft.Resources.ResourceWriteCancel event. This is raised when a resource create or update operation is
-// canceled.
+// Microsoft.Resources.ResourceWriteCancel event. This is raised when a resource create or update operation
+// is canceled.
 type ResourceWriteCancelData struct {
 	// TenantID - The tenant ID of the resource.
 	TenantID *string `json:"tenantId,omitempty"`
@@ -529,7 +1733,8 @@ type ResourceWriteCancelData struct {
 }
 
 // ResourceWriteFailureData schema of the Data property of an EventGridEvent for a
-// Microsoft.Resources.ResourceWriteFailure event. This is raised when a resource create or update operation fails.
+// Microsoft.Resources.ResourceWriteFailure event. This is raised when a resource create or update
+// operation fails.
 type ResourceWriteFailureData struct {
 	// TenantID - The tenant ID of the resource.
 	TenantID *string `json:"tenantId,omitempty"`
@@ -556,8 +1761,8 @@ type ResourceWriteFailureData struct {
 }
 
 // ResourceWriteSuccessData schema of the Data property of an EventGridEvent for a
-// Microsoft.Resources.ResourceWriteSuccess event. This is raised when a resource create or update operation
-// succeeds.
+// Microsoft.Resources.ResourceWriteSuccess event. This is raised when a resource create or update
+// operation succeeds.
 type ResourceWriteSuccessData struct {
 	// TenantID - The tenant ID of the resource.
 	TenantID *string `json:"tenantId,omitempty"`
@@ -583,8 +1788,8 @@ type ResourceWriteSuccessData struct {
 	HTTPRequest *string `json:"httpRequest,omitempty"`
 }
 
-// ServiceBusActiveMessagesAvailableWithNoListenersEventData schema of the Data property of an EventGridEvent for a
-// Microsoft.ServiceBus.ActiveMessagesAvailableWithNoListeners event.
+// ServiceBusActiveMessagesAvailableWithNoListenersEventData schema of the Data property of an
+// EventGridEvent for a Microsoft.ServiceBus.ActiveMessagesAvailableWithNoListeners event.
 type ServiceBusActiveMessagesAvailableWithNoListenersEventData struct {
 	// NamespaceName - The namespace name of the Microsoft.ServiceBus resource.
 	NamespaceName *string `json:"namespaceName,omitempty"`
@@ -600,8 +1805,8 @@ type ServiceBusActiveMessagesAvailableWithNoListenersEventData struct {
 	SubscriptionName *string `json:"subscriptionName,omitempty"`
 }
 
-// ServiceBusDeadletterMessagesAvailableWithNoListenersEventData schema of the Data property of an EventGridEvent
-// for a Microsoft.ServiceBus.DeadletterMessagesAvailableWithNoListenersEvent event.
+// ServiceBusDeadletterMessagesAvailableWithNoListenersEventData schema of the Data property of an
+// EventGridEvent for a Microsoft.ServiceBus.DeadletterMessagesAvailableWithNoListenersEvent event.
 type ServiceBusDeadletterMessagesAvailableWithNoListenersEventData struct {
 	// NamespaceName - The namespace name of the Microsoft.ServiceBus resource.
 	NamespaceName *string `json:"namespaceName,omitempty"`
@@ -679,8 +1884,8 @@ type SubscriptionValidationEventData struct {
 	ValidationURL *string `json:"validationUrl,omitempty"`
 }
 
-// SubscriptionValidationResponse to complete an event subscription validation handshake, a subscriber can use
-// either the validationCode or the validationUrl received in a SubscriptionValidationEvent. When the
+// SubscriptionValidationResponse to complete an event subscription validation handshake, a subscriber can
+// use either the validationCode or the validationUrl received in a SubscriptionValidationEvent. When the
 // validationCode is used, the SubscriptionValidationResponse can be used to build the response.
 type SubscriptionValidationResponse struct {
 	// ValidationResponse - The validation response sent by the subscriber to Azure Event Grid to complete the validation of an event subscription.

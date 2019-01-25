@@ -22,24 +22,29 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ReportsClient is the apiManagement Client
 type ReportsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewReportsClient creates an instance of the ReportsClient client.
 func NewReportsClient(subscriptionID string) ReportsClient {
 	return NewReportsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewReportsClientWithBaseURI creates an instance of the ReportsClient client.
 func NewReportsClientWithBaseURI(baseURI string, subscriptionID string) ReportsClient {
 	return ReportsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByAPI lists report records by API.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -48,6 +53,16 @@ func NewReportsClientWithBaseURI(baseURI string, subscriptionID string) ReportsC
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ReportsClient) ListByAPI(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByAPI")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -84,6 +99,7 @@ func (client ReportsClient) ListByAPI(ctx context.Context, resourceGroupName str
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByAPIPreparer prepares the ListByAPI request.
 func (client ReportsClient) ListByAPIPreparer(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -112,6 +128,7 @@ func (client ReportsClient) ListByAPIPreparer(ctx context.Context, resourceGroup
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByAPISender sends the ListByAPI request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReportsClient) ListByAPISender(req *http.Request) (*http.Response, error) {
@@ -119,6 +136,7 @@ func (client ReportsClient) ListByAPISender(req *http.Request) (*http.Response, 
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByAPIResponder handles the response to the ListByAPI request. The method always
 // closes the http.Response Body.
 func (client ReportsClient) ListByAPIResponder(resp *http.Response) (result ReportCollection, err error) {
@@ -133,8 +151,8 @@ func (client ReportsClient) ListByAPIResponder(resp *http.Response) (result Repo
 }
 
 // listByAPINextResults retrieves the next set of results, if any.
-func (client ReportsClient) listByAPINextResults(lastResults ReportCollection) (result ReportCollection, err error) {
-	req, err := lastResults.reportCollectionPreparer()
+func (client ReportsClient) listByAPINextResults(ctx context.Context, lastResults ReportCollection) (result ReportCollection, err error) {
+	req, err := lastResults.reportCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ReportsClient", "listByAPINextResults", nil, "Failure preparing next results request")
 	}
@@ -153,12 +171,24 @@ func (client ReportsClient) listByAPINextResults(lastResults ReportCollection) (
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByAPIComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReportsClient) ListByAPIComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByAPI")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByAPI(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByGeo lists report records by GeoGraphy.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -167,6 +197,16 @@ func (client ReportsClient) ListByAPIComplete(ctx context.Context, resourceGroup
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ReportsClient) ListByGeo(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByGeo")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -203,6 +243,7 @@ func (client ReportsClient) ListByGeo(ctx context.Context, resourceGroupName str
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByGeoPreparer prepares the ListByGeo request.
 func (client ReportsClient) ListByGeoPreparer(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -233,6 +274,7 @@ func (client ReportsClient) ListByGeoPreparer(ctx context.Context, resourceGroup
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByGeoSender sends the ListByGeo request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReportsClient) ListByGeoSender(req *http.Request) (*http.Response, error) {
@@ -240,6 +282,7 @@ func (client ReportsClient) ListByGeoSender(req *http.Request) (*http.Response, 
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByGeoResponder handles the response to the ListByGeo request. The method always
 // closes the http.Response Body.
 func (client ReportsClient) ListByGeoResponder(resp *http.Response) (result ReportCollection, err error) {
@@ -254,8 +297,8 @@ func (client ReportsClient) ListByGeoResponder(resp *http.Response) (result Repo
 }
 
 // listByGeoNextResults retrieves the next set of results, if any.
-func (client ReportsClient) listByGeoNextResults(lastResults ReportCollection) (result ReportCollection, err error) {
-	req, err := lastResults.reportCollectionPreparer()
+func (client ReportsClient) listByGeoNextResults(ctx context.Context, lastResults ReportCollection) (result ReportCollection, err error) {
+	req, err := lastResults.reportCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ReportsClient", "listByGeoNextResults", nil, "Failure preparing next results request")
 	}
@@ -274,12 +317,24 @@ func (client ReportsClient) listByGeoNextResults(lastResults ReportCollection) (
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByGeoComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReportsClient) ListByGeoComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByGeo")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByGeo(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByOperation lists report records by API Operations.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -288,6 +343,16 @@ func (client ReportsClient) ListByGeoComplete(ctx context.Context, resourceGroup
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ReportsClient) ListByOperation(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByOperation")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -324,6 +389,7 @@ func (client ReportsClient) ListByOperation(ctx context.Context, resourceGroupNa
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByOperationPreparer prepares the ListByOperation request.
 func (client ReportsClient) ListByOperationPreparer(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -352,6 +418,7 @@ func (client ReportsClient) ListByOperationPreparer(ctx context.Context, resourc
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByOperationSender sends the ListByOperation request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReportsClient) ListByOperationSender(req *http.Request) (*http.Response, error) {
@@ -359,6 +426,7 @@ func (client ReportsClient) ListByOperationSender(req *http.Request) (*http.Resp
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByOperationResponder handles the response to the ListByOperation request. The method always
 // closes the http.Response Body.
 func (client ReportsClient) ListByOperationResponder(resp *http.Response) (result ReportCollection, err error) {
@@ -373,8 +441,8 @@ func (client ReportsClient) ListByOperationResponder(resp *http.Response) (resul
 }
 
 // listByOperationNextResults retrieves the next set of results, if any.
-func (client ReportsClient) listByOperationNextResults(lastResults ReportCollection) (result ReportCollection, err error) {
-	req, err := lastResults.reportCollectionPreparer()
+func (client ReportsClient) listByOperationNextResults(ctx context.Context, lastResults ReportCollection) (result ReportCollection, err error) {
+	req, err := lastResults.reportCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ReportsClient", "listByOperationNextResults", nil, "Failure preparing next results request")
 	}
@@ -393,12 +461,24 @@ func (client ReportsClient) listByOperationNextResults(lastResults ReportCollect
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByOperationComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReportsClient) ListByOperationComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByOperation")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByOperation(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByProduct lists report records by Product.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -407,6 +487,16 @@ func (client ReportsClient) ListByOperationComplete(ctx context.Context, resourc
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ReportsClient) ListByProduct(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByProduct")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -443,6 +533,7 @@ func (client ReportsClient) ListByProduct(ctx context.Context, resourceGroupName
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByProductPreparer prepares the ListByProduct request.
 func (client ReportsClient) ListByProductPreparer(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -471,6 +562,7 @@ func (client ReportsClient) ListByProductPreparer(ctx context.Context, resourceG
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByProductSender sends the ListByProduct request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReportsClient) ListByProductSender(req *http.Request) (*http.Response, error) {
@@ -478,6 +570,7 @@ func (client ReportsClient) ListByProductSender(req *http.Request) (*http.Respon
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByProductResponder handles the response to the ListByProduct request. The method always
 // closes the http.Response Body.
 func (client ReportsClient) ListByProductResponder(resp *http.Response) (result ReportCollection, err error) {
@@ -492,8 +585,8 @@ func (client ReportsClient) ListByProductResponder(resp *http.Response) (result 
 }
 
 // listByProductNextResults retrieves the next set of results, if any.
-func (client ReportsClient) listByProductNextResults(lastResults ReportCollection) (result ReportCollection, err error) {
-	req, err := lastResults.reportCollectionPreparer()
+func (client ReportsClient) listByProductNextResults(ctx context.Context, lastResults ReportCollection) (result ReportCollection, err error) {
+	req, err := lastResults.reportCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ReportsClient", "listByProductNextResults", nil, "Failure preparing next results request")
 	}
@@ -512,12 +605,24 @@ func (client ReportsClient) listByProductNextResults(lastResults ReportCollectio
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByProductComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReportsClient) ListByProductComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByProduct")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByProduct(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByRequest lists report records by Request.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -526,6 +631,16 @@ func (client ReportsClient) ListByProductComplete(ctx context.Context, resourceG
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ReportsClient) ListByRequest(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result RequestReportCollection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByRequest")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -561,6 +676,7 @@ func (client ReportsClient) ListByRequest(ctx context.Context, resourceGroupName
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByRequestPreparer prepares the ListByRequest request.
 func (client ReportsClient) ListByRequestPreparer(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -589,6 +705,7 @@ func (client ReportsClient) ListByRequestPreparer(ctx context.Context, resourceG
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByRequestSender sends the ListByRequest request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReportsClient) ListByRequestSender(req *http.Request) (*http.Response, error) {
@@ -596,6 +713,7 @@ func (client ReportsClient) ListByRequestSender(req *http.Request) (*http.Respon
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByRequestResponder handles the response to the ListByRequest request. The method always
 // closes the http.Response Body.
 func (client ReportsClient) ListByRequestResponder(resp *http.Response) (result RequestReportCollection, err error) {
@@ -609,6 +727,7 @@ func (client ReportsClient) ListByRequestResponder(resp *http.Response) (result 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListBySubscription lists report records by subscription.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -617,6 +736,16 @@ func (client ReportsClient) ListByRequestResponder(resp *http.Response) (result 
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ReportsClient) ListBySubscription(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -653,6 +782,7 @@ func (client ReportsClient) ListBySubscription(ctx context.Context, resourceGrou
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListBySubscriptionPreparer prepares the ListBySubscription request.
 func (client ReportsClient) ListBySubscriptionPreparer(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -683,6 +813,7 @@ func (client ReportsClient) ListBySubscriptionPreparer(ctx context.Context, reso
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListBySubscriptionSender sends the ListBySubscription request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReportsClient) ListBySubscriptionSender(req *http.Request) (*http.Response, error) {
@@ -690,6 +821,7 @@ func (client ReportsClient) ListBySubscriptionSender(req *http.Request) (*http.R
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListBySubscriptionResponder handles the response to the ListBySubscription request. The method always
 // closes the http.Response Body.
 func (client ReportsClient) ListBySubscriptionResponder(resp *http.Response) (result ReportCollection, err error) {
@@ -704,8 +836,8 @@ func (client ReportsClient) ListBySubscriptionResponder(resp *http.Response) (re
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client ReportsClient) listBySubscriptionNextResults(lastResults ReportCollection) (result ReportCollection, err error) {
-	req, err := lastResults.reportCollectionPreparer()
+func (client ReportsClient) listBySubscriptionNextResults(ctx context.Context, lastResults ReportCollection) (result ReportCollection, err error) {
+	req, err := lastResults.reportCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ReportsClient", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -724,12 +856,24 @@ func (client ReportsClient) listBySubscriptionNextResults(lastResults ReportColl
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReportsClient) ListBySubscriptionComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBySubscription(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByTime lists report records by Time.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -741,6 +885,16 @@ func (client ReportsClient) ListBySubscriptionComplete(ctx context.Context, reso
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ReportsClient) ListByTime(ctx context.Context, resourceGroupName string, serviceName string, interval string, filter string, top *int32, skip *int32) (result ReportCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByTime")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -777,6 +931,7 @@ func (client ReportsClient) ListByTime(ctx context.Context, resourceGroupName st
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByTimePreparer prepares the ListByTime request.
 func (client ReportsClient) ListByTimePreparer(ctx context.Context, resourceGroupName string, serviceName string, interval string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -808,6 +963,7 @@ func (client ReportsClient) ListByTimePreparer(ctx context.Context, resourceGrou
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByTimeSender sends the ListByTime request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReportsClient) ListByTimeSender(req *http.Request) (*http.Response, error) {
@@ -815,6 +971,7 @@ func (client ReportsClient) ListByTimeSender(req *http.Request) (*http.Response,
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByTimeResponder handles the response to the ListByTime request. The method always
 // closes the http.Response Body.
 func (client ReportsClient) ListByTimeResponder(resp *http.Response) (result ReportCollection, err error) {
@@ -829,8 +986,8 @@ func (client ReportsClient) ListByTimeResponder(resp *http.Response) (result Rep
 }
 
 // listByTimeNextResults retrieves the next set of results, if any.
-func (client ReportsClient) listByTimeNextResults(lastResults ReportCollection) (result ReportCollection, err error) {
-	req, err := lastResults.reportCollectionPreparer()
+func (client ReportsClient) listByTimeNextResults(ctx context.Context, lastResults ReportCollection) (result ReportCollection, err error) {
+	req, err := lastResults.reportCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ReportsClient", "listByTimeNextResults", nil, "Failure preparing next results request")
 	}
@@ -849,12 +1006,24 @@ func (client ReportsClient) listByTimeNextResults(lastResults ReportCollection) 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByTimeComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReportsClient) ListByTimeComplete(ctx context.Context, resourceGroupName string, serviceName string, interval string, filter string, top *int32, skip *int32) (result ReportCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByTime")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByTime(ctx, resourceGroupName, serviceName, interval, filter, top, skip)
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByUser lists report records by User.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -863,6 +1032,16 @@ func (client ReportsClient) ListByTimeComplete(ctx context.Context, resourceGrou
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ReportsClient) ListByUser(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByUser")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -899,6 +1078,7 @@ func (client ReportsClient) ListByUser(ctx context.Context, resourceGroupName st
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByUserPreparer prepares the ListByUser request.
 func (client ReportsClient) ListByUserPreparer(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -927,6 +1107,7 @@ func (client ReportsClient) ListByUserPreparer(ctx context.Context, resourceGrou
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByUserSender sends the ListByUser request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReportsClient) ListByUserSender(req *http.Request) (*http.Response, error) {
@@ -934,6 +1115,7 @@ func (client ReportsClient) ListByUserSender(req *http.Request) (*http.Response,
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByUserResponder handles the response to the ListByUser request. The method always
 // closes the http.Response Body.
 func (client ReportsClient) ListByUserResponder(resp *http.Response) (result ReportCollection, err error) {
@@ -948,8 +1130,8 @@ func (client ReportsClient) ListByUserResponder(resp *http.Response) (result Rep
 }
 
 // listByUserNextResults retrieves the next set of results, if any.
-func (client ReportsClient) listByUserNextResults(lastResults ReportCollection) (result ReportCollection, err error) {
-	req, err := lastResults.reportCollectionPreparer()
+func (client ReportsClient) listByUserNextResults(ctx context.Context, lastResults ReportCollection) (result ReportCollection, err error) {
+	req, err := lastResults.reportCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ReportsClient", "listByUserNextResults", nil, "Failure preparing next results request")
 	}
@@ -968,8 +1150,19 @@ func (client ReportsClient) listByUserNextResults(lastResults ReportCollection) 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByUserComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReportsClient) ListByUserComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByUser")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByUser(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }

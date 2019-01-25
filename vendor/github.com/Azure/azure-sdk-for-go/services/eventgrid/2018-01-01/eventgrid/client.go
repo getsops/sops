@@ -25,6 +25,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewWithoutDefaults() BaseClient {
 // topicHostname - the host name of the topic, e.g. topic1.westus2-1.eventgrid.azure.net
 // events - an array of events to be published to Event Grid.
 func (client BaseClient) PublishEvents(ctx context.Context, topicHostname string, events []Event) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.PublishEvents")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: events,
 			Constraints: []validation.Constraint{{Target: "events", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {

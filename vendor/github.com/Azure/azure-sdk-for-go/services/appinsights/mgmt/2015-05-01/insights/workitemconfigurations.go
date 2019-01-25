@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewWorkItemConfigurationsClientWithBaseURI(baseURI string, subscriptionID s
 // workItemConfigurationProperties - properties that need to be specified to create a work item configuration
 // of a Application Insights component.
 func (client WorkItemConfigurationsClient) Create(ctx context.Context, resourceGroupName string, resourceName string, workItemConfigurationProperties WorkItemCreateConfiguration) (result WorkItemConfiguration, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkItemConfigurationsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, resourceGroupName, resourceName, workItemConfigurationProperties)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.WorkItemConfigurationsClient", "Create", nil, "Failure preparing request")
@@ -110,13 +121,23 @@ func (client WorkItemConfigurationsClient) CreateResponder(resp *http.Response) 
 	return
 }
 
-// Delete delete an workitem configuration of an Application Insights component.
+// Delete delete a work item configuration of an Application Insights component.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // resourceName - the name of the Application Insights component resource.
 // workItemConfigID - the unique work item configuration Id. This can be either friendly name of connector as
 // defined in connector configuration
 func (client WorkItemConfigurationsClient) Delete(ctx context.Context, resourceGroupName string, resourceName string, workItemConfigID string) (result SetObject, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkItemConfigurationsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, resourceName, workItemConfigID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.WorkItemConfigurationsClient", "Delete", nil, "Failure preparing request")
@@ -185,6 +206,16 @@ func (client WorkItemConfigurationsClient) DeleteResponder(resp *http.Response) 
 // resourceGroupName - the name of the resource group.
 // resourceName - the name of the Application Insights component resource.
 func (client WorkItemConfigurationsClient) GetDefault(ctx context.Context, resourceGroupName string, resourceName string) (result WorkItemConfiguration, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkItemConfigurationsClient.GetDefault")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetDefaultPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.WorkItemConfigurationsClient", "GetDefault", nil, "Failure preparing request")
@@ -252,6 +283,16 @@ func (client WorkItemConfigurationsClient) GetDefaultResponder(resp *http.Respon
 // resourceGroupName - the name of the resource group.
 // resourceName - the name of the Application Insights component resource.
 func (client WorkItemConfigurationsClient) List(ctx context.Context, resourceGroupName string, resourceName string) (result WorkItemConfigurationsListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkItemConfigurationsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.WorkItemConfigurationsClient", "List", nil, "Failure preparing request")

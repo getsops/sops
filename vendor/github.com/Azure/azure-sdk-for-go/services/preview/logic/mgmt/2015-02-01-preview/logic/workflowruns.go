@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewWorkflowRunsClientWithBaseURI(baseURI string, subscriptionID string) Wor
 // workflowName - the workflow name.
 // runName - the workflow run name.
 func (client WorkflowRunsClient) Cancel(ctx context.Context, resourceGroupName string, workflowName string, runName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowRunsClient.Cancel")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CancelPreparer(ctx, resourceGroupName, workflowName, runName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowRunsClient", "Cancel", nil, "Failure preparing request")
@@ -113,6 +124,16 @@ func (client WorkflowRunsClient) CancelResponder(resp *http.Response) (result au
 // workflowName - the workflow name.
 // runName - the workflow run name.
 func (client WorkflowRunsClient) Get(ctx context.Context, resourceGroupName string, workflowName string, runName string) (result WorkflowRun, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowRunsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, workflowName, runName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowRunsClient", "Get", nil, "Failure preparing request")
@@ -183,6 +204,16 @@ func (client WorkflowRunsClient) GetResponder(resp *http.Response) (result Workf
 // top - the number of items to be included in the result.
 // filter - the filter to apply on the operation.
 func (client WorkflowRunsClient) List(ctx context.Context, resourceGroupName string, workflowName string, top *int32, filter string) (result WorkflowRunListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowRunsClient.List")
+		defer func() {
+			sc := -1
+			if result.wrlr.Response.Response != nil {
+				sc = result.wrlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, workflowName, top, filter)
 	if err != nil {
@@ -253,8 +284,8 @@ func (client WorkflowRunsClient) ListResponder(resp *http.Response) (result Work
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client WorkflowRunsClient) listNextResults(lastResults WorkflowRunListResult) (result WorkflowRunListResult, err error) {
-	req, err := lastResults.workflowRunListResultPreparer()
+func (client WorkflowRunsClient) listNextResults(ctx context.Context, lastResults WorkflowRunListResult) (result WorkflowRunListResult, err error) {
+	req, err := lastResults.workflowRunListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "logic.WorkflowRunsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -275,6 +306,16 @@ func (client WorkflowRunsClient) listNextResults(lastResults WorkflowRunListResu
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WorkflowRunsClient) ListComplete(ctx context.Context, resourceGroupName string, workflowName string, top *int32, filter string) (result WorkflowRunListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowRunsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, workflowName, top, filter)
 	return
 }

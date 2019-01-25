@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,7 +48,19 @@ func NewTasksClientWithBaseURI(baseURI string, subscriptionID string) TasksClien
 // taskName - the name of the container registry task.
 // taskCreateParameters - the parameters for creating a task.
 func (client TasksClient) Create(ctx context.Context, resourceGroupName string, registryName string, taskName string, taskCreateParameters Task) (result TasksCreateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil}}},
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "registryName", Name: validation.MinLength, Rule: 5, Chain: nil},
@@ -120,10 +133,6 @@ func (client TasksClient) CreateSender(req *http.Request) (future TasksCreateFut
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -147,7 +156,19 @@ func (client TasksClient) CreateResponder(resp *http.Response) (result Task, err
 // registryName - the name of the container registry.
 // taskName - the name of the container registry task.
 func (client TasksClient) Delete(ctx context.Context, resourceGroupName string, registryName string, taskName string) (result TasksDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil}}},
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "registryName", Name: validation.MinLength, Rule: 5, Chain: nil},
@@ -205,10 +226,6 @@ func (client TasksClient) DeleteSender(req *http.Request) (future TasksDeleteFut
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -231,7 +248,19 @@ func (client TasksClient) DeleteResponder(resp *http.Response) (result autorest.
 // registryName - the name of the container registry.
 // taskName - the name of the container registry task.
 func (client TasksClient) Get(ctx context.Context, resourceGroupName string, registryName string, taskName string) (result Task, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil}}},
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "registryName", Name: validation.MinLength, Rule: 5, Chain: nil},
@@ -312,7 +341,19 @@ func (client TasksClient) GetResponder(resp *http.Response) (result Task, err er
 // registryName - the name of the container registry.
 // taskName - the name of the container registry task.
 func (client TasksClient) GetDetails(ctx context.Context, resourceGroupName string, registryName string, taskName string) (result Task, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.GetDetails")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil}}},
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "registryName", Name: validation.MinLength, Rule: 5, Chain: nil},
@@ -392,7 +433,19 @@ func (client TasksClient) GetDetailsResponder(resp *http.Response) (result Task,
 // resourceGroupName - the name of the resource group to which the container registry belongs.
 // registryName - the name of the container registry.
 func (client TasksClient) List(ctx context.Context, resourceGroupName string, registryName string) (result TaskListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.List")
+		defer func() {
+			sc := -1
+			if result.tlr.Response.Response != nil {
+				sc = result.tlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil}}},
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "registryName", Name: validation.MinLength, Rule: 5, Chain: nil},
@@ -464,8 +517,8 @@ func (client TasksClient) ListResponder(resp *http.Response) (result TaskListRes
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client TasksClient) listNextResults(lastResults TaskListResult) (result TaskListResult, err error) {
-	req, err := lastResults.taskListResultPreparer()
+func (client TasksClient) listNextResults(ctx context.Context, lastResults TaskListResult) (result TaskListResult, err error) {
+	req, err := lastResults.taskListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "containerregistry.TasksClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -486,6 +539,16 @@ func (client TasksClient) listNextResults(lastResults TaskListResult) (result Ta
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TasksClient) ListComplete(ctx context.Context, resourceGroupName string, registryName string) (result TaskListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, registryName)
 	return
 }
@@ -497,7 +560,19 @@ func (client TasksClient) ListComplete(ctx context.Context, resourceGroupName st
 // taskName - the name of the container registry task.
 // taskUpdateParameters - the parameters for updating a task.
 func (client TasksClient) Update(ctx context.Context, resourceGroupName string, registryName string, taskName string, taskUpdateParameters TaskUpdateParameters) (result TasksUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil}}},
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "registryName", Name: validation.MinLength, Rule: 5, Chain: nil},
@@ -554,10 +629,6 @@ func (client TasksClient) UpdateSender(req *http.Request) (future TasksUpdateFut
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
 	if err != nil {
 		return
 	}

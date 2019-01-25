@@ -22,24 +22,29 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UserGroupClient is the apiManagement Client
 type UserGroupClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewUserGroupClient creates an instance of the UserGroupClient client.
 func NewUserGroupClient(subscriptionID string) UserGroupClient {
 	return NewUserGroupClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewUserGroupClientWithBaseURI creates an instance of the UserGroupClient client.
 func NewUserGroupClientWithBaseURI(baseURI string, subscriptionID string) UserGroupClient {
 	return UserGroupClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // List lists all user groups.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -53,6 +58,16 @@ func NewUserGroupClientWithBaseURI(baseURI string, subscriptionID string) UserGr
 // top - number of records to return.
 // skip - number of records to skip.
 func (client UserGroupClient) List(ctx context.Context, resourceGroupName string, serviceName string, UID string, filter string, top *int32, skip *int32) (result GroupCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UserGroupClient.List")
+		defer func() {
+			sc := -1
+			if result.gc.Response.Response != nil {
+				sc = result.gc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -93,6 +108,7 @@ func (client UserGroupClient) List(ctx context.Context, resourceGroupName string
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListPreparer prepares the List request.
 func (client UserGroupClient) ListPreparer(ctx context.Context, resourceGroupName string, serviceName string, UID string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -124,6 +140,7 @@ func (client UserGroupClient) ListPreparer(ctx context.Context, resourceGroupNam
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client UserGroupClient) ListSender(req *http.Request) (*http.Response, error) {
@@ -131,6 +148,7 @@ func (client UserGroupClient) ListSender(req *http.Request) (*http.Response, err
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListResponder handles the response to the List request. The method always
 // closes the http.Response Body.
 func (client UserGroupClient) ListResponder(resp *http.Response) (result GroupCollection, err error) {
@@ -145,8 +163,8 @@ func (client UserGroupClient) ListResponder(resp *http.Response) (result GroupCo
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client UserGroupClient) listNextResults(lastResults GroupCollection) (result GroupCollection, err error) {
-	req, err := lastResults.groupCollectionPreparer()
+func (client UserGroupClient) listNextResults(ctx context.Context, lastResults GroupCollection) (result GroupCollection, err error) {
+	req, err := lastResults.groupCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.UserGroupClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -165,8 +183,19 @@ func (client UserGroupClient) listNextResults(lastResults GroupCollection) (resu
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client UserGroupClient) ListComplete(ctx context.Context, resourceGroupName string, serviceName string, UID string, filter string, top *int32, skip *int32) (result GroupCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UserGroupClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, serviceName, UID, filter, top, skip)
 	return
 }

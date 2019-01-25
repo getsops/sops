@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionListsClient is the client for the PartitionLists methods of the Servicefabric service.
 type PartitionListsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewPartitionListsClient creates an instance of the PartitionListsClient client.
 func NewPartitionListsClient(timeout *int32) PartitionListsClient {
 	return NewPartitionListsClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewPartitionListsClientWithBaseURI creates an instance of the PartitionListsClient client.
 func NewPartitionListsClientWithBaseURI(baseURI string, timeout *int32) PartitionListsClient {
 	return PartitionListsClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Repair repair partition lists
 // Parameters:
 // serviceName - the name of the service
@@ -64,6 +68,7 @@ func (client PartitionListsClient) Repair(ctx context.Context, serviceName strin
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairPreparer prepares the Repair request.
 func (client PartitionListsClient) RepairPreparer(ctx context.Context, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -86,6 +91,7 @@ func (client PartitionListsClient) RepairPreparer(ctx context.Context, serviceNa
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairSender sends the Repair request. The method will close the
 // http.Response Body if it receives an error.
 func (client PartitionListsClient) RepairSender(req *http.Request) (*http.Response, error) {
@@ -93,6 +99,7 @@ func (client PartitionListsClient) RepairSender(req *http.Request) (*http.Respon
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairResponder handles the response to the Repair request. The method always
 // closes the http.Response Body.
 func (client PartitionListsClient) RepairResponder(resp *http.Response) (result String, err error) {

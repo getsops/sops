@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewContainerGroupsClientWithBaseURI(baseURI string, subscriptionID string) 
 // containerGroupName - the name of the container group.
 // containerGroup - the properties of the container group to be created or updated.
 func (client ContainerGroupsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, containerGroupName string, containerGroup ContainerGroup) (result ContainerGroupsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContainerGroupsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: containerGroup,
 			Constraints: []validation.Constraint{{Target: "containerGroup.ContainerGroupProperties", Name: validation.Null, Rule: true,
@@ -105,10 +116,6 @@ func (client ContainerGroupsClient) CreateOrUpdateSender(req *http.Request) (fut
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -132,6 +139,16 @@ func (client ContainerGroupsClient) CreateOrUpdateResponder(resp *http.Response)
 // resourceGroupName - the name of the resource group.
 // containerGroupName - the name of the container group.
 func (client ContainerGroupsClient) Delete(ctx context.Context, resourceGroupName string, containerGroupName string) (result ContainerGroup, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContainerGroupsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, containerGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "containerinstance.ContainerGroupsClient", "Delete", nil, "Failure preparing request")
@@ -201,6 +218,16 @@ func (client ContainerGroupsClient) DeleteResponder(resp *http.Response) (result
 // resourceGroupName - the name of the resource group.
 // containerGroupName - the name of the container group.
 func (client ContainerGroupsClient) Get(ctx context.Context, resourceGroupName string, containerGroupName string) (result ContainerGroup, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContainerGroupsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, containerGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "containerinstance.ContainerGroupsClient", "Get", nil, "Failure preparing request")
@@ -267,6 +294,16 @@ func (client ContainerGroupsClient) GetResponder(resp *http.Response) (result Co
 // container group including containers, image registry credentials, restart policy, IP address type, OS type, state,
 // and volumes.
 func (client ContainerGroupsClient) List(ctx context.Context) (result ContainerGroupListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContainerGroupsClient.List")
+		defer func() {
+			sc := -1
+			if result.cglr.Response.Response != nil {
+				sc = result.cglr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -329,8 +366,8 @@ func (client ContainerGroupsClient) ListResponder(resp *http.Response) (result C
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ContainerGroupsClient) listNextResults(lastResults ContainerGroupListResult) (result ContainerGroupListResult, err error) {
-	req, err := lastResults.containerGroupListResultPreparer()
+func (client ContainerGroupsClient) listNextResults(ctx context.Context, lastResults ContainerGroupListResult) (result ContainerGroupListResult, err error) {
+	req, err := lastResults.containerGroupListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "containerinstance.ContainerGroupsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -351,6 +388,16 @@ func (client ContainerGroupsClient) listNextResults(lastResults ContainerGroupLi
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ContainerGroupsClient) ListComplete(ctx context.Context) (result ContainerGroupListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContainerGroupsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -361,6 +408,16 @@ func (client ContainerGroupsClient) ListComplete(ctx context.Context) (result Co
 // Parameters:
 // resourceGroupName - the name of the resource group.
 func (client ContainerGroupsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result ContainerGroupListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContainerGroupsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.cglr.Response.Response != nil {
+				sc = result.cglr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -424,8 +481,8 @@ func (client ContainerGroupsClient) ListByResourceGroupResponder(resp *http.Resp
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client ContainerGroupsClient) listByResourceGroupNextResults(lastResults ContainerGroupListResult) (result ContainerGroupListResult, err error) {
-	req, err := lastResults.containerGroupListResultPreparer()
+func (client ContainerGroupsClient) listByResourceGroupNextResults(ctx context.Context, lastResults ContainerGroupListResult) (result ContainerGroupListResult, err error) {
+	req, err := lastResults.containerGroupListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "containerinstance.ContainerGroupsClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -446,6 +503,16 @@ func (client ContainerGroupsClient) listByResourceGroupNextResults(lastResults C
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ContainerGroupsClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result ContainerGroupListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContainerGroupsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -456,6 +523,16 @@ func (client ContainerGroupsClient) ListByResourceGroupComplete(ctx context.Cont
 // containerGroupName - the name of the container group.
 // resource - the container group resource with just the tags to be updated.
 func (client ContainerGroupsClient) Update(ctx context.Context, resourceGroupName string, containerGroupName string, resource Resource) (result ContainerGroup, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContainerGroupsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, containerGroupName, resource)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "containerinstance.ContainerGroupsClient", "Update", nil, "Failure preparing request")

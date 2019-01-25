@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"io"
 	"net/http"
@@ -49,6 +50,16 @@ func NewLargePersonGroupPersonClient(endpoint string) LargePersonGroupPersonClie
 // image, targetFace is required to specify which face to add. No targetFace means there is only one face
 // detected in the entire image.
 func (client LargePersonGroupPersonClient) AddFaceFromStream(ctx context.Context, largePersonGroupID string, personID uuid.UUID, imageParameter io.ReadCloser, userData string, targetFace []int32) (result PersistedFace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargePersonGroupPersonClient.AddFaceFromStream")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largePersonGroupID,
 			Constraints: []validation.Constraint{{Target: "largePersonGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -140,6 +151,16 @@ func (client LargePersonGroupPersonClient) AddFaceFromStreamResponder(resp *http
 // image, targetFace is required to specify which face to add. No targetFace means there is only one face
 // detected in the entire image.
 func (client LargePersonGroupPersonClient) AddFaceFromURL(ctx context.Context, largePersonGroupID string, personID uuid.UUID, imageURL ImageURL, userData string, targetFace []int32) (result PersistedFace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargePersonGroupPersonClient.AddFaceFromURL")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largePersonGroupID,
 			Constraints: []validation.Constraint{{Target: "largePersonGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -226,6 +247,16 @@ func (client LargePersonGroupPersonClient) AddFaceFromURLResponder(resp *http.Re
 // largePersonGroupID - id referencing a particular large person group.
 // body - request body for creating new person.
 func (client LargePersonGroupPersonClient) Create(ctx context.Context, largePersonGroupID string, body NameAndUserDataContract) (result Person, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargePersonGroupPersonClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largePersonGroupID,
 			Constraints: []validation.Constraint{{Target: "largePersonGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -304,6 +335,16 @@ func (client LargePersonGroupPersonClient) CreateResponder(resp *http.Response) 
 // largePersonGroupID - id referencing a particular large person group.
 // personID - id referencing a particular person.
 func (client LargePersonGroupPersonClient) Delete(ctx context.Context, largePersonGroupID string, personID uuid.UUID) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargePersonGroupPersonClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largePersonGroupID,
 			Constraints: []validation.Constraint{{Target: "largePersonGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -375,6 +416,16 @@ func (client LargePersonGroupPersonClient) DeleteResponder(resp *http.Response) 
 // personID - id referencing a particular person.
 // persistedFaceID - id referencing a particular persistedFaceId of an existing face.
 func (client LargePersonGroupPersonClient) DeleteFace(ctx context.Context, largePersonGroupID string, personID uuid.UUID, persistedFaceID uuid.UUID) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargePersonGroupPersonClient.DeleteFace")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largePersonGroupID,
 			Constraints: []validation.Constraint{{Target: "largePersonGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -446,6 +497,16 @@ func (client LargePersonGroupPersonClient) DeleteFaceResponder(resp *http.Respon
 // largePersonGroupID - id referencing a particular large person group.
 // personID - id referencing a particular person.
 func (client LargePersonGroupPersonClient) Get(ctx context.Context, largePersonGroupID string, personID uuid.UUID) (result Person, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargePersonGroupPersonClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largePersonGroupID,
 			Constraints: []validation.Constraint{{Target: "largePersonGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -519,6 +580,16 @@ func (client LargePersonGroupPersonClient) GetResponder(resp *http.Response) (re
 // personID - id referencing a particular person.
 // persistedFaceID - id referencing a particular persistedFaceId of an existing face.
 func (client LargePersonGroupPersonClient) GetFace(ctx context.Context, largePersonGroupID string, personID uuid.UUID, persistedFaceID uuid.UUID) (result PersistedFace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargePersonGroupPersonClient.GetFace")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largePersonGroupID,
 			Constraints: []validation.Constraint{{Target: "largePersonGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -593,6 +664,16 @@ func (client LargePersonGroupPersonClient) GetFaceResponder(resp *http.Response)
 // start - starting person id to return (used to list a range of persons).
 // top - number of persons to return starting with the person id indicated by the 'start' parameter.
 func (client LargePersonGroupPersonClient) List(ctx context.Context, largePersonGroupID string, start string, top *int32) (result ListPerson, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargePersonGroupPersonClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largePersonGroupID,
 			Constraints: []validation.Constraint{{Target: "largePersonGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -678,6 +759,16 @@ func (client LargePersonGroupPersonClient) ListResponder(resp *http.Response) (r
 // personID - id referencing a particular person.
 // body - request body for person update operation.
 func (client LargePersonGroupPersonClient) Update(ctx context.Context, largePersonGroupID string, personID uuid.UUID, body NameAndUserDataContract) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargePersonGroupPersonClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largePersonGroupID,
 			Constraints: []validation.Constraint{{Target: "largePersonGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -752,6 +843,16 @@ func (client LargePersonGroupPersonClient) UpdateResponder(resp *http.Response) 
 // persistedFaceID - id referencing a particular persistedFaceId of an existing face.
 // body - request body for updating persisted face.
 func (client LargePersonGroupPersonClient) UpdateFace(ctx context.Context, largePersonGroupID string, personID uuid.UUID, persistedFaceID uuid.UUID, body UpdateFaceRequest) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargePersonGroupPersonClient.UpdateFace")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largePersonGroupID,
 			Constraints: []validation.Constraint{{Target: "largePersonGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},

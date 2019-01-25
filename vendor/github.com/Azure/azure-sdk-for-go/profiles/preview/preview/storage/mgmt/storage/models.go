@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,14 +21,10 @@ package storage
 
 import original "github.com/Azure/azure-sdk-for-go/services/preview/storage/mgmt/2018-03-01-preview/storage"
 
-type AccountsClient = original.AccountsClient
-type BlobContainersClient = original.BlobContainersClient
-
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type AccessTier = original.AccessTier
 
 const (
@@ -253,10 +249,13 @@ type AccountPropertiesCreateParameters = original.AccountPropertiesCreateParamet
 type AccountPropertiesUpdateParameters = original.AccountPropertiesUpdateParameters
 type AccountRegenerateKeyParameters = original.AccountRegenerateKeyParameters
 type AccountSasParameters = original.AccountSasParameters
-type AccountsCreateFuture = original.AccountsCreateFuture
 type AccountUpdateParameters = original.AccountUpdateParameters
+type AccountsClient = original.AccountsClient
+type AccountsCreateFuture = original.AccountsCreateFuture
 type AzureEntityResource = original.AzureEntityResource
+type BaseClient = original.BaseClient
 type BlobContainer = original.BlobContainer
+type BlobContainersClient = original.BlobContainersClient
 type CheckNameAvailabilityResult = original.CheckNameAvailabilityResult
 type ContainerProperties = original.ContainerProperties
 type CustomDomain = original.CustomDomain
@@ -265,11 +264,11 @@ type Encryption = original.Encryption
 type EncryptionService = original.EncryptionService
 type EncryptionServices = original.EncryptionServices
 type Endpoints = original.Endpoints
+type IPRule = original.IPRule
 type Identity = original.Identity
 type ImmutabilityPolicy = original.ImmutabilityPolicy
 type ImmutabilityPolicyProperties = original.ImmutabilityPolicyProperties
 type ImmutabilityPolicyProperty = original.ImmutabilityPolicyProperty
-type IPRule = original.IPRule
 type KeyVaultProperties = original.KeyVaultProperties
 type LegalHold = original.LegalHold
 type LegalHoldProperties = original.LegalHoldProperties
@@ -285,25 +284,28 @@ type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
 type OperationProperties = original.OperationProperties
+type OperationsClient = original.OperationsClient
 type ProxyResource = original.ProxyResource
 type Resource = original.Resource
 type Restriction = original.Restriction
+type SKUCapability = original.SKUCapability
 type ServiceSasParameters = original.ServiceSasParameters
 type ServiceSpecification = original.ServiceSpecification
 type Sku = original.Sku
-type SKUCapability = original.SKUCapability
 type SkuListResult = original.SkuListResult
+type SkusClient = original.SkusClient
 type TagProperty = original.TagProperty
 type TrackedResource = original.TrackedResource
 type UpdateHistoryProperty = original.UpdateHistoryProperty
 type Usage = original.Usage
 type UsageListResult = original.UsageListResult
 type UsageName = original.UsageName
-type VirtualNetworkRule = original.VirtualNetworkRule
-type OperationsClient = original.OperationsClient
-type SkusClient = original.SkusClient
 type UsagesClient = original.UsagesClient
+type VirtualNetworkRule = original.VirtualNetworkRule
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
 func NewAccountsClient(subscriptionID string) AccountsClient {
 	return original.NewAccountsClient(subscriptionID)
 }
@@ -316,8 +318,23 @@ func NewBlobContainersClient(subscriptionID string) BlobContainersClient {
 func NewBlobContainersClientWithBaseURI(baseURI string, subscriptionID string) BlobContainersClient {
 	return original.NewBlobContainersClientWithBaseURI(baseURI, subscriptionID)
 }
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewSkusClient(subscriptionID string) SkusClient {
+	return original.NewSkusClient(subscriptionID)
+}
+func NewSkusClientWithBaseURI(baseURI string, subscriptionID string) SkusClient {
+	return original.NewSkusClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewUsagesClient(subscriptionID string) UsagesClient {
+	return original.NewUsagesClient(subscriptionID)
+}
+func NewUsagesClientWithBaseURI(baseURI string, subscriptionID string) UsagesClient {
+	return original.NewUsagesClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 	return original.NewWithBaseURI(baseURI, subscriptionID)
@@ -373,20 +390,20 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 func PossiblePublicAccessValues() []PublicAccess {
 	return original.PossiblePublicAccessValues()
 }
-func PossibleReasonValues() []Reason {
-	return original.PossibleReasonValues()
-}
 func PossibleReasonCodeValues() []ReasonCode {
 	return original.PossibleReasonCodeValues()
+}
+func PossibleReasonValues() []Reason {
+	return original.PossibleReasonValues()
 }
 func PossibleServicesValues() []Services {
 	return original.PossibleServicesValues()
 }
-func PossibleSignedResourceValues() []SignedResource {
-	return original.PossibleSignedResourceValues()
-}
 func PossibleSignedResourceTypesValues() []SignedResourceTypes {
 	return original.PossibleSignedResourceTypesValues()
+}
+func PossibleSignedResourceValues() []SignedResource {
+	return original.PossibleSignedResourceValues()
 }
 func PossibleSkuNameValues() []SkuName {
 	return original.PossibleSkuNameValues()
@@ -399,24 +416,6 @@ func PossibleStateValues() []State {
 }
 func PossibleUsageUnitValues() []UsageUnit {
 	return original.PossibleUsageUnitValues()
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewSkusClient(subscriptionID string) SkusClient {
-	return original.NewSkusClient(subscriptionID)
-}
-func NewSkusClientWithBaseURI(baseURI string, subscriptionID string) SkusClient {
-	return original.NewSkusClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewUsagesClient(subscriptionID string) UsagesClient {
-	return original.NewUsagesClient(subscriptionID)
-}
-func NewUsagesClientWithBaseURI(baseURI string, subscriptionID string) UsagesClient {
-	return original.NewUsagesClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

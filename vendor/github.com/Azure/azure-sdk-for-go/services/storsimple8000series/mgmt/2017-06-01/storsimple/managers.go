@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewManagersClientWithBaseURI(baseURI string, subscriptionID string) Manager
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client ManagersClient) CreateExtendedInfo(ctx context.Context, parameters ManagerExtendedInfo, resourceGroupName string, managerName string) (result ManagerExtendedInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.CreateExtendedInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.ManagerExtendedInfoProperties", Name: validation.Null, Rule: false,
@@ -128,6 +139,16 @@ func (client ManagersClient) CreateExtendedInfoResponder(resp *http.Response) (r
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client ManagersClient) CreateOrUpdate(ctx context.Context, parameters Manager, resourceGroupName string, managerName string) (result Manager, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.ManagerProperties", Name: validation.Null, Rule: false,
@@ -209,6 +230,16 @@ func (client ManagersClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client ManagersClient) Delete(ctx context.Context, resourceGroupName string, managerName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -282,6 +313,16 @@ func (client ManagersClient) DeleteResponder(resp *http.Response) (result autore
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client ManagersClient) DeleteExtendedInfo(ctx context.Context, resourceGroupName string, managerName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.DeleteExtendedInfo")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -355,6 +396,16 @@ func (client ManagersClient) DeleteExtendedInfoResponder(resp *http.Response) (r
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client ManagersClient) Get(ctx context.Context, resourceGroupName string, managerName string) (result Manager, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -429,6 +480,16 @@ func (client ManagersClient) GetResponder(resp *http.Response) (result Manager, 
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client ManagersClient) GetActivationKey(ctx context.Context, resourceGroupName string, managerName string) (result Key, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.GetActivationKey")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -504,6 +565,16 @@ func (client ManagersClient) GetActivationKeyResponder(resp *http.Response) (res
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client ManagersClient) GetDevicePublicEncryptionKey(ctx context.Context, deviceName string, resourceGroupName string, managerName string) (result PublicKey, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.GetDevicePublicEncryptionKey")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -579,6 +650,16 @@ func (client ManagersClient) GetDevicePublicEncryptionKeyResponder(resp *http.Re
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client ManagersClient) GetEncryptionSettings(ctx context.Context, resourceGroupName string, managerName string) (result EncryptionSettings, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.GetEncryptionSettings")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -653,6 +734,16 @@ func (client ManagersClient) GetEncryptionSettingsResponder(resp *http.Response)
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client ManagersClient) GetExtendedInfo(ctx context.Context, resourceGroupName string, managerName string) (result ManagerExtendedInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.GetExtendedInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -727,6 +818,16 @@ func (client ManagersClient) GetExtendedInfoResponder(resp *http.Response) (resu
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client ManagersClient) GetPublicEncryptionKey(ctx context.Context, resourceGroupName string, managerName string) (result SymmetricEncryptedSecret, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.GetPublicEncryptionKey")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -798,6 +899,16 @@ func (client ManagersClient) GetPublicEncryptionKeyResponder(resp *http.Response
 
 // List retrieves all the managers in a subscription.
 func (client ManagersClient) List(ctx context.Context) (result ManagerList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "storsimple.ManagersClient", "List", nil, "Failure preparing request")
@@ -862,6 +973,16 @@ func (client ManagersClient) ListResponder(resp *http.Response) (result ManagerL
 // Parameters:
 // resourceGroupName - the resource group name
 func (client ManagersClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result ManagerList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "storsimple.ManagersClient", "ListByResourceGroup", nil, "Failure preparing request")
@@ -929,6 +1050,16 @@ func (client ManagersClient) ListByResourceGroupResponder(resp *http.Response) (
 // managerName - the manager name
 // filter - oData Filter options
 func (client ManagersClient) ListFeatureSupportStatus(ctx context.Context, resourceGroupName string, managerName string, filter string) (result FeatureList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.ListFeatureSupportStatus")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1006,6 +1137,16 @@ func (client ManagersClient) ListFeatureSupportStatusResponder(resp *http.Respon
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client ManagersClient) ListMetricDefinition(ctx context.Context, resourceGroupName string, managerName string) (result MetricDefinitionList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.ListMetricDefinition")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1081,6 +1222,16 @@ func (client ManagersClient) ListMetricDefinitionResponder(resp *http.Response) 
 // managerName - the manager name
 // filter - oData Filter options
 func (client ManagersClient) ListMetrics(ctx context.Context, resourceGroupName string, managerName string, filter string) (result MetricList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.ListMetrics")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1156,6 +1307,16 @@ func (client ManagersClient) ListMetricsResponder(resp *http.Response) (result M
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client ManagersClient) RegenerateActivationKey(ctx context.Context, resourceGroupName string, managerName string) (result Key, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.RegenerateActivationKey")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1231,6 +1392,16 @@ func (client ManagersClient) RegenerateActivationKeyResponder(resp *http.Respons
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client ManagersClient) Update(ctx context.Context, parameters ManagerPatch, resourceGroupName string, managerName string) (result Manager, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1309,6 +1480,16 @@ func (client ManagersClient) UpdateResponder(resp *http.Response) (result Manage
 // managerName - the manager name
 // ifMatch - pass the ETag of ExtendedInfo fetched from GET call
 func (client ManagersClient) UpdateExtendedInfo(ctx context.Context, parameters ManagerExtendedInfo, resourceGroupName string, managerName string, ifMatch string) (result ManagerExtendedInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagersClient.UpdateExtendedInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},

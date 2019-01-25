@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type Code = original.Code
 
 const (
@@ -41,29 +40,21 @@ const (
 	Deleted State = original.Deleted
 )
 
+type BaseClient = original.BaseClient
 type Error = original.Error
 type ExtendedErrorInfo = original.ExtendedErrorInfo
+type OperationClient = original.OperationClient
 type OperationDisplay = original.OperationDisplay
 type OperationList = original.OperationList
 type OperationListIterator = original.OperationListIterator
 type OperationListPage = original.OperationListPage
 type OperationResponse = original.OperationResponse
+type PartnerClient = original.PartnerClient
 type PartnerProperties = original.PartnerProperties
 type PartnerResponse = original.PartnerResponse
-type OperationClient = original.OperationClient
-type PartnerClient = original.PartnerClient
 
 func New() BaseClient {
 	return original.New()
-}
-func NewWithBaseURI(baseURI string) BaseClient {
-	return original.NewWithBaseURI(baseURI)
-}
-func PossibleCodeValues() []Code {
-	return original.PossibleCodeValues()
-}
-func PossibleStateValues() []State {
-	return original.PossibleStateValues()
 }
 func NewOperationClient() OperationClient {
 	return original.NewOperationClient()
@@ -76,6 +67,15 @@ func NewPartnerClient() PartnerClient {
 }
 func NewPartnerClientWithBaseURI(baseURI string) PartnerClient {
 	return original.NewPartnerClientWithBaseURI(baseURI)
+}
+func NewWithBaseURI(baseURI string) BaseClient {
+	return original.NewWithBaseURI(baseURI)
+}
+func PossibleCodeValues() []Code {
+	return original.PossibleCodeValues()
+}
+func PossibleStateValues() []State {
+	return original.PossibleStateValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

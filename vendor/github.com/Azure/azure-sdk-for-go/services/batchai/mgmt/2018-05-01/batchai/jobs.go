@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -52,6 +53,16 @@ func NewJobsClientWithBaseURI(baseURI string, subscriptionID string) JobsClient 
 // characters long.
 // parameters - the parameters to provide for job creation.
 func (client JobsClient) Create(ctx context.Context, resourceGroupName string, workspaceName string, experimentName string, jobName string, parameters JobCreateParameters) (result JobsCreateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},
@@ -153,10 +164,6 @@ func (client JobsClient) CreateSender(req *http.Request) (future JobsCreateFutur
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -185,6 +192,16 @@ func (client JobsClient) CreateResponder(resp *http.Response) (result Job, err e
 // of alphanumeric characters along with dash (-) and underscore (_). The name must be from 1 through 64
 // characters long.
 func (client JobsClient) Delete(ctx context.Context, resourceGroupName string, workspaceName string, experimentName string, jobName string) (result JobsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},
@@ -250,10 +267,6 @@ func (client JobsClient) DeleteSender(req *http.Request) (future JobsDeleteFutur
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -281,6 +294,16 @@ func (client JobsClient) DeleteResponder(resp *http.Response) (result autorest.R
 // of alphanumeric characters along with dash (-) and underscore (_). The name must be from 1 through 64
 // characters long.
 func (client JobsClient) Get(ctx context.Context, resourceGroupName string, workspaceName string, experimentName string, jobName string) (result Job, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},
@@ -372,6 +395,16 @@ func (client JobsClient) GetResponder(resp *http.Response) (result Job, err erro
 // characters along with dash (-) and underscore (_). The name must be from 1 through 64 characters long.
 // maxResults - the maximum number of items to return in the response. A maximum of 1000 files can be returned.
 func (client JobsClient) ListByExperiment(ctx context.Context, resourceGroupName string, workspaceName string, experimentName string, maxResults *int32) (result JobListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.ListByExperiment")
+		defer func() {
+			sc := -1
+			if result.jlr.Response.Response != nil {
+				sc = result.jlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},
@@ -461,8 +494,8 @@ func (client JobsClient) ListByExperimentResponder(resp *http.Response) (result 
 }
 
 // listByExperimentNextResults retrieves the next set of results, if any.
-func (client JobsClient) listByExperimentNextResults(lastResults JobListResult) (result JobListResult, err error) {
-	req, err := lastResults.jobListResultPreparer()
+func (client JobsClient) listByExperimentNextResults(ctx context.Context, lastResults JobListResult) (result JobListResult, err error) {
+	req, err := lastResults.jobListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "batchai.JobsClient", "listByExperimentNextResults", nil, "Failure preparing next results request")
 	}
@@ -483,6 +516,16 @@ func (client JobsClient) listByExperimentNextResults(lastResults JobListResult) 
 
 // ListByExperimentComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobsClient) ListByExperimentComplete(ctx context.Context, resourceGroupName string, workspaceName string, experimentName string, maxResults *int32) (result JobListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.ListByExperiment")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByExperiment(ctx, resourceGroupName, workspaceName, experimentName, maxResults)
 	return
 }
@@ -504,6 +547,16 @@ func (client JobsClient) ListByExperimentComplete(ctx context.Context, resourceG
 // linkexpiryinminutes - the number of minutes after which the download link will expire.
 // maxResults - the maximum number of items to return in the response. A maximum of 1000 files can be returned.
 func (client JobsClient) ListOutputFiles(ctx context.Context, resourceGroupName string, workspaceName string, experimentName string, jobName string, outputdirectoryid string, directory string, linkexpiryinminutes *int32, maxResults *int32) (result FileListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.ListOutputFiles")
+		defer func() {
+			sc := -1
+			if result.flr.Response.Response != nil {
+				sc = result.flr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},
@@ -614,8 +667,8 @@ func (client JobsClient) ListOutputFilesResponder(resp *http.Response) (result F
 }
 
 // listOutputFilesNextResults retrieves the next set of results, if any.
-func (client JobsClient) listOutputFilesNextResults(lastResults FileListResult) (result FileListResult, err error) {
-	req, err := lastResults.fileListResultPreparer()
+func (client JobsClient) listOutputFilesNextResults(ctx context.Context, lastResults FileListResult) (result FileListResult, err error) {
+	req, err := lastResults.fileListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "batchai.JobsClient", "listOutputFilesNextResults", nil, "Failure preparing next results request")
 	}
@@ -636,6 +689,16 @@ func (client JobsClient) listOutputFilesNextResults(lastResults FileListResult) 
 
 // ListOutputFilesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobsClient) ListOutputFilesComplete(ctx context.Context, resourceGroupName string, workspaceName string, experimentName string, jobName string, outputdirectoryid string, directory string, linkexpiryinminutes *int32, maxResults *int32) (result FileListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.ListOutputFiles")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListOutputFiles(ctx, resourceGroupName, workspaceName, experimentName, jobName, outputdirectoryid, directory, linkexpiryinminutes, maxResults)
 	return
 }
@@ -652,6 +715,16 @@ func (client JobsClient) ListOutputFilesComplete(ctx context.Context, resourceGr
 // of alphanumeric characters along with dash (-) and underscore (_). The name must be from 1 through 64
 // characters long.
 func (client JobsClient) ListRemoteLoginInformation(ctx context.Context, resourceGroupName string, workspaceName string, experimentName string, jobName string) (result RemoteLoginInformationListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.ListRemoteLoginInformation")
+		defer func() {
+			sc := -1
+			if result.rlilr.Response.Response != nil {
+				sc = result.rlilr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},
@@ -736,8 +809,8 @@ func (client JobsClient) ListRemoteLoginInformationResponder(resp *http.Response
 }
 
 // listRemoteLoginInformationNextResults retrieves the next set of results, if any.
-func (client JobsClient) listRemoteLoginInformationNextResults(lastResults RemoteLoginInformationListResult) (result RemoteLoginInformationListResult, err error) {
-	req, err := lastResults.remoteLoginInformationListResultPreparer()
+func (client JobsClient) listRemoteLoginInformationNextResults(ctx context.Context, lastResults RemoteLoginInformationListResult) (result RemoteLoginInformationListResult, err error) {
+	req, err := lastResults.remoteLoginInformationListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "batchai.JobsClient", "listRemoteLoginInformationNextResults", nil, "Failure preparing next results request")
 	}
@@ -758,6 +831,16 @@ func (client JobsClient) listRemoteLoginInformationNextResults(lastResults Remot
 
 // ListRemoteLoginInformationComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobsClient) ListRemoteLoginInformationComplete(ctx context.Context, resourceGroupName string, workspaceName string, experimentName string, jobName string) (result RemoteLoginInformationListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.ListRemoteLoginInformation")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListRemoteLoginInformation(ctx, resourceGroupName, workspaceName, experimentName, jobName)
 	return
 }
@@ -773,6 +856,16 @@ func (client JobsClient) ListRemoteLoginInformationComplete(ctx context.Context,
 // of alphanumeric characters along with dash (-) and underscore (_). The name must be from 1 through 64
 // characters long.
 func (client JobsClient) Terminate(ctx context.Context, resourceGroupName string, workspaceName string, experimentName string, jobName string) (result JobsTerminateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Terminate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},
@@ -835,10 +928,6 @@ func (client JobsClient) TerminateSender(req *http.Request) (future JobsTerminat
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

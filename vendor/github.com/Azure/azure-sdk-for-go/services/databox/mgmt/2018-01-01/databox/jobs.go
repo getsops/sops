@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,11 +48,25 @@ func NewJobsClientWithBaseURI(baseURI string, subscriptionID string) JobsClient 
 // 24 characters in length and use any alphanumeric and underscore only
 // shipmentPickUpRequest - details of shipment pick up request.
 func (client JobsClient) BookShipmentPickUp(ctx context.Context, resourceGroupName string, jobName string, shipmentPickUpRequest ShipmentPickUpRequest) (result ShipmentPickUpResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.BookShipmentPickUp")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: jobName,
 			Constraints: []validation.Constraint{{Target: "jobName", Name: validation.MaxLength, Rule: 24, Chain: nil},
 				{Target: "jobName", Name: validation.MinLength, Rule: 3, Chain: nil},
-				{Target: "jobName", Name: validation.Pattern, Rule: `^[-\w\.]+$`, Chain: nil}}}}); err != nil {
+				{Target: "jobName", Name: validation.Pattern, Rule: `^[-\w\.]+$`, Chain: nil}}},
+		{TargetValue: shipmentPickUpRequest,
+			Constraints: []validation.Constraint{{Target: "shipmentPickUpRequest.StartTime", Name: validation.Null, Rule: true, Chain: nil},
+				{Target: "shipmentPickUpRequest.EndTime", Name: validation.Null, Rule: true, Chain: nil},
+				{Target: "shipmentPickUpRequest.ShipmentLocation", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("databox.JobsClient", "BookShipmentPickUp", err.Error())
 	}
 
@@ -126,6 +141,16 @@ func (client JobsClient) BookShipmentPickUpResponder(resp *http.Response) (resul
 // 24 characters in length and use any alphanumeric and underscore only
 // cancellationReason - reason for cancellation.
 func (client JobsClient) Cancel(ctx context.Context, resourceGroupName string, jobName string, cancellationReason CancellationReason) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Cancel")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: jobName,
 			Constraints: []validation.Constraint{{Target: "jobName", Name: validation.MaxLength, Rule: 24, Chain: nil},
@@ -207,6 +232,16 @@ func (client JobsClient) CancelResponder(resp *http.Response) (result autorest.R
 // 24 characters in length and use any alphanumeric and underscore only
 // jobResource - job details from request body.
 func (client JobsClient) Create(ctx context.Context, resourceGroupName string, jobName string, jobResource JobResource) (result JobsCreateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: jobName,
 			Constraints: []validation.Constraint{{Target: "jobName", Name: validation.MaxLength, Rule: 24, Chain: nil},
@@ -214,20 +249,19 @@ func (client JobsClient) Create(ctx context.Context, resourceGroupName string, j
 				{Target: "jobName", Name: validation.Pattern, Rule: `^[-\w\.]+$`, Chain: nil}}},
 		{TargetValue: jobResource,
 			Constraints: []validation.Constraint{{Target: "jobResource.JobProperties", Name: validation.Null, Rule: true,
-				Chain: []validation.Constraint{{Target: "jobResource.JobProperties.Error", Name: validation.Null, Rule: false,
-					Chain: []validation.Constraint{{Target: "jobResource.JobProperties.Error.Code", Name: validation.Null, Rule: true, Chain: nil}}},
-					{Target: "jobResource.JobProperties.DestinationAccountDetails", Name: validation.Null, Rule: true, Chain: nil},
-					{Target: "jobResource.JobProperties.Details", Name: validation.Null, Rule: false,
-						Chain: []validation.Constraint{{Target: "jobResource.JobProperties.Details.ContactDetails", Name: validation.Null, Rule: true,
-							Chain: []validation.Constraint{{Target: "jobResource.JobProperties.Details.ContactDetails.Phone", Name: validation.Null, Rule: true, Chain: nil},
-								{Target: "jobResource.JobProperties.Details.ContactDetails.EmailList", Name: validation.Null, Rule: true, Chain: nil},
-							}},
-							{Target: "jobResource.JobProperties.Details.ShippingAddress", Name: validation.Null, Rule: true,
-								Chain: []validation.Constraint{{Target: "jobResource.JobProperties.Details.ShippingAddress.StreetAddress1", Name: validation.Null, Rule: true, Chain: nil},
-									{Target: "jobResource.JobProperties.Details.ShippingAddress.Country", Name: validation.Null, Rule: true, Chain: nil},
-									{Target: "jobResource.JobProperties.Details.ShippingAddress.PostalCode", Name: validation.Null, Rule: true, Chain: nil},
-								}},
+				Chain: []validation.Constraint{{Target: "jobResource.JobProperties.Details", Name: validation.Null, Rule: false,
+					Chain: []validation.Constraint{{Target: "jobResource.JobProperties.Details.ContactDetails", Name: validation.Null, Rule: true,
+						Chain: []validation.Constraint{{Target: "jobResource.JobProperties.Details.ContactDetails.ContactName", Name: validation.Null, Rule: true, Chain: nil},
+							{Target: "jobResource.JobProperties.Details.ContactDetails.Phone", Name: validation.Null, Rule: true, Chain: nil},
+							{Target: "jobResource.JobProperties.Details.ContactDetails.EmailList", Name: validation.Null, Rule: true, Chain: nil},
 						}},
+						{Target: "jobResource.JobProperties.Details.ShippingAddress", Name: validation.Null, Rule: true,
+							Chain: []validation.Constraint{{Target: "jobResource.JobProperties.Details.ShippingAddress.StreetAddress1", Name: validation.Null, Rule: true, Chain: nil},
+								{Target: "jobResource.JobProperties.Details.ShippingAddress.Country", Name: validation.Null, Rule: true, Chain: nil},
+								{Target: "jobResource.JobProperties.Details.ShippingAddress.PostalCode", Name: validation.Null, Rule: true, Chain: nil},
+							}},
+						{Target: "jobResource.JobProperties.Details.DestinationAccountDetails", Name: validation.Null, Rule: true, Chain: nil},
+					}},
 				}}}}}); err != nil {
 		return result, validation.NewError("databox.JobsClient", "Create", err.Error())
 	}
@@ -279,10 +313,6 @@ func (client JobsClient) CreateSender(req *http.Request) (future JobsCreateFutur
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -305,7 +335,17 @@ func (client JobsClient) CreateResponder(resp *http.Response) (result JobResourc
 // resourceGroupName - the Resource Group Name
 // jobName - the name of the job Resource within the specified resource group. job names must be between 3 and
 // 24 characters in length and use any alphanumeric and underscore only
-func (client JobsClient) Delete(ctx context.Context, resourceGroupName string, jobName string) (result autorest.Response, err error) {
+func (client JobsClient) Delete(ctx context.Context, resourceGroupName string, jobName string) (result JobsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: jobName,
 			Constraints: []validation.Constraint{{Target: "jobName", Name: validation.MaxLength, Rule: 24, Chain: nil},
@@ -320,16 +360,10 @@ func (client JobsClient) Delete(ctx context.Context, resourceGroupName string, j
 		return
 	}
 
-	resp, err := client.DeleteSender(req)
+	result, err = client.DeleteSender(req)
 	if err != nil {
-		result.Response = resp
-		err = autorest.NewErrorWithError(err, "databox.JobsClient", "Delete", resp, "Failure sending request")
+		err = autorest.NewErrorWithError(err, "databox.JobsClient", "Delete", result.Response(), "Failure sending request")
 		return
-	}
-
-	result, err = client.DeleteResponder(resp)
-	if err != nil {
-		err = autorest.NewErrorWithError(err, "databox.JobsClient", "Delete", resp, "Failure responding to request")
 	}
 
 	return
@@ -358,9 +392,15 @@ func (client JobsClient) DeletePreparer(ctx context.Context, resourceGroupName s
 
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
-func (client JobsClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
+func (client JobsClient) DeleteSender(req *http.Request) (future JobsDeleteFuture, err error) {
+	var resp *http.Response
+	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	future.Future, err = azure.NewFutureFromResponse(resp)
+	return
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -369,85 +409,9 @@ func (client JobsClient) DeleteResponder(resp *http.Response) (result autorest.R
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
-		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
-	return
-}
-
-// DownloadShippingLabelURI get shipping label sas uri.
-// Parameters:
-// resourceGroupName - the Resource Group Name
-// jobName - the name of the job Resource within the specified resource group. job names must be between 3 and
-// 24 characters in length and use any alphanumeric and underscore only
-func (client JobsClient) DownloadShippingLabelURI(ctx context.Context, resourceGroupName string, jobName string) (result ShippingLabelDetails, err error) {
-	if err := validation.Validate([]validation.Validation{
-		{TargetValue: jobName,
-			Constraints: []validation.Constraint{{Target: "jobName", Name: validation.MaxLength, Rule: 24, Chain: nil},
-				{Target: "jobName", Name: validation.MinLength, Rule: 3, Chain: nil},
-				{Target: "jobName", Name: validation.Pattern, Rule: `^[-\w\.]+$`, Chain: nil}}}}); err != nil {
-		return result, validation.NewError("databox.JobsClient", "DownloadShippingLabelURI", err.Error())
-	}
-
-	req, err := client.DownloadShippingLabelURIPreparer(ctx, resourceGroupName, jobName)
-	if err != nil {
-		err = autorest.NewErrorWithError(err, "databox.JobsClient", "DownloadShippingLabelURI", nil, "Failure preparing request")
-		return
-	}
-
-	resp, err := client.DownloadShippingLabelURISender(req)
-	if err != nil {
-		result.Response = autorest.Response{Response: resp}
-		err = autorest.NewErrorWithError(err, "databox.JobsClient", "DownloadShippingLabelURI", resp, "Failure sending request")
-		return
-	}
-
-	result, err = client.DownloadShippingLabelURIResponder(resp)
-	if err != nil {
-		err = autorest.NewErrorWithError(err, "databox.JobsClient", "DownloadShippingLabelURI", resp, "Failure responding to request")
-	}
-
-	return
-}
-
-// DownloadShippingLabelURIPreparer prepares the DownloadShippingLabelURI request.
-func (client JobsClient) DownloadShippingLabelURIPreparer(ctx context.Context, resourceGroupName string, jobName string) (*http.Request, error) {
-	pathParameters := map[string]interface{}{
-		"jobName":           autorest.Encode("path", jobName),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
-	}
-
-	const APIVersion = "2018-01-01"
-	queryParameters := map[string]interface{}{
-		"api-version": APIVersion,
-	}
-
-	preparer := autorest.CreatePreparer(
-		autorest.AsPost(),
-		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataBox/jobs/{jobName}/downloadShippingLabel", pathParameters),
-		autorest.WithQueryParameters(queryParameters))
-	return preparer.Prepare((&http.Request{}).WithContext(ctx))
-}
-
-// DownloadShippingLabelURISender sends the DownloadShippingLabelURI request. The method will close the
-// http.Response Body if it receives an error.
-func (client JobsClient) DownloadShippingLabelURISender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
-}
-
-// DownloadShippingLabelURIResponder handles the response to the DownloadShippingLabelURI request. The method always
-// closes the http.Response Body.
-func (client JobsClient) DownloadShippingLabelURIResponder(resp *http.Response) (result ShippingLabelDetails, err error) {
-	err = autorest.Respond(
-		resp,
-		client.ByInspecting(),
-		azure.WithErrorUnlessStatusCode(http.StatusOK),
-		autorest.ByUnmarshallingJSON(&result),
-		autorest.ByClosing())
-	result.Response = autorest.Response{Response: resp}
 	return
 }
 
@@ -458,6 +422,16 @@ func (client JobsClient) DownloadShippingLabelURIResponder(resp *http.Response) 
 // 24 characters in length and use any alphanumeric and underscore only
 // expand - $expand is supported on details parameter for job, which provides details on the job stages.
 func (client JobsClient) Get(ctx context.Context, resourceGroupName string, jobName string, expand string) (result JobResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: jobName,
 			Constraints: []validation.Constraint{{Target: "jobName", Name: validation.MaxLength, Rule: 24, Chain: nil},
@@ -531,86 +505,20 @@ func (client JobsClient) GetResponder(resp *http.Response) (result JobResource, 
 	return
 }
 
-// GetCopyLogsURI provides list of copy logs uri.
-// Parameters:
-// resourceGroupName - the Resource Group Name
-// jobName - the name of the job Resource within the specified resource group. job names must be between 3 and
-// 24 characters in length and use any alphanumeric and underscore only
-func (client JobsClient) GetCopyLogsURI(ctx context.Context, resourceGroupName string, jobName string) (result GetCopyLogsURIOutput, err error) {
-	if err := validation.Validate([]validation.Validation{
-		{TargetValue: jobName,
-			Constraints: []validation.Constraint{{Target: "jobName", Name: validation.MaxLength, Rule: 24, Chain: nil},
-				{Target: "jobName", Name: validation.MinLength, Rule: 3, Chain: nil},
-				{Target: "jobName", Name: validation.Pattern, Rule: `^[-\w\.]+$`, Chain: nil}}}}); err != nil {
-		return result, validation.NewError("databox.JobsClient", "GetCopyLogsURI", err.Error())
-	}
-
-	req, err := client.GetCopyLogsURIPreparer(ctx, resourceGroupName, jobName)
-	if err != nil {
-		err = autorest.NewErrorWithError(err, "databox.JobsClient", "GetCopyLogsURI", nil, "Failure preparing request")
-		return
-	}
-
-	resp, err := client.GetCopyLogsURISender(req)
-	if err != nil {
-		result.Response = autorest.Response{Response: resp}
-		err = autorest.NewErrorWithError(err, "databox.JobsClient", "GetCopyLogsURI", resp, "Failure sending request")
-		return
-	}
-
-	result, err = client.GetCopyLogsURIResponder(resp)
-	if err != nil {
-		err = autorest.NewErrorWithError(err, "databox.JobsClient", "GetCopyLogsURI", resp, "Failure responding to request")
-	}
-
-	return
-}
-
-// GetCopyLogsURIPreparer prepares the GetCopyLogsURI request.
-func (client JobsClient) GetCopyLogsURIPreparer(ctx context.Context, resourceGroupName string, jobName string) (*http.Request, error) {
-	pathParameters := map[string]interface{}{
-		"jobName":           autorest.Encode("path", jobName),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
-	}
-
-	const APIVersion = "2018-01-01"
-	queryParameters := map[string]interface{}{
-		"api-version": APIVersion,
-	}
-
-	preparer := autorest.CreatePreparer(
-		autorest.AsPost(),
-		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataBox/jobs/{jobName}/copyLogsUri", pathParameters),
-		autorest.WithQueryParameters(queryParameters))
-	return preparer.Prepare((&http.Request{}).WithContext(ctx))
-}
-
-// GetCopyLogsURISender sends the GetCopyLogsURI request. The method will close the
-// http.Response Body if it receives an error.
-func (client JobsClient) GetCopyLogsURISender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
-}
-
-// GetCopyLogsURIResponder handles the response to the GetCopyLogsURI request. The method always
-// closes the http.Response Body.
-func (client JobsClient) GetCopyLogsURIResponder(resp *http.Response) (result GetCopyLogsURIOutput, err error) {
-	err = autorest.Respond(
-		resp,
-		client.ByInspecting(),
-		azure.WithErrorUnlessStatusCode(http.StatusOK),
-		autorest.ByUnmarshallingJSON(&result),
-		autorest.ByClosing())
-	result.Response = autorest.Response{Response: resp}
-	return
-}
-
 // List lists all the jobs available under the subscription.
 // Parameters:
 // skipToken - $skipToken is supported on Get list of jobs, which provides the next page in the list of jobs.
 func (client JobsClient) List(ctx context.Context, skipToken string) (result JobResourceListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.List")
+		defer func() {
+			sc := -1
+			if result.jrl.Response.Response != nil {
+				sc = result.jrl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, skipToken)
 	if err != nil {
@@ -676,8 +584,8 @@ func (client JobsClient) ListResponder(resp *http.Response) (result JobResourceL
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client JobsClient) listNextResults(lastResults JobResourceList) (result JobResourceList, err error) {
-	req, err := lastResults.jobResourceListPreparer()
+func (client JobsClient) listNextResults(ctx context.Context, lastResults JobResourceList) (result JobResourceList, err error) {
+	req, err := lastResults.jobResourceListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "databox.JobsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -698,6 +606,16 @@ func (client JobsClient) listNextResults(lastResults JobResourceList) (result Jo
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobsClient) ListComplete(ctx context.Context, skipToken string) (result JobResourceListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, skipToken)
 	return
 }
@@ -707,6 +625,16 @@ func (client JobsClient) ListComplete(ctx context.Context, skipToken string) (re
 // resourceGroupName - the Resource Group Name
 // skipToken - $skipToken is supported on Get list of jobs, which provides the next page in the list of jobs.
 func (client JobsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, skipToken string) (result JobResourceListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.jrl.Response.Response != nil {
+				sc = result.jrl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName, skipToken)
 	if err != nil {
@@ -773,8 +701,8 @@ func (client JobsClient) ListByResourceGroupResponder(resp *http.Response) (resu
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client JobsClient) listByResourceGroupNextResults(lastResults JobResourceList) (result JobResourceList, err error) {
-	req, err := lastResults.jobResourceListPreparer()
+func (client JobsClient) listByResourceGroupNextResults(ctx context.Context, lastResults JobResourceList) (result JobResourceList, err error) {
+	req, err := lastResults.jobResourceListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "databox.JobsClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -795,47 +723,67 @@ func (client JobsClient) listByResourceGroupNextResults(lastResults JobResourceL
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobsClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string, skipToken string) (result JobResourceListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName, skipToken)
 	return
 }
 
-// ListSecrets this method gets the unencrypted secrets related to the job.
+// ListCredentials this method gets the unencrypted secrets related to the job.
 // Parameters:
 // resourceGroupName - the Resource Group Name
 // jobName - the name of the job Resource within the specified resource group. job names must be between 3 and
 // 24 characters in length and use any alphanumeric and underscore only
-func (client JobsClient) ListSecrets(ctx context.Context, resourceGroupName string, jobName string) (result UnencryptedSecrets, err error) {
+func (client JobsClient) ListCredentials(ctx context.Context, resourceGroupName string, jobName string) (result UnencryptedCredentialsList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.ListCredentials")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: jobName,
 			Constraints: []validation.Constraint{{Target: "jobName", Name: validation.MaxLength, Rule: 24, Chain: nil},
 				{Target: "jobName", Name: validation.MinLength, Rule: 3, Chain: nil},
 				{Target: "jobName", Name: validation.Pattern, Rule: `^[-\w\.]+$`, Chain: nil}}}}); err != nil {
-		return result, validation.NewError("databox.JobsClient", "ListSecrets", err.Error())
+		return result, validation.NewError("databox.JobsClient", "ListCredentials", err.Error())
 	}
 
-	req, err := client.ListSecretsPreparer(ctx, resourceGroupName, jobName)
+	req, err := client.ListCredentialsPreparer(ctx, resourceGroupName, jobName)
 	if err != nil {
-		err = autorest.NewErrorWithError(err, "databox.JobsClient", "ListSecrets", nil, "Failure preparing request")
+		err = autorest.NewErrorWithError(err, "databox.JobsClient", "ListCredentials", nil, "Failure preparing request")
 		return
 	}
 
-	resp, err := client.ListSecretsSender(req)
+	resp, err := client.ListCredentialsSender(req)
 	if err != nil {
 		result.Response = autorest.Response{Response: resp}
-		err = autorest.NewErrorWithError(err, "databox.JobsClient", "ListSecrets", resp, "Failure sending request")
+		err = autorest.NewErrorWithError(err, "databox.JobsClient", "ListCredentials", resp, "Failure sending request")
 		return
 	}
 
-	result, err = client.ListSecretsResponder(resp)
+	result, err = client.ListCredentialsResponder(resp)
 	if err != nil {
-		err = autorest.NewErrorWithError(err, "databox.JobsClient", "ListSecrets", resp, "Failure responding to request")
+		err = autorest.NewErrorWithError(err, "databox.JobsClient", "ListCredentials", resp, "Failure responding to request")
 	}
 
 	return
 }
 
-// ListSecretsPreparer prepares the ListSecrets request.
-func (client JobsClient) ListSecretsPreparer(ctx context.Context, resourceGroupName string, jobName string) (*http.Request, error) {
+// ListCredentialsPreparer prepares the ListCredentials request.
+func (client JobsClient) ListCredentialsPreparer(ctx context.Context, resourceGroupName string, jobName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"jobName":           autorest.Encode("path", jobName),
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
@@ -850,21 +798,21 @@ func (client JobsClient) ListSecretsPreparer(ctx context.Context, resourceGroupN
 	preparer := autorest.CreatePreparer(
 		autorest.AsPost(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataBox/jobs/{jobName}/listSecrets", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataBox/jobs/{jobName}/listCredentials", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// ListSecretsSender sends the ListSecrets request. The method will close the
+// ListCredentialsSender sends the ListCredentials request. The method will close the
 // http.Response Body if it receives an error.
-func (client JobsClient) ListSecretsSender(req *http.Request) (*http.Response, error) {
+func (client JobsClient) ListCredentialsSender(req *http.Request) (*http.Response, error) {
 	return autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// ListSecretsResponder handles the response to the ListSecrets request. The method always
+// ListCredentialsResponder handles the response to the ListCredentials request. The method always
 // closes the http.Response Body.
-func (client JobsClient) ListSecretsResponder(resp *http.Response) (result UnencryptedSecrets, err error) {
+func (client JobsClient) ListCredentialsResponder(resp *http.Response) (result UnencryptedCredentialsList, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
@@ -872,84 +820,6 @@ func (client JobsClient) ListSecretsResponder(resp *http.Response) (result Unenc
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
-	return
-}
-
-// ReportIssue reports an issue.
-// Parameters:
-// resourceGroupName - the Resource Group Name
-// jobName - the name of the job Resource within the specified resource group. job names must be between 3 and
-// 24 characters in length and use any alphanumeric and underscore only
-// reportIssueDetails - details of reported issue.
-func (client JobsClient) ReportIssue(ctx context.Context, resourceGroupName string, jobName string, reportIssueDetails ReportIssueDetails) (result autorest.Response, err error) {
-	if err := validation.Validate([]validation.Validation{
-		{TargetValue: jobName,
-			Constraints: []validation.Constraint{{Target: "jobName", Name: validation.MaxLength, Rule: 24, Chain: nil},
-				{Target: "jobName", Name: validation.MinLength, Rule: 3, Chain: nil},
-				{Target: "jobName", Name: validation.Pattern, Rule: `^[-\w\.]+$`, Chain: nil}}}}); err != nil {
-		return result, validation.NewError("databox.JobsClient", "ReportIssue", err.Error())
-	}
-
-	req, err := client.ReportIssuePreparer(ctx, resourceGroupName, jobName, reportIssueDetails)
-	if err != nil {
-		err = autorest.NewErrorWithError(err, "databox.JobsClient", "ReportIssue", nil, "Failure preparing request")
-		return
-	}
-
-	resp, err := client.ReportIssueSender(req)
-	if err != nil {
-		result.Response = resp
-		err = autorest.NewErrorWithError(err, "databox.JobsClient", "ReportIssue", resp, "Failure sending request")
-		return
-	}
-
-	result, err = client.ReportIssueResponder(resp)
-	if err != nil {
-		err = autorest.NewErrorWithError(err, "databox.JobsClient", "ReportIssue", resp, "Failure responding to request")
-	}
-
-	return
-}
-
-// ReportIssuePreparer prepares the ReportIssue request.
-func (client JobsClient) ReportIssuePreparer(ctx context.Context, resourceGroupName string, jobName string, reportIssueDetails ReportIssueDetails) (*http.Request, error) {
-	pathParameters := map[string]interface{}{
-		"jobName":           autorest.Encode("path", jobName),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
-	}
-
-	const APIVersion = "2018-01-01"
-	queryParameters := map[string]interface{}{
-		"api-version": APIVersion,
-	}
-
-	preparer := autorest.CreatePreparer(
-		autorest.AsContentType("application/json; charset=utf-8"),
-		autorest.AsPost(),
-		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataBox/jobs/{jobName}/reportIssue", pathParameters),
-		autorest.WithJSON(reportIssueDetails),
-		autorest.WithQueryParameters(queryParameters))
-	return preparer.Prepare((&http.Request{}).WithContext(ctx))
-}
-
-// ReportIssueSender sends the ReportIssue request. The method will close the
-// http.Response Body if it receives an error.
-func (client JobsClient) ReportIssueSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
-}
-
-// ReportIssueResponder handles the response to the ReportIssue request. The method always
-// closes the http.Response Body.
-func (client JobsClient) ReportIssueResponder(resp *http.Response) (result autorest.Response, err error) {
-	err = autorest.Respond(
-		resp,
-		client.ByInspecting(),
-		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
-		autorest.ByClosing())
-	result.Response = resp
 	return
 }
 
@@ -962,6 +832,16 @@ func (client JobsClient) ReportIssueResponder(resp *http.Response) (result autor
 // ifMatch - defines the If-Match condition. The patch will be performed only if the ETag of the job on the
 // server matches this value.
 func (client JobsClient) Update(ctx context.Context, resourceGroupName string, jobName string, jobResourceUpdateParameter JobResourceUpdateParameter, ifMatch string) (result JobsUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: jobName,
 			Constraints: []validation.Constraint{{Target: "jobName", Name: validation.MaxLength, Rule: 24, Chain: nil},
@@ -1018,10 +898,6 @@ func (client JobsClient) UpdateSender(req *http.Request) (future JobsUpdateFutur
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

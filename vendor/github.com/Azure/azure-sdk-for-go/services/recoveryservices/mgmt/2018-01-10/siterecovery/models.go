@@ -18,13 +18,18 @@ package siterecovery
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/recoveryservices/mgmt/2018-01-10/siterecovery"
 
 // A2ARpRecoveryPointType enumerates the values for a2a rp recovery point type.
 type A2ARpRecoveryPointType string
@@ -126,6 +131,55 @@ func PossibleDisableProtectionReasonValues() []DisableProtectionReason {
 	return []DisableProtectionReason{MigrationComplete, NotSpecified}
 }
 
+// DiskAccountType enumerates the values for disk account type.
+type DiskAccountType string
+
+const (
+	// PremiumLRS ...
+	PremiumLRS DiskAccountType = "Premium_LRS"
+	// StandardLRS ...
+	StandardLRS DiskAccountType = "Standard_LRS"
+	// StandardSSDLRS ...
+	StandardSSDLRS DiskAccountType = "StandardSSD_LRS"
+)
+
+// PossibleDiskAccountTypeValues returns an array of possible values for the DiskAccountType const type.
+func PossibleDiskAccountTypeValues() []DiskAccountType {
+	return []DiskAccountType{PremiumLRS, StandardLRS, StandardSSDLRS}
+}
+
+// DiskType enumerates the values for disk type.
+type DiskType string
+
+const (
+	// DiskTypePremiumLRS ...
+	DiskTypePremiumLRS DiskType = "Premium_LRS"
+	// DiskTypeStandardLRS ...
+	DiskTypeStandardLRS DiskType = "Standard_LRS"
+	// DiskTypeStandardSSDLRS ...
+	DiskTypeStandardSSDLRS DiskType = "StandardSSD_LRS"
+)
+
+// PossibleDiskTypeValues returns an array of possible values for the DiskType const type.
+func PossibleDiskTypeValues() []DiskType {
+	return []DiskType{DiskTypePremiumLRS, DiskTypeStandardLRS, DiskTypeStandardSSDLRS}
+}
+
+// EthernetAddressType enumerates the values for ethernet address type.
+type EthernetAddressType string
+
+const (
+	// Dynamic ...
+	Dynamic EthernetAddressType = "Dynamic"
+	// Static ...
+	Static EthernetAddressType = "Static"
+)
+
+// PossibleEthernetAddressTypeValues returns an array of possible values for the EthernetAddressType const type.
+func PossibleEthernetAddressTypeValues() []EthernetAddressType {
+	return []EthernetAddressType{Dynamic, Static}
+}
+
 // FailoverDeploymentModel enumerates the values for failover deployment model.
 type FailoverDeploymentModel string
 
@@ -184,19 +238,6 @@ const (
 // PossibleHyperVReplicaAzureRpRecoveryPointTypeValues returns an array of possible values for the HyperVReplicaAzureRpRecoveryPointType const type.
 func PossibleHyperVReplicaAzureRpRecoveryPointTypeValues() []HyperVReplicaAzureRpRecoveryPointType {
 	return []HyperVReplicaAzureRpRecoveryPointType{HyperVReplicaAzureRpRecoveryPointTypeLatest, HyperVReplicaAzureRpRecoveryPointTypeLatestApplicationConsistent, HyperVReplicaAzureRpRecoveryPointTypeLatestProcessed}
-}
-
-// IdentityProviderType enumerates the values for identity provider type.
-type IdentityProviderType string
-
-const (
-	// RecoveryServicesActiveDirectory ...
-	RecoveryServicesActiveDirectory IdentityProviderType = "RecoveryServicesActiveDirectory"
-)
-
-// PossibleIdentityProviderTypeValues returns an array of possible values for the IdentityProviderType const type.
-func PossibleIdentityProviderTypeValues() []IdentityProviderType {
-	return []IdentityProviderType{RecoveryServicesActiveDirectory}
 }
 
 // InMageV2RpRecoveryPointType enumerates the values for in mage v2 rp recovery point type.
@@ -272,6 +313,22 @@ const (
 // PossibleInstanceTypeBasicDisableProtectionProviderSpecificInputValues returns an array of possible values for the InstanceTypeBasicDisableProtectionProviderSpecificInput const type.
 func PossibleInstanceTypeBasicDisableProtectionProviderSpecificInputValues() []InstanceTypeBasicDisableProtectionProviderSpecificInput {
 	return []InstanceTypeBasicDisableProtectionProviderSpecificInput{InstanceTypeDisableProtectionProviderSpecificInput, InstanceTypeInMage}
+}
+
+// InstanceTypeBasicEnableMigrationProviderSpecificInput enumerates the values for instance type basic enable
+// migration provider specific input.
+type InstanceTypeBasicEnableMigrationProviderSpecificInput string
+
+const (
+	// InstanceTypeEnableMigrationProviderSpecificInput ...
+	InstanceTypeEnableMigrationProviderSpecificInput InstanceTypeBasicEnableMigrationProviderSpecificInput = "EnableMigrationProviderSpecificInput"
+	// InstanceTypeVMwareCbt ...
+	InstanceTypeVMwareCbt InstanceTypeBasicEnableMigrationProviderSpecificInput = "VMwareCbt"
+)
+
+// PossibleInstanceTypeBasicEnableMigrationProviderSpecificInputValues returns an array of possible values for the InstanceTypeBasicEnableMigrationProviderSpecificInput const type.
+func PossibleInstanceTypeBasicEnableMigrationProviderSpecificInputValues() []InstanceTypeBasicEnableMigrationProviderSpecificInput {
+	return []InstanceTypeBasicEnableMigrationProviderSpecificInput{InstanceTypeEnableMigrationProviderSpecificInput, InstanceTypeVMwareCbt}
 }
 
 // InstanceTypeBasicEnableProtectionProviderSpecificInput enumerates the values for instance type basic enable
@@ -463,6 +520,38 @@ func PossibleInstanceTypeBasicJobDetailsValues() []InstanceTypeBasicJobDetails {
 	return []InstanceTypeBasicJobDetails{InstanceTypeAsrJobDetails, InstanceTypeExportJobDetails, InstanceTypeFailoverJobDetails, InstanceTypeJobDetails, InstanceTypeSwitchProtectionJobDetails, InstanceTypeTestFailoverJobDetails}
 }
 
+// InstanceTypeBasicMigrateProviderSpecificInput enumerates the values for instance type basic migrate provider
+// specific input.
+type InstanceTypeBasicMigrateProviderSpecificInput string
+
+const (
+	// InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeMigrateProviderSpecificInput ...
+	InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeMigrateProviderSpecificInput InstanceTypeBasicMigrateProviderSpecificInput = "MigrateProviderSpecificInput"
+	// InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeVMwareCbt ...
+	InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeVMwareCbt InstanceTypeBasicMigrateProviderSpecificInput = "VMwareCbt"
+)
+
+// PossibleInstanceTypeBasicMigrateProviderSpecificInputValues returns an array of possible values for the InstanceTypeBasicMigrateProviderSpecificInput const type.
+func PossibleInstanceTypeBasicMigrateProviderSpecificInputValues() []InstanceTypeBasicMigrateProviderSpecificInput {
+	return []InstanceTypeBasicMigrateProviderSpecificInput{InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeMigrateProviderSpecificInput, InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeVMwareCbt}
+}
+
+// InstanceTypeBasicMigrationProviderSpecificSettings enumerates the values for instance type basic migration
+// provider specific settings.
+type InstanceTypeBasicMigrationProviderSpecificSettings string
+
+const (
+	// InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeMigrationProviderSpecificSettings ...
+	InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeMigrationProviderSpecificSettings InstanceTypeBasicMigrationProviderSpecificSettings = "MigrationProviderSpecificSettings"
+	// InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeVMwareCbt ...
+	InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeVMwareCbt InstanceTypeBasicMigrationProviderSpecificSettings = "VMwareCbt"
+)
+
+// PossibleInstanceTypeBasicMigrationProviderSpecificSettingsValues returns an array of possible values for the InstanceTypeBasicMigrationProviderSpecificSettings const type.
+func PossibleInstanceTypeBasicMigrationProviderSpecificSettingsValues() []InstanceTypeBasicMigrationProviderSpecificSettings {
+	return []InstanceTypeBasicMigrationProviderSpecificSettings{InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeMigrationProviderSpecificSettings, InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeVMwareCbt}
+}
+
 // InstanceTypeBasicNetworkMappingFabricSpecificSettings enumerates the values for instance type basic network
 // mapping fabric specific settings.
 type InstanceTypeBasicNetworkMappingFabricSpecificSettings string
@@ -554,11 +643,13 @@ const (
 	InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeA2A InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails = "A2A"
 	// InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeProtectionContainerMappingProviderSpecificDetails ...
 	InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeProtectionContainerMappingProviderSpecificDetails InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails = "ProtectionContainerMappingProviderSpecificDetails"
+	// InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeVMwareCbt ...
+	InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeVMwareCbt InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails = "VMwareCbt"
 )
 
 // PossibleInstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsValues returns an array of possible values for the InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails const type.
 func PossibleInstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsValues() []InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails {
-	return []InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails{InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeA2A, InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeProtectionContainerMappingProviderSpecificDetails}
+	return []InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails{InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeA2A, InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeProtectionContainerMappingProviderSpecificDetails, InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeVMwareCbt}
 }
 
 // InstanceTypeBasicProviderSpecificFailoverInput enumerates the values for instance type basic provider
@@ -656,11 +747,13 @@ const (
 	InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A InstanceTypeBasicReplicationProviderSpecificContainerCreationInput = "A2A"
 	// InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput ...
 	InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput InstanceTypeBasicReplicationProviderSpecificContainerCreationInput = "ReplicationProviderSpecificContainerCreationInput"
+	// InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero ...
+	InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero InstanceTypeBasicReplicationProviderSpecificContainerCreationInput = "6c7da455-506f-43ff-a16a-8eb101aebb70"
 )
 
 // PossibleInstanceTypeBasicReplicationProviderSpecificContainerCreationInputValues returns an array of possible values for the InstanceTypeBasicReplicationProviderSpecificContainerCreationInput const type.
 func PossibleInstanceTypeBasicReplicationProviderSpecificContainerCreationInputValues() []InstanceTypeBasicReplicationProviderSpecificContainerCreationInput {
-	return []InstanceTypeBasicReplicationProviderSpecificContainerCreationInput{InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A, InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput}
+	return []InstanceTypeBasicReplicationProviderSpecificContainerCreationInput{InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A, InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput, InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero}
 }
 
 // InstanceTypeBasicReplicationProviderSpecificContainerMappingInput enumerates the values for instance type
@@ -672,11 +765,13 @@ const (
 	InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeA2A InstanceTypeBasicReplicationProviderSpecificContainerMappingInput = "A2A"
 	// InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeReplicationProviderSpecificContainerMappingInput ...
 	InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeReplicationProviderSpecificContainerMappingInput InstanceTypeBasicReplicationProviderSpecificContainerMappingInput = "ReplicationProviderSpecificContainerMappingInput"
+	// InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeVMwareCbt ...
+	InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeVMwareCbt InstanceTypeBasicReplicationProviderSpecificContainerMappingInput = "VMwareCbt"
 )
 
 // PossibleInstanceTypeBasicReplicationProviderSpecificContainerMappingInputValues returns an array of possible values for the InstanceTypeBasicReplicationProviderSpecificContainerMappingInput const type.
 func PossibleInstanceTypeBasicReplicationProviderSpecificContainerMappingInputValues() []InstanceTypeBasicReplicationProviderSpecificContainerMappingInput {
-	return []InstanceTypeBasicReplicationProviderSpecificContainerMappingInput{InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeA2A, InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeReplicationProviderSpecificContainerMappingInput}
+	return []InstanceTypeBasicReplicationProviderSpecificContainerMappingInput{InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeA2A, InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeReplicationProviderSpecificContainerMappingInput, InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeVMwareCbt}
 }
 
 // InstanceTypeBasicReplicationProviderSpecificSettings enumerates the values for instance type basic
@@ -790,6 +885,38 @@ func PossibleInstanceTypeBasicTaskTypeDetailsValues() []InstanceTypeBasicTaskTyp
 	return []InstanceTypeBasicTaskTypeDetails{InstanceTypeAutomationRunbookTaskDetails, InstanceTypeConsistencyCheckTaskDetails, InstanceTypeFabricReplicationGroupTaskDetails, InstanceTypeJobTaskDetails, InstanceTypeManualActionTaskDetails, InstanceTypeScriptActionTaskDetails, InstanceTypeTaskTypeDetails, InstanceTypeVirtualMachineTaskDetails, InstanceTypeVMNicUpdatesTaskDetails}
 }
 
+// InstanceTypeBasicTestMigrateProviderSpecificInput enumerates the values for instance type basic test migrate
+// provider specific input.
+type InstanceTypeBasicTestMigrateProviderSpecificInput string
+
+const (
+	// InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeTestMigrateProviderSpecificInput ...
+	InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeTestMigrateProviderSpecificInput InstanceTypeBasicTestMigrateProviderSpecificInput = "TestMigrateProviderSpecificInput"
+	// InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeVMwareCbt ...
+	InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeVMwareCbt InstanceTypeBasicTestMigrateProviderSpecificInput = "VMwareCbt"
+)
+
+// PossibleInstanceTypeBasicTestMigrateProviderSpecificInputValues returns an array of possible values for the InstanceTypeBasicTestMigrateProviderSpecificInput const type.
+func PossibleInstanceTypeBasicTestMigrateProviderSpecificInputValues() []InstanceTypeBasicTestMigrateProviderSpecificInput {
+	return []InstanceTypeBasicTestMigrateProviderSpecificInput{InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeTestMigrateProviderSpecificInput, InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeVMwareCbt}
+}
+
+// InstanceTypeBasicUpdateMigrationItemProviderSpecificInput enumerates the values for instance type basic
+// update migration item provider specific input.
+type InstanceTypeBasicUpdateMigrationItemProviderSpecificInput string
+
+const (
+	// InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeUpdateMigrationItemProviderSpecificInput ...
+	InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeUpdateMigrationItemProviderSpecificInput InstanceTypeBasicUpdateMigrationItemProviderSpecificInput = "UpdateMigrationItemProviderSpecificInput"
+	// InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeVMwareCbt ...
+	InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeVMwareCbt InstanceTypeBasicUpdateMigrationItemProviderSpecificInput = "VMwareCbt"
+)
+
+// PossibleInstanceTypeBasicUpdateMigrationItemProviderSpecificInputValues returns an array of possible values for the InstanceTypeBasicUpdateMigrationItemProviderSpecificInput const type.
+func PossibleInstanceTypeBasicUpdateMigrationItemProviderSpecificInputValues() []InstanceTypeBasicUpdateMigrationItemProviderSpecificInput {
+	return []InstanceTypeBasicUpdateMigrationItemProviderSpecificInput{InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeUpdateMigrationItemProviderSpecificInput, InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeVMwareCbt}
+}
+
 // InstanceTypeBasicUpdateReplicationProtectedItemProviderInput enumerates the values for instance type basic
 // update replication protected item provider input.
 type InstanceTypeBasicUpdateReplicationProtectedItemProviderInput string
@@ -825,6 +952,75 @@ const (
 // PossibleLicenseTypeValues returns an array of possible values for the LicenseType const type.
 func PossibleLicenseTypeValues() []LicenseType {
 	return []LicenseType{LicenseTypeNoLicenseType, LicenseTypeNotSpecified, LicenseTypeWindowsServer}
+}
+
+// MigrationItemOperation enumerates the values for migration item operation.
+type MigrationItemOperation string
+
+const (
+	// DisableMigration ...
+	DisableMigration MigrationItemOperation = "DisableMigration"
+	// Migrate ...
+	Migrate MigrationItemOperation = "Migrate"
+	// TestMigrate ...
+	TestMigrate MigrationItemOperation = "TestMigrate"
+	// TestMigrateCleanup ...
+	TestMigrateCleanup MigrationItemOperation = "TestMigrateCleanup"
+)
+
+// PossibleMigrationItemOperationValues returns an array of possible values for the MigrationItemOperation const type.
+func PossibleMigrationItemOperationValues() []MigrationItemOperation {
+	return []MigrationItemOperation{DisableMigration, Migrate, TestMigrate, TestMigrateCleanup}
+}
+
+// MigrationRecoveryPointType enumerates the values for migration recovery point type.
+type MigrationRecoveryPointType string
+
+const (
+	// MigrationRecoveryPointTypeApplicationConsistent ...
+	MigrationRecoveryPointTypeApplicationConsistent MigrationRecoveryPointType = "ApplicationConsistent"
+	// MigrationRecoveryPointTypeCrashConsistent ...
+	MigrationRecoveryPointTypeCrashConsistent MigrationRecoveryPointType = "CrashConsistent"
+	// MigrationRecoveryPointTypeNotSpecified ...
+	MigrationRecoveryPointTypeNotSpecified MigrationRecoveryPointType = "NotSpecified"
+)
+
+// PossibleMigrationRecoveryPointTypeValues returns an array of possible values for the MigrationRecoveryPointType const type.
+func PossibleMigrationRecoveryPointTypeValues() []MigrationRecoveryPointType {
+	return []MigrationRecoveryPointType{MigrationRecoveryPointTypeApplicationConsistent, MigrationRecoveryPointTypeCrashConsistent, MigrationRecoveryPointTypeNotSpecified}
+}
+
+// MigrationState enumerates the values for migration state.
+type MigrationState string
+
+const (
+	// MigrationStateDisableMigrationFailed ...
+	MigrationStateDisableMigrationFailed MigrationState = "DisableMigrationFailed"
+	// MigrationStateDisableMigrationInProgress ...
+	MigrationStateDisableMigrationInProgress MigrationState = "DisableMigrationInProgress"
+	// MigrationStateEnableMigrationFailed ...
+	MigrationStateEnableMigrationFailed MigrationState = "EnableMigrationFailed"
+	// MigrationStateEnableMigrationInProgress ...
+	MigrationStateEnableMigrationInProgress MigrationState = "EnableMigrationInProgress"
+	// MigrationStateInitialSeedingFailed ...
+	MigrationStateInitialSeedingFailed MigrationState = "InitialSeedingFailed"
+	// MigrationStateInitialSeedingInProgress ...
+	MigrationStateInitialSeedingInProgress MigrationState = "InitialSeedingInProgress"
+	// MigrationStateMigrationFailed ...
+	MigrationStateMigrationFailed MigrationState = "MigrationFailed"
+	// MigrationStateMigrationInProgress ...
+	MigrationStateMigrationInProgress MigrationState = "MigrationInProgress"
+	// MigrationStateMigrationSucceeded ...
+	MigrationStateMigrationSucceeded MigrationState = "MigrationSucceeded"
+	// MigrationStateNone ...
+	MigrationStateNone MigrationState = "None"
+	// MigrationStateReplicating ...
+	MigrationStateReplicating MigrationState = "Replicating"
+)
+
+// PossibleMigrationStateValues returns an array of possible values for the MigrationState const type.
+func PossibleMigrationStateValues() []MigrationState {
+	return []MigrationState{MigrationStateDisableMigrationFailed, MigrationStateDisableMigrationInProgress, MigrationStateEnableMigrationFailed, MigrationStateEnableMigrationInProgress, MigrationStateInitialSeedingFailed, MigrationStateInitialSeedingInProgress, MigrationStateMigrationFailed, MigrationStateMigrationInProgress, MigrationStateMigrationSucceeded, MigrationStateNone, MigrationStateReplicating}
 }
 
 // MultiVMGroupCreateOption enumerates the values for multi vm group create option.
@@ -1071,6 +1267,27 @@ func PossibleSourceSiteOperationsValues() []SourceSiteOperations {
 	return []SourceSiteOperations{NotRequired, Required}
 }
 
+// TestMigrationState enumerates the values for test migration state.
+type TestMigrationState string
+
+const (
+	// TestMigrationStateNone ...
+	TestMigrationStateNone TestMigrationState = "None"
+	// TestMigrationStateTestMigrationCleanupInProgress ...
+	TestMigrationStateTestMigrationCleanupInProgress TestMigrationState = "TestMigrationCleanupInProgress"
+	// TestMigrationStateTestMigrationFailed ...
+	TestMigrationStateTestMigrationFailed TestMigrationState = "TestMigrationFailed"
+	// TestMigrationStateTestMigrationInProgress ...
+	TestMigrationStateTestMigrationInProgress TestMigrationState = "TestMigrationInProgress"
+	// TestMigrationStateTestMigrationSucceeded ...
+	TestMigrationStateTestMigrationSucceeded TestMigrationState = "TestMigrationSucceeded"
+)
+
+// PossibleTestMigrationStateValues returns an array of possible values for the TestMigrationState const type.
+func PossibleTestMigrationStateValues() []TestMigrationState {
+	return []TestMigrationState{TestMigrationStateNone, TestMigrationStateTestMigrationCleanupInProgress, TestMigrationStateTestMigrationFailed, TestMigrationStateTestMigrationInProgress, TestMigrationStateTestMigrationSucceeded}
+}
+
 // A2AApplyRecoveryPointInput applyRecoveryPoint input specific to A2A provider.
 type A2AApplyRecoveryPointInput struct {
 	// InstanceType - Possible values include: 'InstanceTypeApplyRecoveryPointProviderSpecificInput', 'InstanceTypeA2A', 'InstanceTypeHyperVReplicaAzure', 'InstanceTypeInMageAzureV2'
@@ -1114,7 +1331,7 @@ func (aarpi A2AApplyRecoveryPointInput) AsBasicApplyRecoveryPointProviderSpecifi
 
 // A2AContainerCreationInput a2A cloud creation input.
 type A2AContainerCreationInput struct {
-	// InstanceType - Possible values include: 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A'
+	// InstanceType - Possible values include: 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero'
 	InstanceType InstanceTypeBasicReplicationProviderSpecificContainerCreationInput `json:"instanceType,omitempty"`
 }
 
@@ -1133,6 +1350,11 @@ func (acci A2AContainerCreationInput) AsA2AContainerCreationInput() (*A2AContain
 	return &acci, true
 }
 
+// AsVMwareCbtContainerCreationInput is the BasicReplicationProviderSpecificContainerCreationInput implementation for A2AContainerCreationInput.
+func (acci A2AContainerCreationInput) AsVMwareCbtContainerCreationInput() (*VMwareCbtContainerCreationInput, bool) {
+	return nil, false
+}
+
 // AsReplicationProviderSpecificContainerCreationInput is the BasicReplicationProviderSpecificContainerCreationInput implementation for A2AContainerCreationInput.
 func (acci A2AContainerCreationInput) AsReplicationProviderSpecificContainerCreationInput() (*ReplicationProviderSpecificContainerCreationInput, bool) {
 	return nil, false
@@ -1149,7 +1371,7 @@ type A2AContainerMappingInput struct {
 	AgentAutoUpdateStatus AgentAutoUpdateStatus `json:"agentAutoUpdateStatus,omitempty"`
 	// AutomationAccountArmID - The automation account arm id.
 	AutomationAccountArmID *string `json:"automationAccountArmId,omitempty"`
-	// InstanceType - Possible values include: 'InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeReplicationProviderSpecificContainerMappingInput', 'InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeA2A'
+	// InstanceType - Possible values include: 'InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeReplicationProviderSpecificContainerMappingInput', 'InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeA2A', 'InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeVMwareCbt'
 	InstanceType InstanceTypeBasicReplicationProviderSpecificContainerMappingInput `json:"instanceType,omitempty"`
 }
 
@@ -1172,6 +1394,11 @@ func (acmi A2AContainerMappingInput) MarshalJSON() ([]byte, error) {
 // AsA2AContainerMappingInput is the BasicReplicationProviderSpecificContainerMappingInput implementation for A2AContainerMappingInput.
 func (acmi A2AContainerMappingInput) AsA2AContainerMappingInput() (*A2AContainerMappingInput, bool) {
 	return &acmi, true
+}
+
+// AsVMwareCbtContainerMappingInput is the BasicReplicationProviderSpecificContainerMappingInput implementation for A2AContainerMappingInput.
+func (acmi A2AContainerMappingInput) AsVMwareCbtContainerMappingInput() (*VMwareCbtContainerMappingInput, bool) {
+	return nil, false
 }
 
 // AsReplicationProviderSpecificContainerMappingInput is the BasicReplicationProviderSpecificContainerMappingInput implementation for A2AContainerMappingInput.
@@ -1712,7 +1939,7 @@ type A2AProtectionContainerMappingDetails struct {
 	ScheduleName *string `json:"scheduleName,omitempty"`
 	// JobScheduleName - The job schedule arm name.
 	JobScheduleName *string `json:"jobScheduleName,omitempty"`
-	// InstanceType - Possible values include: 'InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeProtectionContainerMappingProviderSpecificDetails', 'InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeA2A'
+	// InstanceType - Possible values include: 'InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeProtectionContainerMappingProviderSpecificDetails', 'InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeVMwareCbt'
 	InstanceType InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails `json:"instanceType,omitempty"`
 }
 
@@ -1741,6 +1968,11 @@ func (apcmd A2AProtectionContainerMappingDetails) MarshalJSON() ([]byte, error) 
 // AsA2AProtectionContainerMappingDetails is the BasicProtectionContainerMappingProviderSpecificDetails implementation for A2AProtectionContainerMappingDetails.
 func (apcmd A2AProtectionContainerMappingDetails) AsA2AProtectionContainerMappingDetails() (*A2AProtectionContainerMappingDetails, bool) {
 	return &apcmd, true
+}
+
+// AsVMwareCbtProtectionContainerMappingDetails is the BasicProtectionContainerMappingProviderSpecificDetails implementation for A2AProtectionContainerMappingDetails.
+func (apcmd A2AProtectionContainerMappingDetails) AsVMwareCbtProtectionContainerMappingDetails() (*VMwareCbtProtectionContainerMappingDetails, bool) {
+	return nil, false
 }
 
 // AsProtectionContainerMappingProviderSpecificDetails is the BasicProtectionContainerMappingProviderSpecificDetails implementation for A2AProtectionContainerMappingDetails.
@@ -2303,6 +2535,22 @@ type A2AVMManagedDiskUpdateDetails struct {
 	RecoveryReplicaDiskAccountType *string `json:"recoveryReplicaDiskAccountType,omitempty"`
 }
 
+// AddRecoveryServicesProviderInput input required to add a provider.
+type AddRecoveryServicesProviderInput struct {
+	// Properties - The properties of an add provider request.
+	Properties *AddRecoveryServicesProviderInputProperties `json:"properties,omitempty"`
+}
+
+// AddRecoveryServicesProviderInputProperties the properties of an add provider request.
+type AddRecoveryServicesProviderInputProperties struct {
+	// MachineName - The name of the machine where the provider is getting added.
+	MachineName *string `json:"machineName,omitempty"`
+	// AuthenticationIdentityInput - The identity provider input for DRA authentication.
+	AuthenticationIdentityInput *IdentityProviderInput `json:"authenticationIdentityInput,omitempty"`
+	// ResourceAccessIdentityInput - The identity provider input for resource access.
+	ResourceAccessIdentityInput *IdentityProviderInput `json:"resourceAccessIdentityInput,omitempty"`
+}
+
 // AddVCenterRequest input required to add vCenter.
 type AddVCenterRequest struct {
 	// Properties - The properties of an add vCenter request.
@@ -2353,20 +2601,37 @@ type AlertCollectionIterator struct {
 	page AlertCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *AlertCollectionIterator) Next() error {
+func (iter *AlertCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *AlertCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -2388,6 +2653,11 @@ func (iter AlertCollectionIterator) Value() Alert {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the AlertCollectionIterator type.
+func NewAlertCollectionIterator(page AlertCollectionPage) AlertCollectionIterator {
+	return AlertCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ac AlertCollection) IsEmpty() bool {
 	return ac.Value == nil || len(*ac.Value) == 0
@@ -2395,11 +2665,11 @@ func (ac AlertCollection) IsEmpty() bool {
 
 // alertCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ac AlertCollection) alertCollectionPreparer() (*http.Request, error) {
+func (ac AlertCollection) alertCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if ac.NextLink == nil || len(to.String(ac.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ac.NextLink)))
@@ -2407,19 +2677,36 @@ func (ac AlertCollection) alertCollectionPreparer() (*http.Request, error) {
 
 // AlertCollectionPage contains a page of Alert values.
 type AlertCollectionPage struct {
-	fn func(AlertCollection) (AlertCollection, error)
+	fn func(context.Context, AlertCollection) (AlertCollection, error)
 	ac AlertCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *AlertCollectionPage) Next() error {
-	next, err := page.fn(page.ac)
+func (page *AlertCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.ac)
 	if err != nil {
 		return err
 	}
 	page.ac = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *AlertCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -2440,7 +2727,12 @@ func (page AlertCollectionPage) Values() []Alert {
 	return *page.ac.Value
 }
 
-// AlertProperties the proprties of an alert.
+// Creates a new instance of the AlertCollectionPage type.
+func NewAlertCollectionPage(getNextPage func(context.Context, AlertCollection) (AlertCollection, error)) AlertCollectionPage {
+	return AlertCollectionPage{fn: getNextPage}
+}
+
+// AlertProperties the properties of an alert.
 type AlertProperties struct {
 	// SendToOwners - A value indicating whether to send email to subscription administrator.
 	SendToOwners *string `json:"sendToOwners,omitempty"`
@@ -3008,8 +3300,8 @@ func (afsd AzureFabricSpecificDetails) AsBasicFabricSpecificDetails() (BasicFabr
 	return &afsd, true
 }
 
-// AzureToAzureCreateNetworkMappingInput create network mappings input properties/behaviour specific to Azure to
-// Azure Network mapping.
+// AzureToAzureCreateNetworkMappingInput create network mappings input properties/behavior specific to
+// Azure to Azure Network mapping.
 type AzureToAzureCreateNetworkMappingInput struct {
 	// PrimaryNetworkID - The primary azure vnet Id.
 	PrimaryNetworkID *string `json:"primaryNetworkId,omitempty"`
@@ -3195,7 +3487,8 @@ type AzureVMDiskDetails struct {
 	LunID *string `json:"lunId,omitempty"`
 }
 
-// ComputeSizeErrorDetails represents the error used to indicate why the target compute size is not applicable.
+// ComputeSizeErrorDetails represents the error used to indicate why the target compute size is not
+// applicable.
 type ComputeSizeErrorDetails struct {
 	// Message - The error message.
 	Message *string `json:"message,omitempty"`
@@ -3323,8 +3616,8 @@ type ConfigureAlertRequestProperties struct {
 	Locale *string `json:"locale,omitempty"`
 }
 
-// ConsistencyCheckTaskDetails this class contains monitoring details of all the inconsistent Protected Entites in
-// Vmm.
+// ConsistencyCheckTaskDetails this class contains monitoring details of all the inconsistent Protected
+// Entities in Vmm.
 type ConsistencyCheckTaskDetails struct {
 	// VMDetails - The list of inconsistent Vm details.
 	VMDetails *[]InconsistentVMDetails `json:"vmDetails,omitempty"`
@@ -3597,6 +3890,16 @@ type CreateRecoveryPlanInputProperties struct {
 	Groups *[]RecoveryPlanGroup `json:"groups,omitempty"`
 }
 
+// CurrentJobDetails current job details of the migration item.
+type CurrentJobDetails struct {
+	// JobName - The job name.
+	JobName *string `json:"jobName,omitempty"`
+	// JobID - The ARM Id of the job being executed.
+	JobID *string `json:"jobId,omitempty"`
+	// StartTime - The start time of the job.
+	StartTime *date.Time `json:"startTime,omitempty"`
+}
+
 // CurrentScenarioDetails current scenario details of the protected entity.
 type CurrentScenarioDetails struct {
 	// ScenarioName - Scenario name.
@@ -3607,7 +3910,7 @@ type CurrentScenarioDetails struct {
 	StartTime *date.Time `json:"startTime,omitempty"`
 }
 
-// DataStore the datastore details of the MT.
+// DataStore the data store details of the MT.
 type DataStore struct {
 	// SymbolicName - The symbolic name of data store.
 	SymbolicName *string `json:"symbolicName,omitempty"`
@@ -3757,7 +4060,7 @@ type DiscoverProtectableItemRequestProperties struct {
 	OsType *string `json:"osType,omitempty"`
 }
 
-// DiskDetails onprem disk details data.
+// DiskDetails on-prem disk details data.
 type DiskDetails struct {
 	// MaxSizeMB - The hard disk max size in MB.
 	MaxSizeMB *int64 `json:"maxSizeMB,omitempty"`
@@ -3779,9 +4082,9 @@ type DiskEncryptionInfo struct {
 
 // DiskEncryptionKeyInfo disk Encryption Key Information (BitLocker Encryption Key (BEK) on Windows).
 type DiskEncryptionKeyInfo struct {
-	// SecretIdentifier - The secret url / identifier.
+	// SecretIdentifier - The secret url / identifier.
 	SecretIdentifier *string `json:"secretIdentifier,omitempty"`
-	// KeyVaultResourceArmID - The KeyVault resource ARM id for secret.
+	// KeyVaultResourceArmID - The KeyVault resource ARM id for secret.
 	KeyVaultResourceArmID *string `json:"keyVaultResourceArmId,omitempty"`
 }
 
@@ -3793,9 +4096,9 @@ type DiskVolumeDetails struct {
 	Name *string `json:"name,omitempty"`
 }
 
-// Display contains the localized display information for this particular operation / action. These value will be
-// used by several clients for (1) custom role definitions for RBAC; (2) complex query filters for the event
-// service; and (3) audit history / records for management operations.
+// Display contains the localized display information for this particular operation / action. These value
+// will be used by several clients for (1) custom role definitions for RBAC; (2) complex query filters for
+// the event service; and (3) audit history / records for management operations.
 type Display struct {
 	// Provider - The provider. The localized friendly form of the resource provider name – it is expected to also include the publisher/company responsible. It should use Title Casing and begin with "Microsoft" for 1st party services. e.g. "Microsoft Monitoring Insights" or "Microsoft Compute."
 	Provider *string `json:"provider,omitempty"`
@@ -3805,6 +4108,126 @@ type Display struct {
 	Operation *string `json:"operation,omitempty"`
 	// Description - The description. The localized friendly description for the operation, as it should be shown to the user. It should be thorough, yet concise – it will be used in tool tips and detailed views. Prescriptive guidance for namespaces: Read any 'display.provider' resource Create or Update any 'display.provider' resource Delete any 'display.provider' resource Perform any other action on any 'display.provider' resource Prescriptive guidance for namespaces: Read any 'display.resource' Create or Update any 'display.resource' Delete any 'display.resource' 'ActionName' any 'display.resources'
 	Description *string `json:"description,omitempty"`
+}
+
+// EnableMigrationInput enable migration input.
+type EnableMigrationInput struct {
+	// Properties - Enable migration input properties.
+	Properties *EnableMigrationInputProperties `json:"properties,omitempty"`
+}
+
+// EnableMigrationInputProperties enable migration input properties.
+type EnableMigrationInputProperties struct {
+	// PolicyID - The policy Id.
+	PolicyID *string `json:"policyId,omitempty"`
+	// ProviderSpecificDetails - The provider specific details.
+	ProviderSpecificDetails BasicEnableMigrationProviderSpecificInput `json:"providerSpecificDetails,omitempty"`
+}
+
+// UnmarshalJSON is the custom unmarshaler for EnableMigrationInputProperties struct.
+func (emip *EnableMigrationInputProperties) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "policyId":
+			if v != nil {
+				var policyID string
+				err = json.Unmarshal(*v, &policyID)
+				if err != nil {
+					return err
+				}
+				emip.PolicyID = &policyID
+			}
+		case "providerSpecificDetails":
+			if v != nil {
+				providerSpecificDetails, err := unmarshalBasicEnableMigrationProviderSpecificInput(*v)
+				if err != nil {
+					return err
+				}
+				emip.ProviderSpecificDetails = providerSpecificDetails
+			}
+		}
+	}
+
+	return nil
+}
+
+// BasicEnableMigrationProviderSpecificInput enable migration provider specific input.
+type BasicEnableMigrationProviderSpecificInput interface {
+	AsVMwareCbtEnableMigrationInput() (*VMwareCbtEnableMigrationInput, bool)
+	AsEnableMigrationProviderSpecificInput() (*EnableMigrationProviderSpecificInput, bool)
+}
+
+// EnableMigrationProviderSpecificInput enable migration provider specific input.
+type EnableMigrationProviderSpecificInput struct {
+	// InstanceType - Possible values include: 'InstanceTypeEnableMigrationProviderSpecificInput', 'InstanceTypeVMwareCbt'
+	InstanceType InstanceTypeBasicEnableMigrationProviderSpecificInput `json:"instanceType,omitempty"`
+}
+
+func unmarshalBasicEnableMigrationProviderSpecificInput(body []byte) (BasicEnableMigrationProviderSpecificInput, error) {
+	var m map[string]interface{}
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return nil, err
+	}
+
+	switch m["instanceType"] {
+	case string(InstanceTypeVMwareCbt):
+		var vmcemi VMwareCbtEnableMigrationInput
+		err := json.Unmarshal(body, &vmcemi)
+		return vmcemi, err
+	default:
+		var empsi EnableMigrationProviderSpecificInput
+		err := json.Unmarshal(body, &empsi)
+		return empsi, err
+	}
+}
+func unmarshalBasicEnableMigrationProviderSpecificInputArray(body []byte) ([]BasicEnableMigrationProviderSpecificInput, error) {
+	var rawMessages []*json.RawMessage
+	err := json.Unmarshal(body, &rawMessages)
+	if err != nil {
+		return nil, err
+	}
+
+	empsiArray := make([]BasicEnableMigrationProviderSpecificInput, len(rawMessages))
+
+	for index, rawMessage := range rawMessages {
+		empsi, err := unmarshalBasicEnableMigrationProviderSpecificInput(*rawMessage)
+		if err != nil {
+			return nil, err
+		}
+		empsiArray[index] = empsi
+	}
+	return empsiArray, nil
+}
+
+// MarshalJSON is the custom marshaler for EnableMigrationProviderSpecificInput.
+func (empsi EnableMigrationProviderSpecificInput) MarshalJSON() ([]byte, error) {
+	empsi.InstanceType = InstanceTypeEnableMigrationProviderSpecificInput
+	objectMap := make(map[string]interface{})
+	if empsi.InstanceType != "" {
+		objectMap["instanceType"] = empsi.InstanceType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsVMwareCbtEnableMigrationInput is the BasicEnableMigrationProviderSpecificInput implementation for EnableMigrationProviderSpecificInput.
+func (empsi EnableMigrationProviderSpecificInput) AsVMwareCbtEnableMigrationInput() (*VMwareCbtEnableMigrationInput, bool) {
+	return nil, false
+}
+
+// AsEnableMigrationProviderSpecificInput is the BasicEnableMigrationProviderSpecificInput implementation for EnableMigrationProviderSpecificInput.
+func (empsi EnableMigrationProviderSpecificInput) AsEnableMigrationProviderSpecificInput() (*EnableMigrationProviderSpecificInput, bool) {
+	return &empsi, true
+}
+
+// AsBasicEnableMigrationProviderSpecificInput is the BasicEnableMigrationProviderSpecificInput implementation for EnableMigrationProviderSpecificInput.
+func (empsi EnableMigrationProviderSpecificInput) AsBasicEnableMigrationProviderSpecificInput() (BasicEnableMigrationProviderSpecificInput, bool) {
+	return &empsi, true
 }
 
 // EnableProtectionInput enable protection input.
@@ -4018,20 +4441,37 @@ type EventCollectionIterator struct {
 	page EventCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *EventCollectionIterator) Next() error {
+func (iter *EventCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EventCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *EventCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -4053,6 +4493,11 @@ func (iter EventCollectionIterator) Value() Event {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the EventCollectionIterator type.
+func NewEventCollectionIterator(page EventCollectionPage) EventCollectionIterator {
+	return EventCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ec EventCollection) IsEmpty() bool {
 	return ec.Value == nil || len(*ec.Value) == 0
@@ -4060,11 +4505,11 @@ func (ec EventCollection) IsEmpty() bool {
 
 // eventCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ec EventCollection) eventCollectionPreparer() (*http.Request, error) {
+func (ec EventCollection) eventCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if ec.NextLink == nil || len(to.String(ec.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ec.NextLink)))
@@ -4072,19 +4517,36 @@ func (ec EventCollection) eventCollectionPreparer() (*http.Request, error) {
 
 // EventCollectionPage contains a page of Event values.
 type EventCollectionPage struct {
-	fn func(EventCollection) (EventCollection, error)
+	fn func(context.Context, EventCollection) (EventCollection, error)
 	ec EventCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *EventCollectionPage) Next() error {
-	next, err := page.fn(page.ec)
+func (page *EventCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EventCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.ec)
 	if err != nil {
 		return err
 	}
 	page.ec = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *EventCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -4105,6 +4567,11 @@ func (page EventCollectionPage) Values() []Event {
 	return *page.ec.Value
 }
 
+// Creates a new instance of the EventCollectionPage type.
+func NewEventCollectionPage(getNextPage func(context.Context, EventCollection) (EventCollection, error)) EventCollectionPage {
+	return EventCollectionPage{fn: getNextPage}
+}
+
 // EventProperties the properties of a monitoring event.
 type EventProperties struct {
 	// EventCode - The Id of the monitoring event.
@@ -4117,7 +4584,7 @@ type EventProperties struct {
 	AffectedObjectFriendlyName *string `json:"affectedObjectFriendlyName,omitempty"`
 	// Severity - The severity of the event.
 	Severity *string `json:"severity,omitempty"`
-	// TimeOfOccurrence - The time of occurence of the event.
+	// TimeOfOccurrence - The time of occurrence of the event.
 	TimeOfOccurrence *date.Time `json:"timeOfOccurrence,omitempty"`
 	// FabricID - The ARM ID of the fabric.
 	FabricID *string `json:"fabricId,omitempty"`
@@ -4544,20 +5011,37 @@ type FabricCollectionIterator struct {
 	page FabricCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *FabricCollectionIterator) Next() error {
+func (iter *FabricCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FabricCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *FabricCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -4579,6 +5063,11 @@ func (iter FabricCollectionIterator) Value() Fabric {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the FabricCollectionIterator type.
+func NewFabricCollectionIterator(page FabricCollectionPage) FabricCollectionIterator {
+	return FabricCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (fc FabricCollection) IsEmpty() bool {
 	return fc.Value == nil || len(*fc.Value) == 0
@@ -4586,11 +5075,11 @@ func (fc FabricCollection) IsEmpty() bool {
 
 // fabricCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (fc FabricCollection) fabricCollectionPreparer() (*http.Request, error) {
+func (fc FabricCollection) fabricCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if fc.NextLink == nil || len(to.String(fc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(fc.NextLink)))
@@ -4598,19 +5087,36 @@ func (fc FabricCollection) fabricCollectionPreparer() (*http.Request, error) {
 
 // FabricCollectionPage contains a page of Fabric values.
 type FabricCollectionPage struct {
-	fn func(FabricCollection) (FabricCollection, error)
+	fn func(context.Context, FabricCollection) (FabricCollection, error)
 	fc FabricCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *FabricCollectionPage) Next() error {
-	next, err := page.fn(page.fc)
+func (page *FabricCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FabricCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.fc)
 	if err != nil {
 		return err
 	}
 	page.fc = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *FabricCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -4629,6 +5135,11 @@ func (page FabricCollectionPage) Values() []Fabric {
 		return nil
 	}
 	return *page.fc.Value
+}
+
+// Creates a new instance of the FabricCollectionPage type.
+func NewFabricCollectionPage(getNextPage func(context.Context, FabricCollection) (FabricCollection, error)) FabricCollectionPage {
+	return FabricCollectionPage{fn: getNextPage}
 }
 
 // FabricCreationInput site details provided during the time of site creation
@@ -5351,8 +5862,8 @@ type BasicGroupTaskDetails interface {
 	AsGroupTaskDetails() (*GroupTaskDetails, bool)
 }
 
-// GroupTaskDetails this class represents the group task details when parent child relationship exists in the drill
-// down.
+// GroupTaskDetails this class represents the group task details when parent child relationship exists in the
+// drill down.
 type GroupTaskDetails struct {
 	// ChildTasks - The child tasks.
 	ChildTasks *[]ASRTask `json:"childTasks,omitempty"`
@@ -5643,7 +6154,8 @@ func (hvr2ed HyperVReplica2012R2EventDetails) AsBasicEventProviderSpecificDetail
 	return &hvr2ed, true
 }
 
-// HyperVReplicaAzureApplyRecoveryPointInput applyRecoveryPoint input specific to HyperVReplicaAzure provider.
+// HyperVReplicaAzureApplyRecoveryPointInput applyRecoveryPoint input specific to HyperVReplicaAzure
+// provider.
 type HyperVReplicaAzureApplyRecoveryPointInput struct {
 	// VaultLocation - The vault location where the recovery Vm resides.
 	VaultLocation *string `json:"vaultLocation,omitempty"`
@@ -6477,8 +6989,8 @@ func (hvrari HyperVReplicaAzureReprotectInput) AsBasicReverseReplicationProvider
 	return &hvrari, true
 }
 
-// HyperVReplicaAzureUpdateReplicationProtectedItemInput hyperV replica Azure input to update replication protected
-// item.
+// HyperVReplicaAzureUpdateReplicationProtectedItemInput hyperV replica Azure input to update replication
+// protected item.
 type HyperVReplicaAzureUpdateReplicationProtectedItemInput struct {
 	// RecoveryAzureV1ResourceGroupID - The recovery Azure resource group Id for classic deployment.
 	RecoveryAzureV1ResourceGroupID *string `json:"recoveryAzureV1ResourceGroupId,omitempty"`
@@ -7640,10 +8152,8 @@ func (hvvmd HyperVVirtualMachineDetails) AsBasicConfigurationSettings() (BasicCo
 	return &hvvmd, true
 }
 
-// IdentityInformation identity details.
-type IdentityInformation struct {
-	// IdentityProviderType - The identity provider type. Value is the ToString() of a IdentityProviderType value. Possible values include: 'RecoveryServicesActiveDirectory'
-	IdentityProviderType IdentityProviderType `json:"identityProviderType,omitempty"`
+// IdentityProviderDetails identity provider details.
+type IdentityProviderDetails struct {
 	// TenantID - The tenant Id for the service principal with which the on-premise management/data plane components would communicate with our Azure services.
 	TenantID *string `json:"tenantId,omitempty"`
 	// ApplicationID - The application/client Id for the service principal with which the on-premise management/data plane components would communicate with our Azure services.
@@ -7654,12 +8164,24 @@ type IdentityInformation struct {
 	Audience *string `json:"audience,omitempty"`
 	// AadAuthority - The base authority for Azure Active Directory authentication.
 	AadAuthority *string `json:"aadAuthority,omitempty"`
-	// CertificateThumbprint - The certificate thumbprint. Applicable only if IdentityProviderType is RecoveryServicesActiveDirectory.
-	CertificateThumbprint *string `json:"certificateThumbprint,omitempty"`
 }
 
-// InconsistentVMDetails this class stores the monitoring details for consistency check of inconsistent Protected
-// Entity.
+// IdentityProviderInput identity provider input.
+type IdentityProviderInput struct {
+	// TenantID - The tenant Id for the service principal with which the on-premise management/data plane components would communicate with our Azure services.
+	TenantID *string `json:"tenantId,omitempty"`
+	// ApplicationID - The application/client Id for the service principal with which the on-premise management/data plane components would communicate with our Azure services.
+	ApplicationID *string `json:"applicationId,omitempty"`
+	// ObjectID - The object Id of the service principal with which the on-premise management/data plane components would communicate with our Azure services.
+	ObjectID *string `json:"objectId,omitempty"`
+	// Audience - The intended Audience of the service principal with which the on-premise management/data plane components would communicate with our Azure services.
+	Audience *string `json:"audience,omitempty"`
+	// AadAuthority - The base authority for Azure Active Directory authentication.
+	AadAuthority *string `json:"aadAuthority,omitempty"`
+}
+
+// InconsistentVMDetails this class stores the monitoring details for consistency check of inconsistent
+// Protected Entity.
 type InconsistentVMDetails struct {
 	// VMName - The Vm name.
 	VMName *string `json:"vmName,omitempty"`
@@ -8418,7 +8940,7 @@ type InMageAzureV2ReplicationDetails struct {
 	DiscoveryType *string `json:"discoveryType,omitempty"`
 	// EnableRdpOnTargetOption - The selected option to enable RDP\SSH on target vm after failover. String value of {SrsDataContract.EnableRDPOnTargetOption} enum.
 	EnableRdpOnTargetOption *string `json:"enableRdpOnTargetOption,omitempty"`
-	// Datastores - The datastores of the on-premise machine. Value can be list of strings that contain datastore names.
+	// Datastores - The data stores of the on-premise machine. Value can be list of strings that contain data store names.
 	Datastores *[]string `json:"datastores,omitempty"`
 	// TargetVMID - The ARM Id of the target Azure VM. This value will be null until the VM is failed over. Only after failure it will be populated with the ARM Id of the Azure VM.
 	TargetVMID *string `json:"targetVmId,omitempty"`
@@ -8727,7 +9249,8 @@ func (imavri InMageAzureV2ReprotectInput) AsBasicReverseReplicationProviderSpeci
 	return &imavri, true
 }
 
-// InMageAzureV2UpdateReplicationProtectedItemInput inMage Azure V2 input to update replication protected item.
+// InMageAzureV2UpdateReplicationProtectedItemInput inMage Azure V2 input to update replication protected
+// item.
 type InMageAzureV2UpdateReplicationProtectedItemInput struct {
 	// RecoveryAzureV1ResourceGroupID - The recovery Azure resource group Id for classic deployment.
 	RecoveryAzureV1ResourceGroupID *string `json:"recoveryAzureV1ResourceGroupId,omitempty"`
@@ -8931,7 +9454,8 @@ type InMageDiskDetails struct {
 	VolumeList *[]DiskVolumeDetails `json:"volumeList,omitempty"`
 }
 
-// InMageDiskExclusionInput diskExclusionInput when doing enable protection of virtual machine in InMage provider.
+// InMageDiskExclusionInput diskExclusionInput when doing enable protection of virtual machine in InMage
+// provider.
 type InMageDiskExclusionInput struct {
 	// VolumeOptions - The volume label based option for disk exclusion.
 	VolumeOptions *[]InMageVolumeExclusionOptions `json:"volumeOptions,omitempty"`
@@ -8962,7 +9486,7 @@ type InMageEnableProtectionInput struct {
 	MultiVMGroupID *string `json:"multiVmGroupId,omitempty"`
 	// MultiVMGroupName - The multi vm group name.
 	MultiVMGroupName *string `json:"multiVmGroupName,omitempty"`
-	// DatastoreName - The target datastore name.
+	// DatastoreName - The target data store name.
 	DatastoreName *string `json:"datastoreName,omitempty"`
 	// DiskExclusionInput - The enable disk exclusion input.
 	DiskExclusionInput *InMageDiskExclusionInput `json:"diskExclusionInput,omitempty"`
@@ -9383,7 +9907,7 @@ type InMageReplicationDetails struct {
 	DiscoveryType *string `json:"discoveryType,omitempty"`
 	// AzureStorageAccountID - A value indicating the underlying Azure storage account. If the VM is not running in Azure, this value shall be set to null.
 	AzureStorageAccountID *string `json:"azureStorageAccountId,omitempty"`
-	// Datastores - The datastores of the on-premise machine Value can be list of strings that contain datastore names
+	// Datastores - The data stores of the on-premise machine Value can be list of strings that contain data store names
 	Datastores *[]string `json:"datastores,omitempty"`
 	// ValidationErrors - The validation errors of the on-premise machine Value can be list of validation errors
 	ValidationErrors *[]HealthError `json:"validationErrors,omitempty"`
@@ -9575,7 +10099,7 @@ type InMageReprotectInput struct {
 	RetentionDrive *string `json:"retentionDrive,omitempty"`
 	// RunAsAccountID - The CS account Id.
 	RunAsAccountID *string `json:"runAsAccountId,omitempty"`
-	// DatastoreName - The target datastore name.
+	// DatastoreName - The target data store name.
 	DatastoreName *string `json:"datastoreName,omitempty"`
 	// DiskExclusionInput - The enable disk exclusion input.
 	DiskExclusionInput *InMageDiskExclusionInput `json:"diskExclusionInput,omitempty"`
@@ -9651,8 +10175,8 @@ func (imri InMageReprotectInput) AsBasicReverseReplicationProviderSpecificInput(
 	return &imri, true
 }
 
-// InMageVolumeExclusionOptions guest disk signature based disk exclusion option when doing enable protection of
-// virtual machine in InMage provider.
+// InMageVolumeExclusionOptions guest disk signature based disk exclusion option when doing enable
+// protection of virtual machine in InMage provider.
 type InMageVolumeExclusionOptions struct {
 	// VolumeLabel - The volume label. The disk having any volume with this label will be excluded from replication.
 	VolumeLabel *string `json:"volumeLabel,omitempty"`
@@ -9660,10 +10184,10 @@ type InMageVolumeExclusionOptions struct {
 	OnlyExcludeIfSingleVolume *string `json:"onlyExcludeIfSingleVolume,omitempty"`
 }
 
-// InnerHealthError implements InnerHealthError class. HealthError object has a list of InnerHealthErrors as child
-// errors. InnerHealthError is used because this will prevent an infinite loop of structures when Hydra tries to
-// auto-generate the contract. We are exposing the related health errors as inner health errors and all API
-// consumers can utilize this in the same fashion as Exception -&gt; InnerException.
+// InnerHealthError implements InnerHealthError class. HealthError object has a list of InnerHealthErrors
+// as child errors. InnerHealthError is used because this will prevent an infinite loop of structures when
+// Hydra tries to auto-generate the contract. We are exposing the related health errors as inner health
+// errors and all API consumers can utilize this in the same fashion as Exception -&gt; InnerException.
 type InnerHealthError struct {
 	// ErrorSource - Source of error.
 	ErrorSource *string `json:"errorSource,omitempty"`
@@ -9733,20 +10257,37 @@ type JobCollectionIterator struct {
 	page JobCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *JobCollectionIterator) Next() error {
+func (iter *JobCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *JobCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -9768,6 +10309,11 @@ func (iter JobCollectionIterator) Value() Job {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the JobCollectionIterator type.
+func NewJobCollectionIterator(page JobCollectionPage) JobCollectionIterator {
+	return JobCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (jc JobCollection) IsEmpty() bool {
 	return jc.Value == nil || len(*jc.Value) == 0
@@ -9775,11 +10321,11 @@ func (jc JobCollection) IsEmpty() bool {
 
 // jobCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (jc JobCollection) jobCollectionPreparer() (*http.Request, error) {
+func (jc JobCollection) jobCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if jc.NextLink == nil || len(to.String(jc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(jc.NextLink)))
@@ -9787,19 +10333,36 @@ func (jc JobCollection) jobCollectionPreparer() (*http.Request, error) {
 
 // JobCollectionPage contains a page of Job values.
 type JobCollectionPage struct {
-	fn func(JobCollection) (JobCollection, error)
+	fn func(context.Context, JobCollection) (JobCollection, error)
 	jc JobCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *JobCollectionPage) Next() error {
-	next, err := page.fn(page.jc)
+func (page *JobCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.jc)
 	if err != nil {
 		return err
 	}
 	page.jc = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *JobCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -9818,6 +10381,11 @@ func (page JobCollectionPage) Values() []Job {
 		return nil
 	}
 	return *page.jc.Value
+}
+
+// Creates a new instance of the JobCollectionPage type.
+func NewJobCollectionPage(getNextPage func(context.Context, JobCollection) (JobCollection, error)) JobCollectionPage {
+	return JobCollectionPage{fn: getNextPage}
 }
 
 // BasicJobDetails job details based on specific job type.
@@ -10145,7 +10713,7 @@ func (jp *JobProperties) UnmarshalJSON(body []byte) error {
 type JobQueryParameter struct {
 	// StartTime - Date time to get jobs from.
 	StartTime *string `json:"startTime,omitempty"`
-	// EndTime - Date time to get jobs upto.
+	// EndTime - Date time to get jobs up to.
 	EndTime *string `json:"endTime,omitempty"`
 	// FabricID - The Id of the fabric to search jobs under.
 	FabricID *string `json:"fabricId,omitempty"`
@@ -10280,9 +10848,9 @@ func (jtd JobTaskDetails) AsBasicTaskTypeDetails() (BasicTaskTypeDetails, bool) 
 
 // KeyEncryptionKeyInfo key Encryption Key (KEK) information.
 type KeyEncryptionKeyInfo struct {
-	// KeyIdentifier - The key url / identifier.
+	// KeyIdentifier - The key url / identifier.
 	KeyIdentifier *string `json:"keyIdentifier,omitempty"`
-	// KeyVaultResourceArmID - The KeyVault resource ARM id for key.
+	// KeyVaultResourceArmID - The KeyVault resource ARM id for key.
 	KeyVaultResourceArmID *string `json:"keyVaultResourceArmId,omitempty"`
 }
 
@@ -10316,20 +10884,37 @@ type LogicalNetworkCollectionIterator struct {
 	page LogicalNetworkCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *LogicalNetworkCollectionIterator) Next() error {
+func (iter *LogicalNetworkCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LogicalNetworkCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *LogicalNetworkCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -10351,6 +10936,11 @@ func (iter LogicalNetworkCollectionIterator) Value() LogicalNetwork {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the LogicalNetworkCollectionIterator type.
+func NewLogicalNetworkCollectionIterator(page LogicalNetworkCollectionPage) LogicalNetworkCollectionIterator {
+	return LogicalNetworkCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (lnc LogicalNetworkCollection) IsEmpty() bool {
 	return lnc.Value == nil || len(*lnc.Value) == 0
@@ -10358,11 +10948,11 @@ func (lnc LogicalNetworkCollection) IsEmpty() bool {
 
 // logicalNetworkCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (lnc LogicalNetworkCollection) logicalNetworkCollectionPreparer() (*http.Request, error) {
+func (lnc LogicalNetworkCollection) logicalNetworkCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if lnc.NextLink == nil || len(to.String(lnc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(lnc.NextLink)))
@@ -10370,19 +10960,36 @@ func (lnc LogicalNetworkCollection) logicalNetworkCollectionPreparer() (*http.Re
 
 // LogicalNetworkCollectionPage contains a page of LogicalNetwork values.
 type LogicalNetworkCollectionPage struct {
-	fn  func(LogicalNetworkCollection) (LogicalNetworkCollection, error)
+	fn  func(context.Context, LogicalNetworkCollection) (LogicalNetworkCollection, error)
 	lnc LogicalNetworkCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *LogicalNetworkCollectionPage) Next() error {
-	next, err := page.fn(page.lnc)
+func (page *LogicalNetworkCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LogicalNetworkCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.lnc)
 	if err != nil {
 		return err
 	}
 	page.lnc = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *LogicalNetworkCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -10401,6 +11008,11 @@ func (page LogicalNetworkCollectionPage) Values() []LogicalNetwork {
 		return nil
 	}
 	return *page.lnc.Value
+}
+
+// Creates a new instance of the LogicalNetworkCollectionPage type.
+func NewLogicalNetworkCollectionPage(getNextPage func(context.Context, LogicalNetworkCollection) (LogicalNetworkCollection, error)) LogicalNetworkCollectionPage {
+	return LogicalNetworkCollectionPage{fn: getNextPage}
 }
 
 // LogicalNetworkProperties logical Network Properties.
@@ -10536,6 +11148,689 @@ type MasterTargetServer struct {
 	MarsAgentVersionDetails *VersionDetails `json:"marsAgentVersionDetails,omitempty"`
 }
 
+// MigrateInput input for migrate.
+type MigrateInput struct {
+	// Properties - Migrate input properties.
+	Properties *MigrateInputProperties `json:"properties,omitempty"`
+}
+
+// MigrateInputProperties migrate input properties.
+type MigrateInputProperties struct {
+	// ProviderSpecificDetails - The provider specific details.
+	ProviderSpecificDetails BasicMigrateProviderSpecificInput `json:"providerSpecificDetails,omitempty"`
+}
+
+// UnmarshalJSON is the custom unmarshaler for MigrateInputProperties struct.
+func (mip *MigrateInputProperties) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "providerSpecificDetails":
+			if v != nil {
+				providerSpecificDetails, err := unmarshalBasicMigrateProviderSpecificInput(*v)
+				if err != nil {
+					return err
+				}
+				mip.ProviderSpecificDetails = providerSpecificDetails
+			}
+		}
+	}
+
+	return nil
+}
+
+// BasicMigrateProviderSpecificInput migrate provider specific input.
+type BasicMigrateProviderSpecificInput interface {
+	AsVMwareCbtMigrateInput() (*VMwareCbtMigrateInput, bool)
+	AsMigrateProviderSpecificInput() (*MigrateProviderSpecificInput, bool)
+}
+
+// MigrateProviderSpecificInput migrate provider specific input.
+type MigrateProviderSpecificInput struct {
+	// InstanceType - Possible values include: 'InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeMigrateProviderSpecificInput', 'InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeVMwareCbt'
+	InstanceType InstanceTypeBasicMigrateProviderSpecificInput `json:"instanceType,omitempty"`
+}
+
+func unmarshalBasicMigrateProviderSpecificInput(body []byte) (BasicMigrateProviderSpecificInput, error) {
+	var m map[string]interface{}
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return nil, err
+	}
+
+	switch m["instanceType"] {
+	case string(InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeVMwareCbt):
+		var vmcmi VMwareCbtMigrateInput
+		err := json.Unmarshal(body, &vmcmi)
+		return vmcmi, err
+	default:
+		var mpsi MigrateProviderSpecificInput
+		err := json.Unmarshal(body, &mpsi)
+		return mpsi, err
+	}
+}
+func unmarshalBasicMigrateProviderSpecificInputArray(body []byte) ([]BasicMigrateProviderSpecificInput, error) {
+	var rawMessages []*json.RawMessage
+	err := json.Unmarshal(body, &rawMessages)
+	if err != nil {
+		return nil, err
+	}
+
+	mpsiArray := make([]BasicMigrateProviderSpecificInput, len(rawMessages))
+
+	for index, rawMessage := range rawMessages {
+		mpsi, err := unmarshalBasicMigrateProviderSpecificInput(*rawMessage)
+		if err != nil {
+			return nil, err
+		}
+		mpsiArray[index] = mpsi
+	}
+	return mpsiArray, nil
+}
+
+// MarshalJSON is the custom marshaler for MigrateProviderSpecificInput.
+func (mpsi MigrateProviderSpecificInput) MarshalJSON() ([]byte, error) {
+	mpsi.InstanceType = InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeMigrateProviderSpecificInput
+	objectMap := make(map[string]interface{})
+	if mpsi.InstanceType != "" {
+		objectMap["instanceType"] = mpsi.InstanceType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsVMwareCbtMigrateInput is the BasicMigrateProviderSpecificInput implementation for MigrateProviderSpecificInput.
+func (mpsi MigrateProviderSpecificInput) AsVMwareCbtMigrateInput() (*VMwareCbtMigrateInput, bool) {
+	return nil, false
+}
+
+// AsMigrateProviderSpecificInput is the BasicMigrateProviderSpecificInput implementation for MigrateProviderSpecificInput.
+func (mpsi MigrateProviderSpecificInput) AsMigrateProviderSpecificInput() (*MigrateProviderSpecificInput, bool) {
+	return &mpsi, true
+}
+
+// AsBasicMigrateProviderSpecificInput is the BasicMigrateProviderSpecificInput implementation for MigrateProviderSpecificInput.
+func (mpsi MigrateProviderSpecificInput) AsBasicMigrateProviderSpecificInput() (BasicMigrateProviderSpecificInput, bool) {
+	return &mpsi, true
+}
+
+// MigrationItem migration item.
+type MigrationItem struct {
+	autorest.Response `json:"-"`
+	// Properties - The migration item properties.
+	Properties *MigrationItemProperties `json:"properties,omitempty"`
+	// ID - Resource Id
+	ID *string `json:"id,omitempty"`
+	// Name - Resource Name
+	Name *string `json:"name,omitempty"`
+	// Type - Resource Type
+	Type *string `json:"type,omitempty"`
+	// Location - Resource Location
+	Location *string `json:"location,omitempty"`
+}
+
+// MigrationItemCollection migration item collection.
+type MigrationItemCollection struct {
+	autorest.Response `json:"-"`
+	// Value - The list of migration items.
+	Value *[]MigrationItem `json:"value,omitempty"`
+	// NextLink - The value of next link.
+	NextLink *string `json:"nextLink,omitempty"`
+}
+
+// MigrationItemCollectionIterator provides access to a complete listing of MigrationItem values.
+type MigrationItemCollectionIterator struct {
+	i    int
+	page MigrationItemCollectionPage
+}
+
+// NextWithContext advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+func (iter *MigrationItemCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MigrationItemCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	iter.i++
+	if iter.i < len(iter.page.Values()) {
+		return nil
+	}
+	err = iter.page.NextWithContext(ctx)
+	if err != nil {
+		iter.i--
+		return err
+	}
+	iter.i = 0
+	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *MigrationItemCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the enumeration should be started or is not yet complete.
+func (iter MigrationItemCollectionIterator) NotDone() bool {
+	return iter.page.NotDone() && iter.i < len(iter.page.Values())
+}
+
+// Response returns the raw server response from the last page request.
+func (iter MigrationItemCollectionIterator) Response() MigrationItemCollection {
+	return iter.page.Response()
+}
+
+// Value returns the current value or a zero-initialized value if the
+// iterator has advanced beyond the end of the collection.
+func (iter MigrationItemCollectionIterator) Value() MigrationItem {
+	if !iter.page.NotDone() {
+		return MigrationItem{}
+	}
+	return iter.page.Values()[iter.i]
+}
+
+// Creates a new instance of the MigrationItemCollectionIterator type.
+func NewMigrationItemCollectionIterator(page MigrationItemCollectionPage) MigrationItemCollectionIterator {
+	return MigrationItemCollectionIterator{page: page}
+}
+
+// IsEmpty returns true if the ListResult contains no values.
+func (mic MigrationItemCollection) IsEmpty() bool {
+	return mic.Value == nil || len(*mic.Value) == 0
+}
+
+// migrationItemCollectionPreparer prepares a request to retrieve the next set of results.
+// It returns nil if no more results exist.
+func (mic MigrationItemCollection) migrationItemCollectionPreparer(ctx context.Context) (*http.Request, error) {
+	if mic.NextLink == nil || len(to.String(mic.NextLink)) < 1 {
+		return nil, nil
+	}
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+		autorest.AsJSON(),
+		autorest.AsGet(),
+		autorest.WithBaseURL(to.String(mic.NextLink)))
+}
+
+// MigrationItemCollectionPage contains a page of MigrationItem values.
+type MigrationItemCollectionPage struct {
+	fn  func(context.Context, MigrationItemCollection) (MigrationItemCollection, error)
+	mic MigrationItemCollection
+}
+
+// NextWithContext advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+func (page *MigrationItemCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MigrationItemCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.mic)
+	if err != nil {
+		return err
+	}
+	page.mic = next
+	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *MigrationItemCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the page enumeration should be started or is not yet complete.
+func (page MigrationItemCollectionPage) NotDone() bool {
+	return !page.mic.IsEmpty()
+}
+
+// Response returns the raw server response from the last page request.
+func (page MigrationItemCollectionPage) Response() MigrationItemCollection {
+	return page.mic
+}
+
+// Values returns the slice of values for the current page or nil if there are no values.
+func (page MigrationItemCollectionPage) Values() []MigrationItem {
+	if page.mic.IsEmpty() {
+		return nil
+	}
+	return *page.mic.Value
+}
+
+// Creates a new instance of the MigrationItemCollectionPage type.
+func NewMigrationItemCollectionPage(getNextPage func(context.Context, MigrationItemCollection) (MigrationItemCollection, error)) MigrationItemCollectionPage {
+	return MigrationItemCollectionPage{fn: getNextPage}
+}
+
+// MigrationItemProperties migration item properties.
+type MigrationItemProperties struct {
+	// MachineName - The on-premise virtual machine name.
+	MachineName *string `json:"machineName,omitempty"`
+	// PolicyID - The ARM Id of policy governing this item.
+	PolicyID *string `json:"policyId,omitempty"`
+	// PolicyFriendlyName - The name of policy governing this item.
+	PolicyFriendlyName *string `json:"policyFriendlyName,omitempty"`
+	// RecoveryServicesProviderID - The recovery services provider ARM Id.
+	RecoveryServicesProviderID *string `json:"recoveryServicesProviderId,omitempty"`
+	// MigrationState - The migration status. Possible values include: 'MigrationStateNone', 'MigrationStateEnableMigrationInProgress', 'MigrationStateEnableMigrationFailed', 'MigrationStateDisableMigrationInProgress', 'MigrationStateDisableMigrationFailed', 'MigrationStateInitialSeedingInProgress', 'MigrationStateInitialSeedingFailed', 'MigrationStateReplicating', 'MigrationStateMigrationInProgress', 'MigrationStateMigrationSucceeded', 'MigrationStateMigrationFailed'
+	MigrationState MigrationState `json:"migrationState,omitempty"`
+	// MigrationStateDescription - The migration state description.
+	MigrationStateDescription *string `json:"migrationStateDescription,omitempty"`
+	// TestMigrateState - The test migrate state. Possible values include: 'TestMigrationStateNone', 'TestMigrationStateTestMigrationInProgress', 'TestMigrationStateTestMigrationSucceeded', 'TestMigrationStateTestMigrationFailed', 'TestMigrationStateTestMigrationCleanupInProgress'
+	TestMigrateState TestMigrationState `json:"testMigrateState,omitempty"`
+	// TestMigrateStateDescription - The test migrate state description.
+	TestMigrateStateDescription *string `json:"testMigrateStateDescription,omitempty"`
+	// Health - The consolidated health.
+	Health *string `json:"health,omitempty"`
+	// HealthErrors - The list of health errors.
+	HealthErrors *[]HealthError `json:"healthErrors,omitempty"`
+	// AllowedOperations - The allowed operations on the migration item, based on the current migration state of the item.
+	AllowedOperations *[]MigrationItemOperation `json:"allowedOperations,omitempty"`
+	// CurrentJob - The current job details.
+	CurrentJob *CurrentJobDetails `json:"currentJob,omitempty"`
+	// ProviderSpecificDetails - The migration provider custom settings.
+	ProviderSpecificDetails BasicMigrationProviderSpecificSettings `json:"providerSpecificDetails,omitempty"`
+}
+
+// UnmarshalJSON is the custom unmarshaler for MigrationItemProperties struct.
+func (mip *MigrationItemProperties) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "machineName":
+			if v != nil {
+				var machineName string
+				err = json.Unmarshal(*v, &machineName)
+				if err != nil {
+					return err
+				}
+				mip.MachineName = &machineName
+			}
+		case "policyId":
+			if v != nil {
+				var policyID string
+				err = json.Unmarshal(*v, &policyID)
+				if err != nil {
+					return err
+				}
+				mip.PolicyID = &policyID
+			}
+		case "policyFriendlyName":
+			if v != nil {
+				var policyFriendlyName string
+				err = json.Unmarshal(*v, &policyFriendlyName)
+				if err != nil {
+					return err
+				}
+				mip.PolicyFriendlyName = &policyFriendlyName
+			}
+		case "recoveryServicesProviderId":
+			if v != nil {
+				var recoveryServicesProviderID string
+				err = json.Unmarshal(*v, &recoveryServicesProviderID)
+				if err != nil {
+					return err
+				}
+				mip.RecoveryServicesProviderID = &recoveryServicesProviderID
+			}
+		case "migrationState":
+			if v != nil {
+				var migrationState MigrationState
+				err = json.Unmarshal(*v, &migrationState)
+				if err != nil {
+					return err
+				}
+				mip.MigrationState = migrationState
+			}
+		case "migrationStateDescription":
+			if v != nil {
+				var migrationStateDescription string
+				err = json.Unmarshal(*v, &migrationStateDescription)
+				if err != nil {
+					return err
+				}
+				mip.MigrationStateDescription = &migrationStateDescription
+			}
+		case "testMigrateState":
+			if v != nil {
+				var testMigrateState TestMigrationState
+				err = json.Unmarshal(*v, &testMigrateState)
+				if err != nil {
+					return err
+				}
+				mip.TestMigrateState = testMigrateState
+			}
+		case "testMigrateStateDescription":
+			if v != nil {
+				var testMigrateStateDescription string
+				err = json.Unmarshal(*v, &testMigrateStateDescription)
+				if err != nil {
+					return err
+				}
+				mip.TestMigrateStateDescription = &testMigrateStateDescription
+			}
+		case "health":
+			if v != nil {
+				var health string
+				err = json.Unmarshal(*v, &health)
+				if err != nil {
+					return err
+				}
+				mip.Health = &health
+			}
+		case "healthErrors":
+			if v != nil {
+				var healthErrors []HealthError
+				err = json.Unmarshal(*v, &healthErrors)
+				if err != nil {
+					return err
+				}
+				mip.HealthErrors = &healthErrors
+			}
+		case "allowedOperations":
+			if v != nil {
+				var allowedOperations []MigrationItemOperation
+				err = json.Unmarshal(*v, &allowedOperations)
+				if err != nil {
+					return err
+				}
+				mip.AllowedOperations = &allowedOperations
+			}
+		case "currentJob":
+			if v != nil {
+				var currentJob CurrentJobDetails
+				err = json.Unmarshal(*v, &currentJob)
+				if err != nil {
+					return err
+				}
+				mip.CurrentJob = &currentJob
+			}
+		case "providerSpecificDetails":
+			if v != nil {
+				providerSpecificDetails, err := unmarshalBasicMigrationProviderSpecificSettings(*v)
+				if err != nil {
+					return err
+				}
+				mip.ProviderSpecificDetails = providerSpecificDetails
+			}
+		}
+	}
+
+	return nil
+}
+
+// MigrationItemsQueryParameter query parameter to enumerate migration items.
+type MigrationItemsQueryParameter struct {
+	// SourceFabricName - The source fabric name filter.
+	SourceFabricName *string `json:"sourceFabricName,omitempty"`
+	// InstanceType - The replication provider type.
+	InstanceType *string `json:"instanceType,omitempty"`
+}
+
+// BasicMigrationProviderSpecificSettings migration provider specific settings.
+type BasicMigrationProviderSpecificSettings interface {
+	AsVMwareCbtMigrationDetails() (*VMwareCbtMigrationDetails, bool)
+	AsMigrationProviderSpecificSettings() (*MigrationProviderSpecificSettings, bool)
+}
+
+// MigrationProviderSpecificSettings migration provider specific settings.
+type MigrationProviderSpecificSettings struct {
+	// InstanceType - Possible values include: 'InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeMigrationProviderSpecificSettings', 'InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeVMwareCbt'
+	InstanceType InstanceTypeBasicMigrationProviderSpecificSettings `json:"instanceType,omitempty"`
+}
+
+func unmarshalBasicMigrationProviderSpecificSettings(body []byte) (BasicMigrationProviderSpecificSettings, error) {
+	var m map[string]interface{}
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return nil, err
+	}
+
+	switch m["instanceType"] {
+	case string(InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeVMwareCbt):
+		var vmcmd VMwareCbtMigrationDetails
+		err := json.Unmarshal(body, &vmcmd)
+		return vmcmd, err
+	default:
+		var mpss MigrationProviderSpecificSettings
+		err := json.Unmarshal(body, &mpss)
+		return mpss, err
+	}
+}
+func unmarshalBasicMigrationProviderSpecificSettingsArray(body []byte) ([]BasicMigrationProviderSpecificSettings, error) {
+	var rawMessages []*json.RawMessage
+	err := json.Unmarshal(body, &rawMessages)
+	if err != nil {
+		return nil, err
+	}
+
+	mpssArray := make([]BasicMigrationProviderSpecificSettings, len(rawMessages))
+
+	for index, rawMessage := range rawMessages {
+		mpss, err := unmarshalBasicMigrationProviderSpecificSettings(*rawMessage)
+		if err != nil {
+			return nil, err
+		}
+		mpssArray[index] = mpss
+	}
+	return mpssArray, nil
+}
+
+// MarshalJSON is the custom marshaler for MigrationProviderSpecificSettings.
+func (mpss MigrationProviderSpecificSettings) MarshalJSON() ([]byte, error) {
+	mpss.InstanceType = InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeMigrationProviderSpecificSettings
+	objectMap := make(map[string]interface{})
+	if mpss.InstanceType != "" {
+		objectMap["instanceType"] = mpss.InstanceType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsVMwareCbtMigrationDetails is the BasicMigrationProviderSpecificSettings implementation for MigrationProviderSpecificSettings.
+func (mpss MigrationProviderSpecificSettings) AsVMwareCbtMigrationDetails() (*VMwareCbtMigrationDetails, bool) {
+	return nil, false
+}
+
+// AsMigrationProviderSpecificSettings is the BasicMigrationProviderSpecificSettings implementation for MigrationProviderSpecificSettings.
+func (mpss MigrationProviderSpecificSettings) AsMigrationProviderSpecificSettings() (*MigrationProviderSpecificSettings, bool) {
+	return &mpss, true
+}
+
+// AsBasicMigrationProviderSpecificSettings is the BasicMigrationProviderSpecificSettings implementation for MigrationProviderSpecificSettings.
+func (mpss MigrationProviderSpecificSettings) AsBasicMigrationProviderSpecificSettings() (BasicMigrationProviderSpecificSettings, bool) {
+	return &mpss, true
+}
+
+// MigrationRecoveryPoint recovery point for a migration item.
+type MigrationRecoveryPoint struct {
+	autorest.Response `json:"-"`
+	// Properties - Recovery point properties.
+	Properties *MigrationRecoveryPointProperties `json:"properties,omitempty"`
+	// ID - Resource Id
+	ID *string `json:"id,omitempty"`
+	// Name - Resource Name
+	Name *string `json:"name,omitempty"`
+	// Type - Resource Type
+	Type *string `json:"type,omitempty"`
+	// Location - Resource Location
+	Location *string `json:"location,omitempty"`
+}
+
+// MigrationRecoveryPointCollection collection of migration recovery points.
+type MigrationRecoveryPointCollection struct {
+	autorest.Response `json:"-"`
+	// Value - The migration recovery point details.
+	Value *[]MigrationRecoveryPoint `json:"value,omitempty"`
+	// NextLink - The value of next link.
+	NextLink *string `json:"nextLink,omitempty"`
+}
+
+// MigrationRecoveryPointCollectionIterator provides access to a complete listing of MigrationRecoveryPoint
+// values.
+type MigrationRecoveryPointCollectionIterator struct {
+	i    int
+	page MigrationRecoveryPointCollectionPage
+}
+
+// NextWithContext advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+func (iter *MigrationRecoveryPointCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MigrationRecoveryPointCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	iter.i++
+	if iter.i < len(iter.page.Values()) {
+		return nil
+	}
+	err = iter.page.NextWithContext(ctx)
+	if err != nil {
+		iter.i--
+		return err
+	}
+	iter.i = 0
+	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *MigrationRecoveryPointCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the enumeration should be started or is not yet complete.
+func (iter MigrationRecoveryPointCollectionIterator) NotDone() bool {
+	return iter.page.NotDone() && iter.i < len(iter.page.Values())
+}
+
+// Response returns the raw server response from the last page request.
+func (iter MigrationRecoveryPointCollectionIterator) Response() MigrationRecoveryPointCollection {
+	return iter.page.Response()
+}
+
+// Value returns the current value or a zero-initialized value if the
+// iterator has advanced beyond the end of the collection.
+func (iter MigrationRecoveryPointCollectionIterator) Value() MigrationRecoveryPoint {
+	if !iter.page.NotDone() {
+		return MigrationRecoveryPoint{}
+	}
+	return iter.page.Values()[iter.i]
+}
+
+// Creates a new instance of the MigrationRecoveryPointCollectionIterator type.
+func NewMigrationRecoveryPointCollectionIterator(page MigrationRecoveryPointCollectionPage) MigrationRecoveryPointCollectionIterator {
+	return MigrationRecoveryPointCollectionIterator{page: page}
+}
+
+// IsEmpty returns true if the ListResult contains no values.
+func (mrpc MigrationRecoveryPointCollection) IsEmpty() bool {
+	return mrpc.Value == nil || len(*mrpc.Value) == 0
+}
+
+// migrationRecoveryPointCollectionPreparer prepares a request to retrieve the next set of results.
+// It returns nil if no more results exist.
+func (mrpc MigrationRecoveryPointCollection) migrationRecoveryPointCollectionPreparer(ctx context.Context) (*http.Request, error) {
+	if mrpc.NextLink == nil || len(to.String(mrpc.NextLink)) < 1 {
+		return nil, nil
+	}
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+		autorest.AsJSON(),
+		autorest.AsGet(),
+		autorest.WithBaseURL(to.String(mrpc.NextLink)))
+}
+
+// MigrationRecoveryPointCollectionPage contains a page of MigrationRecoveryPoint values.
+type MigrationRecoveryPointCollectionPage struct {
+	fn   func(context.Context, MigrationRecoveryPointCollection) (MigrationRecoveryPointCollection, error)
+	mrpc MigrationRecoveryPointCollection
+}
+
+// NextWithContext advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+func (page *MigrationRecoveryPointCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MigrationRecoveryPointCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.mrpc)
+	if err != nil {
+		return err
+	}
+	page.mrpc = next
+	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *MigrationRecoveryPointCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the page enumeration should be started or is not yet complete.
+func (page MigrationRecoveryPointCollectionPage) NotDone() bool {
+	return !page.mrpc.IsEmpty()
+}
+
+// Response returns the raw server response from the last page request.
+func (page MigrationRecoveryPointCollectionPage) Response() MigrationRecoveryPointCollection {
+	return page.mrpc
+}
+
+// Values returns the slice of values for the current page or nil if there are no values.
+func (page MigrationRecoveryPointCollectionPage) Values() []MigrationRecoveryPoint {
+	if page.mrpc.IsEmpty() {
+		return nil
+	}
+	return *page.mrpc.Value
+}
+
+// Creates a new instance of the MigrationRecoveryPointCollectionPage type.
+func NewMigrationRecoveryPointCollectionPage(getNextPage func(context.Context, MigrationRecoveryPointCollection) (MigrationRecoveryPointCollection, error)) MigrationRecoveryPointCollectionPage {
+	return MigrationRecoveryPointCollectionPage{fn: getNextPage}
+}
+
+// MigrationRecoveryPointProperties migration item recovery point properties.
+type MigrationRecoveryPointProperties struct {
+	// RecoveryPointTime - The recovery point time.
+	RecoveryPointTime *date.Time `json:"recoveryPointTime,omitempty"`
+	// RecoveryPointType - The recovery point type. Possible values include: 'MigrationRecoveryPointTypeNotSpecified', 'MigrationRecoveryPointTypeApplicationConsistent', 'MigrationRecoveryPointTypeCrashConsistent'
+	RecoveryPointType MigrationRecoveryPointType `json:"recoveryPointType,omitempty"`
+}
+
 // MobilityServiceUpdate the Mobility Service update details.
 type MobilityServiceUpdate struct {
 	// Version - The version of the latest update.
@@ -10576,20 +11871,37 @@ type NetworkCollectionIterator struct {
 	page NetworkCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *NetworkCollectionIterator) Next() error {
+func (iter *NetworkCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NetworkCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *NetworkCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -10611,6 +11923,11 @@ func (iter NetworkCollectionIterator) Value() Network {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the NetworkCollectionIterator type.
+func NewNetworkCollectionIterator(page NetworkCollectionPage) NetworkCollectionIterator {
+	return NetworkCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (nc NetworkCollection) IsEmpty() bool {
 	return nc.Value == nil || len(*nc.Value) == 0
@@ -10618,11 +11935,11 @@ func (nc NetworkCollection) IsEmpty() bool {
 
 // networkCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (nc NetworkCollection) networkCollectionPreparer() (*http.Request, error) {
+func (nc NetworkCollection) networkCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if nc.NextLink == nil || len(to.String(nc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(nc.NextLink)))
@@ -10630,19 +11947,36 @@ func (nc NetworkCollection) networkCollectionPreparer() (*http.Request, error) {
 
 // NetworkCollectionPage contains a page of Network values.
 type NetworkCollectionPage struct {
-	fn func(NetworkCollection) (NetworkCollection, error)
+	fn func(context.Context, NetworkCollection) (NetworkCollection, error)
 	nc NetworkCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *NetworkCollectionPage) Next() error {
-	next, err := page.fn(page.nc)
+func (page *NetworkCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NetworkCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.nc)
 	if err != nil {
 		return err
 	}
 	page.nc = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *NetworkCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -10663,11 +11997,16 @@ func (page NetworkCollectionPage) Values() []Network {
 	return *page.nc.Value
 }
 
-// NetworkMapping network Mapping model. Ideally it should have been possible to inherit this class from prev
-// version in InheritedModels as long as there is no difference in structure or method signature. Since there were
-// no base Models for certain fields and methods viz NetworkMappingProperties and Load with required return type,
-// the class has been introduced in its entirety with references to base models to facilitate exensions in
-// subsequent versions.
+// Creates a new instance of the NetworkCollectionPage type.
+func NewNetworkCollectionPage(getNextPage func(context.Context, NetworkCollection) (NetworkCollection, error)) NetworkCollectionPage {
+	return NetworkCollectionPage{fn: getNextPage}
+}
+
+// NetworkMapping network Mapping model. Ideally it should have been possible to inherit this class from
+// prev version in InheritedModels as long as there is no difference in structure or method signature.
+// Since there were no base Models for certain fields and methods viz NetworkMappingProperties and Load
+// with required return type, the class has been introduced in its entirety with references to base models
+// to facilitate extensions in subsequent versions.
 type NetworkMapping struct {
 	autorest.Response `json:"-"`
 	// Properties - The Network Mapping Properties.
@@ -10682,10 +12021,10 @@ type NetworkMapping struct {
 	Location *string `json:"location,omitempty"`
 }
 
-// NetworkMappingCollection list of network mappings. As with NetworkMapping, it should be possible to reuse a prev
-// version of this class. It doesn't seem likely this class could be anything more than a slightly bespoke
-// collection of NetworkMapping. Hence it makes sense to override Load with Base.NetworkMapping instead of existing
-// CurrentVersion.NetworkMapping.
+// NetworkMappingCollection list of network mappings. As with NetworkMapping, it should be possible to
+// reuse a prev version of this class. It doesn't seem likely this class could be anything more than a
+// slightly bespoke collection of NetworkMapping. Hence it makes sense to override Load with
+// Base.NetworkMapping instead of existing CurrentVersion.NetworkMapping.
 type NetworkMappingCollection struct {
 	autorest.Response `json:"-"`
 	// Value - The Network Mappings list.
@@ -10700,20 +12039,37 @@ type NetworkMappingCollectionIterator struct {
 	page NetworkMappingCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *NetworkMappingCollectionIterator) Next() error {
+func (iter *NetworkMappingCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NetworkMappingCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *NetworkMappingCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -10735,6 +12091,11 @@ func (iter NetworkMappingCollectionIterator) Value() NetworkMapping {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the NetworkMappingCollectionIterator type.
+func NewNetworkMappingCollectionIterator(page NetworkMappingCollectionPage) NetworkMappingCollectionIterator {
+	return NetworkMappingCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (nmc NetworkMappingCollection) IsEmpty() bool {
 	return nmc.Value == nil || len(*nmc.Value) == 0
@@ -10742,11 +12103,11 @@ func (nmc NetworkMappingCollection) IsEmpty() bool {
 
 // networkMappingCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (nmc NetworkMappingCollection) networkMappingCollectionPreparer() (*http.Request, error) {
+func (nmc NetworkMappingCollection) networkMappingCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if nmc.NextLink == nil || len(to.String(nmc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(nmc.NextLink)))
@@ -10754,19 +12115,36 @@ func (nmc NetworkMappingCollection) networkMappingCollectionPreparer() (*http.Re
 
 // NetworkMappingCollectionPage contains a page of NetworkMapping values.
 type NetworkMappingCollectionPage struct {
-	fn  func(NetworkMappingCollection) (NetworkMappingCollection, error)
+	fn  func(context.Context, NetworkMappingCollection) (NetworkMappingCollection, error)
 	nmc NetworkMappingCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *NetworkMappingCollectionPage) Next() error {
-	next, err := page.fn(page.nmc)
+func (page *NetworkMappingCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NetworkMappingCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.nmc)
 	if err != nil {
 		return err
 	}
 	page.nmc = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *NetworkMappingCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -10785,6 +12163,11 @@ func (page NetworkMappingCollectionPage) Values() []NetworkMapping {
 		return nil
 	}
 	return *page.nmc.Value
+}
+
+// Creates a new instance of the NetworkMappingCollectionPage type.
+func NewNetworkMappingCollectionPage(getNextPage func(context.Context, NetworkMappingCollection) (NetworkMappingCollection, error)) NetworkMappingCollectionPage {
+	return NetworkMappingCollectionPage{fn: getNextPage}
 }
 
 // BasicNetworkMappingFabricSpecificSettings network Mapping fabric specific settings.
@@ -11031,26 +12414,44 @@ type OperationsDiscoveryCollection struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// OperationsDiscoveryCollectionIterator provides access to a complete listing of OperationsDiscovery values.
+// OperationsDiscoveryCollectionIterator provides access to a complete listing of OperationsDiscovery
+// values.
 type OperationsDiscoveryCollectionIterator struct {
 	i    int
 	page OperationsDiscoveryCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OperationsDiscoveryCollectionIterator) Next() error {
+func (iter *OperationsDiscoveryCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationsDiscoveryCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *OperationsDiscoveryCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -11072,6 +12473,11 @@ func (iter OperationsDiscoveryCollectionIterator) Value() OperationsDiscovery {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the OperationsDiscoveryCollectionIterator type.
+func NewOperationsDiscoveryCollectionIterator(page OperationsDiscoveryCollectionPage) OperationsDiscoveryCollectionIterator {
+	return OperationsDiscoveryCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (odc OperationsDiscoveryCollection) IsEmpty() bool {
 	return odc.Value == nil || len(*odc.Value) == 0
@@ -11079,11 +12485,11 @@ func (odc OperationsDiscoveryCollection) IsEmpty() bool {
 
 // operationsDiscoveryCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (odc OperationsDiscoveryCollection) operationsDiscoveryCollectionPreparer() (*http.Request, error) {
+func (odc OperationsDiscoveryCollection) operationsDiscoveryCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if odc.NextLink == nil || len(to.String(odc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(odc.NextLink)))
@@ -11091,19 +12497,36 @@ func (odc OperationsDiscoveryCollection) operationsDiscoveryCollectionPreparer()
 
 // OperationsDiscoveryCollectionPage contains a page of OperationsDiscovery values.
 type OperationsDiscoveryCollectionPage struct {
-	fn  func(OperationsDiscoveryCollection) (OperationsDiscoveryCollection, error)
+	fn  func(context.Context, OperationsDiscoveryCollection) (OperationsDiscoveryCollection, error)
 	odc OperationsDiscoveryCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OperationsDiscoveryCollectionPage) Next() error {
-	next, err := page.fn(page.odc)
+func (page *OperationsDiscoveryCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationsDiscoveryCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.odc)
 	if err != nil {
 		return err
 	}
 	page.odc = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *OperationsDiscoveryCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -11122,6 +12545,11 @@ func (page OperationsDiscoveryCollectionPage) Values() []OperationsDiscovery {
 		return nil
 	}
 	return *page.odc.Value
+}
+
+// Creates a new instance of the OperationsDiscoveryCollectionPage type.
+func NewOperationsDiscoveryCollectionPage(getNextPage func(context.Context, OperationsDiscoveryCollection) (OperationsDiscoveryCollection, error)) OperationsDiscoveryCollectionPage {
+	return OperationsDiscoveryCollectionPage{fn: getNextPage}
 }
 
 // OSDetails disk Details.
@@ -11226,20 +12654,37 @@ type PolicyCollectionIterator struct {
 	page PolicyCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *PolicyCollectionIterator) Next() error {
+func (iter *PolicyCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *PolicyCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -11261,6 +12706,11 @@ func (iter PolicyCollectionIterator) Value() Policy {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the PolicyCollectionIterator type.
+func NewPolicyCollectionIterator(page PolicyCollectionPage) PolicyCollectionIterator {
+	return PolicyCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (pc PolicyCollection) IsEmpty() bool {
 	return pc.Value == nil || len(*pc.Value) == 0
@@ -11268,11 +12718,11 @@ func (pc PolicyCollection) IsEmpty() bool {
 
 // policyCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (pc PolicyCollection) policyCollectionPreparer() (*http.Request, error) {
+func (pc PolicyCollection) policyCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if pc.NextLink == nil || len(to.String(pc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(pc.NextLink)))
@@ -11280,19 +12730,36 @@ func (pc PolicyCollection) policyCollectionPreparer() (*http.Request, error) {
 
 // PolicyCollectionPage contains a page of Policy values.
 type PolicyCollectionPage struct {
-	fn func(PolicyCollection) (PolicyCollection, error)
+	fn func(context.Context, PolicyCollection) (PolicyCollection, error)
 	pc PolicyCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *PolicyCollectionPage) Next() error {
-	next, err := page.fn(page.pc)
+func (page *PolicyCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.pc)
 	if err != nil {
 		return err
 	}
 	page.pc = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *PolicyCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -11311,6 +12778,11 @@ func (page PolicyCollectionPage) Values() []Policy {
 		return nil
 	}
 	return *page.pc.Value
+}
+
+// Creates a new instance of the PolicyCollectionPage type.
+func NewPolicyCollectionPage(getNextPage func(context.Context, PolicyCollection) (PolicyCollection, error)) PolicyCollectionPage {
+	return PolicyCollectionPage{fn: getNextPage}
 }
 
 // PolicyProperties protection profile custom data details.
@@ -11741,20 +13213,37 @@ type ProtectableItemCollectionIterator struct {
 	page ProtectableItemCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ProtectableItemCollectionIterator) Next() error {
+func (iter *ProtectableItemCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectableItemCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ProtectableItemCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -11776,6 +13265,11 @@ func (iter ProtectableItemCollectionIterator) Value() ProtectableItem {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ProtectableItemCollectionIterator type.
+func NewProtectableItemCollectionIterator(page ProtectableItemCollectionPage) ProtectableItemCollectionIterator {
+	return ProtectableItemCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (pic ProtectableItemCollection) IsEmpty() bool {
 	return pic.Value == nil || len(*pic.Value) == 0
@@ -11783,11 +13277,11 @@ func (pic ProtectableItemCollection) IsEmpty() bool {
 
 // protectableItemCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (pic ProtectableItemCollection) protectableItemCollectionPreparer() (*http.Request, error) {
+func (pic ProtectableItemCollection) protectableItemCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if pic.NextLink == nil || len(to.String(pic.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(pic.NextLink)))
@@ -11795,19 +13289,36 @@ func (pic ProtectableItemCollection) protectableItemCollectionPreparer() (*http.
 
 // ProtectableItemCollectionPage contains a page of ProtectableItem values.
 type ProtectableItemCollectionPage struct {
-	fn  func(ProtectableItemCollection) (ProtectableItemCollection, error)
+	fn  func(context.Context, ProtectableItemCollection) (ProtectableItemCollection, error)
 	pic ProtectableItemCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ProtectableItemCollectionPage) Next() error {
-	next, err := page.fn(page.pic)
+func (page *ProtectableItemCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectableItemCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.pic)
 	if err != nil {
 		return err
 	}
 	page.pic = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ProtectableItemCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -11826,6 +13337,11 @@ func (page ProtectableItemCollectionPage) Values() []ProtectableItem {
 		return nil
 	}
 	return *page.pic.Value
+}
+
+// Creates a new instance of the ProtectableItemCollectionPage type.
+func NewProtectableItemCollectionPage(getNextPage func(context.Context, ProtectableItemCollection) (ProtectableItemCollection, error)) ProtectableItemCollectionPage {
+	return ProtectableItemCollectionPage{fn: getNextPage}
 }
 
 // ProtectableItemProperties replication protected item custom data details.
@@ -11967,26 +13483,44 @@ type ProtectionContainerCollection struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ProtectionContainerCollectionIterator provides access to a complete listing of ProtectionContainer values.
+// ProtectionContainerCollectionIterator provides access to a complete listing of ProtectionContainer
+// values.
 type ProtectionContainerCollectionIterator struct {
 	i    int
 	page ProtectionContainerCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ProtectionContainerCollectionIterator) Next() error {
+func (iter *ProtectionContainerCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectionContainerCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ProtectionContainerCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -12008,6 +13542,11 @@ func (iter ProtectionContainerCollectionIterator) Value() ProtectionContainer {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ProtectionContainerCollectionIterator type.
+func NewProtectionContainerCollectionIterator(page ProtectionContainerCollectionPage) ProtectionContainerCollectionIterator {
+	return ProtectionContainerCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (pcc ProtectionContainerCollection) IsEmpty() bool {
 	return pcc.Value == nil || len(*pcc.Value) == 0
@@ -12015,11 +13554,11 @@ func (pcc ProtectionContainerCollection) IsEmpty() bool {
 
 // protectionContainerCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (pcc ProtectionContainerCollection) protectionContainerCollectionPreparer() (*http.Request, error) {
+func (pcc ProtectionContainerCollection) protectionContainerCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if pcc.NextLink == nil || len(to.String(pcc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(pcc.NextLink)))
@@ -12027,19 +13566,36 @@ func (pcc ProtectionContainerCollection) protectionContainerCollectionPreparer()
 
 // ProtectionContainerCollectionPage contains a page of ProtectionContainer values.
 type ProtectionContainerCollectionPage struct {
-	fn  func(ProtectionContainerCollection) (ProtectionContainerCollection, error)
+	fn  func(context.Context, ProtectionContainerCollection) (ProtectionContainerCollection, error)
 	pcc ProtectionContainerCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ProtectionContainerCollectionPage) Next() error {
-	next, err := page.fn(page.pcc)
+func (page *ProtectionContainerCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectionContainerCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.pcc)
 	if err != nil {
 		return err
 	}
 	page.pcc = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ProtectionContainerCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -12060,9 +13616,14 @@ func (page ProtectionContainerCollectionPage) Values() []ProtectionContainer {
 	return *page.pcc.Value
 }
 
+// Creates a new instance of the ProtectionContainerCollectionPage type.
+func NewProtectionContainerCollectionPage(getNextPage func(context.Context, ProtectionContainerCollection) (ProtectionContainerCollection, error)) ProtectionContainerCollectionPage {
+	return ProtectionContainerCollectionPage{fn: getNextPage}
+}
+
 // ProtectionContainerFabricSpecificDetails base class for fabric specific details of container.
 type ProtectionContainerFabricSpecificDetails struct {
-	// InstanceType - Gets the class type. Overriden in derived classes.
+	// InstanceType - Gets the class type. Overridden in derived classes.
 	InstanceType *string `json:"instanceType,omitempty"`
 }
 
@@ -12090,27 +13651,44 @@ type ProtectionContainerMappingCollection struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ProtectionContainerMappingCollectionIterator provides access to a complete listing of ProtectionContainerMapping
-// values.
+// ProtectionContainerMappingCollectionIterator provides access to a complete listing of
+// ProtectionContainerMapping values.
 type ProtectionContainerMappingCollectionIterator struct {
 	i    int
 	page ProtectionContainerMappingCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ProtectionContainerMappingCollectionIterator) Next() error {
+func (iter *ProtectionContainerMappingCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectionContainerMappingCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ProtectionContainerMappingCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -12132,6 +13710,11 @@ func (iter ProtectionContainerMappingCollectionIterator) Value() ProtectionConta
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ProtectionContainerMappingCollectionIterator type.
+func NewProtectionContainerMappingCollectionIterator(page ProtectionContainerMappingCollectionPage) ProtectionContainerMappingCollectionIterator {
+	return ProtectionContainerMappingCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (pcmc ProtectionContainerMappingCollection) IsEmpty() bool {
 	return pcmc.Value == nil || len(*pcmc.Value) == 0
@@ -12139,11 +13722,11 @@ func (pcmc ProtectionContainerMappingCollection) IsEmpty() bool {
 
 // protectionContainerMappingCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (pcmc ProtectionContainerMappingCollection) protectionContainerMappingCollectionPreparer() (*http.Request, error) {
+func (pcmc ProtectionContainerMappingCollection) protectionContainerMappingCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if pcmc.NextLink == nil || len(to.String(pcmc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(pcmc.NextLink)))
@@ -12151,19 +13734,36 @@ func (pcmc ProtectionContainerMappingCollection) protectionContainerMappingColle
 
 // ProtectionContainerMappingCollectionPage contains a page of ProtectionContainerMapping values.
 type ProtectionContainerMappingCollectionPage struct {
-	fn   func(ProtectionContainerMappingCollection) (ProtectionContainerMappingCollection, error)
+	fn   func(context.Context, ProtectionContainerMappingCollection) (ProtectionContainerMappingCollection, error)
 	pcmc ProtectionContainerMappingCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ProtectionContainerMappingCollectionPage) Next() error {
-	next, err := page.fn(page.pcmc)
+func (page *ProtectionContainerMappingCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectionContainerMappingCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.pcmc)
 	if err != nil {
 		return err
 	}
 	page.pcmc = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ProtectionContainerMappingCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -12182,6 +13782,11 @@ func (page ProtectionContainerMappingCollectionPage) Values() []ProtectionContai
 		return nil
 	}
 	return *page.pcmc.Value
+}
+
+// Creates a new instance of the ProtectionContainerMappingCollectionPage type.
+func NewProtectionContainerMappingCollectionPage(getNextPage func(context.Context, ProtectionContainerMappingCollection) (ProtectionContainerMappingCollection, error)) ProtectionContainerMappingCollectionPage {
+	return ProtectionContainerMappingCollectionPage{fn: getNextPage}
 }
 
 // ProtectionContainerMappingProperties protection container mapping properties.
@@ -12326,12 +13931,13 @@ func (pcmp *ProtectionContainerMappingProperties) UnmarshalJSON(body []byte) err
 // BasicProtectionContainerMappingProviderSpecificDetails container mapping provider specific details.
 type BasicProtectionContainerMappingProviderSpecificDetails interface {
 	AsA2AProtectionContainerMappingDetails() (*A2AProtectionContainerMappingDetails, bool)
+	AsVMwareCbtProtectionContainerMappingDetails() (*VMwareCbtProtectionContainerMappingDetails, bool)
 	AsProtectionContainerMappingProviderSpecificDetails() (*ProtectionContainerMappingProviderSpecificDetails, bool)
 }
 
 // ProtectionContainerMappingProviderSpecificDetails container mapping provider specific details.
 type ProtectionContainerMappingProviderSpecificDetails struct {
-	// InstanceType - Possible values include: 'InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeProtectionContainerMappingProviderSpecificDetails', 'InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeA2A'
+	// InstanceType - Possible values include: 'InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeProtectionContainerMappingProviderSpecificDetails', 'InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeVMwareCbt'
 	InstanceType InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails `json:"instanceType,omitempty"`
 }
 
@@ -12347,6 +13953,10 @@ func unmarshalBasicProtectionContainerMappingProviderSpecificDetails(body []byte
 		var apcmd A2AProtectionContainerMappingDetails
 		err := json.Unmarshal(body, &apcmd)
 		return apcmd, err
+	case string(InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeVMwareCbt):
+		var vmcpcmd VMwareCbtProtectionContainerMappingDetails
+		err := json.Unmarshal(body, &vmcpcmd)
+		return vmcpcmd, err
 	default:
 		var pcmpsd ProtectionContainerMappingProviderSpecificDetails
 		err := json.Unmarshal(body, &pcmpsd)
@@ -12384,6 +13994,11 @@ func (pcmpsd ProtectionContainerMappingProviderSpecificDetails) MarshalJSON() ([
 
 // AsA2AProtectionContainerMappingDetails is the BasicProtectionContainerMappingProviderSpecificDetails implementation for ProtectionContainerMappingProviderSpecificDetails.
 func (pcmpsd ProtectionContainerMappingProviderSpecificDetails) AsA2AProtectionContainerMappingDetails() (*A2AProtectionContainerMappingDetails, bool) {
+	return nil, false
+}
+
+// AsVMwareCbtProtectionContainerMappingDetails is the BasicProtectionContainerMappingProviderSpecificDetails implementation for ProtectionContainerMappingProviderSpecificDetails.
+func (pcmpsd ProtectionContainerMappingProviderSpecificDetails) AsVMwareCbtProtectionContainerMappingDetails() (*VMwareCbtProtectionContainerMappingDetails, bool) {
 	return nil, false
 }
 
@@ -13036,20 +14651,37 @@ type RecoveryPlanCollectionIterator struct {
 	page RecoveryPlanCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *RecoveryPlanCollectionIterator) Next() error {
+func (iter *RecoveryPlanCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecoveryPlanCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *RecoveryPlanCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -13071,6 +14703,11 @@ func (iter RecoveryPlanCollectionIterator) Value() RecoveryPlan {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the RecoveryPlanCollectionIterator type.
+func NewRecoveryPlanCollectionIterator(page RecoveryPlanCollectionPage) RecoveryPlanCollectionIterator {
+	return RecoveryPlanCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (RPCVar RecoveryPlanCollection) IsEmpty() bool {
 	return RPCVar.Value == nil || len(*RPCVar.Value) == 0
@@ -13078,11 +14715,11 @@ func (RPCVar RecoveryPlanCollection) IsEmpty() bool {
 
 // recoveryPlanCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (RPCVar RecoveryPlanCollection) recoveryPlanCollectionPreparer() (*http.Request, error) {
+func (RPCVar RecoveryPlanCollection) recoveryPlanCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if RPCVar.NextLink == nil || len(to.String(RPCVar.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(RPCVar.NextLink)))
@@ -13090,19 +14727,36 @@ func (RPCVar RecoveryPlanCollection) recoveryPlanCollectionPreparer() (*http.Req
 
 // RecoveryPlanCollectionPage contains a page of RecoveryPlan values.
 type RecoveryPlanCollectionPage struct {
-	fn     func(RecoveryPlanCollection) (RecoveryPlanCollection, error)
+	fn     func(context.Context, RecoveryPlanCollection) (RecoveryPlanCollection, error)
 	RPCVar RecoveryPlanCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *RecoveryPlanCollectionPage) Next() error {
-	next, err := page.fn(page.RPCVar)
+func (page *RecoveryPlanCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecoveryPlanCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.RPCVar)
 	if err != nil {
 		return err
 	}
 	page.RPCVar = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *RecoveryPlanCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -13121,6 +14775,11 @@ func (page RecoveryPlanCollectionPage) Values() []RecoveryPlan {
 		return nil
 	}
 	return *page.RPCVar.Value
+}
+
+// Creates a new instance of the RecoveryPlanCollectionPage type.
+func NewRecoveryPlanCollectionPage(getNextPage func(context.Context, RecoveryPlanCollection) (RecoveryPlanCollection, error)) RecoveryPlanCollectionPage {
+	return RecoveryPlanCollectionPage{fn: getNextPage}
 }
 
 // RecoveryPlanGroup recovery plan group details.
@@ -13754,7 +15413,8 @@ func (rpsad RecoveryPlanScriptActionDetails) AsBasicRecoveryPlanActionDetails() 
 	return &rpsad, true
 }
 
-// RecoveryPlanShutdownGroupTaskDetails this class represents the recovery plan shutdown group task details.
+// RecoveryPlanShutdownGroupTaskDetails this class represents the recovery plan shutdown group task
+// details.
 type RecoveryPlanShutdownGroupTaskDetails struct {
 	// Name - The name.
 	Name *string `json:"name,omitempty"`
@@ -13993,20 +15653,37 @@ type RecoveryPointCollectionIterator struct {
 	page RecoveryPointCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *RecoveryPointCollectionIterator) Next() error {
+func (iter *RecoveryPointCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecoveryPointCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *RecoveryPointCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -14028,6 +15705,11 @@ func (iter RecoveryPointCollectionIterator) Value() RecoveryPoint {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the RecoveryPointCollectionIterator type.
+func NewRecoveryPointCollectionIterator(page RecoveryPointCollectionPage) RecoveryPointCollectionIterator {
+	return RecoveryPointCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (RPCVar RecoveryPointCollection) IsEmpty() bool {
 	return RPCVar.Value == nil || len(*RPCVar.Value) == 0
@@ -14035,11 +15717,11 @@ func (RPCVar RecoveryPointCollection) IsEmpty() bool {
 
 // recoveryPointCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (RPCVar RecoveryPointCollection) recoveryPointCollectionPreparer() (*http.Request, error) {
+func (RPCVar RecoveryPointCollection) recoveryPointCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if RPCVar.NextLink == nil || len(to.String(RPCVar.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(RPCVar.NextLink)))
@@ -14047,19 +15729,36 @@ func (RPCVar RecoveryPointCollection) recoveryPointCollectionPreparer() (*http.R
 
 // RecoveryPointCollectionPage contains a page of RecoveryPoint values.
 type RecoveryPointCollectionPage struct {
-	fn     func(RecoveryPointCollection) (RecoveryPointCollection, error)
+	fn     func(context.Context, RecoveryPointCollection) (RecoveryPointCollection, error)
 	RPCVar RecoveryPointCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *RecoveryPointCollectionPage) Next() error {
-	next, err := page.fn(page.RPCVar)
+func (page *RecoveryPointCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecoveryPointCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.RPCVar)
 	if err != nil {
 		return err
 	}
 	page.RPCVar = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *RecoveryPointCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -14078,6 +15777,11 @@ func (page RecoveryPointCollectionPage) Values() []RecoveryPoint {
 		return nil
 	}
 	return *page.RPCVar.Value
+}
+
+// Creates a new instance of the RecoveryPointCollectionPage type.
+func NewRecoveryPointCollectionPage(getNextPage func(context.Context, RecoveryPointCollection) (RecoveryPointCollection, error)) RecoveryPointCollectionPage {
+	return RecoveryPointCollectionPage{fn: getNextPage}
 }
 
 // RecoveryPointProperties recovery point properties.
@@ -14155,27 +15859,44 @@ type RecoveryServicesProviderCollection struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// RecoveryServicesProviderCollectionIterator provides access to a complete listing of RecoveryServicesProvider
-// values.
+// RecoveryServicesProviderCollectionIterator provides access to a complete listing of
+// RecoveryServicesProvider values.
 type RecoveryServicesProviderCollectionIterator struct {
 	i    int
 	page RecoveryServicesProviderCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *RecoveryServicesProviderCollectionIterator) Next() error {
+func (iter *RecoveryServicesProviderCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecoveryServicesProviderCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *RecoveryServicesProviderCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -14197,6 +15918,11 @@ func (iter RecoveryServicesProviderCollectionIterator) Value() RecoveryServicesP
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the RecoveryServicesProviderCollectionIterator type.
+func NewRecoveryServicesProviderCollectionIterator(page RecoveryServicesProviderCollectionPage) RecoveryServicesProviderCollectionIterator {
+	return RecoveryServicesProviderCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rspc RecoveryServicesProviderCollection) IsEmpty() bool {
 	return rspc.Value == nil || len(*rspc.Value) == 0
@@ -14204,11 +15930,11 @@ func (rspc RecoveryServicesProviderCollection) IsEmpty() bool {
 
 // recoveryServicesProviderCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rspc RecoveryServicesProviderCollection) recoveryServicesProviderCollectionPreparer() (*http.Request, error) {
+func (rspc RecoveryServicesProviderCollection) recoveryServicesProviderCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if rspc.NextLink == nil || len(to.String(rspc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rspc.NextLink)))
@@ -14216,19 +15942,36 @@ func (rspc RecoveryServicesProviderCollection) recoveryServicesProviderCollectio
 
 // RecoveryServicesProviderCollectionPage contains a page of RecoveryServicesProvider values.
 type RecoveryServicesProviderCollectionPage struct {
-	fn   func(RecoveryServicesProviderCollection) (RecoveryServicesProviderCollection, error)
+	fn   func(context.Context, RecoveryServicesProviderCollection) (RecoveryServicesProviderCollection, error)
 	rspc RecoveryServicesProviderCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *RecoveryServicesProviderCollectionPage) Next() error {
-	next, err := page.fn(page.rspc)
+func (page *RecoveryServicesProviderCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecoveryServicesProviderCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rspc)
 	if err != nil {
 		return err
 	}
 	page.rspc = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *RecoveryServicesProviderCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -14247,6 +15990,11 @@ func (page RecoveryServicesProviderCollectionPage) Values() []RecoveryServicesPr
 		return nil
 	}
 	return *page.rspc.Value
+}
+
+// Creates a new instance of the RecoveryServicesProviderCollectionPage type.
+func NewRecoveryServicesProviderCollectionPage(getNextPage func(context.Context, RecoveryServicesProviderCollection) (RecoveryServicesProviderCollection, error)) RecoveryServicesProviderCollectionPage {
+	return RecoveryServicesProviderCollectionPage{fn: getNextPage}
 }
 
 // RecoveryServicesProviderProperties recovery services provider properties.
@@ -14277,8 +16025,10 @@ type RecoveryServicesProviderProperties struct {
 	HealthErrorDetails *[]HealthError `json:"healthErrorDetails,omitempty"`
 	// DraIdentifier - The DRA Id.
 	DraIdentifier *string `json:"draIdentifier,omitempty"`
-	// IdentityDetails - The identity details.
-	IdentityDetails *IdentityInformation `json:"identityDetails,omitempty"`
+	// AuthenticationIdentityDetails - The authentication identity details.
+	AuthenticationIdentityDetails *IdentityProviderDetails `json:"authenticationIdentityDetails,omitempty"`
+	// ResourceAccessIdentityDetails - The resource access identity details.
+	ResourceAccessIdentityDetails *IdentityProviderDetails `json:"resourceAccessIdentityDetails,omitempty"`
 	// ProviderVersionDetails - The provider version details.
 	ProviderVersionDetails *VersionDetails `json:"providerVersionDetails,omitempty"`
 }
@@ -14336,8 +16086,8 @@ func (future *ReplicationFabricsCheckConsistencyFuture) Result(client Replicatio
 	return
 }
 
-// ReplicationFabricsCreateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationFabricsCreateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationFabricsCreateFuture struct {
 	azure.Future
 }
@@ -14365,8 +16115,8 @@ func (future *ReplicationFabricsCreateFuture) Result(client ReplicationFabricsCl
 	return
 }
 
-// ReplicationFabricsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationFabricsDeleteFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationFabricsDeleteFuture struct {
 	azure.Future
 }
@@ -14388,8 +16138,8 @@ func (future *ReplicationFabricsDeleteFuture) Result(client ReplicationFabricsCl
 	return
 }
 
-// ReplicationFabricsMigrateToAadFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationFabricsMigrateToAadFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationFabricsMigrateToAadFuture struct {
 	azure.Future
 }
@@ -14654,6 +16404,174 @@ func (future *ReplicationJobsResumeFuture) Result(client ReplicationJobsClient) 
 	return
 }
 
+// ReplicationMigrationItemsCreateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
+type ReplicationMigrationItemsCreateFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *ReplicationMigrationItemsCreateFuture) Result(client ReplicationMigrationItemsClient) (mi MigrationItem, err error) {
+	var done bool
+	done, err = future.Done(client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationMigrationItemsCreateFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("siterecovery.ReplicationMigrationItemsCreateFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if mi.Response.Response, err = future.GetResult(sender); err == nil && mi.Response.Response.StatusCode != http.StatusNoContent {
+		mi, err = client.CreateResponder(mi.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "siterecovery.ReplicationMigrationItemsCreateFuture", "Result", mi.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
+// ReplicationMigrationItemsDeleteFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
+type ReplicationMigrationItemsDeleteFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *ReplicationMigrationItemsDeleteFuture) Result(client ReplicationMigrationItemsClient) (ar autorest.Response, err error) {
+	var done bool
+	done, err = future.Done(client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationMigrationItemsDeleteFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("siterecovery.ReplicationMigrationItemsDeleteFuture")
+		return
+	}
+	ar.Response = future.Response()
+	return
+}
+
+// ReplicationMigrationItemsMigrateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
+type ReplicationMigrationItemsMigrateFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *ReplicationMigrationItemsMigrateFuture) Result(client ReplicationMigrationItemsClient) (mi MigrationItem, err error) {
+	var done bool
+	done, err = future.Done(client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationMigrationItemsMigrateFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("siterecovery.ReplicationMigrationItemsMigrateFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if mi.Response.Response, err = future.GetResult(sender); err == nil && mi.Response.Response.StatusCode != http.StatusNoContent {
+		mi, err = client.MigrateResponder(mi.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "siterecovery.ReplicationMigrationItemsMigrateFuture", "Result", mi.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
+// ReplicationMigrationItemsTestMigrateCleanupFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
+type ReplicationMigrationItemsTestMigrateCleanupFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *ReplicationMigrationItemsTestMigrateCleanupFuture) Result(client ReplicationMigrationItemsClient) (mi MigrationItem, err error) {
+	var done bool
+	done, err = future.Done(client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationMigrationItemsTestMigrateCleanupFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("siterecovery.ReplicationMigrationItemsTestMigrateCleanupFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if mi.Response.Response, err = future.GetResult(sender); err == nil && mi.Response.Response.StatusCode != http.StatusNoContent {
+		mi, err = client.TestMigrateCleanupResponder(mi.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "siterecovery.ReplicationMigrationItemsTestMigrateCleanupFuture", "Result", mi.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
+// ReplicationMigrationItemsTestMigrateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
+type ReplicationMigrationItemsTestMigrateFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *ReplicationMigrationItemsTestMigrateFuture) Result(client ReplicationMigrationItemsClient) (mi MigrationItem, err error) {
+	var done bool
+	done, err = future.Done(client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationMigrationItemsTestMigrateFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("siterecovery.ReplicationMigrationItemsTestMigrateFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if mi.Response.Response, err = future.GetResult(sender); err == nil && mi.Response.Response.StatusCode != http.StatusNoContent {
+		mi, err = client.TestMigrateResponder(mi.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "siterecovery.ReplicationMigrationItemsTestMigrateFuture", "Result", mi.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
+// ReplicationMigrationItemsUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
+type ReplicationMigrationItemsUpdateFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *ReplicationMigrationItemsUpdateFuture) Result(client ReplicationMigrationItemsClient) (mi MigrationItem, err error) {
+	var done bool
+	done, err = future.Done(client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationMigrationItemsUpdateFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("siterecovery.ReplicationMigrationItemsUpdateFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if mi.Response.Response, err = future.GetResult(sender); err == nil && mi.Response.Response.StatusCode != http.StatusNoContent {
+		mi, err = client.UpdateResponder(mi.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "siterecovery.ReplicationMigrationItemsUpdateFuture", "Result", mi.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
 // ReplicationNetworkMappingsCreateFuture an abstraction for monitoring and retrieving the results of a
 // long-running operation.
 type ReplicationNetworkMappingsCreateFuture struct {
@@ -14735,8 +16653,8 @@ func (future *ReplicationNetworkMappingsUpdateFuture) Result(client ReplicationN
 	return
 }
 
-// ReplicationPoliciesCreateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationPoliciesCreateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationPoliciesCreateFuture struct {
 	azure.Future
 }
@@ -14764,8 +16682,8 @@ func (future *ReplicationPoliciesCreateFuture) Result(client ReplicationPolicies
 	return
 }
 
-// ReplicationPoliciesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationPoliciesDeleteFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationPoliciesDeleteFuture struct {
 	azure.Future
 }
@@ -14787,8 +16705,8 @@ func (future *ReplicationPoliciesDeleteFuture) Result(client ReplicationPolicies
 	return
 }
 
-// ReplicationPoliciesUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationPoliciesUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationPoliciesUpdateFuture struct {
 	azure.Future
 }
@@ -14840,27 +16758,44 @@ type ReplicationProtectedItemCollection struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ReplicationProtectedItemCollectionIterator provides access to a complete listing of ReplicationProtectedItem
-// values.
+// ReplicationProtectedItemCollectionIterator provides access to a complete listing of
+// ReplicationProtectedItem values.
 type ReplicationProtectedItemCollectionIterator struct {
 	i    int
 	page ReplicationProtectedItemCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ReplicationProtectedItemCollectionIterator) Next() error {
+func (iter *ReplicationProtectedItemCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationProtectedItemCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ReplicationProtectedItemCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -14882,6 +16817,11 @@ func (iter ReplicationProtectedItemCollectionIterator) Value() ReplicationProtec
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ReplicationProtectedItemCollectionIterator type.
+func NewReplicationProtectedItemCollectionIterator(page ReplicationProtectedItemCollectionPage) ReplicationProtectedItemCollectionIterator {
+	return ReplicationProtectedItemCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rpic ReplicationProtectedItemCollection) IsEmpty() bool {
 	return rpic.Value == nil || len(*rpic.Value) == 0
@@ -14889,11 +16829,11 @@ func (rpic ReplicationProtectedItemCollection) IsEmpty() bool {
 
 // replicationProtectedItemCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rpic ReplicationProtectedItemCollection) replicationProtectedItemCollectionPreparer() (*http.Request, error) {
+func (rpic ReplicationProtectedItemCollection) replicationProtectedItemCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if rpic.NextLink == nil || len(to.String(rpic.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rpic.NextLink)))
@@ -14901,19 +16841,36 @@ func (rpic ReplicationProtectedItemCollection) replicationProtectedItemCollectio
 
 // ReplicationProtectedItemCollectionPage contains a page of ReplicationProtectedItem values.
 type ReplicationProtectedItemCollectionPage struct {
-	fn   func(ReplicationProtectedItemCollection) (ReplicationProtectedItemCollection, error)
+	fn   func(context.Context, ReplicationProtectedItemCollection) (ReplicationProtectedItemCollection, error)
 	rpic ReplicationProtectedItemCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ReplicationProtectedItemCollectionPage) Next() error {
-	next, err := page.fn(page.rpic)
+func (page *ReplicationProtectedItemCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationProtectedItemCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rpic)
 	if err != nil {
 		return err
 	}
 	page.rpic = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ReplicationProtectedItemCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -14932,6 +16889,11 @@ func (page ReplicationProtectedItemCollectionPage) Values() []ReplicationProtect
 		return nil
 	}
 	return *page.rpic.Value
+}
+
+// Creates a new instance of the ReplicationProtectedItemCollectionPage type.
+func NewReplicationProtectedItemCollectionPage(getNextPage func(context.Context, ReplicationProtectedItemCollection) (ReplicationProtectedItemCollection, error)) ReplicationProtectedItemCollectionPage {
+	return ReplicationProtectedItemCollectionPage{fn: getNextPage}
 }
 
 // ReplicationProtectedItemProperties replication protected item custom data details.
@@ -15249,8 +17211,8 @@ func (rpip *ReplicationProtectedItemProperties) UnmarshalJSON(body []byte) error
 	return nil
 }
 
-// ReplicationProtectedItemsApplyRecoveryPointFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationProtectedItemsApplyRecoveryPointFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
 type ReplicationProtectedItemsApplyRecoveryPointFuture struct {
 	azure.Future
 }
@@ -15278,8 +17240,8 @@ func (future *ReplicationProtectedItemsApplyRecoveryPointFuture) Result(client R
 	return
 }
 
-// ReplicationProtectedItemsCreateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationProtectedItemsCreateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationProtectedItemsCreateFuture struct {
 	azure.Future
 }
@@ -15307,8 +17269,8 @@ func (future *ReplicationProtectedItemsCreateFuture) Result(client ReplicationPr
 	return
 }
 
-// ReplicationProtectedItemsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationProtectedItemsDeleteFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationProtectedItemsDeleteFuture struct {
 	azure.Future
 }
@@ -15330,8 +17292,8 @@ func (future *ReplicationProtectedItemsDeleteFuture) Result(client ReplicationPr
 	return
 }
 
-// ReplicationProtectedItemsFailoverCommitFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationProtectedItemsFailoverCommitFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
 type ReplicationProtectedItemsFailoverCommitFuture struct {
 	azure.Future
 }
@@ -15359,8 +17321,8 @@ func (future *ReplicationProtectedItemsFailoverCommitFuture) Result(client Repli
 	return
 }
 
-// ReplicationProtectedItemsPlannedFailoverFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationProtectedItemsPlannedFailoverFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
 type ReplicationProtectedItemsPlannedFailoverFuture struct {
 	azure.Future
 }
@@ -15388,8 +17350,8 @@ func (future *ReplicationProtectedItemsPlannedFailoverFuture) Result(client Repl
 	return
 }
 
-// ReplicationProtectedItemsPurgeFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationProtectedItemsPurgeFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationProtectedItemsPurgeFuture struct {
 	azure.Future
 }
@@ -15411,8 +17373,8 @@ func (future *ReplicationProtectedItemsPurgeFuture) Result(client ReplicationPro
 	return
 }
 
-// ReplicationProtectedItemsRepairReplicationFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationProtectedItemsRepairReplicationFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
 type ReplicationProtectedItemsRepairReplicationFuture struct {
 	azure.Future
 }
@@ -15469,8 +17431,8 @@ func (future *ReplicationProtectedItemsReprotectFuture) Result(client Replicatio
 	return
 }
 
-// ReplicationProtectedItemsTestFailoverCleanupFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationProtectedItemsTestFailoverCleanupFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
 type ReplicationProtectedItemsTestFailoverCleanupFuture struct {
 	azure.Future
 }
@@ -15498,8 +17460,8 @@ func (future *ReplicationProtectedItemsTestFailoverCleanupFuture) Result(client 
 	return
 }
 
-// ReplicationProtectedItemsTestFailoverFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationProtectedItemsTestFailoverFuture an abstraction for monitoring and retrieving the results of
+// a long-running operation.
 type ReplicationProtectedItemsTestFailoverFuture struct {
 	azure.Future
 }
@@ -15527,8 +17489,8 @@ func (future *ReplicationProtectedItemsTestFailoverFuture) Result(client Replica
 	return
 }
 
-// ReplicationProtectedItemsUnplannedFailoverFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationProtectedItemsUnplannedFailoverFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
 type ReplicationProtectedItemsUnplannedFailoverFuture struct {
 	azure.Future
 }
@@ -15556,8 +17518,8 @@ func (future *ReplicationProtectedItemsUnplannedFailoverFuture) Result(client Re
 	return
 }
 
-// ReplicationProtectedItemsUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationProtectedItemsUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationProtectedItemsUpdateFuture struct {
 	azure.Future
 }
@@ -15585,8 +17547,8 @@ func (future *ReplicationProtectedItemsUpdateFuture) Result(client ReplicationPr
 	return
 }
 
-// ReplicationProtectedItemsUpdateMobilityServiceFuture an abstraction for monitoring and retrieving the results of
-// a long-running operation.
+// ReplicationProtectedItemsUpdateMobilityServiceFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
 type ReplicationProtectedItemsUpdateMobilityServiceFuture struct {
 	azure.Future
 }
@@ -15614,8 +17576,8 @@ func (future *ReplicationProtectedItemsUpdateMobilityServiceFuture) Result(clien
 	return
 }
 
-// ReplicationProtectionContainerMappingsCreateFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationProtectionContainerMappingsCreateFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
 type ReplicationProtectionContainerMappingsCreateFuture struct {
 	azure.Future
 }
@@ -15643,8 +17605,8 @@ func (future *ReplicationProtectionContainerMappingsCreateFuture) Result(client 
 	return
 }
 
-// ReplicationProtectionContainerMappingsDeleteFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationProtectionContainerMappingsDeleteFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
 type ReplicationProtectionContainerMappingsDeleteFuture struct {
 	azure.Future
 }
@@ -15666,8 +17628,8 @@ func (future *ReplicationProtectionContainerMappingsDeleteFuture) Result(client 
 	return
 }
 
-// ReplicationProtectionContainerMappingsPurgeFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationProtectionContainerMappingsPurgeFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
 type ReplicationProtectionContainerMappingsPurgeFuture struct {
 	azure.Future
 }
@@ -15689,8 +17651,8 @@ func (future *ReplicationProtectionContainerMappingsPurgeFuture) Result(client R
 	return
 }
 
-// ReplicationProtectionContainerMappingsUpdateFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationProtectionContainerMappingsUpdateFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
 type ReplicationProtectionContainerMappingsUpdateFuture struct {
 	azure.Future
 }
@@ -15718,8 +17680,8 @@ func (future *ReplicationProtectionContainerMappingsUpdateFuture) Result(client 
 	return
 }
 
-// ReplicationProtectionContainersCreateFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationProtectionContainersCreateFuture an abstraction for monitoring and retrieving the results of
+// a long-running operation.
 type ReplicationProtectionContainersCreateFuture struct {
 	azure.Future
 }
@@ -15747,8 +17709,8 @@ func (future *ReplicationProtectionContainersCreateFuture) Result(client Replica
 	return
 }
 
-// ReplicationProtectionContainersDeleteFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationProtectionContainersDeleteFuture an abstraction for monitoring and retrieving the results of
+// a long-running operation.
 type ReplicationProtectionContainersDeleteFuture struct {
 	azure.Future
 }
@@ -15770,8 +17732,8 @@ func (future *ReplicationProtectionContainersDeleteFuture) Result(client Replica
 	return
 }
 
-// ReplicationProtectionContainersDiscoverProtectableItemFuture an abstraction for monitoring and retrieving the
-// results of a long-running operation.
+// ReplicationProtectionContainersDiscoverProtectableItemFuture an abstraction for monitoring and
+// retrieving the results of a long-running operation.
 type ReplicationProtectionContainersDiscoverProtectableItemFuture struct {
 	azure.Future
 }
@@ -15799,8 +17761,8 @@ func (future *ReplicationProtectionContainersDiscoverProtectableItemFuture) Resu
 	return
 }
 
-// ReplicationProtectionContainersSwitchProtectionFuture an abstraction for monitoring and retrieving the results
-// of a long-running operation.
+// ReplicationProtectionContainersSwitchProtectionFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
 type ReplicationProtectionContainersSwitchProtectionFuture struct {
 	azure.Future
 }
@@ -15837,12 +17799,13 @@ type ReplicationProviderContainerUnmappingInput struct {
 // BasicReplicationProviderSpecificContainerCreationInput provider specific input for container creation operation.
 type BasicReplicationProviderSpecificContainerCreationInput interface {
 	AsA2AContainerCreationInput() (*A2AContainerCreationInput, bool)
+	AsVMwareCbtContainerCreationInput() (*VMwareCbtContainerCreationInput, bool)
 	AsReplicationProviderSpecificContainerCreationInput() (*ReplicationProviderSpecificContainerCreationInput, bool)
 }
 
 // ReplicationProviderSpecificContainerCreationInput provider specific input for container creation operation.
 type ReplicationProviderSpecificContainerCreationInput struct {
-	// InstanceType - Possible values include: 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A'
+	// InstanceType - Possible values include: 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero'
 	InstanceType InstanceTypeBasicReplicationProviderSpecificContainerCreationInput `json:"instanceType,omitempty"`
 }
 
@@ -15858,6 +17821,10 @@ func unmarshalBasicReplicationProviderSpecificContainerCreationInput(body []byte
 		var acci A2AContainerCreationInput
 		err := json.Unmarshal(body, &acci)
 		return acci, err
+	case string(InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero):
+		var vmccci VMwareCbtContainerCreationInput
+		err := json.Unmarshal(body, &vmccci)
+		return vmccci, err
 	default:
 		var rpscci ReplicationProviderSpecificContainerCreationInput
 		err := json.Unmarshal(body, &rpscci)
@@ -15898,6 +17865,11 @@ func (rpscci ReplicationProviderSpecificContainerCreationInput) AsA2AContainerCr
 	return nil, false
 }
 
+// AsVMwareCbtContainerCreationInput is the BasicReplicationProviderSpecificContainerCreationInput implementation for ReplicationProviderSpecificContainerCreationInput.
+func (rpscci ReplicationProviderSpecificContainerCreationInput) AsVMwareCbtContainerCreationInput() (*VMwareCbtContainerCreationInput, bool) {
+	return nil, false
+}
+
 // AsReplicationProviderSpecificContainerCreationInput is the BasicReplicationProviderSpecificContainerCreationInput implementation for ReplicationProviderSpecificContainerCreationInput.
 func (rpscci ReplicationProviderSpecificContainerCreationInput) AsReplicationProviderSpecificContainerCreationInput() (*ReplicationProviderSpecificContainerCreationInput, bool) {
 	return &rpscci, true
@@ -15911,12 +17883,13 @@ func (rpscci ReplicationProviderSpecificContainerCreationInput) AsBasicReplicati
 // BasicReplicationProviderSpecificContainerMappingInput provider specific input for pairing operations.
 type BasicReplicationProviderSpecificContainerMappingInput interface {
 	AsA2AContainerMappingInput() (*A2AContainerMappingInput, bool)
+	AsVMwareCbtContainerMappingInput() (*VMwareCbtContainerMappingInput, bool)
 	AsReplicationProviderSpecificContainerMappingInput() (*ReplicationProviderSpecificContainerMappingInput, bool)
 }
 
 // ReplicationProviderSpecificContainerMappingInput provider specific input for pairing operations.
 type ReplicationProviderSpecificContainerMappingInput struct {
-	// InstanceType - Possible values include: 'InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeReplicationProviderSpecificContainerMappingInput', 'InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeA2A'
+	// InstanceType - Possible values include: 'InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeReplicationProviderSpecificContainerMappingInput', 'InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeA2A', 'InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeVMwareCbt'
 	InstanceType InstanceTypeBasicReplicationProviderSpecificContainerMappingInput `json:"instanceType,omitempty"`
 }
 
@@ -15932,6 +17905,10 @@ func unmarshalBasicReplicationProviderSpecificContainerMappingInput(body []byte)
 		var acmi A2AContainerMappingInput
 		err := json.Unmarshal(body, &acmi)
 		return acmi, err
+	case string(InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeVMwareCbt):
+		var vmccmi VMwareCbtContainerMappingInput
+		err := json.Unmarshal(body, &vmccmi)
+		return vmccmi, err
 	default:
 		var rpscmi ReplicationProviderSpecificContainerMappingInput
 		err := json.Unmarshal(body, &rpscmi)
@@ -15969,6 +17946,11 @@ func (rpscmi ReplicationProviderSpecificContainerMappingInput) MarshalJSON() ([]
 
 // AsA2AContainerMappingInput is the BasicReplicationProviderSpecificContainerMappingInput implementation for ReplicationProviderSpecificContainerMappingInput.
 func (rpscmi ReplicationProviderSpecificContainerMappingInput) AsA2AContainerMappingInput() (*A2AContainerMappingInput, bool) {
+	return nil, false
+}
+
+// AsVMwareCbtContainerMappingInput is the BasicReplicationProviderSpecificContainerMappingInput implementation for ReplicationProviderSpecificContainerMappingInput.
+func (rpscmi ReplicationProviderSpecificContainerMappingInput) AsVMwareCbtContainerMappingInput() (*VMwareCbtContainerMappingInput, bool) {
 	return nil, false
 }
 
@@ -16122,7 +18104,8 @@ type BasicReplicationProviderSpecificUpdateContainerMappingInput interface {
 	AsReplicationProviderSpecificUpdateContainerMappingInput() (*ReplicationProviderSpecificUpdateContainerMappingInput, bool)
 }
 
-// ReplicationProviderSpecificUpdateContainerMappingInput provider specific input for update pairing operations.
+// ReplicationProviderSpecificUpdateContainerMappingInput provider specific input for update pairing
+// operations.
 type ReplicationProviderSpecificUpdateContainerMappingInput struct {
 	// InstanceType - Possible values include: 'InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInputInstanceTypeReplicationProviderSpecificUpdateContainerMappingInput', 'InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInputInstanceTypeA2A'
 	InstanceType InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInput `json:"instanceType,omitempty"`
@@ -16190,8 +18173,8 @@ func (rpsucmi ReplicationProviderSpecificUpdateContainerMappingInput) AsBasicRep
 	return &rpsucmi, true
 }
 
-// ReplicationRecoveryPlansCreateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationRecoveryPlansCreateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationRecoveryPlansCreateFuture struct {
 	azure.Future
 }
@@ -16219,8 +18202,8 @@ func (future *ReplicationRecoveryPlansCreateFuture) Result(client ReplicationRec
 	return
 }
 
-// ReplicationRecoveryPlansDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationRecoveryPlansDeleteFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationRecoveryPlansDeleteFuture struct {
 	azure.Future
 }
@@ -16242,8 +18225,8 @@ func (future *ReplicationRecoveryPlansDeleteFuture) Result(client ReplicationRec
 	return
 }
 
-// ReplicationRecoveryPlansFailoverCommitFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationRecoveryPlansFailoverCommitFuture an abstraction for monitoring and retrieving the results of
+// a long-running operation.
 type ReplicationRecoveryPlansFailoverCommitFuture struct {
 	azure.Future
 }
@@ -16271,8 +18254,8 @@ func (future *ReplicationRecoveryPlansFailoverCommitFuture) Result(client Replic
 	return
 }
 
-// ReplicationRecoveryPlansPlannedFailoverFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationRecoveryPlansPlannedFailoverFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
 type ReplicationRecoveryPlansPlannedFailoverFuture struct {
 	azure.Future
 }
@@ -16329,8 +18312,8 @@ func (future *ReplicationRecoveryPlansReprotectFuture) Result(client Replication
 	return
 }
 
-// ReplicationRecoveryPlansTestFailoverCleanupFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationRecoveryPlansTestFailoverCleanupFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
 type ReplicationRecoveryPlansTestFailoverCleanupFuture struct {
 	azure.Future
 }
@@ -16387,8 +18370,8 @@ func (future *ReplicationRecoveryPlansTestFailoverFuture) Result(client Replicat
 	return
 }
 
-// ReplicationRecoveryPlansUnplannedFailoverFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationRecoveryPlansUnplannedFailoverFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
 type ReplicationRecoveryPlansUnplannedFailoverFuture struct {
 	azure.Future
 }
@@ -16416,8 +18399,8 @@ func (future *ReplicationRecoveryPlansUnplannedFailoverFuture) Result(client Rep
 	return
 }
 
-// ReplicationRecoveryPlansUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationRecoveryPlansUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationRecoveryPlansUpdateFuture struct {
 	azure.Future
 }
@@ -16445,8 +18428,37 @@ func (future *ReplicationRecoveryPlansUpdateFuture) Result(client ReplicationRec
 	return
 }
 
-// ReplicationRecoveryServicesProvidersDeleteFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationRecoveryServicesProvidersCreateFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
+type ReplicationRecoveryServicesProvidersCreateFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *ReplicationRecoveryServicesProvidersCreateFuture) Result(client ReplicationRecoveryServicesProvidersClient) (rsp RecoveryServicesProvider, err error) {
+	var done bool
+	done, err = future.Done(client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationRecoveryServicesProvidersCreateFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("siterecovery.ReplicationRecoveryServicesProvidersCreateFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if rsp.Response.Response, err = future.GetResult(sender); err == nil && rsp.Response.Response.StatusCode != http.StatusNoContent {
+		rsp, err = client.CreateResponder(rsp.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "siterecovery.ReplicationRecoveryServicesProvidersCreateFuture", "Result", rsp.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
+// ReplicationRecoveryServicesProvidersDeleteFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
 type ReplicationRecoveryServicesProvidersDeleteFuture struct {
 	azure.Future
 }
@@ -16468,8 +18480,8 @@ func (future *ReplicationRecoveryServicesProvidersDeleteFuture) Result(client Re
 	return
 }
 
-// ReplicationRecoveryServicesProvidersPurgeFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationRecoveryServicesProvidersPurgeFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
 type ReplicationRecoveryServicesProvidersPurgeFuture struct {
 	azure.Future
 }
@@ -16491,8 +18503,8 @@ func (future *ReplicationRecoveryServicesProvidersPurgeFuture) Result(client Rep
 	return
 }
 
-// ReplicationRecoveryServicesProvidersRefreshProviderFuture an abstraction for monitoring and retrieving the
-// results of a long-running operation.
+// ReplicationRecoveryServicesProvidersRefreshProviderFuture an abstraction for monitoring and retrieving
+// the results of a long-running operation.
 type ReplicationRecoveryServicesProvidersRefreshProviderFuture struct {
 	azure.Future
 }
@@ -16520,8 +18532,8 @@ func (future *ReplicationRecoveryServicesProvidersRefreshProviderFuture) Result(
 	return
 }
 
-// ReplicationStorageClassificationMappingsCreateFuture an abstraction for monitoring and retrieving the results of
-// a long-running operation.
+// ReplicationStorageClassificationMappingsCreateFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
 type ReplicationStorageClassificationMappingsCreateFuture struct {
 	azure.Future
 }
@@ -16549,8 +18561,8 @@ func (future *ReplicationStorageClassificationMappingsCreateFuture) Result(clien
 	return
 }
 
-// ReplicationStorageClassificationMappingsDeleteFuture an abstraction for monitoring and retrieving the results of
-// a long-running operation.
+// ReplicationStorageClassificationMappingsDeleteFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
 type ReplicationStorageClassificationMappingsDeleteFuture struct {
 	azure.Future
 }
@@ -16572,8 +18584,8 @@ func (future *ReplicationStorageClassificationMappingsDeleteFuture) Result(clien
 	return
 }
 
-// ReplicationVaultHealthRefreshFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationVaultHealthRefreshFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationVaultHealthRefreshFuture struct {
 	azure.Future
 }
@@ -16601,8 +18613,8 @@ func (future *ReplicationVaultHealthRefreshFuture) Result(client ReplicationVaul
 	return
 }
 
-// ReplicationvCentersCreateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationvCentersCreateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationvCentersCreateFuture struct {
 	azure.Future
 }
@@ -16630,8 +18642,8 @@ func (future *ReplicationvCentersCreateFuture) Result(client ReplicationvCenters
 	return
 }
 
-// ReplicationvCentersDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationvCentersDeleteFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationvCentersDeleteFuture struct {
 	azure.Future
 }
@@ -16653,8 +18665,8 @@ func (future *ReplicationvCentersDeleteFuture) Result(client ReplicationvCenters
 	return
 }
 
-// ReplicationvCentersUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationvCentersUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationvCentersUpdateFuture struct {
 	azure.Future
 }
@@ -16694,9 +18706,10 @@ type Resource struct {
 	Location *string `json:"location,omitempty"`
 }
 
-// ResourceHealthSummary base class to define the health summary of the resources contained under an Arm resource.
+// ResourceHealthSummary base class to define the health summary of the resources contained under an Arm
+// resource.
 type ResourceHealthSummary struct {
-	// ResourceCount - The count of total resources umder the container.
+	// ResourceCount - The count of total resources under the container.
 	ResourceCount *int32 `json:"resourceCount,omitempty"`
 	// Issues - The list of summary of health errors across the resources under the container.
 	Issues *[]HealthErrorSummary `json:"issues,omitempty"`
@@ -17052,7 +19065,7 @@ type ServiceError struct {
 // StorageClassification storage object definition.
 type StorageClassification struct {
 	autorest.Response `json:"-"`
-	// Properties - Proprties of the storage object.
+	// Properties - Properties of the storage object.
 	Properties *StorageClassificationProperties `json:"properties,omitempty"`
 	// ID - Resource Id
 	ID *string `json:"id,omitempty"`
@@ -17073,26 +19086,44 @@ type StorageClassificationCollection struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// StorageClassificationCollectionIterator provides access to a complete listing of StorageClassification values.
+// StorageClassificationCollectionIterator provides access to a complete listing of StorageClassification
+// values.
 type StorageClassificationCollectionIterator struct {
 	i    int
 	page StorageClassificationCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *StorageClassificationCollectionIterator) Next() error {
+func (iter *StorageClassificationCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/StorageClassificationCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *StorageClassificationCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -17114,6 +19145,11 @@ func (iter StorageClassificationCollectionIterator) Value() StorageClassificatio
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the StorageClassificationCollectionIterator type.
+func NewStorageClassificationCollectionIterator(page StorageClassificationCollectionPage) StorageClassificationCollectionIterator {
+	return StorageClassificationCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (scc StorageClassificationCollection) IsEmpty() bool {
 	return scc.Value == nil || len(*scc.Value) == 0
@@ -17121,11 +19157,11 @@ func (scc StorageClassificationCollection) IsEmpty() bool {
 
 // storageClassificationCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (scc StorageClassificationCollection) storageClassificationCollectionPreparer() (*http.Request, error) {
+func (scc StorageClassificationCollection) storageClassificationCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if scc.NextLink == nil || len(to.String(scc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(scc.NextLink)))
@@ -17133,19 +19169,36 @@ func (scc StorageClassificationCollection) storageClassificationCollectionPrepar
 
 // StorageClassificationCollectionPage contains a page of StorageClassification values.
 type StorageClassificationCollectionPage struct {
-	fn  func(StorageClassificationCollection) (StorageClassificationCollection, error)
+	fn  func(context.Context, StorageClassificationCollection) (StorageClassificationCollection, error)
 	scc StorageClassificationCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *StorageClassificationCollectionPage) Next() error {
-	next, err := page.fn(page.scc)
+func (page *StorageClassificationCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/StorageClassificationCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.scc)
 	if err != nil {
 		return err
 	}
 	page.scc = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *StorageClassificationCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -17166,10 +19219,15 @@ func (page StorageClassificationCollectionPage) Values() []StorageClassification
 	return *page.scc.Value
 }
 
+// Creates a new instance of the StorageClassificationCollectionPage type.
+func NewStorageClassificationCollectionPage(getNextPage func(context.Context, StorageClassificationCollection) (StorageClassificationCollection, error)) StorageClassificationCollectionPage {
+	return StorageClassificationCollectionPage{fn: getNextPage}
+}
+
 // StorageClassificationMapping storage mapping object.
 type StorageClassificationMapping struct {
 	autorest.Response `json:"-"`
-	// Properties - Proprties of the storage mappping object.
+	// Properties - Properties of the storage mapping object.
 	Properties *StorageClassificationMappingProperties `json:"properties,omitempty"`
 	// ID - Resource Id
 	ID *string `json:"id,omitempty"`
@@ -17197,20 +19255,37 @@ type StorageClassificationMappingCollectionIterator struct {
 	page StorageClassificationMappingCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *StorageClassificationMappingCollectionIterator) Next() error {
+func (iter *StorageClassificationMappingCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/StorageClassificationMappingCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *StorageClassificationMappingCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -17232,6 +19307,11 @@ func (iter StorageClassificationMappingCollectionIterator) Value() StorageClassi
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the StorageClassificationMappingCollectionIterator type.
+func NewStorageClassificationMappingCollectionIterator(page StorageClassificationMappingCollectionPage) StorageClassificationMappingCollectionIterator {
+	return StorageClassificationMappingCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (scmc StorageClassificationMappingCollection) IsEmpty() bool {
 	return scmc.Value == nil || len(*scmc.Value) == 0
@@ -17239,11 +19319,11 @@ func (scmc StorageClassificationMappingCollection) IsEmpty() bool {
 
 // storageClassificationMappingCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (scmc StorageClassificationMappingCollection) storageClassificationMappingCollectionPreparer() (*http.Request, error) {
+func (scmc StorageClassificationMappingCollection) storageClassificationMappingCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if scmc.NextLink == nil || len(to.String(scmc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(scmc.NextLink)))
@@ -17251,19 +19331,36 @@ func (scmc StorageClassificationMappingCollection) storageClassificationMappingC
 
 // StorageClassificationMappingCollectionPage contains a page of StorageClassificationMapping values.
 type StorageClassificationMappingCollectionPage struct {
-	fn   func(StorageClassificationMappingCollection) (StorageClassificationMappingCollection, error)
+	fn   func(context.Context, StorageClassificationMappingCollection) (StorageClassificationMappingCollection, error)
 	scmc StorageClassificationMappingCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *StorageClassificationMappingCollectionPage) Next() error {
-	next, err := page.fn(page.scmc)
+func (page *StorageClassificationMappingCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/StorageClassificationMappingCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.scmc)
 	if err != nil {
 		return err
 	}
 	page.scmc = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *StorageClassificationMappingCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -17282,6 +19379,11 @@ func (page StorageClassificationMappingCollectionPage) Values() []StorageClassif
 		return nil
 	}
 	return *page.scmc.Value
+}
+
+// Creates a new instance of the StorageClassificationMappingCollectionPage type.
+func NewStorageClassificationMappingCollectionPage(getNextPage func(context.Context, StorageClassificationMappingCollection) (StorageClassificationMappingCollection, error)) StorageClassificationMappingCollectionPage {
+	return StorageClassificationMappingCollectionPage{fn: getNextPage}
 }
 
 // StorageClassificationMappingInput storage mapping input.
@@ -17526,20 +19628,37 @@ type TargetComputeSizeCollectionIterator struct {
 	page TargetComputeSizeCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *TargetComputeSizeCollectionIterator) Next() error {
+func (iter *TargetComputeSizeCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TargetComputeSizeCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *TargetComputeSizeCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -17561,6 +19680,11 @@ func (iter TargetComputeSizeCollectionIterator) Value() TargetComputeSize {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the TargetComputeSizeCollectionIterator type.
+func NewTargetComputeSizeCollectionIterator(page TargetComputeSizeCollectionPage) TargetComputeSizeCollectionIterator {
+	return TargetComputeSizeCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (tcsc TargetComputeSizeCollection) IsEmpty() bool {
 	return tcsc.Value == nil || len(*tcsc.Value) == 0
@@ -17568,11 +19692,11 @@ func (tcsc TargetComputeSizeCollection) IsEmpty() bool {
 
 // targetComputeSizeCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (tcsc TargetComputeSizeCollection) targetComputeSizeCollectionPreparer() (*http.Request, error) {
+func (tcsc TargetComputeSizeCollection) targetComputeSizeCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if tcsc.NextLink == nil || len(to.String(tcsc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(tcsc.NextLink)))
@@ -17580,19 +19704,36 @@ func (tcsc TargetComputeSizeCollection) targetComputeSizeCollectionPreparer() (*
 
 // TargetComputeSizeCollectionPage contains a page of TargetComputeSize values.
 type TargetComputeSizeCollectionPage struct {
-	fn   func(TargetComputeSizeCollection) (TargetComputeSizeCollection, error)
+	fn   func(context.Context, TargetComputeSizeCollection) (TargetComputeSizeCollection, error)
 	tcsc TargetComputeSizeCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *TargetComputeSizeCollectionPage) Next() error {
-	next, err := page.fn(page.tcsc)
+func (page *TargetComputeSizeCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TargetComputeSizeCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.tcsc)
 	if err != nil {
 		return err
 	}
 	page.tcsc = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *TargetComputeSizeCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -17611,6 +19752,11 @@ func (page TargetComputeSizeCollectionPage) Values() []TargetComputeSize {
 		return nil
 	}
 	return *page.tcsc.Value
+}
+
+// Creates a new instance of the TargetComputeSizeCollectionPage type.
+func NewTargetComputeSizeCollectionPage(getNextPage func(context.Context, TargetComputeSizeCollection) (TargetComputeSizeCollection, error)) TargetComputeSizeCollectionPage {
+	return TargetComputeSizeCollectionPage{fn: getNextPage}
 }
 
 // TargetComputeSizeProperties represents applicable recovery vm sizes properties.
@@ -17954,6 +20100,127 @@ func (tfjd TestFailoverJobDetails) AsBasicJobDetails() (BasicJobDetails, bool) {
 	return &tfjd, true
 }
 
+// TestMigrateCleanupInput input for test migrate cleanup.
+type TestMigrateCleanupInput struct {
+	// Properties - Test migrate cleanup input properties.
+	Properties *TestMigrateCleanupInputProperties `json:"properties,omitempty"`
+}
+
+// TestMigrateCleanupInputProperties test migrate cleanup input properties.
+type TestMigrateCleanupInputProperties struct {
+	// Comments - Test migrate cleanup comments.
+	Comments *string `json:"comments,omitempty"`
+}
+
+// TestMigrateInput input for test migrate.
+type TestMigrateInput struct {
+	// Properties - Test migrate input properties.
+	Properties *TestMigrateInputProperties `json:"properties,omitempty"`
+}
+
+// TestMigrateInputProperties test migrate input properties.
+type TestMigrateInputProperties struct {
+	// ProviderSpecificDetails - The provider specific details.
+	ProviderSpecificDetails BasicTestMigrateProviderSpecificInput `json:"providerSpecificDetails,omitempty"`
+}
+
+// UnmarshalJSON is the custom unmarshaler for TestMigrateInputProperties struct.
+func (tmip *TestMigrateInputProperties) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "providerSpecificDetails":
+			if v != nil {
+				providerSpecificDetails, err := unmarshalBasicTestMigrateProviderSpecificInput(*v)
+				if err != nil {
+					return err
+				}
+				tmip.ProviderSpecificDetails = providerSpecificDetails
+			}
+		}
+	}
+
+	return nil
+}
+
+// BasicTestMigrateProviderSpecificInput test migrate provider specific input.
+type BasicTestMigrateProviderSpecificInput interface {
+	AsVMwareCbtTestMigrateInput() (*VMwareCbtTestMigrateInput, bool)
+	AsTestMigrateProviderSpecificInput() (*TestMigrateProviderSpecificInput, bool)
+}
+
+// TestMigrateProviderSpecificInput test migrate provider specific input.
+type TestMigrateProviderSpecificInput struct {
+	// InstanceType - Possible values include: 'InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeTestMigrateProviderSpecificInput', 'InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeVMwareCbt'
+	InstanceType InstanceTypeBasicTestMigrateProviderSpecificInput `json:"instanceType,omitempty"`
+}
+
+func unmarshalBasicTestMigrateProviderSpecificInput(body []byte) (BasicTestMigrateProviderSpecificInput, error) {
+	var m map[string]interface{}
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return nil, err
+	}
+
+	switch m["instanceType"] {
+	case string(InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeVMwareCbt):
+		var vmctmi VMwareCbtTestMigrateInput
+		err := json.Unmarshal(body, &vmctmi)
+		return vmctmi, err
+	default:
+		var tmpsi TestMigrateProviderSpecificInput
+		err := json.Unmarshal(body, &tmpsi)
+		return tmpsi, err
+	}
+}
+func unmarshalBasicTestMigrateProviderSpecificInputArray(body []byte) ([]BasicTestMigrateProviderSpecificInput, error) {
+	var rawMessages []*json.RawMessage
+	err := json.Unmarshal(body, &rawMessages)
+	if err != nil {
+		return nil, err
+	}
+
+	tmpsiArray := make([]BasicTestMigrateProviderSpecificInput, len(rawMessages))
+
+	for index, rawMessage := range rawMessages {
+		tmpsi, err := unmarshalBasicTestMigrateProviderSpecificInput(*rawMessage)
+		if err != nil {
+			return nil, err
+		}
+		tmpsiArray[index] = tmpsi
+	}
+	return tmpsiArray, nil
+}
+
+// MarshalJSON is the custom marshaler for TestMigrateProviderSpecificInput.
+func (tmpsi TestMigrateProviderSpecificInput) MarshalJSON() ([]byte, error) {
+	tmpsi.InstanceType = InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeTestMigrateProviderSpecificInput
+	objectMap := make(map[string]interface{})
+	if tmpsi.InstanceType != "" {
+		objectMap["instanceType"] = tmpsi.InstanceType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsVMwareCbtTestMigrateInput is the BasicTestMigrateProviderSpecificInput implementation for TestMigrateProviderSpecificInput.
+func (tmpsi TestMigrateProviderSpecificInput) AsVMwareCbtTestMigrateInput() (*VMwareCbtTestMigrateInput, bool) {
+	return nil, false
+}
+
+// AsTestMigrateProviderSpecificInput is the BasicTestMigrateProviderSpecificInput implementation for TestMigrateProviderSpecificInput.
+func (tmpsi TestMigrateProviderSpecificInput) AsTestMigrateProviderSpecificInput() (*TestMigrateProviderSpecificInput, bool) {
+	return &tmpsi, true
+}
+
+// AsBasicTestMigrateProviderSpecificInput is the BasicTestMigrateProviderSpecificInput implementation for TestMigrateProviderSpecificInput.
+func (tmpsi TestMigrateProviderSpecificInput) AsBasicTestMigrateProviderSpecificInput() (BasicTestMigrateProviderSpecificInput, bool) {
+	return &tmpsi, true
+}
+
 // UnplannedFailoverInput input definition for planned failover.
 type UnplannedFailoverInput struct {
 	// Properties - Planned failover input properties
@@ -18009,6 +20276,115 @@ func (ufip *UnplannedFailoverInputProperties) UnmarshalJSON(body []byte) error {
 	}
 
 	return nil
+}
+
+// UpdateMigrationItemInput update migration item input.
+type UpdateMigrationItemInput struct {
+	// Properties - Update migration item input properties.
+	Properties *UpdateMigrationItemInputProperties `json:"properties,omitempty"`
+}
+
+// UpdateMigrationItemInputProperties update migration item input properties.
+type UpdateMigrationItemInputProperties struct {
+	// ProviderSpecificDetails - The provider specific input to update migration item.
+	ProviderSpecificDetails BasicUpdateMigrationItemProviderSpecificInput `json:"providerSpecificDetails,omitempty"`
+}
+
+// UnmarshalJSON is the custom unmarshaler for UpdateMigrationItemInputProperties struct.
+func (umiip *UpdateMigrationItemInputProperties) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "providerSpecificDetails":
+			if v != nil {
+				providerSpecificDetails, err := unmarshalBasicUpdateMigrationItemProviderSpecificInput(*v)
+				if err != nil {
+					return err
+				}
+				umiip.ProviderSpecificDetails = providerSpecificDetails
+			}
+		}
+	}
+
+	return nil
+}
+
+// BasicUpdateMigrationItemProviderSpecificInput update migration item provider specific input.
+type BasicUpdateMigrationItemProviderSpecificInput interface {
+	AsVMwareCbtUpdateMigrationItemInput() (*VMwareCbtUpdateMigrationItemInput, bool)
+	AsUpdateMigrationItemProviderSpecificInput() (*UpdateMigrationItemProviderSpecificInput, bool)
+}
+
+// UpdateMigrationItemProviderSpecificInput update migration item provider specific input.
+type UpdateMigrationItemProviderSpecificInput struct {
+	// InstanceType - Possible values include: 'InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeUpdateMigrationItemProviderSpecificInput', 'InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeVMwareCbt'
+	InstanceType InstanceTypeBasicUpdateMigrationItemProviderSpecificInput `json:"instanceType,omitempty"`
+}
+
+func unmarshalBasicUpdateMigrationItemProviderSpecificInput(body []byte) (BasicUpdateMigrationItemProviderSpecificInput, error) {
+	var m map[string]interface{}
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return nil, err
+	}
+
+	switch m["instanceType"] {
+	case string(InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeVMwareCbt):
+		var vmcumii VMwareCbtUpdateMigrationItemInput
+		err := json.Unmarshal(body, &vmcumii)
+		return vmcumii, err
+	default:
+		var umipsi UpdateMigrationItemProviderSpecificInput
+		err := json.Unmarshal(body, &umipsi)
+		return umipsi, err
+	}
+}
+func unmarshalBasicUpdateMigrationItemProviderSpecificInputArray(body []byte) ([]BasicUpdateMigrationItemProviderSpecificInput, error) {
+	var rawMessages []*json.RawMessage
+	err := json.Unmarshal(body, &rawMessages)
+	if err != nil {
+		return nil, err
+	}
+
+	umipsiArray := make([]BasicUpdateMigrationItemProviderSpecificInput, len(rawMessages))
+
+	for index, rawMessage := range rawMessages {
+		umipsi, err := unmarshalBasicUpdateMigrationItemProviderSpecificInput(*rawMessage)
+		if err != nil {
+			return nil, err
+		}
+		umipsiArray[index] = umipsi
+	}
+	return umipsiArray, nil
+}
+
+// MarshalJSON is the custom marshaler for UpdateMigrationItemProviderSpecificInput.
+func (umipsi UpdateMigrationItemProviderSpecificInput) MarshalJSON() ([]byte, error) {
+	umipsi.InstanceType = InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeUpdateMigrationItemProviderSpecificInput
+	objectMap := make(map[string]interface{})
+	if umipsi.InstanceType != "" {
+		objectMap["instanceType"] = umipsi.InstanceType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsVMwareCbtUpdateMigrationItemInput is the BasicUpdateMigrationItemProviderSpecificInput implementation for UpdateMigrationItemProviderSpecificInput.
+func (umipsi UpdateMigrationItemProviderSpecificInput) AsVMwareCbtUpdateMigrationItemInput() (*VMwareCbtUpdateMigrationItemInput, bool) {
+	return nil, false
+}
+
+// AsUpdateMigrationItemProviderSpecificInput is the BasicUpdateMigrationItemProviderSpecificInput implementation for UpdateMigrationItemProviderSpecificInput.
+func (umipsi UpdateMigrationItemProviderSpecificInput) AsUpdateMigrationItemProviderSpecificInput() (*UpdateMigrationItemProviderSpecificInput, bool) {
+	return &umipsi, true
+}
+
+// AsBasicUpdateMigrationItemProviderSpecificInput is the BasicUpdateMigrationItemProviderSpecificInput implementation for UpdateMigrationItemProviderSpecificInput.
+func (umipsi UpdateMigrationItemProviderSpecificInput) AsBasicUpdateMigrationItemProviderSpecificInput() (BasicUpdateMigrationItemProviderSpecificInput, bool) {
+	return &umipsi, true
 }
 
 // UpdateMobilityServiceRequest request to update the mobility service on a protected item.
@@ -18156,7 +20532,7 @@ type UpdateRecoveryPlanInput struct {
 	Properties *UpdateRecoveryPlanInputProperties `json:"properties,omitempty"`
 }
 
-// UpdateRecoveryPlanInputProperties recovery plan updation properties.
+// UpdateRecoveryPlanInputProperties recovery plan update properties.
 type UpdateRecoveryPlanInputProperties struct {
 	// Groups - The recovery plan groups.
 	Groups *[]RecoveryPlanGroup `json:"groups,omitempty"`
@@ -18395,7 +20771,7 @@ type UpdateVCenterRequestProperties struct {
 	ProcessServerID *string `json:"processServerId,omitempty"`
 	// Port - The port number for discovery.
 	Port *string `json:"port,omitempty"`
-	// RunAsAccountID - The CS account Id which has priviliges to update the vCenter.
+	// RunAsAccountID - The CS account Id which has privileges to update the vCenter.
 	RunAsAccountID *string `json:"runAsAccountId,omitempty"`
 }
 
@@ -18456,20 +20832,37 @@ type VCenterCollectionIterator struct {
 	page VCenterCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *VCenterCollectionIterator) Next() error {
+func (iter *VCenterCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VCenterCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *VCenterCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -18491,6 +20884,11 @@ func (iter VCenterCollectionIterator) Value() VCenter {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the VCenterCollectionIterator type.
+func NewVCenterCollectionIterator(page VCenterCollectionPage) VCenterCollectionIterator {
+	return VCenterCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (vcc VCenterCollection) IsEmpty() bool {
 	return vcc.Value == nil || len(*vcc.Value) == 0
@@ -18498,11 +20896,11 @@ func (vcc VCenterCollection) IsEmpty() bool {
 
 // vCenterCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (vcc VCenterCollection) vCenterCollectionPreparer() (*http.Request, error) {
+func (vcc VCenterCollection) vCenterCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if vcc.NextLink == nil || len(to.String(vcc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(vcc.NextLink)))
@@ -18510,19 +20908,36 @@ func (vcc VCenterCollection) vCenterCollectionPreparer() (*http.Request, error) 
 
 // VCenterCollectionPage contains a page of VCenter values.
 type VCenterCollectionPage struct {
-	fn  func(VCenterCollection) (VCenterCollection, error)
+	fn  func(context.Context, VCenterCollection) (VCenterCollection, error)
 	vcc VCenterCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *VCenterCollectionPage) Next() error {
-	next, err := page.fn(page.vcc)
+func (page *VCenterCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VCenterCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.vcc)
 	if err != nil {
 		return err
 	}
 	page.vcc = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *VCenterCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -18543,13 +20958,18 @@ func (page VCenterCollectionPage) Values() []VCenter {
 	return *page.vcc.Value
 }
 
+// Creates a new instance of the VCenterCollectionPage type.
+func NewVCenterCollectionPage(getNextPage func(context.Context, VCenterCollection) (VCenterCollection, error)) VCenterCollectionPage {
+	return VCenterCollectionPage{fn: getNextPage}
+}
+
 // VCenterProperties vCenter properties.
 type VCenterProperties struct {
 	// FriendlyName - Friendly name of the vCenter.
 	FriendlyName *string `json:"friendlyName,omitempty"`
 	// InternalID - VCenter internal ID.
 	InternalID *string `json:"internalId,omitempty"`
-	// LastHeartbeat - The time when the last heartbeat was reveived by vCenter.
+	// LastHeartbeat - The time when the last heartbeat was received by vCenter.
 	LastHeartbeat *date.Time `json:"lastHeartbeat,omitempty"`
 	// DiscoveryStatus - The VCenter discovery status.
 	DiscoveryStatus *string `json:"discoveryStatus,omitempty"`
@@ -18711,8 +21131,8 @@ func (vd VmmDetails) AsBasicFabricSpecificDetails() (BasicFabricSpecificDetails,
 	return &vd, true
 }
 
-// VmmToAzureCreateNetworkMappingInput create network mappings input properties/behaviour specific to Vmm to Azure
-// Network mapping.
+// VmmToAzureCreateNetworkMappingInput create network mappings input properties/behavior specific to Vmm to
+// Azure Network mapping.
 type VmmToAzureCreateNetworkMappingInput struct {
 	// InstanceType - Possible values include: 'InstanceTypeFabricSpecificCreateNetworkMappingInput', 'InstanceTypeAzureToAzure', 'InstanceTypeVmmToAzure', 'InstanceTypeVmmToVmm'
 	InstanceType InstanceTypeBasicFabricSpecificCreateNetworkMappingInput `json:"instanceType,omitempty"`
@@ -18794,7 +21214,8 @@ func (vtanms VmmToAzureNetworkMappingSettings) AsBasicNetworkMappingFabricSpecif
 	return &vtanms, true
 }
 
-// VmmToAzureUpdateNetworkMappingInput update network mappings input properties/behaviour specific to vmm to azure.
+// VmmToAzureUpdateNetworkMappingInput update network mappings input properties/behavior specific to vmm to
+// azure.
 type VmmToAzureUpdateNetworkMappingInput struct {
 	// InstanceType - Possible values include: 'InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeFabricSpecificUpdateNetworkMappingInput', 'InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeAzureToAzure', 'InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeVmmToAzure', 'InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeVmmToVmm'
 	InstanceType InstanceTypeBasicFabricSpecificUpdateNetworkMappingInput `json:"instanceType,omitempty"`
@@ -18835,8 +21256,8 @@ func (vtaunmi VmmToAzureUpdateNetworkMappingInput) AsBasicFabricSpecificUpdateNe
 	return &vtaunmi, true
 }
 
-// VmmToVmmCreateNetworkMappingInput create network mappings input properties/behaviour specific to vmm to vmm
-// Network mapping.
+// VmmToVmmCreateNetworkMappingInput create network mappings input properties/behavior specific to vmm to
+// vmm Network mapping.
 type VmmToVmmCreateNetworkMappingInput struct {
 	// InstanceType - Possible values include: 'InstanceTypeFabricSpecificCreateNetworkMappingInput', 'InstanceTypeAzureToAzure', 'InstanceTypeVmmToAzure', 'InstanceTypeVmmToVmm'
 	InstanceType InstanceTypeBasicFabricSpecificCreateNetworkMappingInput `json:"instanceType,omitempty"`
@@ -18918,7 +21339,8 @@ func (vtvnms VmmToVmmNetworkMappingSettings) AsBasicNetworkMappingFabricSpecific
 	return &vtvnms, true
 }
 
-// VmmToVmmUpdateNetworkMappingInput update network mappings input properties/behaviour specific to vmm to vmm.
+// VmmToVmmUpdateNetworkMappingInput update network mappings input properties/behavior specific to vmm to
+// vmm.
 type VmmToVmmUpdateNetworkMappingInput struct {
 	// InstanceType - Possible values include: 'InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeFabricSpecificUpdateNetworkMappingInput', 'InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeAzureToAzure', 'InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeVmmToAzure', 'InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeVmmToVmm'
 	InstanceType InstanceTypeBasicFabricSpecificUpdateNetworkMappingInput `json:"instanceType,omitempty"`
@@ -19066,7 +21488,7 @@ type VMNicDetails struct {
 	SelectionType *string `json:"selectionType,omitempty"`
 	// RecoveryNicIPAddressType - IP allocation type for recovery VM.
 	RecoveryNicIPAddressType *string `json:"recoveryNicIpAddressType,omitempty"`
-	// EnableAcceleratedNetworkingOnRecovery - A value indicating whether the NIC has accerated networking enabled.
+	// EnableAcceleratedNetworkingOnRecovery - A value indicating whether the NIC has accelerated networking enabled.
 	EnableAcceleratedNetworkingOnRecovery *bool `json:"enableAcceleratedNetworkingOnRecovery,omitempty"`
 }
 
@@ -19080,7 +21502,7 @@ type VMNicInputDetails struct {
 	ReplicaNicStaticIPAddress *string `json:"replicaNicStaticIPAddress,omitempty"`
 	// SelectionType - Selection type for failover.
 	SelectionType *string `json:"selectionType,omitempty"`
-	// EnableAcceleratedNetworkingOnRecovery - Whether the NIC has accerated networking enabled.
+	// EnableAcceleratedNetworkingOnRecovery - Whether the NIC has accelerated networking enabled.
 	EnableAcceleratedNetworkingOnRecovery *bool `json:"enableAcceleratedNetworkingOnRecovery,omitempty"`
 }
 
@@ -19165,10 +21587,400 @@ func (vnutd VMNicUpdatesTaskDetails) AsBasicTaskTypeDetails() (BasicTaskTypeDeta
 	return &vnutd, true
 }
 
-// VMwareCbtPolicyCreationInput vMware Cbt Policy creation input.
+// VMwareCbtContainerCreationInput vMwareCbt container creation input.
+type VMwareCbtContainerCreationInput struct {
+	// InstanceType - Possible values include: 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero'
+	InstanceType InstanceTypeBasicReplicationProviderSpecificContainerCreationInput `json:"instanceType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for VMwareCbtContainerCreationInput.
+func (vmccci VMwareCbtContainerCreationInput) MarshalJSON() ([]byte, error) {
+	vmccci.InstanceType = InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero
+	objectMap := make(map[string]interface{})
+	if vmccci.InstanceType != "" {
+		objectMap["instanceType"] = vmccci.InstanceType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsA2AContainerCreationInput is the BasicReplicationProviderSpecificContainerCreationInput implementation for VMwareCbtContainerCreationInput.
+func (vmccci VMwareCbtContainerCreationInput) AsA2AContainerCreationInput() (*A2AContainerCreationInput, bool) {
+	return nil, false
+}
+
+// AsVMwareCbtContainerCreationInput is the BasicReplicationProviderSpecificContainerCreationInput implementation for VMwareCbtContainerCreationInput.
+func (vmccci VMwareCbtContainerCreationInput) AsVMwareCbtContainerCreationInput() (*VMwareCbtContainerCreationInput, bool) {
+	return &vmccci, true
+}
+
+// AsReplicationProviderSpecificContainerCreationInput is the BasicReplicationProviderSpecificContainerCreationInput implementation for VMwareCbtContainerCreationInput.
+func (vmccci VMwareCbtContainerCreationInput) AsReplicationProviderSpecificContainerCreationInput() (*ReplicationProviderSpecificContainerCreationInput, bool) {
+	return nil, false
+}
+
+// AsBasicReplicationProviderSpecificContainerCreationInput is the BasicReplicationProviderSpecificContainerCreationInput implementation for VMwareCbtContainerCreationInput.
+func (vmccci VMwareCbtContainerCreationInput) AsBasicReplicationProviderSpecificContainerCreationInput() (BasicReplicationProviderSpecificContainerCreationInput, bool) {
+	return &vmccci, true
+}
+
+// VMwareCbtContainerMappingInput vMwareCbt container mapping input.
+type VMwareCbtContainerMappingInput struct {
+	// KeyVaultID - The target key vault ARM Id.
+	KeyVaultID *string `json:"keyVaultId,omitempty"`
+	// KeyVaultURI - The target key vault URL.
+	KeyVaultURI *string `json:"keyVaultUri,omitempty"`
+	// StorageAccountID - The storage account ARM Id.
+	StorageAccountID *string `json:"storageAccountId,omitempty"`
+	// StorageAccountSasSecretName - The secret name of the storage account.
+	StorageAccountSasSecretName *string `json:"storageAccountSasSecretName,omitempty"`
+	// ServiceBusConnectionStringSecretName - The secret name of the service bus connection string.
+	ServiceBusConnectionStringSecretName *string `json:"serviceBusConnectionStringSecretName,omitempty"`
+	// TargetLocation - The target location.
+	TargetLocation *string `json:"targetLocation,omitempty"`
+	// InstanceType - Possible values include: 'InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeReplicationProviderSpecificContainerMappingInput', 'InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeA2A', 'InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeVMwareCbt'
+	InstanceType InstanceTypeBasicReplicationProviderSpecificContainerMappingInput `json:"instanceType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for VMwareCbtContainerMappingInput.
+func (vmccmi VMwareCbtContainerMappingInput) MarshalJSON() ([]byte, error) {
+	vmccmi.InstanceType = InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeVMwareCbt
+	objectMap := make(map[string]interface{})
+	if vmccmi.KeyVaultID != nil {
+		objectMap["keyVaultId"] = vmccmi.KeyVaultID
+	}
+	if vmccmi.KeyVaultURI != nil {
+		objectMap["keyVaultUri"] = vmccmi.KeyVaultURI
+	}
+	if vmccmi.StorageAccountID != nil {
+		objectMap["storageAccountId"] = vmccmi.StorageAccountID
+	}
+	if vmccmi.StorageAccountSasSecretName != nil {
+		objectMap["storageAccountSasSecretName"] = vmccmi.StorageAccountSasSecretName
+	}
+	if vmccmi.ServiceBusConnectionStringSecretName != nil {
+		objectMap["serviceBusConnectionStringSecretName"] = vmccmi.ServiceBusConnectionStringSecretName
+	}
+	if vmccmi.TargetLocation != nil {
+		objectMap["targetLocation"] = vmccmi.TargetLocation
+	}
+	if vmccmi.InstanceType != "" {
+		objectMap["instanceType"] = vmccmi.InstanceType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsA2AContainerMappingInput is the BasicReplicationProviderSpecificContainerMappingInput implementation for VMwareCbtContainerMappingInput.
+func (vmccmi VMwareCbtContainerMappingInput) AsA2AContainerMappingInput() (*A2AContainerMappingInput, bool) {
+	return nil, false
+}
+
+// AsVMwareCbtContainerMappingInput is the BasicReplicationProviderSpecificContainerMappingInput implementation for VMwareCbtContainerMappingInput.
+func (vmccmi VMwareCbtContainerMappingInput) AsVMwareCbtContainerMappingInput() (*VMwareCbtContainerMappingInput, bool) {
+	return &vmccmi, true
+}
+
+// AsReplicationProviderSpecificContainerMappingInput is the BasicReplicationProviderSpecificContainerMappingInput implementation for VMwareCbtContainerMappingInput.
+func (vmccmi VMwareCbtContainerMappingInput) AsReplicationProviderSpecificContainerMappingInput() (*ReplicationProviderSpecificContainerMappingInput, bool) {
+	return nil, false
+}
+
+// AsBasicReplicationProviderSpecificContainerMappingInput is the BasicReplicationProviderSpecificContainerMappingInput implementation for VMwareCbtContainerMappingInput.
+func (vmccmi VMwareCbtContainerMappingInput) AsBasicReplicationProviderSpecificContainerMappingInput() (BasicReplicationProviderSpecificContainerMappingInput, bool) {
+	return &vmccmi, true
+}
+
+// VMwareCbtDiskInput vMwareCbt disk input.
+type VMwareCbtDiskInput struct {
+	// DiskID - The disk Id.
+	DiskID *string `json:"diskId,omitempty"`
+	// IsOSDisk - A value indicating whether the disk is the OS disk.
+	IsOSDisk *string `json:"isOSDisk,omitempty"`
+	// LogStorageAccountID - The log storage account ARM Id.
+	LogStorageAccountID *string `json:"logStorageAccountId,omitempty"`
+	// LogStorageAccountSasSecretName - The key vault secret name of the log storage account.
+	LogStorageAccountSasSecretName *string `json:"logStorageAccountSasSecretName,omitempty"`
+	// DiskType - The disk type. Possible values include: 'StandardLRS', 'PremiumLRS', 'StandardSSDLRS'
+	DiskType DiskAccountType `json:"diskType,omitempty"`
+}
+
+// VMwareCbtEnableMigrationInput vMwareCbt specific enable migration input.
+type VMwareCbtEnableMigrationInput struct {
+	// VmwareMachineID - The ARM Id of the VM discovered in VMware.
+	VmwareMachineID *string `json:"vmwareMachineId,omitempty"`
+	// DisksToInclude - The disks to include list.
+	DisksToInclude *[]VMwareCbtDiskInput `json:"disksToInclude,omitempty"`
+	// LicenseType - License type. Possible values include: 'LicenseTypeNotSpecified', 'LicenseTypeNoLicenseType', 'LicenseTypeWindowsServer'
+	LicenseType LicenseType `json:"licenseType,omitempty"`
+	// DataMoverRunAsAccountID - The data mover RunAs account Id.
+	DataMoverRunAsAccountID *string `json:"dataMoverRunAsAccountId,omitempty"`
+	// SnapshotRunAsAccountID - The snapshot RunAs account Id.
+	SnapshotRunAsAccountID *string `json:"snapshotRunAsAccountId,omitempty"`
+	// TargetVMName - The target VM name.
+	TargetVMName *string `json:"targetVmName,omitempty"`
+	// TargetVMSize - The target VM size.
+	TargetVMSize *string `json:"targetVmSize,omitempty"`
+	// TargetResourceGroupID - The target resource group ARM Id.
+	TargetResourceGroupID *string `json:"targetResourceGroupId,omitempty"`
+	// TargetNetworkID - The target network ARM Id.
+	TargetNetworkID *string `json:"targetNetworkId,omitempty"`
+	// TargetSubnetName - The target subnet name.
+	TargetSubnetName *string `json:"targetSubnetName,omitempty"`
+	// TargetAvailabilitySetID - The target availability set ARM Id.
+	TargetAvailabilitySetID *string `json:"targetAvailabilitySetId,omitempty"`
+	// TargetBootDiagnosticsStorageAccountID - The target boot diagnostics storage account ARM Id.
+	TargetBootDiagnosticsStorageAccountID *string `json:"targetBootDiagnosticsStorageAccountId,omitempty"`
+	// InstanceType - Possible values include: 'InstanceTypeEnableMigrationProviderSpecificInput', 'InstanceTypeVMwareCbt'
+	InstanceType InstanceTypeBasicEnableMigrationProviderSpecificInput `json:"instanceType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for VMwareCbtEnableMigrationInput.
+func (vmcemi VMwareCbtEnableMigrationInput) MarshalJSON() ([]byte, error) {
+	vmcemi.InstanceType = InstanceTypeVMwareCbt
+	objectMap := make(map[string]interface{})
+	if vmcemi.VmwareMachineID != nil {
+		objectMap["vmwareMachineId"] = vmcemi.VmwareMachineID
+	}
+	if vmcemi.DisksToInclude != nil {
+		objectMap["disksToInclude"] = vmcemi.DisksToInclude
+	}
+	if vmcemi.LicenseType != "" {
+		objectMap["licenseType"] = vmcemi.LicenseType
+	}
+	if vmcemi.DataMoverRunAsAccountID != nil {
+		objectMap["dataMoverRunAsAccountId"] = vmcemi.DataMoverRunAsAccountID
+	}
+	if vmcemi.SnapshotRunAsAccountID != nil {
+		objectMap["snapshotRunAsAccountId"] = vmcemi.SnapshotRunAsAccountID
+	}
+	if vmcemi.TargetVMName != nil {
+		objectMap["targetVmName"] = vmcemi.TargetVMName
+	}
+	if vmcemi.TargetVMSize != nil {
+		objectMap["targetVmSize"] = vmcemi.TargetVMSize
+	}
+	if vmcemi.TargetResourceGroupID != nil {
+		objectMap["targetResourceGroupId"] = vmcemi.TargetResourceGroupID
+	}
+	if vmcemi.TargetNetworkID != nil {
+		objectMap["targetNetworkId"] = vmcemi.TargetNetworkID
+	}
+	if vmcemi.TargetSubnetName != nil {
+		objectMap["targetSubnetName"] = vmcemi.TargetSubnetName
+	}
+	if vmcemi.TargetAvailabilitySetID != nil {
+		objectMap["targetAvailabilitySetId"] = vmcemi.TargetAvailabilitySetID
+	}
+	if vmcemi.TargetBootDiagnosticsStorageAccountID != nil {
+		objectMap["targetBootDiagnosticsStorageAccountId"] = vmcemi.TargetBootDiagnosticsStorageAccountID
+	}
+	if vmcemi.InstanceType != "" {
+		objectMap["instanceType"] = vmcemi.InstanceType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsVMwareCbtEnableMigrationInput is the BasicEnableMigrationProviderSpecificInput implementation for VMwareCbtEnableMigrationInput.
+func (vmcemi VMwareCbtEnableMigrationInput) AsVMwareCbtEnableMigrationInput() (*VMwareCbtEnableMigrationInput, bool) {
+	return &vmcemi, true
+}
+
+// AsEnableMigrationProviderSpecificInput is the BasicEnableMigrationProviderSpecificInput implementation for VMwareCbtEnableMigrationInput.
+func (vmcemi VMwareCbtEnableMigrationInput) AsEnableMigrationProviderSpecificInput() (*EnableMigrationProviderSpecificInput, bool) {
+	return nil, false
+}
+
+// AsBasicEnableMigrationProviderSpecificInput is the BasicEnableMigrationProviderSpecificInput implementation for VMwareCbtEnableMigrationInput.
+func (vmcemi VMwareCbtEnableMigrationInput) AsBasicEnableMigrationProviderSpecificInput() (BasicEnableMigrationProviderSpecificInput, bool) {
+	return &vmcemi, true
+}
+
+// VMwareCbtMigrateInput vMwareCbt specific migrate input.
+type VMwareCbtMigrateInput struct {
+	// PerformShutdown - A value indicating whether VM is to be shutdown.
+	PerformShutdown *string `json:"performShutdown,omitempty"`
+	// InstanceType - Possible values include: 'InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeMigrateProviderSpecificInput', 'InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeVMwareCbt'
+	InstanceType InstanceTypeBasicMigrateProviderSpecificInput `json:"instanceType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for VMwareCbtMigrateInput.
+func (vmcmi VMwareCbtMigrateInput) MarshalJSON() ([]byte, error) {
+	vmcmi.InstanceType = InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeVMwareCbt
+	objectMap := make(map[string]interface{})
+	if vmcmi.PerformShutdown != nil {
+		objectMap["performShutdown"] = vmcmi.PerformShutdown
+	}
+	if vmcmi.InstanceType != "" {
+		objectMap["instanceType"] = vmcmi.InstanceType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsVMwareCbtMigrateInput is the BasicMigrateProviderSpecificInput implementation for VMwareCbtMigrateInput.
+func (vmcmi VMwareCbtMigrateInput) AsVMwareCbtMigrateInput() (*VMwareCbtMigrateInput, bool) {
+	return &vmcmi, true
+}
+
+// AsMigrateProviderSpecificInput is the BasicMigrateProviderSpecificInput implementation for VMwareCbtMigrateInput.
+func (vmcmi VMwareCbtMigrateInput) AsMigrateProviderSpecificInput() (*MigrateProviderSpecificInput, bool) {
+	return nil, false
+}
+
+// AsBasicMigrateProviderSpecificInput is the BasicMigrateProviderSpecificInput implementation for VMwareCbtMigrateInput.
+func (vmcmi VMwareCbtMigrateInput) AsBasicMigrateProviderSpecificInput() (BasicMigrateProviderSpecificInput, bool) {
+	return &vmcmi, true
+}
+
+// VMwareCbtMigrationDetails vMwareCbt provider specific settings
+type VMwareCbtMigrationDetails struct {
+	// VmwareMachineID - The ARM Id of the VM discovered in VMware.
+	VmwareMachineID *string `json:"vmwareMachineId,omitempty"`
+	// OsType - The type of the OS on the VM.
+	OsType *string `json:"osType,omitempty"`
+	// LicenseType - License Type of the VM to be used.
+	LicenseType *string `json:"licenseType,omitempty"`
+	// DataMoverRunAsAccountID - The data mover RunAs account Id.
+	DataMoverRunAsAccountID *string `json:"dataMoverRunAsAccountId,omitempty"`
+	// SnapshotRunAsAccountID - The snapshot RunAs account Id.
+	SnapshotRunAsAccountID *string `json:"snapshotRunAsAccountId,omitempty"`
+	// TargetVMName - Target VM name.
+	TargetVMName *string `json:"targetVmName,omitempty"`
+	// TargetVMSize - The target VM size.
+	TargetVMSize *string `json:"targetVmSize,omitempty"`
+	// TargetLocation - The target location.
+	TargetLocation *string `json:"targetLocation,omitempty"`
+	// TargetResourceGroupID - The target resource group Id.
+	TargetResourceGroupID *string `json:"targetResourceGroupId,omitempty"`
+	// TargetAvailabilitySetID - The target availability set Id.
+	TargetAvailabilitySetID *string `json:"targetAvailabilitySetId,omitempty"`
+	// TargetBootDiagnosticsStorageAccountID - The target boot diagnostics storage account ARM Id.
+	TargetBootDiagnosticsStorageAccountID *string `json:"targetBootDiagnosticsStorageAccountId,omitempty"`
+	// ProtectedDisks - The list of protected disks.
+	ProtectedDisks *[]VMwareCbtProtectedDiskDetails `json:"protectedDisks,omitempty"`
+	// TargetNetworkID - The target network Id.
+	TargetNetworkID *string `json:"targetNetworkId,omitempty"`
+	// VMNics - The network details.
+	VMNics *[]VMwareCbtNicDetails `json:"vmNics,omitempty"`
+	// MigrationRecoveryPointID - The recovery point Id to which the VM was migrated.
+	MigrationRecoveryPointID *string `json:"migrationRecoveryPointId,omitempty"`
+	// LastRecoveryPointReceived - The last recovery point received time.
+	LastRecoveryPointReceived *date.Time `json:"lastRecoveryPointReceived,omitempty"`
+	// InstanceType - Possible values include: 'InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeMigrationProviderSpecificSettings', 'InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeVMwareCbt'
+	InstanceType InstanceTypeBasicMigrationProviderSpecificSettings `json:"instanceType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for VMwareCbtMigrationDetails.
+func (vmcmd VMwareCbtMigrationDetails) MarshalJSON() ([]byte, error) {
+	vmcmd.InstanceType = InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeVMwareCbt
+	objectMap := make(map[string]interface{})
+	if vmcmd.VmwareMachineID != nil {
+		objectMap["vmwareMachineId"] = vmcmd.VmwareMachineID
+	}
+	if vmcmd.OsType != nil {
+		objectMap["osType"] = vmcmd.OsType
+	}
+	if vmcmd.LicenseType != nil {
+		objectMap["licenseType"] = vmcmd.LicenseType
+	}
+	if vmcmd.DataMoverRunAsAccountID != nil {
+		objectMap["dataMoverRunAsAccountId"] = vmcmd.DataMoverRunAsAccountID
+	}
+	if vmcmd.SnapshotRunAsAccountID != nil {
+		objectMap["snapshotRunAsAccountId"] = vmcmd.SnapshotRunAsAccountID
+	}
+	if vmcmd.TargetVMName != nil {
+		objectMap["targetVmName"] = vmcmd.TargetVMName
+	}
+	if vmcmd.TargetVMSize != nil {
+		objectMap["targetVmSize"] = vmcmd.TargetVMSize
+	}
+	if vmcmd.TargetLocation != nil {
+		objectMap["targetLocation"] = vmcmd.TargetLocation
+	}
+	if vmcmd.TargetResourceGroupID != nil {
+		objectMap["targetResourceGroupId"] = vmcmd.TargetResourceGroupID
+	}
+	if vmcmd.TargetAvailabilitySetID != nil {
+		objectMap["targetAvailabilitySetId"] = vmcmd.TargetAvailabilitySetID
+	}
+	if vmcmd.TargetBootDiagnosticsStorageAccountID != nil {
+		objectMap["targetBootDiagnosticsStorageAccountId"] = vmcmd.TargetBootDiagnosticsStorageAccountID
+	}
+	if vmcmd.ProtectedDisks != nil {
+		objectMap["protectedDisks"] = vmcmd.ProtectedDisks
+	}
+	if vmcmd.TargetNetworkID != nil {
+		objectMap["targetNetworkId"] = vmcmd.TargetNetworkID
+	}
+	if vmcmd.VMNics != nil {
+		objectMap["vmNics"] = vmcmd.VMNics
+	}
+	if vmcmd.MigrationRecoveryPointID != nil {
+		objectMap["migrationRecoveryPointId"] = vmcmd.MigrationRecoveryPointID
+	}
+	if vmcmd.LastRecoveryPointReceived != nil {
+		objectMap["lastRecoveryPointReceived"] = vmcmd.LastRecoveryPointReceived
+	}
+	if vmcmd.InstanceType != "" {
+		objectMap["instanceType"] = vmcmd.InstanceType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsVMwareCbtMigrationDetails is the BasicMigrationProviderSpecificSettings implementation for VMwareCbtMigrationDetails.
+func (vmcmd VMwareCbtMigrationDetails) AsVMwareCbtMigrationDetails() (*VMwareCbtMigrationDetails, bool) {
+	return &vmcmd, true
+}
+
+// AsMigrationProviderSpecificSettings is the BasicMigrationProviderSpecificSettings implementation for VMwareCbtMigrationDetails.
+func (vmcmd VMwareCbtMigrationDetails) AsMigrationProviderSpecificSettings() (*MigrationProviderSpecificSettings, bool) {
+	return nil, false
+}
+
+// AsBasicMigrationProviderSpecificSettings is the BasicMigrationProviderSpecificSettings implementation for VMwareCbtMigrationDetails.
+func (vmcmd VMwareCbtMigrationDetails) AsBasicMigrationProviderSpecificSettings() (BasicMigrationProviderSpecificSettings, bool) {
+	return &vmcmd, true
+}
+
+// VMwareCbtNicDetails vMwareCbt NIC details.
+type VMwareCbtNicDetails struct {
+	// NicID - The NIC Id.
+	NicID *string `json:"nicId,omitempty"`
+	// IsPrimaryNic - A value indicating whether this is the primary NIC.
+	IsPrimaryNic *string `json:"isPrimaryNic,omitempty"`
+	// SourceIPAddress - The source IP address.
+	SourceIPAddress *string `json:"sourceIPAddress,omitempty"`
+	// SourceIPAddressType - The source IP address type. Possible values include: 'Dynamic', 'Static'
+	SourceIPAddressType EthernetAddressType `json:"sourceIPAddressType,omitempty"`
+	// SourceNetworkID - Source network Id.
+	SourceNetworkID *string `json:"sourceNetworkId,omitempty"`
+	// TargetIPAddress - The target IP address.
+	TargetIPAddress *string `json:"targetIPAddress,omitempty"`
+	// TargetIPAddressType - The target IP address type. Possible values include: 'Dynamic', 'Static'
+	TargetIPAddressType EthernetAddressType `json:"targetIPAddressType,omitempty"`
+	// TargetSubnetName - Target subnet name.
+	TargetSubnetName *string `json:"targetSubnetName,omitempty"`
+	// IsSelectedForMigration - A value indicating whether this NIC is selected for migration.
+	IsSelectedForMigration *string `json:"isSelectedForMigration,omitempty"`
+}
+
+// VMwareCbtNicInput vMwareCbt NIC input.
+type VMwareCbtNicInput struct {
+	// NicID - The NIC Id.
+	NicID *string `json:"nicId,omitempty"`
+	// IsPrimaryNic - A value indicating whether this is the primary NIC.
+	IsPrimaryNic *string `json:"isPrimaryNic,omitempty"`
+	// TargetSubnetName - Target subnet name.
+	TargetSubnetName *string `json:"targetSubnetName,omitempty"`
+	// TargetStaticIPAddress - The static IP address.
+	TargetStaticIPAddress *string `json:"targetStaticIPAddress,omitempty"`
+	// IsSelectedForMigration - A value indicating whether this NIC is selected for migration.
+	IsSelectedForMigration *string `json:"isSelectedForMigration,omitempty"`
+}
+
+// VMwareCbtPolicyCreationInput vMware Cbt policy creation input.
 type VMwareCbtPolicyCreationInput struct {
-	// RecoveryPointHistory - The duration in minutes until which the recovery points need to be stored.
-	RecoveryPointHistory *int32 `json:"recoveryPointHistory,omitempty"`
+	// RecoveryPointHistoryInMinutes - The duration in minutes until which the recovery points need to be stored.
+	RecoveryPointHistoryInMinutes *int32 `json:"recoveryPointHistoryInMinutes,omitempty"`
 	// CrashConsistentFrequencyInMinutes - The crash consistent snapshot frequency (in minutes).
 	CrashConsistentFrequencyInMinutes *int32 `json:"crashConsistentFrequencyInMinutes,omitempty"`
 	// AppConsistentFrequencyInMinutes - The app consistent snapshot frequency (in minutes).
@@ -19181,8 +21993,8 @@ type VMwareCbtPolicyCreationInput struct {
 func (vmcpci VMwareCbtPolicyCreationInput) MarshalJSON() ([]byte, error) {
 	vmcpci.InstanceType = InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeVMwareCbt
 	objectMap := make(map[string]interface{})
-	if vmcpci.RecoveryPointHistory != nil {
-		objectMap["recoveryPointHistory"] = vmcpci.RecoveryPointHistory
+	if vmcpci.RecoveryPointHistoryInMinutes != nil {
+		objectMap["recoveryPointHistoryInMinutes"] = vmcpci.RecoveryPointHistoryInMinutes
 	}
 	if vmcpci.CrashConsistentFrequencyInMinutes != nil {
 		objectMap["crashConsistentFrequencyInMinutes"] = vmcpci.CrashConsistentFrequencyInMinutes
@@ -19243,10 +22055,8 @@ func (vmcpci VMwareCbtPolicyCreationInput) AsBasicPolicyProviderSpecificInput() 
 
 // VmwareCbtPolicyDetails vMware Cbt specific policy details.
 type VmwareCbtPolicyDetails struct {
-	// RecoveryPointThresholdInMinutes - The recovery point threshold in minutes.
-	RecoveryPointThresholdInMinutes *int32 `json:"recoveryPointThresholdInMinutes,omitempty"`
-	// RecoveryPointHistory - The duration in minutes until which the recovery points need to be stored.
-	RecoveryPointHistory *int32 `json:"recoveryPointHistory,omitempty"`
+	// RecoveryPointHistoryInMinutes - The duration in minutes until which the recovery points need to be stored.
+	RecoveryPointHistoryInMinutes *int32 `json:"recoveryPointHistoryInMinutes,omitempty"`
 	// AppConsistentFrequencyInMinutes - The app consistent snapshot frequency in minutes.
 	AppConsistentFrequencyInMinutes *int32 `json:"appConsistentFrequencyInMinutes,omitempty"`
 	// CrashConsistentFrequencyInMinutes - The crash consistent snapshot frequency in minutes.
@@ -19259,11 +22069,8 @@ type VmwareCbtPolicyDetails struct {
 func (vcpd VmwareCbtPolicyDetails) MarshalJSON() ([]byte, error) {
 	vcpd.InstanceType = InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeVMwareCbt
 	objectMap := make(map[string]interface{})
-	if vcpd.RecoveryPointThresholdInMinutes != nil {
-		objectMap["recoveryPointThresholdInMinutes"] = vcpd.RecoveryPointThresholdInMinutes
-	}
-	if vcpd.RecoveryPointHistory != nil {
-		objectMap["recoveryPointHistory"] = vcpd.RecoveryPointHistory
+	if vcpd.RecoveryPointHistoryInMinutes != nil {
+		objectMap["recoveryPointHistoryInMinutes"] = vcpd.RecoveryPointHistoryInMinutes
 	}
 	if vcpd.AppConsistentFrequencyInMinutes != nil {
 		objectMap["appConsistentFrequencyInMinutes"] = vcpd.AppConsistentFrequencyInMinutes
@@ -19335,6 +22142,208 @@ func (vcpd VmwareCbtPolicyDetails) AsPolicyProviderSpecificDetails() (*PolicyPro
 // AsBasicPolicyProviderSpecificDetails is the BasicPolicyProviderSpecificDetails implementation for VmwareCbtPolicyDetails.
 func (vcpd VmwareCbtPolicyDetails) AsBasicPolicyProviderSpecificDetails() (BasicPolicyProviderSpecificDetails, bool) {
 	return &vcpd, true
+}
+
+// VMwareCbtProtectedDiskDetails vMwareCbt protected disk details.
+type VMwareCbtProtectedDiskDetails struct {
+	// DiskID - The disk id.
+	DiskID *string `json:"diskId,omitempty"`
+	// DiskName - The disk name.
+	DiskName *string `json:"diskName,omitempty"`
+	// DiskPath - The disk path.
+	DiskPath *string `json:"diskPath,omitempty"`
+	// IsOSDisk - A value indicating whether the disk is the OS disk.
+	IsOSDisk *string `json:"isOSDisk,omitempty"`
+	// CapacityInBytes - The disk capacity in bytes.
+	CapacityInBytes *int64 `json:"capacityInBytes,omitempty"`
+	// LogStorageAccountID - The log storage account ARM Id.
+	LogStorageAccountID *string `json:"logStorageAccountId,omitempty"`
+	// LogStorageAccountSasSecretName - The key vault secret name of the log storage account.
+	LogStorageAccountSasSecretName *string `json:"logStorageAccountSasSecretName,omitempty"`
+	// SeedManagedDiskID - The ARM Id of the seed managed disk.
+	SeedManagedDiskID *string `json:"seedManagedDiskId,omitempty"`
+	// TargetManagedDiskID - The ARM Id of the target managed disk.
+	TargetManagedDiskID *string `json:"targetManagedDiskId,omitempty"`
+	// DiskType - The disk type. Possible values include: 'DiskTypeStandardLRS', 'DiskTypePremiumLRS', 'DiskTypeStandardSSDLRS'
+	DiskType DiskType `json:"diskType,omitempty"`
+}
+
+// VMwareCbtProtectionContainerMappingDetails vMwareCbt provider specific container mapping details.
+type VMwareCbtProtectionContainerMappingDetails struct {
+	// KeyVaultID - The target key vault ARM Id.
+	KeyVaultID *string `json:"keyVaultId,omitempty"`
+	// KeyVaultURI - The target key vault URI.
+	KeyVaultURI *string `json:"keyVaultUri,omitempty"`
+	// StorageAccountID - The storage account ARM Id.
+	StorageAccountID *string `json:"storageAccountId,omitempty"`
+	// StorageAccountSasSecretName - The secret name of the storage account.
+	StorageAccountSasSecretName *string `json:"storageAccountSasSecretName,omitempty"`
+	// ServiceBusConnectionStringSecretName - The secret name of the service bus connection string.
+	ServiceBusConnectionStringSecretName *string `json:"serviceBusConnectionStringSecretName,omitempty"`
+	// TargetLocation - The target location.
+	TargetLocation *string `json:"targetLocation,omitempty"`
+	// InstanceType - Possible values include: 'InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeProtectionContainerMappingProviderSpecificDetails', 'InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeVMwareCbt'
+	InstanceType InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails `json:"instanceType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for VMwareCbtProtectionContainerMappingDetails.
+func (vmcpcmd VMwareCbtProtectionContainerMappingDetails) MarshalJSON() ([]byte, error) {
+	vmcpcmd.InstanceType = InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeVMwareCbt
+	objectMap := make(map[string]interface{})
+	if vmcpcmd.KeyVaultID != nil {
+		objectMap["keyVaultId"] = vmcpcmd.KeyVaultID
+	}
+	if vmcpcmd.KeyVaultURI != nil {
+		objectMap["keyVaultUri"] = vmcpcmd.KeyVaultURI
+	}
+	if vmcpcmd.StorageAccountID != nil {
+		objectMap["storageAccountId"] = vmcpcmd.StorageAccountID
+	}
+	if vmcpcmd.StorageAccountSasSecretName != nil {
+		objectMap["storageAccountSasSecretName"] = vmcpcmd.StorageAccountSasSecretName
+	}
+	if vmcpcmd.ServiceBusConnectionStringSecretName != nil {
+		objectMap["serviceBusConnectionStringSecretName"] = vmcpcmd.ServiceBusConnectionStringSecretName
+	}
+	if vmcpcmd.TargetLocation != nil {
+		objectMap["targetLocation"] = vmcpcmd.TargetLocation
+	}
+	if vmcpcmd.InstanceType != "" {
+		objectMap["instanceType"] = vmcpcmd.InstanceType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsA2AProtectionContainerMappingDetails is the BasicProtectionContainerMappingProviderSpecificDetails implementation for VMwareCbtProtectionContainerMappingDetails.
+func (vmcpcmd VMwareCbtProtectionContainerMappingDetails) AsA2AProtectionContainerMappingDetails() (*A2AProtectionContainerMappingDetails, bool) {
+	return nil, false
+}
+
+// AsVMwareCbtProtectionContainerMappingDetails is the BasicProtectionContainerMappingProviderSpecificDetails implementation for VMwareCbtProtectionContainerMappingDetails.
+func (vmcpcmd VMwareCbtProtectionContainerMappingDetails) AsVMwareCbtProtectionContainerMappingDetails() (*VMwareCbtProtectionContainerMappingDetails, bool) {
+	return &vmcpcmd, true
+}
+
+// AsProtectionContainerMappingProviderSpecificDetails is the BasicProtectionContainerMappingProviderSpecificDetails implementation for VMwareCbtProtectionContainerMappingDetails.
+func (vmcpcmd VMwareCbtProtectionContainerMappingDetails) AsProtectionContainerMappingProviderSpecificDetails() (*ProtectionContainerMappingProviderSpecificDetails, bool) {
+	return nil, false
+}
+
+// AsBasicProtectionContainerMappingProviderSpecificDetails is the BasicProtectionContainerMappingProviderSpecificDetails implementation for VMwareCbtProtectionContainerMappingDetails.
+func (vmcpcmd VMwareCbtProtectionContainerMappingDetails) AsBasicProtectionContainerMappingProviderSpecificDetails() (BasicProtectionContainerMappingProviderSpecificDetails, bool) {
+	return &vmcpcmd, true
+}
+
+// VMwareCbtTestMigrateInput vMwareCbt specific test migrate input.
+type VMwareCbtTestMigrateInput struct {
+	// RecoveryPointID - The recovery point Id.
+	RecoveryPointID *string `json:"recoveryPointId,omitempty"`
+	// NetworkID - The test network Id.
+	NetworkID *string `json:"networkId,omitempty"`
+	// InstanceType - Possible values include: 'InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeTestMigrateProviderSpecificInput', 'InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeVMwareCbt'
+	InstanceType InstanceTypeBasicTestMigrateProviderSpecificInput `json:"instanceType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for VMwareCbtTestMigrateInput.
+func (vmctmi VMwareCbtTestMigrateInput) MarshalJSON() ([]byte, error) {
+	vmctmi.InstanceType = InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeVMwareCbt
+	objectMap := make(map[string]interface{})
+	if vmctmi.RecoveryPointID != nil {
+		objectMap["recoveryPointId"] = vmctmi.RecoveryPointID
+	}
+	if vmctmi.NetworkID != nil {
+		objectMap["networkId"] = vmctmi.NetworkID
+	}
+	if vmctmi.InstanceType != "" {
+		objectMap["instanceType"] = vmctmi.InstanceType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsVMwareCbtTestMigrateInput is the BasicTestMigrateProviderSpecificInput implementation for VMwareCbtTestMigrateInput.
+func (vmctmi VMwareCbtTestMigrateInput) AsVMwareCbtTestMigrateInput() (*VMwareCbtTestMigrateInput, bool) {
+	return &vmctmi, true
+}
+
+// AsTestMigrateProviderSpecificInput is the BasicTestMigrateProviderSpecificInput implementation for VMwareCbtTestMigrateInput.
+func (vmctmi VMwareCbtTestMigrateInput) AsTestMigrateProviderSpecificInput() (*TestMigrateProviderSpecificInput, bool) {
+	return nil, false
+}
+
+// AsBasicTestMigrateProviderSpecificInput is the BasicTestMigrateProviderSpecificInput implementation for VMwareCbtTestMigrateInput.
+func (vmctmi VMwareCbtTestMigrateInput) AsBasicTestMigrateProviderSpecificInput() (BasicTestMigrateProviderSpecificInput, bool) {
+	return &vmctmi, true
+}
+
+// VMwareCbtUpdateMigrationItemInput vMwareCbt specific update migration item input.
+type VMwareCbtUpdateMigrationItemInput struct {
+	// TargetVMName - The target VM name.
+	TargetVMName *string `json:"targetVmName,omitempty"`
+	// TargetVMSize - The target VM size.
+	TargetVMSize *string `json:"targetVmSize,omitempty"`
+	// TargetResourceGroupID - The target resource group ARM Id.
+	TargetResourceGroupID *string `json:"targetResourceGroupId,omitempty"`
+	// TargetAvailabilitySetID - The target availability set ARM Id.
+	TargetAvailabilitySetID *string `json:"targetAvailabilitySetId,omitempty"`
+	// TargetBootDiagnosticsStorageAccountID - The target boot diagnostics storage account ARM Id.
+	TargetBootDiagnosticsStorageAccountID *string `json:"targetBootDiagnosticsStorageAccountId,omitempty"`
+	// TargetNetworkID - The target network ARM Id.
+	TargetNetworkID *string `json:"targetNetworkId,omitempty"`
+	// VMNics - The list of NIC details.
+	VMNics *[]VMwareCbtNicInput `json:"vmNics,omitempty"`
+	// LicenseType - The license type. Possible values include: 'LicenseTypeNotSpecified', 'LicenseTypeNoLicenseType', 'LicenseTypeWindowsServer'
+	LicenseType LicenseType `json:"licenseType,omitempty"`
+	// InstanceType - Possible values include: 'InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeUpdateMigrationItemProviderSpecificInput', 'InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeVMwareCbt'
+	InstanceType InstanceTypeBasicUpdateMigrationItemProviderSpecificInput `json:"instanceType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for VMwareCbtUpdateMigrationItemInput.
+func (vmcumii VMwareCbtUpdateMigrationItemInput) MarshalJSON() ([]byte, error) {
+	vmcumii.InstanceType = InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeVMwareCbt
+	objectMap := make(map[string]interface{})
+	if vmcumii.TargetVMName != nil {
+		objectMap["targetVmName"] = vmcumii.TargetVMName
+	}
+	if vmcumii.TargetVMSize != nil {
+		objectMap["targetVmSize"] = vmcumii.TargetVMSize
+	}
+	if vmcumii.TargetResourceGroupID != nil {
+		objectMap["targetResourceGroupId"] = vmcumii.TargetResourceGroupID
+	}
+	if vmcumii.TargetAvailabilitySetID != nil {
+		objectMap["targetAvailabilitySetId"] = vmcumii.TargetAvailabilitySetID
+	}
+	if vmcumii.TargetBootDiagnosticsStorageAccountID != nil {
+		objectMap["targetBootDiagnosticsStorageAccountId"] = vmcumii.TargetBootDiagnosticsStorageAccountID
+	}
+	if vmcumii.TargetNetworkID != nil {
+		objectMap["targetNetworkId"] = vmcumii.TargetNetworkID
+	}
+	if vmcumii.VMNics != nil {
+		objectMap["vmNics"] = vmcumii.VMNics
+	}
+	if vmcumii.LicenseType != "" {
+		objectMap["licenseType"] = vmcumii.LicenseType
+	}
+	if vmcumii.InstanceType != "" {
+		objectMap["instanceType"] = vmcumii.InstanceType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsVMwareCbtUpdateMigrationItemInput is the BasicUpdateMigrationItemProviderSpecificInput implementation for VMwareCbtUpdateMigrationItemInput.
+func (vmcumii VMwareCbtUpdateMigrationItemInput) AsVMwareCbtUpdateMigrationItemInput() (*VMwareCbtUpdateMigrationItemInput, bool) {
+	return &vmcumii, true
+}
+
+// AsUpdateMigrationItemProviderSpecificInput is the BasicUpdateMigrationItemProviderSpecificInput implementation for VMwareCbtUpdateMigrationItemInput.
+func (vmcumii VMwareCbtUpdateMigrationItemInput) AsUpdateMigrationItemProviderSpecificInput() (*UpdateMigrationItemProviderSpecificInput, bool) {
+	return nil, false
+}
+
+// AsBasicUpdateMigrationItemProviderSpecificInput is the BasicUpdateMigrationItemProviderSpecificInput implementation for VMwareCbtUpdateMigrationItemInput.
+func (vmcumii VMwareCbtUpdateMigrationItemInput) AsBasicUpdateMigrationItemProviderSpecificInput() (BasicUpdateMigrationItemProviderSpecificInput, bool) {
+	return &vmcumii, true
 }
 
 // VMwareDetails store the fabric details specific to the VMware fabric.
@@ -19548,12 +22557,12 @@ func (vmd VMwareDetails) AsBasicFabricSpecificDetails() (BasicFabricSpecificDeta
 	return &vmd, true
 }
 
-// VMwareV2FabricCreationInput fabric provider specific settings.
+// VMwareV2FabricCreationInput vMwareV2 fabric provider specific settings.
 type VMwareV2FabricCreationInput struct {
-	// KeyVaultURL - The Key Vault URL.
-	KeyVaultURL *string `json:"keyVaultUrl,omitempty"`
-	// KeyVaultResourceArmID - The Key Vault ARM Id.
-	KeyVaultResourceArmID *string `json:"keyVaultResourceArmId,omitempty"`
+	// VmwareSiteID - The ARM Id of the VMware site.
+	VmwareSiteID *string `json:"vmwareSiteId,omitempty"`
+	// MigrationSolutionID - The ARM Id of the migration solution.
+	MigrationSolutionID *string `json:"migrationSolutionId,omitempty"`
 	// InstanceType - Possible values include: 'InstanceTypeFabricSpecificCreationInput', 'InstanceTypeAzure', 'InstanceTypeVMwareV2'
 	InstanceType InstanceTypeBasicFabricSpecificCreationInput `json:"instanceType,omitempty"`
 }
@@ -19562,11 +22571,11 @@ type VMwareV2FabricCreationInput struct {
 func (vmvfci VMwareV2FabricCreationInput) MarshalJSON() ([]byte, error) {
 	vmvfci.InstanceType = InstanceTypeVMwareV2
 	objectMap := make(map[string]interface{})
-	if vmvfci.KeyVaultURL != nil {
-		objectMap["keyVaultUrl"] = vmvfci.KeyVaultURL
+	if vmvfci.VmwareSiteID != nil {
+		objectMap["vmwareSiteId"] = vmvfci.VmwareSiteID
 	}
-	if vmvfci.KeyVaultResourceArmID != nil {
-		objectMap["keyVaultResourceArmId"] = vmvfci.KeyVaultResourceArmID
+	if vmvfci.MigrationSolutionID != nil {
+		objectMap["migrationSolutionId"] = vmvfci.MigrationSolutionID
 	}
 	if vmvfci.InstanceType != "" {
 		objectMap["instanceType"] = vmvfci.InstanceType
@@ -19594,16 +22603,14 @@ func (vmvfci VMwareV2FabricCreationInput) AsBasicFabricSpecificCreationInput() (
 	return &vmvfci, true
 }
 
-// VMwareV2FabricSpecificDetails vMwareV2 fabric Specific Details.
+// VMwareV2FabricSpecificDetails vMwareV2 fabric specific details.
 type VMwareV2FabricSpecificDetails struct {
-	// SrsServiceEndpoint - The endpoint for making requests to the SRS Service.
-	SrsServiceEndpoint *string `json:"srsServiceEndpoint,omitempty"`
-	// RcmServiceEndpoint - The endpoint for making requests to the RCM Service.
-	RcmServiceEndpoint *string `json:"rcmServiceEndpoint,omitempty"`
-	// KeyVaultURL - The Key Vault URL.
-	KeyVaultURL *string `json:"keyVaultUrl,omitempty"`
-	// KeyVaultResourceArmID - The Key Vault ARM Id.
-	KeyVaultResourceArmID *string `json:"keyVaultResourceArmId,omitempty"`
+	// VmwareSiteID - The ARM Id of the VMware site.
+	VmwareSiteID *string `json:"vmwareSiteId,omitempty"`
+	// MigrationSolutionID - The Migration solution ARM Id.
+	MigrationSolutionID *string `json:"migrationSolutionId,omitempty"`
+	// ServiceEndpoint - The service endpoint.
+	ServiceEndpoint *string `json:"serviceEndpoint,omitempty"`
 	// InstanceType - Possible values include: 'InstanceTypeBasicFabricSpecificDetailsInstanceTypeFabricSpecificDetails', 'InstanceTypeBasicFabricSpecificDetailsInstanceTypeAzure', 'InstanceTypeBasicFabricSpecificDetailsInstanceTypeHyperVSite', 'InstanceTypeBasicFabricSpecificDetailsInstanceTypeVMM', 'InstanceTypeBasicFabricSpecificDetailsInstanceTypeVMware', 'InstanceTypeBasicFabricSpecificDetailsInstanceTypeVMwareV2'
 	InstanceType InstanceTypeBasicFabricSpecificDetails `json:"instanceType,omitempty"`
 }
@@ -19612,17 +22619,14 @@ type VMwareV2FabricSpecificDetails struct {
 func (vmvfsd VMwareV2FabricSpecificDetails) MarshalJSON() ([]byte, error) {
 	vmvfsd.InstanceType = InstanceTypeBasicFabricSpecificDetailsInstanceTypeVMwareV2
 	objectMap := make(map[string]interface{})
-	if vmvfsd.SrsServiceEndpoint != nil {
-		objectMap["srsServiceEndpoint"] = vmvfsd.SrsServiceEndpoint
+	if vmvfsd.VmwareSiteID != nil {
+		objectMap["vmwareSiteId"] = vmvfsd.VmwareSiteID
 	}
-	if vmvfsd.RcmServiceEndpoint != nil {
-		objectMap["rcmServiceEndpoint"] = vmvfsd.RcmServiceEndpoint
+	if vmvfsd.MigrationSolutionID != nil {
+		objectMap["migrationSolutionId"] = vmvfsd.MigrationSolutionID
 	}
-	if vmvfsd.KeyVaultURL != nil {
-		objectMap["keyVaultUrl"] = vmvfsd.KeyVaultURL
-	}
-	if vmvfsd.KeyVaultResourceArmID != nil {
-		objectMap["keyVaultResourceArmId"] = vmvfsd.KeyVaultResourceArmID
+	if vmvfsd.ServiceEndpoint != nil {
+		objectMap["serviceEndpoint"] = vmvfsd.ServiceEndpoint
 	}
 	if vmvfsd.InstanceType != "" {
 		objectMap["instanceType"] = vmvfsd.InstanceType
@@ -19681,7 +22685,7 @@ type VMwareVirtualMachineDetails struct {
 	PoweredOn *string `json:"poweredOn,omitempty"`
 	// VCenterInfrastructureID - The VCenter infrastructure Id.
 	VCenterInfrastructureID *string `json:"vCenterInfrastructureId,omitempty"`
-	// DiscoveryType - A value inidicating the discovery type of the machine. Value can be vCenter or physical.
+	// DiscoveryType - A value indicating the discovery type of the machine. Value can be vCenter or physical.
 	DiscoveryType *string `json:"discoveryType,omitempty"`
 	// DiskDetails - The disk details.
 	DiskDetails *[]InMageDiskDetails `json:"diskDetails,omitempty"`

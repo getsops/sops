@@ -23,6 +23,9 @@ import (
 	"github.com/Azure/go-autorest/autorest/azure"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/datacatalog/mgmt/2016-03-30/datacatalog"
+
 // SkuType enumerates the values for sku type.
 type SkuType string
 
@@ -178,7 +181,8 @@ type ADCCatalogProperties struct {
 	EnableAutomaticUnitAdjustment *bool `json:"enableAutomaticUnitAdjustment,omitempty"`
 }
 
-// ADCCatalogsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ADCCatalogsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ADCCatalogsDeleteFuture struct {
 	azure.Future
 }

@@ -21,10 +21,11 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
-// ReportsClient is the REST APIs for Azure Active Drectory Connect Health
+// ReportsClient is the REST APIs for Azure Active Directory Connect Health
 type ReportsClient struct {
 	BaseClient
 }
@@ -41,6 +42,16 @@ func NewReportsClientWithBaseURI(baseURI string) ReportsClient {
 
 // GetDevOps checks if the user is enabled for Dev Ops access.
 func (client ReportsClient) GetDevOps(ctx context.Context) (result Result, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.GetDevOps")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetDevOpsPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.ReportsClient", "GetDevOps", nil, "Failure preparing request")

@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionHealthsClient is the client for the PartitionHealths methods of the Servicefabric service.
 type PartitionHealthsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewPartitionHealthsClient creates an instance of the PartitionHealthsClient client.
 func NewPartitionHealthsClient(timeout *int32) PartitionHealthsClient {
 	return NewPartitionHealthsClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewPartitionHealthsClientWithBaseURI creates an instance of the PartitionHealthsClient client.
 func NewPartitionHealthsClientWithBaseURI(baseURI string, timeout *int32) PartitionHealthsClient {
 	return PartitionHealthsClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get partition healths
 // Parameters:
 // partitionID - the id of the partition
@@ -66,6 +70,7 @@ func (client PartitionHealthsClient) Get(ctx context.Context, partitionID string
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client PartitionHealthsClient) GetPreparer(ctx context.Context, partitionID string, eventsHealthStateFilter string, replicasHealthStateFilter string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -94,6 +99,7 @@ func (client PartitionHealthsClient) GetPreparer(ctx context.Context, partitionI
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client PartitionHealthsClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -101,6 +107,7 @@ func (client PartitionHealthsClient) GetSender(req *http.Request) (*http.Respons
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client PartitionHealthsClient) GetResponder(resp *http.Response) (result PartitionHealth, err error) {
@@ -114,6 +121,7 @@ func (client PartitionHealthsClient) GetResponder(resp *http.Response) (result P
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Send send partition health
 // Parameters:
 // partitionID - the id of the partition
@@ -140,6 +148,7 @@ func (client PartitionHealthsClient) Send(ctx context.Context, partitionID strin
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SendPreparer prepares the Send request.
 func (client PartitionHealthsClient) SendPreparer(ctx context.Context, partitionID string, partitionHealthReport PartitionHealthReport) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -164,6 +173,7 @@ func (client PartitionHealthsClient) SendPreparer(ctx context.Context, partition
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SendSender sends the Send request. The method will close the
 // http.Response Body if it receives an error.
 func (client PartitionHealthsClient) SendSender(req *http.Request) (*http.Response, error) {
@@ -171,6 +181,7 @@ func (client PartitionHealthsClient) SendSender(req *http.Request) (*http.Respon
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SendResponder handles the response to the Send request. The method always
 // closes the http.Response Body.
 func (client PartitionHealthsClient) SendResponder(resp *http.Response) (result String, err error) {

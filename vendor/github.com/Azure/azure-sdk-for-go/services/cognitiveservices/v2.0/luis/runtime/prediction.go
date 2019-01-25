@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewPredictionClient(endpoint string) PredictionClient {
 // bingSpellCheckSubscriptionKey - the subscription key to use when enabling bing spell check
 // logParameter - log query (default is true)
 func (client PredictionClient) Resolve(ctx context.Context, appID string, query string, timezoneOffset *float64, verbose *bool, staging *bool, spellCheck *bool, bingSpellCheckSubscriptionKey string, logParameter *bool) (result LuisResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PredictionClient.Resolve")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: query,
 			Constraints: []validation.Constraint{{Target: "query", Name: validation.MaxLength, Rule: 500, Chain: nil}}}}); err != nil {

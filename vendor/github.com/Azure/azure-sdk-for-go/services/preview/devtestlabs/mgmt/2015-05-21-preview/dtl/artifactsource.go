@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewArtifactSourceClientWithBaseURI(baseURI string, subscriptionID string) A
 // labName - the name of the lab.
 // name - the name of the artifact source.
 func (client ArtifactSourceClient) CreateOrUpdateResource(ctx context.Context, resourceGroupName string, labName string, name string, artifactSource ArtifactSource) (result ArtifactSource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ArtifactSourceClient.CreateOrUpdateResource")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdateResourcePreparer(ctx, resourceGroupName, labName, name, artifactSource)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.ArtifactSourceClient", "CreateOrUpdateResource", nil, "Failure preparing request")
@@ -116,6 +127,16 @@ func (client ArtifactSourceClient) CreateOrUpdateResourceResponder(resp *http.Re
 // labName - the name of the lab.
 // name - the name of the artifact source.
 func (client ArtifactSourceClient) DeleteResource(ctx context.Context, resourceGroupName string, labName string, name string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ArtifactSourceClient.DeleteResource")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteResourcePreparer(ctx, resourceGroupName, labName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.ArtifactSourceClient", "DeleteResource", nil, "Failure preparing request")
@@ -184,6 +205,16 @@ func (client ArtifactSourceClient) DeleteResourceResponder(resp *http.Response) 
 // labName - the name of the lab.
 // name - the name of the artifact source.
 func (client ArtifactSourceClient) GetResource(ctx context.Context, resourceGroupName string, labName string, name string) (result ArtifactSource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ArtifactSourceClient.GetResource")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetResourcePreparer(ctx, resourceGroupName, labName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.ArtifactSourceClient", "GetResource", nil, "Failure preparing request")
@@ -253,6 +284,16 @@ func (client ArtifactSourceClient) GetResourceResponder(resp *http.Response) (re
 // labName - the name of the lab.
 // filter - the filter to apply on the operation.
 func (client ArtifactSourceClient) List(ctx context.Context, resourceGroupName string, labName string, filter string, top *int32, orderBy string) (result ResponseWithContinuationArtifactSourcePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ArtifactSourceClient.List")
+		defer func() {
+			sc := -1
+			if result.rwcas.Response.Response != nil {
+				sc = result.rwcas.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, labName, filter, top, orderBy)
 	if err != nil {
@@ -326,8 +367,8 @@ func (client ArtifactSourceClient) ListResponder(resp *http.Response) (result Re
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ArtifactSourceClient) listNextResults(lastResults ResponseWithContinuationArtifactSource) (result ResponseWithContinuationArtifactSource, err error) {
-	req, err := lastResults.responseWithContinuationArtifactSourcePreparer()
+func (client ArtifactSourceClient) listNextResults(ctx context.Context, lastResults ResponseWithContinuationArtifactSource) (result ResponseWithContinuationArtifactSource, err error) {
+	req, err := lastResults.responseWithContinuationArtifactSourcePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dtl.ArtifactSourceClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -348,6 +389,16 @@ func (client ArtifactSourceClient) listNextResults(lastResults ResponseWithConti
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ArtifactSourceClient) ListComplete(ctx context.Context, resourceGroupName string, labName string, filter string, top *int32, orderBy string) (result ResponseWithContinuationArtifactSourceIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ArtifactSourceClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, labName, filter, top, orderBy)
 	return
 }
@@ -358,6 +409,16 @@ func (client ArtifactSourceClient) ListComplete(ctx context.Context, resourceGro
 // labName - the name of the lab.
 // name - the name of the artifact source.
 func (client ArtifactSourceClient) PatchResource(ctx context.Context, resourceGroupName string, labName string, name string, artifactSource ArtifactSource) (result ArtifactSource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ArtifactSourceClient.PatchResource")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PatchResourcePreparer(ctx, resourceGroupName, labName, name, artifactSource)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.ArtifactSourceClient", "PatchResource", nil, "Failure preparing request")

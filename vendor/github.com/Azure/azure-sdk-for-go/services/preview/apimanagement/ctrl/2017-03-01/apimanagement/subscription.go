@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewSubscriptionClient() SubscriptionClient {
 // parameters - create parameters.
 // notify - notify the subscriber of the subscription state change to Submitted or Active state.
 func (client SubscriptionClient) CreateOrUpdate(ctx context.Context, apimBaseURL string, sid string, parameters SubscriptionCreateParameters, notify string) (result SubscriptionContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: sid,
 			Constraints: []validation.Constraint{{Target: "sid", Name: validation.MaxLength, Rule: 256, Chain: nil},
@@ -146,6 +157,16 @@ func (client SubscriptionClient) CreateOrUpdateResponder(resp *http.Response) (r
 // ifMatch - eTag of the Subscription Entity. ETag should match the current entity state from the header
 // response of the GET request or it should be * for unconditional update.
 func (client SubscriptionClient) Delete(ctx context.Context, apimBaseURL string, sid string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: sid,
 			Constraints: []validation.Constraint{{Target: "sid", Name: validation.MaxLength, Rule: 256, Chain: nil},
@@ -224,6 +245,16 @@ func (client SubscriptionClient) DeleteResponder(resp *http.Response) (result au
 // sid - subscription entity Identifier. The entity represents the association between a user and a product in
 // API Management.
 func (client SubscriptionClient) Get(ctx context.Context, apimBaseURL string, sid string) (result SubscriptionContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: sid,
 			Constraints: []validation.Constraint{{Target: "sid", Name: validation.MaxLength, Rule: 256, Chain: nil},
@@ -310,6 +341,16 @@ func (client SubscriptionClient) GetResponder(resp *http.Response) (result Subsc
 // top - number of records to return.
 // skip - number of records to skip.
 func (client SubscriptionClient) List(ctx context.Context, apimBaseURL string, filter string, top *int32, skip *int32) (result SubscriptionCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionClient.List")
+		defer func() {
+			sc := -1
+			if result.sc.Response.Response != nil {
+				sc = result.sc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -391,8 +432,8 @@ func (client SubscriptionClient) ListResponder(resp *http.Response) (result Subs
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client SubscriptionClient) listNextResults(lastResults SubscriptionCollection) (result SubscriptionCollection, err error) {
-	req, err := lastResults.subscriptionCollectionPreparer()
+func (client SubscriptionClient) listNextResults(ctx context.Context, lastResults SubscriptionCollection) (result SubscriptionCollection, err error) {
+	req, err := lastResults.subscriptionCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.SubscriptionClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -413,6 +454,16 @@ func (client SubscriptionClient) listNextResults(lastResults SubscriptionCollect
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SubscriptionClient) ListComplete(ctx context.Context, apimBaseURL string, filter string, top *int32, skip *int32) (result SubscriptionCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, apimBaseURL, filter, top, skip)
 	return
 }
@@ -424,6 +475,16 @@ func (client SubscriptionClient) ListComplete(ctx context.Context, apimBaseURL s
 // sid - subscription entity Identifier. The entity represents the association between a user and a product in
 // API Management.
 func (client SubscriptionClient) RegeneratePrimaryKey(ctx context.Context, apimBaseURL string, sid string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionClient.RegeneratePrimaryKey")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: sid,
 			Constraints: []validation.Constraint{{Target: "sid", Name: validation.MaxLength, Rule: 256, Chain: nil},
@@ -501,6 +562,16 @@ func (client SubscriptionClient) RegeneratePrimaryKeyResponder(resp *http.Respon
 // sid - subscription entity Identifier. The entity represents the association between a user and a product in
 // API Management.
 func (client SubscriptionClient) RegenerateSecondaryKey(ctx context.Context, apimBaseURL string, sid string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionClient.RegenerateSecondaryKey")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: sid,
 			Constraints: []validation.Constraint{{Target: "sid", Name: validation.MaxLength, Rule: 256, Chain: nil},
@@ -571,7 +642,7 @@ func (client SubscriptionClient) RegenerateSecondaryKeyResponder(resp *http.Resp
 	return
 }
 
-// Update updates the details of a subscription specificied by its identifier.
+// Update updates the details of a subscription specified by its identifier.
 // Parameters:
 // apimBaseURL - the management endpoint of the API Management service, for example
 // https://myapimservice.management.azure-api.net.
@@ -582,6 +653,16 @@ func (client SubscriptionClient) RegenerateSecondaryKeyResponder(resp *http.Resp
 // response of the GET request or it should be * for unconditional update.
 // notify - notify the subscriber of the subscription state change to Submitted or Active state.
 func (client SubscriptionClient) Update(ctx context.Context, apimBaseURL string, sid string, parameters SubscriptionUpdateParameters, ifMatch string, notify string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: sid,
 			Constraints: []validation.Constraint{{Target: "sid", Name: validation.MaxLength, Rule: 256, Chain: nil},

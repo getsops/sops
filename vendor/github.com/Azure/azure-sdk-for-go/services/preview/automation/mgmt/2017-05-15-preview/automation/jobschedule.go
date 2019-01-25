@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -48,6 +49,16 @@ func NewJobScheduleClientWithBaseURI(baseURI string, subscriptionID string) JobS
 // jobScheduleID - the job schedule name.
 // parameters - the parameters supplied to the create job schedule operation.
 func (client JobScheduleClient) Create(ctx context.Context, resourceGroupName string, automationAccountName string, jobScheduleID uuid.UUID, parameters JobScheduleCreateParameters) (result JobSchedule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobScheduleClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -132,6 +143,16 @@ func (client JobScheduleClient) CreateResponder(resp *http.Response) (result Job
 // automationAccountName - the name of the automation account.
 // jobScheduleID - the job schedule name.
 func (client JobScheduleClient) Delete(ctx context.Context, resourceGroupName string, automationAccountName string, jobScheduleID uuid.UUID) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobScheduleClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -208,6 +229,16 @@ func (client JobScheduleClient) DeleteResponder(resp *http.Response) (result aut
 // automationAccountName - the name of the automation account.
 // jobScheduleID - the job schedule name.
 func (client JobScheduleClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string, jobScheduleID uuid.UUID) (result JobSchedule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobScheduleClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -285,6 +316,16 @@ func (client JobScheduleClient) GetResponder(resp *http.Response) (result JobSch
 // automationAccountName - the name of the automation account.
 // filter - the filter to apply on the operation.
 func (client JobScheduleClient) ListByAutomationAccount(ctx context.Context, resourceGroupName string, automationAccountName string, filter string) (result JobScheduleListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobScheduleClient.ListByAutomationAccount")
+		defer func() {
+			sc := -1
+			if result.jslr.Response.Response != nil {
+				sc = result.jslr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -360,8 +401,8 @@ func (client JobScheduleClient) ListByAutomationAccountResponder(resp *http.Resp
 }
 
 // listByAutomationAccountNextResults retrieves the next set of results, if any.
-func (client JobScheduleClient) listByAutomationAccountNextResults(lastResults JobScheduleListResult) (result JobScheduleListResult, err error) {
-	req, err := lastResults.jobScheduleListResultPreparer()
+func (client JobScheduleClient) listByAutomationAccountNextResults(ctx context.Context, lastResults JobScheduleListResult) (result JobScheduleListResult, err error) {
+	req, err := lastResults.jobScheduleListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "automation.JobScheduleClient", "listByAutomationAccountNextResults", nil, "Failure preparing next results request")
 	}
@@ -382,6 +423,16 @@ func (client JobScheduleClient) listByAutomationAccountNextResults(lastResults J
 
 // ListByAutomationAccountComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobScheduleClient) ListByAutomationAccountComplete(ctx context.Context, resourceGroupName string, automationAccountName string, filter string) (result JobScheduleListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobScheduleClient.ListByAutomationAccount")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByAutomationAccount(ctx, resourceGroupName, automationAccountName, filter)
 	return
 }

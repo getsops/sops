@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewProactiveDetectionConfigurationsClientWithBaseURI(baseURI string, subscr
 // configurationID - the ProactiveDetection configuration ID. This is unique within a Application Insights
 // component.
 func (client ProactiveDetectionConfigurationsClient) Get(ctx context.Context, resourceGroupName string, resourceName string, configurationID string) (result ApplicationInsightsComponentProactiveDetectionConfiguration, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProactiveDetectionConfigurationsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, resourceName, configurationID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ProactiveDetectionConfigurationsClient", "Get", nil, "Failure preparing request")
@@ -115,6 +126,16 @@ func (client ProactiveDetectionConfigurationsClient) GetResponder(resp *http.Res
 // resourceGroupName - the name of the resource group.
 // resourceName - the name of the Application Insights component resource.
 func (client ProactiveDetectionConfigurationsClient) List(ctx context.Context, resourceGroupName string, resourceName string) (result ListApplicationInsightsComponentProactiveDetectionConfiguration, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProactiveDetectionConfigurationsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ProactiveDetectionConfigurationsClient", "List", nil, "Failure preparing request")
@@ -186,6 +207,16 @@ func (client ProactiveDetectionConfigurationsClient) ListResponder(resp *http.Re
 // proactiveDetectionProperties - properties that need to be specified to update the ProactiveDetection
 // configuration.
 func (client ProactiveDetectionConfigurationsClient) Update(ctx context.Context, resourceGroupName string, resourceName string, configurationID string, proactiveDetectionProperties ApplicationInsightsComponentProactiveDetectionConfiguration) (result ApplicationInsightsComponentProactiveDetectionConfiguration, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProactiveDetectionConfigurationsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, resourceName, configurationID, proactiveDetectionProperties)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ProactiveDetectionConfigurationsClient", "Update", nil, "Failure preparing request")

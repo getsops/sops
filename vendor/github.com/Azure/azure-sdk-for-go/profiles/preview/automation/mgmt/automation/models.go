@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,31 +21,10 @@ package automation
 
 import original "github.com/Azure/azure-sdk-for-go/services/automation/mgmt/2017-05-15-preview/automation"
 
-type AccountClient = original.AccountClient
-type ActivityClient = original.ActivityClient
-type AgentRegistrationInformationClient = original.AgentRegistrationInformationClient
-type CertificateClient = original.CertificateClient
-
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type ConnectionClient = original.ConnectionClient
-type ConnectionTypeClient = original.ConnectionTypeClient
-type CredentialClient = original.CredentialClient
-type DscCompilationJobClient = original.DscCompilationJobClient
-type DscCompilationJobStreamClient = original.DscCompilationJobStreamClient
-type DscConfigurationClient = original.DscConfigurationClient
-type DscNodeClient = original.DscNodeClient
-type DscNodeConfigurationClient = original.DscNodeConfigurationClient
-type FieldsClient = original.FieldsClient
-type HybridRunbookWorkerGroupClient = original.HybridRunbookWorkerGroupClient
-type JobClient = original.JobClient
-type JobScheduleClient = original.JobScheduleClient
-type JobStreamClient = original.JobStreamClient
-type KeysClient = original.KeysClient
-type LinkedWorkspaceClient = original.LinkedWorkspaceClient
 type AccountState = original.AccountState
 
 const (
@@ -308,6 +287,7 @@ const (
 )
 
 type Account = original.Account
+type AccountClient = original.AccountClient
 type AccountCreateOrUpdateParameters = original.AccountCreateOrUpdateParameters
 type AccountCreateOrUpdateProperties = original.AccountCreateOrUpdateProperties
 type AccountListResult = original.AccountListResult
@@ -317,6 +297,7 @@ type AccountProperties = original.AccountProperties
 type AccountUpdateParameters = original.AccountUpdateParameters
 type AccountUpdateProperties = original.AccountUpdateProperties
 type Activity = original.Activity
+type ActivityClient = original.ActivityClient
 type ActivityListResult = original.ActivityListResult
 type ActivityListResultIterator = original.ActivityListResultIterator
 type ActivityListResultPage = original.ActivityListResultPage
@@ -327,9 +308,12 @@ type ActivityProperties = original.ActivityProperties
 type AdvancedSchedule = original.AdvancedSchedule
 type AdvancedScheduleMonthlyOccurrence = original.AdvancedScheduleMonthlyOccurrence
 type AgentRegistration = original.AgentRegistration
+type AgentRegistrationInformationClient = original.AgentRegistrationInformationClient
 type AgentRegistrationKeys = original.AgentRegistrationKeys
 type AgentRegistrationRegenerateKeyParameter = original.AgentRegistrationRegenerateKeyParameter
+type BaseClient = original.BaseClient
 type Certificate = original.Certificate
+type CertificateClient = original.CertificateClient
 type CertificateCreateOrUpdateParameters = original.CertificateCreateOrUpdateParameters
 type CertificateCreateOrUpdateProperties = original.CertificateCreateOrUpdateProperties
 type CertificateListResult = original.CertificateListResult
@@ -340,6 +324,7 @@ type CertificateUpdateParameters = original.CertificateUpdateParameters
 type CertificateUpdateProperties = original.CertificateUpdateProperties
 type CollectionItemUpdateConfiguration = original.CollectionItemUpdateConfiguration
 type Connection = original.Connection
+type ConnectionClient = original.ConnectionClient
 type ConnectionCreateOrUpdateParameters = original.ConnectionCreateOrUpdateParameters
 type ConnectionCreateOrUpdateProperties = original.ConnectionCreateOrUpdateProperties
 type ConnectionListResult = original.ConnectionListResult
@@ -348,6 +333,7 @@ type ConnectionListResultPage = original.ConnectionListResultPage
 type ConnectionProperties = original.ConnectionProperties
 type ConnectionType = original.ConnectionType
 type ConnectionTypeAssociationProperty = original.ConnectionTypeAssociationProperty
+type ConnectionTypeClient = original.ConnectionTypeClient
 type ConnectionTypeCreateOrUpdateParameters = original.ConnectionTypeCreateOrUpdateParameters
 type ConnectionTypeCreateOrUpdateProperties = original.ConnectionTypeCreateOrUpdateProperties
 type ConnectionTypeListResult = original.ConnectionTypeListResult
@@ -360,6 +346,7 @@ type ContentHash = original.ContentHash
 type ContentLink = original.ContentLink
 type ContentSource = original.ContentSource
 type Credential = original.Credential
+type CredentialClient = original.CredentialClient
 type CredentialCreateOrUpdateParameters = original.CredentialCreateOrUpdateParameters
 type CredentialCreateOrUpdateProperties = original.CredentialCreateOrUpdateProperties
 type CredentialListResult = original.CredentialListResult
@@ -369,14 +356,17 @@ type CredentialProperties = original.CredentialProperties
 type CredentialUpdateParameters = original.CredentialUpdateParameters
 type CredentialUpdateProperties = original.CredentialUpdateProperties
 type DscCompilationJob = original.DscCompilationJob
+type DscCompilationJobClient = original.DscCompilationJobClient
 type DscCompilationJobCreateParameters = original.DscCompilationJobCreateParameters
 type DscCompilationJobCreateProperties = original.DscCompilationJobCreateProperties
 type DscCompilationJobListResult = original.DscCompilationJobListResult
 type DscCompilationJobListResultIterator = original.DscCompilationJobListResultIterator
 type DscCompilationJobListResultPage = original.DscCompilationJobListResultPage
 type DscCompilationJobProperties = original.DscCompilationJobProperties
+type DscCompilationJobStreamClient = original.DscCompilationJobStreamClient
 type DscConfiguration = original.DscConfiguration
 type DscConfigurationAssociationProperty = original.DscConfigurationAssociationProperty
+type DscConfigurationClient = original.DscConfigurationClient
 type DscConfigurationCreateOrUpdateParameters = original.DscConfigurationCreateOrUpdateParameters
 type DscConfigurationCreateOrUpdateProperties = original.DscConfigurationCreateOrUpdateProperties
 type DscConfigurationListResult = original.DscConfigurationListResult
@@ -387,8 +377,10 @@ type DscConfigurationProperties = original.DscConfigurationProperties
 type DscConfigurationUpdateParameters = original.DscConfigurationUpdateParameters
 type DscMetaConfiguration = original.DscMetaConfiguration
 type DscNode = original.DscNode
+type DscNodeClient = original.DscNodeClient
 type DscNodeConfiguration = original.DscNodeConfiguration
 type DscNodeConfigurationAssociationProperty = original.DscNodeConfigurationAssociationProperty
+type DscNodeConfigurationClient = original.DscNodeConfigurationClient
 type DscNodeConfigurationCreateOrUpdateParameters = original.DscNodeConfigurationCreateOrUpdateParameters
 type DscNodeConfigurationListResult = original.DscNodeConfigurationListResult
 type DscNodeConfigurationListResultIterator = original.DscNodeConfigurationListResultIterator
@@ -407,13 +399,16 @@ type DscReportResource = original.DscReportResource
 type DscReportResourceNavigation = original.DscReportResourceNavigation
 type ErrorResponse = original.ErrorResponse
 type FieldDefinition = original.FieldDefinition
+type FieldsClient = original.FieldsClient
 type HybridRunbookWorker = original.HybridRunbookWorker
 type HybridRunbookWorkerGroup = original.HybridRunbookWorkerGroup
+type HybridRunbookWorkerGroupClient = original.HybridRunbookWorkerGroupClient
+type HybridRunbookWorkerGroupUpdateParameters = original.HybridRunbookWorkerGroupUpdateParameters
 type HybridRunbookWorkerGroupsListResult = original.HybridRunbookWorkerGroupsListResult
 type HybridRunbookWorkerGroupsListResultIterator = original.HybridRunbookWorkerGroupsListResultIterator
 type HybridRunbookWorkerGroupsListResultPage = original.HybridRunbookWorkerGroupsListResultPage
-type HybridRunbookWorkerGroupUpdateParameters = original.HybridRunbookWorkerGroupUpdateParameters
 type Job = original.Job
+type JobClient = original.JobClient
 type JobCollectionItem = original.JobCollectionItem
 type JobCollectionItemProperties = original.JobCollectionItemProperties
 type JobCreateParameters = original.JobCreateParameters
@@ -426,6 +421,7 @@ type JobNavigation = original.JobNavigation
 type JobProperties = original.JobProperties
 type JobProvisioningStateProperty = original.JobProvisioningStateProperty
 type JobSchedule = original.JobSchedule
+type JobScheduleClient = original.JobScheduleClient
 type JobScheduleCreateParameters = original.JobScheduleCreateParameters
 type JobScheduleCreateProperties = original.JobScheduleCreateProperties
 type JobScheduleListResult = original.JobScheduleListResult
@@ -433,15 +429,19 @@ type JobScheduleListResultIterator = original.JobScheduleListResultIterator
 type JobScheduleListResultPage = original.JobScheduleListResultPage
 type JobScheduleProperties = original.JobScheduleProperties
 type JobStream = original.JobStream
+type JobStreamClient = original.JobStreamClient
 type JobStreamListResult = original.JobStreamListResult
 type JobStreamListResultIterator = original.JobStreamListResultIterator
 type JobStreamListResultPage = original.JobStreamListResultPage
 type JobStreamProperties = original.JobStreamProperties
 type Key = original.Key
 type KeyListResult = original.KeyListResult
+type KeysClient = original.KeysClient
 type LinkedWorkspace = original.LinkedWorkspace
+type LinkedWorkspaceClient = original.LinkedWorkspaceClient
 type LinuxProperties = original.LinuxProperties
 type Module = original.Module
+type ModuleClient = original.ModuleClient
 type ModuleCreateOrUpdateParameters = original.ModuleCreateOrUpdateParameters
 type ModuleCreateOrUpdateProperties = original.ModuleCreateOrUpdateProperties
 type ModuleErrorInfo = original.ModuleErrorInfo
@@ -451,19 +451,24 @@ type ModuleListResultPage = original.ModuleListResultPage
 type ModuleProperties = original.ModuleProperties
 type ModuleUpdateParameters = original.ModuleUpdateParameters
 type ModuleUpdateProperties = original.ModuleUpdateProperties
+type NodeReportsClient = original.NodeReportsClient
+type ObjectDataTypesClient = original.ObjectDataTypesClient
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
+type OperationsClient = original.OperationsClient
 type ProxyResource = original.ProxyResource
 type Resource = original.Resource
 type RunAsCredentialAssociationProperty = original.RunAsCredentialAssociationProperty
 type Runbook = original.Runbook
 type RunbookAssociationProperty = original.RunbookAssociationProperty
+type RunbookClient = original.RunbookClient
 type RunbookCreateOrUpdateDraftParameters = original.RunbookCreateOrUpdateDraftParameters
 type RunbookCreateOrUpdateDraftProperties = original.RunbookCreateOrUpdateDraftProperties
 type RunbookCreateOrUpdateParameters = original.RunbookCreateOrUpdateParameters
 type RunbookCreateOrUpdateProperties = original.RunbookCreateOrUpdateProperties
 type RunbookDraft = original.RunbookDraft
+type RunbookDraftClient = original.RunbookDraftClient
 type RunbookDraftPublishFuture = original.RunbookDraftPublishFuture
 type RunbookDraftReplaceContentFuture = original.RunbookDraftReplaceContentFuture
 type RunbookDraftUndoEditResult = original.RunbookDraftUndoEditResult
@@ -476,6 +481,7 @@ type RunbookUpdateParameters = original.RunbookUpdateParameters
 type RunbookUpdateProperties = original.RunbookUpdateProperties
 type Schedule = original.Schedule
 type ScheduleAssociationProperty = original.ScheduleAssociationProperty
+type ScheduleClient = original.ScheduleClient
 type ScheduleCreateOrUpdateParameters = original.ScheduleCreateOrUpdateParameters
 type ScheduleCreateOrUpdateProperties = original.ScheduleCreateOrUpdateProperties
 type ScheduleListResult = original.ScheduleListResult
@@ -492,11 +498,15 @@ type SoftwareUpdateConfigurationCollectionItemProperties = original.SoftwareUpda
 type SoftwareUpdateConfigurationListResult = original.SoftwareUpdateConfigurationListResult
 type SoftwareUpdateConfigurationMachineRun = original.SoftwareUpdateConfigurationMachineRun
 type SoftwareUpdateConfigurationMachineRunListResult = original.SoftwareUpdateConfigurationMachineRunListResult
+type SoftwareUpdateConfigurationMachineRunsClient = original.SoftwareUpdateConfigurationMachineRunsClient
 type SoftwareUpdateConfigurationProperties = original.SoftwareUpdateConfigurationProperties
 type SoftwareUpdateConfigurationRun = original.SoftwareUpdateConfigurationRun
 type SoftwareUpdateConfigurationRunListResult = original.SoftwareUpdateConfigurationRunListResult
 type SoftwareUpdateConfigurationRunProperties = original.SoftwareUpdateConfigurationRunProperties
+type SoftwareUpdateConfigurationRunsClient = original.SoftwareUpdateConfigurationRunsClient
+type SoftwareUpdateConfigurationsClient = original.SoftwareUpdateConfigurationsClient
 type SourceControl = original.SourceControl
+type SourceControlClient = original.SourceControlClient
 type SourceControlCreateOrUpdateParameters = original.SourceControlCreateOrUpdateParameters
 type SourceControlCreateOrUpdateProperties = original.SourceControlCreateOrUpdateProperties
 type SourceControlListResult = original.SourceControlListResult
@@ -507,6 +517,7 @@ type SourceControlSyncJob = original.SourceControlSyncJob
 type SourceControlSyncJobByID = original.SourceControlSyncJobByID
 type SourceControlSyncJobByIDErrors = original.SourceControlSyncJobByIDErrors
 type SourceControlSyncJobByIDProperties = original.SourceControlSyncJobByIDProperties
+type SourceControlSyncJobClient = original.SourceControlSyncJobClient
 type SourceControlSyncJobListResult = original.SourceControlSyncJobListResult
 type SourceControlSyncJobListResultIterator = original.SourceControlSyncJobListResultIterator
 type SourceControlSyncJobListResultPage = original.SourceControlSyncJobListResultPage
@@ -514,11 +525,14 @@ type SourceControlSyncJobProperties = original.SourceControlSyncJobProperties
 type SourceControlUpdateParameters = original.SourceControlUpdateParameters
 type SourceControlUpdateProperties = original.SourceControlUpdateProperties
 type Statistics = original.Statistics
+type StatisticsClient = original.StatisticsClient
 type StatisticsListResult = original.StatisticsListResult
 type String = original.String
 type SubResource = original.SubResource
 type TestJob = original.TestJob
+type TestJobClient = original.TestJobClient
 type TestJobCreateParameters = original.TestJobCreateParameters
+type TestJobStreamsClient = original.TestJobStreamsClient
 type TypeField = original.TypeField
 type TypeFieldListResult = original.TypeFieldListResult
 type UpdateConfiguration = original.UpdateConfiguration
@@ -527,7 +541,9 @@ type UpdateConfigurationNavigation = original.UpdateConfigurationNavigation
 type Usage = original.Usage
 type UsageCounterName = original.UsageCounterName
 type UsageListResult = original.UsageListResult
+type UsagesClient = original.UsagesClient
 type Variable = original.Variable
+type VariableClient = original.VariableClient
 type VariableCreateOrUpdateParameters = original.VariableCreateOrUpdateParameters
 type VariableCreateOrUpdateProperties = original.VariableCreateOrUpdateProperties
 type VariableListResult = original.VariableListResult
@@ -537,6 +553,7 @@ type VariableProperties = original.VariableProperties
 type VariableUpdateParameters = original.VariableUpdateParameters
 type VariableUpdateProperties = original.VariableUpdateProperties
 type Webhook = original.Webhook
+type WebhookClient = original.WebhookClient
 type WebhookCreateOrUpdateParameters = original.WebhookCreateOrUpdateParameters
 type WebhookCreateOrUpdateProperties = original.WebhookCreateOrUpdateProperties
 type WebhookListResult = original.WebhookListResult
@@ -546,25 +563,10 @@ type WebhookProperties = original.WebhookProperties
 type WebhookUpdateParameters = original.WebhookUpdateParameters
 type WebhookUpdateProperties = original.WebhookUpdateProperties
 type WindowsProperties = original.WindowsProperties
-type ModuleClient = original.ModuleClient
-type NodeReportsClient = original.NodeReportsClient
-type ObjectDataTypesClient = original.ObjectDataTypesClient
-type OperationsClient = original.OperationsClient
-type RunbookClient = original.RunbookClient
-type RunbookDraftClient = original.RunbookDraftClient
-type ScheduleClient = original.ScheduleClient
-type SoftwareUpdateConfigurationMachineRunsClient = original.SoftwareUpdateConfigurationMachineRunsClient
-type SoftwareUpdateConfigurationRunsClient = original.SoftwareUpdateConfigurationRunsClient
-type SoftwareUpdateConfigurationsClient = original.SoftwareUpdateConfigurationsClient
-type SourceControlClient = original.SourceControlClient
-type SourceControlSyncJobClient = original.SourceControlSyncJobClient
-type StatisticsClient = original.StatisticsClient
-type TestJobClient = original.TestJobClient
-type TestJobStreamsClient = original.TestJobStreamsClient
-type UsagesClient = original.UsagesClient
-type VariableClient = original.VariableClient
-type WebhookClient = original.WebhookClient
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
 func NewAccountClient(subscriptionID string) AccountClient {
 	return original.NewAccountClient(subscriptionID)
 }
@@ -588,12 +590,6 @@ func NewCertificateClient(subscriptionID string) CertificateClient {
 }
 func NewCertificateClientWithBaseURI(baseURI string, subscriptionID string) CertificateClient {
 	return original.NewCertificateClientWithBaseURI(baseURI, subscriptionID)
-}
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewConnectionClient(subscriptionID string) ConnectionClient {
 	return original.NewConnectionClient(subscriptionID)
@@ -684,75 +680,6 @@ func NewLinkedWorkspaceClient(subscriptionID string) LinkedWorkspaceClient {
 }
 func NewLinkedWorkspaceClientWithBaseURI(baseURI string, subscriptionID string) LinkedWorkspaceClient {
 	return original.NewLinkedWorkspaceClientWithBaseURI(baseURI, subscriptionID)
-}
-func PossibleAccountStateValues() []AccountState {
-	return original.PossibleAccountStateValues()
-}
-func PossibleAgentRegistrationKeyNameValues() []AgentRegistrationKeyName {
-	return original.PossibleAgentRegistrationKeyNameValues()
-}
-func PossibleContentSourceTypeValues() []ContentSourceType {
-	return original.PossibleContentSourceTypeValues()
-}
-func PossibleDscConfigurationProvisioningStateValues() []DscConfigurationProvisioningState {
-	return original.PossibleDscConfigurationProvisioningStateValues()
-}
-func PossibleDscConfigurationStateValues() []DscConfigurationState {
-	return original.PossibleDscConfigurationStateValues()
-}
-func PossibleHTTPStatusCodeValues() []HTTPStatusCode {
-	return original.PossibleHTTPStatusCodeValues()
-}
-func PossibleJobProvisioningStateValues() []JobProvisioningState {
-	return original.PossibleJobProvisioningStateValues()
-}
-func PossibleJobStatusValues() []JobStatus {
-	return original.PossibleJobStatusValues()
-}
-func PossibleJobStreamTypeValues() []JobStreamType {
-	return original.PossibleJobStreamTypeValues()
-}
-func PossibleKeyNameValues() []KeyName {
-	return original.PossibleKeyNameValues()
-}
-func PossibleKeyPermissionsValues() []KeyPermissions {
-	return original.PossibleKeyPermissionsValues()
-}
-func PossibleLinuxUpdateClassesValues() []LinuxUpdateClasses {
-	return original.PossibleLinuxUpdateClassesValues()
-}
-func PossibleModuleProvisioningStateValues() []ModuleProvisioningState {
-	return original.PossibleModuleProvisioningStateValues()
-}
-func PossibleOperatingSystemTypeValues() []OperatingSystemType {
-	return original.PossibleOperatingSystemTypeValues()
-}
-func PossibleProvisioningStateValues() []ProvisioningState {
-	return original.PossibleProvisioningStateValues()
-}
-func PossibleRunbookProvisioningStateValues() []RunbookProvisioningState {
-	return original.PossibleRunbookProvisioningStateValues()
-}
-func PossibleRunbookStateValues() []RunbookState {
-	return original.PossibleRunbookStateValues()
-}
-func PossibleRunbookTypeEnumValues() []RunbookTypeEnum {
-	return original.PossibleRunbookTypeEnumValues()
-}
-func PossibleScheduleDayValues() []ScheduleDay {
-	return original.PossibleScheduleDayValues()
-}
-func PossibleScheduleFrequencyValues() []ScheduleFrequency {
-	return original.PossibleScheduleFrequencyValues()
-}
-func PossibleSkuNameEnumValues() []SkuNameEnum {
-	return original.PossibleSkuNameEnumValues()
-}
-func PossibleSourceTypeValues() []SourceType {
-	return original.PossibleSourceTypeValues()
-}
-func PossibleWindowsUpdateClassesValues() []WindowsUpdateClasses {
-	return original.PossibleWindowsUpdateClassesValues()
 }
 func NewModuleClient(subscriptionID string) ModuleClient {
 	return original.NewModuleClient(subscriptionID)
@@ -856,15 +783,87 @@ func NewVariableClient(subscriptionID string) VariableClient {
 func NewVariableClientWithBaseURI(baseURI string, subscriptionID string) VariableClient {
 	return original.NewVariableClientWithBaseURI(baseURI, subscriptionID)
 }
-func UserAgent() string {
-	return original.UserAgent() + " profiles/preview"
-}
-func Version() string {
-	return original.Version()
-}
 func NewWebhookClient(subscriptionID string) WebhookClient {
 	return original.NewWebhookClient(subscriptionID)
 }
 func NewWebhookClientWithBaseURI(baseURI string, subscriptionID string) WebhookClient {
 	return original.NewWebhookClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
+}
+func PossibleAccountStateValues() []AccountState {
+	return original.PossibleAccountStateValues()
+}
+func PossibleAgentRegistrationKeyNameValues() []AgentRegistrationKeyName {
+	return original.PossibleAgentRegistrationKeyNameValues()
+}
+func PossibleContentSourceTypeValues() []ContentSourceType {
+	return original.PossibleContentSourceTypeValues()
+}
+func PossibleDscConfigurationProvisioningStateValues() []DscConfigurationProvisioningState {
+	return original.PossibleDscConfigurationProvisioningStateValues()
+}
+func PossibleDscConfigurationStateValues() []DscConfigurationState {
+	return original.PossibleDscConfigurationStateValues()
+}
+func PossibleHTTPStatusCodeValues() []HTTPStatusCode {
+	return original.PossibleHTTPStatusCodeValues()
+}
+func PossibleJobProvisioningStateValues() []JobProvisioningState {
+	return original.PossibleJobProvisioningStateValues()
+}
+func PossibleJobStatusValues() []JobStatus {
+	return original.PossibleJobStatusValues()
+}
+func PossibleJobStreamTypeValues() []JobStreamType {
+	return original.PossibleJobStreamTypeValues()
+}
+func PossibleKeyNameValues() []KeyName {
+	return original.PossibleKeyNameValues()
+}
+func PossibleKeyPermissionsValues() []KeyPermissions {
+	return original.PossibleKeyPermissionsValues()
+}
+func PossibleLinuxUpdateClassesValues() []LinuxUpdateClasses {
+	return original.PossibleLinuxUpdateClassesValues()
+}
+func PossibleModuleProvisioningStateValues() []ModuleProvisioningState {
+	return original.PossibleModuleProvisioningStateValues()
+}
+func PossibleOperatingSystemTypeValues() []OperatingSystemType {
+	return original.PossibleOperatingSystemTypeValues()
+}
+func PossibleProvisioningStateValues() []ProvisioningState {
+	return original.PossibleProvisioningStateValues()
+}
+func PossibleRunbookProvisioningStateValues() []RunbookProvisioningState {
+	return original.PossibleRunbookProvisioningStateValues()
+}
+func PossibleRunbookStateValues() []RunbookState {
+	return original.PossibleRunbookStateValues()
+}
+func PossibleRunbookTypeEnumValues() []RunbookTypeEnum {
+	return original.PossibleRunbookTypeEnumValues()
+}
+func PossibleScheduleDayValues() []ScheduleDay {
+	return original.PossibleScheduleDayValues()
+}
+func PossibleScheduleFrequencyValues() []ScheduleFrequency {
+	return original.PossibleScheduleFrequencyValues()
+}
+func PossibleSkuNameEnumValues() []SkuNameEnum {
+	return original.PossibleSkuNameEnumValues()
+}
+func PossibleSourceTypeValues() []SourceType {
+	return original.PossibleSourceTypeValues()
+}
+func PossibleWindowsUpdateClassesValues() []WindowsUpdateClasses {
+	return original.PossibleWindowsUpdateClassesValues()
+}
+func UserAgent() string {
+	return original.UserAgent() + " profiles/preview"
+}
+func Version() string {
+	return original.Version()
 }

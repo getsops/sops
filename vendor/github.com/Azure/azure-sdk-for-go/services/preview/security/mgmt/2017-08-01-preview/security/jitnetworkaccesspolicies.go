@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewJitNetworkAccessPoliciesClientWithBaseURI(baseURI string, subscriptionID
 // insensitive.
 // jitNetworkAccessPolicyName - name of a Just-in-Time access configuration policy.
 func (client JitNetworkAccessPoliciesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, jitNetworkAccessPolicyName string, body JitNetworkAccessPolicy) (result JitNetworkAccessPolicy, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JitNetworkAccessPoliciesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -130,6 +141,16 @@ func (client JitNetworkAccessPoliciesClient) CreateOrUpdateResponder(resp *http.
 // insensitive.
 // jitNetworkAccessPolicyName - name of a Just-in-Time access configuration policy.
 func (client JitNetworkAccessPoliciesClient) Delete(ctx context.Context, resourceGroupName string, jitNetworkAccessPolicyName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JitNetworkAccessPoliciesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -208,6 +229,16 @@ func (client JitNetworkAccessPoliciesClient) DeleteResponder(resp *http.Response
 // insensitive.
 // jitNetworkAccessPolicyName - name of a Just-in-Time access configuration policy.
 func (client JitNetworkAccessPoliciesClient) Get(ctx context.Context, resourceGroupName string, jitNetworkAccessPolicyName string) (result JitNetworkAccessPolicy, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JitNetworkAccessPoliciesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -287,6 +318,16 @@ func (client JitNetworkAccessPoliciesClient) GetResponder(resp *http.Response) (
 // insensitive.
 // jitNetworkAccessPolicyName - name of a Just-in-Time access configuration policy.
 func (client JitNetworkAccessPoliciesClient) Initiate(ctx context.Context, resourceGroupName string, jitNetworkAccessPolicyName string, body JitNetworkAccessPolicyInitiateRequest) (result JitNetworkAccessRequest, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JitNetworkAccessPoliciesClient.Initiate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -367,6 +408,16 @@ func (client JitNetworkAccessPoliciesClient) InitiateResponder(resp *http.Respon
 
 // List policies for protecting resources using Just-in-Time access control.
 func (client JitNetworkAccessPoliciesClient) List(ctx context.Context) (result JitNetworkAccessPoliciesListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JitNetworkAccessPoliciesClient.List")
+		defer func() {
+			sc := -1
+			if result.jnapl.Response.Response != nil {
+				sc = result.jnapl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -435,8 +486,8 @@ func (client JitNetworkAccessPoliciesClient) ListResponder(resp *http.Response) 
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client JitNetworkAccessPoliciesClient) listNextResults(lastResults JitNetworkAccessPoliciesList) (result JitNetworkAccessPoliciesList, err error) {
-	req, err := lastResults.jitNetworkAccessPoliciesListPreparer()
+func (client JitNetworkAccessPoliciesClient) listNextResults(ctx context.Context, lastResults JitNetworkAccessPoliciesList) (result JitNetworkAccessPoliciesList, err error) {
+	req, err := lastResults.jitNetworkAccessPoliciesListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.JitNetworkAccessPoliciesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -457,12 +508,32 @@ func (client JitNetworkAccessPoliciesClient) listNextResults(lastResults JitNetw
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JitNetworkAccessPoliciesClient) ListComplete(ctx context.Context) (result JitNetworkAccessPoliciesListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JitNetworkAccessPoliciesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
 
 // ListByRegion policies for protecting resources using Just-in-Time access control for the subscription, location
 func (client JitNetworkAccessPoliciesClient) ListByRegion(ctx context.Context) (result JitNetworkAccessPoliciesListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JitNetworkAccessPoliciesClient.ListByRegion")
+		defer func() {
+			sc := -1
+			if result.jnapl.Response.Response != nil {
+				sc = result.jnapl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -532,8 +603,8 @@ func (client JitNetworkAccessPoliciesClient) ListByRegionResponder(resp *http.Re
 }
 
 // listByRegionNextResults retrieves the next set of results, if any.
-func (client JitNetworkAccessPoliciesClient) listByRegionNextResults(lastResults JitNetworkAccessPoliciesList) (result JitNetworkAccessPoliciesList, err error) {
-	req, err := lastResults.jitNetworkAccessPoliciesListPreparer()
+func (client JitNetworkAccessPoliciesClient) listByRegionNextResults(ctx context.Context, lastResults JitNetworkAccessPoliciesList) (result JitNetworkAccessPoliciesList, err error) {
+	req, err := lastResults.jitNetworkAccessPoliciesListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.JitNetworkAccessPoliciesClient", "listByRegionNextResults", nil, "Failure preparing next results request")
 	}
@@ -554,6 +625,16 @@ func (client JitNetworkAccessPoliciesClient) listByRegionNextResults(lastResults
 
 // ListByRegionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JitNetworkAccessPoliciesClient) ListByRegionComplete(ctx context.Context) (result JitNetworkAccessPoliciesListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JitNetworkAccessPoliciesClient.ListByRegion")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByRegion(ctx)
 	return
 }
@@ -564,6 +645,16 @@ func (client JitNetworkAccessPoliciesClient) ListByRegionComplete(ctx context.Co
 // resourceGroupName - the name of the resource group within the user's subscription. The name is case
 // insensitive.
 func (client JitNetworkAccessPoliciesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result JitNetworkAccessPoliciesListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JitNetworkAccessPoliciesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.jnapl.Response.Response != nil {
+				sc = result.jnapl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -637,8 +728,8 @@ func (client JitNetworkAccessPoliciesClient) ListByResourceGroupResponder(resp *
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client JitNetworkAccessPoliciesClient) listByResourceGroupNextResults(lastResults JitNetworkAccessPoliciesList) (result JitNetworkAccessPoliciesList, err error) {
-	req, err := lastResults.jitNetworkAccessPoliciesListPreparer()
+func (client JitNetworkAccessPoliciesClient) listByResourceGroupNextResults(ctx context.Context, lastResults JitNetworkAccessPoliciesList) (result JitNetworkAccessPoliciesList, err error) {
+	req, err := lastResults.jitNetworkAccessPoliciesListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.JitNetworkAccessPoliciesClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -659,6 +750,16 @@ func (client JitNetworkAccessPoliciesClient) listByResourceGroupNextResults(last
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JitNetworkAccessPoliciesClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result JitNetworkAccessPoliciesListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JitNetworkAccessPoliciesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -669,6 +770,16 @@ func (client JitNetworkAccessPoliciesClient) ListByResourceGroupComplete(ctx con
 // resourceGroupName - the name of the resource group within the user's subscription. The name is case
 // insensitive.
 func (client JitNetworkAccessPoliciesClient) ListByResourceGroupAndRegion(ctx context.Context, resourceGroupName string) (result JitNetworkAccessPoliciesListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JitNetworkAccessPoliciesClient.ListByResourceGroupAndRegion")
+		defer func() {
+			sc := -1
+			if result.jnapl.Response.Response != nil {
+				sc = result.jnapl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -743,8 +854,8 @@ func (client JitNetworkAccessPoliciesClient) ListByResourceGroupAndRegionRespond
 }
 
 // listByResourceGroupAndRegionNextResults retrieves the next set of results, if any.
-func (client JitNetworkAccessPoliciesClient) listByResourceGroupAndRegionNextResults(lastResults JitNetworkAccessPoliciesList) (result JitNetworkAccessPoliciesList, err error) {
-	req, err := lastResults.jitNetworkAccessPoliciesListPreparer()
+func (client JitNetworkAccessPoliciesClient) listByResourceGroupAndRegionNextResults(ctx context.Context, lastResults JitNetworkAccessPoliciesList) (result JitNetworkAccessPoliciesList, err error) {
+	req, err := lastResults.jitNetworkAccessPoliciesListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.JitNetworkAccessPoliciesClient", "listByResourceGroupAndRegionNextResults", nil, "Failure preparing next results request")
 	}
@@ -765,6 +876,16 @@ func (client JitNetworkAccessPoliciesClient) listByResourceGroupAndRegionNextRes
 
 // ListByResourceGroupAndRegionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JitNetworkAccessPoliciesClient) ListByResourceGroupAndRegionComplete(ctx context.Context, resourceGroupName string) (result JitNetworkAccessPoliciesListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JitNetworkAccessPoliciesClient.ListByResourceGroupAndRegion")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroupAndRegion(ctx, resourceGroupName)
 	return
 }

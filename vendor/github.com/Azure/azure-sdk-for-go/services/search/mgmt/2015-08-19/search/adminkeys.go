@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -48,6 +49,16 @@ func NewAdminKeysClientWithBaseURI(baseURI string, subscriptionID string) AdminK
 // clientRequestID - a client-generated GUID value that identifies this request. If specified, this will be
 // included in response information as a way to track the request.
 func (client AdminKeysClient) Get(ctx context.Context, resourceGroupName string, searchServiceName string, clientRequestID *uuid.UUID) (result AdminKeyResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AdminKeysClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, searchServiceName, clientRequestID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "search.AdminKeysClient", "Get", nil, "Failure preparing request")
@@ -123,6 +134,16 @@ func (client AdminKeysClient) GetResponder(resp *http.Response) (result AdminKey
 // clientRequestID - a client-generated GUID value that identifies this request. If specified, this will be
 // included in response information as a way to track the request.
 func (client AdminKeysClient) Regenerate(ctx context.Context, resourceGroupName string, searchServiceName string, keyKind AdminKeyKind, clientRequestID *uuid.UUID) (result AdminKeyResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AdminKeysClient.Regenerate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RegeneratePreparer(ctx, resourceGroupName, searchServiceName, keyKind, clientRequestID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "search.AdminKeysClient", "Regenerate", nil, "Failure preparing request")

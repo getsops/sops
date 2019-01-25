@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,15 +19,16 @@
 
 package containerservice
 
-import original "github.com/Azure/azure-sdk-for-go/services/containerservice/mgmt/2018-03-31/containerservice"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/containerservice/mgmt/2018-03-31/containerservice"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type ContainerServicesClient = original.ContainerServicesClient
-type ManagedClustersClient = original.ManagedClustersClient
 type NetworkPlugin = original.NetworkPlugin
 
 const (
@@ -41,6 +42,13 @@ const (
 	Calico NetworkPolicy = original.Calico
 )
 
+type OSType = original.OSType
+
+const (
+	Linux   OSType = original.Linux
+	Windows OSType = original.Windows
+)
+
 type OrchestratorTypes = original.OrchestratorTypes
 
 const (
@@ -49,13 +57,6 @@ const (
 	DockerCE   OrchestratorTypes = original.DockerCE
 	Kubernetes OrchestratorTypes = original.Kubernetes
 	Swarm      OrchestratorTypes = original.Swarm
-)
-
-type OSType = original.OSType
-
-const (
-	Linux   OSType = original.Linux
-	Windows OSType = original.Windows
 )
 
 type StorageProfileTypes = original.StorageProfileTypes
@@ -246,7 +247,9 @@ const (
 
 type AccessProfile = original.AccessProfile
 type AgentPoolProfile = original.AgentPoolProfile
+type BaseClient = original.BaseClient
 type ContainerService = original.ContainerService
+type ContainerServicesClient = original.ContainerServicesClient
 type ContainerServicesCreateOrUpdateFutureType = original.ContainerServicesCreateOrUpdateFutureType
 type ContainerServicesDeleteFutureType = original.ContainerServicesDeleteFutureType
 type CredentialResult = original.CredentialResult
@@ -268,17 +271,21 @@ type ManagedClusterListResultIterator = original.ManagedClusterListResultIterato
 type ManagedClusterListResultPage = original.ManagedClusterListResultPage
 type ManagedClusterPoolUpgradeProfile = original.ManagedClusterPoolUpgradeProfile
 type ManagedClusterProperties = original.ManagedClusterProperties
-type ManagedClustersCreateOrUpdateFuture = original.ManagedClustersCreateOrUpdateFuture
-type ManagedClustersDeleteFuture = original.ManagedClustersDeleteFuture
 type ManagedClusterServicePrincipalProfile = original.ManagedClusterServicePrincipalProfile
-type ManagedClustersUpdateTagsFuture = original.ManagedClustersUpdateTagsFuture
 type ManagedClusterUpgradeProfile = original.ManagedClusterUpgradeProfile
 type ManagedClusterUpgradeProfileProperties = original.ManagedClusterUpgradeProfileProperties
+type ManagedClustersClient = original.ManagedClustersClient
+type ManagedClustersCreateOrUpdateFuture = original.ManagedClustersCreateOrUpdateFuture
+type ManagedClustersDeleteFuture = original.ManagedClustersDeleteFuture
+type ManagedClustersResetAADProfileFuture = original.ManagedClustersResetAADProfileFuture
+type ManagedClustersResetServicePrincipalProfileFuture = original.ManagedClustersResetServicePrincipalProfileFuture
+type ManagedClustersUpdateTagsFuture = original.ManagedClustersUpdateTagsFuture
 type MasterProfile = original.MasterProfile
 type NetworkProfile = original.NetworkProfile
 type OperationListResult = original.OperationListResult
 type OperationValue = original.OperationValue
 type OperationValueDisplay = original.OperationValueDisplay
+type OperationsClient = original.OperationsClient
 type OrchestratorProfile = original.OrchestratorProfile
 type OrchestratorProfileType = original.OrchestratorProfileType
 type OrchestratorVersionProfile = original.OrchestratorVersionProfile
@@ -286,19 +293,15 @@ type OrchestratorVersionProfileListResult = original.OrchestratorVersionProfileL
 type OrchestratorVersionProfileProperties = original.OrchestratorVersionProfileProperties
 type Properties = original.Properties
 type Resource = original.Resource
-type ServicePrincipalProfile = original.ServicePrincipalProfile
 type SSHConfiguration = original.SSHConfiguration
 type SSHPublicKey = original.SSHPublicKey
+type ServicePrincipalProfile = original.ServicePrincipalProfile
 type TagsObject = original.TagsObject
 type VMDiagnostics = original.VMDiagnostics
 type WindowsProfile = original.WindowsProfile
-type OperationsClient = original.OperationsClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewContainerServicesClient(subscriptionID string) ContainerServicesClient {
 	return original.NewContainerServicesClient(subscriptionID)
@@ -306,11 +309,32 @@ func NewContainerServicesClient(subscriptionID string) ContainerServicesClient {
 func NewContainerServicesClientWithBaseURI(baseURI string, subscriptionID string) ContainerServicesClient {
 	return original.NewContainerServicesClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewListResultIterator(page ListResultPage) ListResultIterator {
+	return original.NewListResultIterator(page)
+}
+func NewListResultPage(getNextPage func(context.Context, ListResult) (ListResult, error)) ListResultPage {
+	return original.NewListResultPage(getNextPage)
+}
+func NewManagedClusterListResultIterator(page ManagedClusterListResultPage) ManagedClusterListResultIterator {
+	return original.NewManagedClusterListResultIterator(page)
+}
+func NewManagedClusterListResultPage(getNextPage func(context.Context, ManagedClusterListResult) (ManagedClusterListResult, error)) ManagedClusterListResultPage {
+	return original.NewManagedClusterListResultPage(getNextPage)
+}
 func NewManagedClustersClient(subscriptionID string) ManagedClustersClient {
 	return original.NewManagedClustersClient(subscriptionID)
 }
 func NewManagedClustersClientWithBaseURI(baseURI string, subscriptionID string) ManagedClustersClient {
 	return original.NewManagedClustersClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleNetworkPluginValues() []NetworkPlugin {
 	return original.PossibleNetworkPluginValues()
@@ -318,23 +342,17 @@ func PossibleNetworkPluginValues() []NetworkPlugin {
 func PossibleNetworkPolicyValues() []NetworkPolicy {
 	return original.PossibleNetworkPolicyValues()
 }
-func PossibleOrchestratorTypesValues() []OrchestratorTypes {
-	return original.PossibleOrchestratorTypesValues()
-}
 func PossibleOSTypeValues() []OSType {
 	return original.PossibleOSTypeValues()
+}
+func PossibleOrchestratorTypesValues() []OrchestratorTypes {
+	return original.PossibleOrchestratorTypesValues()
 }
 func PossibleStorageProfileTypesValues() []StorageProfileTypes {
 	return original.PossibleStorageProfileTypesValues()
 }
 func PossibleVMSizeTypesValues() []VMSizeTypes {
 	return original.PossibleVMSizeTypesValues()
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

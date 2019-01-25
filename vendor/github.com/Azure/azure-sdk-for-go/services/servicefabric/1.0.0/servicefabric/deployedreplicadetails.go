@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedReplicaDetailsClient is the client for the DeployedReplicaDetails methods of the Servicefabric service.
 type DeployedReplicaDetailsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewDeployedReplicaDetailsClient creates an instance of the DeployedReplicaDetailsClient client.
 func NewDeployedReplicaDetailsClient(timeout *int32) DeployedReplicaDetailsClient {
 	return NewDeployedReplicaDetailsClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewDeployedReplicaDetailsClientWithBaseURI creates an instance of the DeployedReplicaDetailsClient client.
 func NewDeployedReplicaDetailsClientWithBaseURI(baseURI string, timeout *int32) DeployedReplicaDetailsClient {
 	return DeployedReplicaDetailsClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get deployed replica details
 // Parameters:
 // nodeName - the name of the node
@@ -66,6 +70,7 @@ func (client DeployedReplicaDetailsClient) Get(ctx context.Context, nodeName str
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client DeployedReplicaDetailsClient) GetPreparer(ctx context.Context, nodeName string, partitionName string, replicaID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -90,6 +95,7 @@ func (client DeployedReplicaDetailsClient) GetPreparer(ctx context.Context, node
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client DeployedReplicaDetailsClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -97,6 +103,7 @@ func (client DeployedReplicaDetailsClient) GetSender(req *http.Request) (*http.R
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client DeployedReplicaDetailsClient) GetResponder(resp *http.Response) (result DeployedReplicaDetail, err error) {

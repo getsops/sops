@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"io"
 	"net/http"
 )
@@ -48,6 +49,16 @@ func NewClient(endpoint string) Client {
 // smile, facialHair, glasses and emotion. Note that each face attribute analysis has additional computational
 // and time cost.
 func (client Client) DetectWithStream(ctx context.Context, imageParameter io.ReadCloser, returnFaceID *bool, returnFaceLandmarks *bool, returnFaceAttributes []AttributeType) (result ListDetectedFace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.DetectWithStream")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DetectWithStreamPreparer(ctx, imageParameter, returnFaceID, returnFaceLandmarks, returnFaceAttributes)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "face.Client", "DetectWithStream", nil, "Failure preparing request")
@@ -132,6 +143,16 @@ func (client Client) DetectWithStreamResponder(resp *http.Response) (result List
 // smile, facialHair, glasses and emotion. Note that each face attribute analysis has additional computational
 // and time cost.
 func (client Client) DetectWithURL(ctx context.Context, imageURL ImageURL, returnFaceID *bool, returnFaceLandmarks *bool, returnFaceAttributes []AttributeType) (result ListDetectedFace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.DetectWithURL")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: imageURL,
 			Constraints: []validation.Constraint{{Target: "imageURL.URL", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -215,6 +236,16 @@ func (client Client) DetectWithURLResponder(resp *http.Response) (result ListDet
 // Parameters:
 // body - request body for Find Similar.
 func (client Client) FindSimilar(ctx context.Context, body FindSimilarRequest) (result ListSimilarFace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.FindSimilar")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: body,
 			Constraints: []validation.Constraint{{Target: "body.FaceID", Name: validation.Null, Rule: true, Chain: nil},
@@ -295,6 +326,16 @@ func (client Client) FindSimilarResponder(resp *http.Response) (result ListSimil
 // Parameters:
 // body - request body for grouping.
 func (client Client) Group(ctx context.Context, body GroupRequest) (result GroupResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Group")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: body,
 			Constraints: []validation.Constraint{{Target: "body.FaceIds", Name: validation.Null, Rule: true,
@@ -363,6 +404,16 @@ func (client Client) GroupResponder(resp *http.Response) (result GroupResult, er
 // Parameters:
 // body - request body for identify operation.
 func (client Client) Identify(ctx context.Context, body IdentifyRequest) (result ListIdentifyResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Identify")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: body,
 			Constraints: []validation.Constraint{{Target: "body.FaceIds", Name: validation.Null, Rule: true,
@@ -442,6 +493,16 @@ func (client Client) IdentifyResponder(resp *http.Response) (result ListIdentify
 // Parameters:
 // body - request body for face to face verification.
 func (client Client) VerifyFaceToFace(ctx context.Context, body VerifyFaceToFaceRequest) (result VerifyResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.VerifyFaceToFace")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: body,
 			Constraints: []validation.Constraint{{Target: "body.FaceID1", Name: validation.Null, Rule: true, Chain: nil},
@@ -509,6 +570,16 @@ func (client Client) VerifyFaceToFaceResponder(resp *http.Response) (result Veri
 // Parameters:
 // body - request body for face to person verification.
 func (client Client) VerifyFaceToPerson(ctx context.Context, body VerifyFaceToPersonRequest) (result VerifyResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.VerifyFaceToPerson")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: body,
 			Constraints: []validation.Constraint{{Target: "body.FaceID", Name: validation.Null, Rule: true, Chain: nil},

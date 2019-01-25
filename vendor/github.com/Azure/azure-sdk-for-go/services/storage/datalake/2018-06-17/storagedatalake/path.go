@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"io"
 	"net/http"
 )
@@ -107,6 +108,16 @@ func NewPathClient(xMsVersion string, accountName string) PathClient {
 // xMsDate - specifies the Coordinated Universal Time (UTC) for the request.  This is required when using
 // shared key authorization.
 func (client PathClient) Create(ctx context.Context, filesystem string, pathParameter string, resource PathResourceType, continuation string, mode PathRenameMode, cacheControl string, contentEncoding string, contentLanguage string, contentDisposition string, xMsCacheControl string, xMsContentType string, xMsContentEncoding string, xMsContentLanguage string, xMsContentDisposition string, xMsRenameSource string, xMsLeaseID string, xMsProposedLeaseID string, xMsSourceLeaseID string, xMsProperties string, xMsPermissions string, ifMatch string, ifNoneMatch string, ifModifiedSince string, ifUnmodifiedSince string, xMsSourceIfMatch string, xMsSourceIfNoneMatch string, xMsSourceIfModifiedSince string, xMsSourceIfUnmodifiedSince string, xMsClientRequestID string, timeout *int32, xMsDate string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PathClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: xMsLeaseID,
 			Constraints: []validation.Constraint{{Target: "xMsLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
@@ -331,6 +342,16 @@ func (client PathClient) CreateResponder(resp *http.Response) (result autorest.R
 // xMsDate - specifies the Coordinated Universal Time (UTC) for the request.  This is required when using
 // shared key authorization.
 func (client PathClient) Delete(ctx context.Context, filesystem string, pathParameter string, recursive *bool, continuation string, xMsLeaseID string, ifMatch string, ifNoneMatch string, ifModifiedSince string, ifUnmodifiedSince string, xMsClientRequestID string, timeout *int32, xMsDate string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PathClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: xMsLeaseID,
 			Constraints: []validation.Constraint{{Target: "xMsLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
@@ -472,6 +493,16 @@ func (client PathClient) DeleteResponder(resp *http.Response) (result autorest.R
 // xMsDate - specifies the Coordinated Universal Time (UTC) for the request.  This is required when using
 // shared key authorization.
 func (client PathClient) GetProperties(ctx context.Context, filesystem string, pathParameter string, action PathGetPropertiesAction, ifMatch string, ifNoneMatch string, ifModifiedSince string, ifUnmodifiedSince string, xMsClientRequestID string, timeout *int32, xMsDate string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PathClient.GetProperties")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: filesystem,
 			Constraints: []validation.Constraint{{Target: "filesystem", Name: validation.MaxLength, Rule: 63, Chain: nil},
@@ -618,6 +649,16 @@ func (client PathClient) GetPropertiesResponder(resp *http.Response) (result aut
 // xMsDate - specifies the Coordinated Universal Time (UTC) for the request.  This is required when using
 // shared key authorization.
 func (client PathClient) Lease(ctx context.Context, xMsLeaseAction PathLeaseAction, filesystem string, pathParameter string, xMsLeaseDuration *int32, xMsLeaseBreakPeriod *int32, xMsLeaseID string, xMsProposedLeaseID string, ifMatch string, ifNoneMatch string, ifModifiedSince string, ifUnmodifiedSince string, xMsClientRequestID string, timeout *int32, xMsDate string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PathClient.Lease")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: xMsLeaseID,
 			Constraints: []validation.Constraint{{Target: "xMsLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
@@ -765,6 +806,16 @@ func (client PathClient) LeaseResponder(resp *http.Response) (result autorest.Re
 // xMsDate - specifies the Coordinated Universal Time (UTC) for the request.  This is required when using
 // shared key authorization.
 func (client PathClient) List(ctx context.Context, recursive bool, filesystem string, directory string, continuation string, maxResults *int32, xMsClientRequestID string, timeout *int32, xMsDate string) (result PathList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PathClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
@@ -889,6 +940,16 @@ func (client PathClient) ListResponder(resp *http.Response) (result PathList, er
 // xMsDate - specifies the Coordinated Universal Time (UTC) for the request.  This is required when using
 // shared key authorization.
 func (client PathClient) Read(ctx context.Context, filesystem string, pathParameter string, rangeParameter string, ifMatch string, ifNoneMatch string, ifModifiedSince string, ifUnmodifiedSince string, xMsClientRequestID string, timeout *int32, xMsDate string) (result ReadCloser, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PathClient.Read")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: filesystem,
 			Constraints: []validation.Constraint{{Target: "filesystem", Name: validation.MaxLength, Rule: 63, Chain: nil},
@@ -1087,6 +1148,16 @@ func (client PathClient) ReadResponder(resp *http.Response) (result ReadCloser, 
 // xMsDate - specifies the Coordinated Universal Time (UTC) for the request.  This is required when using
 // shared key authorization.
 func (client PathClient) Update(ctx context.Context, action PathUpdateAction, filesystem string, pathParameter string, position *int64, retainUncommittedData *bool, contentLength string, xMsLeaseAction PathUpdateLeaseAction, xMsLeaseID string, xMsCacheControl string, xMsContentType string, xMsContentDisposition string, xMsContentEncoding string, xMsContentLanguage string, xMsProperties string, xMsOwner string, xMsGroup string, xMsPermissions string, xMsACL string, ifMatch string, ifNoneMatch string, ifModifiedSince string, ifUnmodifiedSince string, requestBody io.ReadCloser, xMsClientRequestID string, timeout *int32, xMsDate string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PathClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: xMsLeaseID,
 			Constraints: []validation.Constraint{{Target: "xMsLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},

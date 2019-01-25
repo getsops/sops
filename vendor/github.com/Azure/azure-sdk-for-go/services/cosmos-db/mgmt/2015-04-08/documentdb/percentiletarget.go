@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -51,6 +52,16 @@ func NewPercentileTargetClientWithBaseURI(baseURI string, subscriptionID string)
 // filtered are name.value (name of the metric, can have an or of multiple names), startTime, endTime, and
 // timeGrain. The supported operator is eq.
 func (client PercentileTargetClient) ListMetrics(ctx context.Context, resourceGroupName string, accountName string, targetRegion string, filter string) (result PercentileMetricListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PercentileTargetClient.ListMetrics")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

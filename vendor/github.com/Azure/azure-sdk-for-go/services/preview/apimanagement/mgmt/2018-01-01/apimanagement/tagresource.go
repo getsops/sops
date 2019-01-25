@@ -22,24 +22,29 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // TagResourceClient is the apiManagement Client
 type TagResourceClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewTagResourceClient creates an instance of the TagResourceClient client.
 func NewTagResourceClient(subscriptionID string) TagResourceClient {
 	return NewTagResourceClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewTagResourceClientWithBaseURI creates an instance of the TagResourceClient client.
 func NewTagResourceClientWithBaseURI(baseURI string, subscriptionID string) TagResourceClient {
 	return TagResourceClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByService lists a collection of resources associated with tags.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -62,6 +67,16 @@ func NewTagResourceClientWithBaseURI(baseURI string, subscriptionID string) TagR
 // top - number of records to return.
 // skip - number of records to skip.
 func (client TagResourceClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result TagResourceCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagResourceClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.trc.Response.Response != nil {
+				sc = result.trc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -98,6 +113,7 @@ func (client TagResourceClient) ListByService(ctx context.Context, resourceGroup
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServicePreparer prepares the ListByService request.
 func (client TagResourceClient) ListByServicePreparer(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -128,6 +144,7 @@ func (client TagResourceClient) ListByServicePreparer(ctx context.Context, resou
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceSender sends the ListByService request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagResourceClient) ListByServiceSender(req *http.Request) (*http.Response, error) {
@@ -135,6 +152,7 @@ func (client TagResourceClient) ListByServiceSender(req *http.Request) (*http.Re
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceResponder handles the response to the ListByService request. The method always
 // closes the http.Response Body.
 func (client TagResourceClient) ListByServiceResponder(resp *http.Response) (result TagResourceCollection, err error) {
@@ -149,8 +167,8 @@ func (client TagResourceClient) ListByServiceResponder(resp *http.Response) (res
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client TagResourceClient) listByServiceNextResults(lastResults TagResourceCollection) (result TagResourceCollection, err error) {
-	req, err := lastResults.tagResourceCollectionPreparer()
+func (client TagResourceClient) listByServiceNextResults(ctx context.Context, lastResults TagResourceCollection) (result TagResourceCollection, err error) {
+	req, err := lastResults.tagResourceCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.TagResourceClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -169,8 +187,19 @@ func (client TagResourceClient) listByServiceNextResults(lastResults TagResource
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TagResourceClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result TagResourceCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TagResourceClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }

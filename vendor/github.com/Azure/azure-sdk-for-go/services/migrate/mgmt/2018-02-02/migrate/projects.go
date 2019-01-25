@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewProjectsClientWithBaseURI(baseURI string, subscriptionID string, acceptL
 // projectName - name of the Azure Migrate project.
 // project - new or Updated project object.
 func (client ProjectsClient) Create(ctx context.Context, resourceGroupName string, projectName string, project *Project) (result Project, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, resourceGroupName, projectName, project)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "migrate.ProjectsClient", "Create", nil, "Failure preparing request")
@@ -121,6 +132,16 @@ func (client ProjectsClient) CreateResponder(resp *http.Response) (result Projec
 // resourceGroupName - name of the Azure Resource Group that project is part of.
 // projectName - name of the Azure Migrate project.
 func (client ProjectsClient) Delete(ctx context.Context, resourceGroupName string, projectName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, projectName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "migrate.ProjectsClient", "Delete", nil, "Failure preparing request")
@@ -191,6 +212,16 @@ func (client ProjectsClient) DeleteResponder(resp *http.Response) (result autore
 // resourceGroupName - name of the Azure Resource Group that project is part of.
 // projectName - name of the Azure Migrate project.
 func (client ProjectsClient) Get(ctx context.Context, resourceGroupName string, projectName string) (result Project, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, projectName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "migrate.ProjectsClient", "Get", nil, "Failure preparing request")
@@ -262,6 +293,16 @@ func (client ProjectsClient) GetResponder(resp *http.Response) (result Project, 
 // resourceGroupName - name of the Azure Resource Group that project is part of.
 // projectName - name of the Azure Migrate project.
 func (client ProjectsClient) GetKeys(ctx context.Context, resourceGroupName string, projectName string) (result ProjectKey, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.GetKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetKeysPreparer(ctx, resourceGroupName, projectName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "migrate.ProjectsClient", "GetKeys", nil, "Failure preparing request")
@@ -332,6 +373,16 @@ func (client ProjectsClient) GetKeysResponder(resp *http.Response) (result Proje
 // Parameters:
 // resourceGroupName - name of the Azure Resource Group that project is part of.
 func (client ProjectsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result ProjectResultList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "migrate.ProjectsClient", "ListByResourceGroup", nil, "Failure preparing request")
@@ -399,6 +450,16 @@ func (client ProjectsClient) ListByResourceGroupResponder(resp *http.Response) (
 
 // ListBySubscription get all the projects in the subscription.
 func (client ProjectsClient) ListBySubscription(ctx context.Context) (result ProjectResultList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "migrate.ProjectsClient", "ListBySubscription", nil, "Failure preparing request")
@@ -469,6 +530,16 @@ func (client ProjectsClient) ListBySubscriptionResponder(resp *http.Response) (r
 // projectName - name of the Azure Migrate project.
 // project - updated project object.
 func (client ProjectsClient) Update(ctx context.Context, resourceGroupName string, projectName string, project *Project) (result Project, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, projectName, project)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "migrate.ProjectsClient", "Update", nil, "Failure preparing request")

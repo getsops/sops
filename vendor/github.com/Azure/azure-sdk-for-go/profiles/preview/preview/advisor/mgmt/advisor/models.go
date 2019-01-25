@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,13 +19,16 @@
 
 package advisor
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/advisor/mgmt/2016-07-12-preview/advisor"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/preview/advisor/mgmt/2016-07-12-preview/advisor"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type Category = original.Category
 
 const (
@@ -51,13 +54,16 @@ const (
 	Warning Risk = original.Warning
 )
 
+type BaseClient = original.BaseClient
 type ListSuppressionContract = original.ListSuppressionContract
 type OperationDisplayInfo = original.OperationDisplayInfo
 type OperationEntity = original.OperationEntity
 type OperationEntityListResult = original.OperationEntityListResult
 type OperationEntityListResultIterator = original.OperationEntityListResultIterator
 type OperationEntityListResultPage = original.OperationEntityListResultPage
+type OperationsClient = original.OperationsClient
 type RecommendationProperties = original.RecommendationProperties
+type RecommendationsClient = original.RecommendationsClient
 type Resource = original.Resource
 type ResourceRecommendationBase = original.ResourceRecommendationBase
 type ResourceRecommendationBaseListResult = original.ResourceRecommendationBaseListResult
@@ -65,24 +71,16 @@ type ResourceRecommendationBaseListResultIterator = original.ResourceRecommendat
 type ResourceRecommendationBaseListResultPage = original.ResourceRecommendationBaseListResultPage
 type ShortDescription = original.ShortDescription
 type SuppressionContract = original.SuppressionContract
-type OperationsClient = original.OperationsClient
-type RecommendationsClient = original.RecommendationsClient
 type SuppressionsClient = original.SuppressionsClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func NewOperationEntityListResultIterator(page OperationEntityListResultPage) OperationEntityListResultIterator {
+	return original.NewOperationEntityListResultIterator(page)
 }
-func PossibleCategoryValues() []Category {
-	return original.PossibleCategoryValues()
-}
-func PossibleImpactValues() []Impact {
-	return original.PossibleImpactValues()
-}
-func PossibleRiskValues() []Risk {
-	return original.PossibleRiskValues()
+func NewOperationEntityListResultPage(getNextPage func(context.Context, OperationEntityListResult) (OperationEntityListResult, error)) OperationEntityListResultPage {
+	return original.NewOperationEntityListResultPage(getNextPage)
 }
 func NewOperationsClient(subscriptionID string) OperationsClient {
 	return original.NewOperationsClient(subscriptionID)
@@ -96,11 +94,29 @@ func NewRecommendationsClient(subscriptionID string) RecommendationsClient {
 func NewRecommendationsClientWithBaseURI(baseURI string, subscriptionID string) RecommendationsClient {
 	return original.NewRecommendationsClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewResourceRecommendationBaseListResultIterator(page ResourceRecommendationBaseListResultPage) ResourceRecommendationBaseListResultIterator {
+	return original.NewResourceRecommendationBaseListResultIterator(page)
+}
+func NewResourceRecommendationBaseListResultPage(getNextPage func(context.Context, ResourceRecommendationBaseListResult) (ResourceRecommendationBaseListResult, error)) ResourceRecommendationBaseListResultPage {
+	return original.NewResourceRecommendationBaseListResultPage(getNextPage)
+}
 func NewSuppressionsClient(subscriptionID string) SuppressionsClient {
 	return original.NewSuppressionsClient(subscriptionID)
 }
 func NewSuppressionsClientWithBaseURI(baseURI string, subscriptionID string) SuppressionsClient {
 	return original.NewSuppressionsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
+}
+func PossibleCategoryValues() []Category {
+	return original.PossibleCategoryValues()
+}
+func PossibleImpactValues() []Impact {
+	return original.PossibleImpactValues()
+}
+func PossibleRiskValues() []Risk {
+	return original.PossibleRiskValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

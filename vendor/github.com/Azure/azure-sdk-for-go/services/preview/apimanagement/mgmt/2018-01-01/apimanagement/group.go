@@ -22,24 +22,29 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GroupClient is the apiManagement Client
 type GroupClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewGroupClient creates an instance of the GroupClient client.
 func NewGroupClient(subscriptionID string) GroupClient {
 	return NewGroupClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewGroupClientWithBaseURI creates an instance of the GroupClient client.
 func NewGroupClientWithBaseURI(baseURI string, subscriptionID string) GroupClient {
 	return GroupClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdate creates or Updates a group.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -48,6 +53,16 @@ func NewGroupClientWithBaseURI(baseURI string, subscriptionID string) GroupClien
 // parameters - create parameters.
 // ifMatch - eTag of the Entity. Not required when creating an entity, but required when updating an entity.
 func (client GroupClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, groupID string, parameters GroupCreateParameters, ifMatch string) (result GroupContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -88,6 +103,7 @@ func (client GroupClient) CreateOrUpdate(ctx context.Context, resourceGroupName 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
 func (client GroupClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, groupID string, parameters GroupCreateParameters, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -116,6 +132,7 @@ func (client GroupClient) CreateOrUpdatePreparer(ctx context.Context, resourceGr
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client GroupClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
@@ -123,6 +140,7 @@ func (client GroupClient) CreateOrUpdateSender(req *http.Request) (*http.Respons
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
 // closes the http.Response Body.
 func (client GroupClient) CreateOrUpdateResponder(resp *http.Response) (result GroupContract, err error) {
@@ -136,6 +154,7 @@ func (client GroupClient) CreateOrUpdateResponder(resp *http.Response) (result G
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Delete deletes specific group of the API Management service instance.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -144,6 +163,16 @@ func (client GroupClient) CreateOrUpdateResponder(resp *http.Response) (result G
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client GroupClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, groupID string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -177,6 +206,7 @@ func (client GroupClient) Delete(ctx context.Context, resourceGroupName string, 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeletePreparer prepares the Delete request.
 func (client GroupClient) DeletePreparer(ctx context.Context, resourceGroupName string, serviceName string, groupID string, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -200,6 +230,7 @@ func (client GroupClient) DeletePreparer(ctx context.Context, resourceGroupName 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client GroupClient) DeleteSender(req *http.Request) (*http.Response, error) {
@@ -207,6 +238,7 @@ func (client GroupClient) DeleteSender(req *http.Request) (*http.Response, error
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteResponder handles the response to the Delete request. The method always
 // closes the http.Response Body.
 func (client GroupClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -219,12 +251,23 @@ func (client GroupClient) DeleteResponder(resp *http.Response) (result autorest.
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Get gets the details of the group specified by its identifier.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // groupID - group identifier. Must be unique in the current API Management service instance.
 func (client GroupClient) Get(ctx context.Context, resourceGroupName string, serviceName string, groupID string) (result GroupContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -258,6 +301,7 @@ func (client GroupClient) Get(ctx context.Context, resourceGroupName string, ser
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetPreparer prepares the Get request.
 func (client GroupClient) GetPreparer(ctx context.Context, resourceGroupName string, serviceName string, groupID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -280,6 +324,7 @@ func (client GroupClient) GetPreparer(ctx context.Context, resourceGroupName str
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client GroupClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -287,6 +332,7 @@ func (client GroupClient) GetSender(req *http.Request) (*http.Response, error) {
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client GroupClient) GetResponder(resp *http.Response) (result GroupContract, err error) {
@@ -300,12 +346,23 @@ func (client GroupClient) GetResponder(resp *http.Response) (result GroupContrac
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTag gets the entity state (Etag) version of the group specified by its identifier.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // groupID - group identifier. Must be unique in the current API Management service instance.
 func (client GroupClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, groupID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupClient.GetEntityTag")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -339,6 +396,7 @@ func (client GroupClient) GetEntityTag(ctx context.Context, resourceGroupName st
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagPreparer prepares the GetEntityTag request.
 func (client GroupClient) GetEntityTagPreparer(ctx context.Context, resourceGroupName string, serviceName string, groupID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -361,6 +419,7 @@ func (client GroupClient) GetEntityTagPreparer(ctx context.Context, resourceGrou
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagSender sends the GetEntityTag request. The method will close the
 // http.Response Body if it receives an error.
 func (client GroupClient) GetEntityTagSender(req *http.Request) (*http.Response, error) {
@@ -368,6 +427,7 @@ func (client GroupClient) GetEntityTagSender(req *http.Request) (*http.Response,
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagResponder handles the response to the GetEntityTag request. The method always
 // closes the http.Response Body.
 func (client GroupClient) GetEntityTagResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -380,6 +440,7 @@ func (client GroupClient) GetEntityTagResponder(resp *http.Response) (result aut
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByService lists a collection of groups defined within a service instance.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -393,6 +454,16 @@ func (client GroupClient) GetEntityTagResponder(resp *http.Response) (result aut
 // top - number of records to return.
 // skip - number of records to skip.
 func (client GroupClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result GroupCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.gc.Response.Response != nil {
+				sc = result.gc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -429,6 +500,7 @@ func (client GroupClient) ListByService(ctx context.Context, resourceGroupName s
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServicePreparer prepares the ListByService request.
 func (client GroupClient) ListByServicePreparer(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -459,6 +531,7 @@ func (client GroupClient) ListByServicePreparer(ctx context.Context, resourceGro
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceSender sends the ListByService request. The method will close the
 // http.Response Body if it receives an error.
 func (client GroupClient) ListByServiceSender(req *http.Request) (*http.Response, error) {
@@ -466,6 +539,7 @@ func (client GroupClient) ListByServiceSender(req *http.Request) (*http.Response
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceResponder handles the response to the ListByService request. The method always
 // closes the http.Response Body.
 func (client GroupClient) ListByServiceResponder(resp *http.Response) (result GroupCollection, err error) {
@@ -480,8 +554,8 @@ func (client GroupClient) ListByServiceResponder(resp *http.Response) (result Gr
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client GroupClient) listByServiceNextResults(lastResults GroupCollection) (result GroupCollection, err error) {
-	req, err := lastResults.groupCollectionPreparer()
+func (client GroupClient) listByServiceNextResults(ctx context.Context, lastResults GroupCollection) (result GroupCollection, err error) {
+	req, err := lastResults.groupCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.GroupClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -500,12 +574,24 @@ func (client GroupClient) listByServiceNextResults(lastResults GroupCollection) 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client GroupClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result GroupCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Update updates the details of the group specified by its identifier.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -515,6 +601,16 @@ func (client GroupClient) ListByServiceComplete(ctx context.Context, resourceGro
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client GroupClient) Update(ctx context.Context, resourceGroupName string, serviceName string, groupID string, parameters GroupUpdateParameters, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -548,6 +644,7 @@ func (client GroupClient) Update(ctx context.Context, resourceGroupName string, 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdatePreparer prepares the Update request.
 func (client GroupClient) UpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, groupID string, parameters GroupUpdateParameters, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -573,6 +670,7 @@ func (client GroupClient) UpdatePreparer(ctx context.Context, resourceGroupName 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client GroupClient) UpdateSender(req *http.Request) (*http.Response, error) {
@@ -580,6 +678,7 @@ func (client GroupClient) UpdateSender(req *http.Request) (*http.Response, error
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateResponder handles the response to the Update request. The method always
 // closes the http.Response Body.
 func (client GroupClient) UpdateResponder(resp *http.Response) (result autorest.Response, err error) {

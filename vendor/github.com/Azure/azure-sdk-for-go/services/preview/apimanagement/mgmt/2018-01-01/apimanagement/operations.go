@@ -21,26 +21,41 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // OperationsClient is the apiManagement Client
 type OperationsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewOperationsClient creates an instance of the OperationsClient client.
 func NewOperationsClient(subscriptionID string) OperationsClient {
 	return NewOperationsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewOperationsClientWithBaseURI creates an instance of the OperationsClient client.
 func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
 	return OperationsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // List lists all of the available REST API operations of the Microsoft.ApiManagement provider.
 func (client OperationsClient) List(ctx context.Context) (result OperationListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationsClient.List")
+		defer func() {
+			sc := -1
+			if result.olr.Response.Response != nil {
+				sc = result.olr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -63,6 +78,7 @@ func (client OperationsClient) List(ctx context.Context) (result OperationListRe
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListPreparer prepares the List request.
 func (client OperationsClient) ListPreparer(ctx context.Context) (*http.Request, error) {
 	const APIVersion = "2018-01-01"
@@ -78,6 +94,7 @@ func (client OperationsClient) ListPreparer(ctx context.Context) (*http.Request,
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client OperationsClient) ListSender(req *http.Request) (*http.Response, error) {
@@ -85,6 +102,7 @@ func (client OperationsClient) ListSender(req *http.Request) (*http.Response, er
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListResponder handles the response to the List request. The method always
 // closes the http.Response Body.
 func (client OperationsClient) ListResponder(resp *http.Response) (result OperationListResult, err error) {
@@ -99,8 +117,8 @@ func (client OperationsClient) ListResponder(resp *http.Response) (result Operat
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client OperationsClient) listNextResults(lastResults OperationListResult) (result OperationListResult, err error) {
-	req, err := lastResults.operationListResultPreparer()
+func (client OperationsClient) listNextResults(ctx context.Context, lastResults OperationListResult) (result OperationListResult, err error) {
+	req, err := lastResults.operationListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.OperationsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -119,8 +137,19 @@ func (client OperationsClient) listNextResults(lastResults OperationListResult) 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client OperationsClient) ListComplete(ctx context.Context) (result OperationListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }

@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
 // resourceGroupName - the resource group name.
 // commitmentPlanName - the Azure ML commitment plan name.
 func (client Client) CreateOrUpdate(ctx context.Context, createOrUpdatePayload CommitmentPlan, resourceGroupName string, commitmentPlanName string) (result CommitmentPlan, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, createOrUpdatePayload, resourceGroupName, commitmentPlanName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "commitmentplans.Client", "CreateOrUpdate", nil, "Failure preparing request")
@@ -117,6 +128,16 @@ func (client Client) CreateOrUpdateResponder(resp *http.Response) (result Commit
 // resourceGroupName - the resource group name.
 // commitmentPlanName - the Azure ML commitment plan name.
 func (client Client) Get(ctx context.Context, resourceGroupName string, commitmentPlanName string) (result CommitmentPlan, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, commitmentPlanName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "commitmentplans.Client", "Get", nil, "Failure preparing request")
@@ -183,6 +204,16 @@ func (client Client) GetResponder(resp *http.Response) (result CommitmentPlan, e
 // Parameters:
 // skipToken - continuation token for pagination.
 func (client Client) List(ctx context.Context, skipToken string) (result ListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.List")
+		defer func() {
+			sc := -1
+			if result.lr.Response.Response != nil {
+				sc = result.lr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, skipToken)
 	if err != nil {
@@ -248,8 +279,8 @@ func (client Client) ListResponder(resp *http.Response) (result ListResult, err 
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client Client) listNextResults(lastResults ListResult) (result ListResult, err error) {
-	req, err := lastResults.listResultPreparer()
+func (client Client) listNextResults(ctx context.Context, lastResults ListResult) (result ListResult, err error) {
+	req, err := lastResults.listResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "commitmentplans.Client", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -270,6 +301,16 @@ func (client Client) listNextResults(lastResults ListResult) (result ListResult,
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListComplete(ctx context.Context, skipToken string) (result ListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, skipToken)
 	return
 }
@@ -279,6 +320,16 @@ func (client Client) ListComplete(ctx context.Context, skipToken string) (result
 // resourceGroupName - the resource group name.
 // skipToken - continuation token for pagination.
 func (client Client) ListInResourceGroup(ctx context.Context, resourceGroupName string, skipToken string) (result ListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListInResourceGroup")
+		defer func() {
+			sc := -1
+			if result.lr.Response.Response != nil {
+				sc = result.lr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listInResourceGroupNextResults
 	req, err := client.ListInResourceGroupPreparer(ctx, resourceGroupName, skipToken)
 	if err != nil {
@@ -345,8 +396,8 @@ func (client Client) ListInResourceGroupResponder(resp *http.Response) (result L
 }
 
 // listInResourceGroupNextResults retrieves the next set of results, if any.
-func (client Client) listInResourceGroupNextResults(lastResults ListResult) (result ListResult, err error) {
-	req, err := lastResults.listResultPreparer()
+func (client Client) listInResourceGroupNextResults(ctx context.Context, lastResults ListResult) (result ListResult, err error) {
+	req, err := lastResults.listResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "commitmentplans.Client", "listInResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -367,6 +418,16 @@ func (client Client) listInResourceGroupNextResults(lastResults ListResult) (res
 
 // ListInResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListInResourceGroupComplete(ctx context.Context, resourceGroupName string, skipToken string) (result ListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListInResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListInResourceGroup(ctx, resourceGroupName, skipToken)
 	return
 }
@@ -378,6 +439,16 @@ func (client Client) ListInResourceGroupComplete(ctx context.Context, resourceGr
 // resourceGroupName - the resource group name.
 // commitmentPlanName - the Azure ML commitment plan name.
 func (client Client) Patch(ctx context.Context, patchPayload PatchPayload, resourceGroupName string, commitmentPlanName string) (result CommitmentPlan, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Patch")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PatchPreparer(ctx, patchPayload, resourceGroupName, commitmentPlanName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "commitmentplans.Client", "Patch", nil, "Failure preparing request")
@@ -447,6 +518,16 @@ func (client Client) PatchResponder(resp *http.Response) (result CommitmentPlan,
 // resourceGroupName - the resource group name.
 // commitmentPlanName - the Azure ML commitment plan name.
 func (client Client) Remove(ctx context.Context, resourceGroupName string, commitmentPlanName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Remove")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RemovePreparer(ctx, resourceGroupName, commitmentPlanName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "commitmentplans.Client", "Remove", nil, "Failure preparing request")

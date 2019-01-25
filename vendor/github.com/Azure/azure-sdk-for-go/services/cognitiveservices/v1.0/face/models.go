@@ -23,6 +23,9 @@ import (
 	"github.com/satori/go.uuid"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v1.0/face"
+
 // AccessoryType enumerates the values for accessory type.
 type AccessoryType string
 
@@ -421,7 +424,8 @@ type ImageURL struct {
 	URL *string `json:"url,omitempty"`
 }
 
-// Landmarks a collection of 27-point face landmarks pointing to the important positions of face components.
+// Landmarks a collection of 27-point face landmarks pointing to the important positions of face
+// components.
 type Landmarks struct {
 	PupilLeft           *Coordinate `json:"pupilLeft,omitempty"`
 	PupilRight          *Coordinate `json:"pupilRight,omitempty"`

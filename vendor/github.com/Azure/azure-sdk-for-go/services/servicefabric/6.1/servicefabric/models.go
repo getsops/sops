@@ -24,6 +24,7 @@ import (
 	"github.com/satori/go.uuid"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationDefinitionKind enumerates the values for application definition kind.
 type ApplicationDefinitionKind string
 
@@ -38,11 +39,13 @@ const (
 	ServiceFabricApplicationDescription ApplicationDefinitionKind = "ServiceFabricApplicationDescription"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleApplicationDefinitionKindValues returns an array of possible values for the ApplicationDefinitionKind const type.
 func PossibleApplicationDefinitionKindValues() []ApplicationDefinitionKind {
 	return []ApplicationDefinitionKind{Compose, Invalid, ServiceFabricApplicationDescription}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationStatus enumerates the values for application status.
 type ApplicationStatus string
 
@@ -64,11 +67,13 @@ const (
 	ApplicationStatusUpgrading ApplicationStatus = "Upgrading"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleApplicationStatusValues returns an array of possible values for the ApplicationStatus const type.
 func PossibleApplicationStatusValues() []ApplicationStatus {
 	return []ApplicationStatus{ApplicationStatusCreating, ApplicationStatusDeleting, ApplicationStatusFailed, ApplicationStatusInvalid, ApplicationStatusReady, ApplicationStatusUpgrading}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationTypeDefinitionKind enumerates the values for application type definition kind.
 type ApplicationTypeDefinitionKind string
 
@@ -84,11 +89,13 @@ const (
 	ApplicationTypeDefinitionKindServiceFabricApplicationPackage ApplicationTypeDefinitionKind = "ServiceFabricApplicationPackage"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleApplicationTypeDefinitionKindValues returns an array of possible values for the ApplicationTypeDefinitionKind const type.
 func PossibleApplicationTypeDefinitionKindValues() []ApplicationTypeDefinitionKind {
 	return []ApplicationTypeDefinitionKind{ApplicationTypeDefinitionKindCompose, ApplicationTypeDefinitionKindInvalid, ApplicationTypeDefinitionKindServiceFabricApplicationPackage}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationTypeStatus enumerates the values for application type status.
 type ApplicationTypeStatus string
 
@@ -112,11 +119,13 @@ const (
 	ApplicationTypeStatusUnprovisioning ApplicationTypeStatus = "Unprovisioning"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleApplicationTypeStatusValues returns an array of possible values for the ApplicationTypeStatus const type.
 func PossibleApplicationTypeStatusValues() []ApplicationTypeStatus {
 	return []ApplicationTypeStatus{ApplicationTypeStatusAvailable, ApplicationTypeStatusFailed, ApplicationTypeStatusInvalid, ApplicationTypeStatusProvisioning, ApplicationTypeStatusUnprovisioning}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ChaosEventKind enumerates the values for chaos event kind.
 type ChaosEventKind string
 
@@ -144,11 +153,13 @@ const (
 	ChaosEventKindWaiting ChaosEventKind = "Waiting"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleChaosEventKindValues returns an array of possible values for the ChaosEventKind const type.
 func PossibleChaosEventKindValues() []ChaosEventKind {
 	return []ChaosEventKind{ChaosEventKindExecutingFaults, ChaosEventKindInvalid, ChaosEventKindStarted, ChaosEventKindStopped, ChaosEventKindTestError, ChaosEventKindValidationFailed, ChaosEventKindWaiting}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Code enumerates the values for code.
 type Code string
 
@@ -287,11 +298,13 @@ const (
 	FABRICEVALUETOOLARGE Code = "FABRIC_E_VALUE_TOO_LARGE"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleCodeValues returns an array of possible values for the Code const type.
 func PossibleCodeValues() []Code {
 	return []Code{EABORT, FABRICEAPPLICATIONALREADYEXISTS, FABRICEAPPLICATIONALREADYINTARGETVERSION, FABRICEAPPLICATIONNOTFOUND, FABRICEAPPLICATIONNOTUPGRADING, FABRICEAPPLICATIONTYPEALREADYEXISTS, FABRICEAPPLICATIONTYPEINUSE, FABRICEAPPLICATIONTYPENOTFOUND, FABRICEAPPLICATIONTYPEPROVISIONINPROGRESS, FABRICEAPPLICATIONUPGRADEINPROGRESS, FABRICEAPPLICATIONUPGRADEVALIDATIONERROR, FABRICECOMMUNICATIONERROR, FABRICECONFIGURATIONPARAMETERNOTFOUND, FABRICECONFIGURATIONSECTIONNOTFOUND, FABRICEDIRECTORYNOTFOUND, FABRICEENUMERATIONCOMPLETED, FABRICEFABRICALREADYINTARGETVERSION, FABRICEFABRICNOTUPGRADING, FABRICEFABRICUPGRADEINPROGRESS, FABRICEFABRICUPGRADEVALIDATIONERROR, FABRICEFABRICVERSIONALREADYEXISTS, FABRICEFABRICVERSIONINUSE, FABRICEFABRICVERSIONNOTFOUND, FABRICEFILENOTFOUND, FABRICEHEALTHENTITYNOTFOUND, FABRICEHEALTHSTALEREPORT, FABRICEIMAGEBUILDERVALIDATIONERROR, FABRICEINSTANCEIDMISMATCH, FABRICEINVALIDADDRESS, FABRICEINVALIDATOMICGROUP, FABRICEINVALIDCONFIGURATION, FABRICEINVALIDNAMEURI, FABRICEINVALIDPARTITIONKEY, FABRICEKEYNOTFOUND, FABRICEKEYTOOLARGE, FABRICENAMEALREADYEXISTS, FABRICENAMEDOESNOTEXIST, FABRICENAMENOTEMPTY, FABRICENODEHASNOTSTOPPEDYET, FABRICENODEISUP, FABRICENODENOTFOUND, FABRICENOTPRIMARY, FABRICENOTREADY, FABRICENOWRITEQUORUM, FABRICEOPERATIONNOTCOMPLETE, FABRICEPARTITIONNOTFOUND, FABRICEPATHTOOLONG, FABRICEPROPERTYCHECKFAILED, FABRICEPROPERTYDOESNOTEXIST, FABRICERECONFIGURATIONPENDING, FABRICEREPLICADOESNOTEXIST, FABRICESEQUENCENUMBERCHECKFAILED, FABRICESERVICEAFFINITYCHAINNOTSUPPORTED, FABRICESERVICEALREADYEXISTS, FABRICESERVICEDOESNOTEXIST, FABRICESERVICEGROUPALREADYEXISTS, FABRICESERVICEGROUPDOESNOTEXIST, FABRICESERVICEMANIFESTNOTFOUND, FABRICESERVICEMETADATAMISMATCH, FABRICESERVICEOFFLINE, FABRICESERVICETYPEMISMATCH, FABRICESERVICETYPENOTFOUND, FABRICESERVICETYPETEMPLATENOTFOUND, FABRICETIMEOUT, FABRICEVALUEEMPTY, FABRICEVALUETOOLARGE}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ComposeDeploymentStatus enumerates the values for compose deployment status.
 type ComposeDeploymentStatus string
 
@@ -322,11 +335,13 @@ const (
 	ComposeDeploymentStatusUpgrading ComposeDeploymentStatus = "Upgrading"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleComposeDeploymentStatusValues returns an array of possible values for the ComposeDeploymentStatus const type.
 func PossibleComposeDeploymentStatusValues() []ComposeDeploymentStatus {
 	return []ComposeDeploymentStatus{ComposeDeploymentStatusCreating, ComposeDeploymentStatusDeleting, ComposeDeploymentStatusFailed, ComposeDeploymentStatusInvalid, ComposeDeploymentStatusProvisioning, ComposeDeploymentStatusReady, ComposeDeploymentStatusUnprovisioning, ComposeDeploymentStatusUpgrading}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ComposeDeploymentUpgradeState enumerates the values for compose deployment upgrade state.
 type ComposeDeploymentUpgradeState string
 
@@ -363,11 +378,13 @@ const (
 	ComposeDeploymentUpgradeStateUnprovisioningTarget ComposeDeploymentUpgradeState = "UnprovisioningTarget"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleComposeDeploymentUpgradeStateValues returns an array of possible values for the ComposeDeploymentUpgradeState const type.
 func PossibleComposeDeploymentUpgradeStateValues() []ComposeDeploymentUpgradeState {
 	return []ComposeDeploymentUpgradeState{ComposeDeploymentUpgradeStateFailed, ComposeDeploymentUpgradeStateInvalid, ComposeDeploymentUpgradeStateProvisioningTarget, ComposeDeploymentUpgradeStateRollingBackCompleted, ComposeDeploymentUpgradeStateRollingBackInProgress, ComposeDeploymentUpgradeStateRollingForwardCompleted, ComposeDeploymentUpgradeStateRollingForwardInProgress, ComposeDeploymentUpgradeStateRollingForwardPending, ComposeDeploymentUpgradeStateUnprovisioningCurrent, ComposeDeploymentUpgradeStateUnprovisioningTarget}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateFabricDump enumerates the values for create fabric dump.
 type CreateFabricDump string
 
@@ -378,11 +395,13 @@ const (
 	True CreateFabricDump = "True"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleCreateFabricDumpValues returns an array of possible values for the CreateFabricDump const type.
 func PossibleCreateFabricDumpValues() []CreateFabricDump {
 	return []CreateFabricDump{False, True}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DataLossModeRequiredQueryParam enumerates the values for data loss mode required query param.
 type DataLossModeRequiredQueryParam string
 
@@ -397,11 +416,13 @@ const (
 	DataLossModeRequiredQueryParamPartialDataLoss DataLossModeRequiredQueryParam = "PartialDataLoss"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleDataLossModeRequiredQueryParamValues returns an array of possible values for the DataLossModeRequiredQueryParam const type.
 func PossibleDataLossModeRequiredQueryParamValues() []DataLossModeRequiredQueryParam {
 	return []DataLossModeRequiredQueryParam{DataLossModeRequiredQueryParamFullDataLoss, DataLossModeRequiredQueryParamInvalid, DataLossModeRequiredQueryParamPartialDataLoss}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeactivationIntent enumerates the values for deactivation intent.
 type DeactivationIntent string
 
@@ -415,11 +436,13 @@ const (
 	Restart DeactivationIntent = "Restart"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleDeactivationIntentValues returns an array of possible values for the DeactivationIntent const type.
 func PossibleDeactivationIntentValues() []DeactivationIntent {
 	return []DeactivationIntent{Pause, RemoveData, Restart}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedApplicationStatus enumerates the values for deployed application status.
 type DeployedApplicationStatus string
 
@@ -440,11 +463,13 @@ const (
 	DeployedApplicationStatusUpgrading DeployedApplicationStatus = "Upgrading"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleDeployedApplicationStatusValues returns an array of possible values for the DeployedApplicationStatus const type.
 func PossibleDeployedApplicationStatusValues() []DeployedApplicationStatus {
 	return []DeployedApplicationStatus{DeployedApplicationStatusActivating, DeployedApplicationStatusActive, DeployedApplicationStatusDeactivating, DeployedApplicationStatusDownloading, DeployedApplicationStatusInvalid, DeployedApplicationStatusUpgrading}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeploymentStatus enumerates the values for deployment status.
 type DeploymentStatus string
 
@@ -468,11 +493,13 @@ const (
 	DeploymentStatusUpgrading DeploymentStatus = "Upgrading"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleDeploymentStatusValues returns an array of possible values for the DeploymentStatus const type.
 func PossibleDeploymentStatusValues() []DeploymentStatus {
 	return []DeploymentStatus{DeploymentStatusActivating, DeploymentStatusActive, DeploymentStatusDeactivating, DeploymentStatusDownloading, DeploymentStatusInvalid, DeploymentStatusUpgrading}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // EntityKind enumerates the values for entity kind.
 type EntityKind string
 
@@ -500,11 +527,13 @@ const (
 	EntityKindService EntityKind = "Service"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleEntityKindValues returns an array of possible values for the EntityKind const type.
 func PossibleEntityKindValues() []EntityKind {
 	return []EntityKind{EntityKindApplication, EntityKindCluster, EntityKindDeployedApplication, EntityKindDeployedServicePackage, EntityKindInvalid, EntityKindNode, EntityKindPartition, EntityKindReplica, EntityKindService}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // EntryPointStatus enumerates the values for entry point status.
 type EntryPointStatus string
 
@@ -524,11 +553,13 @@ const (
 	EntryPointStatusStopping EntryPointStatus = "Stopping"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleEntryPointStatusValues returns an array of possible values for the EntryPointStatus const type.
 func PossibleEntryPointStatusValues() []EntryPointStatus {
 	return []EntryPointStatus{EntryPointStatusInvalid, EntryPointStatusPending, EntryPointStatusStarted, EntryPointStatusStarting, EntryPointStatusStopped, EntryPointStatusStopping}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // FabricReplicaStatus enumerates the values for fabric replica status.
 type FabricReplicaStatus string
 
@@ -542,11 +573,13 @@ const (
 	FabricReplicaStatusUp FabricReplicaStatus = "Up"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleFabricReplicaStatusValues returns an array of possible values for the FabricReplicaStatus const type.
 func PossibleFabricReplicaStatusValues() []FabricReplicaStatus {
 	return []FabricReplicaStatus{FabricReplicaStatusDown, FabricReplicaStatusInvalid, FabricReplicaStatusUp}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // FailureAction enumerates the values for failure action.
 type FailureAction string
 
@@ -560,11 +593,13 @@ const (
 	FailureActionRollback FailureAction = "Rollback"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleFailureActionValues returns an array of possible values for the FailureAction const type.
 func PossibleFailureActionValues() []FailureAction {
 	return []FailureAction{FailureActionInvalid, FailureActionManual, FailureActionRollback}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // FailureReason enumerates the values for failure reason.
 type FailureReason string
 
@@ -584,11 +619,13 @@ const (
 	UpgradeDomainTimeout FailureReason = "UpgradeDomainTimeout"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleFailureReasonValues returns an array of possible values for the FailureReason const type.
 func PossibleFailureReasonValues() []FailureReason {
 	return []FailureReason{HealthCheck, Interrupted, None, OverallUpgradeTimeout, UpgradeDomainTimeout}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // HealthEvaluationKind enumerates the values for health evaluation kind.
 type HealthEvaluationKind string
 
@@ -654,11 +691,13 @@ const (
 	HealthEvaluationKindUpgradeDomainNodes HealthEvaluationKind = "UpgradeDomainNodes"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleHealthEvaluationKindValues returns an array of possible values for the HealthEvaluationKind const type.
 func PossibleHealthEvaluationKindValues() []HealthEvaluationKind {
 	return []HealthEvaluationKind{HealthEvaluationKindApplication, HealthEvaluationKindApplications, HealthEvaluationKindApplicationTypeApplications, HealthEvaluationKindDeltaNodesCheck, HealthEvaluationKindDeployedApplication, HealthEvaluationKindDeployedApplications, HealthEvaluationKindDeployedServicePackage, HealthEvaluationKindDeployedServicePackages, HealthEvaluationKindEvent, HealthEvaluationKindInvalid, HealthEvaluationKindNode, HealthEvaluationKindNodes, HealthEvaluationKindPartition, HealthEvaluationKindPartitions, HealthEvaluationKindReplica, HealthEvaluationKindReplicas, HealthEvaluationKindService, HealthEvaluationKindServices, HealthEvaluationKindSystemApplication, HealthEvaluationKindUpgradeDomainDeltaNodesCheck, HealthEvaluationKindUpgradeDomainDeployedApplications, HealthEvaluationKindUpgradeDomainNodes}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // HealthState enumerates the values for health state.
 type HealthState string
 
@@ -677,11 +716,13 @@ const (
 	HealthStateWarning HealthState = "Warning"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleHealthStateValues returns an array of possible values for the HealthState const type.
 func PossibleHealthStateValues() []HealthState {
 	return []HealthState{HealthStateError, HealthStateInvalid, HealthStateOk, HealthStateUnknown, HealthStateWarning}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // HostIsolationMode enumerates the values for host isolation mode.
 type HostIsolationMode string
 
@@ -695,11 +736,13 @@ const (
 	HostIsolationModeProcess HostIsolationMode = "Process"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleHostIsolationModeValues returns an array of possible values for the HostIsolationMode const type.
 func PossibleHostIsolationModeValues() []HostIsolationMode {
 	return []HostIsolationMode{HostIsolationModeHyperV, HostIsolationModeNone, HostIsolationModeProcess}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // HostType enumerates the values for host type.
 type HostType string
 
@@ -712,11 +755,13 @@ const (
 	HostTypeInvalid HostType = "Invalid"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleHostTypeValues returns an array of possible values for the HostType const type.
 func PossibleHostTypeValues() []HostType {
 	return []HostType{HostTypeContainerHost, HostTypeExeHost, HostTypeInvalid}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ImpactLevel enumerates the values for impact level.
 type ImpactLevel string
 
@@ -733,11 +778,13 @@ const (
 	ImpactLevelRestart ImpactLevel = "Restart"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleImpactLevelValues returns an array of possible values for the ImpactLevel const type.
 func PossibleImpactLevelValues() []ImpactLevel {
 	return []ImpactLevel{ImpactLevelInvalid, ImpactLevelNone, ImpactLevelRemoveData, ImpactLevelRemoveNode, ImpactLevelRestart}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Kind enumerates the values for kind.
 type Kind string
 
@@ -786,11 +833,13 @@ const (
 	KindUpgradeDomainNodes Kind = "UpgradeDomainNodes"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleKindValues returns an array of possible values for the Kind const type.
 func PossibleKindValues() []Kind {
 	return []Kind{KindApplication, KindApplications, KindApplicationTypeApplications, KindDeltaNodesCheck, KindDeployedApplication, KindDeployedApplications, KindDeployedServicePackage, KindDeployedServicePackages, KindEvent, KindHealthEvaluation, KindNode, KindNodes, KindPartition, KindPartitions, KindReplica, KindReplicas, KindService, KindServices, KindSystemApplication, KindUpgradeDomainDeltaNodesCheck, KindUpgradeDomainNodes}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // KindBasicChaosEvent enumerates the values for kind basic chaos event.
 type KindBasicChaosEvent string
 
@@ -811,11 +860,13 @@ const (
 	KindWaiting KindBasicChaosEvent = "Waiting"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleKindBasicChaosEventValues returns an array of possible values for the KindBasicChaosEvent const type.
 func PossibleKindBasicChaosEventValues() []KindBasicChaosEvent {
 	return []KindBasicChaosEvent{KindChaosEvent, KindExecutingFaults, KindStarted, KindStopped, KindTestError, KindValidationFailed, KindWaiting}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // KindBasicPropertyBatchInfo enumerates the values for kind basic property batch info.
 type KindBasicPropertyBatchInfo string
 
@@ -828,11 +879,13 @@ const (
 	KindSuccessful KindBasicPropertyBatchInfo = "Successful"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleKindBasicPropertyBatchInfoValues returns an array of possible values for the KindBasicPropertyBatchInfo const type.
 func PossibleKindBasicPropertyBatchInfoValues() []KindBasicPropertyBatchInfo {
 	return []KindBasicPropertyBatchInfo{KindFailed, KindPropertyBatchInfo, KindSuccessful}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // KindBasicPropertyBatchOperation enumerates the values for kind basic property batch operation.
 type KindBasicPropertyBatchOperation string
 
@@ -853,11 +906,13 @@ const (
 	KindPut KindBasicPropertyBatchOperation = "Put"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleKindBasicPropertyBatchOperationValues returns an array of possible values for the KindBasicPropertyBatchOperation const type.
 func PossibleKindBasicPropertyBatchOperationValues() []KindBasicPropertyBatchOperation {
 	return []KindBasicPropertyBatchOperation{KindCheckExists, KindCheckSequence, KindCheckValue, KindDelete, KindGet, KindPropertyBatchOperation, KindPut}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // KindBasicPropertyValue enumerates the values for kind basic property value.
 type KindBasicPropertyValue string
 
@@ -876,11 +931,13 @@ const (
 	KindString KindBasicPropertyValue = "String"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleKindBasicPropertyValueValues returns an array of possible values for the KindBasicPropertyValue const type.
 func PossibleKindBasicPropertyValueValues() []KindBasicPropertyValue {
 	return []KindBasicPropertyValue{KindBinary, KindDouble, KindGUID, KindInt64, KindPropertyValue, KindString}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // KindBasicProvisionApplicationTypeDescriptionBase enumerates the values for kind basic provision application
 // type description base.
 type KindBasicProvisionApplicationTypeDescriptionBase string
@@ -894,11 +951,13 @@ const (
 	KindProvisionApplicationTypeDescriptionBase KindBasicProvisionApplicationTypeDescriptionBase = "ProvisionApplicationTypeDescriptionBase"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleKindBasicProvisionApplicationTypeDescriptionBaseValues returns an array of possible values for the KindBasicProvisionApplicationTypeDescriptionBase const type.
 func PossibleKindBasicProvisionApplicationTypeDescriptionBaseValues() []KindBasicProvisionApplicationTypeDescriptionBase {
 	return []KindBasicProvisionApplicationTypeDescriptionBase{KindExternalStore, KindImageStorePath, KindProvisionApplicationTypeDescriptionBase}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // KindBasicRepairImpactDescriptionBase enumerates the values for kind basic repair impact description base.
 type KindBasicRepairImpactDescriptionBase string
 
@@ -909,11 +968,13 @@ const (
 	KindBasicRepairImpactDescriptionBaseKindRepairImpactDescriptionBase KindBasicRepairImpactDescriptionBase = "RepairImpactDescriptionBase"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleKindBasicRepairImpactDescriptionBaseValues returns an array of possible values for the KindBasicRepairImpactDescriptionBase const type.
 func PossibleKindBasicRepairImpactDescriptionBaseValues() []KindBasicRepairImpactDescriptionBase {
 	return []KindBasicRepairImpactDescriptionBase{KindBasicRepairImpactDescriptionBaseKindNode, KindBasicRepairImpactDescriptionBaseKindRepairImpactDescriptionBase}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // KindBasicRepairTargetDescriptionBase enumerates the values for kind basic repair target description base.
 type KindBasicRepairTargetDescriptionBase string
 
@@ -924,11 +985,13 @@ const (
 	KindBasicRepairTargetDescriptionBaseKindRepairTargetDescriptionBase KindBasicRepairTargetDescriptionBase = "RepairTargetDescriptionBase"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleKindBasicRepairTargetDescriptionBaseValues returns an array of possible values for the KindBasicRepairTargetDescriptionBase const type.
 func PossibleKindBasicRepairTargetDescriptionBaseValues() []KindBasicRepairTargetDescriptionBase {
 	return []KindBasicRepairTargetDescriptionBase{KindBasicRepairTargetDescriptionBaseKindNode, KindBasicRepairTargetDescriptionBaseKindRepairTargetDescriptionBase}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // KindBasicReplicaStatusBase enumerates the values for kind basic replica status base.
 type KindBasicReplicaStatusBase string
 
@@ -939,11 +1002,13 @@ const (
 	KindReplicaStatusBase KindBasicReplicaStatusBase = "ReplicaStatusBase"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleKindBasicReplicaStatusBaseValues returns an array of possible values for the KindBasicReplicaStatusBase const type.
 func PossibleKindBasicReplicaStatusBaseValues() []KindBasicReplicaStatusBase {
 	return []KindBasicReplicaStatusBase{KindKeyValueStore, KindReplicaStatusBase}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // KindBasicReplicatorStatus enumerates the values for kind basic replicator status.
 type KindBasicReplicatorStatus string
 
@@ -960,11 +1025,13 @@ const (
 	KindSecondaryReplicatorStatus KindBasicReplicatorStatus = "SecondaryReplicatorStatus"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleKindBasicReplicatorStatusValues returns an array of possible values for the KindBasicReplicatorStatus const type.
 func PossibleKindBasicReplicatorStatusValues() []KindBasicReplicatorStatus {
 	return []KindBasicReplicatorStatus{KindActiveSecondary, KindIdleSecondary, KindPrimary, KindReplicatorStatus, KindSecondaryReplicatorStatus}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // KindBasicSafetyCheck enumerates the values for kind basic safety check.
 type KindBasicSafetyCheck string
 
@@ -989,11 +1056,13 @@ const (
 	KindWaitForReconfiguration KindBasicSafetyCheck = "WaitForReconfiguration"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleKindBasicSafetyCheckValues returns an array of possible values for the KindBasicSafetyCheck const type.
 func PossibleKindBasicSafetyCheckValues() []KindBasicSafetyCheck {
 	return []KindBasicSafetyCheck{KindEnsureAvailability, KindEnsurePartitionQuorum, KindEnsureSeedNodeQuorum, KindPartitionSafetyCheck, KindSafetyCheck, KindWaitForInbuildReplica, KindWaitForPrimaryPlacement, KindWaitForPrimarySwap, KindWaitForReconfiguration}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // KindBasicServiceTypeDescription enumerates the values for kind basic service type description.
 type KindBasicServiceTypeDescription string
 
@@ -1006,11 +1075,13 @@ const (
 	KindStateless KindBasicServiceTypeDescription = "Stateless"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleKindBasicServiceTypeDescriptionValues returns an array of possible values for the KindBasicServiceTypeDescription const type.
 func PossibleKindBasicServiceTypeDescriptionValues() []KindBasicServiceTypeDescription {
 	return []KindBasicServiceTypeDescription{KindServiceTypeDescription, KindStateful, KindStateless}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MoveCost enumerates the values for move cost.
 type MoveCost string
 
@@ -1025,11 +1096,13 @@ const (
 	Zero MoveCost = "Zero"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleMoveCostValues returns an array of possible values for the MoveCost const type.
 func PossibleMoveCostValues() []MoveCost {
 	return []MoveCost{High, Low, Medium, Zero}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeDeactivationIntent enumerates the values for node deactivation intent.
 type NodeDeactivationIntent string
 
@@ -1052,11 +1125,13 @@ const (
 	NodeDeactivationIntentRestart NodeDeactivationIntent = "Restart"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleNodeDeactivationIntentValues returns an array of possible values for the NodeDeactivationIntent const type.
 func PossibleNodeDeactivationIntentValues() []NodeDeactivationIntent {
 	return []NodeDeactivationIntent{NodeDeactivationIntentInvalid, NodeDeactivationIntentPause, NodeDeactivationIntentRemoveData, NodeDeactivationIntentRemoveNode, NodeDeactivationIntentRestart}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeDeactivationStatus enumerates the values for node deactivation status.
 type NodeDeactivationStatus string
 
@@ -1075,11 +1150,13 @@ const (
 	NodeDeactivationStatusSafetyCheckInProgress NodeDeactivationStatus = "SafetyCheckInProgress"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleNodeDeactivationStatusValues returns an array of possible values for the NodeDeactivationStatus const type.
 func PossibleNodeDeactivationStatusValues() []NodeDeactivationStatus {
 	return []NodeDeactivationStatus{NodeDeactivationStatusCompleted, NodeDeactivationStatusNone, NodeDeactivationStatusSafetyCheckComplete, NodeDeactivationStatusSafetyCheckInProgress}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeDeactivationTaskType enumerates the values for node deactivation task type.
 type NodeDeactivationTaskType string
 
@@ -1098,11 +1175,13 @@ const (
 	NodeDeactivationTaskTypeRepair NodeDeactivationTaskType = "Repair"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleNodeDeactivationTaskTypeValues returns an array of possible values for the NodeDeactivationTaskType const type.
 func PossibleNodeDeactivationTaskTypeValues() []NodeDeactivationTaskType {
 	return []NodeDeactivationTaskType{NodeDeactivationTaskTypeClient, NodeDeactivationTaskTypeInfrastructure, NodeDeactivationTaskTypeInvalid, NodeDeactivationTaskTypeRepair}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeStatus enumerates the values for node status.
 type NodeStatus string
 
@@ -1130,11 +1209,13 @@ const (
 	NodeStatusUp NodeStatus = "Up"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleNodeStatusValues returns an array of possible values for the NodeStatus const type.
 func PossibleNodeStatusValues() []NodeStatus {
 	return []NodeStatus{NodeStatusDisabled, NodeStatusDisabling, NodeStatusDown, NodeStatusEnabling, NodeStatusInvalid, NodeStatusRemoved, NodeStatusUnknown, NodeStatusUp}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeStatusFilterOptionalQueryParam enumerates the values for node status filter optional query param.
 type NodeStatusFilterOptionalQueryParam string
 
@@ -1165,11 +1246,13 @@ const (
 	Up NodeStatusFilterOptionalQueryParam = "up"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleNodeStatusFilterOptionalQueryParamValues returns an array of possible values for the NodeStatusFilterOptionalQueryParam const type.
 func PossibleNodeStatusFilterOptionalQueryParamValues() []NodeStatusFilterOptionalQueryParam {
 	return []NodeStatusFilterOptionalQueryParam{All, Default, Disabled, Disabling, Down, Enabling, Removed, Unknown, Up}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeTransitionTypeRequiredQueryParam enumerates the values for node transition type required query param.
 type NodeTransitionTypeRequiredQueryParam string
 
@@ -1182,11 +1265,13 @@ const (
 	NodeTransitionTypeRequiredQueryParamStop NodeTransitionTypeRequiredQueryParam = "Stop"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleNodeTransitionTypeRequiredQueryParamValues returns an array of possible values for the NodeTransitionTypeRequiredQueryParam const type.
 func PossibleNodeTransitionTypeRequiredQueryParamValues() []NodeTransitionTypeRequiredQueryParam {
 	return []NodeTransitionTypeRequiredQueryParam{NodeTransitionTypeRequiredQueryParamInvalid, NodeTransitionTypeRequiredQueryParamStart, NodeTransitionTypeRequiredQueryParamStop}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeUpgradePhase enumerates the values for node upgrade phase.
 type NodeUpgradePhase string
 
@@ -1204,11 +1289,13 @@ const (
 	NodeUpgradePhaseUpgrading NodeUpgradePhase = "Upgrading"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleNodeUpgradePhaseValues returns an array of possible values for the NodeUpgradePhase const type.
 func PossibleNodeUpgradePhaseValues() []NodeUpgradePhase {
 	return []NodeUpgradePhase{NodeUpgradePhaseInvalid, NodeUpgradePhasePostUpgradeSafetyCheck, NodeUpgradePhasePreUpgradeSafetyCheck, NodeUpgradePhaseUpgrading}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // OperationState enumerates the values for operation state.
 type OperationState string
 
@@ -1235,11 +1322,13 @@ const (
 	OperationStateRunning OperationState = "Running"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleOperationStateValues returns an array of possible values for the OperationState const type.
 func PossibleOperationStateValues() []OperationState {
 	return []OperationState{OperationStateCancelled, OperationStateCompleted, OperationStateFaulted, OperationStateForceCancelled, OperationStateInvalid, OperationStateRollingBack, OperationStateRunning}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // OperationType enumerates the values for operation type.
 type OperationType string
 
@@ -1256,11 +1345,13 @@ const (
 	OperationTypePartitionRestart OperationType = "PartitionRestart"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleOperationTypeValues returns an array of possible values for the OperationType const type.
 func PossibleOperationTypeValues() []OperationType {
 	return []OperationType{OperationTypeInvalid, OperationTypeNodeTransition, OperationTypePartitionDataLoss, OperationTypePartitionQuorumLoss, OperationTypePartitionRestart}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PackageSharingPolicyScope enumerates the values for package sharing policy scope.
 type PackageSharingPolicyScope string
 
@@ -1281,11 +1372,13 @@ const (
 	PackageSharingPolicyScopeNone PackageSharingPolicyScope = "None"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossiblePackageSharingPolicyScopeValues returns an array of possible values for the PackageSharingPolicyScope const type.
 func PossiblePackageSharingPolicyScopeValues() []PackageSharingPolicyScope {
 	return []PackageSharingPolicyScope{PackageSharingPolicyScopeAll, PackageSharingPolicyScopeCode, PackageSharingPolicyScopeConfig, PackageSharingPolicyScopeData, PackageSharingPolicyScopeNone}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionAccessStatus enumerates the values for partition access status.
 type PartitionAccessStatus string
 
@@ -1307,11 +1400,13 @@ const (
 	PartitionAccessStatusReconfigurationPending PartitionAccessStatus = "ReconfigurationPending"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossiblePartitionAccessStatusValues returns an array of possible values for the PartitionAccessStatus const type.
 func PossiblePartitionAccessStatusValues() []PartitionAccessStatus {
 	return []PartitionAccessStatus{PartitionAccessStatusGranted, PartitionAccessStatusInvalid, PartitionAccessStatusNotPrimary, PartitionAccessStatusNoWriteQuorum, PartitionAccessStatusReconfigurationPending}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionScheme enumerates the values for partition scheme.
 type PartitionScheme string
 
@@ -1330,11 +1425,13 @@ const (
 	PartitionSchemeUniformInt64Range PartitionScheme = "UniformInt64Range"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossiblePartitionSchemeValues returns an array of possible values for the PartitionScheme const type.
 func PossiblePartitionSchemeValues() []PartitionScheme {
 	return []PartitionScheme{PartitionSchemeInvalid, PartitionSchemeNamed, PartitionSchemeSingleton, PartitionSchemeUniformInt64Range}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionSchemeBasicPartitionSchemeDescription enumerates the values for partition scheme basic partition
 // scheme description.
 type PartitionSchemeBasicPartitionSchemeDescription string
@@ -1350,11 +1447,13 @@ const (
 	PartitionSchemeUniformInt64Range1 PartitionSchemeBasicPartitionSchemeDescription = "UniformInt64Range"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossiblePartitionSchemeBasicPartitionSchemeDescriptionValues returns an array of possible values for the PartitionSchemeBasicPartitionSchemeDescription const type.
 func PossiblePartitionSchemeBasicPartitionSchemeDescriptionValues() []PartitionSchemeBasicPartitionSchemeDescription {
 	return []PartitionSchemeBasicPartitionSchemeDescription{PartitionSchemeNamed1, PartitionSchemePartitionSchemeDescription, PartitionSchemeSingleton1, PartitionSchemeUniformInt64Range1}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PropertyBatchInfoKind enumerates the values for property batch info kind.
 type PropertyBatchInfoKind string
 
@@ -1368,11 +1467,13 @@ const (
 	PropertyBatchInfoKindSuccessful PropertyBatchInfoKind = "Successful"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossiblePropertyBatchInfoKindValues returns an array of possible values for the PropertyBatchInfoKind const type.
 func PossiblePropertyBatchInfoKindValues() []PropertyBatchInfoKind {
 	return []PropertyBatchInfoKind{PropertyBatchInfoKindFailed, PropertyBatchInfoKindInvalid, PropertyBatchInfoKindSuccessful}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PropertyBatchOperationKind enumerates the values for property batch operation kind.
 type PropertyBatchOperationKind string
 
@@ -1397,11 +1498,13 @@ const (
 	PropertyBatchOperationKindPut PropertyBatchOperationKind = "Put"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossiblePropertyBatchOperationKindValues returns an array of possible values for the PropertyBatchOperationKind const type.
 func PossiblePropertyBatchOperationKindValues() []PropertyBatchOperationKind {
 	return []PropertyBatchOperationKind{PropertyBatchOperationKindCheckExists, PropertyBatchOperationKindCheckSequence, PropertyBatchOperationKindCheckValue, PropertyBatchOperationKindDelete, PropertyBatchOperationKindGet, PropertyBatchOperationKindInvalid, PropertyBatchOperationKindPut}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PropertyValueKind enumerates the values for property value kind.
 type PropertyValueKind string
 
@@ -1421,11 +1524,13 @@ const (
 	PropertyValueKindString PropertyValueKind = "String"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossiblePropertyValueKindValues returns an array of possible values for the PropertyValueKind const type.
 func PossiblePropertyValueKindValues() []PropertyValueKind {
 	return []PropertyValueKind{PropertyValueKindBinary, PropertyValueKindDouble, PropertyValueKindGUID, PropertyValueKindInt64, PropertyValueKindInvalid, PropertyValueKindString}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ProvisionApplicationTypeKind enumerates the values for provision application type kind.
 type ProvisionApplicationTypeKind string
 
@@ -1442,11 +1547,13 @@ const (
 	ProvisionApplicationTypeKindInvalid ProvisionApplicationTypeKind = "Invalid"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleProvisionApplicationTypeKindValues returns an array of possible values for the ProvisionApplicationTypeKind const type.
 func PossibleProvisionApplicationTypeKindValues() []ProvisionApplicationTypeKind {
 	return []ProvisionApplicationTypeKind{ProvisionApplicationTypeKindExternalStore, ProvisionApplicationTypeKindImageStorePath, ProvisionApplicationTypeKindInvalid}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // QuorumLossModeRequiredQueryParam enumerates the values for quorum loss mode required query param.
 type QuorumLossModeRequiredQueryParam string
 
@@ -1460,11 +1567,13 @@ const (
 	QuorumLossModeRequiredQueryParamQuorumReplicas QuorumLossModeRequiredQueryParam = "QuorumReplicas"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleQuorumLossModeRequiredQueryParamValues returns an array of possible values for the QuorumLossModeRequiredQueryParam const type.
 func PossibleQuorumLossModeRequiredQueryParamValues() []QuorumLossModeRequiredQueryParam {
 	return []QuorumLossModeRequiredQueryParam{QuorumLossModeRequiredQueryParamAllReplicas, QuorumLossModeRequiredQueryParamInvalid, QuorumLossModeRequiredQueryParamQuorumReplicas}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReconfigurationPhase enumerates the values for reconfiguration phase.
 type ReconfigurationPhase string
 
@@ -1490,11 +1599,13 @@ const (
 	ReconfigurationPhaseUnknown ReconfigurationPhase = "Unknown"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleReconfigurationPhaseValues returns an array of possible values for the ReconfigurationPhase const type.
 func PossibleReconfigurationPhaseValues() []ReconfigurationPhase {
 	return []ReconfigurationPhase{ReconfigurationPhaseAbortPhaseZero, ReconfigurationPhaseNone, ReconfigurationPhasePhase0, ReconfigurationPhasePhase1, ReconfigurationPhasePhase2, ReconfigurationPhasePhase3, ReconfigurationPhasePhase4, ReconfigurationPhaseUnknown}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReconfigurationType enumerates the values for reconfiguration type.
 type ReconfigurationType string
 
@@ -1511,11 +1622,13 @@ const (
 	ReconfigurationTypeUnknown ReconfigurationType = "Unknown"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleReconfigurationTypeValues returns an array of possible values for the ReconfigurationType const type.
 func PossibleReconfigurationTypeValues() []ReconfigurationType {
 	return []ReconfigurationType{ReconfigurationTypeFailover, ReconfigurationTypeOther, ReconfigurationTypeSwapPrimary, ReconfigurationTypeUnknown}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairImpactKind enumerates the values for repair impact kind.
 type RepairImpactKind string
 
@@ -1526,11 +1639,13 @@ const (
 	RepairImpactKindNode RepairImpactKind = "Node"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleRepairImpactKindValues returns an array of possible values for the RepairImpactKind const type.
 func PossibleRepairImpactKindValues() []RepairImpactKind {
 	return []RepairImpactKind{RepairImpactKindInvalid, RepairImpactKindNode}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairTargetKind enumerates the values for repair target kind.
 type RepairTargetKind string
 
@@ -1541,11 +1656,13 @@ const (
 	RepairTargetKindNode RepairTargetKind = "Node"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleRepairTargetKindValues returns an array of possible values for the RepairTargetKind const type.
 func PossibleRepairTargetKindValues() []RepairTargetKind {
 	return []RepairTargetKind{RepairTargetKindInvalid, RepairTargetKindNode}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairTaskHealthCheckState enumerates the values for repair task health check state.
 type RepairTaskHealthCheckState string
 
@@ -1562,11 +1679,13 @@ const (
 	TimedOut RepairTaskHealthCheckState = "TimedOut"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleRepairTaskHealthCheckStateValues returns an array of possible values for the RepairTaskHealthCheckState const type.
 func PossibleRepairTaskHealthCheckStateValues() []RepairTaskHealthCheckState {
 	return []RepairTaskHealthCheckState{InProgress, NotStarted, Skipped, Succeeded, TimedOut}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicaHealthReportServiceKindRequiredQueryParam enumerates the values for replica health report service
 // kind required query param.
 type ReplicaHealthReportServiceKindRequiredQueryParam string
@@ -1579,11 +1698,13 @@ const (
 	Stateless ReplicaHealthReportServiceKindRequiredQueryParam = "Stateless"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleReplicaHealthReportServiceKindRequiredQueryParamValues returns an array of possible values for the ReplicaHealthReportServiceKindRequiredQueryParam const type.
 func PossibleReplicaHealthReportServiceKindRequiredQueryParamValues() []ReplicaHealthReportServiceKindRequiredQueryParam {
 	return []ReplicaHealthReportServiceKindRequiredQueryParam{Stateful, Stateless}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicaKind enumerates the values for replica kind.
 type ReplicaKind string
 
@@ -1594,11 +1715,13 @@ const (
 	ReplicaKindKeyValueStore ReplicaKind = "KeyValueStore"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleReplicaKindValues returns an array of possible values for the ReplicaKind const type.
 func PossibleReplicaKindValues() []ReplicaKind {
 	return []ReplicaKind{ReplicaKindInvalid, ReplicaKindKeyValueStore}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicaRole enumerates the values for replica role.
 type ReplicaRole string
 
@@ -1626,11 +1749,13 @@ const (
 	ReplicaRoleUnknown ReplicaRole = "Unknown"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleReplicaRoleValues returns an array of possible values for the ReplicaRole const type.
 func PossibleReplicaRoleValues() []ReplicaRole {
 	return []ReplicaRole{ReplicaRoleActiveSecondary, ReplicaRoleIdleSecondary, ReplicaRoleNone, ReplicaRolePrimary, ReplicaRoleUnknown}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicaStatus enumerates the values for replica status.
 type ReplicaStatus string
 
@@ -1649,11 +1774,13 @@ const (
 	ReplicaStatusStandby ReplicaStatus = "Standby"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleReplicaStatusValues returns an array of possible values for the ReplicaStatus const type.
 func PossibleReplicaStatusValues() []ReplicaStatus {
 	return []ReplicaStatus{ReplicaStatusDown, ReplicaStatusDropped, ReplicaStatusInBuild, ReplicaStatusInvalid, ReplicaStatusReady, ReplicaStatusStandby}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicaStatus1 enumerates the values for replica status 1.
 type ReplicaStatus1 string
 
@@ -1672,11 +1799,13 @@ const (
 	ReplicaStatus1Standby ReplicaStatus1 = "Standby"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleReplicaStatus1Values returns an array of possible values for the ReplicaStatus1 const type.
 func PossibleReplicaStatus1Values() []ReplicaStatus1 {
 	return []ReplicaStatus1{ReplicaStatus1Down, ReplicaStatus1Dropped, ReplicaStatus1InBuild, ReplicaStatus1Invalid, ReplicaStatus1Ready, ReplicaStatus1Standby}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicatorOperationName enumerates the values for replicator operation name.
 type ReplicatorOperationName string
 
@@ -1706,11 +1835,13 @@ const (
 	ReplicatorOperationNameWaitForCatchup ReplicatorOperationName = "WaitForCatchup"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleReplicatorOperationNameValues returns an array of possible values for the ReplicatorOperationName const type.
 func PossibleReplicatorOperationNameValues() []ReplicatorOperationName {
 	return []ReplicatorOperationName{ReplicatorOperationNameAbort, ReplicatorOperationNameBuild, ReplicatorOperationNameChangeRole, ReplicatorOperationNameClose, ReplicatorOperationNameInvalid, ReplicatorOperationNameNone, ReplicatorOperationNameOnDataLoss, ReplicatorOperationNameOpen, ReplicatorOperationNameUpdateEpoch, ReplicatorOperationNameWaitForCatchup}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RestartPartitionModeRequiredQueryParam enumerates the values for restart partition mode required query
 // param.
 type RestartPartitionModeRequiredQueryParam string
@@ -1725,11 +1856,13 @@ const (
 	RestartPartitionModeRequiredQueryParamOnlyActiveSecondaries RestartPartitionModeRequiredQueryParam = "OnlyActiveSecondaries"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleRestartPartitionModeRequiredQueryParamValues returns an array of possible values for the RestartPartitionModeRequiredQueryParam const type.
 func PossibleRestartPartitionModeRequiredQueryParamValues() []RestartPartitionModeRequiredQueryParam {
 	return []RestartPartitionModeRequiredQueryParam{RestartPartitionModeRequiredQueryParamAllReplicasOrInstances, RestartPartitionModeRequiredQueryParamInvalid, RestartPartitionModeRequiredQueryParamOnlyActiveSecondaries}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResultStatus enumerates the values for result status.
 type ResultStatus string
 
@@ -1752,11 +1885,13 @@ const (
 	ResultStatusSucceeded ResultStatus = "Succeeded"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleResultStatusValues returns an array of possible values for the ResultStatus const type.
 func PossibleResultStatusValues() []ResultStatus {
 	return []ResultStatus{ResultStatusCancelled, ResultStatusFailed, ResultStatusInterrupted, ResultStatusInvalid, ResultStatusPending, ResultStatusSucceeded}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SafetyCheckKind enumerates the values for safety check kind.
 type SafetyCheckKind string
 
@@ -1792,11 +1927,13 @@ const (
 	SafetyCheckKindWaitForReconfiguration SafetyCheckKind = "WaitForReconfiguration"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleSafetyCheckKindValues returns an array of possible values for the SafetyCheckKind const type.
 func PossibleSafetyCheckKindValues() []SafetyCheckKind {
 	return []SafetyCheckKind{SafetyCheckKindEnsureAvailability, SafetyCheckKindEnsurePartitionQuorum, SafetyCheckKindEnsureSeedNodeQuorum, SafetyCheckKindInvalid, SafetyCheckKindWaitForInbuildReplica, SafetyCheckKindWaitForPrimaryPlacement, SafetyCheckKindWaitForPrimarySwap, SafetyCheckKindWaitForReconfiguration}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceCorrelationScheme enumerates the values for service correlation scheme.
 type ServiceCorrelationScheme string
 
@@ -1817,11 +1954,13 @@ const (
 	ServiceCorrelationSchemeNonAlignedAffinity ServiceCorrelationScheme = "NonAlignedAffinity"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServiceCorrelationSchemeValues returns an array of possible values for the ServiceCorrelationScheme const type.
 func PossibleServiceCorrelationSchemeValues() []ServiceCorrelationScheme {
 	return []ServiceCorrelationScheme{ServiceCorrelationSchemeAffinity, ServiceCorrelationSchemeAlignedAffinity, ServiceCorrelationSchemeInvalid, ServiceCorrelationSchemeNonAlignedAffinity}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceEndpointRole enumerates the values for service endpoint role.
 type ServiceEndpointRole string
 
@@ -1840,11 +1979,13 @@ const (
 	ServiceEndpointRoleStateless ServiceEndpointRole = "Stateless"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServiceEndpointRoleValues returns an array of possible values for the ServiceEndpointRole const type.
 func PossibleServiceEndpointRoleValues() []ServiceEndpointRole {
 	return []ServiceEndpointRole{ServiceEndpointRoleInvalid, ServiceEndpointRoleStatefulPrimary, ServiceEndpointRoleStatefulSecondary, ServiceEndpointRoleStateless}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceKind enumerates the values for service kind.
 type ServiceKind string
 
@@ -1860,11 +2001,13 @@ const (
 	ServiceKindStateless ServiceKind = "Stateless"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServiceKindValues returns an array of possible values for the ServiceKind const type.
 func PossibleServiceKindValues() []ServiceKind {
 	return []ServiceKind{ServiceKindInvalid, ServiceKindStateful, ServiceKindStateless}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceKindBasicDeployedServiceReplicaDetailInfo enumerates the values for service kind basic deployed
 // service replica detail info.
 type ServiceKindBasicDeployedServiceReplicaDetailInfo string
@@ -1878,11 +2021,13 @@ const (
 	ServiceKindStateless1 ServiceKindBasicDeployedServiceReplicaDetailInfo = "Stateless"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServiceKindBasicDeployedServiceReplicaDetailInfoValues returns an array of possible values for the ServiceKindBasicDeployedServiceReplicaDetailInfo const type.
 func PossibleServiceKindBasicDeployedServiceReplicaDetailInfoValues() []ServiceKindBasicDeployedServiceReplicaDetailInfo {
 	return []ServiceKindBasicDeployedServiceReplicaDetailInfo{ServiceKindDeployedServiceReplicaDetailInfo, ServiceKindStateful1, ServiceKindStateless1}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceKindBasicDeployedServiceReplicaInfo enumerates the values for service kind basic deployed service
 // replica info.
 type ServiceKindBasicDeployedServiceReplicaInfo string
@@ -1896,11 +2041,13 @@ const (
 	ServiceKindBasicDeployedServiceReplicaInfoServiceKindStateless ServiceKindBasicDeployedServiceReplicaInfo = "Stateless"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServiceKindBasicDeployedServiceReplicaInfoValues returns an array of possible values for the ServiceKindBasicDeployedServiceReplicaInfo const type.
 func PossibleServiceKindBasicDeployedServiceReplicaInfoValues() []ServiceKindBasicDeployedServiceReplicaInfo {
 	return []ServiceKindBasicDeployedServiceReplicaInfo{ServiceKindBasicDeployedServiceReplicaInfoServiceKindDeployedServiceReplicaInfo, ServiceKindBasicDeployedServiceReplicaInfoServiceKindStateful, ServiceKindBasicDeployedServiceReplicaInfoServiceKindStateless}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceKindBasicReplicaHealth enumerates the values for service kind basic replica health.
 type ServiceKindBasicReplicaHealth string
 
@@ -1913,11 +2060,13 @@ const (
 	ServiceKindBasicReplicaHealthServiceKindStateless ServiceKindBasicReplicaHealth = "Stateless"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServiceKindBasicReplicaHealthValues returns an array of possible values for the ServiceKindBasicReplicaHealth const type.
 func PossibleServiceKindBasicReplicaHealthValues() []ServiceKindBasicReplicaHealth {
 	return []ServiceKindBasicReplicaHealth{ServiceKindBasicReplicaHealthServiceKindReplicaHealth, ServiceKindBasicReplicaHealthServiceKindStateful, ServiceKindBasicReplicaHealthServiceKindStateless}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceKindBasicReplicaHealthState enumerates the values for service kind basic replica health state.
 type ServiceKindBasicReplicaHealthState string
 
@@ -1930,11 +2079,13 @@ const (
 	ServiceKindBasicReplicaHealthStateServiceKindStateless ServiceKindBasicReplicaHealthState = "Stateless"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServiceKindBasicReplicaHealthStateValues returns an array of possible values for the ServiceKindBasicReplicaHealthState const type.
 func PossibleServiceKindBasicReplicaHealthStateValues() []ServiceKindBasicReplicaHealthState {
 	return []ServiceKindBasicReplicaHealthState{ServiceKindBasicReplicaHealthStateServiceKindReplicaHealthState, ServiceKindBasicReplicaHealthStateServiceKindStateful, ServiceKindBasicReplicaHealthStateServiceKindStateless}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceKindBasicReplicaInfo enumerates the values for service kind basic replica info.
 type ServiceKindBasicReplicaInfo string
 
@@ -1947,11 +2098,13 @@ const (
 	ServiceKindBasicReplicaInfoServiceKindStateless ServiceKindBasicReplicaInfo = "Stateless"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServiceKindBasicReplicaInfoValues returns an array of possible values for the ServiceKindBasicReplicaInfo const type.
 func PossibleServiceKindBasicReplicaInfoValues() []ServiceKindBasicReplicaInfo {
 	return []ServiceKindBasicReplicaInfo{ServiceKindBasicReplicaInfoServiceKindReplicaInfo, ServiceKindBasicReplicaInfoServiceKindStateful, ServiceKindBasicReplicaInfoServiceKindStateless}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceKindBasicServiceDescription enumerates the values for service kind basic service description.
 type ServiceKindBasicServiceDescription string
 
@@ -1964,11 +2117,13 @@ const (
 	ServiceKindBasicServiceDescriptionServiceKindStateless ServiceKindBasicServiceDescription = "Stateless"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServiceKindBasicServiceDescriptionValues returns an array of possible values for the ServiceKindBasicServiceDescription const type.
 func PossibleServiceKindBasicServiceDescriptionValues() []ServiceKindBasicServiceDescription {
 	return []ServiceKindBasicServiceDescription{ServiceKindBasicServiceDescriptionServiceKindServiceDescription, ServiceKindBasicServiceDescriptionServiceKindStateful, ServiceKindBasicServiceDescriptionServiceKindStateless}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceKindBasicServiceInfo enumerates the values for service kind basic service info.
 type ServiceKindBasicServiceInfo string
 
@@ -1981,11 +2136,13 @@ const (
 	ServiceKindBasicServiceInfoServiceKindStateless ServiceKindBasicServiceInfo = "Stateless"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServiceKindBasicServiceInfoValues returns an array of possible values for the ServiceKindBasicServiceInfo const type.
 func PossibleServiceKindBasicServiceInfoValues() []ServiceKindBasicServiceInfo {
 	return []ServiceKindBasicServiceInfo{ServiceKindBasicServiceInfoServiceKindServiceInfo, ServiceKindBasicServiceInfoServiceKindStateful, ServiceKindBasicServiceInfoServiceKindStateless}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceKindBasicServicePartitionInfo enumerates the values for service kind basic service partition info.
 type ServiceKindBasicServicePartitionInfo string
 
@@ -1998,11 +2155,13 @@ const (
 	ServiceKindBasicServicePartitionInfoServiceKindStateless ServiceKindBasicServicePartitionInfo = "Stateless"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServiceKindBasicServicePartitionInfoValues returns an array of possible values for the ServiceKindBasicServicePartitionInfo const type.
 func PossibleServiceKindBasicServicePartitionInfoValues() []ServiceKindBasicServicePartitionInfo {
 	return []ServiceKindBasicServicePartitionInfo{ServiceKindBasicServicePartitionInfoServiceKindServicePartitionInfo, ServiceKindBasicServicePartitionInfoServiceKindStateful, ServiceKindBasicServicePartitionInfoServiceKindStateless}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceKindBasicServiceUpdateDescription enumerates the values for service kind basic service update
 // description.
 type ServiceKindBasicServiceUpdateDescription string
@@ -2016,11 +2175,13 @@ const (
 	ServiceKindBasicServiceUpdateDescriptionServiceKindStateless ServiceKindBasicServiceUpdateDescription = "Stateless"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServiceKindBasicServiceUpdateDescriptionValues returns an array of possible values for the ServiceKindBasicServiceUpdateDescription const type.
 func PossibleServiceKindBasicServiceUpdateDescriptionValues() []ServiceKindBasicServiceUpdateDescription {
 	return []ServiceKindBasicServiceUpdateDescription{ServiceKindBasicServiceUpdateDescriptionServiceKindServiceUpdateDescription, ServiceKindBasicServiceUpdateDescriptionServiceKindStateful, ServiceKindBasicServiceUpdateDescriptionServiceKindStateless}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceLoadMetricWeight enumerates the values for service load metric weight.
 type ServiceLoadMetricWeight string
 
@@ -2035,11 +2196,13 @@ const (
 	ServiceLoadMetricWeightZero ServiceLoadMetricWeight = "Zero"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServiceLoadMetricWeightValues returns an array of possible values for the ServiceLoadMetricWeight const type.
 func PossibleServiceLoadMetricWeightValues() []ServiceLoadMetricWeight {
 	return []ServiceLoadMetricWeight{ServiceLoadMetricWeightHigh, ServiceLoadMetricWeightLow, ServiceLoadMetricWeightMedium, ServiceLoadMetricWeightZero}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceOperationName enumerates the values for service operation name.
 type ServiceOperationName string
 
@@ -2058,11 +2221,13 @@ const (
 	ServiceOperationNameUnknown ServiceOperationName = "Unknown"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServiceOperationNameValues returns an array of possible values for the ServiceOperationName const type.
 func PossibleServiceOperationNameValues() []ServiceOperationName {
 	return []ServiceOperationName{ServiceOperationNameAbort, ServiceOperationNameChangeRole, ServiceOperationNameClose, ServiceOperationNameNone, ServiceOperationNameOpen, ServiceOperationNameUnknown}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServicePackageActivationMode enumerates the values for service package activation mode.
 type ServicePackageActivationMode string
 
@@ -2076,11 +2241,13 @@ const (
 	SharedProcess ServicePackageActivationMode = "SharedProcess"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServicePackageActivationModeValues returns an array of possible values for the ServicePackageActivationMode const type.
 func PossibleServicePackageActivationModeValues() []ServicePackageActivationMode {
 	return []ServicePackageActivationMode{ExclusiveProcess, SharedProcess}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServicePartitionKind enumerates the values for service partition kind.
 type ServicePartitionKind string
 
@@ -2095,11 +2262,13 @@ const (
 	ServicePartitionKindSingleton ServicePartitionKind = "Singleton"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServicePartitionKindValues returns an array of possible values for the ServicePartitionKind const type.
 func PossibleServicePartitionKindValues() []ServicePartitionKind {
 	return []ServicePartitionKind{ServicePartitionKindInt64Range, ServicePartitionKindNamed, ServicePartitionKindPartitionInformation, ServicePartitionKindSingleton}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServicePartitionStatus enumerates the values for service partition status.
 type ServicePartitionStatus string
 
@@ -2126,11 +2295,13 @@ const (
 	ServicePartitionStatusReconfiguring ServicePartitionStatus = "Reconfiguring"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServicePartitionStatusValues returns an array of possible values for the ServicePartitionStatus const type.
 func PossibleServicePartitionStatusValues() []ServicePartitionStatus {
 	return []ServicePartitionStatus{ServicePartitionStatusDeleting, ServicePartitionStatusInQuorumLoss, ServicePartitionStatusInvalid, ServicePartitionStatusNotReady, ServicePartitionStatusReady, ServicePartitionStatusReconfiguring}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServicePlacementPolicyType enumerates the values for service placement policy type.
 type ServicePlacementPolicyType string
 
@@ -2162,11 +2333,13 @@ const (
 	ServicePlacementPolicyTypeRequiredDomainDistribution ServicePlacementPolicyType = "RequiredDomainDistribution"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServicePlacementPolicyTypeValues returns an array of possible values for the ServicePlacementPolicyType const type.
 func PossibleServicePlacementPolicyTypeValues() []ServicePlacementPolicyType {
 	return []ServicePlacementPolicyType{ServicePlacementPolicyTypeInvalid, ServicePlacementPolicyTypeInvalidDomain, ServicePlacementPolicyTypeNonPartiallyPlaceService, ServicePlacementPolicyTypePreferredPrimaryDomain, ServicePlacementPolicyTypeRequiredDomain, ServicePlacementPolicyTypeRequiredDomainDistribution}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceStatus enumerates the values for service status.
 type ServiceStatus string
 
@@ -2186,11 +2359,13 @@ const (
 	ServiceStatusUpgrading ServiceStatus = "Upgrading"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServiceStatusValues returns an array of possible values for the ServiceStatus const type.
 func PossibleServiceStatusValues() []ServiceStatus {
 	return []ServiceStatus{ServiceStatusActive, ServiceStatusCreating, ServiceStatusDeleting, ServiceStatusFailed, ServiceStatusUnknown, ServiceStatusUpgrading}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceTypeRegistrationStatus enumerates the values for service type registration status.
 type ServiceTypeRegistrationStatus string
 
@@ -2213,11 +2388,13 @@ const (
 	ServiceTypeRegistrationStatusRegistered ServiceTypeRegistrationStatus = "Registered"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleServiceTypeRegistrationStatusValues returns an array of possible values for the ServiceTypeRegistrationStatus const type.
 func PossibleServiceTypeRegistrationStatusValues() []ServiceTypeRegistrationStatus {
 	return []ServiceTypeRegistrationStatus{ServiceTypeRegistrationStatusDisabled, ServiceTypeRegistrationStatusEnabled, ServiceTypeRegistrationStatusInvalid, ServiceTypeRegistrationStatusRegistered}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // State enumerates the values for state.
 type State string
 
@@ -2244,11 +2421,13 @@ const (
 	StateRestoring State = "Restoring"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleStateValues returns an array of possible values for the State const type.
 func PossibleStateValues() []State {
 	return []State{StateApproved, StateClaimed, StateCompleted, StateCreated, StateExecuting, StateInvalid, StatePreparing, StateRestoring}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Status enumerates the values for status.
 type Status string
 
@@ -2261,11 +2440,13 @@ const (
 	StatusStopped Status = "Stopped"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleStatusValues returns an array of possible values for the Status const type.
 func PossibleStatusValues() []Status {
 	return []Status{StatusInvalid, StatusRunning, StatusStopped}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Type enumerates the values for type.
 type Type string
 
@@ -2284,11 +2465,13 @@ const (
 	TypeServicePlacementPolicyDescription Type = "ServicePlacementPolicyDescription"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleTypeValues returns an array of possible values for the Type const type.
 func PossibleTypeValues() []Type {
 	return []Type{TypeInvalidDomain, TypeNonPartiallyPlaceService, TypePreferPrimaryDomain, TypeRequireDomain, TypeRequireDomainDistribution, TypeServicePlacementPolicyDescription}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpgradeDomainState enumerates the values for upgrade domain state.
 type UpgradeDomainState string
 
@@ -2304,11 +2487,13 @@ const (
 	UpgradeDomainStatePending UpgradeDomainState = "Pending"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleUpgradeDomainStateValues returns an array of possible values for the UpgradeDomainState const type.
 func PossibleUpgradeDomainStateValues() []UpgradeDomainState {
 	return []UpgradeDomainState{UpgradeDomainStateCompleted, UpgradeDomainStateInProgress, UpgradeDomainStateInvalid, UpgradeDomainStatePending}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpgradeKind enumerates the values for upgrade kind.
 type UpgradeKind string
 
@@ -2320,11 +2505,13 @@ const (
 	UpgradeKindRolling UpgradeKind = "Rolling"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleUpgradeKindValues returns an array of possible values for the UpgradeKind const type.
 func PossibleUpgradeKindValues() []UpgradeKind {
 	return []UpgradeKind{UpgradeKindInvalid, UpgradeKindRolling}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpgradeMode enumerates the values for upgrade mode.
 type UpgradeMode string
 
@@ -2343,11 +2530,13 @@ const (
 	UpgradeModeUnmonitoredManual UpgradeMode = "UnmonitoredManual"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleUpgradeModeValues returns an array of possible values for the UpgradeMode const type.
 func PossibleUpgradeModeValues() []UpgradeMode {
 	return []UpgradeMode{UpgradeModeInvalid, UpgradeModeMonitored, UpgradeModeUnmonitoredAuto, UpgradeModeUnmonitoredManual}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpgradeState enumerates the values for upgrade state.
 type UpgradeState string
 
@@ -2373,11 +2562,13 @@ const (
 	UpgradeStateRollingForwardPending UpgradeState = "RollingForwardPending"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleUpgradeStateValues returns an array of possible values for the UpgradeState const type.
 func PossibleUpgradeStateValues() []UpgradeState {
 	return []UpgradeState{UpgradeStateFailed, UpgradeStateInvalid, UpgradeStateRollingBackCompleted, UpgradeStateRollingBackInProgress, UpgradeStateRollingForwardCompleted, UpgradeStateRollingForwardInProgress, UpgradeStateRollingForwardPending}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpgradeType enumerates the values for upgrade type.
 type UpgradeType string
 
@@ -2391,11 +2582,13 @@ const (
 	UpgradeTypeRollingForceRestart UpgradeType = "Rolling_ForceRestart"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PossibleUpgradeTypeValues returns an array of possible values for the UpgradeType const type.
 func PossibleUpgradeTypeValues() []UpgradeType {
 	return []UpgradeType{UpgradeTypeInvalid, UpgradeTypeRolling, UpgradeTypeRollingForceRestart}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AadMetadata azure Active Directory metadata used for secured connection to cluster.
 type AadMetadata struct {
 	// Authority - The AAD authority url.
@@ -2412,6 +2605,7 @@ type AadMetadata struct {
 	Tenant *string `json:"tenant,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AadMetadataObject azure Active Directory metadata object used for secured connection to cluster.
 type AadMetadataObject struct {
 	autorest.Response `json:"-"`
@@ -2421,6 +2615,7 @@ type AadMetadataObject struct {
 	Metadata *AadMetadata `json:"metadata,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationCapacityDescription describes capacity information for services of this application. This description
 // can be used for describing the following.
 // - Reserving the capacity for the services on the nodes
@@ -2436,6 +2631,7 @@ type ApplicationCapacityDescription struct {
 	ApplicationMetrics *[]ApplicationMetricDescription `json:"ApplicationMetrics,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationDescription describes a Service Fabric application.
 type ApplicationDescription struct {
 	// Name - The name of the application, including the 'fabric:' URI scheme.
@@ -2453,6 +2649,7 @@ type ApplicationDescription struct {
 	ApplicationCapacity *ApplicationCapacityDescription `json:"ApplicationCapacity,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationHealth represents the health of the application. Contains the application aggregated health state and
 // the service and deployed application health states.
 type ApplicationHealth struct {
@@ -2476,6 +2673,7 @@ type ApplicationHealth struct {
 	HealthStatistics *HealthStatistics `json:"HealthStatistics,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationHealthEvaluation represents health evaluation for an application, containing information about the
 // data and the algorithm used by the health store to evaluate health.
 type ApplicationHealthEvaluation struct {
@@ -2491,6 +2689,7 @@ type ApplicationHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) MarshalJSON() ([]byte, error) {
 	ahe.Kind = KindApplication
@@ -2513,116 +2712,139 @@ func (ahe ApplicationHealthEvaluation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return &ahe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &ahe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationHealthPolicies defines the application health policy map used to evaluate the health of an
 // application or one of its children entities.
 type ApplicationHealthPolicies struct {
@@ -2630,6 +2852,7 @@ type ApplicationHealthPolicies struct {
 	ApplicationHealthPolicyMap *[]ApplicationHealthPolicyMapItem `json:"ApplicationHealthPolicyMap,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationHealthPolicy defines a health policy used to evaluate the health of an application or one of its
 // children entities.
 type ApplicationHealthPolicy struct {
@@ -2646,6 +2869,7 @@ type ApplicationHealthPolicy struct {
 	ServiceTypeHealthPolicyMap *[]ServiceTypeHealthPolicyMapItem `json:"ServiceTypeHealthPolicyMap,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationHealthPolicyMapItem defines an item in ApplicationHealthPolicyMap.
 type ApplicationHealthPolicyMapItem struct {
 	// Key - The key of the application health policy map item. This is the name of the application.
@@ -2654,6 +2878,7 @@ type ApplicationHealthPolicyMapItem struct {
 	Value *ApplicationHealthPolicy `json:"Value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationHealthState represents the health state of an application, which contains the application identifier
 // and the aggregated health state.
 type ApplicationHealthState struct {
@@ -2663,6 +2888,7 @@ type ApplicationHealthState struct {
 	AggregatedHealthState HealthState `json:"AggregatedHealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationHealthStateChunk represents the health state chunk of a application.
 // The application health state chunk contains the application name, its aggregated health state and any children
 // services and deployed applications that respect the filters in cluster health chunk query description.
@@ -2679,6 +2905,7 @@ type ApplicationHealthStateChunk struct {
 	HealthState HealthState `json:"HealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationHealthStateChunkList the list of application health state chunks in the cluster that respect the
 // input filters in the chunk query. Returned by get cluster health state chunks query.
 type ApplicationHealthStateChunkList struct {
@@ -2688,6 +2915,7 @@ type ApplicationHealthStateChunkList struct {
 	TotalCount *int64 `json:"TotalCount,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationHealthStateFilter defines matching criteria to determine whether a application should be included in
 // the cluster health chunk.
 // One filter can match zero, one or multiple applications, depending on its properties.
@@ -2727,6 +2955,7 @@ type ApplicationHealthStateFilter struct {
 	DeployedApplicationFilters *[]DeployedApplicationHealthStateFilter `json:"DeployedApplicationFilters,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationInfo information about a Service Fabric application.
 type ApplicationInfo struct {
 	autorest.Response `json:"-"`
@@ -2752,6 +2981,7 @@ type ApplicationInfo struct {
 	ApplicationDefinitionKind ApplicationDefinitionKind `json:"ApplicationDefinitionKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationLoadInfo load Information about a Service Fabric application.
 type ApplicationLoadInfo struct {
 	autorest.Response `json:"-"`
@@ -2774,6 +3004,7 @@ type ApplicationLoadInfo struct {
 	ApplicationLoadMetricInformation *[]ApplicationMetricDescription `json:"ApplicationLoadMetricInformation,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationMetricDescription describes capacity information for a custom resource balancing metric. This can be
 // used to limit the total consumption of this metric by the services of this application.
 type ApplicationMetricDescription struct {
@@ -2797,6 +3028,7 @@ type ApplicationMetricDescription struct {
 	TotalApplicationCapacity *int64 `json:"TotalApplicationCapacity,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationNameInfo information about the application name.
 type ApplicationNameInfo struct {
 	autorest.Response `json:"-"`
@@ -2808,6 +3040,7 @@ type ApplicationNameInfo struct {
 	Name *string `json:"Name,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationParameter describes an application parameter override to be applied when creating or upgrading an
 // application.
 type ApplicationParameter struct {
@@ -2817,6 +3050,7 @@ type ApplicationParameter struct {
 	Value *string `json:"Value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationsHealthEvaluation represents health evaluation for applications, containing health evaluations for
 // each unhealthy application that impacted current aggregated health state.
 type ApplicationsHealthEvaluation struct {
@@ -2834,6 +3068,7 @@ type ApplicationsHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) MarshalJSON() ([]byte, error) {
 	ahe.Kind = KindApplications
@@ -2859,116 +3094,139 @@ func (ahe ApplicationsHealthEvaluation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return &ahe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &ahe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationTypeApplicationsHealthEvaluation represents health evaluation for applications of a particular
 // application type. The application type applications evaluation can be returned when cluster health evaluation
 // returns unhealthy aggregated health state, either Error or Warning. It contains health evaluations for each
@@ -2990,6 +3248,7 @@ type ApplicationTypeApplicationsHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) MarshalJSON() ([]byte, error) {
 	atahe.Kind = KindApplicationTypeApplications
@@ -3018,116 +3277,139 @@ func (atahe ApplicationTypeApplicationsHealthEvaluation) MarshalJSON() ([]byte, 
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return &atahe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeApplicationsHealthEvaluation.
 func (atahe ApplicationTypeApplicationsHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &atahe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationTypeHealthPolicyMapItem defines an item in ApplicationTypeHealthPolicyMap.
 type ApplicationTypeHealthPolicyMapItem struct {
 	// Key - The key of the application type health policy map item. This is the name of the application type.
@@ -3137,6 +3419,7 @@ type ApplicationTypeHealthPolicyMapItem struct {
 	Value *int32 `json:"Value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationTypeImageStorePath path description for the application package in the image store specified during
 // the prior copy operation.
 type ApplicationTypeImageStorePath struct {
@@ -3144,6 +3427,7 @@ type ApplicationTypeImageStorePath struct {
 	ApplicationTypeBuildPath *string `json:"ApplicationTypeBuildPath,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationTypeInfo information about an application type.
 type ApplicationTypeInfo struct {
 	// Name - The application type name as defined in the application manifest.
@@ -3162,6 +3446,7 @@ type ApplicationTypeInfo struct {
 	ApplicationTypeDefinitionKind ApplicationTypeDefinitionKind `json:"ApplicationTypeDefinitionKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationTypeManifest contains the manifest describing an application type registered in a Service Fabric
 // cluster.
 type ApplicationTypeManifest struct {
@@ -3170,6 +3455,7 @@ type ApplicationTypeManifest struct {
 	Manifest *string `json:"Manifest,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationUpgradeDescription describes the parameters for an application upgrade. Please note that upgrade
 // description replaces the existing application description. This means that if the parameters are not specified,
 // the existing parameters on the applications will be overwritten with the empty parameters list. This would
@@ -3197,6 +3483,7 @@ type ApplicationUpgradeDescription struct {
 	ApplicationHealthPolicy *ApplicationHealthPolicy `json:"ApplicationHealthPolicy,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationUpgradeProgressInfo describes the parameters for an application upgrade.
 type ApplicationUpgradeProgressInfo struct {
 	autorest.Response `json:"-"`
@@ -3236,6 +3523,7 @@ type ApplicationUpgradeProgressInfo struct {
 	UpgradeStatusDetails *string `json:"UpgradeStatusDetails,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationUpgradeUpdateDescription describes the parameters for updating an ongoing application upgrade.
 type ApplicationUpgradeUpdateDescription struct {
 	// Name - The name of the application, including the 'fabric:' URI scheme.
@@ -3248,6 +3536,7 @@ type ApplicationUpgradeUpdateDescription struct {
 	UpdateDescription *RollingUpgradeUpdateDescription `json:"UpdateDescription,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BinaryPropertyValue describes a Service Fabric property value of type Binary.
 type BinaryPropertyValue struct {
 	// Data - Array of bytes to be sent as an integer array. Each element of array is a number between 0 and 255.
@@ -3256,6 +3545,7 @@ type BinaryPropertyValue struct {
 	Kind KindBasicPropertyValue `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for BinaryPropertyValue.
 func (bpv BinaryPropertyValue) MarshalJSON() ([]byte, error) {
 	bpv.Kind = KindBinary
@@ -3269,41 +3559,49 @@ func (bpv BinaryPropertyValue) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBinaryPropertyValue is the BasicPropertyValue implementation for BinaryPropertyValue.
 func (bpv BinaryPropertyValue) AsBinaryPropertyValue() (*BinaryPropertyValue, bool) {
 	return &bpv, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsInt64PropertyValue is the BasicPropertyValue implementation for BinaryPropertyValue.
 func (bpv BinaryPropertyValue) AsInt64PropertyValue() (*Int64PropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDoublePropertyValue is the BasicPropertyValue implementation for BinaryPropertyValue.
 func (bpv BinaryPropertyValue) AsDoublePropertyValue() (*DoublePropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStringPropertyValue is the BasicPropertyValue implementation for BinaryPropertyValue.
 func (bpv BinaryPropertyValue) AsStringPropertyValue() (*StringPropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsGUIDPropertyValue is the BasicPropertyValue implementation for BinaryPropertyValue.
 func (bpv BinaryPropertyValue) AsGUIDPropertyValue() (*GUIDPropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPropertyValue is the BasicPropertyValue implementation for BinaryPropertyValue.
 func (bpv BinaryPropertyValue) AsPropertyValue() (*PropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPropertyValue is the BasicPropertyValue implementation for BinaryPropertyValue.
 func (bpv BinaryPropertyValue) AsBasicPropertyValue() (BasicPropertyValue, bool) {
 	return &bpv, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ChaosContext describes a map, which is a collection of (string, string) type key-value pairs. The map can be
 // used to record information about
 // the Chaos run. There cannot be more than 100 such pairs and each string (key or value) can be at most 4095
@@ -3314,6 +3612,7 @@ type ChaosContext struct {
 	Map interface{} `json:"Map,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ChaosContextMapItem describes an item in the ChaosContextMap in ChaosParameters.
 type ChaosContextMapItem struct {
 	// Key - The key for a ChaosContextMapItem.
@@ -3322,6 +3621,7 @@ type ChaosContextMapItem struct {
 	Value *string `json:"Value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicChaosEvent represents an event generated during a Chaos run.
 type BasicChaosEvent interface {
 	AsExecutingFaultsChaosEvent() (*ExecutingFaultsChaosEvent, bool)
@@ -3333,6 +3633,7 @@ type BasicChaosEvent interface {
 	AsChaosEvent() (*ChaosEvent, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ChaosEvent represents an event generated during a Chaos run.
 type ChaosEvent struct {
 	// TimeStampUtc - The UTC timestamp when this Chaos event was generated.
@@ -3398,6 +3699,7 @@ func unmarshalBasicChaosEventArray(body []byte) ([]BasicChaosEvent, error) {
 	return ceArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ChaosEvent.
 func (ce ChaosEvent) MarshalJSON() ([]byte, error) {
 	ce.Kind = KindChaosEvent
@@ -3411,52 +3713,62 @@ func (ce ChaosEvent) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsExecutingFaultsChaosEvent is the BasicChaosEvent implementation for ChaosEvent.
 func (ce ChaosEvent) AsExecutingFaultsChaosEvent() (*ExecutingFaultsChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStartedChaosEvent is the BasicChaosEvent implementation for ChaosEvent.
 func (ce ChaosEvent) AsStartedChaosEvent() (*StartedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStoppedChaosEvent is the BasicChaosEvent implementation for ChaosEvent.
 func (ce ChaosEvent) AsStoppedChaosEvent() (*StoppedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsTestErrorChaosEvent is the BasicChaosEvent implementation for ChaosEvent.
 func (ce ChaosEvent) AsTestErrorChaosEvent() (*TestErrorChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsValidationFailedChaosEvent is the BasicChaosEvent implementation for ChaosEvent.
 func (ce ChaosEvent) AsValidationFailedChaosEvent() (*ValidationFailedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitingChaosEvent is the BasicChaosEvent implementation for ChaosEvent.
 func (ce ChaosEvent) AsWaitingChaosEvent() (*WaitingChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsChaosEvent is the BasicChaosEvent implementation for ChaosEvent.
 func (ce ChaosEvent) AsChaosEvent() (*ChaosEvent, bool) {
 	return &ce, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicChaosEvent is the BasicChaosEvent implementation for ChaosEvent.
 func (ce ChaosEvent) AsBasicChaosEvent() (BasicChaosEvent, bool) {
 	return &ce, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ChaosEventWrapper wrapper object for Chaos event.
 type ChaosEventWrapper struct {
 	// ChaosEvent - Represents an event generated during a Chaos run.
 	ChaosEvent BasicChaosEvent `json:"ChaosEvent,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for ChaosEventWrapper struct.
 func (cew *ChaosEventWrapper) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -3480,6 +3792,7 @@ func (cew *ChaosEventWrapper) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ChaosParameters defines all the parameters to configure a Chaos run.
 type ChaosParameters struct {
 	// TimeToRunInSeconds - Total time (in seconds) for which Chaos will run before automatically stopping. The maximum allowed value is 4,294,967,295 (System.UInt32.MaxValue).
@@ -3513,6 +3826,7 @@ type ChaosParameters struct {
 	ChaosTargetFilter *ChaosTargetFilter `json:"ChaosTargetFilter,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ChaosReport contains detailed Chaos report.
 type ChaosReport struct {
 	autorest.Response `json:"-"`
@@ -3527,6 +3841,7 @@ type ChaosReport struct {
 	History *[]ChaosEventWrapper `json:"History,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ChaosTargetFilter defines all filters for targeted Chaos faults, for example, faulting only certain node types
 // or faulting only certain applications.
 // If ChaosTargetFilter is not used, Chaos faults all cluster entities. If ChaosTargetFilter is used, Chaos faults
@@ -3558,6 +3873,7 @@ type ChaosTargetFilter struct {
 	ApplicationInclusionList *[]string `json:"ApplicationInclusionList,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CheckExistsPropertyBatchOperation represents a PropertyBatchOperation that compares the Boolean existence of a
 // property with the Exists argument.
 // The PropertyBatchOperation operation fails if the property's existence is not equal to the Exists argument.
@@ -3573,6 +3889,7 @@ type CheckExistsPropertyBatchOperation struct {
 	Kind KindBasicPropertyBatchOperation `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for CheckExistsPropertyBatchOperation.
 func (cepbo CheckExistsPropertyBatchOperation) MarshalJSON() ([]byte, error) {
 	cepbo.Kind = KindCheckExists
@@ -3589,46 +3906,55 @@ func (cepbo CheckExistsPropertyBatchOperation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckExistsPropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckExistsPropertyBatchOperation.
 func (cepbo CheckExistsPropertyBatchOperation) AsCheckExistsPropertyBatchOperation() (*CheckExistsPropertyBatchOperation, bool) {
 	return &cepbo, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckSequencePropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckExistsPropertyBatchOperation.
 func (cepbo CheckExistsPropertyBatchOperation) AsCheckSequencePropertyBatchOperation() (*CheckSequencePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckValuePropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckExistsPropertyBatchOperation.
 func (cepbo CheckExistsPropertyBatchOperation) AsCheckValuePropertyBatchOperation() (*CheckValuePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeletePropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckExistsPropertyBatchOperation.
 func (cepbo CheckExistsPropertyBatchOperation) AsDeletePropertyBatchOperation() (*DeletePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsGetPropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckExistsPropertyBatchOperation.
 func (cepbo CheckExistsPropertyBatchOperation) AsGetPropertyBatchOperation() (*GetPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPutPropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckExistsPropertyBatchOperation.
 func (cepbo CheckExistsPropertyBatchOperation) AsPutPropertyBatchOperation() (*PutPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckExistsPropertyBatchOperation.
 func (cepbo CheckExistsPropertyBatchOperation) AsPropertyBatchOperation() (*PropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckExistsPropertyBatchOperation.
 func (cepbo CheckExistsPropertyBatchOperation) AsBasicPropertyBatchOperation() (BasicPropertyBatchOperation, bool) {
 	return &cepbo, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CheckSequencePropertyBatchOperation compares the Sequence Number of a property with the SequenceNumber argument.
 // A property's sequence number can be thought of as that property's version.
 // Every time the property is modified, its sequence number is increased.
@@ -3646,6 +3972,7 @@ type CheckSequencePropertyBatchOperation struct {
 	Kind KindBasicPropertyBatchOperation `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for CheckSequencePropertyBatchOperation.
 func (cspbo CheckSequencePropertyBatchOperation) MarshalJSON() ([]byte, error) {
 	cspbo.Kind = KindCheckSequence
@@ -3662,46 +3989,55 @@ func (cspbo CheckSequencePropertyBatchOperation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckExistsPropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckSequencePropertyBatchOperation.
 func (cspbo CheckSequencePropertyBatchOperation) AsCheckExistsPropertyBatchOperation() (*CheckExistsPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckSequencePropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckSequencePropertyBatchOperation.
 func (cspbo CheckSequencePropertyBatchOperation) AsCheckSequencePropertyBatchOperation() (*CheckSequencePropertyBatchOperation, bool) {
 	return &cspbo, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckValuePropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckSequencePropertyBatchOperation.
 func (cspbo CheckSequencePropertyBatchOperation) AsCheckValuePropertyBatchOperation() (*CheckValuePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeletePropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckSequencePropertyBatchOperation.
 func (cspbo CheckSequencePropertyBatchOperation) AsDeletePropertyBatchOperation() (*DeletePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsGetPropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckSequencePropertyBatchOperation.
 func (cspbo CheckSequencePropertyBatchOperation) AsGetPropertyBatchOperation() (*GetPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPutPropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckSequencePropertyBatchOperation.
 func (cspbo CheckSequencePropertyBatchOperation) AsPutPropertyBatchOperation() (*PutPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckSequencePropertyBatchOperation.
 func (cspbo CheckSequencePropertyBatchOperation) AsPropertyBatchOperation() (*PropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckSequencePropertyBatchOperation.
 func (cspbo CheckSequencePropertyBatchOperation) AsBasicPropertyBatchOperation() (BasicPropertyBatchOperation, bool) {
 	return &cspbo, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CheckValuePropertyBatchOperation represents a PropertyBatchOperation that compares the value of the property
 // with the expected value.
 // The CheckValuePropertyBatchOperation is generally used as a precondition for the write operations in the batch.
@@ -3716,6 +4052,7 @@ type CheckValuePropertyBatchOperation struct {
 	Kind KindBasicPropertyBatchOperation `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for CheckValuePropertyBatchOperation.
 func (cvpbo CheckValuePropertyBatchOperation) MarshalJSON() ([]byte, error) {
 	cvpbo.Kind = KindCheckValue
@@ -3730,46 +4067,55 @@ func (cvpbo CheckValuePropertyBatchOperation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckExistsPropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckValuePropertyBatchOperation.
 func (cvpbo CheckValuePropertyBatchOperation) AsCheckExistsPropertyBatchOperation() (*CheckExistsPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckSequencePropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckValuePropertyBatchOperation.
 func (cvpbo CheckValuePropertyBatchOperation) AsCheckSequencePropertyBatchOperation() (*CheckSequencePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckValuePropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckValuePropertyBatchOperation.
 func (cvpbo CheckValuePropertyBatchOperation) AsCheckValuePropertyBatchOperation() (*CheckValuePropertyBatchOperation, bool) {
 	return &cvpbo, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeletePropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckValuePropertyBatchOperation.
 func (cvpbo CheckValuePropertyBatchOperation) AsDeletePropertyBatchOperation() (*DeletePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsGetPropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckValuePropertyBatchOperation.
 func (cvpbo CheckValuePropertyBatchOperation) AsGetPropertyBatchOperation() (*GetPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPutPropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckValuePropertyBatchOperation.
 func (cvpbo CheckValuePropertyBatchOperation) AsPutPropertyBatchOperation() (*PutPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckValuePropertyBatchOperation.
 func (cvpbo CheckValuePropertyBatchOperation) AsPropertyBatchOperation() (*PropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPropertyBatchOperation is the BasicPropertyBatchOperation implementation for CheckValuePropertyBatchOperation.
 func (cvpbo CheckValuePropertyBatchOperation) AsBasicPropertyBatchOperation() (BasicPropertyBatchOperation, bool) {
 	return &cvpbo, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for CheckValuePropertyBatchOperation struct.
 func (cvpbo *CheckValuePropertyBatchOperation) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -3811,6 +4157,7 @@ func (cvpbo *CheckValuePropertyBatchOperation) UnmarshalJSON(body []byte) error 
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ClusterConfiguration information about the standalone cluster configuration.
 type ClusterConfiguration struct {
 	autorest.Response `json:"-"`
@@ -3818,6 +4165,7 @@ type ClusterConfiguration struct {
 	ClusterConfiguration *string `json:"ClusterConfiguration,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ClusterConfigurationUpgradeDescription describes the parameters for a standalone cluster configuration upgrade.
 type ClusterConfigurationUpgradeDescription struct {
 	// ClusterConfig - The cluster configuration.
@@ -3842,6 +4190,7 @@ type ClusterConfigurationUpgradeDescription struct {
 	MaxPercentUpgradeDomainDeltaUnhealthyNodes *int32 `json:"MaxPercentUpgradeDomainDeltaUnhealthyNodes,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ClusterConfigurationUpgradeStatusInfo information about a standalone cluster configuration upgrade status.
 type ClusterConfigurationUpgradeStatusInfo struct {
 	autorest.Response `json:"-"`
@@ -3855,6 +4204,7 @@ type ClusterConfigurationUpgradeStatusInfo struct {
 	Details *string `json:"Details,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ClusterHealth represents the health of the cluster.
 // Contains the cluster aggregated health state, the cluster application and node health states as well as the
 // health events and the unhealthy evaluations.
@@ -3877,6 +4227,7 @@ type ClusterHealth struct {
 	HealthStatistics *HealthStatistics `json:"HealthStatistics,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ClusterHealthChunk represents the health chunk of the cluster.
 // Contains the cluster aggregated health state, and the cluster entities that respect the input filter.
 type ClusterHealthChunk struct {
@@ -3892,6 +4243,7 @@ type ClusterHealthChunk struct {
 	ApplicationHealthStateChunks *ApplicationHealthStateChunkList `json:"ApplicationHealthStateChunks,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ClusterHealthChunkQueryDescription the cluster health chunk query description, which can specify the health
 // policies to evaluate cluster health and very expressive filters to select which cluster entities to include in
 // response.
@@ -3912,6 +4264,7 @@ type ClusterHealthChunkQueryDescription struct {
 	ApplicationHealthPolicies *ApplicationHealthPolicies `json:"ApplicationHealthPolicies,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ClusterHealthPolicies health policies to evaluate cluster health.
 type ClusterHealthPolicies struct {
 	// ApplicationHealthPolicyMap - Defines a map that contains specific application health policies for different applications.
@@ -3923,6 +4276,7 @@ type ClusterHealthPolicies struct {
 	ClusterHealthPolicy *ClusterHealthPolicy `json:"ClusterHealthPolicy,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ClusterHealthPolicy defines a health policy used to evaluate the health of the cluster or of a cluster node.
 type ClusterHealthPolicy struct {
 	// ConsiderWarningAsError - Indicates whether warnings are treated with the same severity as errors.
@@ -3952,6 +4306,7 @@ type ClusterHealthPolicy struct {
 	ApplicationTypeHealthPolicyMap *[]ApplicationTypeHealthPolicyMapItem `json:"ApplicationTypeHealthPolicyMap,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ClusterManifest information about the cluster manifest.
 type ClusterManifest struct {
 	autorest.Response `json:"-"`
@@ -3959,6 +4314,7 @@ type ClusterManifest struct {
 	Manifest *string `json:"Manifest,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ClusterUpgradeDescriptionObject represents a ServiceFabric cluster upgrade
 type ClusterUpgradeDescriptionObject struct {
 	// ConfigVersion - The cluster configuration version (specified in the cluster manifest).
@@ -3988,6 +4344,7 @@ type ClusterUpgradeDescriptionObject struct {
 	ApplicationHealthPolicyMap *[]ApplicationHealthPolicyMapItem `json:"ApplicationHealthPolicyMap,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ClusterUpgradeHealthPolicyObject defines a health policy used to evaluate the health of the cluster during a
 // cluster upgrade.
 type ClusterUpgradeHealthPolicyObject struct {
@@ -3997,6 +4354,7 @@ type ClusterUpgradeHealthPolicyObject struct {
 	MaxPercentUpgradeDomainDeltaUnhealthyNodes *int32 `json:"MaxPercentUpgradeDomainDeltaUnhealthyNodes,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ClusterUpgradeProgressObject information about a cluster upgrade.
 type ClusterUpgradeProgressObject struct {
 	autorest.Response `json:"-"`
@@ -4032,6 +4390,7 @@ type ClusterUpgradeProgressObject struct {
 	UpgradeDomainProgressAtFailure *FailedUpgradeDomainProgressObject `json:"UpgradeDomainProgressAtFailure,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CodePackageEntryPoint information about setup or main entry point of a code package deployed on a Service Fabric
 // node.
 type CodePackageEntryPoint struct {
@@ -4051,6 +4410,7 @@ type CodePackageEntryPoint struct {
 	InstanceID *string `json:"InstanceId,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CodePackageEntryPointStatistics statistics about setup or main entry point  of a code package deployed on a
 // Service Fabric node.
 type CodePackageEntryPointStatistics struct {
@@ -4078,6 +4438,7 @@ type CodePackageEntryPointStatistics struct {
 	ContinuousExitFailureCount *string `json:"ContinuousExitFailureCount,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ComposeDeploymentStatusInfo information about a Service Fabric compose deployment.
 type ComposeDeploymentStatusInfo struct {
 	autorest.Response `json:"-"`
@@ -4091,6 +4452,7 @@ type ComposeDeploymentStatusInfo struct {
 	StatusDetails *string `json:"StatusDetails,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ComposeDeploymentUpgradeDescription describes the parameters for a compose deployment upgrade.
 type ComposeDeploymentUpgradeDescription struct {
 	// DeploymentName - The name of the deployment.
@@ -4113,6 +4475,7 @@ type ComposeDeploymentUpgradeDescription struct {
 	ApplicationHealthPolicy *ApplicationHealthPolicy `json:"ApplicationHealthPolicy,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ComposeDeploymentUpgradeProgressInfo describes the parameters for a compose deployment upgrade.
 type ComposeDeploymentUpgradeProgressInfo struct {
 	autorest.Response `json:"-"`
@@ -4159,6 +4522,7 @@ type ComposeDeploymentUpgradeProgressInfo struct {
 	ApplicationUpgradeStatusDetails *string `json:"ApplicationUpgradeStatusDetails,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ContainerLogs container logs.
 type ContainerLogs struct {
 	autorest.Response `json:"-"`
@@ -4166,6 +4530,7 @@ type ContainerLogs struct {
 	Content *string `json:"Content,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateComposeDeploymentDescription defines description for creating a Service Fabric compose deployment.
 type CreateComposeDeploymentDescription struct {
 	// DeploymentName - The name of the deployment.
@@ -4176,6 +4541,7 @@ type CreateComposeDeploymentDescription struct {
 	RegistryCredential *RegistryCredential `json:"RegistryCredential,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CurrentUpgradeDomainProgressInfo information about the current in-progress upgrade domain.
 type CurrentUpgradeDomainProgressInfo struct {
 	// DomainName - The name of the upgrade domain
@@ -4184,6 +4550,7 @@ type CurrentUpgradeDomainProgressInfo struct {
 	NodeUpgradeProgressList *[]NodeUpgradeProgressInfo `json:"NodeUpgradeProgressList,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeactivationIntentDescription describes the intent or reason for deactivating the node.
 type DeactivationIntentDescription struct {
 	// DeactivationIntent - Describes the intent or reason for deactivating the node. The possible values are following.
@@ -4191,6 +4558,7 @@ type DeactivationIntentDescription struct {
 	DeactivationIntent DeactivationIntent `json:"DeactivationIntent,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeletePropertyBatchOperation represents a PropertyBatchOperation that deletes a specified property if it exists.
 // Note that if one PropertyBatchOperation in a PropertyBatch fails,
 // the entire batch fails and cannot be committed in a transactional manner.
@@ -4201,6 +4569,7 @@ type DeletePropertyBatchOperation struct {
 	Kind KindBasicPropertyBatchOperation `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for DeletePropertyBatchOperation.
 func (dpbo DeletePropertyBatchOperation) MarshalJSON() ([]byte, error) {
 	dpbo.Kind = KindDelete
@@ -4214,46 +4583,55 @@ func (dpbo DeletePropertyBatchOperation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckExistsPropertyBatchOperation is the BasicPropertyBatchOperation implementation for DeletePropertyBatchOperation.
 func (dpbo DeletePropertyBatchOperation) AsCheckExistsPropertyBatchOperation() (*CheckExistsPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckSequencePropertyBatchOperation is the BasicPropertyBatchOperation implementation for DeletePropertyBatchOperation.
 func (dpbo DeletePropertyBatchOperation) AsCheckSequencePropertyBatchOperation() (*CheckSequencePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckValuePropertyBatchOperation is the BasicPropertyBatchOperation implementation for DeletePropertyBatchOperation.
 func (dpbo DeletePropertyBatchOperation) AsCheckValuePropertyBatchOperation() (*CheckValuePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeletePropertyBatchOperation is the BasicPropertyBatchOperation implementation for DeletePropertyBatchOperation.
 func (dpbo DeletePropertyBatchOperation) AsDeletePropertyBatchOperation() (*DeletePropertyBatchOperation, bool) {
 	return &dpbo, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsGetPropertyBatchOperation is the BasicPropertyBatchOperation implementation for DeletePropertyBatchOperation.
 func (dpbo DeletePropertyBatchOperation) AsGetPropertyBatchOperation() (*GetPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPutPropertyBatchOperation is the BasicPropertyBatchOperation implementation for DeletePropertyBatchOperation.
 func (dpbo DeletePropertyBatchOperation) AsPutPropertyBatchOperation() (*PutPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPropertyBatchOperation is the BasicPropertyBatchOperation implementation for DeletePropertyBatchOperation.
 func (dpbo DeletePropertyBatchOperation) AsPropertyBatchOperation() (*PropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPropertyBatchOperation is the BasicPropertyBatchOperation implementation for DeletePropertyBatchOperation.
 func (dpbo DeletePropertyBatchOperation) AsBasicPropertyBatchOperation() (BasicPropertyBatchOperation, bool) {
 	return &dpbo, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeltaNodesCheckHealthEvaluation represents health evaluation for delta nodes, containing health evaluations for
 // each unhealthy node that impacted current aggregated health state.
 // Can be returned during cluster upgrade when the aggregated health state of the cluster is Warning or Error.
@@ -4277,6 +4655,7 @@ type DeltaNodesCheckHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) MarshalJSON() ([]byte, error) {
 	dnche.Kind = KindDeltaNodesCheck
@@ -4308,116 +4687,139 @@ func (dnche DeltaNodesCheckHealthEvaluation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return &dnche, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &dnche, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedApplicationHealth information about the health of an application deployed on a Service Fabric node.
 type DeployedApplicationHealth struct {
 	autorest.Response `json:"-"`
@@ -4440,6 +4842,7 @@ type DeployedApplicationHealth struct {
 	HealthStatistics *HealthStatistics `json:"HealthStatistics,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedApplicationHealthEvaluation represents health evaluation for a deployed application, containing
 // information about the data and the algorithm used by the health store to evaluate health.
 type DeployedApplicationHealthEvaluation struct {
@@ -4458,6 +4861,7 @@ type DeployedApplicationHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) MarshalJSON() ([]byte, error) {
 	dahe.Kind = KindDeployedApplication
@@ -4483,116 +4887,139 @@ func (dahe DeployedApplicationHealthEvaluation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return &dahe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &dahe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedApplicationHealthState represents the health state of a deployed application, which contains the entity
 // identifier and the aggregated health state.
 type DeployedApplicationHealthState struct {
@@ -4604,6 +5031,7 @@ type DeployedApplicationHealthState struct {
 	AggregatedHealthState HealthState `json:"AggregatedHealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedApplicationHealthStateChunk represents the health state chunk of a deployed application, which contains
 // the node where the application is deployed, the aggregated health state and any deployed service packages that
 // respect the chunk query description filters.
@@ -4616,6 +5044,7 @@ type DeployedApplicationHealthStateChunk struct {
 	HealthState HealthState `json:"HealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedApplicationHealthStateChunkList the list of deployed application health state chunks that respect the
 // input filters in the chunk query. Returned by get cluster health state chunks query.
 type DeployedApplicationHealthStateChunkList struct {
@@ -4623,6 +5052,7 @@ type DeployedApplicationHealthStateChunkList struct {
 	Items *[]DeployedApplicationHealthStateChunk `json:"Items,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedApplicationHealthStateFilter defines matching criteria to determine whether a deployed application
 // should be included as a child of an application in the cluster health chunk.
 // The deployed applications are only returned if the parent application matches a filter specified in the cluster
@@ -4654,6 +5084,7 @@ type DeployedApplicationHealthStateFilter struct {
 	DeployedServicePackageFilters *[]DeployedServicePackageHealthStateFilter `json:"DeployedServicePackageFilters,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedApplicationInfo information about application deployed on the node.
 type DeployedApplicationInfo struct {
 	autorest.Response `json:"-"`
@@ -4678,6 +5109,7 @@ type DeployedApplicationInfo struct {
 	HealthState HealthState `json:"HealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedApplicationsHealthEvaluation represents health evaluation for deployed applications, containing health
 // evaluations for each unhealthy deployed application that impacted current aggregated health state.
 // Can be returned when evaluating application health and the aggregated health state is either Error or Warning.
@@ -4696,6 +5128,7 @@ type DeployedApplicationsHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) MarshalJSON() ([]byte, error) {
 	dahe.Kind = KindDeployedApplications
@@ -4721,116 +5154,139 @@ func (dahe DeployedApplicationsHealthEvaluation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return &dahe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &dahe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedCodePackageInfo information about code package deployed on a Service Fabric node.
 type DeployedCodePackageInfo struct {
 	// Name - The name of the code package.
@@ -4858,6 +5314,7 @@ type DeployedCodePackageInfo struct {
 	MainEntryPoint *CodePackageEntryPoint `json:"MainEntryPoint,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedServicePackageHealth information about the health of a service package for a specific application
 // deployed on a Service Fabric node.
 type DeployedServicePackageHealth struct {
@@ -4881,6 +5338,7 @@ type DeployedServicePackageHealth struct {
 	HealthStatistics *HealthStatistics `json:"HealthStatistics,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedServicePackageHealthEvaluation represents health evaluation for a deployed service package, containing
 // information about the data and the algorithm used by health store to evaluate health. The evaluation is returned
 // only when the aggregated health state is either Error or Warning.
@@ -4901,6 +5359,7 @@ type DeployedServicePackageHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) MarshalJSON() ([]byte, error) {
 	dsphe.Kind = KindDeployedServicePackage
@@ -4929,116 +5388,139 @@ func (dsphe DeployedServicePackageHealthEvaluation) MarshalJSON() ([]byte, error
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return &dsphe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &dsphe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedServicePackageHealthState represents the health state of a deployed service package, containing the
 // entity identifier and the aggregated health state.
 type DeployedServicePackageHealthState struct {
@@ -5056,6 +5538,7 @@ type DeployedServicePackageHealthState struct {
 	AggregatedHealthState HealthState `json:"AggregatedHealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedServicePackageHealthStateChunk represents the health state chunk of a deployed service package, which
 // contains the service manifest name and the service package aggregated health state.
 type DeployedServicePackageHealthStateChunk struct {
@@ -5069,6 +5552,7 @@ type DeployedServicePackageHealthStateChunk struct {
 	HealthState HealthState `json:"HealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedServicePackageHealthStateChunkList the list of deployed service package health state chunks that respect
 // the input filters in the chunk query. Returned by get cluster health state chunks query.
 type DeployedServicePackageHealthStateChunkList struct {
@@ -5076,6 +5560,7 @@ type DeployedServicePackageHealthStateChunkList struct {
 	Items *[]DeployedServicePackageHealthStateChunk `json:"Items,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedServicePackageHealthStateFilter defines matching criteria to determine whether a deployed service
 // package should be included as a child of a deployed application in the cluster health chunk.
 // The deployed service packages are only returned if the parent entities match a filter specified in the cluster
@@ -5107,6 +5592,7 @@ type DeployedServicePackageHealthStateFilter struct {
 	HealthStateFilter *int32 `json:"HealthStateFilter,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedServicePackageInfo information about service package deployed on a Service Fabric node.
 type DeployedServicePackageInfo struct {
 	// Name - The name of the service package as specified in the service manifest.
@@ -5122,6 +5608,7 @@ type DeployedServicePackageInfo struct {
 	ServicePackageActivationID *string `json:"ServicePackageActivationId,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedServicePackagesHealthEvaluation represents health evaluation for deployed service packages, containing
 // health evaluations for each unhealthy deployed service package that impacted current aggregated health state.
 // Can be returned when evaluating deployed application health and the aggregated health state is either Error or
@@ -5139,6 +5626,7 @@ type DeployedServicePackagesHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) MarshalJSON() ([]byte, error) {
 	dsphe.Kind = KindDeployedServicePackages
@@ -5161,116 +5649,139 @@ func (dsphe DeployedServicePackagesHealthEvaluation) MarshalJSON() ([]byte, erro
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return &dsphe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &dsphe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicDeployedServiceReplicaDetailInfo information about a Service Fabric service replica deployed on a node.
 type BasicDeployedServiceReplicaDetailInfo interface {
 	AsDeployedStatefulServiceReplicaDetailInfo() (*DeployedStatefulServiceReplicaDetailInfo, bool)
@@ -5278,6 +5789,7 @@ type BasicDeployedServiceReplicaDetailInfo interface {
 	AsDeployedServiceReplicaDetailInfo() (*DeployedServiceReplicaDetailInfo, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedServiceReplicaDetailInfo information about a Service Fabric service replica deployed on a node.
 type DeployedServiceReplicaDetailInfo struct {
 	autorest.Response `json:"-"`
@@ -5336,6 +5848,7 @@ func unmarshalBasicDeployedServiceReplicaDetailInfoArray(body []byte) ([]BasicDe
 	return dsrdiArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for DeployedServiceReplicaDetailInfo.
 func (dsrdi DeployedServiceReplicaDetailInfo) MarshalJSON() ([]byte, error) {
 	dsrdi.ServiceKind = ServiceKindDeployedServiceReplicaDetailInfo
@@ -5361,32 +5874,38 @@ func (dsrdi DeployedServiceReplicaDetailInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedStatefulServiceReplicaDetailInfo is the BasicDeployedServiceReplicaDetailInfo implementation for DeployedServiceReplicaDetailInfo.
 func (dsrdi DeployedServiceReplicaDetailInfo) AsDeployedStatefulServiceReplicaDetailInfo() (*DeployedStatefulServiceReplicaDetailInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedStatelessServiceInstanceDetailInfo is the BasicDeployedServiceReplicaDetailInfo implementation for DeployedServiceReplicaDetailInfo.
 func (dsrdi DeployedServiceReplicaDetailInfo) AsDeployedStatelessServiceInstanceDetailInfo() (*DeployedStatelessServiceInstanceDetailInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServiceReplicaDetailInfo is the BasicDeployedServiceReplicaDetailInfo implementation for DeployedServiceReplicaDetailInfo.
 func (dsrdi DeployedServiceReplicaDetailInfo) AsDeployedServiceReplicaDetailInfo() (*DeployedServiceReplicaDetailInfo, bool) {
 	return &dsrdi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicDeployedServiceReplicaDetailInfo is the BasicDeployedServiceReplicaDetailInfo implementation for DeployedServiceReplicaDetailInfo.
 func (dsrdi DeployedServiceReplicaDetailInfo) AsBasicDeployedServiceReplicaDetailInfo() (BasicDeployedServiceReplicaDetailInfo, bool) {
 	return &dsrdi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedServiceReplicaDetailInfoModel ...
 type DeployedServiceReplicaDetailInfoModel struct {
 	autorest.Response `json:"-"`
 	Value             BasicDeployedServiceReplicaDetailInfo `json:"value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for DeployedServiceReplicaDetailInfoModel struct.
 func (dsrdim *DeployedServiceReplicaDetailInfoModel) UnmarshalJSON(body []byte) error {
 	dsrdi, err := unmarshalBasicDeployedServiceReplicaDetailInfo(body)
@@ -5398,6 +5917,7 @@ func (dsrdim *DeployedServiceReplicaDetailInfoModel) UnmarshalJSON(body []byte) 
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicDeployedServiceReplicaInfo information about a Service Fabric service replica deployed on a node.
 type BasicDeployedServiceReplicaInfo interface {
 	AsDeployedStatefulServiceReplicaInfo() (*DeployedStatefulServiceReplicaInfo, bool)
@@ -5405,6 +5925,7 @@ type BasicDeployedServiceReplicaInfo interface {
 	AsDeployedServiceReplicaInfo() (*DeployedServiceReplicaInfo, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedServiceReplicaInfo information about a Service Fabric service replica deployed on a node.
 type DeployedServiceReplicaInfo struct {
 	// ServiceName - The full name of the service with 'fabric:' URI scheme.
@@ -5479,6 +6000,7 @@ func unmarshalBasicDeployedServiceReplicaInfoArray(body []byte) ([]BasicDeployed
 	return dsriArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for DeployedServiceReplicaInfo.
 func (dsri DeployedServiceReplicaInfo) MarshalJSON() ([]byte, error) {
 	dsri.ServiceKind = ServiceKindBasicDeployedServiceReplicaInfoServiceKindDeployedServiceReplicaInfo
@@ -5516,26 +6038,31 @@ func (dsri DeployedServiceReplicaInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedStatefulServiceReplicaInfo is the BasicDeployedServiceReplicaInfo implementation for DeployedServiceReplicaInfo.
 func (dsri DeployedServiceReplicaInfo) AsDeployedStatefulServiceReplicaInfo() (*DeployedStatefulServiceReplicaInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedStatelessServiceInstanceInfo is the BasicDeployedServiceReplicaInfo implementation for DeployedServiceReplicaInfo.
 func (dsri DeployedServiceReplicaInfo) AsDeployedStatelessServiceInstanceInfo() (*DeployedStatelessServiceInstanceInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServiceReplicaInfo is the BasicDeployedServiceReplicaInfo implementation for DeployedServiceReplicaInfo.
 func (dsri DeployedServiceReplicaInfo) AsDeployedServiceReplicaInfo() (*DeployedServiceReplicaInfo, bool) {
 	return &dsri, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicDeployedServiceReplicaInfo is the BasicDeployedServiceReplicaInfo implementation for DeployedServiceReplicaInfo.
 func (dsri DeployedServiceReplicaInfo) AsBasicDeployedServiceReplicaInfo() (BasicDeployedServiceReplicaInfo, bool) {
 	return &dsri, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedServiceTypeInfo information about service type deployed on a node, information such as the status of the
 // service type registration on a node.
 type DeployedServiceTypeInfo struct {
@@ -5553,6 +6080,7 @@ type DeployedServiceTypeInfo struct {
 	ServicePackageActivationID *string `json:"ServicePackageActivationId,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedStatefulServiceReplicaDetailInfo information about a stateful replica running in a code package. Please
 // note DeployedServiceReplicaQueryResult will contain duplicate data like ServiceKind, ServiceName, PartitionId
 // and replicaId.
@@ -5586,6 +6114,7 @@ type DeployedStatefulServiceReplicaDetailInfo struct {
 	ServiceKind ServiceKindBasicDeployedServiceReplicaDetailInfo `json:"ServiceKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for DeployedStatefulServiceReplicaDetailInfo.
 func (dssrdi DeployedStatefulServiceReplicaDetailInfo) MarshalJSON() ([]byte, error) {
 	dssrdi.ServiceKind = ServiceKindStateful1
@@ -5630,26 +6159,31 @@ func (dssrdi DeployedStatefulServiceReplicaDetailInfo) MarshalJSON() ([]byte, er
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedStatefulServiceReplicaDetailInfo is the BasicDeployedServiceReplicaDetailInfo implementation for DeployedStatefulServiceReplicaDetailInfo.
 func (dssrdi DeployedStatefulServiceReplicaDetailInfo) AsDeployedStatefulServiceReplicaDetailInfo() (*DeployedStatefulServiceReplicaDetailInfo, bool) {
 	return &dssrdi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedStatelessServiceInstanceDetailInfo is the BasicDeployedServiceReplicaDetailInfo implementation for DeployedStatefulServiceReplicaDetailInfo.
 func (dssrdi DeployedStatefulServiceReplicaDetailInfo) AsDeployedStatelessServiceInstanceDetailInfo() (*DeployedStatelessServiceInstanceDetailInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServiceReplicaDetailInfo is the BasicDeployedServiceReplicaDetailInfo implementation for DeployedStatefulServiceReplicaDetailInfo.
 func (dssrdi DeployedStatefulServiceReplicaDetailInfo) AsDeployedServiceReplicaDetailInfo() (*DeployedServiceReplicaDetailInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicDeployedServiceReplicaDetailInfo is the BasicDeployedServiceReplicaDetailInfo implementation for DeployedStatefulServiceReplicaDetailInfo.
 func (dssrdi DeployedStatefulServiceReplicaDetailInfo) AsBasicDeployedServiceReplicaDetailInfo() (BasicDeployedServiceReplicaDetailInfo, bool) {
 	return &dssrdi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for DeployedStatefulServiceReplicaDetailInfo struct.
 func (dssrdi *DeployedStatefulServiceReplicaDetailInfo) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -5781,6 +6315,7 @@ func (dssrdi *DeployedStatefulServiceReplicaDetailInfo) UnmarshalJSON(body []byt
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedStatefulServiceReplicaInfo information about a stateful service replica deployed on a node.
 type DeployedStatefulServiceReplicaInfo struct {
 	// ReplicaID - Id of a stateful service replica. ReplicaId is used by Service Fabric to uniquely identify a replica of a partition. It is unique within a partition and does not change for the lifetime of the replica. If a replica gets dropped and another replica gets created on the same node for the same partition, it will get a different value for the id. Sometimes the id of a stateless service instance is also referred as a replica id.
@@ -5820,6 +6355,7 @@ type DeployedStatefulServiceReplicaInfo struct {
 	ServiceKind ServiceKindBasicDeployedServiceReplicaInfo `json:"ServiceKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for DeployedStatefulServiceReplicaInfo.
 func (dssri DeployedStatefulServiceReplicaInfo) MarshalJSON() ([]byte, error) {
 	dssri.ServiceKind = ServiceKindBasicDeployedServiceReplicaInfoServiceKindStateful
@@ -5866,26 +6402,31 @@ func (dssri DeployedStatefulServiceReplicaInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedStatefulServiceReplicaInfo is the BasicDeployedServiceReplicaInfo implementation for DeployedStatefulServiceReplicaInfo.
 func (dssri DeployedStatefulServiceReplicaInfo) AsDeployedStatefulServiceReplicaInfo() (*DeployedStatefulServiceReplicaInfo, bool) {
 	return &dssri, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedStatelessServiceInstanceInfo is the BasicDeployedServiceReplicaInfo implementation for DeployedStatefulServiceReplicaInfo.
 func (dssri DeployedStatefulServiceReplicaInfo) AsDeployedStatelessServiceInstanceInfo() (*DeployedStatelessServiceInstanceInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServiceReplicaInfo is the BasicDeployedServiceReplicaInfo implementation for DeployedStatefulServiceReplicaInfo.
 func (dssri DeployedStatefulServiceReplicaInfo) AsDeployedServiceReplicaInfo() (*DeployedServiceReplicaInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicDeployedServiceReplicaInfo is the BasicDeployedServiceReplicaInfo implementation for DeployedStatefulServiceReplicaInfo.
 func (dssri DeployedStatefulServiceReplicaInfo) AsBasicDeployedServiceReplicaInfo() (BasicDeployedServiceReplicaInfo, bool) {
 	return &dssri, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedStatelessServiceInstanceDetailInfo information about a stateless instance running in a code package.
 // Please note that DeployedServiceReplicaQueryResult will contain duplicate data like ServiceKind, ServiceName,
 // PartitionId and InstanceId.
@@ -5908,6 +6449,7 @@ type DeployedStatelessServiceInstanceDetailInfo struct {
 	ServiceKind ServiceKindBasicDeployedServiceReplicaDetailInfo `json:"ServiceKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for DeployedStatelessServiceInstanceDetailInfo.
 func (dssidi DeployedStatelessServiceInstanceDetailInfo) MarshalJSON() ([]byte, error) {
 	dssidi.ServiceKind = ServiceKindStateless1
@@ -5939,26 +6481,31 @@ func (dssidi DeployedStatelessServiceInstanceDetailInfo) MarshalJSON() ([]byte, 
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedStatefulServiceReplicaDetailInfo is the BasicDeployedServiceReplicaDetailInfo implementation for DeployedStatelessServiceInstanceDetailInfo.
 func (dssidi DeployedStatelessServiceInstanceDetailInfo) AsDeployedStatefulServiceReplicaDetailInfo() (*DeployedStatefulServiceReplicaDetailInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedStatelessServiceInstanceDetailInfo is the BasicDeployedServiceReplicaDetailInfo implementation for DeployedStatelessServiceInstanceDetailInfo.
 func (dssidi DeployedStatelessServiceInstanceDetailInfo) AsDeployedStatelessServiceInstanceDetailInfo() (*DeployedStatelessServiceInstanceDetailInfo, bool) {
 	return &dssidi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServiceReplicaDetailInfo is the BasicDeployedServiceReplicaDetailInfo implementation for DeployedStatelessServiceInstanceDetailInfo.
 func (dssidi DeployedStatelessServiceInstanceDetailInfo) AsDeployedServiceReplicaDetailInfo() (*DeployedServiceReplicaDetailInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicDeployedServiceReplicaDetailInfo is the BasicDeployedServiceReplicaDetailInfo implementation for DeployedStatelessServiceInstanceDetailInfo.
 func (dssidi DeployedStatelessServiceInstanceDetailInfo) AsBasicDeployedServiceReplicaDetailInfo() (BasicDeployedServiceReplicaDetailInfo, bool) {
 	return &dssidi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedStatelessServiceInstanceInfo information about a stateless service instance deployed on a node.
 type DeployedStatelessServiceInstanceInfo struct {
 	// InstanceID - Id of a stateless service instance. InstanceId is used by Service Fabric to uniquely identify an instance of a partition of a stateless service. It is unique within a partition and does not change for the lifetime of the instance. If the instance has failed over on the same or different node, it will get a different value for the InstanceId.
@@ -5994,6 +6541,7 @@ type DeployedStatelessServiceInstanceInfo struct {
 	ServiceKind ServiceKindBasicDeployedServiceReplicaInfo `json:"ServiceKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for DeployedStatelessServiceInstanceInfo.
 func (dssii DeployedStatelessServiceInstanceInfo) MarshalJSON() ([]byte, error) {
 	dssii.ServiceKind = ServiceKindBasicDeployedServiceReplicaInfoServiceKindStateless
@@ -6034,26 +6582,31 @@ func (dssii DeployedStatelessServiceInstanceInfo) MarshalJSON() ([]byte, error) 
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedStatefulServiceReplicaInfo is the BasicDeployedServiceReplicaInfo implementation for DeployedStatelessServiceInstanceInfo.
 func (dssii DeployedStatelessServiceInstanceInfo) AsDeployedStatefulServiceReplicaInfo() (*DeployedStatefulServiceReplicaInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedStatelessServiceInstanceInfo is the BasicDeployedServiceReplicaInfo implementation for DeployedStatelessServiceInstanceInfo.
 func (dssii DeployedStatelessServiceInstanceInfo) AsDeployedStatelessServiceInstanceInfo() (*DeployedStatelessServiceInstanceInfo, bool) {
 	return &dssii, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServiceReplicaInfo is the BasicDeployedServiceReplicaInfo implementation for DeployedStatelessServiceInstanceInfo.
 func (dssii DeployedStatelessServiceInstanceInfo) AsDeployedServiceReplicaInfo() (*DeployedServiceReplicaInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicDeployedServiceReplicaInfo is the BasicDeployedServiceReplicaInfo implementation for DeployedStatelessServiceInstanceInfo.
 func (dssii DeployedStatelessServiceInstanceInfo) AsBasicDeployedServiceReplicaInfo() (BasicDeployedServiceReplicaInfo, bool) {
 	return &dssii, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployServicePackageToNodeDescription defines description for downloading packages associated with a service
 // manifest to image cache on a Service Fabric node.
 type DeployServicePackageToNodeDescription struct {
@@ -6069,6 +6622,7 @@ type DeployServicePackageToNodeDescription struct {
 	PackageSharingPolicy *[]PackageSharingPolicyInfo `json:"PackageSharingPolicy,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DoublePropertyValue describes a Service Fabric property value of type Double.
 type DoublePropertyValue struct {
 	// Data - The data of the property value.
@@ -6077,6 +6631,7 @@ type DoublePropertyValue struct {
 	Kind KindBasicPropertyValue `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for DoublePropertyValue.
 func (dpv DoublePropertyValue) MarshalJSON() ([]byte, error) {
 	dpv.Kind = KindDouble
@@ -6090,41 +6645,49 @@ func (dpv DoublePropertyValue) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBinaryPropertyValue is the BasicPropertyValue implementation for DoublePropertyValue.
 func (dpv DoublePropertyValue) AsBinaryPropertyValue() (*BinaryPropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsInt64PropertyValue is the BasicPropertyValue implementation for DoublePropertyValue.
 func (dpv DoublePropertyValue) AsInt64PropertyValue() (*Int64PropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDoublePropertyValue is the BasicPropertyValue implementation for DoublePropertyValue.
 func (dpv DoublePropertyValue) AsDoublePropertyValue() (*DoublePropertyValue, bool) {
 	return &dpv, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStringPropertyValue is the BasicPropertyValue implementation for DoublePropertyValue.
 func (dpv DoublePropertyValue) AsStringPropertyValue() (*StringPropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsGUIDPropertyValue is the BasicPropertyValue implementation for DoublePropertyValue.
 func (dpv DoublePropertyValue) AsGUIDPropertyValue() (*GUIDPropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPropertyValue is the BasicPropertyValue implementation for DoublePropertyValue.
 func (dpv DoublePropertyValue) AsPropertyValue() (*PropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPropertyValue is the BasicPropertyValue implementation for DoublePropertyValue.
 func (dpv DoublePropertyValue) AsBasicPropertyValue() (BasicPropertyValue, bool) {
 	return &dpv, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // EnsureAvailabilitySafetyCheck safety check that waits to ensure the availability of the partition. It waits
 // until there are replicas available such that bringing down this replica will not cause availability loss for the
 // partition.
@@ -6135,6 +6698,7 @@ type EnsureAvailabilitySafetyCheck struct {
 	Kind KindBasicSafetyCheck `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for EnsureAvailabilitySafetyCheck.
 func (easc EnsureAvailabilitySafetyCheck) MarshalJSON() ([]byte, error) {
 	easc.Kind = KindEnsureAvailability
@@ -6148,61 +6712,73 @@ func (easc EnsureAvailabilitySafetyCheck) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionSafetyCheck is the BasicSafetyCheck implementation for EnsureAvailabilitySafetyCheck.
 func (easc EnsureAvailabilitySafetyCheck) AsPartitionSafetyCheck() (*PartitionSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPartitionSafetyCheck is the BasicSafetyCheck implementation for EnsureAvailabilitySafetyCheck.
 func (easc EnsureAvailabilitySafetyCheck) AsBasicPartitionSafetyCheck() (BasicPartitionSafetyCheck, bool) {
 	return &easc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsureAvailabilitySafetyCheck is the BasicSafetyCheck implementation for EnsureAvailabilitySafetyCheck.
 func (easc EnsureAvailabilitySafetyCheck) AsEnsureAvailabilitySafetyCheck() (*EnsureAvailabilitySafetyCheck, bool) {
 	return &easc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsurePartitionQurumSafetyCheck is the BasicSafetyCheck implementation for EnsureAvailabilitySafetyCheck.
 func (easc EnsureAvailabilitySafetyCheck) AsEnsurePartitionQurumSafetyCheck() (*EnsurePartitionQurumSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSeedNodeSafetyCheck is the BasicSafetyCheck implementation for EnsureAvailabilitySafetyCheck.
 func (easc EnsureAvailabilitySafetyCheck) AsSeedNodeSafetyCheck() (*SeedNodeSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForInbuildReplicaSafetyCheck is the BasicSafetyCheck implementation for EnsureAvailabilitySafetyCheck.
 func (easc EnsureAvailabilitySafetyCheck) AsWaitForInbuildReplicaSafetyCheck() (*WaitForInbuildReplicaSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimaryPlacementSafetyCheck is the BasicSafetyCheck implementation for EnsureAvailabilitySafetyCheck.
 func (easc EnsureAvailabilitySafetyCheck) AsWaitForPrimaryPlacementSafetyCheck() (*WaitForPrimaryPlacementSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimarySwapSafetyCheck is the BasicSafetyCheck implementation for EnsureAvailabilitySafetyCheck.
 func (easc EnsureAvailabilitySafetyCheck) AsWaitForPrimarySwapSafetyCheck() (*WaitForPrimarySwapSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForReconfigurationSafetyCheck is the BasicSafetyCheck implementation for EnsureAvailabilitySafetyCheck.
 func (easc EnsureAvailabilitySafetyCheck) AsWaitForReconfigurationSafetyCheck() (*WaitForReconfigurationSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSafetyCheck is the BasicSafetyCheck implementation for EnsureAvailabilitySafetyCheck.
 func (easc EnsureAvailabilitySafetyCheck) AsSafetyCheck() (*SafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicSafetyCheck is the BasicSafetyCheck implementation for EnsureAvailabilitySafetyCheck.
 func (easc EnsureAvailabilitySafetyCheck) AsBasicSafetyCheck() (BasicSafetyCheck, bool) {
 	return &easc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // EnsurePartitionQurumSafetyCheck safety check that ensures that a quorum of replicas are not lost for a
 // partition.
 type EnsurePartitionQurumSafetyCheck struct {
@@ -6212,6 +6788,7 @@ type EnsurePartitionQurumSafetyCheck struct {
 	Kind KindBasicSafetyCheck `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for EnsurePartitionQurumSafetyCheck.
 func (epqsc EnsurePartitionQurumSafetyCheck) MarshalJSON() ([]byte, error) {
 	epqsc.Kind = KindEnsurePartitionQuorum
@@ -6225,61 +6802,73 @@ func (epqsc EnsurePartitionQurumSafetyCheck) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionSafetyCheck is the BasicSafetyCheck implementation for EnsurePartitionQurumSafetyCheck.
 func (epqsc EnsurePartitionQurumSafetyCheck) AsPartitionSafetyCheck() (*PartitionSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPartitionSafetyCheck is the BasicSafetyCheck implementation for EnsurePartitionQurumSafetyCheck.
 func (epqsc EnsurePartitionQurumSafetyCheck) AsBasicPartitionSafetyCheck() (BasicPartitionSafetyCheck, bool) {
 	return &epqsc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsureAvailabilitySafetyCheck is the BasicSafetyCheck implementation for EnsurePartitionQurumSafetyCheck.
 func (epqsc EnsurePartitionQurumSafetyCheck) AsEnsureAvailabilitySafetyCheck() (*EnsureAvailabilitySafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsurePartitionQurumSafetyCheck is the BasicSafetyCheck implementation for EnsurePartitionQurumSafetyCheck.
 func (epqsc EnsurePartitionQurumSafetyCheck) AsEnsurePartitionQurumSafetyCheck() (*EnsurePartitionQurumSafetyCheck, bool) {
 	return &epqsc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSeedNodeSafetyCheck is the BasicSafetyCheck implementation for EnsurePartitionQurumSafetyCheck.
 func (epqsc EnsurePartitionQurumSafetyCheck) AsSeedNodeSafetyCheck() (*SeedNodeSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForInbuildReplicaSafetyCheck is the BasicSafetyCheck implementation for EnsurePartitionQurumSafetyCheck.
 func (epqsc EnsurePartitionQurumSafetyCheck) AsWaitForInbuildReplicaSafetyCheck() (*WaitForInbuildReplicaSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimaryPlacementSafetyCheck is the BasicSafetyCheck implementation for EnsurePartitionQurumSafetyCheck.
 func (epqsc EnsurePartitionQurumSafetyCheck) AsWaitForPrimaryPlacementSafetyCheck() (*WaitForPrimaryPlacementSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimarySwapSafetyCheck is the BasicSafetyCheck implementation for EnsurePartitionQurumSafetyCheck.
 func (epqsc EnsurePartitionQurumSafetyCheck) AsWaitForPrimarySwapSafetyCheck() (*WaitForPrimarySwapSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForReconfigurationSafetyCheck is the BasicSafetyCheck implementation for EnsurePartitionQurumSafetyCheck.
 func (epqsc EnsurePartitionQurumSafetyCheck) AsWaitForReconfigurationSafetyCheck() (*WaitForReconfigurationSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSafetyCheck is the BasicSafetyCheck implementation for EnsurePartitionQurumSafetyCheck.
 func (epqsc EnsurePartitionQurumSafetyCheck) AsSafetyCheck() (*SafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicSafetyCheck is the BasicSafetyCheck implementation for EnsurePartitionQurumSafetyCheck.
 func (epqsc EnsurePartitionQurumSafetyCheck) AsBasicSafetyCheck() (BasicSafetyCheck, bool) {
 	return &epqsc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // EntityHealth health information common to all entities in the cluster. It contains the aggregated health state,
 // health events and unhealthy evaluation.
 type EntityHealth struct {
@@ -6296,6 +6885,7 @@ type EntityHealth struct {
 	HealthStatistics *HealthStatistics `json:"HealthStatistics,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // EntityHealthState a base type for the health state of various entities in the cluster. It contains the
 // aggregated health state.
 type EntityHealthState struct {
@@ -6303,6 +6893,7 @@ type EntityHealthState struct {
 	AggregatedHealthState HealthState `json:"AggregatedHealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // EntityHealthStateChunk a base type for the health state chunk of various entities in the cluster. It contains
 // the aggregated health state.
 type EntityHealthStateChunk struct {
@@ -6310,6 +6901,7 @@ type EntityHealthStateChunk struct {
 	HealthState HealthState `json:"HealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // EntityHealthStateChunkList a base type for the list of health state chunks found in the cluster. It contains the
 // total number of health states that match the input filters.
 type EntityHealthStateChunkList struct {
@@ -6317,6 +6909,7 @@ type EntityHealthStateChunkList struct {
 	TotalCount *int64 `json:"TotalCount,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // EntityKindHealthStateCount represents health state count for entities of the specified entity kind.
 type EntityKindHealthStateCount struct {
 	// EntityKind - The entity kind for which health states are evaluated. Possible values include: 'EntityKindInvalid', 'EntityKindNode', 'EntityKindPartition', 'EntityKindService', 'EntityKindApplication', 'EntityKindReplica', 'EntityKindDeployedApplication', 'EntityKindDeployedServicePackage', 'EntityKindCluster'
@@ -6325,6 +6918,7 @@ type EntityKindHealthStateCount struct {
 	HealthStateCount *HealthStateCount `json:"HealthStateCount,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Epoch an Epoch is a configuration number for the partition as a whole. When the configuration of the replica set
 // changes, for example when the Primary replica changes, the operations that are replicated from the new Primary
 // replica are said to be a new Epoch from the ones which were sent by the old Primary replica.
@@ -6335,6 +6929,7 @@ type Epoch struct {
 	DataLossVersion *string `json:"DataLossVersion,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // EventHealthEvaluation represents health evaluation of a HealthEvent that was reported on the entity.
 // The health evaluation is returned when evaluating health of an entity results in Error or Warning.
 type EventHealthEvaluation struct {
@@ -6350,6 +6945,7 @@ type EventHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) MarshalJSON() ([]byte, error) {
 	ehe.Kind = KindEvent
@@ -6372,116 +6968,139 @@ func (ehe EventHealthEvaluation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return &ehe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &ehe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ExecutingFaultsChaosEvent describes a Chaos event that gets generated when Chaos has decided on the faults for
 // an iteration. This Chaos event contains the details of the faults as a list of strings.
 type ExecutingFaultsChaosEvent struct {
@@ -6493,6 +7112,7 @@ type ExecutingFaultsChaosEvent struct {
 	Kind KindBasicChaosEvent `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ExecutingFaultsChaosEvent.
 func (efce ExecutingFaultsChaosEvent) MarshalJSON() ([]byte, error) {
 	efce.Kind = KindExecutingFaults
@@ -6509,46 +7129,55 @@ func (efce ExecutingFaultsChaosEvent) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsExecutingFaultsChaosEvent is the BasicChaosEvent implementation for ExecutingFaultsChaosEvent.
 func (efce ExecutingFaultsChaosEvent) AsExecutingFaultsChaosEvent() (*ExecutingFaultsChaosEvent, bool) {
 	return &efce, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStartedChaosEvent is the BasicChaosEvent implementation for ExecutingFaultsChaosEvent.
 func (efce ExecutingFaultsChaosEvent) AsStartedChaosEvent() (*StartedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStoppedChaosEvent is the BasicChaosEvent implementation for ExecutingFaultsChaosEvent.
 func (efce ExecutingFaultsChaosEvent) AsStoppedChaosEvent() (*StoppedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsTestErrorChaosEvent is the BasicChaosEvent implementation for ExecutingFaultsChaosEvent.
 func (efce ExecutingFaultsChaosEvent) AsTestErrorChaosEvent() (*TestErrorChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsValidationFailedChaosEvent is the BasicChaosEvent implementation for ExecutingFaultsChaosEvent.
 func (efce ExecutingFaultsChaosEvent) AsValidationFailedChaosEvent() (*ValidationFailedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitingChaosEvent is the BasicChaosEvent implementation for ExecutingFaultsChaosEvent.
 func (efce ExecutingFaultsChaosEvent) AsWaitingChaosEvent() (*WaitingChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsChaosEvent is the BasicChaosEvent implementation for ExecutingFaultsChaosEvent.
 func (efce ExecutingFaultsChaosEvent) AsChaosEvent() (*ChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicChaosEvent is the BasicChaosEvent implementation for ExecutingFaultsChaosEvent.
 func (efce ExecutingFaultsChaosEvent) AsBasicChaosEvent() (BasicChaosEvent, bool) {
 	return &efce, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ExternalStoreProvisionApplicationTypeDescription describes the operation to register or provision an application
 // type using an application package from an external store instead of a package uploaded to the Service Fabric
 // image store.
@@ -6565,6 +7194,7 @@ type ExternalStoreProvisionApplicationTypeDescription struct {
 	Kind KindBasicProvisionApplicationTypeDescriptionBase `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ExternalStoreProvisionApplicationTypeDescription.
 func (espatd ExternalStoreProvisionApplicationTypeDescription) MarshalJSON() ([]byte, error) {
 	espatd.Kind = KindExternalStore
@@ -6587,38 +7217,45 @@ func (espatd ExternalStoreProvisionApplicationTypeDescription) MarshalJSON() ([]
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsProvisionApplicationTypeDescription is the BasicProvisionApplicationTypeDescriptionBase implementation for ExternalStoreProvisionApplicationTypeDescription.
 func (espatd ExternalStoreProvisionApplicationTypeDescription) AsProvisionApplicationTypeDescription() (*ProvisionApplicationTypeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsExternalStoreProvisionApplicationTypeDescription is the BasicProvisionApplicationTypeDescriptionBase implementation for ExternalStoreProvisionApplicationTypeDescription.
 func (espatd ExternalStoreProvisionApplicationTypeDescription) AsExternalStoreProvisionApplicationTypeDescription() (*ExternalStoreProvisionApplicationTypeDescription, bool) {
 	return &espatd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsProvisionApplicationTypeDescriptionBase is the BasicProvisionApplicationTypeDescriptionBase implementation for ExternalStoreProvisionApplicationTypeDescription.
 func (espatd ExternalStoreProvisionApplicationTypeDescription) AsProvisionApplicationTypeDescriptionBase() (*ProvisionApplicationTypeDescriptionBase, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicProvisionApplicationTypeDescriptionBase is the BasicProvisionApplicationTypeDescriptionBase implementation for ExternalStoreProvisionApplicationTypeDescription.
 func (espatd ExternalStoreProvisionApplicationTypeDescription) AsBasicProvisionApplicationTypeDescriptionBase() (BasicProvisionApplicationTypeDescriptionBase, bool) {
 	return &espatd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // FabricCodeVersionInfo information about a Service Fabric code version.
 type FabricCodeVersionInfo struct {
 	// CodeVersion - The product version of Service Fabric.
 	CodeVersion *string `json:"CodeVersion,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // FabricConfigVersionInfo information about a Service Fabric config version.
 type FabricConfigVersionInfo struct {
 	// ConfigVersion - The config version of Service Fabric.
 	ConfigVersion *string `json:"ConfigVersion,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // FabricError the REST API operations for Service Fabric return standard HTTP status codes. This type defines the
 // additional information returned from the Service Fabric API operations that are not successful.
 type FabricError struct {
@@ -6626,6 +7263,7 @@ type FabricError struct {
 	Error *FabricErrorError `json:"Error,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // FabricErrorError error object containing error code and error message.
 type FabricErrorError struct {
 	// Code - Defines the fabric error codes that be returned as part of the error object in response to Service Fabric API operations that are not successful. Following are the error code values that can be returned for a specific HTTP status code.
@@ -6709,6 +7347,7 @@ type FabricErrorError struct {
 	Message *string `json:"Message,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // FailedPropertyBatchInfo derived from PropertyBatchInfo. Represents the property batch failing. Contains
 // information about the specific batch failure.
 type FailedPropertyBatchInfo struct {
@@ -6720,6 +7359,7 @@ type FailedPropertyBatchInfo struct {
 	Kind KindBasicPropertyBatchInfo `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for FailedPropertyBatchInfo.
 func (fpbi FailedPropertyBatchInfo) MarshalJSON() ([]byte, error) {
 	fpbi.Kind = KindFailed
@@ -6736,26 +7376,31 @@ func (fpbi FailedPropertyBatchInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSuccessfulPropertyBatchInfo is the BasicPropertyBatchInfo implementation for FailedPropertyBatchInfo.
 func (fpbi FailedPropertyBatchInfo) AsSuccessfulPropertyBatchInfo() (*SuccessfulPropertyBatchInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsFailedPropertyBatchInfo is the BasicPropertyBatchInfo implementation for FailedPropertyBatchInfo.
 func (fpbi FailedPropertyBatchInfo) AsFailedPropertyBatchInfo() (*FailedPropertyBatchInfo, bool) {
 	return &fpbi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPropertyBatchInfo is the BasicPropertyBatchInfo implementation for FailedPropertyBatchInfo.
 func (fpbi FailedPropertyBatchInfo) AsPropertyBatchInfo() (*PropertyBatchInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPropertyBatchInfo is the BasicPropertyBatchInfo implementation for FailedPropertyBatchInfo.
 func (fpbi FailedPropertyBatchInfo) AsBasicPropertyBatchInfo() (BasicPropertyBatchInfo, bool) {
 	return &fpbi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // FailedUpgradeDomainProgressObject the detailed upgrade progress for nodes in the current upgrade domain at the
 // point of failure.
 type FailedUpgradeDomainProgressObject struct {
@@ -6765,6 +7410,7 @@ type FailedUpgradeDomainProgressObject struct {
 	NodeUpgradeProgressList *[]NodeUpgradeProgressInfo `json:"NodeUpgradeProgressList,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // FailureUpgradeDomainProgressInfo information about the upgrade domain progress at the time of upgrade failure.
 type FailureUpgradeDomainProgressInfo struct {
 	// DomainName - The name of the upgrade domain
@@ -6773,6 +7419,7 @@ type FailureUpgradeDomainProgressInfo struct {
 	NodeUpgradeProgressList *[]NodeUpgradeProgressInfo `json:"NodeUpgradeProgressList,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // FileInfo information about a image store file.
 type FileInfo struct {
 	// FileSize - The size of file in bytes.
@@ -6785,6 +7432,7 @@ type FileInfo struct {
 	StoreRelativePath *string `json:"StoreRelativePath,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // FileVersion information about the version of image store file.
 type FileVersion struct {
 	// VersionNumber - The current image store version number for the file is used in image store for checking whether it need to be updated.
@@ -6795,6 +7443,7 @@ type FileVersion struct {
 	EpochConfigurationNumber *string `json:"EpochConfigurationNumber,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // FolderInfo information about a image store folder. It includes how many files this folder contains and its image
 // store relative path.
 type FolderInfo struct {
@@ -6804,6 +7453,7 @@ type FolderInfo struct {
 	FileCount *uuid.UUID `json:"FileCount,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPropertyBatchOperation represents a PropertyBatchOperation that gets the specified property if it exists.
 // Note that if one PropertyBatchOperation in a PropertyBatch fails,
 // the entire batch fails and cannot be committed in a transactional manner.
@@ -6817,6 +7467,7 @@ type GetPropertyBatchOperation struct {
 	Kind KindBasicPropertyBatchOperation `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for GetPropertyBatchOperation.
 func (gpbo GetPropertyBatchOperation) MarshalJSON() ([]byte, error) {
 	gpbo.Kind = KindGet
@@ -6833,46 +7484,55 @@ func (gpbo GetPropertyBatchOperation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckExistsPropertyBatchOperation is the BasicPropertyBatchOperation implementation for GetPropertyBatchOperation.
 func (gpbo GetPropertyBatchOperation) AsCheckExistsPropertyBatchOperation() (*CheckExistsPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckSequencePropertyBatchOperation is the BasicPropertyBatchOperation implementation for GetPropertyBatchOperation.
 func (gpbo GetPropertyBatchOperation) AsCheckSequencePropertyBatchOperation() (*CheckSequencePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckValuePropertyBatchOperation is the BasicPropertyBatchOperation implementation for GetPropertyBatchOperation.
 func (gpbo GetPropertyBatchOperation) AsCheckValuePropertyBatchOperation() (*CheckValuePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeletePropertyBatchOperation is the BasicPropertyBatchOperation implementation for GetPropertyBatchOperation.
 func (gpbo GetPropertyBatchOperation) AsDeletePropertyBatchOperation() (*DeletePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsGetPropertyBatchOperation is the BasicPropertyBatchOperation implementation for GetPropertyBatchOperation.
 func (gpbo GetPropertyBatchOperation) AsGetPropertyBatchOperation() (*GetPropertyBatchOperation, bool) {
 	return &gpbo, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPutPropertyBatchOperation is the BasicPropertyBatchOperation implementation for GetPropertyBatchOperation.
 func (gpbo GetPropertyBatchOperation) AsPutPropertyBatchOperation() (*PutPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPropertyBatchOperation is the BasicPropertyBatchOperation implementation for GetPropertyBatchOperation.
 func (gpbo GetPropertyBatchOperation) AsPropertyBatchOperation() (*PropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPropertyBatchOperation is the BasicPropertyBatchOperation implementation for GetPropertyBatchOperation.
 func (gpbo GetPropertyBatchOperation) AsBasicPropertyBatchOperation() (BasicPropertyBatchOperation, bool) {
 	return &gpbo, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GUIDPropertyValue describes a Service Fabric property value of type Guid.
 type GUIDPropertyValue struct {
 	// Data - The data of the property value.
@@ -6881,6 +7541,7 @@ type GUIDPropertyValue struct {
 	Kind KindBasicPropertyValue `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for GUIDPropertyValue.
 func (gpv GUIDPropertyValue) MarshalJSON() ([]byte, error) {
 	gpv.Kind = KindGUID
@@ -6894,41 +7555,49 @@ func (gpv GUIDPropertyValue) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBinaryPropertyValue is the BasicPropertyValue implementation for GUIDPropertyValue.
 func (gpv GUIDPropertyValue) AsBinaryPropertyValue() (*BinaryPropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsInt64PropertyValue is the BasicPropertyValue implementation for GUIDPropertyValue.
 func (gpv GUIDPropertyValue) AsInt64PropertyValue() (*Int64PropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDoublePropertyValue is the BasicPropertyValue implementation for GUIDPropertyValue.
 func (gpv GUIDPropertyValue) AsDoublePropertyValue() (*DoublePropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStringPropertyValue is the BasicPropertyValue implementation for GUIDPropertyValue.
 func (gpv GUIDPropertyValue) AsStringPropertyValue() (*StringPropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsGUIDPropertyValue is the BasicPropertyValue implementation for GUIDPropertyValue.
 func (gpv GUIDPropertyValue) AsGUIDPropertyValue() (*GUIDPropertyValue, bool) {
 	return &gpv, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPropertyValue is the BasicPropertyValue implementation for GUIDPropertyValue.
 func (gpv GUIDPropertyValue) AsPropertyValue() (*PropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPropertyValue is the BasicPropertyValue implementation for GUIDPropertyValue.
 func (gpv GUIDPropertyValue) AsBasicPropertyValue() (BasicPropertyValue, bool) {
 	return &gpv, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicHealthEvaluation represents a health evaluation which describes the data and the algorithm used by health
 // manager to evaluate the health of an entity.
 type BasicHealthEvaluation interface {
@@ -6955,6 +7624,7 @@ type BasicHealthEvaluation interface {
 	AsHealthEvaluation() (*HealthEvaluation, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // HealthEvaluation represents a health evaluation which describes the data and the algorithm used by health
 // manager to evaluate the health of an entity.
 type HealthEvaluation struct {
@@ -7079,6 +7749,7 @@ func unmarshalBasicHealthEvaluationArray(body []byte) ([]BasicHealthEvaluation, 
 	return heArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for HealthEvaluation.
 func (he HealthEvaluation) MarshalJSON() ([]byte, error) {
 	he.Kind = KindHealthEvaluation
@@ -7095,122 +7766,146 @@ func (he HealthEvaluation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return &he, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
 func (he HealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &he, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // HealthEvaluationWrapper wrapper object for health evaluation.
 type HealthEvaluationWrapper struct {
 	// HealthEvaluation - Represents a health evaluation which describes the data and the algorithm used by health manager to evaluate the health of an entity.
 	HealthEvaluation BasicHealthEvaluation `json:"HealthEvaluation,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for HealthEvaluationWrapper struct.
 func (hew *HealthEvaluationWrapper) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -7234,6 +7929,7 @@ func (hew *HealthEvaluationWrapper) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // HealthEvent represents health information reported on a health entity, such as cluster, application or node,
 // with additional metadata added by the Health Manager.
 type HealthEvent struct {
@@ -7296,6 +7992,7 @@ type HealthEvent struct {
 	RemoveWhenExpired *bool `json:"RemoveWhenExpired,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // HealthInformation represents common health report information. It is included in all health reports sent to
 // health store and in all health events returned by health queries.
 type HealthInformation struct {
@@ -7338,6 +8035,7 @@ type HealthInformation struct {
 	RemoveWhenExpired *bool `json:"RemoveWhenExpired,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // HealthStateCount represents information about how many health entities are in Ok, Warning and Error health
 // state.
 type HealthStateCount struct {
@@ -7349,6 +8047,7 @@ type HealthStateCount struct {
 	ErrorCount *int64 `json:"ErrorCount,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // HealthStatistics the health statistics of an entity, returned as part of the health query result when the query
 // description is configured to include statistics.
 // The statistics include health state counts for all children types of the current entity.
@@ -7360,6 +8059,7 @@ type HealthStatistics struct {
 	HealthStateCountList *[]EntityKindHealthStateCount `json:"HealthStateCountList,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ImageStoreContent information about the image store content.
 type ImageStoreContent struct {
 	autorest.Response `json:"-"`
@@ -7369,6 +8069,7 @@ type ImageStoreContent struct {
 	StoreFolders *[]FolderInfo `json:"StoreFolders,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ImageStoreCopyDescription information about how to copy image store content from one image store relative path
 // to another image store relative path.
 type ImageStoreCopyDescription struct {
@@ -7382,6 +8083,7 @@ type ImageStoreCopyDescription struct {
 	CheckMarkFile *bool `json:"CheckMarkFile,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Int64PropertyValue describes a Service Fabric property value of type Int64.
 type Int64PropertyValue struct {
 	// Data - The data of the property value.
@@ -7390,6 +8092,7 @@ type Int64PropertyValue struct {
 	Kind KindBasicPropertyValue `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for Int64PropertyValue.
 func (i6pv Int64PropertyValue) MarshalJSON() ([]byte, error) {
 	i6pv.Kind = KindInt64
@@ -7403,41 +8106,49 @@ func (i6pv Int64PropertyValue) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBinaryPropertyValue is the BasicPropertyValue implementation for Int64PropertyValue.
 func (i6pv Int64PropertyValue) AsBinaryPropertyValue() (*BinaryPropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsInt64PropertyValue is the BasicPropertyValue implementation for Int64PropertyValue.
 func (i6pv Int64PropertyValue) AsInt64PropertyValue() (*Int64PropertyValue, bool) {
 	return &i6pv, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDoublePropertyValue is the BasicPropertyValue implementation for Int64PropertyValue.
 func (i6pv Int64PropertyValue) AsDoublePropertyValue() (*DoublePropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStringPropertyValue is the BasicPropertyValue implementation for Int64PropertyValue.
 func (i6pv Int64PropertyValue) AsStringPropertyValue() (*StringPropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsGUIDPropertyValue is the BasicPropertyValue implementation for Int64PropertyValue.
 func (i6pv Int64PropertyValue) AsGUIDPropertyValue() (*GUIDPropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPropertyValue is the BasicPropertyValue implementation for Int64PropertyValue.
 func (i6pv Int64PropertyValue) AsPropertyValue() (*PropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPropertyValue is the BasicPropertyValue implementation for Int64PropertyValue.
 func (i6pv Int64PropertyValue) AsBasicPropertyValue() (BasicPropertyValue, bool) {
 	return &i6pv, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Int64RangePartitionInformation describes the partition information for the integer range that is based on
 // partition schemes.
 type Int64RangePartitionInformation struct {
@@ -7451,6 +8162,7 @@ type Int64RangePartitionInformation struct {
 	ServicePartitionKind ServicePartitionKind `json:"ServicePartitionKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for Int64RangePartitionInformation.
 func (i6rpi Int64RangePartitionInformation) MarshalJSON() ([]byte, error) {
 	i6rpi.ServicePartitionKind = ServicePartitionKindInt64Range
@@ -7470,31 +8182,37 @@ func (i6rpi Int64RangePartitionInformation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsInt64RangePartitionInformation is the BasicPartitionInformation implementation for Int64RangePartitionInformation.
 func (i6rpi Int64RangePartitionInformation) AsInt64RangePartitionInformation() (*Int64RangePartitionInformation, bool) {
 	return &i6rpi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNamedPartitionInformation is the BasicPartitionInformation implementation for Int64RangePartitionInformation.
 func (i6rpi Int64RangePartitionInformation) AsNamedPartitionInformation() (*NamedPartitionInformation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSingletonPartitionInformation is the BasicPartitionInformation implementation for Int64RangePartitionInformation.
 func (i6rpi Int64RangePartitionInformation) AsSingletonPartitionInformation() (*SingletonPartitionInformation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionInformation is the BasicPartitionInformation implementation for Int64RangePartitionInformation.
 func (i6rpi Int64RangePartitionInformation) AsPartitionInformation() (*PartitionInformation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPartitionInformation is the BasicPartitionInformation implementation for Int64RangePartitionInformation.
 func (i6rpi Int64RangePartitionInformation) AsBasicPartitionInformation() (BasicPartitionInformation, bool) {
 	return &i6rpi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // InvokeDataLossResult represents information about an operation in a terminal state (Completed or Faulted).
 type InvokeDataLossResult struct {
 	// ErrorCode - If OperationState is Completed, this is 0.  If OperationState is Faulted, this is an error code indicating the reason.
@@ -7503,6 +8221,7 @@ type InvokeDataLossResult struct {
 	SelectedPartition *SelectedPartition `json:"SelectedPartition,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // InvokeQuorumLossResult represents information about an operation in a terminal state (Completed or Faulted).
 type InvokeQuorumLossResult struct {
 	// ErrorCode - If OperationState is Completed, this is 0.  If OperationState is Faulted, this is an error code indicating the reason.
@@ -7511,6 +8230,7 @@ type InvokeQuorumLossResult struct {
 	SelectedPartition *SelectedPartition `json:"SelectedPartition,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // KeyValueStoreReplicaStatus key value store related information for the replica.
 type KeyValueStoreReplicaStatus struct {
 	// DatabaseRowCountEstimate - Value indicating the estimated number of rows in the underlying database.
@@ -7527,6 +8247,7 @@ type KeyValueStoreReplicaStatus struct {
 	Kind KindBasicReplicaStatusBase `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for KeyValueStoreReplicaStatus.
 func (kvsrs KeyValueStoreReplicaStatus) MarshalJSON() ([]byte, error) {
 	kvsrs.Kind = KindKeyValueStore
@@ -7552,39 +8273,46 @@ func (kvsrs KeyValueStoreReplicaStatus) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsKeyValueStoreReplicaStatus is the BasicReplicaStatusBase implementation for KeyValueStoreReplicaStatus.
 func (kvsrs KeyValueStoreReplicaStatus) AsKeyValueStoreReplicaStatus() (*KeyValueStoreReplicaStatus, bool) {
 	return &kvsrs, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaStatusBase is the BasicReplicaStatusBase implementation for KeyValueStoreReplicaStatus.
 func (kvsrs KeyValueStoreReplicaStatus) AsReplicaStatusBase() (*ReplicaStatusBase, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicReplicaStatusBase is the BasicReplicaStatusBase implementation for KeyValueStoreReplicaStatus.
 func (kvsrs KeyValueStoreReplicaStatus) AsBasicReplicaStatusBase() (BasicReplicaStatusBase, bool) {
 	return &kvsrs, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListDeployedCodePackageInfo ...
 type ListDeployedCodePackageInfo struct {
 	autorest.Response `json:"-"`
 	Value             *[]DeployedCodePackageInfo `json:"value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListDeployedServicePackageInfo ...
 type ListDeployedServicePackageInfo struct {
 	autorest.Response `json:"-"`
 	Value             *[]DeployedServicePackageInfo `json:"value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListDeployedServiceReplicaInfo ...
 type ListDeployedServiceReplicaInfo struct {
 	autorest.Response `json:"-"`
 	Value             *[]BasicDeployedServiceReplicaInfo `json:"value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for ListDeployedServiceReplicaInfo struct.
 func (ldsri *ListDeployedServiceReplicaInfo) UnmarshalJSON(body []byte) error {
 	dsri, err := unmarshalBasicDeployedServiceReplicaInfoArray(body)
@@ -7596,42 +8324,49 @@ func (ldsri *ListDeployedServiceReplicaInfo) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListDeployedServiceTypeInfo ...
 type ListDeployedServiceTypeInfo struct {
 	autorest.Response `json:"-"`
 	Value             *[]DeployedServiceTypeInfo `json:"value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListFabricCodeVersionInfo ...
 type ListFabricCodeVersionInfo struct {
 	autorest.Response `json:"-"`
 	Value             *[]FabricCodeVersionInfo `json:"value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListFabricConfigVersionInfo ...
 type ListFabricConfigVersionInfo struct {
 	autorest.Response `json:"-"`
 	Value             *[]FabricConfigVersionInfo `json:"value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListOperationStatus ...
 type ListOperationStatus struct {
 	autorest.Response `json:"-"`
 	Value             *[]OperationStatus `json:"value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListRepairTask ...
 type ListRepairTask struct {
 	autorest.Response `json:"-"`
 	Value             *[]RepairTask `json:"value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListServiceTypeInfo ...
 type ListServiceTypeInfo struct {
 	autorest.Response `json:"-"`
 	Value             *[]ServiceTypeInfo `json:"value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // LoadMetricReport represents the load metric report which contains the time metric was reported, its name and
 // value.
 type LoadMetricReport struct {
@@ -7643,6 +8378,7 @@ type LoadMetricReport struct {
 	Value *string `json:"Value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // LoadMetricReportInfo information about load reported by replica.
 type LoadMetricReportInfo struct {
 	// Name - The name of the metric.
@@ -7653,6 +8389,7 @@ type LoadMetricReportInfo struct {
 	LastReportedUtc *date.Time `json:"LastReportedUtc,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MonitoringPolicyDescription describes the parameters for monitoring an upgrade in Monitored mode.
 type MonitoringPolicyDescription struct {
 	// FailureAction - The compensating action to perform when a Monitored upgrade encounters monitoring policy or health policy violations. Possible values include: 'FailureActionInvalid', 'FailureActionRollback', 'FailureActionManual'
@@ -7669,12 +8406,14 @@ type MonitoringPolicyDescription struct {
 	UpgradeDomainTimeoutInMilliseconds *string `json:"UpgradeDomainTimeoutInMilliseconds,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NameDescription describes a Service Fabric name.
 type NameDescription struct {
 	// Name - The Service Fabric name, including the 'fabric:' URI scheme.
 	Name *string `json:"Name,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NamedPartitionInformation describes the partition information for the name as a string that is based on
 // partition schemes.
 type NamedPartitionInformation struct {
@@ -7686,6 +8425,7 @@ type NamedPartitionInformation struct {
 	ServicePartitionKind ServicePartitionKind `json:"ServicePartitionKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for NamedPartitionInformation.
 func (npi NamedPartitionInformation) MarshalJSON() ([]byte, error) {
 	npi.ServicePartitionKind = ServicePartitionKindNamed
@@ -7702,31 +8442,37 @@ func (npi NamedPartitionInformation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsInt64RangePartitionInformation is the BasicPartitionInformation implementation for NamedPartitionInformation.
 func (npi NamedPartitionInformation) AsInt64RangePartitionInformation() (*Int64RangePartitionInformation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNamedPartitionInformation is the BasicPartitionInformation implementation for NamedPartitionInformation.
 func (npi NamedPartitionInformation) AsNamedPartitionInformation() (*NamedPartitionInformation, bool) {
 	return &npi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSingletonPartitionInformation is the BasicPartitionInformation implementation for NamedPartitionInformation.
 func (npi NamedPartitionInformation) AsSingletonPartitionInformation() (*SingletonPartitionInformation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionInformation is the BasicPartitionInformation implementation for NamedPartitionInformation.
 func (npi NamedPartitionInformation) AsPartitionInformation() (*PartitionInformation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPartitionInformation is the BasicPartitionInformation implementation for NamedPartitionInformation.
 func (npi NamedPartitionInformation) AsBasicPartitionInformation() (BasicPartitionInformation, bool) {
 	return &npi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NamedPartitionSchemeDescription describes the named partition scheme of the service.
 type NamedPartitionSchemeDescription struct {
 	// Count - The number of partitions.
@@ -7737,6 +8483,7 @@ type NamedPartitionSchemeDescription struct {
 	PartitionScheme PartitionSchemeBasicPartitionSchemeDescription `json:"PartitionScheme,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for NamedPartitionSchemeDescription.
 func (npsd NamedPartitionSchemeDescription) MarshalJSON() ([]byte, error) {
 	npsd.PartitionScheme = PartitionSchemeNamed1
@@ -7753,31 +8500,37 @@ func (npsd NamedPartitionSchemeDescription) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNamedPartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for NamedPartitionSchemeDescription.
 func (npsd NamedPartitionSchemeDescription) AsNamedPartitionSchemeDescription() (*NamedPartitionSchemeDescription, bool) {
 	return &npsd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSingletonPartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for NamedPartitionSchemeDescription.
 func (npsd NamedPartitionSchemeDescription) AsSingletonPartitionSchemeDescription() (*SingletonPartitionSchemeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUniformInt64RangePartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for NamedPartitionSchemeDescription.
 func (npsd NamedPartitionSchemeDescription) AsUniformInt64RangePartitionSchemeDescription() (*UniformInt64RangePartitionSchemeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for NamedPartitionSchemeDescription.
 func (npsd NamedPartitionSchemeDescription) AsPartitionSchemeDescription() (*PartitionSchemeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for NamedPartitionSchemeDescription.
 func (npsd NamedPartitionSchemeDescription) AsBasicPartitionSchemeDescription() (BasicPartitionSchemeDescription, bool) {
 	return &npsd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeDeactivationInfo information about the node deactivation. This information is valid for a node that is
 // undergoing deactivation or has already been deactivated.
 type NodeDeactivationInfo struct {
@@ -7791,6 +8544,7 @@ type NodeDeactivationInfo struct {
 	PendingSafetyChecks *[]SafetyCheckWrapper `json:"PendingSafetyChecks,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeDeactivationTask the task representing the deactivation operation on the node.
 type NodeDeactivationTask struct {
 	// NodeDeactivationTaskID - Identity of the task related to deactivation operation on the node.
@@ -7799,6 +8553,7 @@ type NodeDeactivationTask struct {
 	NodeDeactivationIntent NodeDeactivationIntent `json:"NodeDeactivationIntent,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeDeactivationTaskID identity of the task related to deactivation operation on the node.
 type NodeDeactivationTaskID struct {
 	// ID - Value of the task id.
@@ -7807,6 +8562,7 @@ type NodeDeactivationTaskID struct {
 	NodeDeactivationTaskType NodeDeactivationTaskType `json:"NodeDeactivationTaskType,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeHealth information about the health of a Service Fabric node.
 type NodeHealth struct {
 	autorest.Response `json:"-"`
@@ -7825,6 +8581,7 @@ type NodeHealth struct {
 	HealthStatistics *HealthStatistics `json:"HealthStatistics,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeHealthEvaluation represents health evaluation for a node, containing information about the data and the
 // algorithm used by health store to evaluate health. The evaluation is returned only when the aggregated health
 // state is either Error or Warning.
@@ -7841,6 +8598,7 @@ type NodeHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) MarshalJSON() ([]byte, error) {
 	nhe.Kind = KindNode
@@ -7863,116 +8621,139 @@ func (nhe NodeHealthEvaluation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return &nhe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &nhe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeHealthState represents the health state of a node, which contains the node identifier and its aggregated
 // health state.
 type NodeHealthState struct {
@@ -7984,6 +8765,7 @@ type NodeHealthState struct {
 	AggregatedHealthState HealthState `json:"AggregatedHealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeHealthStateChunk represents the health state chunk of a node, which contains the node name and its
 // aggregated health state.
 type NodeHealthStateChunk struct {
@@ -7993,6 +8775,7 @@ type NodeHealthStateChunk struct {
 	HealthState HealthState `json:"HealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeHealthStateChunkList the list of node health state chunks in the cluster that respect the input filters in
 // the chunk query. Returned by get cluster health state chunks query.
 type NodeHealthStateChunkList struct {
@@ -8002,6 +8785,7 @@ type NodeHealthStateChunkList struct {
 	TotalCount *int64 `json:"TotalCount,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeHealthStateFilter defines matching criteria to determine whether a node should be included in the returned
 // cluster health chunk.
 // One filter can match zero, one or multiple nodes, depending on its properties.
@@ -8026,6 +8810,7 @@ type NodeHealthStateFilter struct {
 	HealthStateFilter *int32 `json:"HealthStateFilter,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeID an internal ID used by Service Fabric to uniquely identify a node. Node Id is deterministically generated
 // from node name.
 type NodeID struct {
@@ -8033,6 +8818,7 @@ type NodeID struct {
 	ID *string `json:"Id,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeImpact describes the expected impact of a repair to a particular node.
 //
 // This type supports the Service Fabric platform; it is not meant to be used directly from your code.
@@ -8043,6 +8829,7 @@ type NodeImpact struct {
 	ImpactLevel ImpactLevel `json:"ImpactLevel,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeInfo information about a node in Service Fabric cluster.
 type NodeInfo struct {
 	autorest.Response `json:"-"`
@@ -8084,6 +8871,7 @@ type NodeInfo struct {
 	NodeDownAt *date.Time `json:"NodeDownAt,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeLoadInfo information about load on a Service Fabric node. It holds a summary of all metrics and their load
 // on a node.
 type NodeLoadInfo struct {
@@ -8094,6 +8882,7 @@ type NodeLoadInfo struct {
 	NodeLoadMetricInformation *[]NodeLoadMetricInformation `json:"NodeLoadMetricInformation,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeLoadMetricInformation represents data structure that contains load information for a certain metric on a
 // node.
 type NodeLoadMetricInformation struct {
@@ -8113,6 +8902,7 @@ type NodeLoadMetricInformation struct {
 	NodeRemainingBufferedCapacity *string `json:"NodeRemainingBufferedCapacity,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeRepairImpactDescription describes the expected impact of a repair on a set of nodes.
 //
 // This type supports the Service Fabric platform; it is not meant to be used directly from your code.
@@ -8123,6 +8913,7 @@ type NodeRepairImpactDescription struct {
 	Kind KindBasicRepairImpactDescriptionBase `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for NodeRepairImpactDescription.
 func (nrid NodeRepairImpactDescription) MarshalJSON() ([]byte, error) {
 	nrid.Kind = KindBasicRepairImpactDescriptionBaseKindNode
@@ -8136,21 +8927,25 @@ func (nrid NodeRepairImpactDescription) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeRepairImpactDescription is the BasicRepairImpactDescriptionBase implementation for NodeRepairImpactDescription.
 func (nrid NodeRepairImpactDescription) AsNodeRepairImpactDescription() (*NodeRepairImpactDescription, bool) {
 	return &nrid, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsRepairImpactDescriptionBase is the BasicRepairImpactDescriptionBase implementation for NodeRepairImpactDescription.
 func (nrid NodeRepairImpactDescription) AsRepairImpactDescriptionBase() (*RepairImpactDescriptionBase, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicRepairImpactDescriptionBase is the BasicRepairImpactDescriptionBase implementation for NodeRepairImpactDescription.
 func (nrid NodeRepairImpactDescription) AsBasicRepairImpactDescriptionBase() (BasicRepairImpactDescriptionBase, bool) {
 	return &nrid, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeRepairTargetDescription describes the list of nodes targeted by a repair action.
 //
 // This type supports the Service Fabric platform; it is not meant to be used directly from your code.
@@ -8161,6 +8956,7 @@ type NodeRepairTargetDescription struct {
 	Kind KindBasicRepairTargetDescriptionBase `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for NodeRepairTargetDescription.
 func (nrtd NodeRepairTargetDescription) MarshalJSON() ([]byte, error) {
 	nrtd.Kind = KindBasicRepairTargetDescriptionBaseKindNode
@@ -8174,21 +8970,25 @@ func (nrtd NodeRepairTargetDescription) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeRepairTargetDescription is the BasicRepairTargetDescriptionBase implementation for NodeRepairTargetDescription.
 func (nrtd NodeRepairTargetDescription) AsNodeRepairTargetDescription() (*NodeRepairTargetDescription, bool) {
 	return &nrtd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsRepairTargetDescriptionBase is the BasicRepairTargetDescriptionBase implementation for NodeRepairTargetDescription.
 func (nrtd NodeRepairTargetDescription) AsRepairTargetDescriptionBase() (*RepairTargetDescriptionBase, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicRepairTargetDescriptionBase is the BasicRepairTargetDescriptionBase implementation for NodeRepairTargetDescription.
 func (nrtd NodeRepairTargetDescription) AsBasicRepairTargetDescriptionBase() (BasicRepairTargetDescriptionBase, bool) {
 	return &nrtd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeResult contains information about a node that was targeted by a user-induced operation.
 type NodeResult struct {
 	// NodeName - The name of a Service Fabric node.
@@ -8197,6 +8997,7 @@ type NodeResult struct {
 	NodeInstanceID *string `json:"NodeInstanceId,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodesHealthEvaluation represents health evaluation for nodes, containing health evaluations for each unhealthy
 // node that impacted current aggregated health state. Can be returned when evaluating cluster health and the
 // aggregated health state is either Error or Warning.
@@ -8215,6 +9016,7 @@ type NodesHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) MarshalJSON() ([]byte, error) {
 	nhe.Kind = KindNodes
@@ -8240,116 +9042,139 @@ func (nhe NodesHealthEvaluation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return &nhe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &nhe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeTransitionProgress information about an NodeTransition operation.  This class contains an OperationState and
 // a NodeTransitionResult.  The NodeTransitionResult is not valid until OperationState
 // is Completed or Faulted.
@@ -8361,6 +9186,7 @@ type NodeTransitionProgress struct {
 	NodeTransitionResult *NodeTransitionResult `json:"NodeTransitionResult,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeTransitionResult represents information about an operation in a terminal state (Completed or Faulted).
 type NodeTransitionResult struct {
 	// ErrorCode - If OperationState is Completed, this is 0.  If OperationState is Faulted, this is an error code indicating the reason.
@@ -8369,6 +9195,7 @@ type NodeTransitionResult struct {
 	NodeResult *NodeResult `json:"NodeResult,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodeUpgradeProgressInfo information about the upgrading node and its status
 type NodeUpgradeProgressInfo struct {
 	// NodeName - The name of a Service Fabric node.
@@ -8379,6 +9206,7 @@ type NodeUpgradeProgressInfo struct {
 	PendingSafetyChecks *[]SafetyCheckWrapper `json:"PendingSafetyChecks,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // OperationStatus contains the OperationId, OperationState, and OperationType for user-induced operations.
 type OperationStatus struct {
 	// OperationID - A GUID that identifies a call to this API.  This is also passed into the corresponding GetProgress API.
@@ -8389,6 +9217,7 @@ type OperationStatus struct {
 	Type OperationType `json:"Type,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PackageSharingPolicyInfo represents a policy for the package sharing.
 type PackageSharingPolicyInfo struct {
 	// SharedPackageName - The name of code, configuration or data package that should be shared.
@@ -8397,6 +9226,7 @@ type PackageSharingPolicyInfo struct {
 	PackageSharingScope PackageSharingPolicyScope `json:"PackageSharingScope,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PagedApplicationInfoList the list of applications in the cluster. The list is paged when all of the results
 // cannot fit in a single message. The next set of results can be obtained by executing the same query with the
 // continuation token provided in this list.
@@ -8408,6 +9238,7 @@ type PagedApplicationInfoList struct {
 	Items *[]ApplicationInfo `json:"Items,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PagedApplicationTypeInfoList the list of application types that are provisioned or being provisioned in the
 // cluster. The list is paged when all of the results cannot fit in a single message. The next set of results can
 // be obtained by executing the same query with the continuation token provided in this list.
@@ -8419,6 +9250,7 @@ type PagedApplicationTypeInfoList struct {
 	Items *[]ApplicationTypeInfo `json:"Items,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PagedComposeDeploymentStatusInfoList the list of compose deployments in the cluster. The list is paged when all
 // of the results cannot fit in a single message. The next set of results can be obtained by executing the same
 // query with the continuation token provided in this list.
@@ -8430,6 +9262,7 @@ type PagedComposeDeploymentStatusInfoList struct {
 	Items *[]ComposeDeploymentStatusInfo `json:"Items,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PagedDeployedApplicationInfoList the list of deployed applications in activating, downloading, or active states
 // on a node.
 // The list is paged when all of the results cannot fit in a single message.
@@ -8443,6 +9276,7 @@ type PagedDeployedApplicationInfoList struct {
 	Items *[]DeployedApplicationInfo `json:"Items,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PagedNodeInfoList the list of nodes in the cluster. The list is paged when all of the results cannot fit in a
 // single message. The next set of results can be obtained by executing the same query with the continuation token
 // provided in this list.
@@ -8454,6 +9288,7 @@ type PagedNodeInfoList struct {
 	Items *[]NodeInfo `json:"Items,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PagedPropertyInfoList the paged list of Service Fabric properties under a given name. The list is paged when all
 // of the results cannot fit in a single message. The next set of results can be obtained by executing the same
 // query with the continuation token provided in this list.
@@ -8467,6 +9302,7 @@ type PagedPropertyInfoList struct {
 	Properties *[]PropertyInfo `json:"Properties,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PagedReplicaInfoList the list of replicas in the cluster for a given partition. The list is paged when all of
 // the results cannot fit in a single message. The next set of results can be obtained by executing the same query
 // with the continuation token provided in this list.
@@ -8478,6 +9314,7 @@ type PagedReplicaInfoList struct {
 	Items *[]BasicReplicaInfo `json:"Items,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for PagedReplicaInfoList struct.
 func (pril *PagedReplicaInfoList) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -8510,6 +9347,7 @@ func (pril *PagedReplicaInfoList) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PagedServiceInfoList the list of services in the cluster for an application. The list is paged when all of the
 // results cannot fit in a single message. The next set of results can be obtained by executing the same query with
 // the continuation token provided in this list.
@@ -8521,6 +9359,7 @@ type PagedServiceInfoList struct {
 	Items *[]BasicServiceInfo `json:"Items,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for PagedServiceInfoList struct.
 func (psil *PagedServiceInfoList) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -8553,6 +9392,7 @@ func (psil *PagedServiceInfoList) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PagedServicePartitionInfoList the list of partition in the cluster for a service. The list is paged when all of
 // the results cannot fit in a single message. The next set of results can be obtained by executing the same query
 // with the continuation token provided in this list.
@@ -8564,6 +9404,7 @@ type PagedServicePartitionInfoList struct {
 	Items *[]BasicServicePartitionInfo `json:"Items,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for PagedServicePartitionInfoList struct.
 func (pspil *PagedServicePartitionInfoList) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -8596,6 +9437,7 @@ func (pspil *PagedServicePartitionInfoList) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PagedSubNameInfoList a paged list of Service Fabric names. The list is paged when all of the results cannot fit
 // in a single message. The next set of results can be obtained by executing the same query with the continuation
 // token provided in this list.
@@ -8609,6 +9451,7 @@ type PagedSubNameInfoList struct {
 	SubNames *[]string `json:"SubNames,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionDataLossProgress information about a partition data loss user-induced operation.
 type PartitionDataLossProgress struct {
 	autorest.Response `json:"-"`
@@ -8618,6 +9461,7 @@ type PartitionDataLossProgress struct {
 	InvokeDataLossResult *InvokeDataLossResult `json:"InvokeDataLossResult,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionHealth information about the health of a Service Fabric partition.
 type PartitionHealth struct {
 	autorest.Response `json:"-"`
@@ -8638,6 +9482,7 @@ type PartitionHealth struct {
 	HealthStatistics *HealthStatistics `json:"HealthStatistics,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for PartitionHealth struct.
 func (ph *PartitionHealth) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -8706,6 +9551,7 @@ func (ph *PartitionHealth) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionHealthEvaluation represents health evaluation for a partition, containing information about the data
 // and the algorithm used by health store to evaluate health. The evaluation is returned only when the aggregated
 // health state is either Error or Warning.
@@ -8722,6 +9568,7 @@ type PartitionHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) MarshalJSON() ([]byte, error) {
 	phe.Kind = KindPartition
@@ -8744,116 +9591,139 @@ func (phe PartitionHealthEvaluation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return &phe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &phe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionHealthState represents the health state of a partition, which contains the partition identifier and its
 // aggregated health state.
 type PartitionHealthState struct {
@@ -8863,6 +9733,7 @@ type PartitionHealthState struct {
 	AggregatedHealthState HealthState `json:"AggregatedHealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionHealthStateChunk represents the health state chunk of a partition, which contains the partition id, its
 // aggregated health state and any replicas that respect the filters in the cluster health chunk query description.
 type PartitionHealthStateChunk struct {
@@ -8874,6 +9745,7 @@ type PartitionHealthStateChunk struct {
 	HealthState HealthState `json:"HealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionHealthStateChunkList the list of partition health state chunks that respect the input filters in the
 // chunk query description.
 // Returned by get cluster health state chunks query as part of the parent application hierarchy.
@@ -8882,6 +9754,7 @@ type PartitionHealthStateChunkList struct {
 	Items *[]PartitionHealthStateChunk `json:"Items,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionHealthStateFilter defines matching criteria to determine whether a partition should be included as a
 // child of a service in the cluster health chunk.
 // The partitions are only returned if the parent entities match a filter specified in the cluster health chunk
@@ -8912,6 +9785,7 @@ type PartitionHealthStateFilter struct {
 	ReplicaFilters *[]ReplicaHealthStateFilter `json:"ReplicaFilters,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicPartitionInformation information about the partition identity, partitioning scheme and keys supported by it.
 type BasicPartitionInformation interface {
 	AsInt64RangePartitionInformation() (*Int64RangePartitionInformation, bool)
@@ -8920,6 +9794,7 @@ type BasicPartitionInformation interface {
 	AsPartitionInformation() (*PartitionInformation, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionInformation information about the partition identity, partitioning scheme and keys supported by it.
 type PartitionInformation struct {
 	// ID - An internal ID used by Service Fabric to uniquely identify a partition. This is a randomly generated GUID when the service was created. The partition id is unique and does not change for the lifetime of the service. If the same service was deleted and recreated the ids of its partitions would be different.
@@ -8973,6 +9848,7 @@ func unmarshalBasicPartitionInformationArray(body []byte) ([]BasicPartitionInfor
 	return piArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for PartitionInformation.
 func (pi PartitionInformation) MarshalJSON() ([]byte, error) {
 	pi.ServicePartitionKind = ServicePartitionKindPartitionInformation
@@ -8986,31 +9862,37 @@ func (pi PartitionInformation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsInt64RangePartitionInformation is the BasicPartitionInformation implementation for PartitionInformation.
 func (pi PartitionInformation) AsInt64RangePartitionInformation() (*Int64RangePartitionInformation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNamedPartitionInformation is the BasicPartitionInformation implementation for PartitionInformation.
 func (pi PartitionInformation) AsNamedPartitionInformation() (*NamedPartitionInformation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSingletonPartitionInformation is the BasicPartitionInformation implementation for PartitionInformation.
 func (pi PartitionInformation) AsSingletonPartitionInformation() (*SingletonPartitionInformation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionInformation is the BasicPartitionInformation implementation for PartitionInformation.
 func (pi PartitionInformation) AsPartitionInformation() (*PartitionInformation, bool) {
 	return &pi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPartitionInformation is the BasicPartitionInformation implementation for PartitionInformation.
 func (pi PartitionInformation) AsBasicPartitionInformation() (BasicPartitionInformation, bool) {
 	return &pi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionLoadInformation represents load information for a partition, which contains the primary and secondary
 // reported load metrics.
 // In case there is no load reported, PartitionLoadInformation will contain the default load for the service of the
@@ -9027,6 +9909,7 @@ type PartitionLoadInformation struct {
 	SecondaryLoadMetricReports *[]LoadMetricReport `json:"SecondaryLoadMetricReports,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionQuorumLossProgress information about a partition quorum loss user-induced operation.
 type PartitionQuorumLossProgress struct {
 	autorest.Response `json:"-"`
@@ -9036,6 +9919,7 @@ type PartitionQuorumLossProgress struct {
 	InvokeQuorumLossResult *InvokeQuorumLossResult `json:"InvokeQuorumLossResult,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionRestartProgress information about a partition restart user-induced operation.
 type PartitionRestartProgress struct {
 	autorest.Response `json:"-"`
@@ -9045,6 +9929,7 @@ type PartitionRestartProgress struct {
 	RestartPartitionResult *RestartPartitionResult `json:"RestartPartitionResult,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicPartitionSafetyCheck represents a safety check for the service partition being performed by service fabric
 // before continuing with operations.
 type BasicPartitionSafetyCheck interface {
@@ -9057,6 +9942,7 @@ type BasicPartitionSafetyCheck interface {
 	AsPartitionSafetyCheck() (*PartitionSafetyCheck, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionSafetyCheck represents a safety check for the service partition being performed by service fabric
 // before continuing with operations.
 type PartitionSafetyCheck struct {
@@ -9123,6 +10009,7 @@ func unmarshalBasicPartitionSafetyCheckArray(body []byte) ([]BasicPartitionSafet
 	return pscArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for PartitionSafetyCheck.
 func (psc PartitionSafetyCheck) MarshalJSON() ([]byte, error) {
 	psc.Kind = KindPartitionSafetyCheck
@@ -9136,61 +10023,73 @@ func (psc PartitionSafetyCheck) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionSafetyCheck is the BasicSafetyCheck implementation for PartitionSafetyCheck.
 func (psc PartitionSafetyCheck) AsPartitionSafetyCheck() (*PartitionSafetyCheck, bool) {
 	return &psc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPartitionSafetyCheck is the BasicSafetyCheck implementation for PartitionSafetyCheck.
 func (psc PartitionSafetyCheck) AsBasicPartitionSafetyCheck() (BasicPartitionSafetyCheck, bool) {
 	return &psc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsureAvailabilitySafetyCheck is the BasicSafetyCheck implementation for PartitionSafetyCheck.
 func (psc PartitionSafetyCheck) AsEnsureAvailabilitySafetyCheck() (*EnsureAvailabilitySafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsurePartitionQurumSafetyCheck is the BasicSafetyCheck implementation for PartitionSafetyCheck.
 func (psc PartitionSafetyCheck) AsEnsurePartitionQurumSafetyCheck() (*EnsurePartitionQurumSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSeedNodeSafetyCheck is the BasicSafetyCheck implementation for PartitionSafetyCheck.
 func (psc PartitionSafetyCheck) AsSeedNodeSafetyCheck() (*SeedNodeSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForInbuildReplicaSafetyCheck is the BasicSafetyCheck implementation for PartitionSafetyCheck.
 func (psc PartitionSafetyCheck) AsWaitForInbuildReplicaSafetyCheck() (*WaitForInbuildReplicaSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimaryPlacementSafetyCheck is the BasicSafetyCheck implementation for PartitionSafetyCheck.
 func (psc PartitionSafetyCheck) AsWaitForPrimaryPlacementSafetyCheck() (*WaitForPrimaryPlacementSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimarySwapSafetyCheck is the BasicSafetyCheck implementation for PartitionSafetyCheck.
 func (psc PartitionSafetyCheck) AsWaitForPrimarySwapSafetyCheck() (*WaitForPrimarySwapSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForReconfigurationSafetyCheck is the BasicSafetyCheck implementation for PartitionSafetyCheck.
 func (psc PartitionSafetyCheck) AsWaitForReconfigurationSafetyCheck() (*WaitForReconfigurationSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSafetyCheck is the BasicSafetyCheck implementation for PartitionSafetyCheck.
 func (psc PartitionSafetyCheck) AsSafetyCheck() (*SafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicSafetyCheck is the BasicSafetyCheck implementation for PartitionSafetyCheck.
 func (psc PartitionSafetyCheck) AsBasicSafetyCheck() (BasicSafetyCheck, bool) {
 	return &psc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicPartitionSchemeDescription describes how the service is partitioned.
 type BasicPartitionSchemeDescription interface {
 	AsNamedPartitionSchemeDescription() (*NamedPartitionSchemeDescription, bool)
@@ -9199,6 +10098,7 @@ type BasicPartitionSchemeDescription interface {
 	AsPartitionSchemeDescription() (*PartitionSchemeDescription, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionSchemeDescription describes how the service is partitioned.
 type PartitionSchemeDescription struct {
 	// PartitionScheme - Possible values include: 'PartitionSchemePartitionSchemeDescription', 'PartitionSchemeNamed1', 'PartitionSchemeSingleton1', 'PartitionSchemeUniformInt64Range1'
@@ -9250,6 +10150,7 @@ func unmarshalBasicPartitionSchemeDescriptionArray(body []byte) ([]BasicPartitio
 	return psdArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for PartitionSchemeDescription.
 func (psd PartitionSchemeDescription) MarshalJSON() ([]byte, error) {
 	psd.PartitionScheme = PartitionSchemePartitionSchemeDescription
@@ -9260,31 +10161,37 @@ func (psd PartitionSchemeDescription) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNamedPartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for PartitionSchemeDescription.
 func (psd PartitionSchemeDescription) AsNamedPartitionSchemeDescription() (*NamedPartitionSchemeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSingletonPartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for PartitionSchemeDescription.
 func (psd PartitionSchemeDescription) AsSingletonPartitionSchemeDescription() (*SingletonPartitionSchemeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUniformInt64RangePartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for PartitionSchemeDescription.
 func (psd PartitionSchemeDescription) AsUniformInt64RangePartitionSchemeDescription() (*UniformInt64RangePartitionSchemeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for PartitionSchemeDescription.
 func (psd PartitionSchemeDescription) AsPartitionSchemeDescription() (*PartitionSchemeDescription, bool) {
 	return &psd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for PartitionSchemeDescription.
 func (psd PartitionSchemeDescription) AsBasicPartitionSchemeDescription() (BasicPartitionSchemeDescription, bool) {
 	return &psd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionsHealthEvaluation represents health evaluation for the partitions of a service, containing health
 // evaluations for each unhealthy partition that impacts current aggregated health state. Can be returned when
 // evaluating service health and the aggregated health state is either Error or Warning.
@@ -9303,6 +10210,7 @@ type PartitionsHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) MarshalJSON() ([]byte, error) {
 	phe.Kind = KindPartitions
@@ -9328,116 +10236,139 @@ func (phe PartitionsHealthEvaluation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return &phe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &phe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PrimaryReplicatorStatus provides statistics about the Service Fabric Replicator, when it is functioning in a
 // Primary role.
 type PrimaryReplicatorStatus struct {
@@ -9449,6 +10380,7 @@ type PrimaryReplicatorStatus struct {
 	Kind KindBasicReplicatorStatus `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for PrimaryReplicatorStatus.
 func (prs PrimaryReplicatorStatus) MarshalJSON() ([]byte, error) {
 	prs.Kind = KindPrimary
@@ -9465,41 +10397,49 @@ func (prs PrimaryReplicatorStatus) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPrimaryReplicatorStatus is the BasicReplicatorStatus implementation for PrimaryReplicatorStatus.
 func (prs PrimaryReplicatorStatus) AsPrimaryReplicatorStatus() (*PrimaryReplicatorStatus, bool) {
 	return &prs, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSecondaryReplicatorStatus is the BasicReplicatorStatus implementation for PrimaryReplicatorStatus.
 func (prs PrimaryReplicatorStatus) AsSecondaryReplicatorStatus() (*SecondaryReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicSecondaryReplicatorStatus is the BasicReplicatorStatus implementation for PrimaryReplicatorStatus.
 func (prs PrimaryReplicatorStatus) AsBasicSecondaryReplicatorStatus() (BasicSecondaryReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSecondaryActiveReplicatorStatus is the BasicReplicatorStatus implementation for PrimaryReplicatorStatus.
 func (prs PrimaryReplicatorStatus) AsSecondaryActiveReplicatorStatus() (*SecondaryActiveReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSecondaryIdleReplicatorStatus is the BasicReplicatorStatus implementation for PrimaryReplicatorStatus.
 func (prs PrimaryReplicatorStatus) AsSecondaryIdleReplicatorStatus() (*SecondaryIdleReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicatorStatus is the BasicReplicatorStatus implementation for PrimaryReplicatorStatus.
 func (prs PrimaryReplicatorStatus) AsReplicatorStatus() (*ReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicReplicatorStatus is the BasicReplicatorStatus implementation for PrimaryReplicatorStatus.
 func (prs PrimaryReplicatorStatus) AsBasicReplicatorStatus() (BasicReplicatorStatus, bool) {
 	return &prs, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PropertyBatchDescriptionList describes a list of property batch operations to be executed. Either all or none of
 // the operations will be committed.
 type PropertyBatchDescriptionList struct {
@@ -9507,6 +10447,7 @@ type PropertyBatchDescriptionList struct {
 	Operations *[]BasicPropertyBatchOperation `json:"Operations,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for PropertyBatchDescriptionList struct.
 func (pbdl *PropertyBatchDescriptionList) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -9530,6 +10471,7 @@ func (pbdl *PropertyBatchDescriptionList) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicPropertyBatchInfo information about the results of a property batch.
 type BasicPropertyBatchInfo interface {
 	AsSuccessfulPropertyBatchInfo() (*SuccessfulPropertyBatchInfo, bool)
@@ -9537,6 +10479,7 @@ type BasicPropertyBatchInfo interface {
 	AsPropertyBatchInfo() (*PropertyBatchInfo, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PropertyBatchInfo information about the results of a property batch.
 type PropertyBatchInfo struct {
 	autorest.Response `json:"-"`
@@ -9585,6 +10528,7 @@ func unmarshalBasicPropertyBatchInfoArray(body []byte) ([]BasicPropertyBatchInfo
 	return pbiArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for PropertyBatchInfo.
 func (pbi PropertyBatchInfo) MarshalJSON() ([]byte, error) {
 	pbi.Kind = KindPropertyBatchInfo
@@ -9595,32 +10539,38 @@ func (pbi PropertyBatchInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSuccessfulPropertyBatchInfo is the BasicPropertyBatchInfo implementation for PropertyBatchInfo.
 func (pbi PropertyBatchInfo) AsSuccessfulPropertyBatchInfo() (*SuccessfulPropertyBatchInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsFailedPropertyBatchInfo is the BasicPropertyBatchInfo implementation for PropertyBatchInfo.
 func (pbi PropertyBatchInfo) AsFailedPropertyBatchInfo() (*FailedPropertyBatchInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPropertyBatchInfo is the BasicPropertyBatchInfo implementation for PropertyBatchInfo.
 func (pbi PropertyBatchInfo) AsPropertyBatchInfo() (*PropertyBatchInfo, bool) {
 	return &pbi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPropertyBatchInfo is the BasicPropertyBatchInfo implementation for PropertyBatchInfo.
 func (pbi PropertyBatchInfo) AsBasicPropertyBatchInfo() (BasicPropertyBatchInfo, bool) {
 	return &pbi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PropertyBatchInfoModel ...
 type PropertyBatchInfoModel struct {
 	autorest.Response `json:"-"`
 	Value             BasicPropertyBatchInfo `json:"value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for PropertyBatchInfoModel struct.
 func (pbim *PropertyBatchInfoModel) UnmarshalJSON(body []byte) error {
 	pbi, err := unmarshalBasicPropertyBatchInfo(body)
@@ -9632,6 +10582,7 @@ func (pbim *PropertyBatchInfoModel) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicPropertyBatchOperation represents the base type for property operations that can be put into a batch and
 // submitted.
 type BasicPropertyBatchOperation interface {
@@ -9644,6 +10595,7 @@ type BasicPropertyBatchOperation interface {
 	AsPropertyBatchOperation() (*PropertyBatchOperation, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PropertyBatchOperation represents the base type for property operations that can be put into a batch and
 // submitted.
 type PropertyBatchOperation struct {
@@ -9710,6 +10662,7 @@ func unmarshalBasicPropertyBatchOperationArray(body []byte) ([]BasicPropertyBatc
 	return pboArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for PropertyBatchOperation.
 func (pbo PropertyBatchOperation) MarshalJSON() ([]byte, error) {
 	pbo.Kind = KindPropertyBatchOperation
@@ -9723,46 +10676,55 @@ func (pbo PropertyBatchOperation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckExistsPropertyBatchOperation is the BasicPropertyBatchOperation implementation for PropertyBatchOperation.
 func (pbo PropertyBatchOperation) AsCheckExistsPropertyBatchOperation() (*CheckExistsPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckSequencePropertyBatchOperation is the BasicPropertyBatchOperation implementation for PropertyBatchOperation.
 func (pbo PropertyBatchOperation) AsCheckSequencePropertyBatchOperation() (*CheckSequencePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckValuePropertyBatchOperation is the BasicPropertyBatchOperation implementation for PropertyBatchOperation.
 func (pbo PropertyBatchOperation) AsCheckValuePropertyBatchOperation() (*CheckValuePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeletePropertyBatchOperation is the BasicPropertyBatchOperation implementation for PropertyBatchOperation.
 func (pbo PropertyBatchOperation) AsDeletePropertyBatchOperation() (*DeletePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsGetPropertyBatchOperation is the BasicPropertyBatchOperation implementation for PropertyBatchOperation.
 func (pbo PropertyBatchOperation) AsGetPropertyBatchOperation() (*GetPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPutPropertyBatchOperation is the BasicPropertyBatchOperation implementation for PropertyBatchOperation.
 func (pbo PropertyBatchOperation) AsPutPropertyBatchOperation() (*PutPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPropertyBatchOperation is the BasicPropertyBatchOperation implementation for PropertyBatchOperation.
 func (pbo PropertyBatchOperation) AsPropertyBatchOperation() (*PropertyBatchOperation, bool) {
 	return &pbo, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPropertyBatchOperation is the BasicPropertyBatchOperation implementation for PropertyBatchOperation.
 func (pbo PropertyBatchOperation) AsBasicPropertyBatchOperation() (BasicPropertyBatchOperation, bool) {
 	return &pbo, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PropertyDescription description of a Service Fabric property.
 type PropertyDescription struct {
 	// PropertyName - The name of the Service Fabric property.
@@ -9773,6 +10735,7 @@ type PropertyDescription struct {
 	Value BasicPropertyValue `json:"Value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for PropertyDescription struct.
 func (pd *PropertyDescription) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -9814,6 +10777,7 @@ func (pd *PropertyDescription) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PropertyInfo information about a Service Fabric property.
 type PropertyInfo struct {
 	autorest.Response `json:"-"`
@@ -9825,6 +10789,7 @@ type PropertyInfo struct {
 	Metadata *PropertyMetadata `json:"Metadata,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for PropertyInfo struct.
 func (pi *PropertyInfo) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -9866,6 +10831,7 @@ func (pi *PropertyInfo) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PropertyMetadata the metadata associated with a property, including the property's name.
 type PropertyMetadata struct {
 	// TypeID - The kind of property, determined by the type of data. Following are the possible values. Possible values include: 'PropertyValueKindInvalid', 'PropertyValueKindBinary', 'PropertyValueKindInt64', 'PropertyValueKindDouble', 'PropertyValueKindString', 'PropertyValueKindGUID'
@@ -9882,6 +10848,7 @@ type PropertyMetadata struct {
 	SequenceNumber *string `json:"SequenceNumber,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicPropertyValue describes a Service Fabric property value.
 type BasicPropertyValue interface {
 	AsBinaryPropertyValue() (*BinaryPropertyValue, bool)
@@ -9892,6 +10859,7 @@ type BasicPropertyValue interface {
 	AsPropertyValue() (*PropertyValue, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PropertyValue describes a Service Fabric property value.
 type PropertyValue struct {
 	// Kind - Possible values include: 'KindPropertyValue', 'KindBinary', 'KindInt64', 'KindDouble', 'KindString', 'KindGUID'
@@ -9951,6 +10919,7 @@ func unmarshalBasicPropertyValueArray(body []byte) ([]BasicPropertyValue, error)
 	return pvArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for PropertyValue.
 func (pv PropertyValue) MarshalJSON() ([]byte, error) {
 	pv.Kind = KindPropertyValue
@@ -9961,41 +10930,49 @@ func (pv PropertyValue) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBinaryPropertyValue is the BasicPropertyValue implementation for PropertyValue.
 func (pv PropertyValue) AsBinaryPropertyValue() (*BinaryPropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsInt64PropertyValue is the BasicPropertyValue implementation for PropertyValue.
 func (pv PropertyValue) AsInt64PropertyValue() (*Int64PropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDoublePropertyValue is the BasicPropertyValue implementation for PropertyValue.
 func (pv PropertyValue) AsDoublePropertyValue() (*DoublePropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStringPropertyValue is the BasicPropertyValue implementation for PropertyValue.
 func (pv PropertyValue) AsStringPropertyValue() (*StringPropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsGUIDPropertyValue is the BasicPropertyValue implementation for PropertyValue.
 func (pv PropertyValue) AsGUIDPropertyValue() (*GUIDPropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPropertyValue is the BasicPropertyValue implementation for PropertyValue.
 func (pv PropertyValue) AsPropertyValue() (*PropertyValue, bool) {
 	return &pv, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPropertyValue is the BasicPropertyValue implementation for PropertyValue.
 func (pv PropertyValue) AsBasicPropertyValue() (BasicPropertyValue, bool) {
 	return &pv, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ProvisionApplicationTypeDescription describes the operation to register or provision an application type using
 // an application package uploaded to the Service Fabric image store.
 type ProvisionApplicationTypeDescription struct {
@@ -10007,6 +10984,7 @@ type ProvisionApplicationTypeDescription struct {
 	Kind KindBasicProvisionApplicationTypeDescriptionBase `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ProvisionApplicationTypeDescription.
 func (patd ProvisionApplicationTypeDescription) MarshalJSON() ([]byte, error) {
 	patd.Kind = KindImageStorePath
@@ -10023,26 +11001,31 @@ func (patd ProvisionApplicationTypeDescription) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsProvisionApplicationTypeDescription is the BasicProvisionApplicationTypeDescriptionBase implementation for ProvisionApplicationTypeDescription.
 func (patd ProvisionApplicationTypeDescription) AsProvisionApplicationTypeDescription() (*ProvisionApplicationTypeDescription, bool) {
 	return &patd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsExternalStoreProvisionApplicationTypeDescription is the BasicProvisionApplicationTypeDescriptionBase implementation for ProvisionApplicationTypeDescription.
 func (patd ProvisionApplicationTypeDescription) AsExternalStoreProvisionApplicationTypeDescription() (*ExternalStoreProvisionApplicationTypeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsProvisionApplicationTypeDescriptionBase is the BasicProvisionApplicationTypeDescriptionBase implementation for ProvisionApplicationTypeDescription.
 func (patd ProvisionApplicationTypeDescription) AsProvisionApplicationTypeDescriptionBase() (*ProvisionApplicationTypeDescriptionBase, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicProvisionApplicationTypeDescriptionBase is the BasicProvisionApplicationTypeDescriptionBase implementation for ProvisionApplicationTypeDescription.
 func (patd ProvisionApplicationTypeDescription) AsBasicProvisionApplicationTypeDescriptionBase() (BasicProvisionApplicationTypeDescriptionBase, bool) {
 	return &patd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicProvisionApplicationTypeDescriptionBase represents the type of registration or provision requested, and if the
 // operation needs to be asynchronous or not. Supported types of provision operations are from either image store or
 // external store.
@@ -10052,6 +11035,7 @@ type BasicProvisionApplicationTypeDescriptionBase interface {
 	AsProvisionApplicationTypeDescriptionBase() (*ProvisionApplicationTypeDescriptionBase, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ProvisionApplicationTypeDescriptionBase represents the type of registration or provision requested, and if the
 // operation needs to be asynchronous or not. Supported types of provision operations are from either image store
 // or external store.
@@ -10103,6 +11087,7 @@ func unmarshalBasicProvisionApplicationTypeDescriptionBaseArray(body []byte) ([]
 	return patdbArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ProvisionApplicationTypeDescriptionBase.
 func (patdb ProvisionApplicationTypeDescriptionBase) MarshalJSON() ([]byte, error) {
 	patdb.Kind = KindProvisionApplicationTypeDescriptionBase
@@ -10116,26 +11101,31 @@ func (patdb ProvisionApplicationTypeDescriptionBase) MarshalJSON() ([]byte, erro
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsProvisionApplicationTypeDescription is the BasicProvisionApplicationTypeDescriptionBase implementation for ProvisionApplicationTypeDescriptionBase.
 func (patdb ProvisionApplicationTypeDescriptionBase) AsProvisionApplicationTypeDescription() (*ProvisionApplicationTypeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsExternalStoreProvisionApplicationTypeDescription is the BasicProvisionApplicationTypeDescriptionBase implementation for ProvisionApplicationTypeDescriptionBase.
 func (patdb ProvisionApplicationTypeDescriptionBase) AsExternalStoreProvisionApplicationTypeDescription() (*ExternalStoreProvisionApplicationTypeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsProvisionApplicationTypeDescriptionBase is the BasicProvisionApplicationTypeDescriptionBase implementation for ProvisionApplicationTypeDescriptionBase.
 func (patdb ProvisionApplicationTypeDescriptionBase) AsProvisionApplicationTypeDescriptionBase() (*ProvisionApplicationTypeDescriptionBase, bool) {
 	return &patdb, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicProvisionApplicationTypeDescriptionBase is the BasicProvisionApplicationTypeDescriptionBase implementation for ProvisionApplicationTypeDescriptionBase.
 func (patdb ProvisionApplicationTypeDescriptionBase) AsBasicProvisionApplicationTypeDescriptionBase() (BasicProvisionApplicationTypeDescriptionBase, bool) {
 	return &patdb, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ProvisionFabricDescription describes the parameters for provisioning a cluster.
 type ProvisionFabricDescription struct {
 	// CodeFilePath - The cluster code package file path.
@@ -10144,6 +11134,7 @@ type ProvisionFabricDescription struct {
 	ClusterManifestFilePath *string `json:"ClusterManifestFilePath,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PutPropertyBatchOperation puts the specified property under the specified name.
 // Note that if one PropertyBatchOperation in a PropertyBatch fails,
 // the entire batch fails and cannot be committed in a transactional manner.
@@ -10158,6 +11149,7 @@ type PutPropertyBatchOperation struct {
 	Kind KindBasicPropertyBatchOperation `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for PutPropertyBatchOperation.
 func (ppbo PutPropertyBatchOperation) MarshalJSON() ([]byte, error) {
 	ppbo.Kind = KindPut
@@ -10175,46 +11167,55 @@ func (ppbo PutPropertyBatchOperation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckExistsPropertyBatchOperation is the BasicPropertyBatchOperation implementation for PutPropertyBatchOperation.
 func (ppbo PutPropertyBatchOperation) AsCheckExistsPropertyBatchOperation() (*CheckExistsPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckSequencePropertyBatchOperation is the BasicPropertyBatchOperation implementation for PutPropertyBatchOperation.
 func (ppbo PutPropertyBatchOperation) AsCheckSequencePropertyBatchOperation() (*CheckSequencePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsCheckValuePropertyBatchOperation is the BasicPropertyBatchOperation implementation for PutPropertyBatchOperation.
 func (ppbo PutPropertyBatchOperation) AsCheckValuePropertyBatchOperation() (*CheckValuePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeletePropertyBatchOperation is the BasicPropertyBatchOperation implementation for PutPropertyBatchOperation.
 func (ppbo PutPropertyBatchOperation) AsDeletePropertyBatchOperation() (*DeletePropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsGetPropertyBatchOperation is the BasicPropertyBatchOperation implementation for PutPropertyBatchOperation.
 func (ppbo PutPropertyBatchOperation) AsGetPropertyBatchOperation() (*GetPropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPutPropertyBatchOperation is the BasicPropertyBatchOperation implementation for PutPropertyBatchOperation.
 func (ppbo PutPropertyBatchOperation) AsPutPropertyBatchOperation() (*PutPropertyBatchOperation, bool) {
 	return &ppbo, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPropertyBatchOperation is the BasicPropertyBatchOperation implementation for PutPropertyBatchOperation.
 func (ppbo PutPropertyBatchOperation) AsPropertyBatchOperation() (*PropertyBatchOperation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPropertyBatchOperation is the BasicPropertyBatchOperation implementation for PutPropertyBatchOperation.
 func (ppbo PutPropertyBatchOperation) AsBasicPropertyBatchOperation() (BasicPropertyBatchOperation, bool) {
 	return &ppbo, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for PutPropertyBatchOperation struct.
 func (ppbo *PutPropertyBatchOperation) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -10265,6 +11266,7 @@ func (ppbo *PutPropertyBatchOperation) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReconfigurationInformation information about current reconfiguration like phase, type, previous configuration
 // role of replica and reconfiguration start date time.
 type ReconfigurationInformation struct {
@@ -10278,6 +11280,7 @@ type ReconfigurationInformation struct {
 	ReconfigurationStartTimeUtc *date.Time `json:"ReconfigurationStartTimeUtc,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RegistryCredential credential information to connect to container registry.
 type RegistryCredential struct {
 	// RegistryUserName - The user name to connect to container registry.
@@ -10288,6 +11291,7 @@ type RegistryCredential struct {
 	PasswordEncrypted *bool `json:"PasswordEncrypted,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoteReplicatorAcknowledgementDetail provides various statistics of the acknowledgements that are being
 // received from the remote replicator.
 type RemoteReplicatorAcknowledgementDetail struct {
@@ -10301,6 +11305,7 @@ type RemoteReplicatorAcknowledgementDetail struct {
 	ReceivedAndNotAppliedCount *string `json:"ReceivedAndNotAppliedCount,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoteReplicatorAcknowledgementStatus provides details about the remote replicators from the primary
 // replicator's point of view.
 type RemoteReplicatorAcknowledgementStatus struct {
@@ -10310,6 +11315,7 @@ type RemoteReplicatorAcknowledgementStatus struct {
 	CopyStreamAcknowledgementDetail *RemoteReplicatorAcknowledgementDetail `json:"CopyStreamAcknowledgementDetail,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoteReplicatorStatus represents the state of the secondary replicator from the primary replicator’s point of
 // view.
 type RemoteReplicatorStatus struct {
@@ -10334,6 +11340,7 @@ type RemoteReplicatorStatus struct {
 	RemoteReplicatorAcknowledgementStatus *RemoteReplicatorAcknowledgementStatus `json:"RemoteReplicatorAcknowledgementStatus,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicRepairImpactDescriptionBase describes the expected impact of executing a repair task.
 //
 // This type supports the Service Fabric platform; it is not meant to be used directly from your code.
@@ -10342,6 +11349,7 @@ type BasicRepairImpactDescriptionBase interface {
 	AsRepairImpactDescriptionBase() (*RepairImpactDescriptionBase, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairImpactDescriptionBase describes the expected impact of executing a repair task.
 //
 // This type supports the Service Fabric platform; it is not meant to be used directly from your code.
@@ -10387,6 +11395,7 @@ func unmarshalBasicRepairImpactDescriptionBaseArray(body []byte) ([]BasicRepairI
 	return ridbArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for RepairImpactDescriptionBase.
 func (ridb RepairImpactDescriptionBase) MarshalJSON() ([]byte, error) {
 	ridb.Kind = KindBasicRepairImpactDescriptionBaseKindRepairImpactDescriptionBase
@@ -10397,21 +11406,25 @@ func (ridb RepairImpactDescriptionBase) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeRepairImpactDescription is the BasicRepairImpactDescriptionBase implementation for RepairImpactDescriptionBase.
 func (ridb RepairImpactDescriptionBase) AsNodeRepairImpactDescription() (*NodeRepairImpactDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsRepairImpactDescriptionBase is the BasicRepairImpactDescriptionBase implementation for RepairImpactDescriptionBase.
 func (ridb RepairImpactDescriptionBase) AsRepairImpactDescriptionBase() (*RepairImpactDescriptionBase, bool) {
 	return &ridb, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicRepairImpactDescriptionBase is the BasicRepairImpactDescriptionBase implementation for RepairImpactDescriptionBase.
 func (ridb RepairImpactDescriptionBase) AsBasicRepairImpactDescriptionBase() (BasicRepairImpactDescriptionBase, bool) {
 	return &ridb, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicRepairTargetDescriptionBase describes the entities targeted by a repair action.
 //
 // This type supports the Service Fabric platform; it is not meant to be used directly from your code.
@@ -10420,6 +11433,7 @@ type BasicRepairTargetDescriptionBase interface {
 	AsRepairTargetDescriptionBase() (*RepairTargetDescriptionBase, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairTargetDescriptionBase describes the entities targeted by a repair action.
 //
 // This type supports the Service Fabric platform; it is not meant to be used directly from your code.
@@ -10465,6 +11479,7 @@ func unmarshalBasicRepairTargetDescriptionBaseArray(body []byte) ([]BasicRepairT
 	return rtdbArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for RepairTargetDescriptionBase.
 func (rtdb RepairTargetDescriptionBase) MarshalJSON() ([]byte, error) {
 	rtdb.Kind = KindBasicRepairTargetDescriptionBaseKindRepairTargetDescriptionBase
@@ -10475,21 +11490,25 @@ func (rtdb RepairTargetDescriptionBase) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeRepairTargetDescription is the BasicRepairTargetDescriptionBase implementation for RepairTargetDescriptionBase.
 func (rtdb RepairTargetDescriptionBase) AsNodeRepairTargetDescription() (*NodeRepairTargetDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsRepairTargetDescriptionBase is the BasicRepairTargetDescriptionBase implementation for RepairTargetDescriptionBase.
 func (rtdb RepairTargetDescriptionBase) AsRepairTargetDescriptionBase() (*RepairTargetDescriptionBase, bool) {
 	return &rtdb, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicRepairTargetDescriptionBase is the BasicRepairTargetDescriptionBase implementation for RepairTargetDescriptionBase.
 func (rtdb RepairTargetDescriptionBase) AsBasicRepairTargetDescriptionBase() (BasicRepairTargetDescriptionBase, bool) {
 	return &rtdb, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairTask represents a repair task, which includes information about what kind of repair was requested, what
 // its progress is, and what its final result was.
 //
@@ -10546,6 +11565,7 @@ type RepairTask struct {
 	PerformRestoringHealthCheck *bool `json:"PerformRestoringHealthCheck,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for RepairTask struct.
 func (rt *RepairTask) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -10721,6 +11741,7 @@ func (rt *RepairTask) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairTaskApproveDescription describes a request for forced approval of a repair task.
 //
 // This type supports the Service Fabric platform; it is not meant to be used directly from your code.
@@ -10731,6 +11752,7 @@ type RepairTaskApproveDescription struct {
 	Version *string `json:"Version,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairTaskCancelDescription describes a request to cancel a repair task.
 //
 // This type supports the Service Fabric platform; it is not meant to be used directly from your code.
@@ -10743,6 +11765,7 @@ type RepairTaskCancelDescription struct {
 	RequestAbort *bool `json:"RequestAbort,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairTaskDeleteDescription describes a request to delete a completed repair task.
 //
 // This type supports the Service Fabric platform; it is not meant to be used directly from your code.
@@ -10753,6 +11776,7 @@ type RepairTaskDeleteDescription struct {
 	Version *string `json:"Version,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairTaskHistory a record of the times when the repair task entered each state.
 //
 // This type supports the Service Fabric platform; it is not meant to be used directly from your code.
@@ -10781,6 +11805,7 @@ type RepairTaskHistory struct {
 	RestoringHealthCheckEndUtcTimestamp *date.Time `json:"RestoringHealthCheckEndUtcTimestamp,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairTaskUpdateHealthPolicyDescription describes a request to update the health policy of a repair task.
 //
 // This type supports the Service Fabric platform; it is not meant to be used directly from your code.
@@ -10795,6 +11820,7 @@ type RepairTaskUpdateHealthPolicyDescription struct {
 	PerformRestoringHealthCheck *bool `json:"PerformRestoringHealthCheck,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairTaskUpdateInfo describes the result of an operation that created or updated a repair task.
 //
 // This type supports the Service Fabric platform; it is not meant to be used directly from your code.
@@ -10804,6 +11830,7 @@ type RepairTaskUpdateInfo struct {
 	Version *string `json:"Version,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicReplicaHealth represents a base class for stateful service replica or stateless service instance health.
 // Contains the replica aggregated health state, the health events and the unhealthy evaluations.
 type BasicReplicaHealth interface {
@@ -10812,6 +11839,7 @@ type BasicReplicaHealth interface {
 	AsReplicaHealth() (*ReplicaHealth, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicaHealth represents a base class for stateful service replica or stateless service instance health.
 // Contains the replica aggregated health state, the health events and the unhealthy evaluations.
 type ReplicaHealth struct {
@@ -10874,6 +11902,7 @@ func unmarshalBasicReplicaHealthArray(body []byte) ([]BasicReplicaHealth, error)
 	return rhArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ReplicaHealth.
 func (rh ReplicaHealth) MarshalJSON() ([]byte, error) {
 	rh.ServiceKind = ServiceKindBasicReplicaHealthServiceKindReplicaHealth
@@ -10899,26 +11928,31 @@ func (rh ReplicaHealth) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceReplicaHealth is the BasicReplicaHealth implementation for ReplicaHealth.
 func (rh ReplicaHealth) AsStatefulServiceReplicaHealth() (*StatefulServiceReplicaHealth, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceInstanceHealth is the BasicReplicaHealth implementation for ReplicaHealth.
 func (rh ReplicaHealth) AsStatelessServiceInstanceHealth() (*StatelessServiceInstanceHealth, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealth is the BasicReplicaHealth implementation for ReplicaHealth.
 func (rh ReplicaHealth) AsReplicaHealth() (*ReplicaHealth, bool) {
 	return &rh, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicReplicaHealth is the BasicReplicaHealth implementation for ReplicaHealth.
 func (rh ReplicaHealth) AsBasicReplicaHealth() (BasicReplicaHealth, bool) {
 	return &rh, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicaHealthEvaluation represents health evaluation for a replica, containing information about the data and
 // the algorithm used by health store to evaluate health. The evaluation is returned only when the aggregated
 // health state is either Error or Warning.
@@ -10937,6 +11971,7 @@ type ReplicaHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) MarshalJSON() ([]byte, error) {
 	rhe.Kind = KindReplica
@@ -10962,122 +11997,146 @@ func (rhe ReplicaHealthEvaluation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return &rhe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &rhe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicaHealthModel ...
 type ReplicaHealthModel struct {
 	autorest.Response `json:"-"`
 	Value             BasicReplicaHealth `json:"value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for ReplicaHealthModel struct.
 func (rhm *ReplicaHealthModel) UnmarshalJSON(body []byte) error {
 	rh, err := unmarshalBasicReplicaHealth(body)
@@ -11089,6 +12148,7 @@ func (rhm *ReplicaHealthModel) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicReplicaHealthState represents a base class for stateful service replica or stateless service instance health
 // state.
 type BasicReplicaHealthState interface {
@@ -11097,6 +12157,7 @@ type BasicReplicaHealthState interface {
 	AsReplicaHealthState() (*ReplicaHealthState, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicaHealthState represents a base class for stateful service replica or stateless service instance health
 // state.
 type ReplicaHealthState struct {
@@ -11149,6 +12210,7 @@ func unmarshalBasicReplicaHealthStateArray(body []byte) ([]BasicReplicaHealthSta
 	return RHSArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ReplicaHealthState.
 func (RHS ReplicaHealthState) MarshalJSON() ([]byte, error) {
 	RHS.ServiceKind = ServiceKindBasicReplicaHealthStateServiceKindReplicaHealthState
@@ -11165,26 +12227,31 @@ func (RHS ReplicaHealthState) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceReplicaHealthState is the BasicReplicaHealthState implementation for ReplicaHealthState.
 func (RHS ReplicaHealthState) AsStatefulServiceReplicaHealthState() (*StatefulServiceReplicaHealthState, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceInstanceHealthState is the BasicReplicaHealthState implementation for ReplicaHealthState.
 func (RHS ReplicaHealthState) AsStatelessServiceInstanceHealthState() (*StatelessServiceInstanceHealthState, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthState is the BasicReplicaHealthState implementation for ReplicaHealthState.
 func (RHS ReplicaHealthState) AsReplicaHealthState() (*ReplicaHealthState, bool) {
 	return &RHS, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicReplicaHealthState is the BasicReplicaHealthState implementation for ReplicaHealthState.
 func (RHS ReplicaHealthState) AsBasicReplicaHealthState() (BasicReplicaHealthState, bool) {
 	return &RHS, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicaHealthStateChunk represents the health state chunk of a stateful service replica or a stateless service
 // instance.
 // The replica health state contains the replica ID and its aggregated health state.
@@ -11195,6 +12262,7 @@ type ReplicaHealthStateChunk struct {
 	HealthState HealthState `json:"HealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicaHealthStateChunkList the list of replica health state chunks that respect the input filters in the chunk
 // query. Returned by get cluster health state chunks query.
 type ReplicaHealthStateChunkList struct {
@@ -11202,6 +12270,7 @@ type ReplicaHealthStateChunkList struct {
 	Items *[]ReplicaHealthStateChunk `json:"Items,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicaHealthStateFilter defines matching criteria to determine whether a replica should be included as a child
 // of a partition in the cluster health chunk.
 // The replicas are only returned if the parent entities match a filter specified in the cluster health chunk query
@@ -11227,6 +12296,7 @@ type ReplicaHealthStateFilter struct {
 	HealthStateFilter *int32 `json:"HealthStateFilter,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicReplicaInfo information about the identity, status, health, node name, uptime, and other details about the
 // replica.
 type BasicReplicaInfo interface {
@@ -11235,6 +12305,7 @@ type BasicReplicaInfo interface {
 	AsReplicaInfo() (*ReplicaInfo, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicaInfo information about the identity, status, health, node name, uptime, and other details about the
 // replica.
 type ReplicaInfo struct {
@@ -11301,6 +12372,7 @@ func unmarshalBasicReplicaInfoArray(body []byte) ([]BasicReplicaInfo, error) {
 	return riArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ReplicaInfo.
 func (ri ReplicaInfo) MarshalJSON() ([]byte, error) {
 	ri.ServiceKind = ServiceKindBasicReplicaInfoServiceKindReplicaInfo
@@ -11326,32 +12398,38 @@ func (ri ReplicaInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceReplicaInfo is the BasicReplicaInfo implementation for ReplicaInfo.
 func (ri ReplicaInfo) AsStatefulServiceReplicaInfo() (*StatefulServiceReplicaInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceInstanceInfo is the BasicReplicaInfo implementation for ReplicaInfo.
 func (ri ReplicaInfo) AsStatelessServiceInstanceInfo() (*StatelessServiceInstanceInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaInfo is the BasicReplicaInfo implementation for ReplicaInfo.
 func (ri ReplicaInfo) AsReplicaInfo() (*ReplicaInfo, bool) {
 	return &ri, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicReplicaInfo is the BasicReplicaInfo implementation for ReplicaInfo.
 func (ri ReplicaInfo) AsBasicReplicaInfo() (BasicReplicaInfo, bool) {
 	return &ri, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicaInfoModel ...
 type ReplicaInfoModel struct {
 	autorest.Response `json:"-"`
 	Value             BasicReplicaInfo `json:"value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for ReplicaInfoModel struct.
 func (rim *ReplicaInfoModel) UnmarshalJSON(body []byte) error {
 	ri, err := unmarshalBasicReplicaInfo(body)
@@ -11363,6 +12441,7 @@ func (rim *ReplicaInfoModel) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicasHealthEvaluation represents health evaluation for replicas, containing health evaluations for each
 // unhealthy replica that impacted current aggregated health state. Can be returned when evaluating partition
 // health and the aggregated health state is either Error or Warning.
@@ -11381,6 +12460,7 @@ type ReplicasHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) MarshalJSON() ([]byte, error) {
 	rhe.Kind = KindReplicas
@@ -11406,122 +12486,146 @@ func (rhe ReplicasHealthEvaluation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return &rhe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &rhe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicReplicaStatusBase information about the replica.
 type BasicReplicaStatusBase interface {
 	AsKeyValueStoreReplicaStatus() (*KeyValueStoreReplicaStatus, bool)
 	AsReplicaStatusBase() (*ReplicaStatusBase, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicaStatusBase information about the replica.
 type ReplicaStatusBase struct {
 	// Kind - Possible values include: 'KindReplicaStatusBase', 'KindKeyValueStore'
@@ -11565,6 +12669,7 @@ func unmarshalBasicReplicaStatusBaseArray(body []byte) ([]BasicReplicaStatusBase
 	return rsbArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ReplicaStatusBase.
 func (rsb ReplicaStatusBase) MarshalJSON() ([]byte, error) {
 	rsb.Kind = KindReplicaStatusBase
@@ -11575,21 +12680,25 @@ func (rsb ReplicaStatusBase) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsKeyValueStoreReplicaStatus is the BasicReplicaStatusBase implementation for ReplicaStatusBase.
 func (rsb ReplicaStatusBase) AsKeyValueStoreReplicaStatus() (*KeyValueStoreReplicaStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaStatusBase is the BasicReplicaStatusBase implementation for ReplicaStatusBase.
 func (rsb ReplicaStatusBase) AsReplicaStatusBase() (*ReplicaStatusBase, bool) {
 	return &rsb, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicReplicaStatusBase is the BasicReplicaStatusBase implementation for ReplicaStatusBase.
 func (rsb ReplicaStatusBase) AsBasicReplicaStatusBase() (BasicReplicaStatusBase, bool) {
 	return &rsb, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicatorQueueStatus provides various statistics of the queue used in the service fabric replicator.
 // Contains information about the service fabric replicator like the replication/copy queue utilization, last
 // acknowledgement received timestamp, etc.
@@ -11612,6 +12721,7 @@ type ReplicatorQueueStatus struct {
 	LastSequenceNumber *string `json:"LastSequenceNumber,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicReplicatorStatus represents a base class for primary or secondary replicator status.
 // Contains information about the service fabric replicator like the replication/copy queue utilization, last
 // acknowledgement received timestamp, etc.
@@ -11624,6 +12734,7 @@ type BasicReplicatorStatus interface {
 	AsReplicatorStatus() (*ReplicatorStatus, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicatorStatus represents a base class for primary or secondary replicator status.
 // Contains information about the service fabric replicator like the replication/copy queue utilization, last
 // acknowledgement received timestamp, etc.
@@ -11681,6 +12792,7 @@ func unmarshalBasicReplicatorStatusArray(body []byte) ([]BasicReplicatorStatus, 
 	return rsArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ReplicatorStatus.
 func (rs ReplicatorStatus) MarshalJSON() ([]byte, error) {
 	rs.Kind = KindReplicatorStatus
@@ -11691,41 +12803,49 @@ func (rs ReplicatorStatus) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPrimaryReplicatorStatus is the BasicReplicatorStatus implementation for ReplicatorStatus.
 func (rs ReplicatorStatus) AsPrimaryReplicatorStatus() (*PrimaryReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSecondaryReplicatorStatus is the BasicReplicatorStatus implementation for ReplicatorStatus.
 func (rs ReplicatorStatus) AsSecondaryReplicatorStatus() (*SecondaryReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicSecondaryReplicatorStatus is the BasicReplicatorStatus implementation for ReplicatorStatus.
 func (rs ReplicatorStatus) AsBasicSecondaryReplicatorStatus() (BasicSecondaryReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSecondaryActiveReplicatorStatus is the BasicReplicatorStatus implementation for ReplicatorStatus.
 func (rs ReplicatorStatus) AsSecondaryActiveReplicatorStatus() (*SecondaryActiveReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSecondaryIdleReplicatorStatus is the BasicReplicatorStatus implementation for ReplicatorStatus.
 func (rs ReplicatorStatus) AsSecondaryIdleReplicatorStatus() (*SecondaryIdleReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicatorStatus is the BasicReplicatorStatus implementation for ReplicatorStatus.
 func (rs ReplicatorStatus) AsReplicatorStatus() (*ReplicatorStatus, bool) {
 	return &rs, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicReplicatorStatus is the BasicReplicatorStatus implementation for ReplicatorStatus.
 func (rs ReplicatorStatus) AsBasicReplicatorStatus() (BasicReplicatorStatus, bool) {
 	return &rs, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResolvedServiceEndpoint endpoint of a resolved service partition.
 type ResolvedServiceEndpoint struct {
 	// Kind - The role of the replica where the endpoint is reported. Possible values include: 'ServiceEndpointRoleInvalid', 'ServiceEndpointRoleStateless', 'ServiceEndpointRoleStatefulPrimary', 'ServiceEndpointRoleStatefulSecondary'
@@ -11734,6 +12854,7 @@ type ResolvedServiceEndpoint struct {
 	Address *string `json:"Address,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResolvedServicePartition information about a service partition and its associated endpoints.
 type ResolvedServicePartition struct {
 	autorest.Response `json:"-"`
@@ -11747,6 +12868,7 @@ type ResolvedServicePartition struct {
 	Version *string `json:"Version,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for ResolvedServicePartition struct.
 func (rsp *ResolvedServicePartition) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -11797,6 +12919,7 @@ func (rsp *ResolvedServicePartition) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RestartDeployedCodePackageDescription defines description for restarting a deployed code package on Service
 // Fabric node.
 type RestartDeployedCodePackageDescription struct {
@@ -11815,6 +12938,7 @@ type RestartDeployedCodePackageDescription struct {
 	CodePackageInstanceID *string `json:"CodePackageInstanceId,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RestartNodeDescription describes the parameters to restart a Service Fabric node.
 type RestartNodeDescription struct {
 	// NodeInstanceID - The instance id of the target node. If instance id is specified the node is restarted only if it matches with the current instance of the node. A default value of "0" would match any instance id. The instance id can be obtained using get node query.
@@ -11823,6 +12947,7 @@ type RestartNodeDescription struct {
 	CreateFabricDump CreateFabricDump `json:"CreateFabricDump,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RestartPartitionResult represents information about an operation in a terminal state (Completed or Faulted).
 type RestartPartitionResult struct {
 	// ErrorCode - If OperationState is Completed, this is 0.  If OperationState is Faulted, this is an error code indicating the reason.
@@ -11831,6 +12956,7 @@ type RestartPartitionResult struct {
 	SelectedPartition *SelectedPartition `json:"SelectedPartition,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResumeApplicationUpgradeDescription describes the parameters for resuming an unmonitored manual Service Fabric
 // application upgrade
 type ResumeApplicationUpgradeDescription struct {
@@ -11838,12 +12964,14 @@ type ResumeApplicationUpgradeDescription struct {
 	UpgradeDomainName *string `json:"UpgradeDomainName,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResumeClusterUpgradeDescription describes the parameters for resuming a cluster upgrade.
 type ResumeClusterUpgradeDescription struct {
 	// UpgradeDomain - The next upgrade domain for this cluster upgrade.
 	UpgradeDomain *string `json:"UpgradeDomain,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RollingUpgradeUpdateDescription describes the parameters for updating a rolling upgrade of application or
 // cluster.
 type RollingUpgradeUpdateDescription struct {
@@ -11867,6 +12995,7 @@ type RollingUpgradeUpdateDescription struct {
 	UpgradeDomainTimeoutInMilliseconds *string `json:"UpgradeDomainTimeoutInMilliseconds,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicSafetyCheck represents a safety check performed by service fabric before continuing with the operations. These
 // checks ensure the availability of the service and the reliability of the state.
 type BasicSafetyCheck interface {
@@ -11882,6 +13011,7 @@ type BasicSafetyCheck interface {
 	AsSafetyCheck() (*SafetyCheck, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SafetyCheck represents a safety check performed by service fabric before continuing with the operations. These
 // checks ensure the availability of the service and the reliability of the state.
 type SafetyCheck struct {
@@ -11954,6 +13084,7 @@ func unmarshalBasicSafetyCheckArray(body []byte) ([]BasicSafetyCheck, error) {
 	return scArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for SafetyCheck.
 func (sc SafetyCheck) MarshalJSON() ([]byte, error) {
 	sc.Kind = KindSafetyCheck
@@ -11964,61 +13095,73 @@ func (sc SafetyCheck) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionSafetyCheck is the BasicSafetyCheck implementation for SafetyCheck.
 func (sc SafetyCheck) AsPartitionSafetyCheck() (*PartitionSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPartitionSafetyCheck is the BasicSafetyCheck implementation for SafetyCheck.
 func (sc SafetyCheck) AsBasicPartitionSafetyCheck() (BasicPartitionSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsureAvailabilitySafetyCheck is the BasicSafetyCheck implementation for SafetyCheck.
 func (sc SafetyCheck) AsEnsureAvailabilitySafetyCheck() (*EnsureAvailabilitySafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsurePartitionQurumSafetyCheck is the BasicSafetyCheck implementation for SafetyCheck.
 func (sc SafetyCheck) AsEnsurePartitionQurumSafetyCheck() (*EnsurePartitionQurumSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSeedNodeSafetyCheck is the BasicSafetyCheck implementation for SafetyCheck.
 func (sc SafetyCheck) AsSeedNodeSafetyCheck() (*SeedNodeSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForInbuildReplicaSafetyCheck is the BasicSafetyCheck implementation for SafetyCheck.
 func (sc SafetyCheck) AsWaitForInbuildReplicaSafetyCheck() (*WaitForInbuildReplicaSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimaryPlacementSafetyCheck is the BasicSafetyCheck implementation for SafetyCheck.
 func (sc SafetyCheck) AsWaitForPrimaryPlacementSafetyCheck() (*WaitForPrimaryPlacementSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimarySwapSafetyCheck is the BasicSafetyCheck implementation for SafetyCheck.
 func (sc SafetyCheck) AsWaitForPrimarySwapSafetyCheck() (*WaitForPrimarySwapSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForReconfigurationSafetyCheck is the BasicSafetyCheck implementation for SafetyCheck.
 func (sc SafetyCheck) AsWaitForReconfigurationSafetyCheck() (*WaitForReconfigurationSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSafetyCheck is the BasicSafetyCheck implementation for SafetyCheck.
 func (sc SafetyCheck) AsSafetyCheck() (*SafetyCheck, bool) {
 	return &sc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicSafetyCheck is the BasicSafetyCheck implementation for SafetyCheck.
 func (sc SafetyCheck) AsBasicSafetyCheck() (BasicSafetyCheck, bool) {
 	return &sc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SafetyCheckWrapper a wrapper for the safety check object. Safety checks are performed by service fabric before
 // continuing with the operations. These checks ensure the availability of the service and the reliability of the
 // state.
@@ -12027,6 +13170,7 @@ type SafetyCheckWrapper struct {
 	SafetyCheck BasicSafetyCheck `json:"SafetyCheck,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for SafetyCheckWrapper struct.
 func (scw *SafetyCheckWrapper) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -12050,6 +13194,7 @@ func (scw *SafetyCheckWrapper) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SecondaryActiveReplicatorStatus status of the secondary replicator when it is in active mode and is part of the
 // replica set.
 type SecondaryActiveReplicatorStatus struct {
@@ -12072,6 +13217,7 @@ type SecondaryActiveReplicatorStatus struct {
 	Kind KindBasicReplicatorStatus `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for SecondaryActiveReplicatorStatus.
 func (sars SecondaryActiveReplicatorStatus) MarshalJSON() ([]byte, error) {
 	sars.Kind = KindActiveSecondary
@@ -12100,41 +13246,49 @@ func (sars SecondaryActiveReplicatorStatus) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPrimaryReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryActiveReplicatorStatus.
 func (sars SecondaryActiveReplicatorStatus) AsPrimaryReplicatorStatus() (*PrimaryReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSecondaryReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryActiveReplicatorStatus.
 func (sars SecondaryActiveReplicatorStatus) AsSecondaryReplicatorStatus() (*SecondaryReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicSecondaryReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryActiveReplicatorStatus.
 func (sars SecondaryActiveReplicatorStatus) AsBasicSecondaryReplicatorStatus() (BasicSecondaryReplicatorStatus, bool) {
 	return &sars, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSecondaryActiveReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryActiveReplicatorStatus.
 func (sars SecondaryActiveReplicatorStatus) AsSecondaryActiveReplicatorStatus() (*SecondaryActiveReplicatorStatus, bool) {
 	return &sars, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSecondaryIdleReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryActiveReplicatorStatus.
 func (sars SecondaryActiveReplicatorStatus) AsSecondaryIdleReplicatorStatus() (*SecondaryIdleReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryActiveReplicatorStatus.
 func (sars SecondaryActiveReplicatorStatus) AsReplicatorStatus() (*ReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryActiveReplicatorStatus.
 func (sars SecondaryActiveReplicatorStatus) AsBasicReplicatorStatus() (BasicReplicatorStatus, bool) {
 	return &sars, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SecondaryIdleReplicatorStatus status of the secondary replicator when it is in idle mode and is being built by
 // the primary.
 type SecondaryIdleReplicatorStatus struct {
@@ -12157,6 +13311,7 @@ type SecondaryIdleReplicatorStatus struct {
 	Kind KindBasicReplicatorStatus `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for SecondaryIdleReplicatorStatus.
 func (sirs SecondaryIdleReplicatorStatus) MarshalJSON() ([]byte, error) {
 	sirs.Kind = KindIdleSecondary
@@ -12185,41 +13340,49 @@ func (sirs SecondaryIdleReplicatorStatus) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPrimaryReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryIdleReplicatorStatus.
 func (sirs SecondaryIdleReplicatorStatus) AsPrimaryReplicatorStatus() (*PrimaryReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSecondaryReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryIdleReplicatorStatus.
 func (sirs SecondaryIdleReplicatorStatus) AsSecondaryReplicatorStatus() (*SecondaryReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicSecondaryReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryIdleReplicatorStatus.
 func (sirs SecondaryIdleReplicatorStatus) AsBasicSecondaryReplicatorStatus() (BasicSecondaryReplicatorStatus, bool) {
 	return &sirs, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSecondaryActiveReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryIdleReplicatorStatus.
 func (sirs SecondaryIdleReplicatorStatus) AsSecondaryActiveReplicatorStatus() (*SecondaryActiveReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSecondaryIdleReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryIdleReplicatorStatus.
 func (sirs SecondaryIdleReplicatorStatus) AsSecondaryIdleReplicatorStatus() (*SecondaryIdleReplicatorStatus, bool) {
 	return &sirs, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryIdleReplicatorStatus.
 func (sirs SecondaryIdleReplicatorStatus) AsReplicatorStatus() (*ReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryIdleReplicatorStatus.
 func (sirs SecondaryIdleReplicatorStatus) AsBasicReplicatorStatus() (BasicReplicatorStatus, bool) {
 	return &sirs, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicSecondaryReplicatorStatus provides statistics about the Service Fabric Replicator, when it is functioning in a
 // ActiveSecondary role.
 type BasicSecondaryReplicatorStatus interface {
@@ -12228,6 +13391,7 @@ type BasicSecondaryReplicatorStatus interface {
 	AsSecondaryReplicatorStatus() (*SecondaryReplicatorStatus, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SecondaryReplicatorStatus provides statistics about the Service Fabric Replicator, when it is functioning in a
 // ActiveSecondary role.
 type SecondaryReplicatorStatus struct {
@@ -12291,6 +13455,7 @@ func unmarshalBasicSecondaryReplicatorStatusArray(body []byte) ([]BasicSecondary
 	return srsArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for SecondaryReplicatorStatus.
 func (srs SecondaryReplicatorStatus) MarshalJSON() ([]byte, error) {
 	srs.Kind = KindSecondaryReplicatorStatus
@@ -12319,41 +13484,49 @@ func (srs SecondaryReplicatorStatus) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPrimaryReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryReplicatorStatus.
 func (srs SecondaryReplicatorStatus) AsPrimaryReplicatorStatus() (*PrimaryReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSecondaryReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryReplicatorStatus.
 func (srs SecondaryReplicatorStatus) AsSecondaryReplicatorStatus() (*SecondaryReplicatorStatus, bool) {
 	return &srs, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicSecondaryReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryReplicatorStatus.
 func (srs SecondaryReplicatorStatus) AsBasicSecondaryReplicatorStatus() (BasicSecondaryReplicatorStatus, bool) {
 	return &srs, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSecondaryActiveReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryReplicatorStatus.
 func (srs SecondaryReplicatorStatus) AsSecondaryActiveReplicatorStatus() (*SecondaryActiveReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSecondaryIdleReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryReplicatorStatus.
 func (srs SecondaryReplicatorStatus) AsSecondaryIdleReplicatorStatus() (*SecondaryIdleReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryReplicatorStatus.
 func (srs SecondaryReplicatorStatus) AsReplicatorStatus() (*ReplicatorStatus, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicReplicatorStatus is the BasicReplicatorStatus implementation for SecondaryReplicatorStatus.
 func (srs SecondaryReplicatorStatus) AsBasicReplicatorStatus() (BasicReplicatorStatus, bool) {
 	return &srs, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SeedNodeSafetyCheck represents a safety check for the seed nodes being performed by service fabric before
 // continuing with node level operations.
 type SeedNodeSafetyCheck struct {
@@ -12361,6 +13534,7 @@ type SeedNodeSafetyCheck struct {
 	Kind KindBasicSafetyCheck `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for SeedNodeSafetyCheck.
 func (snsc SeedNodeSafetyCheck) MarshalJSON() ([]byte, error) {
 	snsc.Kind = KindEnsureSeedNodeQuorum
@@ -12371,61 +13545,73 @@ func (snsc SeedNodeSafetyCheck) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionSafetyCheck is the BasicSafetyCheck implementation for SeedNodeSafetyCheck.
 func (snsc SeedNodeSafetyCheck) AsPartitionSafetyCheck() (*PartitionSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPartitionSafetyCheck is the BasicSafetyCheck implementation for SeedNodeSafetyCheck.
 func (snsc SeedNodeSafetyCheck) AsBasicPartitionSafetyCheck() (BasicPartitionSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsureAvailabilitySafetyCheck is the BasicSafetyCheck implementation for SeedNodeSafetyCheck.
 func (snsc SeedNodeSafetyCheck) AsEnsureAvailabilitySafetyCheck() (*EnsureAvailabilitySafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsurePartitionQurumSafetyCheck is the BasicSafetyCheck implementation for SeedNodeSafetyCheck.
 func (snsc SeedNodeSafetyCheck) AsEnsurePartitionQurumSafetyCheck() (*EnsurePartitionQurumSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSeedNodeSafetyCheck is the BasicSafetyCheck implementation for SeedNodeSafetyCheck.
 func (snsc SeedNodeSafetyCheck) AsSeedNodeSafetyCheck() (*SeedNodeSafetyCheck, bool) {
 	return &snsc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForInbuildReplicaSafetyCheck is the BasicSafetyCheck implementation for SeedNodeSafetyCheck.
 func (snsc SeedNodeSafetyCheck) AsWaitForInbuildReplicaSafetyCheck() (*WaitForInbuildReplicaSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimaryPlacementSafetyCheck is the BasicSafetyCheck implementation for SeedNodeSafetyCheck.
 func (snsc SeedNodeSafetyCheck) AsWaitForPrimaryPlacementSafetyCheck() (*WaitForPrimaryPlacementSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimarySwapSafetyCheck is the BasicSafetyCheck implementation for SeedNodeSafetyCheck.
 func (snsc SeedNodeSafetyCheck) AsWaitForPrimarySwapSafetyCheck() (*WaitForPrimarySwapSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForReconfigurationSafetyCheck is the BasicSafetyCheck implementation for SeedNodeSafetyCheck.
 func (snsc SeedNodeSafetyCheck) AsWaitForReconfigurationSafetyCheck() (*WaitForReconfigurationSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSafetyCheck is the BasicSafetyCheck implementation for SeedNodeSafetyCheck.
 func (snsc SeedNodeSafetyCheck) AsSafetyCheck() (*SafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicSafetyCheck is the BasicSafetyCheck implementation for SeedNodeSafetyCheck.
 func (snsc SeedNodeSafetyCheck) AsBasicSafetyCheck() (BasicSafetyCheck, bool) {
 	return &snsc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SelectedPartition this class returns information about the partition that the user-induced operation acted upon.
 type SelectedPartition struct {
 	// ServiceName - The name of the service the partition belongs to.
@@ -12434,6 +13620,7 @@ type SelectedPartition struct {
 	PartitionID *uuid.UUID `json:"PartitionId,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceCorrelationDescription creates a particular correlation between services.
 type ServiceCorrelationDescription struct {
 	// Scheme - The ServiceCorrelationScheme which describes the relationship between this service and the service specified via ServiceName. Possible values include: 'ServiceCorrelationSchemeInvalid', 'ServiceCorrelationSchemeAffinity', 'ServiceCorrelationSchemeAlignedAffinity', 'ServiceCorrelationSchemeNonAlignedAffinity'
@@ -12442,6 +13629,7 @@ type ServiceCorrelationDescription struct {
 	ServiceName *string `json:"ServiceName,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicServiceDescription a ServiceDescription contains all of the information necessary to create a service.
 type BasicServiceDescription interface {
 	AsStatefulServiceDescription() (*StatefulServiceDescription, bool)
@@ -12449,6 +13637,7 @@ type BasicServiceDescription interface {
 	AsServiceDescription() (*ServiceDescription, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceDescription a ServiceDescription contains all of the information necessary to create a service.
 type ServiceDescription struct {
 	autorest.Response `json:"-"`
@@ -12523,6 +13712,7 @@ func unmarshalBasicServiceDescriptionArray(body []byte) ([]BasicServiceDescripti
 	return sdArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ServiceDescription.
 func (sd ServiceDescription) MarshalJSON() ([]byte, error) {
 	sd.ServiceKind = ServiceKindBasicServiceDescriptionServiceKindServiceDescription
@@ -12570,26 +13760,31 @@ func (sd ServiceDescription) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceDescription is the BasicServiceDescription implementation for ServiceDescription.
 func (sd ServiceDescription) AsStatefulServiceDescription() (*StatefulServiceDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceDescription is the BasicServiceDescription implementation for ServiceDescription.
 func (sd ServiceDescription) AsStatelessServiceDescription() (*StatelessServiceDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceDescription is the BasicServiceDescription implementation for ServiceDescription.
 func (sd ServiceDescription) AsServiceDescription() (*ServiceDescription, bool) {
 	return &sd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServiceDescription is the BasicServiceDescription implementation for ServiceDescription.
 func (sd ServiceDescription) AsBasicServiceDescription() (BasicServiceDescription, bool) {
 	return &sd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for ServiceDescription struct.
 func (sd *ServiceDescription) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -12729,12 +13924,14 @@ func (sd *ServiceDescription) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceDescriptionModel ...
 type ServiceDescriptionModel struct {
 	autorest.Response `json:"-"`
 	Value             BasicServiceDescription `json:"value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for ServiceDescriptionModel struct.
 func (sdm *ServiceDescriptionModel) UnmarshalJSON(body []byte) error {
 	sd, err := unmarshalBasicServiceDescription(body)
@@ -12746,6 +13943,7 @@ func (sdm *ServiceDescriptionModel) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceFromTemplateDescription defines description for creating a Service Fabric service from a template defined
 // in the application manifest.
 type ServiceFromTemplateDescription struct {
@@ -12763,6 +13961,7 @@ type ServiceFromTemplateDescription struct {
 	ServiceDNSName *string `json:"ServiceDnsName,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceHealth information about the health of a Service Fabric service.
 type ServiceHealth struct {
 	autorest.Response `json:"-"`
@@ -12783,6 +13982,7 @@ type ServiceHealth struct {
 	HealthStatistics *HealthStatistics `json:"HealthStatistics,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceHealthEvaluation represents health evaluation for a service, containing information about the data and
 // the algorithm used by health store to evaluate health. The evaluation is returned only when the aggregated
 // health state is either Error or Warning.
@@ -12799,6 +13999,7 @@ type ServiceHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) MarshalJSON() ([]byte, error) {
 	she.Kind = KindService
@@ -12821,116 +14022,139 @@ func (she ServiceHealthEvaluation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return &she, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &she, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceHealthState represents the health state of a service, which contains the service identifier and its
 // aggregated health state.
 type ServiceHealthState struct {
@@ -12940,6 +14164,7 @@ type ServiceHealthState struct {
 	AggregatedHealthState HealthState `json:"AggregatedHealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceHealthStateChunk represents the health state chunk of a service, which contains the service name, its
 // aggregated health state and any partitions that respect the filters in the cluster health chunk query
 // description.
@@ -12952,6 +14177,7 @@ type ServiceHealthStateChunk struct {
 	HealthState HealthState `json:"HealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceHealthStateChunkList the list of service health state chunks that respect the input filters in the chunk
 // query. Returned by get cluster health state chunks query.
 type ServiceHealthStateChunkList struct {
@@ -12959,6 +14185,7 @@ type ServiceHealthStateChunkList struct {
 	Items *[]ServiceHealthStateChunk `json:"Items,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceHealthStateFilter defines matching criteria to determine whether a service should be included as a child
 // of an application in the cluster health chunk.
 // The services are only returned if the parent application matches a filter specified in the cluster health chunk
@@ -12989,6 +14216,7 @@ type ServiceHealthStateFilter struct {
 	PartitionFilters *[]PartitionHealthStateFilter `json:"PartitionFilters,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicServiceInfo information about a Service Fabric service.
 type BasicServiceInfo interface {
 	AsStatefulServiceInfo() (*StatefulServiceInfo, bool)
@@ -12996,6 +14224,7 @@ type BasicServiceInfo interface {
 	AsServiceInfo() (*ServiceInfo, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceInfo information about a Service Fabric service.
 type ServiceInfo struct {
 	autorest.Response `json:"-"`
@@ -13060,6 +14289,7 @@ func unmarshalBasicServiceInfoArray(body []byte) ([]BasicServiceInfo, error) {
 	return siArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ServiceInfo.
 func (si ServiceInfo) MarshalJSON() ([]byte, error) {
 	si.ServiceKind = ServiceKindBasicServiceInfoServiceKindServiceInfo
@@ -13091,32 +14321,38 @@ func (si ServiceInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceInfo is the BasicServiceInfo implementation for ServiceInfo.
 func (si ServiceInfo) AsStatefulServiceInfo() (*StatefulServiceInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceInfo is the BasicServiceInfo implementation for ServiceInfo.
 func (si ServiceInfo) AsStatelessServiceInfo() (*StatelessServiceInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceInfo is the BasicServiceInfo implementation for ServiceInfo.
 func (si ServiceInfo) AsServiceInfo() (*ServiceInfo, bool) {
 	return &si, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServiceInfo is the BasicServiceInfo implementation for ServiceInfo.
 func (si ServiceInfo) AsBasicServiceInfo() (BasicServiceInfo, bool) {
 	return &si, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceInfoModel ...
 type ServiceInfoModel struct {
 	autorest.Response `json:"-"`
 	Value             BasicServiceInfo `json:"value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for ServiceInfoModel struct.
 func (sim *ServiceInfoModel) UnmarshalJSON(body []byte) error {
 	si, err := unmarshalBasicServiceInfo(body)
@@ -13128,6 +14364,7 @@ func (sim *ServiceInfoModel) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceLoadMetricDescription specifies a metric to load balance a service during runtime.
 type ServiceLoadMetricDescription struct {
 	// Name - The name of the metric. If the service chooses to report load during runtime, the load metric name should match the name that is specified in Name exactly. Note that metric names are case sensitive.
@@ -13142,6 +14379,7 @@ type ServiceLoadMetricDescription struct {
 	DefaultLoad *int32 `json:"DefaultLoad,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceNameInfo information about the service name.
 type ServiceNameInfo struct {
 	autorest.Response `json:"-"`
@@ -13153,6 +14391,7 @@ type ServiceNameInfo struct {
 	Name *string `json:"Name,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicServicePartitionInfo information about a partition of a Service Fabric service.
 type BasicServicePartitionInfo interface {
 	AsStatefulServicePartitionInfo() (*StatefulServicePartitionInfo, bool)
@@ -13160,6 +14399,7 @@ type BasicServicePartitionInfo interface {
 	AsServicePartitionInfo() (*ServicePartitionInfo, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServicePartitionInfo information about a partition of a Service Fabric service.
 type ServicePartitionInfo struct {
 	autorest.Response `json:"-"`
@@ -13214,6 +14454,7 @@ func unmarshalBasicServicePartitionInfoArray(body []byte) ([]BasicServicePartiti
 	return spiArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ServicePartitionInfo.
 func (spi ServicePartitionInfo) MarshalJSON() ([]byte, error) {
 	spi.ServiceKind = ServiceKindBasicServicePartitionInfoServiceKindServicePartitionInfo
@@ -13231,26 +14472,31 @@ func (spi ServicePartitionInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServicePartitionInfo is the BasicServicePartitionInfo implementation for ServicePartitionInfo.
 func (spi ServicePartitionInfo) AsStatefulServicePartitionInfo() (*StatefulServicePartitionInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServicePartitionInfo is the BasicServicePartitionInfo implementation for ServicePartitionInfo.
 func (spi ServicePartitionInfo) AsStatelessServicePartitionInfo() (*StatelessServicePartitionInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePartitionInfo is the BasicServicePartitionInfo implementation for ServicePartitionInfo.
 func (spi ServicePartitionInfo) AsServicePartitionInfo() (*ServicePartitionInfo, bool) {
 	return &spi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServicePartitionInfo is the BasicServicePartitionInfo implementation for ServicePartitionInfo.
 func (spi ServicePartitionInfo) AsBasicServicePartitionInfo() (BasicServicePartitionInfo, bool) {
 	return &spi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for ServicePartitionInfo struct.
 func (spi *ServicePartitionInfo) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -13301,12 +14547,14 @@ func (spi *ServicePartitionInfo) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServicePartitionInfoModel ...
 type ServicePartitionInfoModel struct {
 	autorest.Response `json:"-"`
 	Value             BasicServicePartitionInfo `json:"value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for ServicePartitionInfoModel struct.
 func (spim *ServicePartitionInfoModel) UnmarshalJSON(body []byte) error {
 	spi, err := unmarshalBasicServicePartitionInfo(body)
@@ -13318,6 +14566,7 @@ func (spim *ServicePartitionInfoModel) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServicePlacementInvalidDomainPolicyDescription describes the policy to be used for placement of a Service Fabric
 // service where a particular fault or upgrade domain should not be used for placement of the instances or replicas
 // of that service.
@@ -13328,6 +14577,7 @@ type ServicePlacementInvalidDomainPolicyDescription struct {
 	Type Type `json:"Type,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ServicePlacementInvalidDomainPolicyDescription.
 func (spidpd ServicePlacementInvalidDomainPolicyDescription) MarshalJSON() ([]byte, error) {
 	spidpd.Type = TypeInvalidDomain
@@ -13341,41 +14591,49 @@ func (spidpd ServicePlacementInvalidDomainPolicyDescription) MarshalJSON() ([]by
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementInvalidDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementInvalidDomainPolicyDescription.
 func (spidpd ServicePlacementInvalidDomainPolicyDescription) AsServicePlacementInvalidDomainPolicyDescription() (*ServicePlacementInvalidDomainPolicyDescription, bool) {
 	return &spidpd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementNonPartiallyPlaceServicePolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementInvalidDomainPolicyDescription.
 func (spidpd ServicePlacementInvalidDomainPolicyDescription) AsServicePlacementNonPartiallyPlaceServicePolicyDescription() (*ServicePlacementNonPartiallyPlaceServicePolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementPreferPrimaryDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementInvalidDomainPolicyDescription.
 func (spidpd ServicePlacementInvalidDomainPolicyDescription) AsServicePlacementPreferPrimaryDomainPolicyDescription() (*ServicePlacementPreferPrimaryDomainPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementRequiredDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementInvalidDomainPolicyDescription.
 func (spidpd ServicePlacementInvalidDomainPolicyDescription) AsServicePlacementRequiredDomainPolicyDescription() (*ServicePlacementRequiredDomainPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementRequireDomainDistributionPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementInvalidDomainPolicyDescription.
 func (spidpd ServicePlacementInvalidDomainPolicyDescription) AsServicePlacementRequireDomainDistributionPolicyDescription() (*ServicePlacementRequireDomainDistributionPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementInvalidDomainPolicyDescription.
 func (spidpd ServicePlacementInvalidDomainPolicyDescription) AsServicePlacementPolicyDescription() (*ServicePlacementPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServicePlacementPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementInvalidDomainPolicyDescription.
 func (spidpd ServicePlacementInvalidDomainPolicyDescription) AsBasicServicePlacementPolicyDescription() (BasicServicePlacementPolicyDescription, bool) {
 	return &spidpd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServicePlacementNonPartiallyPlaceServicePolicyDescription describes the policy to be used for placement of a
 // Service Fabric service where all replicas must be able to be placed in order for any replicas to be created.
 type ServicePlacementNonPartiallyPlaceServicePolicyDescription struct {
@@ -13383,6 +14641,7 @@ type ServicePlacementNonPartiallyPlaceServicePolicyDescription struct {
 	Type Type `json:"Type,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ServicePlacementNonPartiallyPlaceServicePolicyDescription.
 func (spnppspd ServicePlacementNonPartiallyPlaceServicePolicyDescription) MarshalJSON() ([]byte, error) {
 	spnppspd.Type = TypeNonPartiallyPlaceService
@@ -13393,41 +14652,49 @@ func (spnppspd ServicePlacementNonPartiallyPlaceServicePolicyDescription) Marsha
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementInvalidDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementNonPartiallyPlaceServicePolicyDescription.
 func (spnppspd ServicePlacementNonPartiallyPlaceServicePolicyDescription) AsServicePlacementInvalidDomainPolicyDescription() (*ServicePlacementInvalidDomainPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementNonPartiallyPlaceServicePolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementNonPartiallyPlaceServicePolicyDescription.
 func (spnppspd ServicePlacementNonPartiallyPlaceServicePolicyDescription) AsServicePlacementNonPartiallyPlaceServicePolicyDescription() (*ServicePlacementNonPartiallyPlaceServicePolicyDescription, bool) {
 	return &spnppspd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementPreferPrimaryDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementNonPartiallyPlaceServicePolicyDescription.
 func (spnppspd ServicePlacementNonPartiallyPlaceServicePolicyDescription) AsServicePlacementPreferPrimaryDomainPolicyDescription() (*ServicePlacementPreferPrimaryDomainPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementRequiredDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementNonPartiallyPlaceServicePolicyDescription.
 func (spnppspd ServicePlacementNonPartiallyPlaceServicePolicyDescription) AsServicePlacementRequiredDomainPolicyDescription() (*ServicePlacementRequiredDomainPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementRequireDomainDistributionPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementNonPartiallyPlaceServicePolicyDescription.
 func (spnppspd ServicePlacementNonPartiallyPlaceServicePolicyDescription) AsServicePlacementRequireDomainDistributionPolicyDescription() (*ServicePlacementRequireDomainDistributionPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementNonPartiallyPlaceServicePolicyDescription.
 func (spnppspd ServicePlacementNonPartiallyPlaceServicePolicyDescription) AsServicePlacementPolicyDescription() (*ServicePlacementPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServicePlacementPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementNonPartiallyPlaceServicePolicyDescription.
 func (spnppspd ServicePlacementNonPartiallyPlaceServicePolicyDescription) AsBasicServicePlacementPolicyDescription() (BasicServicePlacementPolicyDescription, bool) {
 	return &spnppspd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicServicePlacementPolicyDescription describes the policy to be used for placement of a Service Fabric service.
 type BasicServicePlacementPolicyDescription interface {
 	AsServicePlacementInvalidDomainPolicyDescription() (*ServicePlacementInvalidDomainPolicyDescription, bool)
@@ -13438,6 +14705,7 @@ type BasicServicePlacementPolicyDescription interface {
 	AsServicePlacementPolicyDescription() (*ServicePlacementPolicyDescription, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServicePlacementPolicyDescription describes the policy to be used for placement of a Service Fabric service.
 type ServicePlacementPolicyDescription struct {
 	// Type - Possible values include: 'TypeServicePlacementPolicyDescription', 'TypeInvalidDomain', 'TypeNonPartiallyPlaceService', 'TypePreferPrimaryDomain', 'TypeRequireDomain', 'TypeRequireDomainDistribution'
@@ -13497,6 +14765,7 @@ func unmarshalBasicServicePlacementPolicyDescriptionArray(body []byte) ([]BasicS
 	return sppdArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ServicePlacementPolicyDescription.
 func (sppd ServicePlacementPolicyDescription) MarshalJSON() ([]byte, error) {
 	sppd.Type = TypeServicePlacementPolicyDescription
@@ -13507,41 +14776,49 @@ func (sppd ServicePlacementPolicyDescription) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementInvalidDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementPolicyDescription.
 func (sppd ServicePlacementPolicyDescription) AsServicePlacementInvalidDomainPolicyDescription() (*ServicePlacementInvalidDomainPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementNonPartiallyPlaceServicePolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementPolicyDescription.
 func (sppd ServicePlacementPolicyDescription) AsServicePlacementNonPartiallyPlaceServicePolicyDescription() (*ServicePlacementNonPartiallyPlaceServicePolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementPreferPrimaryDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementPolicyDescription.
 func (sppd ServicePlacementPolicyDescription) AsServicePlacementPreferPrimaryDomainPolicyDescription() (*ServicePlacementPreferPrimaryDomainPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementRequiredDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementPolicyDescription.
 func (sppd ServicePlacementPolicyDescription) AsServicePlacementRequiredDomainPolicyDescription() (*ServicePlacementRequiredDomainPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementRequireDomainDistributionPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementPolicyDescription.
 func (sppd ServicePlacementPolicyDescription) AsServicePlacementRequireDomainDistributionPolicyDescription() (*ServicePlacementRequireDomainDistributionPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementPolicyDescription.
 func (sppd ServicePlacementPolicyDescription) AsServicePlacementPolicyDescription() (*ServicePlacementPolicyDescription, bool) {
 	return &sppd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServicePlacementPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementPolicyDescription.
 func (sppd ServicePlacementPolicyDescription) AsBasicServicePlacementPolicyDescription() (BasicServicePlacementPolicyDescription, bool) {
 	return &sppd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServicePlacementPreferPrimaryDomainPolicyDescription describes the policy to be used for placement of a Service
 // Fabric service where the service's Primary replicas should optimally be placed in a particular domain.
 //
@@ -13557,6 +14834,7 @@ type ServicePlacementPreferPrimaryDomainPolicyDescription struct {
 	Type Type `json:"Type,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ServicePlacementPreferPrimaryDomainPolicyDescription.
 func (spppdpd ServicePlacementPreferPrimaryDomainPolicyDescription) MarshalJSON() ([]byte, error) {
 	spppdpd.Type = TypePreferPrimaryDomain
@@ -13570,41 +14848,49 @@ func (spppdpd ServicePlacementPreferPrimaryDomainPolicyDescription) MarshalJSON(
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementInvalidDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementPreferPrimaryDomainPolicyDescription.
 func (spppdpd ServicePlacementPreferPrimaryDomainPolicyDescription) AsServicePlacementInvalidDomainPolicyDescription() (*ServicePlacementInvalidDomainPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementNonPartiallyPlaceServicePolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementPreferPrimaryDomainPolicyDescription.
 func (spppdpd ServicePlacementPreferPrimaryDomainPolicyDescription) AsServicePlacementNonPartiallyPlaceServicePolicyDescription() (*ServicePlacementNonPartiallyPlaceServicePolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementPreferPrimaryDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementPreferPrimaryDomainPolicyDescription.
 func (spppdpd ServicePlacementPreferPrimaryDomainPolicyDescription) AsServicePlacementPreferPrimaryDomainPolicyDescription() (*ServicePlacementPreferPrimaryDomainPolicyDescription, bool) {
 	return &spppdpd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementRequiredDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementPreferPrimaryDomainPolicyDescription.
 func (spppdpd ServicePlacementPreferPrimaryDomainPolicyDescription) AsServicePlacementRequiredDomainPolicyDescription() (*ServicePlacementRequiredDomainPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementRequireDomainDistributionPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementPreferPrimaryDomainPolicyDescription.
 func (spppdpd ServicePlacementPreferPrimaryDomainPolicyDescription) AsServicePlacementRequireDomainDistributionPolicyDescription() (*ServicePlacementRequireDomainDistributionPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementPreferPrimaryDomainPolicyDescription.
 func (spppdpd ServicePlacementPreferPrimaryDomainPolicyDescription) AsServicePlacementPolicyDescription() (*ServicePlacementPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServicePlacementPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementPreferPrimaryDomainPolicyDescription.
 func (spppdpd ServicePlacementPreferPrimaryDomainPolicyDescription) AsBasicServicePlacementPolicyDescription() (BasicServicePlacementPolicyDescription, bool) {
 	return &spppdpd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServicePlacementRequiredDomainPolicyDescription describes the policy to be used for placement of a Service
 // Fabric service where the instances or replicas of that service must be placed in a particular domain
 type ServicePlacementRequiredDomainPolicyDescription struct {
@@ -13614,6 +14900,7 @@ type ServicePlacementRequiredDomainPolicyDescription struct {
 	Type Type `json:"Type,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ServicePlacementRequiredDomainPolicyDescription.
 func (sprdpd ServicePlacementRequiredDomainPolicyDescription) MarshalJSON() ([]byte, error) {
 	sprdpd.Type = TypeRequireDomain
@@ -13627,41 +14914,49 @@ func (sprdpd ServicePlacementRequiredDomainPolicyDescription) MarshalJSON() ([]b
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementInvalidDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementRequiredDomainPolicyDescription.
 func (sprdpd ServicePlacementRequiredDomainPolicyDescription) AsServicePlacementInvalidDomainPolicyDescription() (*ServicePlacementInvalidDomainPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementNonPartiallyPlaceServicePolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementRequiredDomainPolicyDescription.
 func (sprdpd ServicePlacementRequiredDomainPolicyDescription) AsServicePlacementNonPartiallyPlaceServicePolicyDescription() (*ServicePlacementNonPartiallyPlaceServicePolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementPreferPrimaryDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementRequiredDomainPolicyDescription.
 func (sprdpd ServicePlacementRequiredDomainPolicyDescription) AsServicePlacementPreferPrimaryDomainPolicyDescription() (*ServicePlacementPreferPrimaryDomainPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementRequiredDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementRequiredDomainPolicyDescription.
 func (sprdpd ServicePlacementRequiredDomainPolicyDescription) AsServicePlacementRequiredDomainPolicyDescription() (*ServicePlacementRequiredDomainPolicyDescription, bool) {
 	return &sprdpd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementRequireDomainDistributionPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementRequiredDomainPolicyDescription.
 func (sprdpd ServicePlacementRequiredDomainPolicyDescription) AsServicePlacementRequireDomainDistributionPolicyDescription() (*ServicePlacementRequireDomainDistributionPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementRequiredDomainPolicyDescription.
 func (sprdpd ServicePlacementRequiredDomainPolicyDescription) AsServicePlacementPolicyDescription() (*ServicePlacementPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServicePlacementPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementRequiredDomainPolicyDescription.
 func (sprdpd ServicePlacementRequiredDomainPolicyDescription) AsBasicServicePlacementPolicyDescription() (BasicServicePlacementPolicyDescription, bool) {
 	return &sprdpd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServicePlacementRequireDomainDistributionPolicyDescription describes the policy to be used for placement of a
 // Service Fabric service where two replicas from the same partition should never be placed in the same fault or
 // upgrade domain.
@@ -13678,6 +14973,7 @@ type ServicePlacementRequireDomainDistributionPolicyDescription struct {
 	Type Type `json:"Type,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ServicePlacementRequireDomainDistributionPolicyDescription.
 func (sprddpd ServicePlacementRequireDomainDistributionPolicyDescription) MarshalJSON() ([]byte, error) {
 	sprddpd.Type = TypeRequireDomainDistribution
@@ -13691,41 +14987,49 @@ func (sprddpd ServicePlacementRequireDomainDistributionPolicyDescription) Marsha
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementInvalidDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementRequireDomainDistributionPolicyDescription.
 func (sprddpd ServicePlacementRequireDomainDistributionPolicyDescription) AsServicePlacementInvalidDomainPolicyDescription() (*ServicePlacementInvalidDomainPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementNonPartiallyPlaceServicePolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementRequireDomainDistributionPolicyDescription.
 func (sprddpd ServicePlacementRequireDomainDistributionPolicyDescription) AsServicePlacementNonPartiallyPlaceServicePolicyDescription() (*ServicePlacementNonPartiallyPlaceServicePolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementPreferPrimaryDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementRequireDomainDistributionPolicyDescription.
 func (sprddpd ServicePlacementRequireDomainDistributionPolicyDescription) AsServicePlacementPreferPrimaryDomainPolicyDescription() (*ServicePlacementPreferPrimaryDomainPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementRequiredDomainPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementRequireDomainDistributionPolicyDescription.
 func (sprddpd ServicePlacementRequireDomainDistributionPolicyDescription) AsServicePlacementRequiredDomainPolicyDescription() (*ServicePlacementRequiredDomainPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementRequireDomainDistributionPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementRequireDomainDistributionPolicyDescription.
 func (sprddpd ServicePlacementRequireDomainDistributionPolicyDescription) AsServicePlacementRequireDomainDistributionPolicyDescription() (*ServicePlacementRequireDomainDistributionPolicyDescription, bool) {
 	return &sprddpd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePlacementPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementRequireDomainDistributionPolicyDescription.
 func (sprddpd ServicePlacementRequireDomainDistributionPolicyDescription) AsServicePlacementPolicyDescription() (*ServicePlacementPolicyDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServicePlacementPolicyDescription is the BasicServicePlacementPolicyDescription implementation for ServicePlacementRequireDomainDistributionPolicyDescription.
 func (sprddpd ServicePlacementRequireDomainDistributionPolicyDescription) AsBasicServicePlacementPolicyDescription() (BasicServicePlacementPolicyDescription, bool) {
 	return &sprddpd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServicesHealthEvaluation represents health evaluation for services of a certain service type belonging to an
 // application, containing health evaluations for each unhealthy service that impacted current aggregated health
 // state. Can be returned when evaluating application health and the aggregated health state is either Error or
@@ -13747,6 +15051,7 @@ type ServicesHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) MarshalJSON() ([]byte, error) {
 	she.Kind = KindServices
@@ -13775,116 +15080,139 @@ func (she ServicesHealthEvaluation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return &she, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &she, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicServiceTypeDescription describes a service type defined in the service manifest of a provisioned application
 // type. The properties the the ones defined in the service manifest.
 type BasicServiceTypeDescription interface {
@@ -13893,6 +15221,7 @@ type BasicServiceTypeDescription interface {
 	AsServiceTypeDescription() (*ServiceTypeDescription, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceTypeDescription describes a service type defined in the service manifest of a provisioned application
 // type. The properties the the ones defined in the service manifest.
 type ServiceTypeDescription struct {
@@ -13951,6 +15280,7 @@ func unmarshalBasicServiceTypeDescriptionArray(body []byte) ([]BasicServiceTypeD
 	return stdArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ServiceTypeDescription.
 func (std ServiceTypeDescription) MarshalJSON() ([]byte, error) {
 	std.Kind = KindServiceTypeDescription
@@ -13976,26 +15306,31 @@ func (std ServiceTypeDescription) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceTypeDescription is the BasicServiceTypeDescription implementation for ServiceTypeDescription.
 func (std ServiceTypeDescription) AsStatefulServiceTypeDescription() (*StatefulServiceTypeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceTypeDescription is the BasicServiceTypeDescription implementation for ServiceTypeDescription.
 func (std ServiceTypeDescription) AsStatelessServiceTypeDescription() (*StatelessServiceTypeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceTypeDescription is the BasicServiceTypeDescription implementation for ServiceTypeDescription.
 func (std ServiceTypeDescription) AsServiceTypeDescription() (*ServiceTypeDescription, bool) {
 	return &std, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServiceTypeDescription is the BasicServiceTypeDescription implementation for ServiceTypeDescription.
 func (std ServiceTypeDescription) AsBasicServiceTypeDescription() (BasicServiceTypeDescription, bool) {
 	return &std, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for ServiceTypeDescription struct.
 func (std *ServiceTypeDescription) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -14064,6 +15399,7 @@ func (std *ServiceTypeDescription) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceTypeExtensionDescription describes extension of a service type defined in the service manifest.
 type ServiceTypeExtensionDescription struct {
 	// Key - The name of the extension.
@@ -14072,6 +15408,7 @@ type ServiceTypeExtensionDescription struct {
 	Value *string `json:"Value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceTypeHealthPolicy represents the health policy used to evaluate the health of services belonging to a
 // service type.
 type ServiceTypeHealthPolicy struct {
@@ -14095,6 +15432,7 @@ type ServiceTypeHealthPolicy struct {
 	MaxPercentUnhealthyServices *int32 `json:"MaxPercentUnhealthyServices,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceTypeHealthPolicyMapItem defines an item in ServiceTypeHealthPolicyMap.
 type ServiceTypeHealthPolicyMapItem struct {
 	// Key - The key of the service type health policy map item. This is the name of the service type.
@@ -14103,6 +15441,7 @@ type ServiceTypeHealthPolicyMapItem struct {
 	Value *ServiceTypeHealthPolicy `json:"Value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceTypeInfo information about a service type that is defined in a service manifest of a provisioned
 // application type.
 type ServiceTypeInfo struct {
@@ -14116,6 +15455,7 @@ type ServiceTypeInfo struct {
 	IsServiceGroup *bool `json:"IsServiceGroup,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for ServiceTypeInfo struct.
 func (sti *ServiceTypeInfo) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -14166,6 +15506,7 @@ func (sti *ServiceTypeInfo) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceTypeManifest contains the manifest describing a service type registered as part of an application in a
 // Service Fabric cluster.
 type ServiceTypeManifest struct {
@@ -14174,6 +15515,7 @@ type ServiceTypeManifest struct {
 	Manifest *string `json:"Manifest,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BasicServiceUpdateDescription a ServiceUpdateDescription contains all of the information necessary to update a
 // service.
 type BasicServiceUpdateDescription interface {
@@ -14182,6 +15524,7 @@ type BasicServiceUpdateDescription interface {
 	AsServiceUpdateDescription() (*ServiceUpdateDescription, bool)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceUpdateDescription a ServiceUpdateDescription contains all of the information necessary to update a
 // service.
 type ServiceUpdateDescription struct {
@@ -14255,6 +15598,7 @@ func unmarshalBasicServiceUpdateDescriptionArray(body []byte) ([]BasicServiceUpd
 	return sudArray, nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ServiceUpdateDescription.
 func (sud ServiceUpdateDescription) MarshalJSON() ([]byte, error) {
 	sud.ServiceKind = ServiceKindBasicServiceUpdateDescriptionServiceKindServiceUpdateDescription
@@ -14283,26 +15627,31 @@ func (sud ServiceUpdateDescription) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceUpdateDescription is the BasicServiceUpdateDescription implementation for ServiceUpdateDescription.
 func (sud ServiceUpdateDescription) AsStatefulServiceUpdateDescription() (*StatefulServiceUpdateDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceUpdateDescription is the BasicServiceUpdateDescription implementation for ServiceUpdateDescription.
 func (sud ServiceUpdateDescription) AsStatelessServiceUpdateDescription() (*StatelessServiceUpdateDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceUpdateDescription is the BasicServiceUpdateDescription implementation for ServiceUpdateDescription.
 func (sud ServiceUpdateDescription) AsServiceUpdateDescription() (*ServiceUpdateDescription, bool) {
 	return &sud, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServiceUpdateDescription is the BasicServiceUpdateDescription implementation for ServiceUpdateDescription.
 func (sud ServiceUpdateDescription) AsBasicServiceUpdateDescription() (BasicServiceUpdateDescription, bool) {
 	return &sud, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for ServiceUpdateDescription struct.
 func (sud *ServiceUpdateDescription) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -14380,6 +15729,7 @@ func (sud *ServiceUpdateDescription) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SingletonPartitionInformation information about a partition that is singleton. The services with singleton
 // partitioning scheme are effectively non-partitioned. They only have one partition.
 type SingletonPartitionInformation struct {
@@ -14389,6 +15739,7 @@ type SingletonPartitionInformation struct {
 	ServicePartitionKind ServicePartitionKind `json:"ServicePartitionKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for SingletonPartitionInformation.
 func (spi SingletonPartitionInformation) MarshalJSON() ([]byte, error) {
 	spi.ServicePartitionKind = ServicePartitionKindSingleton
@@ -14402,31 +15753,37 @@ func (spi SingletonPartitionInformation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsInt64RangePartitionInformation is the BasicPartitionInformation implementation for SingletonPartitionInformation.
 func (spi SingletonPartitionInformation) AsInt64RangePartitionInformation() (*Int64RangePartitionInformation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNamedPartitionInformation is the BasicPartitionInformation implementation for SingletonPartitionInformation.
 func (spi SingletonPartitionInformation) AsNamedPartitionInformation() (*NamedPartitionInformation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSingletonPartitionInformation is the BasicPartitionInformation implementation for SingletonPartitionInformation.
 func (spi SingletonPartitionInformation) AsSingletonPartitionInformation() (*SingletonPartitionInformation, bool) {
 	return &spi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionInformation is the BasicPartitionInformation implementation for SingletonPartitionInformation.
 func (spi SingletonPartitionInformation) AsPartitionInformation() (*PartitionInformation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPartitionInformation is the BasicPartitionInformation implementation for SingletonPartitionInformation.
 func (spi SingletonPartitionInformation) AsBasicPartitionInformation() (BasicPartitionInformation, bool) {
 	return &spi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SingletonPartitionSchemeDescription describes the partition scheme of a singleton-partitioned, or
 // non-partitioned service.
 type SingletonPartitionSchemeDescription struct {
@@ -14434,6 +15791,7 @@ type SingletonPartitionSchemeDescription struct {
 	PartitionScheme PartitionSchemeBasicPartitionSchemeDescription `json:"PartitionScheme,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for SingletonPartitionSchemeDescription.
 func (spsd SingletonPartitionSchemeDescription) MarshalJSON() ([]byte, error) {
 	spsd.PartitionScheme = PartitionSchemeSingleton1
@@ -14444,31 +15802,37 @@ func (spsd SingletonPartitionSchemeDescription) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNamedPartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for SingletonPartitionSchemeDescription.
 func (spsd SingletonPartitionSchemeDescription) AsNamedPartitionSchemeDescription() (*NamedPartitionSchemeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSingletonPartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for SingletonPartitionSchemeDescription.
 func (spsd SingletonPartitionSchemeDescription) AsSingletonPartitionSchemeDescription() (*SingletonPartitionSchemeDescription, bool) {
 	return &spsd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUniformInt64RangePartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for SingletonPartitionSchemeDescription.
 func (spsd SingletonPartitionSchemeDescription) AsUniformInt64RangePartitionSchemeDescription() (*UniformInt64RangePartitionSchemeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for SingletonPartitionSchemeDescription.
 func (spsd SingletonPartitionSchemeDescription) AsPartitionSchemeDescription() (*PartitionSchemeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for SingletonPartitionSchemeDescription.
 func (spsd SingletonPartitionSchemeDescription) AsBasicPartitionSchemeDescription() (BasicPartitionSchemeDescription, bool) {
 	return &spsd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartClusterUpgradeDescription describes the parameters for starting a cluster upgrade.
 type StartClusterUpgradeDescription struct {
 	// CodeVersion - The cluster code version.
@@ -14495,6 +15859,7 @@ type StartClusterUpgradeDescription struct {
 	ApplicationHealthPolicyMap *ApplicationHealthPolicies `json:"ApplicationHealthPolicyMap,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartedChaosEvent describes a Chaos event that gets generated when Chaos is started.
 type StartedChaosEvent struct {
 	// ChaosParameters - Defines all the parameters to configure a Chaos run.
@@ -14505,6 +15870,7 @@ type StartedChaosEvent struct {
 	Kind KindBasicChaosEvent `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StartedChaosEvent.
 func (sce StartedChaosEvent) MarshalJSON() ([]byte, error) {
 	sce.Kind = KindStarted
@@ -14521,46 +15887,55 @@ func (sce StartedChaosEvent) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsExecutingFaultsChaosEvent is the BasicChaosEvent implementation for StartedChaosEvent.
 func (sce StartedChaosEvent) AsExecutingFaultsChaosEvent() (*ExecutingFaultsChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStartedChaosEvent is the BasicChaosEvent implementation for StartedChaosEvent.
 func (sce StartedChaosEvent) AsStartedChaosEvent() (*StartedChaosEvent, bool) {
 	return &sce, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStoppedChaosEvent is the BasicChaosEvent implementation for StartedChaosEvent.
 func (sce StartedChaosEvent) AsStoppedChaosEvent() (*StoppedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsTestErrorChaosEvent is the BasicChaosEvent implementation for StartedChaosEvent.
 func (sce StartedChaosEvent) AsTestErrorChaosEvent() (*TestErrorChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsValidationFailedChaosEvent is the BasicChaosEvent implementation for StartedChaosEvent.
 func (sce StartedChaosEvent) AsValidationFailedChaosEvent() (*ValidationFailedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitingChaosEvent is the BasicChaosEvent implementation for StartedChaosEvent.
 func (sce StartedChaosEvent) AsWaitingChaosEvent() (*WaitingChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsChaosEvent is the BasicChaosEvent implementation for StartedChaosEvent.
 func (sce StartedChaosEvent) AsChaosEvent() (*ChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicChaosEvent is the BasicChaosEvent implementation for StartedChaosEvent.
 func (sce StartedChaosEvent) AsBasicChaosEvent() (BasicChaosEvent, bool) {
 	return &sce, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StatefulServiceDescription describes a stateful service.
 type StatefulServiceDescription struct {
 	// TargetReplicaSetSize - The target replica set size as a number.
@@ -14613,6 +15988,7 @@ type StatefulServiceDescription struct {
 	ServiceKind ServiceKindBasicServiceDescription `json:"ServiceKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StatefulServiceDescription.
 func (ssd StatefulServiceDescription) MarshalJSON() ([]byte, error) {
 	ssd.ServiceKind = ServiceKindBasicServiceDescriptionServiceKindStateful
@@ -14681,26 +16057,31 @@ func (ssd StatefulServiceDescription) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceDescription is the BasicServiceDescription implementation for StatefulServiceDescription.
 func (ssd StatefulServiceDescription) AsStatefulServiceDescription() (*StatefulServiceDescription, bool) {
 	return &ssd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceDescription is the BasicServiceDescription implementation for StatefulServiceDescription.
 func (ssd StatefulServiceDescription) AsStatelessServiceDescription() (*StatelessServiceDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceDescription is the BasicServiceDescription implementation for StatefulServiceDescription.
 func (ssd StatefulServiceDescription) AsServiceDescription() (*ServiceDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServiceDescription is the BasicServiceDescription implementation for StatefulServiceDescription.
 func (ssd StatefulServiceDescription) AsBasicServiceDescription() (BasicServiceDescription, bool) {
 	return &ssd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for StatefulServiceDescription struct.
 func (ssd *StatefulServiceDescription) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -14903,6 +16284,7 @@ func (ssd *StatefulServiceDescription) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StatefulServiceInfo information about a stateful Service Fabric service.
 type StatefulServiceInfo struct {
 	// HasPersistedState - Whether the service has persisted state.
@@ -14927,6 +16309,7 @@ type StatefulServiceInfo struct {
 	ServiceKind ServiceKindBasicServiceInfo `json:"ServiceKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StatefulServiceInfo.
 func (ssi StatefulServiceInfo) MarshalJSON() ([]byte, error) {
 	ssi.ServiceKind = ServiceKindBasicServiceInfoServiceKindStateful
@@ -14961,26 +16344,31 @@ func (ssi StatefulServiceInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceInfo is the BasicServiceInfo implementation for StatefulServiceInfo.
 func (ssi StatefulServiceInfo) AsStatefulServiceInfo() (*StatefulServiceInfo, bool) {
 	return &ssi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceInfo is the BasicServiceInfo implementation for StatefulServiceInfo.
 func (ssi StatefulServiceInfo) AsStatelessServiceInfo() (*StatelessServiceInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceInfo is the BasicServiceInfo implementation for StatefulServiceInfo.
 func (ssi StatefulServiceInfo) AsServiceInfo() (*ServiceInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServiceInfo is the BasicServiceInfo implementation for StatefulServiceInfo.
 func (ssi StatefulServiceInfo) AsBasicServiceInfo() (BasicServiceInfo, bool) {
 	return &ssi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StatefulServicePartitionInfo information about a partition of a stateful Service Fabric service..
 type StatefulServicePartitionInfo struct {
 	// TargetReplicaSetSize - The target replica set size as a number.
@@ -15001,6 +16389,7 @@ type StatefulServicePartitionInfo struct {
 	ServiceKind ServiceKindBasicServicePartitionInfo `json:"ServiceKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StatefulServicePartitionInfo.
 func (sspi StatefulServicePartitionInfo) MarshalJSON() ([]byte, error) {
 	sspi.ServiceKind = ServiceKindBasicServicePartitionInfoServiceKindStateful
@@ -15030,26 +16419,31 @@ func (sspi StatefulServicePartitionInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServicePartitionInfo is the BasicServicePartitionInfo implementation for StatefulServicePartitionInfo.
 func (sspi StatefulServicePartitionInfo) AsStatefulServicePartitionInfo() (*StatefulServicePartitionInfo, bool) {
 	return &sspi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServicePartitionInfo is the BasicServicePartitionInfo implementation for StatefulServicePartitionInfo.
 func (sspi StatefulServicePartitionInfo) AsStatelessServicePartitionInfo() (*StatelessServicePartitionInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePartitionInfo is the BasicServicePartitionInfo implementation for StatefulServicePartitionInfo.
 func (sspi StatefulServicePartitionInfo) AsServicePartitionInfo() (*ServicePartitionInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServicePartitionInfo is the BasicServicePartitionInfo implementation for StatefulServicePartitionInfo.
 func (sspi StatefulServicePartitionInfo) AsBasicServicePartitionInfo() (BasicServicePartitionInfo, bool) {
 	return &sspi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for StatefulServicePartitionInfo struct.
 func (sspi *StatefulServicePartitionInfo) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -15136,6 +16530,7 @@ func (sspi *StatefulServicePartitionInfo) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StatefulServiceReplicaHealth represents the health of the stateful service replica.
 // Contains the replica aggregated health state, the health events and the unhealthy evaluations.
 type StatefulServiceReplicaHealth struct {
@@ -15158,6 +16553,7 @@ type StatefulServiceReplicaHealth struct {
 	HealthStatistics *HealthStatistics `json:"HealthStatistics,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StatefulServiceReplicaHealth.
 func (ssrh StatefulServiceReplicaHealth) MarshalJSON() ([]byte, error) {
 	ssrh.ServiceKind = ServiceKindBasicReplicaHealthServiceKindStateful
@@ -15186,26 +16582,31 @@ func (ssrh StatefulServiceReplicaHealth) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceReplicaHealth is the BasicReplicaHealth implementation for StatefulServiceReplicaHealth.
 func (ssrh StatefulServiceReplicaHealth) AsStatefulServiceReplicaHealth() (*StatefulServiceReplicaHealth, bool) {
 	return &ssrh, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceInstanceHealth is the BasicReplicaHealth implementation for StatefulServiceReplicaHealth.
 func (ssrh StatefulServiceReplicaHealth) AsStatelessServiceInstanceHealth() (*StatelessServiceInstanceHealth, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealth is the BasicReplicaHealth implementation for StatefulServiceReplicaHealth.
 func (ssrh StatefulServiceReplicaHealth) AsReplicaHealth() (*ReplicaHealth, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicReplicaHealth is the BasicReplicaHealth implementation for StatefulServiceReplicaHealth.
 func (ssrh StatefulServiceReplicaHealth) AsBasicReplicaHealth() (BasicReplicaHealth, bool) {
 	return &ssrh, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StatefulServiceReplicaHealthState represents the health state of the stateful service replica, which contains
 // the replica id and the aggregated health state.
 type StatefulServiceReplicaHealthState struct {
@@ -15219,6 +16620,7 @@ type StatefulServiceReplicaHealthState struct {
 	AggregatedHealthState HealthState `json:"AggregatedHealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StatefulServiceReplicaHealthState.
 func (ssrhs StatefulServiceReplicaHealthState) MarshalJSON() ([]byte, error) {
 	ssrhs.ServiceKind = ServiceKindBasicReplicaHealthStateServiceKindStateful
@@ -15238,26 +16640,31 @@ func (ssrhs StatefulServiceReplicaHealthState) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceReplicaHealthState is the BasicReplicaHealthState implementation for StatefulServiceReplicaHealthState.
 func (ssrhs StatefulServiceReplicaHealthState) AsStatefulServiceReplicaHealthState() (*StatefulServiceReplicaHealthState, bool) {
 	return &ssrhs, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceInstanceHealthState is the BasicReplicaHealthState implementation for StatefulServiceReplicaHealthState.
 func (ssrhs StatefulServiceReplicaHealthState) AsStatelessServiceInstanceHealthState() (*StatelessServiceInstanceHealthState, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthState is the BasicReplicaHealthState implementation for StatefulServiceReplicaHealthState.
 func (ssrhs StatefulServiceReplicaHealthState) AsReplicaHealthState() (*ReplicaHealthState, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicReplicaHealthState is the BasicReplicaHealthState implementation for StatefulServiceReplicaHealthState.
 func (ssrhs StatefulServiceReplicaHealthState) AsBasicReplicaHealthState() (BasicReplicaHealthState, bool) {
 	return &ssrhs, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StatefulServiceReplicaInfo represents a stateful service replica. This includes information about the identity,
 // role, status, health, node name, uptime, and other details about the replica.
 type StatefulServiceReplicaInfo struct {
@@ -15286,6 +16693,7 @@ type StatefulServiceReplicaInfo struct {
 	ServiceKind ServiceKindBasicReplicaInfo `json:"ServiceKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StatefulServiceReplicaInfo.
 func (ssri StatefulServiceReplicaInfo) MarshalJSON() ([]byte, error) {
 	ssri.ServiceKind = ServiceKindBasicReplicaInfoServiceKindStateful
@@ -15317,26 +16725,31 @@ func (ssri StatefulServiceReplicaInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceReplicaInfo is the BasicReplicaInfo implementation for StatefulServiceReplicaInfo.
 func (ssri StatefulServiceReplicaInfo) AsStatefulServiceReplicaInfo() (*StatefulServiceReplicaInfo, bool) {
 	return &ssri, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceInstanceInfo is the BasicReplicaInfo implementation for StatefulServiceReplicaInfo.
 func (ssri StatefulServiceReplicaInfo) AsStatelessServiceInstanceInfo() (*StatelessServiceInstanceInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaInfo is the BasicReplicaInfo implementation for StatefulServiceReplicaInfo.
 func (ssri StatefulServiceReplicaInfo) AsReplicaInfo() (*ReplicaInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicReplicaInfo is the BasicReplicaInfo implementation for StatefulServiceReplicaInfo.
 func (ssri StatefulServiceReplicaInfo) AsBasicReplicaInfo() (BasicReplicaInfo, bool) {
 	return &ssri, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StatefulServiceTypeDescription describes a stateful service type defined in the service manifest of a
 // provisioned application type.
 type StatefulServiceTypeDescription struct {
@@ -15356,6 +16769,7 @@ type StatefulServiceTypeDescription struct {
 	Kind KindBasicServiceTypeDescription `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StatefulServiceTypeDescription.
 func (sstd StatefulServiceTypeDescription) MarshalJSON() ([]byte, error) {
 	sstd.Kind = KindStateful
@@ -15384,26 +16798,31 @@ func (sstd StatefulServiceTypeDescription) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceTypeDescription is the BasicServiceTypeDescription implementation for StatefulServiceTypeDescription.
 func (sstd StatefulServiceTypeDescription) AsStatefulServiceTypeDescription() (*StatefulServiceTypeDescription, bool) {
 	return &sstd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceTypeDescription is the BasicServiceTypeDescription implementation for StatefulServiceTypeDescription.
 func (sstd StatefulServiceTypeDescription) AsStatelessServiceTypeDescription() (*StatelessServiceTypeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceTypeDescription is the BasicServiceTypeDescription implementation for StatefulServiceTypeDescription.
 func (sstd StatefulServiceTypeDescription) AsServiceTypeDescription() (*ServiceTypeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServiceTypeDescription is the BasicServiceTypeDescription implementation for StatefulServiceTypeDescription.
 func (sstd StatefulServiceTypeDescription) AsBasicServiceTypeDescription() (BasicServiceTypeDescription, bool) {
 	return &sstd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for StatefulServiceTypeDescription struct.
 func (sstd *StatefulServiceTypeDescription) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -15481,6 +16900,7 @@ func (sstd *StatefulServiceTypeDescription) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StatefulServiceUpdateDescription describes an update for a stateful service.
 type StatefulServiceUpdateDescription struct {
 	// TargetReplicaSetSize - The target replica set size as a number.
@@ -15522,6 +16942,7 @@ type StatefulServiceUpdateDescription struct {
 	ServiceKind ServiceKindBasicServiceUpdateDescription `json:"ServiceKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StatefulServiceUpdateDescription.
 func (ssud StatefulServiceUpdateDescription) MarshalJSON() ([]byte, error) {
 	ssud.ServiceKind = ServiceKindBasicServiceUpdateDescriptionServiceKindStateful
@@ -15565,26 +16986,31 @@ func (ssud StatefulServiceUpdateDescription) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceUpdateDescription is the BasicServiceUpdateDescription implementation for StatefulServiceUpdateDescription.
 func (ssud StatefulServiceUpdateDescription) AsStatefulServiceUpdateDescription() (*StatefulServiceUpdateDescription, bool) {
 	return &ssud, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceUpdateDescription is the BasicServiceUpdateDescription implementation for StatefulServiceUpdateDescription.
 func (ssud StatefulServiceUpdateDescription) AsStatelessServiceUpdateDescription() (*StatelessServiceUpdateDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceUpdateDescription is the BasicServiceUpdateDescription implementation for StatefulServiceUpdateDescription.
 func (ssud StatefulServiceUpdateDescription) AsServiceUpdateDescription() (*ServiceUpdateDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServiceUpdateDescription is the BasicServiceUpdateDescription implementation for StatefulServiceUpdateDescription.
 func (ssud StatefulServiceUpdateDescription) AsBasicServiceUpdateDescription() (BasicServiceUpdateDescription, bool) {
 	return &ssud, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for StatefulServiceUpdateDescription struct.
 func (ssud *StatefulServiceUpdateDescription) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -15707,6 +17133,7 @@ func (ssud *StatefulServiceUpdateDescription) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StatelessServiceDescription describes a stateless service.
 type StatelessServiceDescription struct {
 	// InstanceCount - The instance count.
@@ -15741,6 +17168,7 @@ type StatelessServiceDescription struct {
 	ServiceKind ServiceKindBasicServiceDescription `json:"ServiceKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StatelessServiceDescription.
 func (ssd StatelessServiceDescription) MarshalJSON() ([]byte, error) {
 	ssd.ServiceKind = ServiceKindBasicServiceDescriptionServiceKindStateless
@@ -15791,26 +17219,31 @@ func (ssd StatelessServiceDescription) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceDescription is the BasicServiceDescription implementation for StatelessServiceDescription.
 func (ssd StatelessServiceDescription) AsStatefulServiceDescription() (*StatefulServiceDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceDescription is the BasicServiceDescription implementation for StatelessServiceDescription.
 func (ssd StatelessServiceDescription) AsStatelessServiceDescription() (*StatelessServiceDescription, bool) {
 	return &ssd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceDescription is the BasicServiceDescription implementation for StatelessServiceDescription.
 func (ssd StatelessServiceDescription) AsServiceDescription() (*ServiceDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServiceDescription is the BasicServiceDescription implementation for StatelessServiceDescription.
 func (ssd StatelessServiceDescription) AsBasicServiceDescription() (BasicServiceDescription, bool) {
 	return &ssd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for StatelessServiceDescription struct.
 func (ssd *StatelessServiceDescription) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -15959,6 +17392,7 @@ func (ssd *StatelessServiceDescription) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StatelessServiceInfo information about a stateless Service Fabric service.
 type StatelessServiceInfo struct {
 	// ID - The identity of the service. This is an encoded representation of the service name. This is used in the REST APIs to identify the service resource.
@@ -15981,6 +17415,7 @@ type StatelessServiceInfo struct {
 	ServiceKind ServiceKindBasicServiceInfo `json:"ServiceKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StatelessServiceInfo.
 func (ssi StatelessServiceInfo) MarshalJSON() ([]byte, error) {
 	ssi.ServiceKind = ServiceKindBasicServiceInfoServiceKindStateless
@@ -16012,26 +17447,31 @@ func (ssi StatelessServiceInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceInfo is the BasicServiceInfo implementation for StatelessServiceInfo.
 func (ssi StatelessServiceInfo) AsStatefulServiceInfo() (*StatefulServiceInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceInfo is the BasicServiceInfo implementation for StatelessServiceInfo.
 func (ssi StatelessServiceInfo) AsStatelessServiceInfo() (*StatelessServiceInfo, bool) {
 	return &ssi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceInfo is the BasicServiceInfo implementation for StatelessServiceInfo.
 func (ssi StatelessServiceInfo) AsServiceInfo() (*ServiceInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServiceInfo is the BasicServiceInfo implementation for StatelessServiceInfo.
 func (ssi StatelessServiceInfo) AsBasicServiceInfo() (BasicServiceInfo, bool) {
 	return &ssi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StatelessServiceInstanceHealth represents the health of the stateless service instance.
 // Contains the instance aggregated health state, the health events and the unhealthy evaluations.
 type StatelessServiceInstanceHealth struct {
@@ -16054,6 +17494,7 @@ type StatelessServiceInstanceHealth struct {
 	HealthStatistics *HealthStatistics `json:"HealthStatistics,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StatelessServiceInstanceHealth.
 func (ssih StatelessServiceInstanceHealth) MarshalJSON() ([]byte, error) {
 	ssih.ServiceKind = ServiceKindBasicReplicaHealthServiceKindStateless
@@ -16082,26 +17523,31 @@ func (ssih StatelessServiceInstanceHealth) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceReplicaHealth is the BasicReplicaHealth implementation for StatelessServiceInstanceHealth.
 func (ssih StatelessServiceInstanceHealth) AsStatefulServiceReplicaHealth() (*StatefulServiceReplicaHealth, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceInstanceHealth is the BasicReplicaHealth implementation for StatelessServiceInstanceHealth.
 func (ssih StatelessServiceInstanceHealth) AsStatelessServiceInstanceHealth() (*StatelessServiceInstanceHealth, bool) {
 	return &ssih, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealth is the BasicReplicaHealth implementation for StatelessServiceInstanceHealth.
 func (ssih StatelessServiceInstanceHealth) AsReplicaHealth() (*ReplicaHealth, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicReplicaHealth is the BasicReplicaHealth implementation for StatelessServiceInstanceHealth.
 func (ssih StatelessServiceInstanceHealth) AsBasicReplicaHealth() (BasicReplicaHealth, bool) {
 	return &ssih, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StatelessServiceInstanceHealthState represents the health state of the stateless service instance, which
 // contains the instance id and the aggregated health state.
 type StatelessServiceInstanceHealthState struct {
@@ -16115,6 +17561,7 @@ type StatelessServiceInstanceHealthState struct {
 	AggregatedHealthState HealthState `json:"AggregatedHealthState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StatelessServiceInstanceHealthState.
 func (ssihs StatelessServiceInstanceHealthState) MarshalJSON() ([]byte, error) {
 	ssihs.ServiceKind = ServiceKindBasicReplicaHealthStateServiceKindStateless
@@ -16134,26 +17581,31 @@ func (ssihs StatelessServiceInstanceHealthState) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceReplicaHealthState is the BasicReplicaHealthState implementation for StatelessServiceInstanceHealthState.
 func (ssihs StatelessServiceInstanceHealthState) AsStatefulServiceReplicaHealthState() (*StatefulServiceReplicaHealthState, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceInstanceHealthState is the BasicReplicaHealthState implementation for StatelessServiceInstanceHealthState.
 func (ssihs StatelessServiceInstanceHealthState) AsStatelessServiceInstanceHealthState() (*StatelessServiceInstanceHealthState, bool) {
 	return &ssihs, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthState is the BasicReplicaHealthState implementation for StatelessServiceInstanceHealthState.
 func (ssihs StatelessServiceInstanceHealthState) AsReplicaHealthState() (*ReplicaHealthState, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicReplicaHealthState is the BasicReplicaHealthState implementation for StatelessServiceInstanceHealthState.
 func (ssihs StatelessServiceInstanceHealthState) AsBasicReplicaHealthState() (BasicReplicaHealthState, bool) {
 	return &ssihs, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StatelessServiceInstanceInfo represents a stateless service instance. This includes information about the
 // identity, status, health, node name, uptime, and other details about the instance.
 type StatelessServiceInstanceInfo struct {
@@ -16180,6 +17632,7 @@ type StatelessServiceInstanceInfo struct {
 	ServiceKind ServiceKindBasicReplicaInfo `json:"ServiceKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StatelessServiceInstanceInfo.
 func (ssii StatelessServiceInstanceInfo) MarshalJSON() ([]byte, error) {
 	ssii.ServiceKind = ServiceKindBasicReplicaInfoServiceKindStateless
@@ -16208,26 +17661,31 @@ func (ssii StatelessServiceInstanceInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceReplicaInfo is the BasicReplicaInfo implementation for StatelessServiceInstanceInfo.
 func (ssii StatelessServiceInstanceInfo) AsStatefulServiceReplicaInfo() (*StatefulServiceReplicaInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceInstanceInfo is the BasicReplicaInfo implementation for StatelessServiceInstanceInfo.
 func (ssii StatelessServiceInstanceInfo) AsStatelessServiceInstanceInfo() (*StatelessServiceInstanceInfo, bool) {
 	return &ssii, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaInfo is the BasicReplicaInfo implementation for StatelessServiceInstanceInfo.
 func (ssii StatelessServiceInstanceInfo) AsReplicaInfo() (*ReplicaInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicReplicaInfo is the BasicReplicaInfo implementation for StatelessServiceInstanceInfo.
 func (ssii StatelessServiceInstanceInfo) AsBasicReplicaInfo() (BasicReplicaInfo, bool) {
 	return &ssii, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StatelessServicePartitionInfo information about a partition of a stateless Service Fabric service.
 type StatelessServicePartitionInfo struct {
 	// InstanceCount - Number of instances of this partition.
@@ -16242,6 +17700,7 @@ type StatelessServicePartitionInfo struct {
 	ServiceKind ServiceKindBasicServicePartitionInfo `json:"ServiceKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StatelessServicePartitionInfo.
 func (sspi StatelessServicePartitionInfo) MarshalJSON() ([]byte, error) {
 	sspi.ServiceKind = ServiceKindBasicServicePartitionInfoServiceKindStateless
@@ -16262,26 +17721,31 @@ func (sspi StatelessServicePartitionInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServicePartitionInfo is the BasicServicePartitionInfo implementation for StatelessServicePartitionInfo.
 func (sspi StatelessServicePartitionInfo) AsStatefulServicePartitionInfo() (*StatefulServicePartitionInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServicePartitionInfo is the BasicServicePartitionInfo implementation for StatelessServicePartitionInfo.
 func (sspi StatelessServicePartitionInfo) AsStatelessServicePartitionInfo() (*StatelessServicePartitionInfo, bool) {
 	return &sspi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicePartitionInfo is the BasicServicePartitionInfo implementation for StatelessServicePartitionInfo.
 func (sspi StatelessServicePartitionInfo) AsServicePartitionInfo() (*ServicePartitionInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServicePartitionInfo is the BasicServicePartitionInfo implementation for StatelessServicePartitionInfo.
 func (sspi StatelessServicePartitionInfo) AsBasicServicePartitionInfo() (BasicServicePartitionInfo, bool) {
 	return &sspi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for StatelessServicePartitionInfo struct.
 func (sspi *StatelessServicePartitionInfo) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -16341,6 +17805,7 @@ func (sspi *StatelessServicePartitionInfo) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StatelessServiceTypeDescription describes a stateless service type defined in the service manifest of a
 // provisioned application type.
 type StatelessServiceTypeDescription struct {
@@ -16360,6 +17825,7 @@ type StatelessServiceTypeDescription struct {
 	Kind KindBasicServiceTypeDescription `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StatelessServiceTypeDescription.
 func (sstd StatelessServiceTypeDescription) MarshalJSON() ([]byte, error) {
 	sstd.Kind = KindStateless
@@ -16388,26 +17854,31 @@ func (sstd StatelessServiceTypeDescription) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceTypeDescription is the BasicServiceTypeDescription implementation for StatelessServiceTypeDescription.
 func (sstd StatelessServiceTypeDescription) AsStatefulServiceTypeDescription() (*StatefulServiceTypeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceTypeDescription is the BasicServiceTypeDescription implementation for StatelessServiceTypeDescription.
 func (sstd StatelessServiceTypeDescription) AsStatelessServiceTypeDescription() (*StatelessServiceTypeDescription, bool) {
 	return &sstd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceTypeDescription is the BasicServiceTypeDescription implementation for StatelessServiceTypeDescription.
 func (sstd StatelessServiceTypeDescription) AsServiceTypeDescription() (*ServiceTypeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServiceTypeDescription is the BasicServiceTypeDescription implementation for StatelessServiceTypeDescription.
 func (sstd StatelessServiceTypeDescription) AsBasicServiceTypeDescription() (BasicServiceTypeDescription, bool) {
 	return &sstd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for StatelessServiceTypeDescription struct.
 func (sstd *StatelessServiceTypeDescription) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -16485,6 +17956,7 @@ func (sstd *StatelessServiceTypeDescription) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StatelessServiceUpdateDescription describes an update for a stateless service.
 type StatelessServiceUpdateDescription struct {
 	// InstanceCount - The instance count.
@@ -16518,6 +17990,7 @@ type StatelessServiceUpdateDescription struct {
 	ServiceKind ServiceKindBasicServiceUpdateDescription `json:"ServiceKind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StatelessServiceUpdateDescription.
 func (ssud StatelessServiceUpdateDescription) MarshalJSON() ([]byte, error) {
 	ssud.ServiceKind = ServiceKindBasicServiceUpdateDescriptionServiceKindStateless
@@ -16549,26 +18022,31 @@ func (ssud StatelessServiceUpdateDescription) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatefulServiceUpdateDescription is the BasicServiceUpdateDescription implementation for StatelessServiceUpdateDescription.
 func (ssud StatelessServiceUpdateDescription) AsStatefulServiceUpdateDescription() (*StatefulServiceUpdateDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStatelessServiceUpdateDescription is the BasicServiceUpdateDescription implementation for StatelessServiceUpdateDescription.
 func (ssud StatelessServiceUpdateDescription) AsStatelessServiceUpdateDescription() (*StatelessServiceUpdateDescription, bool) {
 	return &ssud, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceUpdateDescription is the BasicServiceUpdateDescription implementation for StatelessServiceUpdateDescription.
 func (ssud StatelessServiceUpdateDescription) AsServiceUpdateDescription() (*ServiceUpdateDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicServiceUpdateDescription is the BasicServiceUpdateDescription implementation for StatelessServiceUpdateDescription.
 func (ssud StatelessServiceUpdateDescription) AsBasicServiceUpdateDescription() (BasicServiceUpdateDescription, bool) {
 	return &ssud, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnmarshalJSON is the custom unmarshaler for StatelessServiceUpdateDescription struct.
 func (ssud *StatelessServiceUpdateDescription) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -16655,6 +18133,7 @@ func (ssud *StatelessServiceUpdateDescription) UnmarshalJSON(body []byte) error 
 	return nil
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StoppedChaosEvent describes a Chaos event that gets generated when Chaos stops because either the user issued a
 // stop or the time to run was up.
 type StoppedChaosEvent struct {
@@ -16666,6 +18145,7 @@ type StoppedChaosEvent struct {
 	Kind KindBasicChaosEvent `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StoppedChaosEvent.
 func (sce StoppedChaosEvent) MarshalJSON() ([]byte, error) {
 	sce.Kind = KindStopped
@@ -16682,52 +18162,62 @@ func (sce StoppedChaosEvent) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsExecutingFaultsChaosEvent is the BasicChaosEvent implementation for StoppedChaosEvent.
 func (sce StoppedChaosEvent) AsExecutingFaultsChaosEvent() (*ExecutingFaultsChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStartedChaosEvent is the BasicChaosEvent implementation for StoppedChaosEvent.
 func (sce StoppedChaosEvent) AsStartedChaosEvent() (*StartedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStoppedChaosEvent is the BasicChaosEvent implementation for StoppedChaosEvent.
 func (sce StoppedChaosEvent) AsStoppedChaosEvent() (*StoppedChaosEvent, bool) {
 	return &sce, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsTestErrorChaosEvent is the BasicChaosEvent implementation for StoppedChaosEvent.
 func (sce StoppedChaosEvent) AsTestErrorChaosEvent() (*TestErrorChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsValidationFailedChaosEvent is the BasicChaosEvent implementation for StoppedChaosEvent.
 func (sce StoppedChaosEvent) AsValidationFailedChaosEvent() (*ValidationFailedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitingChaosEvent is the BasicChaosEvent implementation for StoppedChaosEvent.
 func (sce StoppedChaosEvent) AsWaitingChaosEvent() (*WaitingChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsChaosEvent is the BasicChaosEvent implementation for StoppedChaosEvent.
 func (sce StoppedChaosEvent) AsChaosEvent() (*ChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicChaosEvent is the BasicChaosEvent implementation for StoppedChaosEvent.
 func (sce StoppedChaosEvent) AsBasicChaosEvent() (BasicChaosEvent, bool) {
 	return &sce, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // String ...
 type String struct {
 	autorest.Response `json:"-"`
 	Value             *string `json:"value,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StringPropertyValue describes a Service Fabric property value of type String.
 type StringPropertyValue struct {
 	// Data - The data of the property value.
@@ -16736,6 +18226,7 @@ type StringPropertyValue struct {
 	Kind KindBasicPropertyValue `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for StringPropertyValue.
 func (spv StringPropertyValue) MarshalJSON() ([]byte, error) {
 	spv.Kind = KindString
@@ -16749,41 +18240,49 @@ func (spv StringPropertyValue) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBinaryPropertyValue is the BasicPropertyValue implementation for StringPropertyValue.
 func (spv StringPropertyValue) AsBinaryPropertyValue() (*BinaryPropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsInt64PropertyValue is the BasicPropertyValue implementation for StringPropertyValue.
 func (spv StringPropertyValue) AsInt64PropertyValue() (*Int64PropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDoublePropertyValue is the BasicPropertyValue implementation for StringPropertyValue.
 func (spv StringPropertyValue) AsDoublePropertyValue() (*DoublePropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStringPropertyValue is the BasicPropertyValue implementation for StringPropertyValue.
 func (spv StringPropertyValue) AsStringPropertyValue() (*StringPropertyValue, bool) {
 	return &spv, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsGUIDPropertyValue is the BasicPropertyValue implementation for StringPropertyValue.
 func (spv StringPropertyValue) AsGUIDPropertyValue() (*GUIDPropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPropertyValue is the BasicPropertyValue implementation for StringPropertyValue.
 func (spv StringPropertyValue) AsPropertyValue() (*PropertyValue, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPropertyValue is the BasicPropertyValue implementation for StringPropertyValue.
 func (spv StringPropertyValue) AsBasicPropertyValue() (BasicPropertyValue, bool) {
 	return &spv, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SuccessfulPropertyBatchInfo derived from PropertyBatchInfo. Represents the property batch succeeding. Contains
 // the results of any "Get" operations in the batch.
 type SuccessfulPropertyBatchInfo struct {
@@ -16793,6 +18292,7 @@ type SuccessfulPropertyBatchInfo struct {
 	Kind KindBasicPropertyBatchInfo `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for SuccessfulPropertyBatchInfo.
 func (spbi SuccessfulPropertyBatchInfo) MarshalJSON() ([]byte, error) {
 	spbi.Kind = KindSuccessful
@@ -16806,26 +18306,31 @@ func (spbi SuccessfulPropertyBatchInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSuccessfulPropertyBatchInfo is the BasicPropertyBatchInfo implementation for SuccessfulPropertyBatchInfo.
 func (spbi SuccessfulPropertyBatchInfo) AsSuccessfulPropertyBatchInfo() (*SuccessfulPropertyBatchInfo, bool) {
 	return &spbi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsFailedPropertyBatchInfo is the BasicPropertyBatchInfo implementation for SuccessfulPropertyBatchInfo.
 func (spbi SuccessfulPropertyBatchInfo) AsFailedPropertyBatchInfo() (*FailedPropertyBatchInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPropertyBatchInfo is the BasicPropertyBatchInfo implementation for SuccessfulPropertyBatchInfo.
 func (spbi SuccessfulPropertyBatchInfo) AsPropertyBatchInfo() (*PropertyBatchInfo, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPropertyBatchInfo is the BasicPropertyBatchInfo implementation for SuccessfulPropertyBatchInfo.
 func (spbi SuccessfulPropertyBatchInfo) AsBasicPropertyBatchInfo() (BasicPropertyBatchInfo, bool) {
 	return &spbi, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SystemApplicationHealthEvaluation represents health evaluation for the fabric:/System application, containing
 // information about the data and the algorithm used by health store to evaluate health. The evaluation is returned
 // only when the aggregated health state of the cluster is either Error or Warning.
@@ -16840,6 +18345,7 @@ type SystemApplicationHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) MarshalJSON() ([]byte, error) {
 	sahe.Kind = KindSystemApplication
@@ -16859,116 +18365,139 @@ func (sahe SystemApplicationHealthEvaluation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return &sahe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &sahe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // TestErrorChaosEvent describes a Chaos event that gets generated when an unexpected event occurs in the Chaos
 // engine.
 // For example, due to the cluster snapshot being inconsistent, while faulting an entity, Chaos found that the
@@ -16982,6 +18511,7 @@ type TestErrorChaosEvent struct {
 	Kind KindBasicChaosEvent `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for TestErrorChaosEvent.
 func (tece TestErrorChaosEvent) MarshalJSON() ([]byte, error) {
 	tece.Kind = KindTestError
@@ -16998,46 +18528,55 @@ func (tece TestErrorChaosEvent) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsExecutingFaultsChaosEvent is the BasicChaosEvent implementation for TestErrorChaosEvent.
 func (tece TestErrorChaosEvent) AsExecutingFaultsChaosEvent() (*ExecutingFaultsChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStartedChaosEvent is the BasicChaosEvent implementation for TestErrorChaosEvent.
 func (tece TestErrorChaosEvent) AsStartedChaosEvent() (*StartedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStoppedChaosEvent is the BasicChaosEvent implementation for TestErrorChaosEvent.
 func (tece TestErrorChaosEvent) AsStoppedChaosEvent() (*StoppedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsTestErrorChaosEvent is the BasicChaosEvent implementation for TestErrorChaosEvent.
 func (tece TestErrorChaosEvent) AsTestErrorChaosEvent() (*TestErrorChaosEvent, bool) {
 	return &tece, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsValidationFailedChaosEvent is the BasicChaosEvent implementation for TestErrorChaosEvent.
 func (tece TestErrorChaosEvent) AsValidationFailedChaosEvent() (*ValidationFailedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitingChaosEvent is the BasicChaosEvent implementation for TestErrorChaosEvent.
 func (tece TestErrorChaosEvent) AsWaitingChaosEvent() (*WaitingChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsChaosEvent is the BasicChaosEvent implementation for TestErrorChaosEvent.
 func (tece TestErrorChaosEvent) AsChaosEvent() (*ChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicChaosEvent is the BasicChaosEvent implementation for TestErrorChaosEvent.
 func (tece TestErrorChaosEvent) AsBasicChaosEvent() (BasicChaosEvent, bool) {
 	return &tece, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UniformInt64RangePartitionSchemeDescription describes a partitioning scheme where an integer range is allocated
 // evenly across a number of partitions.
 type UniformInt64RangePartitionSchemeDescription struct {
@@ -17053,6 +18592,7 @@ type UniformInt64RangePartitionSchemeDescription struct {
 	PartitionScheme PartitionSchemeBasicPartitionSchemeDescription `json:"PartitionScheme,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for UniformInt64RangePartitionSchemeDescription.
 func (ui6rpsd UniformInt64RangePartitionSchemeDescription) MarshalJSON() ([]byte, error) {
 	ui6rpsd.PartitionScheme = PartitionSchemeUniformInt64Range1
@@ -17072,31 +18612,37 @@ func (ui6rpsd UniformInt64RangePartitionSchemeDescription) MarshalJSON() ([]byte
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNamedPartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for UniformInt64RangePartitionSchemeDescription.
 func (ui6rpsd UniformInt64RangePartitionSchemeDescription) AsNamedPartitionSchemeDescription() (*NamedPartitionSchemeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSingletonPartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for UniformInt64RangePartitionSchemeDescription.
 func (ui6rpsd UniformInt64RangePartitionSchemeDescription) AsSingletonPartitionSchemeDescription() (*SingletonPartitionSchemeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUniformInt64RangePartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for UniformInt64RangePartitionSchemeDescription.
 func (ui6rpsd UniformInt64RangePartitionSchemeDescription) AsUniformInt64RangePartitionSchemeDescription() (*UniformInt64RangePartitionSchemeDescription, bool) {
 	return &ui6rpsd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for UniformInt64RangePartitionSchemeDescription.
 func (ui6rpsd UniformInt64RangePartitionSchemeDescription) AsPartitionSchemeDescription() (*PartitionSchemeDescription, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPartitionSchemeDescription is the BasicPartitionSchemeDescription implementation for UniformInt64RangePartitionSchemeDescription.
 func (ui6rpsd UniformInt64RangePartitionSchemeDescription) AsBasicPartitionSchemeDescription() (BasicPartitionSchemeDescription, bool) {
 	return &ui6rpsd, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnprovisionApplicationTypeDescriptionInfo describes the operation to unregister or unprovision an application
 // type and its version that was registered with the Service Fabric.
 type UnprovisionApplicationTypeDescriptionInfo struct {
@@ -17106,6 +18652,7 @@ type UnprovisionApplicationTypeDescriptionInfo struct {
 	Async *bool `json:"Async,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnprovisionFabricDescription describes the parameters for unprovisioning a cluster.
 type UnprovisionFabricDescription struct {
 	// CodeVersion - The cluster code package version.
@@ -17114,6 +18661,7 @@ type UnprovisionFabricDescription struct {
 	ConfigVersion *string `json:"ConfigVersion,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateClusterUpgradeDescription parameters for updating a cluster upgrade.
 type UpdateClusterUpgradeDescription struct {
 	// UpgradeKind - The type of upgrade out of the following possible values. Possible values include: 'UpgradeTypeInvalid', 'UpgradeTypeRolling', 'UpgradeTypeRollingForceRestart'
@@ -17130,6 +18678,7 @@ type UpdateClusterUpgradeDescription struct {
 	ApplicationHealthPolicyMap *ApplicationHealthPolicies `json:"ApplicationHealthPolicyMap,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpgradeDomainDeltaNodesCheckHealthEvaluation represents health evaluation for delta unhealthy cluster nodes in
 // an upgrade domain, containing health evaluations for each unhealthy node that impacted current aggregated health
 // state.
@@ -17155,6 +18704,7 @@ type UpgradeDomainDeltaNodesCheckHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) MarshalJSON() ([]byte, error) {
 	uddnche.Kind = KindUpgradeDomainDeltaNodesCheck
@@ -17189,116 +18739,139 @@ func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) MarshalJSON() ([]byt
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return &uddnche, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &uddnche, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpgradeDomainInfo information about an upgrade domain.
 type UpgradeDomainInfo struct {
 	// Name - The name of the upgrade domain
@@ -17307,6 +18880,7 @@ type UpgradeDomainInfo struct {
 	State UpgradeDomainState `json:"State,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpgradeDomainNodesHealthEvaluation represents health evaluation for cluster nodes in an upgrade domain,
 // containing health evaluations for each unhealthy node that impacted current aggregated health state. Can be
 // returned when evaluating cluster health during cluster upgrade and the aggregated health state is either Error
@@ -17328,6 +18902,7 @@ type UpgradeDomainNodesHealthEvaluation struct {
 	Kind Kind `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) MarshalJSON() ([]byte, error) {
 	udnhe.Kind = KindUpgradeDomainNodes
@@ -17356,116 +18931,139 @@ func (udnhe UpgradeDomainNodesHealthEvaluation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsApplicationHealthEvaluation() (*ApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsApplicationsHealthEvaluation() (*ApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsApplicationTypeApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsApplicationTypeApplicationsHealthEvaluation() (*ApplicationTypeApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsDeltaNodesCheckHealthEvaluation() (*DeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsDeployedApplicationHealthEvaluation() (*DeployedApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedApplicationsHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsDeployedApplicationsHealthEvaluation() (*DeployedApplicationsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackageHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsDeployedServicePackageHealthEvaluation() (*DeployedServicePackageHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsDeployedServicePackagesHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsDeployedServicePackagesHealthEvaluation() (*DeployedServicePackagesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsEventHealthEvaluation() (*EventHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodeHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsNodeHealthEvaluation() (*NodeHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsNodesHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsNodesHealthEvaluation() (*NodesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsPartitionHealthEvaluation() (*PartitionHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionsHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsPartitionsHealthEvaluation() (*PartitionsHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicaHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsReplicaHealthEvaluation() (*ReplicaHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsReplicasHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsReplicasHealthEvaluation() (*ReplicasHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServiceHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsServiceHealthEvaluation() (*ServiceHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsServicesHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsServicesHealthEvaluation() (*ServicesHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSystemApplicationHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsSystemApplicationHealthEvaluation() (*SystemApplicationHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainDeltaNodesCheckHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsUpgradeDomainDeltaNodesCheckHealthEvaluation() (*UpgradeDomainDeltaNodesCheckHealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsUpgradeDomainNodesHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsUpgradeDomainNodesHealthEvaluation() (*UpgradeDomainNodesHealthEvaluation, bool) {
 	return &udnhe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsHealthEvaluation() (*HealthEvaluation, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) AsBasicHealthEvaluation() (BasicHealthEvaluation, bool) {
 	return &udnhe, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpgradeOrchestrationServiceState service state of Service Fabric Upgrade Orchestration Service.
 type UpgradeOrchestrationServiceState struct {
 	autorest.Response `json:"-"`
@@ -17473,6 +19071,7 @@ type UpgradeOrchestrationServiceState struct {
 	ServiceState *string `json:"ServiceState,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpgradeOrchestrationServiceStateSummary service state summary of Service Fabric Upgrade Orchestration Service.
 type UpgradeOrchestrationServiceStateSummary struct {
 	autorest.Response `json:"-"`
@@ -17488,6 +19087,7 @@ type UpgradeOrchestrationServiceStateSummary struct {
 	PendingUpgradeType *string `json:"PendingUpgradeType,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UploadChunkRange information about which portion of the file to upload.
 type UploadChunkRange struct {
 	// StartPosition - The start position of the portion of the file. It's represented by the number of bytes.
@@ -17496,6 +19096,7 @@ type UploadChunkRange struct {
 	EndPosition *string `json:"EndPosition,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UploadSession information about a image store upload session
 type UploadSession struct {
 	autorest.Response `json:"-"`
@@ -17503,6 +19104,7 @@ type UploadSession struct {
 	UploadSessions *[]UploadSessionInfo `json:"UploadSessions,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UploadSessionInfo information about an image store upload session. A session is associated with a relative path
 // in the image store.
 type UploadSessionInfo struct {
@@ -17518,6 +19120,7 @@ type UploadSessionInfo struct {
 	ExpectedRanges *[]UploadChunkRange `json:"ExpectedRanges,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ValidationFailedChaosEvent chaos event corresponding to a failure during validation.
 type ValidationFailedChaosEvent struct {
 	// Reason - Describes why the ValidationFailedChaosEvent was generated. This may happen because more than MaxPercentUnhealthyNodes are unhealthy for more than MaxClusterStabilizationTimeout. This reason will be in the Reason property of the ValidationFailedChaosEvent as a string.
@@ -17528,6 +19131,7 @@ type ValidationFailedChaosEvent struct {
 	Kind KindBasicChaosEvent `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for ValidationFailedChaosEvent.
 func (vfce ValidationFailedChaosEvent) MarshalJSON() ([]byte, error) {
 	vfce.Kind = KindValidationFailed
@@ -17544,46 +19148,55 @@ func (vfce ValidationFailedChaosEvent) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsExecutingFaultsChaosEvent is the BasicChaosEvent implementation for ValidationFailedChaosEvent.
 func (vfce ValidationFailedChaosEvent) AsExecutingFaultsChaosEvent() (*ExecutingFaultsChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStartedChaosEvent is the BasicChaosEvent implementation for ValidationFailedChaosEvent.
 func (vfce ValidationFailedChaosEvent) AsStartedChaosEvent() (*StartedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStoppedChaosEvent is the BasicChaosEvent implementation for ValidationFailedChaosEvent.
 func (vfce ValidationFailedChaosEvent) AsStoppedChaosEvent() (*StoppedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsTestErrorChaosEvent is the BasicChaosEvent implementation for ValidationFailedChaosEvent.
 func (vfce ValidationFailedChaosEvent) AsTestErrorChaosEvent() (*TestErrorChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsValidationFailedChaosEvent is the BasicChaosEvent implementation for ValidationFailedChaosEvent.
 func (vfce ValidationFailedChaosEvent) AsValidationFailedChaosEvent() (*ValidationFailedChaosEvent, bool) {
 	return &vfce, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitingChaosEvent is the BasicChaosEvent implementation for ValidationFailedChaosEvent.
 func (vfce ValidationFailedChaosEvent) AsWaitingChaosEvent() (*WaitingChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsChaosEvent is the BasicChaosEvent implementation for ValidationFailedChaosEvent.
 func (vfce ValidationFailedChaosEvent) AsChaosEvent() (*ChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicChaosEvent is the BasicChaosEvent implementation for ValidationFailedChaosEvent.
 func (vfce ValidationFailedChaosEvent) AsBasicChaosEvent() (BasicChaosEvent, bool) {
 	return &vfce, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // WaitForInbuildReplicaSafetyCheck safety check that waits for the replica build operation to finish. This
 // indicates that there is a replica that is going through the copy or is providing data for building another
 // replica. Bring the node down will abort this copy operation which are typically expensive involving data
@@ -17595,6 +19208,7 @@ type WaitForInbuildReplicaSafetyCheck struct {
 	Kind KindBasicSafetyCheck `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for WaitForInbuildReplicaSafetyCheck.
 func (wfirsc WaitForInbuildReplicaSafetyCheck) MarshalJSON() ([]byte, error) {
 	wfirsc.Kind = KindWaitForInbuildReplica
@@ -17608,61 +19222,73 @@ func (wfirsc WaitForInbuildReplicaSafetyCheck) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionSafetyCheck is the BasicSafetyCheck implementation for WaitForInbuildReplicaSafetyCheck.
 func (wfirsc WaitForInbuildReplicaSafetyCheck) AsPartitionSafetyCheck() (*PartitionSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPartitionSafetyCheck is the BasicSafetyCheck implementation for WaitForInbuildReplicaSafetyCheck.
 func (wfirsc WaitForInbuildReplicaSafetyCheck) AsBasicPartitionSafetyCheck() (BasicPartitionSafetyCheck, bool) {
 	return &wfirsc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsureAvailabilitySafetyCheck is the BasicSafetyCheck implementation for WaitForInbuildReplicaSafetyCheck.
 func (wfirsc WaitForInbuildReplicaSafetyCheck) AsEnsureAvailabilitySafetyCheck() (*EnsureAvailabilitySafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsurePartitionQurumSafetyCheck is the BasicSafetyCheck implementation for WaitForInbuildReplicaSafetyCheck.
 func (wfirsc WaitForInbuildReplicaSafetyCheck) AsEnsurePartitionQurumSafetyCheck() (*EnsurePartitionQurumSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSeedNodeSafetyCheck is the BasicSafetyCheck implementation for WaitForInbuildReplicaSafetyCheck.
 func (wfirsc WaitForInbuildReplicaSafetyCheck) AsSeedNodeSafetyCheck() (*SeedNodeSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForInbuildReplicaSafetyCheck is the BasicSafetyCheck implementation for WaitForInbuildReplicaSafetyCheck.
 func (wfirsc WaitForInbuildReplicaSafetyCheck) AsWaitForInbuildReplicaSafetyCheck() (*WaitForInbuildReplicaSafetyCheck, bool) {
 	return &wfirsc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimaryPlacementSafetyCheck is the BasicSafetyCheck implementation for WaitForInbuildReplicaSafetyCheck.
 func (wfirsc WaitForInbuildReplicaSafetyCheck) AsWaitForPrimaryPlacementSafetyCheck() (*WaitForPrimaryPlacementSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimarySwapSafetyCheck is the BasicSafetyCheck implementation for WaitForInbuildReplicaSafetyCheck.
 func (wfirsc WaitForInbuildReplicaSafetyCheck) AsWaitForPrimarySwapSafetyCheck() (*WaitForPrimarySwapSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForReconfigurationSafetyCheck is the BasicSafetyCheck implementation for WaitForInbuildReplicaSafetyCheck.
 func (wfirsc WaitForInbuildReplicaSafetyCheck) AsWaitForReconfigurationSafetyCheck() (*WaitForReconfigurationSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSafetyCheck is the BasicSafetyCheck implementation for WaitForInbuildReplicaSafetyCheck.
 func (wfirsc WaitForInbuildReplicaSafetyCheck) AsSafetyCheck() (*SafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicSafetyCheck is the BasicSafetyCheck implementation for WaitForInbuildReplicaSafetyCheck.
 func (wfirsc WaitForInbuildReplicaSafetyCheck) AsBasicSafetyCheck() (BasicSafetyCheck, bool) {
 	return &wfirsc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // WaitForPrimaryPlacementSafetyCheck safety check that waits for the primary replica that was moved out of the
 // node due to upgrade to be placed back again on that node.
 type WaitForPrimaryPlacementSafetyCheck struct {
@@ -17672,6 +19298,7 @@ type WaitForPrimaryPlacementSafetyCheck struct {
 	Kind KindBasicSafetyCheck `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for WaitForPrimaryPlacementSafetyCheck.
 func (wfppsc WaitForPrimaryPlacementSafetyCheck) MarshalJSON() ([]byte, error) {
 	wfppsc.Kind = KindWaitForPrimaryPlacement
@@ -17685,61 +19312,73 @@ func (wfppsc WaitForPrimaryPlacementSafetyCheck) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimaryPlacementSafetyCheck.
 func (wfppsc WaitForPrimaryPlacementSafetyCheck) AsPartitionSafetyCheck() (*PartitionSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPartitionSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimaryPlacementSafetyCheck.
 func (wfppsc WaitForPrimaryPlacementSafetyCheck) AsBasicPartitionSafetyCheck() (BasicPartitionSafetyCheck, bool) {
 	return &wfppsc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsureAvailabilitySafetyCheck is the BasicSafetyCheck implementation for WaitForPrimaryPlacementSafetyCheck.
 func (wfppsc WaitForPrimaryPlacementSafetyCheck) AsEnsureAvailabilitySafetyCheck() (*EnsureAvailabilitySafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsurePartitionQurumSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimaryPlacementSafetyCheck.
 func (wfppsc WaitForPrimaryPlacementSafetyCheck) AsEnsurePartitionQurumSafetyCheck() (*EnsurePartitionQurumSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSeedNodeSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimaryPlacementSafetyCheck.
 func (wfppsc WaitForPrimaryPlacementSafetyCheck) AsSeedNodeSafetyCheck() (*SeedNodeSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForInbuildReplicaSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimaryPlacementSafetyCheck.
 func (wfppsc WaitForPrimaryPlacementSafetyCheck) AsWaitForInbuildReplicaSafetyCheck() (*WaitForInbuildReplicaSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimaryPlacementSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimaryPlacementSafetyCheck.
 func (wfppsc WaitForPrimaryPlacementSafetyCheck) AsWaitForPrimaryPlacementSafetyCheck() (*WaitForPrimaryPlacementSafetyCheck, bool) {
 	return &wfppsc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimarySwapSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimaryPlacementSafetyCheck.
 func (wfppsc WaitForPrimaryPlacementSafetyCheck) AsWaitForPrimarySwapSafetyCheck() (*WaitForPrimarySwapSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForReconfigurationSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimaryPlacementSafetyCheck.
 func (wfppsc WaitForPrimaryPlacementSafetyCheck) AsWaitForReconfigurationSafetyCheck() (*WaitForReconfigurationSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimaryPlacementSafetyCheck.
 func (wfppsc WaitForPrimaryPlacementSafetyCheck) AsSafetyCheck() (*SafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimaryPlacementSafetyCheck.
 func (wfppsc WaitForPrimaryPlacementSafetyCheck) AsBasicSafetyCheck() (BasicSafetyCheck, bool) {
 	return &wfppsc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // WaitForPrimarySwapSafetyCheck safety check that waits for the primary replica to be moved out of the node before
 // starting an upgrade to ensure the availability of the primary replica for the partition.
 type WaitForPrimarySwapSafetyCheck struct {
@@ -17749,6 +19388,7 @@ type WaitForPrimarySwapSafetyCheck struct {
 	Kind KindBasicSafetyCheck `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for WaitForPrimarySwapSafetyCheck.
 func (wfpssc WaitForPrimarySwapSafetyCheck) MarshalJSON() ([]byte, error) {
 	wfpssc.Kind = KindWaitForPrimarySwap
@@ -17762,61 +19402,73 @@ func (wfpssc WaitForPrimarySwapSafetyCheck) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimarySwapSafetyCheck.
 func (wfpssc WaitForPrimarySwapSafetyCheck) AsPartitionSafetyCheck() (*PartitionSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPartitionSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimarySwapSafetyCheck.
 func (wfpssc WaitForPrimarySwapSafetyCheck) AsBasicPartitionSafetyCheck() (BasicPartitionSafetyCheck, bool) {
 	return &wfpssc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsureAvailabilitySafetyCheck is the BasicSafetyCheck implementation for WaitForPrimarySwapSafetyCheck.
 func (wfpssc WaitForPrimarySwapSafetyCheck) AsEnsureAvailabilitySafetyCheck() (*EnsureAvailabilitySafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsurePartitionQurumSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimarySwapSafetyCheck.
 func (wfpssc WaitForPrimarySwapSafetyCheck) AsEnsurePartitionQurumSafetyCheck() (*EnsurePartitionQurumSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSeedNodeSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimarySwapSafetyCheck.
 func (wfpssc WaitForPrimarySwapSafetyCheck) AsSeedNodeSafetyCheck() (*SeedNodeSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForInbuildReplicaSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimarySwapSafetyCheck.
 func (wfpssc WaitForPrimarySwapSafetyCheck) AsWaitForInbuildReplicaSafetyCheck() (*WaitForInbuildReplicaSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimaryPlacementSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimarySwapSafetyCheck.
 func (wfpssc WaitForPrimarySwapSafetyCheck) AsWaitForPrimaryPlacementSafetyCheck() (*WaitForPrimaryPlacementSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimarySwapSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimarySwapSafetyCheck.
 func (wfpssc WaitForPrimarySwapSafetyCheck) AsWaitForPrimarySwapSafetyCheck() (*WaitForPrimarySwapSafetyCheck, bool) {
 	return &wfpssc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForReconfigurationSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimarySwapSafetyCheck.
 func (wfpssc WaitForPrimarySwapSafetyCheck) AsWaitForReconfigurationSafetyCheck() (*WaitForReconfigurationSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimarySwapSafetyCheck.
 func (wfpssc WaitForPrimarySwapSafetyCheck) AsSafetyCheck() (*SafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicSafetyCheck is the BasicSafetyCheck implementation for WaitForPrimarySwapSafetyCheck.
 func (wfpssc WaitForPrimarySwapSafetyCheck) AsBasicSafetyCheck() (BasicSafetyCheck, bool) {
 	return &wfpssc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // WaitForReconfigurationSafetyCheck safety check that waits for the current reconfiguration of the partition to be
 // completed before starting an upgrade.
 type WaitForReconfigurationSafetyCheck struct {
@@ -17826,6 +19478,7 @@ type WaitForReconfigurationSafetyCheck struct {
 	Kind KindBasicSafetyCheck `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for WaitForReconfigurationSafetyCheck.
 func (wfrsc WaitForReconfigurationSafetyCheck) MarshalJSON() ([]byte, error) {
 	wfrsc.Kind = KindWaitForReconfiguration
@@ -17839,61 +19492,73 @@ func (wfrsc WaitForReconfigurationSafetyCheck) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsPartitionSafetyCheck is the BasicSafetyCheck implementation for WaitForReconfigurationSafetyCheck.
 func (wfrsc WaitForReconfigurationSafetyCheck) AsPartitionSafetyCheck() (*PartitionSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicPartitionSafetyCheck is the BasicSafetyCheck implementation for WaitForReconfigurationSafetyCheck.
 func (wfrsc WaitForReconfigurationSafetyCheck) AsBasicPartitionSafetyCheck() (BasicPartitionSafetyCheck, bool) {
 	return &wfrsc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsureAvailabilitySafetyCheck is the BasicSafetyCheck implementation for WaitForReconfigurationSafetyCheck.
 func (wfrsc WaitForReconfigurationSafetyCheck) AsEnsureAvailabilitySafetyCheck() (*EnsureAvailabilitySafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsEnsurePartitionQurumSafetyCheck is the BasicSafetyCheck implementation for WaitForReconfigurationSafetyCheck.
 func (wfrsc WaitForReconfigurationSafetyCheck) AsEnsurePartitionQurumSafetyCheck() (*EnsurePartitionQurumSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSeedNodeSafetyCheck is the BasicSafetyCheck implementation for WaitForReconfigurationSafetyCheck.
 func (wfrsc WaitForReconfigurationSafetyCheck) AsSeedNodeSafetyCheck() (*SeedNodeSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForInbuildReplicaSafetyCheck is the BasicSafetyCheck implementation for WaitForReconfigurationSafetyCheck.
 func (wfrsc WaitForReconfigurationSafetyCheck) AsWaitForInbuildReplicaSafetyCheck() (*WaitForInbuildReplicaSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimaryPlacementSafetyCheck is the BasicSafetyCheck implementation for WaitForReconfigurationSafetyCheck.
 func (wfrsc WaitForReconfigurationSafetyCheck) AsWaitForPrimaryPlacementSafetyCheck() (*WaitForPrimaryPlacementSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForPrimarySwapSafetyCheck is the BasicSafetyCheck implementation for WaitForReconfigurationSafetyCheck.
 func (wfrsc WaitForReconfigurationSafetyCheck) AsWaitForPrimarySwapSafetyCheck() (*WaitForPrimarySwapSafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitForReconfigurationSafetyCheck is the BasicSafetyCheck implementation for WaitForReconfigurationSafetyCheck.
 func (wfrsc WaitForReconfigurationSafetyCheck) AsWaitForReconfigurationSafetyCheck() (*WaitForReconfigurationSafetyCheck, bool) {
 	return &wfrsc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsSafetyCheck is the BasicSafetyCheck implementation for WaitForReconfigurationSafetyCheck.
 func (wfrsc WaitForReconfigurationSafetyCheck) AsSafetyCheck() (*SafetyCheck, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicSafetyCheck is the BasicSafetyCheck implementation for WaitForReconfigurationSafetyCheck.
 func (wfrsc WaitForReconfigurationSafetyCheck) AsBasicSafetyCheck() (BasicSafetyCheck, bool) {
 	return &wfrsc, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // WaitingChaosEvent describes a Chaos event that gets generated when Chaos is waiting for the cluster to become
 // ready for faulting, for example, Chaos may be waiting for the on-going upgrade to finish.
 type WaitingChaosEvent struct {
@@ -17905,6 +19570,7 @@ type WaitingChaosEvent struct {
 	Kind KindBasicChaosEvent `json:"Kind,omitempty"`
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // MarshalJSON is the custom marshaler for WaitingChaosEvent.
 func (wce WaitingChaosEvent) MarshalJSON() ([]byte, error) {
 	wce.Kind = KindWaiting
@@ -17921,41 +19587,49 @@ func (wce WaitingChaosEvent) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsExecutingFaultsChaosEvent is the BasicChaosEvent implementation for WaitingChaosEvent.
 func (wce WaitingChaosEvent) AsExecutingFaultsChaosEvent() (*ExecutingFaultsChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStartedChaosEvent is the BasicChaosEvent implementation for WaitingChaosEvent.
 func (wce WaitingChaosEvent) AsStartedChaosEvent() (*StartedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsStoppedChaosEvent is the BasicChaosEvent implementation for WaitingChaosEvent.
 func (wce WaitingChaosEvent) AsStoppedChaosEvent() (*StoppedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsTestErrorChaosEvent is the BasicChaosEvent implementation for WaitingChaosEvent.
 func (wce WaitingChaosEvent) AsTestErrorChaosEvent() (*TestErrorChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsValidationFailedChaosEvent is the BasicChaosEvent implementation for WaitingChaosEvent.
 func (wce WaitingChaosEvent) AsValidationFailedChaosEvent() (*ValidationFailedChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsWaitingChaosEvent is the BasicChaosEvent implementation for WaitingChaosEvent.
 func (wce WaitingChaosEvent) AsWaitingChaosEvent() (*WaitingChaosEvent, bool) {
 	return &wce, true
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsChaosEvent is the BasicChaosEvent implementation for WaitingChaosEvent.
 func (wce WaitingChaosEvent) AsChaosEvent() (*ChaosEvent, bool) {
 	return nil, false
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // AsBasicChaosEvent is the BasicChaosEvent implementation for WaitingChaosEvent.
 func (wce WaitingChaosEvent) AsBasicChaosEvent() (BasicChaosEvent, bool) {
 	return &wce, true

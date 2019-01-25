@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewDiagnosticLoggerClientWithBaseURI(baseURI string, subscriptionID string)
 // diagnosticID - diagnostic identifier. Must be unique in the current API Management service instance.
 // loggerid - logger identifier. Must be unique in the API Management service instance.
 func (client DiagnosticLoggerClient) CheckEntityExists(ctx context.Context, resourceGroupName string, serviceName string, diagnosticID string, loggerid string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticLoggerClient.CheckEntityExists")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -125,13 +136,23 @@ func (client DiagnosticLoggerClient) CheckEntityExistsResponder(resp *http.Respo
 	return
 }
 
-// CreateOrUpdate attaches a logger to a dignostic.
+// CreateOrUpdate attaches a logger to a diagnostic.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // diagnosticID - diagnostic identifier. Must be unique in the current API Management service instance.
 // loggerid - logger identifier. Must be unique in the API Management service instance.
 func (client DiagnosticLoggerClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, diagnosticID string, loggerid string) (result LoggerContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticLoggerClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -218,6 +239,16 @@ func (client DiagnosticLoggerClient) CreateOrUpdateResponder(resp *http.Response
 // diagnosticID - diagnostic identifier. Must be unique in the current API Management service instance.
 // loggerid - logger identifier. Must be unique in the API Management service instance.
 func (client DiagnosticLoggerClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, diagnosticID string, loggerid string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticLoggerClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -296,7 +327,7 @@ func (client DiagnosticLoggerClient) DeleteResponder(resp *http.Response) (resul
 	return
 }
 
-// ListByService lists all loggers assosiated with the specified Diagnostic of the API Management service instance.
+// ListByService lists all loggers associated with the specified Diagnostic of the API Management service instance.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
@@ -308,6 +339,16 @@ func (client DiagnosticLoggerClient) DeleteResponder(resp *http.Response) (resul
 // top - number of records to return.
 // skip - number of records to skip.
 func (client DiagnosticLoggerClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, diagnosticID string, filter string, top *int32, skip *int32) (result LoggerCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticLoggerClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.lc.Response.Response != nil {
+				sc = result.lc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -400,8 +441,8 @@ func (client DiagnosticLoggerClient) ListByServiceResponder(resp *http.Response)
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client DiagnosticLoggerClient) listByServiceNextResults(lastResults LoggerCollection) (result LoggerCollection, err error) {
-	req, err := lastResults.loggerCollectionPreparer()
+func (client DiagnosticLoggerClient) listByServiceNextResults(ctx context.Context, lastResults LoggerCollection) (result LoggerCollection, err error) {
+	req, err := lastResults.loggerCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.DiagnosticLoggerClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -422,6 +463,16 @@ func (client DiagnosticLoggerClient) listByServiceNextResults(lastResults Logger
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DiagnosticLoggerClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, diagnosticID string, filter string, top *int32, skip *int32) (result LoggerCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticLoggerClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, diagnosticID, filter, top, skip)
 	return
 }

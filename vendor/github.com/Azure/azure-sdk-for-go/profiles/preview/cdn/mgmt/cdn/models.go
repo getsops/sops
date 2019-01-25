@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,16 +19,16 @@
 
 package cdn
 
-import original "github.com/Azure/azure-sdk-for-go/services/cdn/mgmt/2017-10-12/cdn"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/cdn/mgmt/2017-10-12/cdn"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type CustomDomainsClient = original.CustomDomainsClient
-type EdgeNodesClient = original.EdgeNodesClient
-type EndpointsClient = original.EndpointsClient
 type CacheBehavior = original.CacheBehavior
 
 const (
@@ -163,6 +163,9 @@ const (
 	StandardVerizon   SkuName = original.StandardVerizon
 )
 
+type BaseClient = original.BaseClient
+type BasicDeliveryRuleAction = original.BasicDeliveryRuleAction
+type BasicDeliveryRuleCondition = original.BasicDeliveryRuleCondition
 type CacheExpirationActionParameters = original.CacheExpirationActionParameters
 type CheckNameAvailabilityInput = original.CheckNameAvailabilityInput
 type CheckNameAvailabilityOutput = original.CheckNameAvailabilityOutput
@@ -174,20 +177,20 @@ type CustomDomainListResultPage = original.CustomDomainListResultPage
 type CustomDomainParameters = original.CustomDomainParameters
 type CustomDomainProperties = original.CustomDomainProperties
 type CustomDomainPropertiesParameters = original.CustomDomainPropertiesParameters
+type CustomDomainsClient = original.CustomDomainsClient
 type CustomDomainsCreateFuture = original.CustomDomainsCreateFuture
 type CustomDomainsDeleteFuture = original.CustomDomainsDeleteFuture
 type DeepCreatedOrigin = original.DeepCreatedOrigin
 type DeepCreatedOriginProperties = original.DeepCreatedOriginProperties
 type DeliveryRule = original.DeliveryRule
-type BasicDeliveryRuleAction = original.BasicDeliveryRuleAction
 type DeliveryRuleAction = original.DeliveryRuleAction
 type DeliveryRuleCacheExpirationAction = original.DeliveryRuleCacheExpirationAction
-type BasicDeliveryRuleCondition = original.BasicDeliveryRuleCondition
 type DeliveryRuleCondition = original.DeliveryRuleCondition
 type DeliveryRuleURLFileExtensionCondition = original.DeliveryRuleURLFileExtensionCondition
 type DeliveryRuleURLPathCondition = original.DeliveryRuleURLPathCondition
 type EdgeNode = original.EdgeNode
 type EdgeNodeProperties = original.EdgeNodeProperties
+type EdgeNodesClient = original.EdgeNodesClient
 type EdgenodeResult = original.EdgenodeResult
 type EdgenodeResultIterator = original.EdgenodeResultIterator
 type EdgenodeResultPage = original.EdgenodeResultPage
@@ -198,6 +201,8 @@ type EndpointListResultPage = original.EndpointListResultPage
 type EndpointProperties = original.EndpointProperties
 type EndpointPropertiesUpdateParameters = original.EndpointPropertiesUpdateParameters
 type EndpointPropertiesUpdateParametersDeliveryPolicy = original.EndpointPropertiesUpdateParametersDeliveryPolicy
+type EndpointUpdateParameters = original.EndpointUpdateParameters
+type EndpointsClient = original.EndpointsClient
 type EndpointsCreateFuture = original.EndpointsCreateFuture
 type EndpointsDeleteFuture = original.EndpointsDeleteFuture
 type EndpointsLoadContentFuture = original.EndpointsLoadContentFuture
@@ -205,13 +210,13 @@ type EndpointsPurgeContentFuture = original.EndpointsPurgeContentFuture
 type EndpointsStartFuture = original.EndpointsStartFuture
 type EndpointsStopFuture = original.EndpointsStopFuture
 type EndpointsUpdateFuture = original.EndpointsUpdateFuture
-type EndpointUpdateParameters = original.EndpointUpdateParameters
 type ErrorResponse = original.ErrorResponse
 type GeoFilter = original.GeoFilter
 type IPAddressGroup = original.IPAddressGroup
 type LoadParameters = original.LoadParameters
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
+type OperationsClient = original.OperationsClient
 type OperationsListResult = original.OperationsListResult
 type OperationsListResultIterator = original.OperationsListResultIterator
 type OperationsListResultPage = original.OperationsListResultPage
@@ -221,21 +226,24 @@ type OriginListResultIterator = original.OriginListResultIterator
 type OriginListResultPage = original.OriginListResultPage
 type OriginProperties = original.OriginProperties
 type OriginPropertiesParameters = original.OriginPropertiesParameters
-type OriginsUpdateFuture = original.OriginsUpdateFuture
 type OriginUpdateParameters = original.OriginUpdateParameters
+type OriginsClient = original.OriginsClient
+type OriginsUpdateFuture = original.OriginsUpdateFuture
 type Profile = original.Profile
 type ProfileListResult = original.ProfileListResult
 type ProfileListResultIterator = original.ProfileListResultIterator
 type ProfileListResultPage = original.ProfileListResultPage
 type ProfileProperties = original.ProfileProperties
+type ProfileUpdateParameters = original.ProfileUpdateParameters
+type ProfilesClient = original.ProfilesClient
 type ProfilesCreateFuture = original.ProfilesCreateFuture
 type ProfilesDeleteFuture = original.ProfilesDeleteFuture
 type ProfilesUpdateFuture = original.ProfilesUpdateFuture
-type ProfileUpdateParameters = original.ProfileUpdateParameters
 type ProxyResource = original.ProxyResource
 type PurgeParameters = original.PurgeParameters
 type Resource = original.Resource
 type ResourceUsage = original.ResourceUsage
+type ResourceUsageClient = original.ResourceUsageClient
 type ResourceUsageListResult = original.ResourceUsageListResult
 type ResourceUsageListResultIterator = original.ResourceUsageListResultIterator
 type ResourceUsageListResultPage = original.ResourceUsageListResultPage
@@ -249,16 +257,15 @@ type ValidateCustomDomainInput = original.ValidateCustomDomainInput
 type ValidateCustomDomainOutput = original.ValidateCustomDomainOutput
 type ValidateProbeInput = original.ValidateProbeInput
 type ValidateProbeOutput = original.ValidateProbeOutput
-type OperationsClient = original.OperationsClient
-type OriginsClient = original.OriginsClient
-type ProfilesClient = original.ProfilesClient
-type ResourceUsageClient = original.ResourceUsageClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func NewCustomDomainListResultIterator(page CustomDomainListResultPage) CustomDomainListResultIterator {
+	return original.NewCustomDomainListResultIterator(page)
+}
+func NewCustomDomainListResultPage(getNextPage func(context.Context, CustomDomainListResult) (CustomDomainListResult, error)) CustomDomainListResultPage {
+	return original.NewCustomDomainListResultPage(getNextPage)
 }
 func NewCustomDomainsClient(subscriptionID string) CustomDomainsClient {
 	return original.NewCustomDomainsClient(subscriptionID)
@@ -272,11 +279,74 @@ func NewEdgeNodesClient(subscriptionID string) EdgeNodesClient {
 func NewEdgeNodesClientWithBaseURI(baseURI string, subscriptionID string) EdgeNodesClient {
 	return original.NewEdgeNodesClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewEdgenodeResultIterator(page EdgenodeResultPage) EdgenodeResultIterator {
+	return original.NewEdgenodeResultIterator(page)
+}
+func NewEdgenodeResultPage(getNextPage func(context.Context, EdgenodeResult) (EdgenodeResult, error)) EdgenodeResultPage {
+	return original.NewEdgenodeResultPage(getNextPage)
+}
+func NewEndpointListResultIterator(page EndpointListResultPage) EndpointListResultIterator {
+	return original.NewEndpointListResultIterator(page)
+}
+func NewEndpointListResultPage(getNextPage func(context.Context, EndpointListResult) (EndpointListResult, error)) EndpointListResultPage {
+	return original.NewEndpointListResultPage(getNextPage)
+}
 func NewEndpointsClient(subscriptionID string) EndpointsClient {
 	return original.NewEndpointsClient(subscriptionID)
 }
 func NewEndpointsClientWithBaseURI(baseURI string, subscriptionID string) EndpointsClient {
 	return original.NewEndpointsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewOperationsListResultIterator(page OperationsListResultPage) OperationsListResultIterator {
+	return original.NewOperationsListResultIterator(page)
+}
+func NewOperationsListResultPage(getNextPage func(context.Context, OperationsListResult) (OperationsListResult, error)) OperationsListResultPage {
+	return original.NewOperationsListResultPage(getNextPage)
+}
+func NewOriginListResultIterator(page OriginListResultPage) OriginListResultIterator {
+	return original.NewOriginListResultIterator(page)
+}
+func NewOriginListResultPage(getNextPage func(context.Context, OriginListResult) (OriginListResult, error)) OriginListResultPage {
+	return original.NewOriginListResultPage(getNextPage)
+}
+func NewOriginsClient(subscriptionID string) OriginsClient {
+	return original.NewOriginsClient(subscriptionID)
+}
+func NewOriginsClientWithBaseURI(baseURI string, subscriptionID string) OriginsClient {
+	return original.NewOriginsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProfileListResultIterator(page ProfileListResultPage) ProfileListResultIterator {
+	return original.NewProfileListResultIterator(page)
+}
+func NewProfileListResultPage(getNextPage func(context.Context, ProfileListResult) (ProfileListResult, error)) ProfileListResultPage {
+	return original.NewProfileListResultPage(getNextPage)
+}
+func NewProfilesClient(subscriptionID string) ProfilesClient {
+	return original.NewProfilesClient(subscriptionID)
+}
+func NewProfilesClientWithBaseURI(baseURI string, subscriptionID string) ProfilesClient {
+	return original.NewProfilesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewResourceUsageClient(subscriptionID string) ResourceUsageClient {
+	return original.NewResourceUsageClient(subscriptionID)
+}
+func NewResourceUsageClientWithBaseURI(baseURI string, subscriptionID string) ResourceUsageClient {
+	return original.NewResourceUsageClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewResourceUsageListResultIterator(page ResourceUsageListResultPage) ResourceUsageListResultIterator {
+	return original.NewResourceUsageListResultIterator(page)
+}
+func NewResourceUsageListResultPage(getNextPage func(context.Context, ResourceUsageListResult) (ResourceUsageListResult, error)) ResourceUsageListResultPage {
+	return original.NewResourceUsageListResultPage(getNextPage)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleCacheBehaviorValues() []CacheBehavior {
 	return original.PossibleCacheBehaviorValues()
@@ -299,11 +369,11 @@ func PossibleGeoFilterActionsValues() []GeoFilterActions {
 func PossibleMatchTypeValues() []MatchType {
 	return original.PossibleMatchTypeValues()
 }
-func PossibleNameValues() []Name {
-	return original.PossibleNameValues()
-}
 func PossibleNameBasicDeliveryRuleConditionValues() []NameBasicDeliveryRuleCondition {
 	return original.PossibleNameBasicDeliveryRuleConditionValues()
+}
+func PossibleNameValues() []Name {
+	return original.PossibleNameValues()
 }
 func PossibleOptimizationTypeValues() []OptimizationType {
 	return original.PossibleOptimizationTypeValues()
@@ -322,30 +392,6 @@ func PossibleResourceTypeValues() []ResourceType {
 }
 func PossibleSkuNameValues() []SkuName {
 	return original.PossibleSkuNameValues()
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewOriginsClient(subscriptionID string) OriginsClient {
-	return original.NewOriginsClient(subscriptionID)
-}
-func NewOriginsClientWithBaseURI(baseURI string, subscriptionID string) OriginsClient {
-	return original.NewOriginsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewProfilesClient(subscriptionID string) ProfilesClient {
-	return original.NewProfilesClient(subscriptionID)
-}
-func NewProfilesClientWithBaseURI(baseURI string, subscriptionID string) ProfilesClient {
-	return original.NewProfilesClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewResourceUsageClient(subscriptionID string) ResourceUsageClient {
-	return original.NewResourceUsageClient(subscriptionID)
-}
-func NewResourceUsageClientWithBaseURI(baseURI string, subscriptionID string) ResourceUsageClient {
-	return original.NewResourceUsageClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

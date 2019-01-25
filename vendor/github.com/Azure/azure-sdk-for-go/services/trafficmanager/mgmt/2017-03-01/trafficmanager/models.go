@@ -22,8 +22,11 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
-// CheckTrafficManagerRelativeDNSNameAvailabilityParameters parameters supplied to check Traffic Manager name
-// operation.
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/trafficmanager/mgmt/2017-03-01/trafficmanager"
+
+// CheckTrafficManagerRelativeDNSNameAvailabilityParameters parameters supplied to check Traffic Manager
+// name operation.
 type CheckTrafficManagerRelativeDNSNameAvailabilityParameters struct {
 	// Name - Gets or sets the name of the resource.
 	Name *string `json:"name,omitempty"`
@@ -57,7 +60,7 @@ type DNSConfig struct {
 	RelativeName *string `json:"relativeName,omitempty"`
 	// Fqdn - Gets or sets the fully-qualified domain name (FQDN) of the Traffic Manager profile.  This is formed from the concatenation of the RelativeName with the DNS domain used by Azure Traffic Manager.
 	Fqdn *string `json:"fqdn,omitempty"`
-	// TTL - Gets or sets the DNS Ttime-To-Live (TTL), in seconds.  This informs the local DNS resolvers and DNS clients how long to cache DNS responses provided by this Traffic Manager profile.
+	// TTL - Gets or sets the DNS Time-To-Live (TTL), in seconds.  This informs the local DNS resolvers and DNS clients how long to cache DNS responses provided by this Traffic Manager profile.
 	TTL *int64 `json:"ttl,omitempty"`
 }
 
@@ -164,7 +167,8 @@ type EndpointProperties struct {
 	GeoMapping *[]string `json:"geoMapping,omitempty"`
 }
 
-// GeographicHierarchy class representing the Geographic hierarchy used with the Geographic traffic routing method.
+// GeographicHierarchy class representing the Geographic hierarchy used with the Geographic traffic routing
+// method.
 type GeographicHierarchy struct {
 	autorest.Response              `json:"-"`
 	*GeographicHierarchyProperties `json:"properties,omitempty"`
@@ -273,8 +277,8 @@ func (gh *GeographicHierarchy) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// GeographicHierarchyProperties class representing the properties of the Geographic hierarchy used with the
-// Geographic traffic routing method.
+// GeographicHierarchyProperties class representing the properties of the Geographic hierarchy used with
+// the Geographic traffic routing method.
 type GeographicHierarchyProperties struct {
 	// GeographicHierarchy - The region at the root of the hierarchy from all the regions in the hierarchy can be retrieved.
 	GeographicHierarchy *Region `json:"geographicHierarchy,omitempty"`
@@ -437,7 +441,8 @@ type ProfileProperties struct {
 	Endpoints *[]Endpoint `json:"endpoints,omitempty"`
 }
 
-// Region class representing a region in the Geographic hierarchy used with the Geographic traffic routing method.
+// Region class representing a region in the Geographic hierarchy used with the Geographic traffic routing
+// method.
 type Region struct {
 	// Code - The code of the region
 	Code *string `json:"code,omitempty"`

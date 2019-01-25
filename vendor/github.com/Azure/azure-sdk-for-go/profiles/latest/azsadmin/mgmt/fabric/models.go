@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,18 +25,6 @@ const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type ComputeFabricOperationsClient = original.ComputeFabricOperationsClient
-type EdgeGatewayPoolsClient = original.EdgeGatewayPoolsClient
-type EdgeGatewaysClient = original.EdgeGatewaysClient
-type FileSharesClient = original.FileSharesClient
-type InfraRoleInstancesClient = original.InfraRoleInstancesClient
-type InfraRolesClient = original.InfraRolesClient
-type IPPoolsClient = original.IPPoolsClient
-type LocationsClient = original.LocationsClient
-type LogicalNetworksClient = original.LogicalNetworksClient
-type LogicalSubnetsClient = original.LogicalSubnetsClient
-type MacAddressPoolsClient = original.MacAddressPoolsClient
 type InfraRoleInstanceState = original.InfraRoleInstanceState
 
 const (
@@ -82,6 +70,8 @@ const (
 	Unknown        ScaleUnitType = original.Unknown
 )
 
+type BaseClient = original.BaseClient
+type ComputeFabricOperationsClient = original.ComputeFabricOperationsClient
 type EdgeGateway = original.EdgeGateway
 type EdgeGatewayList = original.EdgeGatewayList
 type EdgeGatewayListIterator = original.EdgeGatewayListIterator
@@ -92,9 +82,19 @@ type EdgeGatewayPoolList = original.EdgeGatewayPoolList
 type EdgeGatewayPoolListIterator = original.EdgeGatewayPoolListIterator
 type EdgeGatewayPoolListPage = original.EdgeGatewayPoolListPage
 type EdgeGatewayPoolModel = original.EdgeGatewayPoolModel
+type EdgeGatewayPoolsClient = original.EdgeGatewayPoolsClient
+type EdgeGatewaysClient = original.EdgeGatewaysClient
 type FileShare = original.FileShare
 type FileShareList = original.FileShareList
 type FileShareModel = original.FileShareModel
+type FileSharesClient = original.FileSharesClient
+type IPPool = original.IPPool
+type IPPoolList = original.IPPoolList
+type IPPoolListIterator = original.IPPoolListIterator
+type IPPoolListPage = original.IPPoolListPage
+type IPPoolModel = original.IPPoolModel
+type IPPoolsClient = original.IPPoolsClient
+type IPPoolsCreateFuture = original.IPPoolsCreateFuture
 type InfraRole = original.InfraRole
 type InfraRoleInstance = original.InfraRoleInstance
 type InfraRoleInstanceList = original.InfraRoleInstanceList
@@ -102,6 +102,7 @@ type InfraRoleInstanceListIterator = original.InfraRoleInstanceListIterator
 type InfraRoleInstanceListPage = original.InfraRoleInstanceListPage
 type InfraRoleInstanceModel = original.InfraRoleInstanceModel
 type InfraRoleInstanceSize = original.InfraRoleInstanceSize
+type InfraRoleInstancesClient = original.InfraRoleInstancesClient
 type InfraRoleInstancesPowerOffFuture = original.InfraRoleInstancesPowerOffFuture
 type InfraRoleInstancesPowerOnFuture = original.InfraRoleInstancesPowerOnFuture
 type InfraRoleInstancesRebootFuture = original.InfraRoleInstancesRebootFuture
@@ -110,31 +111,31 @@ type InfraRoleList = original.InfraRoleList
 type InfraRoleListIterator = original.InfraRoleListIterator
 type InfraRoleListPage = original.InfraRoleListPage
 type InfraRoleModel = original.InfraRoleModel
-type IPPool = original.IPPool
-type IPPoolList = original.IPPoolList
-type IPPoolListIterator = original.IPPoolListIterator
-type IPPoolListPage = original.IPPoolListPage
-type IPPoolModel = original.IPPoolModel
-type IPPoolsCreateFuture = original.IPPoolsCreateFuture
+type InfraRolesClient = original.InfraRolesClient
 type Location = original.Location
 type LocationList = original.LocationList
 type LocationListIterator = original.LocationListIterator
 type LocationListPage = original.LocationListPage
+type LocationsClient = original.LocationsClient
 type LogicalNetwork = original.LogicalNetwork
 type LogicalNetworkList = original.LogicalNetworkList
 type LogicalNetworkListIterator = original.LogicalNetworkListIterator
 type LogicalNetworkListPage = original.LogicalNetworkListPage
 type LogicalNetworkModel = original.LogicalNetworkModel
+type LogicalNetworksClient = original.LogicalNetworksClient
 type LogicalSubnet = original.LogicalSubnet
 type LogicalSubnetList = original.LogicalSubnetList
 type LogicalSubnetListIterator = original.LogicalSubnetListIterator
 type LogicalSubnetListPage = original.LogicalSubnetListPage
 type LogicalSubnetModel = original.LogicalSubnetModel
+type LogicalSubnetsClient = original.LogicalSubnetsClient
 type MacAddressPool = original.MacAddressPool
 type MacAddressPoolList = original.MacAddressPoolList
 type MacAddressPoolListIterator = original.MacAddressPoolListIterator
 type MacAddressPoolListPage = original.MacAddressPoolListPage
 type MacAddressPoolModel = original.MacAddressPoolModel
+type MacAddressPoolsClient = original.MacAddressPoolsClient
+type NetworkFabricOperationsClient = original.NetworkFabricOperationsClient
 type OperationStatus = original.OperationStatus
 type OperationStatusLocation = original.OperationStatusLocation
 type ProvisioningStateModel = original.ProvisioningStateModel
@@ -150,43 +151,39 @@ type ScaleUnitNodeList = original.ScaleUnitNodeList
 type ScaleUnitNodeListIterator = original.ScaleUnitNodeListIterator
 type ScaleUnitNodeListPage = original.ScaleUnitNodeListPage
 type ScaleUnitNodeModel = original.ScaleUnitNodeModel
+type ScaleUnitNodesClient = original.ScaleUnitNodesClient
 type ScaleUnitNodesPowerOffFuture = original.ScaleUnitNodesPowerOffFuture
 type ScaleUnitNodesPowerOnFuture = original.ScaleUnitNodesPowerOnFuture
 type ScaleUnitNodesStartMaintenanceModeFuture = original.ScaleUnitNodesStartMaintenanceModeFuture
 type ScaleUnitNodesStopMaintenanceModeFuture = original.ScaleUnitNodesStopMaintenanceModeFuture
+type ScaleUnitsClient = original.ScaleUnitsClient
 type SlbMuxInstance = original.SlbMuxInstance
 type SlbMuxInstanceList = original.SlbMuxInstanceList
 type SlbMuxInstanceListIterator = original.SlbMuxInstanceListIterator
 type SlbMuxInstanceListPage = original.SlbMuxInstanceListPage
 type SlbMuxInstanceModel = original.SlbMuxInstanceModel
+type SlbMuxInstancesClient = original.SlbMuxInstancesClient
 type StoragePool = original.StoragePool
 type StoragePoolList = original.StoragePoolList
 type StoragePoolListIterator = original.StoragePoolListIterator
 type StoragePoolListPage = original.StoragePoolListPage
 type StoragePoolModel = original.StoragePoolModel
+type StoragePoolsClient = original.StoragePoolsClient
 type StorageSystem = original.StorageSystem
 type StorageSystemList = original.StorageSystemList
 type StorageSystemListIterator = original.StorageSystemListIterator
 type StorageSystemListPage = original.StorageSystemListPage
 type StorageSystemModel = original.StorageSystemModel
+type StorageSystemsClient = original.StorageSystemsClient
 type Volume = original.Volume
 type VolumeList = original.VolumeList
 type VolumeListIterator = original.VolumeListIterator
 type VolumeListPage = original.VolumeListPage
 type VolumeModel = original.VolumeModel
-type NetworkFabricOperationsClient = original.NetworkFabricOperationsClient
-type ScaleUnitNodesClient = original.ScaleUnitNodesClient
-type ScaleUnitsClient = original.ScaleUnitsClient
-type SlbMuxInstancesClient = original.SlbMuxInstancesClient
-type StoragePoolsClient = original.StoragePoolsClient
-type StorageSystemsClient = original.StorageSystemsClient
 type VolumesClient = original.VolumesClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewComputeFabricOperationsClient(subscriptionID string) ComputeFabricOperationsClient {
 	return original.NewComputeFabricOperationsClient(subscriptionID)
@@ -212,6 +209,12 @@ func NewFileSharesClient(subscriptionID string) FileSharesClient {
 func NewFileSharesClientWithBaseURI(baseURI string, subscriptionID string) FileSharesClient {
 	return original.NewFileSharesClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewIPPoolsClient(subscriptionID string) IPPoolsClient {
+	return original.NewIPPoolsClient(subscriptionID)
+}
+func NewIPPoolsClientWithBaseURI(baseURI string, subscriptionID string) IPPoolsClient {
+	return original.NewIPPoolsClientWithBaseURI(baseURI, subscriptionID)
+}
 func NewInfraRoleInstancesClient(subscriptionID string) InfraRoleInstancesClient {
 	return original.NewInfraRoleInstancesClient(subscriptionID)
 }
@@ -223,12 +226,6 @@ func NewInfraRolesClient(subscriptionID string) InfraRolesClient {
 }
 func NewInfraRolesClientWithBaseURI(baseURI string, subscriptionID string) InfraRolesClient {
 	return original.NewInfraRolesClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewIPPoolsClient(subscriptionID string) IPPoolsClient {
-	return original.NewIPPoolsClient(subscriptionID)
-}
-func NewIPPoolsClientWithBaseURI(baseURI string, subscriptionID string) IPPoolsClient {
-	return original.NewIPPoolsClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewLocationsClient(subscriptionID string) LocationsClient {
 	return original.NewLocationsClient(subscriptionID)
@@ -253,21 +250,6 @@ func NewMacAddressPoolsClient(subscriptionID string) MacAddressPoolsClient {
 }
 func NewMacAddressPoolsClientWithBaseURI(baseURI string, subscriptionID string) MacAddressPoolsClient {
 	return original.NewMacAddressPoolsClientWithBaseURI(baseURI, subscriptionID)
-}
-func PossibleInfraRoleInstanceStateValues() []InfraRoleInstanceState {
-	return original.PossibleInfraRoleInstanceStateValues()
-}
-func PossiblePowerStateValues() []PowerState {
-	return original.PossiblePowerStateValues()
-}
-func PossibleScaleUnitNodeStatusValues() []ScaleUnitNodeStatus {
-	return original.PossibleScaleUnitNodeStatusValues()
-}
-func PossibleScaleUnitStateValues() []ScaleUnitState {
-	return original.PossibleScaleUnitStateValues()
-}
-func PossibleScaleUnitTypeValues() []ScaleUnitType {
-	return original.PossibleScaleUnitTypeValues()
 }
 func NewNetworkFabricOperationsClient(subscriptionID string) NetworkFabricOperationsClient {
 	return original.NewNetworkFabricOperationsClient(subscriptionID)
@@ -305,15 +287,33 @@ func NewStorageSystemsClient(subscriptionID string) StorageSystemsClient {
 func NewStorageSystemsClientWithBaseURI(baseURI string, subscriptionID string) StorageSystemsClient {
 	return original.NewStorageSystemsClientWithBaseURI(baseURI, subscriptionID)
 }
-func UserAgent() string {
-	return original.UserAgent() + " profiles/latest"
-}
-func Version() string {
-	return original.Version()
-}
 func NewVolumesClient(subscriptionID string) VolumesClient {
 	return original.NewVolumesClient(subscriptionID)
 }
 func NewVolumesClientWithBaseURI(baseURI string, subscriptionID string) VolumesClient {
 	return original.NewVolumesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
+}
+func PossibleInfraRoleInstanceStateValues() []InfraRoleInstanceState {
+	return original.PossibleInfraRoleInstanceStateValues()
+}
+func PossiblePowerStateValues() []PowerState {
+	return original.PossiblePowerStateValues()
+}
+func PossibleScaleUnitNodeStatusValues() []ScaleUnitNodeStatus {
+	return original.PossibleScaleUnitNodeStatusValues()
+}
+func PossibleScaleUnitStateValues() []ScaleUnitState {
+	return original.PossibleScaleUnitStateValues()
+}
+func PossibleScaleUnitTypeValues() []ScaleUnitType {
+	return original.PossibleScaleUnitTypeValues()
+}
+func UserAgent() string {
+	return original.UserAgent() + " profiles/latest"
+}
+func Version() string {
+	return original.Version()
 }

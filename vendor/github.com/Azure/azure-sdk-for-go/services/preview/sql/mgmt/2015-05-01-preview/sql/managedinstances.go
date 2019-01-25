@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewManagedInstancesClientWithBaseURI(baseURI string, subscriptionID string)
 // managedInstanceName - the name of the managed instance.
 // parameters - the requested managed instance resource state.
 func (client ManagedInstancesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, managedInstanceName string, parameters ManagedInstance) (result ManagedInstancesCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagedInstancesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Sku", Name: validation.Null, Rule: false,
@@ -103,10 +114,6 @@ func (client ManagedInstancesClient) CreateOrUpdateSender(req *http.Request) (fu
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -130,6 +137,16 @@ func (client ManagedInstancesClient) CreateOrUpdateResponder(resp *http.Response
 // from the Azure Resource Manager API or the portal.
 // managedInstanceName - the name of the managed instance.
 func (client ManagedInstancesClient) Delete(ctx context.Context, resourceGroupName string, managedInstanceName string) (result ManagedInstancesDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagedInstancesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, managedInstanceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ManagedInstancesClient", "Delete", nil, "Failure preparing request")
@@ -175,10 +192,6 @@ func (client ManagedInstancesClient) DeleteSender(req *http.Request) (future Man
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -201,6 +214,16 @@ func (client ManagedInstancesClient) DeleteResponder(resp *http.Response) (resul
 // from the Azure Resource Manager API or the portal.
 // managedInstanceName - the name of the managed instance.
 func (client ManagedInstancesClient) Get(ctx context.Context, resourceGroupName string, managedInstanceName string) (result ManagedInstance, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagedInstancesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, managedInstanceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ManagedInstancesClient", "Get", nil, "Failure preparing request")
@@ -265,6 +288,16 @@ func (client ManagedInstancesClient) GetResponder(resp *http.Response) (result M
 
 // List gets a list of all managed instances in the subscription.
 func (client ManagedInstancesClient) List(ctx context.Context) (result ManagedInstanceListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagedInstancesClient.List")
+		defer func() {
+			sc := -1
+			if result.milr.Response.Response != nil {
+				sc = result.milr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -327,8 +360,8 @@ func (client ManagedInstancesClient) ListResponder(resp *http.Response) (result 
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ManagedInstancesClient) listNextResults(lastResults ManagedInstanceListResult) (result ManagedInstanceListResult, err error) {
-	req, err := lastResults.managedInstanceListResultPreparer()
+func (client ManagedInstancesClient) listNextResults(ctx context.Context, lastResults ManagedInstanceListResult) (result ManagedInstanceListResult, err error) {
+	req, err := lastResults.managedInstanceListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.ManagedInstancesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -349,6 +382,16 @@ func (client ManagedInstancesClient) listNextResults(lastResults ManagedInstance
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ManagedInstancesClient) ListComplete(ctx context.Context) (result ManagedInstanceListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagedInstancesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -358,6 +401,16 @@ func (client ManagedInstancesClient) ListComplete(ctx context.Context) (result M
 // resourceGroupName - the name of the resource group that contains the resource. You can obtain this value
 // from the Azure Resource Manager API or the portal.
 func (client ManagedInstancesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result ManagedInstanceListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagedInstancesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.milr.Response.Response != nil {
+				sc = result.milr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -421,8 +474,8 @@ func (client ManagedInstancesClient) ListByResourceGroupResponder(resp *http.Res
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client ManagedInstancesClient) listByResourceGroupNextResults(lastResults ManagedInstanceListResult) (result ManagedInstanceListResult, err error) {
-	req, err := lastResults.managedInstanceListResultPreparer()
+func (client ManagedInstancesClient) listByResourceGroupNextResults(ctx context.Context, lastResults ManagedInstanceListResult) (result ManagedInstanceListResult, err error) {
+	req, err := lastResults.managedInstanceListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.ManagedInstancesClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -443,6 +496,16 @@ func (client ManagedInstancesClient) listByResourceGroupNextResults(lastResults 
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ManagedInstancesClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result ManagedInstanceListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagedInstancesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -454,6 +517,16 @@ func (client ManagedInstancesClient) ListByResourceGroupComplete(ctx context.Con
 // managedInstanceName - the name of the managed instance.
 // parameters - the requested managed instance resource state.
 func (client ManagedInstancesClient) Update(ctx context.Context, resourceGroupName string, managedInstanceName string, parameters ManagedInstanceUpdate) (result ManagedInstancesUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagedInstancesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, managedInstanceName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ManagedInstancesClient", "Update", nil, "Failure preparing request")
@@ -498,10 +571,6 @@ func (client ManagedInstancesClient) UpdateSender(req *http.Request) (future Man
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewExternalSecuritySolutionsClientWithBaseURI(baseURI string, subscriptionI
 // insensitive.
 // externalSecuritySolutionsName - name of an external security solution.
 func (client ExternalSecuritySolutionsClient) Get(ctx context.Context, resourceGroupName string, externalSecuritySolutionsName string) (result ExternalSecuritySolutionModel, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExternalSecuritySolutionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -121,6 +132,16 @@ func (client ExternalSecuritySolutionsClient) GetResponder(resp *http.Response) 
 
 // List gets a list of external security solutions for the subscription.
 func (client ExternalSecuritySolutionsClient) List(ctx context.Context) (result ExternalSecuritySolutionListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExternalSecuritySolutionsClient.List")
+		defer func() {
+			sc := -1
+			if result.essl.Response.Response != nil {
+				sc = result.essl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -189,8 +210,8 @@ func (client ExternalSecuritySolutionsClient) ListResponder(resp *http.Response)
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ExternalSecuritySolutionsClient) listNextResults(lastResults ExternalSecuritySolutionList) (result ExternalSecuritySolutionList, err error) {
-	req, err := lastResults.externalSecuritySolutionListPreparer()
+func (client ExternalSecuritySolutionsClient) listNextResults(ctx context.Context, lastResults ExternalSecuritySolutionList) (result ExternalSecuritySolutionList, err error) {
+	req, err := lastResults.externalSecuritySolutionListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.ExternalSecuritySolutionsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -211,12 +232,32 @@ func (client ExternalSecuritySolutionsClient) listNextResults(lastResults Extern
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ExternalSecuritySolutionsClient) ListComplete(ctx context.Context) (result ExternalSecuritySolutionListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExternalSecuritySolutionsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
 
 // ListByHomeRegion gets a list of external Security Solutions for the subscription and location.
 func (client ExternalSecuritySolutionsClient) ListByHomeRegion(ctx context.Context) (result ExternalSecuritySolutionListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExternalSecuritySolutionsClient.ListByHomeRegion")
+		defer func() {
+			sc := -1
+			if result.essl.Response.Response != nil {
+				sc = result.essl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -286,8 +327,8 @@ func (client ExternalSecuritySolutionsClient) ListByHomeRegionResponder(resp *ht
 }
 
 // listByHomeRegionNextResults retrieves the next set of results, if any.
-func (client ExternalSecuritySolutionsClient) listByHomeRegionNextResults(lastResults ExternalSecuritySolutionList) (result ExternalSecuritySolutionList, err error) {
-	req, err := lastResults.externalSecuritySolutionListPreparer()
+func (client ExternalSecuritySolutionsClient) listByHomeRegionNextResults(ctx context.Context, lastResults ExternalSecuritySolutionList) (result ExternalSecuritySolutionList, err error) {
+	req, err := lastResults.externalSecuritySolutionListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.ExternalSecuritySolutionsClient", "listByHomeRegionNextResults", nil, "Failure preparing next results request")
 	}
@@ -308,6 +349,16 @@ func (client ExternalSecuritySolutionsClient) listByHomeRegionNextResults(lastRe
 
 // ListByHomeRegionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ExternalSecuritySolutionsClient) ListByHomeRegionComplete(ctx context.Context) (result ExternalSecuritySolutionListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExternalSecuritySolutionsClient.ListByHomeRegion")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByHomeRegion(ctx)
 	return
 }

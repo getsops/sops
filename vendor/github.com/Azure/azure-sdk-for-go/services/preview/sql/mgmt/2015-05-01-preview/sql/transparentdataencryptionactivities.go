@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewTransparentDataEncryptionActivitiesClientWithBaseURI(baseURI string, sub
 // serverName - the name of the server.
 // databaseName - the name of the database for which the transparent data encryption applies.
 func (client TransparentDataEncryptionActivitiesClient) ListByConfiguration(ctx context.Context, resourceGroupName string, serverName string, databaseName string) (result TransparentDataEncryptionActivityListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TransparentDataEncryptionActivitiesClient.ListByConfiguration")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByConfigurationPreparer(ctx, resourceGroupName, serverName, databaseName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.TransparentDataEncryptionActivitiesClient", "ListByConfiguration", nil, "Failure preparing request")

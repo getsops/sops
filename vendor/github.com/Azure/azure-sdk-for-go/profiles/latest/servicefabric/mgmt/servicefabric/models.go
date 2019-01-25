@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,15 +19,12 @@
 
 package servicefabric
 
-import original "github.com/Azure/azure-sdk-for-go/services/servicefabric/mgmt/2016-09-01/servicefabric"
+import original "github.com/Azure/azure-sdk-for-go/services/servicefabric/mgmt/2018-02-01/servicefabric"
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type ClustersClient = original.ClustersClient
-type ClusterVersionsClient = original.ClusterVersionsClient
 type ClusterState = original.ClusterState
 
 const (
@@ -58,6 +55,33 @@ const (
 	Windows Environment = original.Windows
 )
 
+type MoveCost = original.MoveCost
+
+const (
+	High   MoveCost = original.High
+	Low    MoveCost = original.Low
+	Medium MoveCost = original.Medium
+	Zero   MoveCost = original.Zero
+)
+
+type PartitionScheme = original.PartitionScheme
+
+const (
+	Invalid           PartitionScheme = original.Invalid
+	Named             PartitionScheme = original.Named
+	Singleton         PartitionScheme = original.Singleton
+	UniformInt64Range PartitionScheme = original.UniformInt64Range
+)
+
+type PartitionSchemeBasicPartitionSchemeDescription = original.PartitionSchemeBasicPartitionSchemeDescription
+
+const (
+	PartitionSchemeNamed                      PartitionSchemeBasicPartitionSchemeDescription = original.PartitionSchemeNamed
+	PartitionSchemePartitionSchemeDescription PartitionSchemeBasicPartitionSchemeDescription = original.PartitionSchemePartitionSchemeDescription
+	PartitionSchemeSingleton                  PartitionSchemeBasicPartitionSchemeDescription = original.PartitionSchemeSingleton
+	PartitionSchemeUniformInt64Range          PartitionSchemeBasicPartitionSchemeDescription = original.PartitionSchemeUniformInt64Range
+)
+
 type ProvisioningState = original.ProvisioningState
 
 const (
@@ -70,9 +94,11 @@ const (
 type ReliabilityLevel = original.ReliabilityLevel
 
 const (
-	ReliabilityLevelBronze ReliabilityLevel = original.ReliabilityLevelBronze
-	ReliabilityLevelGold   ReliabilityLevel = original.ReliabilityLevelGold
-	ReliabilityLevelSilver ReliabilityLevel = original.ReliabilityLevelSilver
+	ReliabilityLevelBronze   ReliabilityLevel = original.ReliabilityLevelBronze
+	ReliabilityLevelGold     ReliabilityLevel = original.ReliabilityLevelGold
+	ReliabilityLevelNone     ReliabilityLevel = original.ReliabilityLevelNone
+	ReliabilityLevelPlatinum ReliabilityLevel = original.ReliabilityLevelPlatinum
+	ReliabilityLevelSilver   ReliabilityLevel = original.ReliabilityLevelSilver
 )
 
 type ReliabilityLevel1 = original.ReliabilityLevel1
@@ -80,8 +106,68 @@ type ReliabilityLevel1 = original.ReliabilityLevel1
 const (
 	ReliabilityLevel1Bronze   ReliabilityLevel1 = original.ReliabilityLevel1Bronze
 	ReliabilityLevel1Gold     ReliabilityLevel1 = original.ReliabilityLevel1Gold
+	ReliabilityLevel1None     ReliabilityLevel1 = original.ReliabilityLevel1None
 	ReliabilityLevel1Platinum ReliabilityLevel1 = original.ReliabilityLevel1Platinum
 	ReliabilityLevel1Silver   ReliabilityLevel1 = original.ReliabilityLevel1Silver
+)
+
+type ServiceCorrelationScheme = original.ServiceCorrelationScheme
+
+const (
+	ServiceCorrelationSchemeAffinity           ServiceCorrelationScheme = original.ServiceCorrelationSchemeAffinity
+	ServiceCorrelationSchemeAlignedAffinity    ServiceCorrelationScheme = original.ServiceCorrelationSchemeAlignedAffinity
+	ServiceCorrelationSchemeInvalid            ServiceCorrelationScheme = original.ServiceCorrelationSchemeInvalid
+	ServiceCorrelationSchemeNonAlignedAffinity ServiceCorrelationScheme = original.ServiceCorrelationSchemeNonAlignedAffinity
+)
+
+type ServiceKind = original.ServiceKind
+
+const (
+	ServiceKindInvalid   ServiceKind = original.ServiceKindInvalid
+	ServiceKindStateful  ServiceKind = original.ServiceKindStateful
+	ServiceKindStateless ServiceKind = original.ServiceKindStateless
+)
+
+type ServiceKindBasicServiceResourceProperties = original.ServiceKindBasicServiceResourceProperties
+
+const (
+	ServiceKindServiceResourceProperties ServiceKindBasicServiceResourceProperties = original.ServiceKindServiceResourceProperties
+	ServiceKindStateful1                 ServiceKindBasicServiceResourceProperties = original.ServiceKindStateful1
+	ServiceKindStateless1                ServiceKindBasicServiceResourceProperties = original.ServiceKindStateless1
+)
+
+type ServiceKindBasicServiceResourceUpdateProperties = original.ServiceKindBasicServiceResourceUpdateProperties
+
+const (
+	ServiceKindBasicServiceResourceUpdatePropertiesServiceKindServiceResourceUpdateProperties ServiceKindBasicServiceResourceUpdateProperties = original.ServiceKindBasicServiceResourceUpdatePropertiesServiceKindServiceResourceUpdateProperties
+	ServiceKindBasicServiceResourceUpdatePropertiesServiceKindStateful                        ServiceKindBasicServiceResourceUpdateProperties = original.ServiceKindBasicServiceResourceUpdatePropertiesServiceKindStateful
+	ServiceKindBasicServiceResourceUpdatePropertiesServiceKindStateless                       ServiceKindBasicServiceResourceUpdateProperties = original.ServiceKindBasicServiceResourceUpdatePropertiesServiceKindStateless
+)
+
+type ServiceLoadMetricWeight = original.ServiceLoadMetricWeight
+
+const (
+	ServiceLoadMetricWeightHigh   ServiceLoadMetricWeight = original.ServiceLoadMetricWeightHigh
+	ServiceLoadMetricWeightLow    ServiceLoadMetricWeight = original.ServiceLoadMetricWeightLow
+	ServiceLoadMetricWeightMedium ServiceLoadMetricWeight = original.ServiceLoadMetricWeightMedium
+	ServiceLoadMetricWeightZero   ServiceLoadMetricWeight = original.ServiceLoadMetricWeightZero
+)
+
+type ServicePlacementPolicyType = original.ServicePlacementPolicyType
+
+const (
+	ServicePlacementPolicyTypeInvalid                    ServicePlacementPolicyType = original.ServicePlacementPolicyTypeInvalid
+	ServicePlacementPolicyTypeInvalidDomain              ServicePlacementPolicyType = original.ServicePlacementPolicyTypeInvalidDomain
+	ServicePlacementPolicyTypeNonPartiallyPlaceService   ServicePlacementPolicyType = original.ServicePlacementPolicyTypeNonPartiallyPlaceService
+	ServicePlacementPolicyTypePreferredPrimaryDomain     ServicePlacementPolicyType = original.ServicePlacementPolicyTypePreferredPrimaryDomain
+	ServicePlacementPolicyTypeRequiredDomain             ServicePlacementPolicyType = original.ServicePlacementPolicyTypeRequiredDomain
+	ServicePlacementPolicyTypeRequiredDomainDistribution ServicePlacementPolicyType = original.ServicePlacementPolicyTypeRequiredDomainDistribution
+)
+
+type Type = original.Type
+
+const (
+	TypeServicePlacementPolicyDescription Type = original.TypeServicePlacementPolicyDescription
 )
 
 type UpgradeMode = original.UpgradeMode
@@ -111,47 +197,135 @@ const (
 	TrustedPublisher     X509StoreName = original.TrustedPublisher
 )
 
+type X509StoreName1 = original.X509StoreName1
+
+const (
+	X509StoreName1AddressBook          X509StoreName1 = original.X509StoreName1AddressBook
+	X509StoreName1AuthRoot             X509StoreName1 = original.X509StoreName1AuthRoot
+	X509StoreName1CertificateAuthority X509StoreName1 = original.X509StoreName1CertificateAuthority
+	X509StoreName1Disallowed           X509StoreName1 = original.X509StoreName1Disallowed
+	X509StoreName1My                   X509StoreName1 = original.X509StoreName1My
+	X509StoreName1Root                 X509StoreName1 = original.X509StoreName1Root
+	X509StoreName1TrustedPeople        X509StoreName1 = original.X509StoreName1TrustedPeople
+	X509StoreName1TrustedPublisher     X509StoreName1 = original.X509StoreName1TrustedPublisher
+)
+
+type ApplicationDeltaHealthPolicy = original.ApplicationDeltaHealthPolicy
+type ApplicationHealthPolicy = original.ApplicationHealthPolicy
+type ApplicationMetricDescription = original.ApplicationMetricDescription
+type ApplicationResource = original.ApplicationResource
+type ApplicationResourceList = original.ApplicationResourceList
+type ApplicationResourceProperties = original.ApplicationResourceProperties
+type ApplicationResourceUpdate = original.ApplicationResourceUpdate
+type ApplicationResourceUpdateProperties = original.ApplicationResourceUpdateProperties
+type ApplicationTypeResource = original.ApplicationTypeResource
+type ApplicationTypeResourceList = original.ApplicationTypeResourceList
+type ApplicationTypeResourceProperties = original.ApplicationTypeResourceProperties
+type ApplicationTypeVersionResource = original.ApplicationTypeVersionResource
+type ApplicationTypeVersionResourceList = original.ApplicationTypeVersionResourceList
+type ApplicationTypeVersionResourceProperties = original.ApplicationTypeVersionResourceProperties
+type ApplicationTypeVersionsClient = original.ApplicationTypeVersionsClient
+type ApplicationTypeVersionsCreateFuture = original.ApplicationTypeVersionsCreateFuture
+type ApplicationTypeVersionsDeleteFuture = original.ApplicationTypeVersionsDeleteFuture
+type ApplicationTypesClient = original.ApplicationTypesClient
+type ApplicationTypesDeleteFuture = original.ApplicationTypesDeleteFuture
+type ApplicationUpgradePolicy = original.ApplicationUpgradePolicy
+type ApplicationsClient = original.ApplicationsClient
+type ApplicationsCreateFuture = original.ApplicationsCreateFuture
+type ApplicationsDeleteFuture = original.ApplicationsDeleteFuture
+type ApplicationsUpdateFuture = original.ApplicationsUpdateFuture
 type AvailableOperationDisplay = original.AvailableOperationDisplay
 type AzureActiveDirectory = original.AzureActiveDirectory
+type BaseClient = original.BaseClient
+type BasicPartitionSchemeDescription = original.BasicPartitionSchemeDescription
+type BasicServicePlacementPolicyDescription = original.BasicServicePlacementPolicyDescription
+type BasicServiceResourceProperties = original.BasicServiceResourceProperties
+type BasicServiceResourceUpdateProperties = original.BasicServiceResourceUpdateProperties
 type CertificateDescription = original.CertificateDescription
 type ClientCertificateCommonName = original.ClientCertificateCommonName
 type ClientCertificateThumbprint = original.ClientCertificateThumbprint
 type Cluster = original.Cluster
 type ClusterCodeVersionsListResult = original.ClusterCodeVersionsListResult
-type ClusterCodeVersionsListResultIterator = original.ClusterCodeVersionsListResultIterator
-type ClusterCodeVersionsListResultPage = original.ClusterCodeVersionsListResultPage
 type ClusterCodeVersionsResult = original.ClusterCodeVersionsResult
 type ClusterHealthPolicy = original.ClusterHealthPolicy
 type ClusterListResult = original.ClusterListResult
-type ClusterListResultIterator = original.ClusterListResultIterator
-type ClusterListResultPage = original.ClusterListResultPage
 type ClusterProperties = original.ClusterProperties
 type ClusterPropertiesUpdateParameters = original.ClusterPropertiesUpdateParameters
-type ClustersCreateFuture = original.ClustersCreateFuture
-type ClustersUpdateFuture = original.ClustersUpdateFuture
 type ClusterUpdateParameters = original.ClusterUpdateParameters
 type ClusterUpgradeDeltaHealthPolicy = original.ClusterUpgradeDeltaHealthPolicy
 type ClusterUpgradePolicy = original.ClusterUpgradePolicy
 type ClusterVersionDetails = original.ClusterVersionDetails
+type ClusterVersionsClient = original.ClusterVersionsClient
+type ClustersClient = original.ClustersClient
+type ClustersCreateFuture = original.ClustersCreateFuture
+type ClustersUpdateFuture = original.ClustersUpdateFuture
 type DiagnosticsStorageAccountConfig = original.DiagnosticsStorageAccountConfig
 type EndpointRangeDescription = original.EndpointRangeDescription
 type ErrorModel = original.ErrorModel
 type ErrorModelError = original.ErrorModelError
+type NamedPartitionSchemeDescription = original.NamedPartitionSchemeDescription
 type NodeTypeDescription = original.NodeTypeDescription
 type OperationListResult = original.OperationListResult
 type OperationListResultIterator = original.OperationListResultIterator
 type OperationListResultPage = original.OperationListResultPage
 type OperationResult = original.OperationResult
+type OperationsClient = original.OperationsClient
+type PartitionSchemeDescription = original.PartitionSchemeDescription
+type ProxyResource = original.ProxyResource
 type Resource = original.Resource
+type RollingUpgradeMonitoringPolicy = original.RollingUpgradeMonitoringPolicy
+type ServerCertificateCommonName = original.ServerCertificateCommonName
+type ServerCertificateCommonNames = original.ServerCertificateCommonNames
+type ServiceCorrelationDescription = original.ServiceCorrelationDescription
+type ServiceLoadMetricDescription = original.ServiceLoadMetricDescription
+type ServicePlacementPolicyDescription = original.ServicePlacementPolicyDescription
+type ServiceResource = original.ServiceResource
+type ServiceResourceList = original.ServiceResourceList
+type ServiceResourceProperties = original.ServiceResourceProperties
+type ServiceResourcePropertiesBase = original.ServiceResourcePropertiesBase
+type ServiceResourceUpdate = original.ServiceResourceUpdate
+type ServiceResourceUpdateProperties = original.ServiceResourceUpdateProperties
+type ServiceTypeDeltaHealthPolicy = original.ServiceTypeDeltaHealthPolicy
+type ServiceTypeHealthPolicy = original.ServiceTypeHealthPolicy
+type ServicesClient = original.ServicesClient
+type ServicesCreateFuture = original.ServicesCreateFuture
+type ServicesDeleteFuture = original.ServicesDeleteFuture
+type ServicesUpdateFuture = original.ServicesUpdateFuture
 type SettingsParameterDescription = original.SettingsParameterDescription
 type SettingsSectionDescription = original.SettingsSectionDescription
-type OperationsClient = original.OperationsClient
+type SingletonPartitionSchemeDescription = original.SingletonPartitionSchemeDescription
+type StatefulServiceProperties = original.StatefulServiceProperties
+type StatefulServiceUpdateProperties = original.StatefulServiceUpdateProperties
+type StatelessServiceProperties = original.StatelessServiceProperties
+type StatelessServiceUpdateProperties = original.StatelessServiceUpdateProperties
+type UniformInt64RangePartitionSchemeDescription = original.UniformInt64RangePartitionSchemeDescription
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func NewApplicationTypeVersionsClient(subscriptionID string) ApplicationTypeVersionsClient {
+	return original.NewApplicationTypeVersionsClient(subscriptionID)
+}
+func NewApplicationTypeVersionsClientWithBaseURI(baseURI string, subscriptionID string) ApplicationTypeVersionsClient {
+	return original.NewApplicationTypeVersionsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewApplicationTypesClient(subscriptionID string) ApplicationTypesClient {
+	return original.NewApplicationTypesClient(subscriptionID)
+}
+func NewApplicationTypesClientWithBaseURI(baseURI string, subscriptionID string) ApplicationTypesClient {
+	return original.NewApplicationTypesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewApplicationsClient(subscriptionID string) ApplicationsClient {
+	return original.NewApplicationsClient(subscriptionID)
+}
+func NewApplicationsClientWithBaseURI(baseURI string, subscriptionID string) ApplicationsClient {
+	return original.NewApplicationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewClusterVersionsClient(subscriptionID string) ClusterVersionsClient {
+	return original.NewClusterVersionsClient(subscriptionID)
+}
+func NewClusterVersionsClientWithBaseURI(baseURI string, subscriptionID string) ClusterVersionsClient {
+	return original.NewClusterVersionsClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewClustersClient(subscriptionID string) ClustersClient {
 	return original.NewClustersClient(subscriptionID)
@@ -159,11 +333,20 @@ func NewClustersClient(subscriptionID string) ClustersClient {
 func NewClustersClientWithBaseURI(baseURI string, subscriptionID string) ClustersClient {
 	return original.NewClustersClientWithBaseURI(baseURI, subscriptionID)
 }
-func NewClusterVersionsClient(subscriptionID string) ClusterVersionsClient {
-	return original.NewClusterVersionsClient(subscriptionID)
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
 }
-func NewClusterVersionsClientWithBaseURI(baseURI string, subscriptionID string) ClusterVersionsClient {
-	return original.NewClusterVersionsClientWithBaseURI(baseURI, subscriptionID)
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewServicesClient(subscriptionID string) ServicesClient {
+	return original.NewServicesClient(subscriptionID)
+}
+func NewServicesClientWithBaseURI(baseURI string, subscriptionID string) ServicesClient {
+	return original.NewServicesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleClusterStateValues() []ClusterState {
 	return original.PossibleClusterStateValues()
@@ -174,29 +357,56 @@ func PossibleDurabilityLevelValues() []DurabilityLevel {
 func PossibleEnvironmentValues() []Environment {
 	return original.PossibleEnvironmentValues()
 }
+func PossibleMoveCostValues() []MoveCost {
+	return original.PossibleMoveCostValues()
+}
+func PossiblePartitionSchemeBasicPartitionSchemeDescriptionValues() []PartitionSchemeBasicPartitionSchemeDescription {
+	return original.PossiblePartitionSchemeBasicPartitionSchemeDescriptionValues()
+}
+func PossiblePartitionSchemeValues() []PartitionScheme {
+	return original.PossiblePartitionSchemeValues()
+}
 func PossibleProvisioningStateValues() []ProvisioningState {
 	return original.PossibleProvisioningStateValues()
-}
-func PossibleReliabilityLevelValues() []ReliabilityLevel {
-	return original.PossibleReliabilityLevelValues()
 }
 func PossibleReliabilityLevel1Values() []ReliabilityLevel1 {
 	return original.PossibleReliabilityLevel1Values()
 }
-func PossibleUpgradeModeValues() []UpgradeMode {
-	return original.PossibleUpgradeModeValues()
+func PossibleReliabilityLevelValues() []ReliabilityLevel {
+	return original.PossibleReliabilityLevelValues()
+}
+func PossibleServiceCorrelationSchemeValues() []ServiceCorrelationScheme {
+	return original.PossibleServiceCorrelationSchemeValues()
+}
+func PossibleServiceKindBasicServiceResourcePropertiesValues() []ServiceKindBasicServiceResourceProperties {
+	return original.PossibleServiceKindBasicServiceResourcePropertiesValues()
+}
+func PossibleServiceKindBasicServiceResourceUpdatePropertiesValues() []ServiceKindBasicServiceResourceUpdateProperties {
+	return original.PossibleServiceKindBasicServiceResourceUpdatePropertiesValues()
+}
+func PossibleServiceKindValues() []ServiceKind {
+	return original.PossibleServiceKindValues()
+}
+func PossibleServiceLoadMetricWeightValues() []ServiceLoadMetricWeight {
+	return original.PossibleServiceLoadMetricWeightValues()
+}
+func PossibleServicePlacementPolicyTypeValues() []ServicePlacementPolicyType {
+	return original.PossibleServicePlacementPolicyTypeValues()
+}
+func PossibleTypeValues() []Type {
+	return original.PossibleTypeValues()
 }
 func PossibleUpgradeMode1Values() []UpgradeMode1 {
 	return original.PossibleUpgradeMode1Values()
 }
+func PossibleUpgradeModeValues() []UpgradeMode {
+	return original.PossibleUpgradeModeValues()
+}
+func PossibleX509StoreName1Values() []X509StoreName1 {
+	return original.PossibleX509StoreName1Values()
+}
 func PossibleX509StoreNameValues() []X509StoreName {
 	return original.PossibleX509StoreNameValues()
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/latest"

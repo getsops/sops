@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionsClient is the client for the Partitions methods of the Servicefabric service.
 type PartitionsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewPartitionsClient creates an instance of the PartitionsClient client.
 func NewPartitionsClient(timeout *int32) PartitionsClient {
 	return NewPartitionsClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewPartitionsClientWithBaseURI creates an instance of the PartitionsClient client.
 func NewPartitionsClientWithBaseURI(baseURI string, timeout *int32) PartitionsClient {
 	return PartitionsClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get partitions
 // Parameters:
 // serviceName - the name of the service
@@ -65,6 +69,7 @@ func (client PartitionsClient) Get(ctx context.Context, serviceName string, part
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client PartitionsClient) GetPreparer(ctx context.Context, serviceName string, partitionID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -88,6 +93,7 @@ func (client PartitionsClient) GetPreparer(ctx context.Context, serviceName stri
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client PartitionsClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -95,6 +101,7 @@ func (client PartitionsClient) GetSender(req *http.Request) (*http.Response, err
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client PartitionsClient) GetResponder(resp *http.Response) (result Partition, err error) {
@@ -108,6 +115,7 @@ func (client PartitionsClient) GetResponder(resp *http.Response) (result Partiti
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // List list partitions
 // Parameters:
 // serviceName - the name of the service
@@ -133,6 +141,7 @@ func (client PartitionsClient) List(ctx context.Context, serviceName string) (re
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListPreparer prepares the List request.
 func (client PartitionsClient) ListPreparer(ctx context.Context, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -155,6 +164,7 @@ func (client PartitionsClient) ListPreparer(ctx context.Context, serviceName str
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client PartitionsClient) ListSender(req *http.Request) (*http.Response, error) {
@@ -162,6 +172,7 @@ func (client PartitionsClient) ListSender(req *http.Request) (*http.Response, er
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListResponder handles the response to the List request. The method always
 // closes the http.Response Body.
 func (client PartitionsClient) ListResponder(resp *http.Response) (result PartitionList, err error) {
@@ -175,6 +186,7 @@ func (client PartitionsClient) ListResponder(resp *http.Response) (result Partit
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Repair repair partitions
 // Parameters:
 // partitionID - the id of the partition
@@ -200,6 +212,7 @@ func (client PartitionsClient) Repair(ctx context.Context, partitionID string) (
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairPreparer prepares the Repair request.
 func (client PartitionsClient) RepairPreparer(ctx context.Context, partitionID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -222,6 +235,7 @@ func (client PartitionsClient) RepairPreparer(ctx context.Context, partitionID s
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairSender sends the Repair request. The method will close the
 // http.Response Body if it receives an error.
 func (client PartitionsClient) RepairSender(req *http.Request) (*http.Response, error) {
@@ -229,6 +243,7 @@ func (client PartitionsClient) RepairSender(req *http.Request) (*http.Response, 
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RepairResponder handles the response to the Repair request. The method always
 // closes the http.Response Body.
 func (client PartitionsClient) RepairResponder(resp *http.Response) (result String, err error) {

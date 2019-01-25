@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewConnectionClientWithBaseURI(baseURI string, subscriptionID string) Conne
 // connectionName - the parameters supplied to the create or update connection operation.
 // parameters - the parameters supplied to the create or update connection operation.
 func (client ConnectionClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, automationAccountName string, connectionName string, parameters ConnectionCreateOrUpdateParameters) (result Connection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConnectionClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -130,6 +141,16 @@ func (client ConnectionClient) CreateOrUpdateResponder(resp *http.Response) (res
 // automationAccountName - the name of the automation account.
 // connectionName - the name of connection.
 func (client ConnectionClient) Delete(ctx context.Context, resourceGroupName string, automationAccountName string, connectionName string) (result Connection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConnectionClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -207,6 +228,16 @@ func (client ConnectionClient) DeleteResponder(resp *http.Response) (result Conn
 // automationAccountName - the name of the automation account.
 // connectionName - the name of connection.
 func (client ConnectionClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string, connectionName string) (result Connection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConnectionClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -283,6 +314,16 @@ func (client ConnectionClient) GetResponder(resp *http.Response) (result Connect
 // resourceGroupName - name of an Azure Resource group.
 // automationAccountName - the name of the automation account.
 func (client ConnectionClient) ListByAutomationAccount(ctx context.Context, resourceGroupName string, automationAccountName string) (result ConnectionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConnectionClient.ListByAutomationAccount")
+		defer func() {
+			sc := -1
+			if result.clr.Response.Response != nil {
+				sc = result.clr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -355,8 +396,8 @@ func (client ConnectionClient) ListByAutomationAccountResponder(resp *http.Respo
 }
 
 // listByAutomationAccountNextResults retrieves the next set of results, if any.
-func (client ConnectionClient) listByAutomationAccountNextResults(lastResults ConnectionListResult) (result ConnectionListResult, err error) {
-	req, err := lastResults.connectionListResultPreparer()
+func (client ConnectionClient) listByAutomationAccountNextResults(ctx context.Context, lastResults ConnectionListResult) (result ConnectionListResult, err error) {
+	req, err := lastResults.connectionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "automation.ConnectionClient", "listByAutomationAccountNextResults", nil, "Failure preparing next results request")
 	}
@@ -377,6 +418,16 @@ func (client ConnectionClient) listByAutomationAccountNextResults(lastResults Co
 
 // ListByAutomationAccountComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ConnectionClient) ListByAutomationAccountComplete(ctx context.Context, resourceGroupName string, automationAccountName string) (result ConnectionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConnectionClient.ListByAutomationAccount")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByAutomationAccount(ctx, resourceGroupName, automationAccountName)
 	return
 }
@@ -388,6 +439,16 @@ func (client ConnectionClient) ListByAutomationAccountComplete(ctx context.Conte
 // connectionName - the parameters supplied to the update a connection operation.
 // parameters - the parameters supplied to the update a connection operation.
 func (client ConnectionClient) Update(ctx context.Context, resourceGroupName string, automationAccountName string, connectionName string, parameters ConnectionUpdateParameters) (result Connection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConnectionClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

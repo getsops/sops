@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationUpgradesClient is the client for the ApplicationUpgrades methods of the Servicefabric service.
 type ApplicationUpgradesClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewApplicationUpgradesClient creates an instance of the ApplicationUpgradesClient client.
 func NewApplicationUpgradesClient(timeout *int32) ApplicationUpgradesClient {
 	return NewApplicationUpgradesClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewApplicationUpgradesClientWithBaseURI creates an instance of the ApplicationUpgradesClient client.
 func NewApplicationUpgradesClientWithBaseURI(baseURI string, timeout *int32) ApplicationUpgradesClient {
 	return ApplicationUpgradesClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get application upgrades
 // Parameters:
 // applicationName - the name of the application
@@ -64,6 +68,7 @@ func (client ApplicationUpgradesClient) Get(ctx context.Context, applicationName
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client ApplicationUpgradesClient) GetPreparer(ctx context.Context, applicationName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -86,6 +91,7 @@ func (client ApplicationUpgradesClient) GetPreparer(ctx context.Context, applica
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationUpgradesClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -93,6 +99,7 @@ func (client ApplicationUpgradesClient) GetSender(req *http.Request) (*http.Resp
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client ApplicationUpgradesClient) GetResponder(resp *http.Response) (result ApplicationUpgrade, err error) {
@@ -106,6 +113,7 @@ func (client ApplicationUpgradesClient) GetResponder(resp *http.Response) (resul
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Resume resume application upgrades
 // Parameters:
 // applicationName - the name of the application
@@ -132,6 +140,7 @@ func (client ApplicationUpgradesClient) Resume(ctx context.Context, applicationN
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResumePreparer prepares the Resume request.
 func (client ApplicationUpgradesClient) ResumePreparer(ctx context.Context, applicationName string, resumeApplicationUpgrade ResumeApplicationUpgrade) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -156,6 +165,7 @@ func (client ApplicationUpgradesClient) ResumePreparer(ctx context.Context, appl
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResumeSender sends the Resume request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationUpgradesClient) ResumeSender(req *http.Request) (*http.Response, error) {
@@ -163,6 +173,7 @@ func (client ApplicationUpgradesClient) ResumeSender(req *http.Request) (*http.R
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResumeResponder handles the response to the Resume request. The method always
 // closes the http.Response Body.
 func (client ApplicationUpgradesClient) ResumeResponder(resp *http.Response) (result String, err error) {
@@ -176,6 +187,7 @@ func (client ApplicationUpgradesClient) ResumeResponder(resp *http.Response) (re
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Start start application upgrades
 // Parameters:
 // applicationName - the name of the application
@@ -202,6 +214,7 @@ func (client ApplicationUpgradesClient) Start(ctx context.Context, applicationNa
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartPreparer prepares the Start request.
 func (client ApplicationUpgradesClient) StartPreparer(ctx context.Context, applicationName string, startApplicationUpgrade StartApplicationUpgrade) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -226,6 +239,7 @@ func (client ApplicationUpgradesClient) StartPreparer(ctx context.Context, appli
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartSender sends the Start request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationUpgradesClient) StartSender(req *http.Request) (*http.Response, error) {
@@ -233,6 +247,7 @@ func (client ApplicationUpgradesClient) StartSender(req *http.Request) (*http.Re
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartResponder handles the response to the Start request. The method always
 // closes the http.Response Body.
 func (client ApplicationUpgradesClient) StartResponder(resp *http.Response) (result String, err error) {
@@ -246,6 +261,7 @@ func (client ApplicationUpgradesClient) StartResponder(resp *http.Response) (res
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Update update application upgrades
 // Parameters:
 // applicationName - the name of the application
@@ -272,6 +288,7 @@ func (client ApplicationUpgradesClient) Update(ctx context.Context, applicationN
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdatePreparer prepares the Update request.
 func (client ApplicationUpgradesClient) UpdatePreparer(ctx context.Context, applicationName string, updateApplicationUpgrade UpdateApplicationUpgrade) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -296,6 +313,7 @@ func (client ApplicationUpgradesClient) UpdatePreparer(ctx context.Context, appl
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationUpgradesClient) UpdateSender(req *http.Request) (*http.Response, error) {
@@ -303,6 +321,7 @@ func (client ApplicationUpgradesClient) UpdateSender(req *http.Request) (*http.R
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateResponder handles the response to the Update request. The method always
 // closes the http.Response Body.
 func (client ApplicationUpgradesClient) UpdateResponder(resp *http.Response) (result String, err error) {

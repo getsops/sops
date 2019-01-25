@@ -22,24 +22,29 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // APIProductClient is the apiManagement Client
 type APIProductClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewAPIProductClient creates an instance of the APIProductClient client.
 func NewAPIProductClient(subscriptionID string) APIProductClient {
 	return NewAPIProductClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewAPIProductClientWithBaseURI creates an instance of the APIProductClient client.
 func NewAPIProductClientWithBaseURI(baseURI string, subscriptionID string) APIProductClient {
 	return APIProductClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByApis lists all Products, which the API is part of.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -51,6 +56,16 @@ func NewAPIProductClientWithBaseURI(baseURI string, subscriptionID string) APIPr
 // top - number of records to return.
 // skip - number of records to skip.
 func (client APIProductClient) ListByApis(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result ProductCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIProductClient.ListByApis")
+		defer func() {
+			sc := -1
+			if result.pc.Response.Response != nil {
+				sc = result.pc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -91,6 +106,7 @@ func (client APIProductClient) ListByApis(ctx context.Context, resourceGroupName
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByApisPreparer prepares the ListByApis request.
 func (client APIProductClient) ListByApisPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -122,6 +138,7 @@ func (client APIProductClient) ListByApisPreparer(ctx context.Context, resourceG
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByApisSender sends the ListByApis request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIProductClient) ListByApisSender(req *http.Request) (*http.Response, error) {
@@ -129,6 +146,7 @@ func (client APIProductClient) ListByApisSender(req *http.Request) (*http.Respon
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByApisResponder handles the response to the ListByApis request. The method always
 // closes the http.Response Body.
 func (client APIProductClient) ListByApisResponder(resp *http.Response) (result ProductCollection, err error) {
@@ -143,8 +161,8 @@ func (client APIProductClient) ListByApisResponder(resp *http.Response) (result 
 }
 
 // listByApisNextResults retrieves the next set of results, if any.
-func (client APIProductClient) listByApisNextResults(lastResults ProductCollection) (result ProductCollection, err error) {
-	req, err := lastResults.productCollectionPreparer()
+func (client APIProductClient) listByApisNextResults(ctx context.Context, lastResults ProductCollection) (result ProductCollection, err error) {
+	req, err := lastResults.productCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.APIProductClient", "listByApisNextResults", nil, "Failure preparing next results request")
 	}
@@ -163,8 +181,19 @@ func (client APIProductClient) listByApisNextResults(lastResults ProductCollecti
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByApisComplete enumerates all values, automatically crossing page boundaries as required.
 func (client APIProductClient) ListByApisComplete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result ProductCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIProductClient.ListByApis")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByApis(ctx, resourceGroupName, serviceName, apiid, filter, top, skip)
 	return
 }

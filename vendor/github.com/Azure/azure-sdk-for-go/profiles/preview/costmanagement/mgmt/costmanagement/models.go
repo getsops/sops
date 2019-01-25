@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,15 +19,16 @@
 
 package costmanagement
 
-import original "github.com/Azure/azure-sdk-for-go/services/costmanagement/mgmt/2018-05-31/costmanagement"
+import (
+	"context"
 
-type BillingAccountDimensionsClient = original.BillingAccountDimensionsClient
+	original "github.com/Azure/azure-sdk-for-go/services/costmanagement/mgmt/2018-05-31/costmanagement"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type FormatType = original.FormatType
 
 const (
@@ -72,17 +73,26 @@ const (
 	YearToDate  TimeframeType = original.YearToDate
 )
 
+type BaseClient = original.BaseClient
+type BillingAccountDimensionsClient = original.BillingAccountDimensionsClient
 type Dimension = original.Dimension
 type DimensionProperties = original.DimensionProperties
 type DimensionsListResult = original.DimensionsListResult
 type ErrorDetails = original.ErrorDetails
 type ErrorResponse = original.ErrorResponse
+type Operation = original.Operation
+type OperationDisplay = original.OperationDisplay
+type OperationListResult = original.OperationListResult
+type OperationListResultIterator = original.OperationListResultIterator
+type OperationListResultPage = original.OperationListResultPage
+type OperationsClient = original.OperationsClient
 type Query = original.Query
 type QueryColumn = original.QueryColumn
 type QueryProperties = original.QueryProperties
 type QueryResult = original.QueryResult
 type ReportConfig = original.ReportConfig
 type ReportConfigAggregation = original.ReportConfigAggregation
+type ReportConfigClient = original.ReportConfigClient
 type ReportConfigComparisonExpression = original.ReportConfigComparisonExpression
 type ReportConfigDataset = original.ReportConfigDataset
 type ReportConfigDatasetConfiguration = original.ReportConfigDatasetConfiguration
@@ -97,18 +107,47 @@ type ReportConfigRecurrencePeriod = original.ReportConfigRecurrencePeriod
 type ReportConfigSchedule = original.ReportConfigSchedule
 type ReportConfigTimePeriod = original.ReportConfigTimePeriod
 type Resource = original.Resource
-type ReportConfigClient = original.ReportConfigClient
 type ResourceGroupDimensionsClient = original.ResourceGroupDimensionsClient
 type SubscriptionDimensionsClient = original.SubscriptionDimensionsClient
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
 func NewBillingAccountDimensionsClient(subscriptionID string) BillingAccountDimensionsClient {
 	return original.NewBillingAccountDimensionsClient(subscriptionID)
 }
 func NewBillingAccountDimensionsClientWithBaseURI(baseURI string, subscriptionID string) BillingAccountDimensionsClient {
 	return original.NewBillingAccountDimensionsClientWithBaseURI(baseURI, subscriptionID)
 }
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return original.NewOperationListResultIterator(page)
+}
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return original.NewOperationListResultPage(getNextPage)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewReportConfigClient(subscriptionID string) ReportConfigClient {
+	return original.NewReportConfigClient(subscriptionID)
+}
+func NewReportConfigClientWithBaseURI(baseURI string, subscriptionID string) ReportConfigClient {
+	return original.NewReportConfigClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewResourceGroupDimensionsClient(subscriptionID string) ResourceGroupDimensionsClient {
+	return original.NewResourceGroupDimensionsClient(subscriptionID)
+}
+func NewResourceGroupDimensionsClientWithBaseURI(baseURI string, subscriptionID string) ResourceGroupDimensionsClient {
+	return original.NewResourceGroupDimensionsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewSubscriptionDimensionsClient(subscriptionID string) SubscriptionDimensionsClient {
+	return original.NewSubscriptionDimensionsClient(subscriptionID)
+}
+func NewSubscriptionDimensionsClientWithBaseURI(baseURI string, subscriptionID string) SubscriptionDimensionsClient {
+	return original.NewSubscriptionDimensionsClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 	return original.NewWithBaseURI(baseURI, subscriptionID)
@@ -130,24 +169,6 @@ func PossibleStatusTypeValues() []StatusType {
 }
 func PossibleTimeframeTypeValues() []TimeframeType {
 	return original.PossibleTimeframeTypeValues()
-}
-func NewReportConfigClient(subscriptionID string) ReportConfigClient {
-	return original.NewReportConfigClient(subscriptionID)
-}
-func NewReportConfigClientWithBaseURI(baseURI string, subscriptionID string) ReportConfigClient {
-	return original.NewReportConfigClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewResourceGroupDimensionsClient(subscriptionID string) ResourceGroupDimensionsClient {
-	return original.NewResourceGroupDimensionsClient(subscriptionID)
-}
-func NewResourceGroupDimensionsClientWithBaseURI(baseURI string, subscriptionID string) ResourceGroupDimensionsClient {
-	return original.NewResourceGroupDimensionsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewSubscriptionDimensionsClient(subscriptionID string) SubscriptionDimensionsClient {
-	return original.NewSubscriptionDimensionsClient(subscriptionID)
-}
-func NewSubscriptionDimensionsClientWithBaseURI(baseURI string, subscriptionID string) SubscriptionDimensionsClient {
-	return original.NewSubscriptionDimensionsClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

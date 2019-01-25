@@ -24,22 +24,26 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceGroupFromTemplatesClient is the client for the ServiceGroupFromTemplates methods of the Servicefabric
 // service.
 type ServiceGroupFromTemplatesClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewServiceGroupFromTemplatesClient creates an instance of the ServiceGroupFromTemplatesClient client.
 func NewServiceGroupFromTemplatesClient(timeout *int32) ServiceGroupFromTemplatesClient {
 	return NewServiceGroupFromTemplatesClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewServiceGroupFromTemplatesClientWithBaseURI creates an instance of the ServiceGroupFromTemplatesClient client.
 func NewServiceGroupFromTemplatesClientWithBaseURI(baseURI string, timeout *int32) ServiceGroupFromTemplatesClient {
 	return ServiceGroupFromTemplatesClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Create create service group from templates
 // Parameters:
 // applicationName - the name of the application
@@ -66,6 +70,7 @@ func (client ServiceGroupFromTemplatesClient) Create(ctx context.Context, applic
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreatePreparer prepares the Create request.
 func (client ServiceGroupFromTemplatesClient) CreatePreparer(ctx context.Context, applicationName string, serviceDescriptionTemplate ServiceDescriptionTemplate) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -90,6 +95,7 @@ func (client ServiceGroupFromTemplatesClient) CreatePreparer(ctx context.Context
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateSender sends the Create request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceGroupFromTemplatesClient) CreateSender(req *http.Request) (*http.Response, error) {
@@ -97,6 +103,7 @@ func (client ServiceGroupFromTemplatesClient) CreateSender(req *http.Request) (*
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateResponder handles the response to the Create request. The method always
 // closes the http.Response Body.
 func (client ServiceGroupFromTemplatesClient) CreateResponder(resp *http.Response) (result String, err error) {

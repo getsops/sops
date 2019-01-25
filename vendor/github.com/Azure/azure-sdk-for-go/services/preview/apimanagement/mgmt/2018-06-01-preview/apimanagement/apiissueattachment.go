@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -51,6 +52,16 @@ func NewAPIIssueAttachmentClientWithBaseURI(baseURI string, subscriptionID strin
 // ifMatch - eTag of the Issue Entity. ETag should match the current entity state from the header response of
 // the GET request or it should be * for unconditional update.
 func (client APIIssueAttachmentClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, attachmentID string, parameters IssueAttachmentContract, ifMatch string) (result IssueAttachmentContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueAttachmentClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -158,6 +169,16 @@ func (client APIIssueAttachmentClient) CreateOrUpdateResponder(resp *http.Respon
 // ifMatch - eTag of the Issue Entity. ETag should match the current entity state from the header response of
 // the GET request or it should be * for unconditional update.
 func (client APIIssueAttachmentClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, attachmentID string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueAttachmentClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -251,6 +272,16 @@ func (client APIIssueAttachmentClient) DeleteResponder(resp *http.Response) (res
 // issueID - issue identifier. Must be unique in the current API Management service instance.
 // attachmentID - attachment identifier within an Issue. Must be unique in the current Issue.
 func (client APIIssueAttachmentClient) Get(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, attachmentID string) (result IssueAttachmentContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueAttachmentClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -344,6 +375,16 @@ func (client APIIssueAttachmentClient) GetResponder(resp *http.Response) (result
 // issueID - issue identifier. Must be unique in the current API Management service instance.
 // attachmentID - attachment identifier within an Issue. Must be unique in the current Issue.
 func (client APIIssueAttachmentClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, attachmentID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueAttachmentClient.GetEntityTag")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -428,7 +469,7 @@ func (client APIIssueAttachmentClient) GetEntityTagResponder(resp *http.Response
 	return
 }
 
-// ListByService lists all comments for the Issue assosiated with the specified API.
+// ListByService lists all comments for the Issue associated with the specified API.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
@@ -441,6 +482,16 @@ func (client APIIssueAttachmentClient) GetEntityTagResponder(resp *http.Response
 // top - number of records to return.
 // skip - number of records to skip.
 func (client APIIssueAttachmentClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, filter string, top *int32, skip *int32) (result IssueAttachmentCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueAttachmentClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.iac.Response.Response != nil {
+				sc = result.iac.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -538,8 +589,8 @@ func (client APIIssueAttachmentClient) ListByServiceResponder(resp *http.Respons
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client APIIssueAttachmentClient) listByServiceNextResults(lastResults IssueAttachmentCollection) (result IssueAttachmentCollection, err error) {
-	req, err := lastResults.issueAttachmentCollectionPreparer()
+func (client APIIssueAttachmentClient) listByServiceNextResults(ctx context.Context, lastResults IssueAttachmentCollection) (result IssueAttachmentCollection, err error) {
+	req, err := lastResults.issueAttachmentCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.APIIssueAttachmentClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -560,6 +611,16 @@ func (client APIIssueAttachmentClient) listByServiceNextResults(lastResults Issu
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client APIIssueAttachmentClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, filter string, top *int32, skip *int32) (result IssueAttachmentCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueAttachmentClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, apiid, issueID, filter, top, skip)
 	return
 }

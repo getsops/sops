@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ClusterLoadInformationsClient is the client for the ClusterLoadInformations methods of the Servicefabric service.
 type ClusterLoadInformationsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewClusterLoadInformationsClient creates an instance of the ClusterLoadInformationsClient client.
 func NewClusterLoadInformationsClient(timeout *int32) ClusterLoadInformationsClient {
 	return NewClusterLoadInformationsClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewClusterLoadInformationsClientWithBaseURI creates an instance of the ClusterLoadInformationsClient client.
 func NewClusterLoadInformationsClientWithBaseURI(baseURI string, timeout *int32) ClusterLoadInformationsClient {
 	return ClusterLoadInformationsClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get cluster load informations
 func (client ClusterLoadInformationsClient) Get(ctx context.Context) (result ClusterLoadInformation, err error) {
 	req, err := client.GetPreparer(ctx)
@@ -62,6 +66,7 @@ func (client ClusterLoadInformationsClient) Get(ctx context.Context) (result Clu
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client ClusterLoadInformationsClient) GetPreparer(ctx context.Context) (*http.Request, error) {
 	const APIVersion = "1.0.0"
@@ -80,6 +85,7 @@ func (client ClusterLoadInformationsClient) GetPreparer(ctx context.Context) (*h
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ClusterLoadInformationsClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -87,6 +93,7 @@ func (client ClusterLoadInformationsClient) GetSender(req *http.Request) (*http.
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client ClusterLoadInformationsClient) GetResponder(resp *http.Response) (result ClusterLoadInformation, err error) {

@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicasClient is the client for the Replicas methods of the Servicefabric service.
 type ReplicasClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewReplicasClient creates an instance of the ReplicasClient client.
 func NewReplicasClient(timeout *int32) ReplicasClient {
 	return NewReplicasClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewReplicasClientWithBaseURI creates an instance of the ReplicasClient client.
 func NewReplicasClientWithBaseURI(baseURI string, timeout *int32) ReplicasClient {
 	return ReplicasClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get replicas
 // Parameters:
 // partitionID - the id of the partition
@@ -65,6 +69,7 @@ func (client ReplicasClient) Get(ctx context.Context, partitionID string, replic
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client ReplicasClient) GetPreparer(ctx context.Context, partitionID string, replicaID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -88,6 +93,7 @@ func (client ReplicasClient) GetPreparer(ctx context.Context, partitionID string
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReplicasClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -95,6 +101,7 @@ func (client ReplicasClient) GetSender(req *http.Request) (*http.Response, error
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client ReplicasClient) GetResponder(resp *http.Response) (result Replica, err error) {
@@ -108,6 +115,7 @@ func (client ReplicasClient) GetResponder(resp *http.Response) (result Replica, 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // List list replicas
 // Parameters:
 // partitionID - the id of the partition
@@ -133,6 +141,7 @@ func (client ReplicasClient) List(ctx context.Context, partitionID string) (resu
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListPreparer prepares the List request.
 func (client ReplicasClient) ListPreparer(ctx context.Context, partitionID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -155,6 +164,7 @@ func (client ReplicasClient) ListPreparer(ctx context.Context, partitionID strin
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReplicasClient) ListSender(req *http.Request) (*http.Response, error) {
@@ -162,6 +172,7 @@ func (client ReplicasClient) ListSender(req *http.Request) (*http.Response, erro
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListResponder handles the response to the List request. The method always
 // closes the http.Response Body.
 func (client ReplicasClient) ListResponder(resp *http.Response) (result ReplicaList, err error) {

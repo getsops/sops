@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewDatabaseBlobAuditingPoliciesClientWithBaseURI(baseURI string, subscripti
 // databaseName - the name of the database.
 // parameters - the database blob auditing policy.
 func (client DatabaseBlobAuditingPoliciesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, databaseName string, parameters DatabaseBlobAuditingPolicy) (result DatabaseBlobAuditingPolicy, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DatabaseBlobAuditingPoliciesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serverName, databaseName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.DatabaseBlobAuditingPoliciesClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -123,6 +134,16 @@ func (client DatabaseBlobAuditingPoliciesClient) CreateOrUpdateResponder(resp *h
 // serverName - the name of the server.
 // databaseName - the name of the database.
 func (client DatabaseBlobAuditingPoliciesClient) Get(ctx context.Context, resourceGroupName string, serverName string, databaseName string) (result DatabaseBlobAuditingPolicy, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DatabaseBlobAuditingPoliciesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, databaseName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.DatabaseBlobAuditingPoliciesClient", "Get", nil, "Failure preparing request")

@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,11 +22,9 @@ package entitysearch
 import original "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v1.0/entitysearch"
 
 const (
-	DefaultBaseURI = original.DefaultBaseURI
+	DefaultEndpoint = original.DefaultEndpoint
 )
 
-type BaseClient = original.BaseClient
-type EntitiesClient = original.EntitiesClient
 type AnswerType = original.AnswerType
 
 const (
@@ -194,73 +192,72 @@ const (
 )
 
 type Airport = original.Airport
-type BasicAnswer = original.BasicAnswer
 type Answer = original.Answer
+type BaseClient = original.BaseClient
+type BasicAnswer = original.BasicAnswer
 type BasicCivicStructure = original.BasicCivicStructure
-type CivicStructure = original.CivicStructure
 type BasicContractualRulesAttribution = original.BasicContractualRulesAttribution
-type ContractualRulesAttribution = original.ContractualRulesAttribution
 type BasicContractualRulesContractualRule = original.BasicContractualRulesContractualRule
+type BasicCreativeWork = original.BasicCreativeWork
+type BasicEntertainmentBusiness = original.BasicEntertainmentBusiness
+type BasicFoodEstablishment = original.BasicFoodEstablishment
+type BasicIdentifiable = original.BasicIdentifiable
+type BasicIntangible = original.BasicIntangible
+type BasicLocalBusiness = original.BasicLocalBusiness
+type BasicLodgingBusiness = original.BasicLodgingBusiness
+type BasicMediaObject = original.BasicMediaObject
+type BasicPlace = original.BasicPlace
+type BasicResponse = original.BasicResponse
+type BasicResponseBase = original.BasicResponseBase
+type BasicSearchResultsAnswer = original.BasicSearchResultsAnswer
+type BasicStructuredValue = original.BasicStructuredValue
+type BasicThing = original.BasicThing
+type CivicStructure = original.CivicStructure
+type ContractualRulesAttribution = original.ContractualRulesAttribution
 type ContractualRulesContractualRule = original.ContractualRulesContractualRule
 type ContractualRulesLicenseAttribution = original.ContractualRulesLicenseAttribution
 type ContractualRulesLinkAttribution = original.ContractualRulesLinkAttribution
 type ContractualRulesMediaAttribution = original.ContractualRulesMediaAttribution
 type ContractualRulesTextAttribution = original.ContractualRulesTextAttribution
-type BasicCreativeWork = original.BasicCreativeWork
 type CreativeWork = original.CreativeWork
-type BasicEntertainmentBusiness = original.BasicEntertainmentBusiness
 type EntertainmentBusiness = original.EntertainmentBusiness
 type Entities = original.Entities
+type EntitiesClient = original.EntitiesClient
 type EntitiesEntityPresentationInfo = original.EntitiesEntityPresentationInfo
 type Error = original.Error
 type ErrorResponse = original.ErrorResponse
-type BasicFoodEstablishment = original.BasicFoodEstablishment
 type FoodEstablishment = original.FoodEstablishment
 type Hotel = original.Hotel
-type BasicIdentifiable = original.BasicIdentifiable
 type Identifiable = original.Identifiable
 type ImageObject = original.ImageObject
-type BasicIntangible = original.BasicIntangible
 type Intangible = original.Intangible
 type License = original.License
-type BasicLocalBusiness = original.BasicLocalBusiness
 type LocalBusiness = original.LocalBusiness
-type BasicLodgingBusiness = original.BasicLodgingBusiness
 type LodgingBusiness = original.LodgingBusiness
-type BasicMediaObject = original.BasicMediaObject
 type MediaObject = original.MediaObject
 type MovieTheater = original.MovieTheater
 type Organization = original.Organization
-type BasicPlace = original.BasicPlace
 type Place = original.Place
 type Places = original.Places
 type PostalAddress = original.PostalAddress
 type QueryContext = original.QueryContext
-type BasicResponse = original.BasicResponse
 type Response = original.Response
-type BasicResponseBase = original.BasicResponseBase
 type ResponseBase = original.ResponseBase
 type Restaurant = original.Restaurant
 type SearchResponse = original.SearchResponse
-type BasicSearchResultsAnswer = original.BasicSearchResultsAnswer
 type SearchResultsAnswer = original.SearchResultsAnswer
-type BasicStructuredValue = original.BasicStructuredValue
 type StructuredValue = original.StructuredValue
-type BasicThing = original.BasicThing
 type Thing = original.Thing
 type TouristAttraction = original.TouristAttraction
 
 func New() BaseClient {
 	return original.New()
 }
-func NewWithBaseURI(baseURI string) BaseClient {
-	return original.NewWithBaseURI(baseURI)
-}
 func NewEntitiesClient() EntitiesClient {
 	return original.NewEntitiesClient()
 }
-func NewEntitiesClientWithBaseURI(baseURI string) EntitiesClient {
-	return original.NewEntitiesClientWithBaseURI(baseURI)
+func NewWithoutDefaults(endpoint string) BaseClient {
+	return original.NewWithoutDefaults(endpoint)
 }
 func PossibleAnswerTypeValues() []AnswerType {
 	return original.PossibleAnswerTypeValues()
@@ -286,11 +283,11 @@ func PossibleResponseFormatValues() []ResponseFormat {
 func PossibleSafeSearchValues() []SafeSearch {
 	return original.PossibleSafeSearchValues()
 }
-func PossibleTypeValues() []Type {
-	return original.PossibleTypeValues()
-}
 func PossibleTypeBasicResponseBaseValues() []TypeBasicResponseBase {
 	return original.PossibleTypeBasicResponseBaseValues()
+}
+func PossibleTypeValues() []Type {
+	return original.PossibleTypeValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/latest"

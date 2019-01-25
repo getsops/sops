@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewLoadBalancerLoadBalancingRulesClientWithBaseURI(baseURI string, subscrip
 // loadBalancerName - the name of the load balancer.
 // loadBalancingRuleName - the name of the load balancing rule.
 func (client LoadBalancerLoadBalancingRulesClient) Get(ctx context.Context, resourceGroupName string, loadBalancerName string, loadBalancingRuleName string) (result LoadBalancingRule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LoadBalancerLoadBalancingRulesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, loadBalancerName, loadBalancingRuleName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.LoadBalancerLoadBalancingRulesClient", "Get", nil, "Failure preparing request")
@@ -114,6 +125,16 @@ func (client LoadBalancerLoadBalancingRulesClient) GetResponder(resp *http.Respo
 // resourceGroupName - the name of the resource group.
 // loadBalancerName - the name of the load balancer.
 func (client LoadBalancerLoadBalancingRulesClient) List(ctx context.Context, resourceGroupName string, loadBalancerName string) (result LoadBalancerLoadBalancingRuleListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LoadBalancerLoadBalancingRulesClient.List")
+		defer func() {
+			sc := -1
+			if result.lblbrlr.Response.Response != nil {
+				sc = result.lblbrlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, loadBalancerName)
 	if err != nil {
@@ -178,8 +199,8 @@ func (client LoadBalancerLoadBalancingRulesClient) ListResponder(resp *http.Resp
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client LoadBalancerLoadBalancingRulesClient) listNextResults(lastResults LoadBalancerLoadBalancingRuleListResult) (result LoadBalancerLoadBalancingRuleListResult, err error) {
-	req, err := lastResults.loadBalancerLoadBalancingRuleListResultPreparer()
+func (client LoadBalancerLoadBalancingRulesClient) listNextResults(ctx context.Context, lastResults LoadBalancerLoadBalancingRuleListResult) (result LoadBalancerLoadBalancingRuleListResult, err error) {
+	req, err := lastResults.loadBalancerLoadBalancingRuleListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "network.LoadBalancerLoadBalancingRulesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -200,6 +221,16 @@ func (client LoadBalancerLoadBalancingRulesClient) listNextResults(lastResults L
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client LoadBalancerLoadBalancingRulesClient) ListComplete(ctx context.Context, resourceGroupName string, loadBalancerName string) (result LoadBalancerLoadBalancingRuleListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LoadBalancerLoadBalancingRulesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, loadBalancerName)
 	return
 }

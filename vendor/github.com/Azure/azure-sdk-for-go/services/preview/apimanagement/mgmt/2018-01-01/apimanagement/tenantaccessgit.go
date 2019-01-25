@@ -22,29 +22,44 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // TenantAccessGitClient is the apiManagement Client
 type TenantAccessGitClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewTenantAccessGitClient creates an instance of the TenantAccessGitClient client.
 func NewTenantAccessGitClient(subscriptionID string) TenantAccessGitClient {
 	return NewTenantAccessGitClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewTenantAccessGitClientWithBaseURI creates an instance of the TenantAccessGitClient client.
 func NewTenantAccessGitClientWithBaseURI(baseURI string, subscriptionID string) TenantAccessGitClient {
 	return TenantAccessGitClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Get gets the Git access configuration for the tenant.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client TenantAccessGitClient) Get(ctx context.Context, resourceGroupName string, serviceName string) (result AccessInformationContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TenantAccessGitClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -74,6 +89,7 @@ func (client TenantAccessGitClient) Get(ctx context.Context, resourceGroupName s
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetPreparer prepares the Get request.
 func (client TenantAccessGitClient) GetPreparer(ctx context.Context, resourceGroupName string, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -96,6 +112,7 @@ func (client TenantAccessGitClient) GetPreparer(ctx context.Context, resourceGro
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client TenantAccessGitClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -103,6 +120,7 @@ func (client TenantAccessGitClient) GetSender(req *http.Request) (*http.Response
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client TenantAccessGitClient) GetResponder(resp *http.Response) (result AccessInformationContract, err error) {
@@ -116,11 +134,22 @@ func (client TenantAccessGitClient) GetResponder(resp *http.Response) (result Ac
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // RegeneratePrimaryKey regenerate primary access key for GIT.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client TenantAccessGitClient) RegeneratePrimaryKey(ctx context.Context, resourceGroupName string, serviceName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TenantAccessGitClient.RegeneratePrimaryKey")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -150,6 +179,7 @@ func (client TenantAccessGitClient) RegeneratePrimaryKey(ctx context.Context, re
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // RegeneratePrimaryKeyPreparer prepares the RegeneratePrimaryKey request.
 func (client TenantAccessGitClient) RegeneratePrimaryKeyPreparer(ctx context.Context, resourceGroupName string, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -172,6 +202,7 @@ func (client TenantAccessGitClient) RegeneratePrimaryKeyPreparer(ctx context.Con
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // RegeneratePrimaryKeySender sends the RegeneratePrimaryKey request. The method will close the
 // http.Response Body if it receives an error.
 func (client TenantAccessGitClient) RegeneratePrimaryKeySender(req *http.Request) (*http.Response, error) {
@@ -179,6 +210,7 @@ func (client TenantAccessGitClient) RegeneratePrimaryKeySender(req *http.Request
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // RegeneratePrimaryKeyResponder handles the response to the RegeneratePrimaryKey request. The method always
 // closes the http.Response Body.
 func (client TenantAccessGitClient) RegeneratePrimaryKeyResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -191,11 +223,22 @@ func (client TenantAccessGitClient) RegeneratePrimaryKeyResponder(resp *http.Res
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // RegenerateSecondaryKey regenerate secondary access key for GIT.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client TenantAccessGitClient) RegenerateSecondaryKey(ctx context.Context, resourceGroupName string, serviceName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TenantAccessGitClient.RegenerateSecondaryKey")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -225,6 +268,7 @@ func (client TenantAccessGitClient) RegenerateSecondaryKey(ctx context.Context, 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // RegenerateSecondaryKeyPreparer prepares the RegenerateSecondaryKey request.
 func (client TenantAccessGitClient) RegenerateSecondaryKeyPreparer(ctx context.Context, resourceGroupName string, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -247,6 +291,7 @@ func (client TenantAccessGitClient) RegenerateSecondaryKeyPreparer(ctx context.C
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // RegenerateSecondaryKeySender sends the RegenerateSecondaryKey request. The method will close the
 // http.Response Body if it receives an error.
 func (client TenantAccessGitClient) RegenerateSecondaryKeySender(req *http.Request) (*http.Response, error) {
@@ -254,6 +299,7 @@ func (client TenantAccessGitClient) RegenerateSecondaryKeySender(req *http.Reque
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // RegenerateSecondaryKeyResponder handles the response to the RegenerateSecondaryKey request. The method always
 // closes the http.Response Body.
 func (client TenantAccessGitClient) RegenerateSecondaryKeyResponder(resp *http.Response) (result autorest.Response, err error) {

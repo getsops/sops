@@ -22,24 +22,29 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // APIDiagnosticLoggerClient is the apiManagement Client
 type APIDiagnosticLoggerClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewAPIDiagnosticLoggerClient creates an instance of the APIDiagnosticLoggerClient client.
 func NewAPIDiagnosticLoggerClient(subscriptionID string) APIDiagnosticLoggerClient {
 	return NewAPIDiagnosticLoggerClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewAPIDiagnosticLoggerClientWithBaseURI creates an instance of the APIDiagnosticLoggerClient client.
 func NewAPIDiagnosticLoggerClientWithBaseURI(baseURI string, subscriptionID string) APIDiagnosticLoggerClient {
 	return APIDiagnosticLoggerClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CheckEntityExists checks that logger entity specified by identifier is associated with the diagnostics entity.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -48,6 +53,16 @@ func NewAPIDiagnosticLoggerClientWithBaseURI(baseURI string, subscriptionID stri
 // diagnosticID - diagnostic identifier. Must be unique in the current API Management service instance.
 // loggerid - logger identifier. Must be unique in the API Management service instance.
 func (client APIDiagnosticLoggerClient) CheckEntityExists(ctx context.Context, resourceGroupName string, serviceName string, apiid string, diagnosticID string, loggerid string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIDiagnosticLoggerClient.CheckEntityExists")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -88,6 +103,7 @@ func (client APIDiagnosticLoggerClient) CheckEntityExists(ctx context.Context, r
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CheckEntityExistsPreparer prepares the CheckEntityExists request.
 func (client APIDiagnosticLoggerClient) CheckEntityExistsPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, diagnosticID string, loggerid string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -112,6 +128,7 @@ func (client APIDiagnosticLoggerClient) CheckEntityExistsPreparer(ctx context.Co
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CheckEntityExistsSender sends the CheckEntityExists request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIDiagnosticLoggerClient) CheckEntityExistsSender(req *http.Request) (*http.Response, error) {
@@ -119,6 +136,7 @@ func (client APIDiagnosticLoggerClient) CheckEntityExistsSender(req *http.Reques
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CheckEntityExistsResponder handles the response to the CheckEntityExists request. The method always
 // closes the http.Response Body.
 func (client APIDiagnosticLoggerClient) CheckEntityExistsResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -131,6 +149,7 @@ func (client APIDiagnosticLoggerClient) CheckEntityExistsResponder(resp *http.Re
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdate attaches a logger to a dignostic for an API.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -139,6 +158,16 @@ func (client APIDiagnosticLoggerClient) CheckEntityExistsResponder(resp *http.Re
 // diagnosticID - diagnostic identifier. Must be unique in the current API Management service instance.
 // loggerid - logger identifier. Must be unique in the API Management service instance.
 func (client APIDiagnosticLoggerClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, apiid string, diagnosticID string, loggerid string) (result LoggerContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIDiagnosticLoggerClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -179,6 +208,7 @@ func (client APIDiagnosticLoggerClient) CreateOrUpdate(ctx context.Context, reso
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
 func (client APIDiagnosticLoggerClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, diagnosticID string, loggerid string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -203,6 +233,7 @@ func (client APIDiagnosticLoggerClient) CreateOrUpdatePreparer(ctx context.Conte
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIDiagnosticLoggerClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
@@ -210,6 +241,7 @@ func (client APIDiagnosticLoggerClient) CreateOrUpdateSender(req *http.Request) 
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
 // closes the http.Response Body.
 func (client APIDiagnosticLoggerClient) CreateOrUpdateResponder(resp *http.Response) (result LoggerContract, err error) {
@@ -223,6 +255,7 @@ func (client APIDiagnosticLoggerClient) CreateOrUpdateResponder(resp *http.Respo
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Delete deletes the specified Logger from Diagnostic for an API.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -231,6 +264,16 @@ func (client APIDiagnosticLoggerClient) CreateOrUpdateResponder(resp *http.Respo
 // diagnosticID - diagnostic identifier. Must be unique in the current API Management service instance.
 // loggerid - logger identifier. Must be unique in the API Management service instance.
 func (client APIDiagnosticLoggerClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, diagnosticID string, loggerid string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIDiagnosticLoggerClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -271,6 +314,7 @@ func (client APIDiagnosticLoggerClient) Delete(ctx context.Context, resourceGrou
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeletePreparer prepares the Delete request.
 func (client APIDiagnosticLoggerClient) DeletePreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, diagnosticID string, loggerid string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -295,6 +339,7 @@ func (client APIDiagnosticLoggerClient) DeletePreparer(ctx context.Context, reso
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIDiagnosticLoggerClient) DeleteSender(req *http.Request) (*http.Response, error) {
@@ -302,6 +347,7 @@ func (client APIDiagnosticLoggerClient) DeleteSender(req *http.Request) (*http.R
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteResponder handles the response to the Delete request. The method always
 // closes the http.Response Body.
 func (client APIDiagnosticLoggerClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -314,6 +360,7 @@ func (client APIDiagnosticLoggerClient) DeleteResponder(resp *http.Response) (re
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByService lists all loggers assosiated with the specified Diagnostic of an API.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -327,6 +374,16 @@ func (client APIDiagnosticLoggerClient) DeleteResponder(resp *http.Response) (re
 // top - number of records to return.
 // skip - number of records to skip.
 func (client APIDiagnosticLoggerClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, apiid string, diagnosticID string, filter string, top *int32, skip *int32) (result LoggerCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIDiagnosticLoggerClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.lc.Response.Response != nil {
+				sc = result.lc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -371,6 +428,7 @@ func (client APIDiagnosticLoggerClient) ListByService(ctx context.Context, resou
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServicePreparer prepares the ListByService request.
 func (client APIDiagnosticLoggerClient) ListByServicePreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, diagnosticID string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -403,6 +461,7 @@ func (client APIDiagnosticLoggerClient) ListByServicePreparer(ctx context.Contex
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceSender sends the ListByService request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIDiagnosticLoggerClient) ListByServiceSender(req *http.Request) (*http.Response, error) {
@@ -410,6 +469,7 @@ func (client APIDiagnosticLoggerClient) ListByServiceSender(req *http.Request) (
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceResponder handles the response to the ListByService request. The method always
 // closes the http.Response Body.
 func (client APIDiagnosticLoggerClient) ListByServiceResponder(resp *http.Response) (result LoggerCollection, err error) {
@@ -424,8 +484,8 @@ func (client APIDiagnosticLoggerClient) ListByServiceResponder(resp *http.Respon
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client APIDiagnosticLoggerClient) listByServiceNextResults(lastResults LoggerCollection) (result LoggerCollection, err error) {
-	req, err := lastResults.loggerCollectionPreparer()
+func (client APIDiagnosticLoggerClient) listByServiceNextResults(ctx context.Context, lastResults LoggerCollection) (result LoggerCollection, err error) {
+	req, err := lastResults.loggerCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.APIDiagnosticLoggerClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -444,8 +504,19 @@ func (client APIDiagnosticLoggerClient) listByServiceNextResults(lastResults Log
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client APIDiagnosticLoggerClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, diagnosticID string, filter string, top *int32, skip *int32) (result LoggerCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIDiagnosticLoggerClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, apiid, diagnosticID, filter, top, skip)
 	return
 }

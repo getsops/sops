@@ -18,12 +18,17 @@ package powerbidedicated
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/powerbidedicated/mgmt/2017-10-01/powerbidedicated"
 
 // ProvisioningState enumerates the values for provisioning state.
 type ProvisioningState string
@@ -108,7 +113,8 @@ func PossibleStateValues() []State {
 	return []State{StateDeleting, StateFailed, StatePaused, StatePausing, StatePreparing, StateProvisioning, StateResuming, StateScaling, StateSucceeded, StateSuspended, StateSuspending, StateUpdating}
 }
 
-// CapacitiesCreateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// CapacitiesCreateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type CapacitiesCreateFuture struct {
 	azure.Future
 }
@@ -136,7 +142,8 @@ func (future *CapacitiesCreateFuture) Result(client CapacitiesClient) (dc Dedica
 	return
 }
 
-// CapacitiesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// CapacitiesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type CapacitiesDeleteFuture struct {
 	azure.Future
 }
@@ -158,7 +165,8 @@ func (future *CapacitiesDeleteFuture) Result(client CapacitiesClient) (ar autore
 	return
 }
 
-// CapacitiesResumeFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// CapacitiesResumeFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type CapacitiesResumeFuture struct {
 	azure.Future
 }
@@ -180,7 +188,8 @@ func (future *CapacitiesResumeFuture) Result(client CapacitiesClient) (ar autore
 	return
 }
 
-// CapacitiesSuspendFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// CapacitiesSuspendFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type CapacitiesSuspendFuture struct {
 	azure.Future
 }
@@ -202,7 +211,8 @@ func (future *CapacitiesSuspendFuture) Result(client CapacitiesClient) (ar autor
 	return
 }
 
-// CapacitiesUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// CapacitiesUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type CapacitiesUpdateFuture struct {
 	azure.Future
 }
@@ -234,14 +244,14 @@ func (future *CapacitiesUpdateFuture) Result(client CapacitiesClient) (dc Dedica
 type CheckCapacityNameAvailabilityParameters struct {
 	// Name - Name for checking availability.
 	Name *string `json:"name,omitempty"`
-	// Type - The resource type of powerbi dedicated.
+	// Type - The resource type of PowerBI dedicated.
 	Type *string `json:"type,omitempty"`
 }
 
-// CheckCapacityNameAvailabilityResult the checking result of capacity name availibility.
+// CheckCapacityNameAvailabilityResult the checking result of capacity name availability.
 type CheckCapacityNameAvailabilityResult struct {
 	autorest.Response `json:"-"`
-	// NameAvailable - Indicator of availablity of the capacity name.
+	// NameAvailable - Indicator of availability of the capacity name.
 	NameAvailable *bool `json:"nameAvailable,omitempty"`
 	// Reason - The reason of unavailability.
 	Reason *string `json:"reason,omitempty"`
@@ -386,8 +396,8 @@ type DedicatedCapacityAdministrators struct {
 	Members *[]string `json:"members,omitempty"`
 }
 
-// DedicatedCapacityMutableProperties an object that represents a set of mutable Dedicated capacity resource
-// properties.
+// DedicatedCapacityMutableProperties an object that represents a set of mutable Dedicated capacity
+// resource properties.
 type DedicatedCapacityMutableProperties struct {
 	// Administration - A collection of Dedicated capacity administrators
 	Administration *DedicatedCapacityAdministrators `json:"administration,omitempty"`
@@ -397,7 +407,7 @@ type DedicatedCapacityMutableProperties struct {
 type DedicatedCapacityProperties struct {
 	// State - The current state of PowerBI Dedicated resource. The state is to indicate more states outside of resource provisioning. Possible values include: 'StateDeleting', 'StateSucceeded', 'StateFailed', 'StatePaused', 'StateSuspended', 'StateProvisioning', 'StateUpdating', 'StateSuspending', 'StatePausing', 'StateResuming', 'StatePreparing', 'StateScaling'
 	State State `json:"state,omitempty"`
-	// ProvisioningState - The current deployment state of PowerBI Dedicatedresource. The provisioningState is to indicate states for resource provisioning. Possible values include: 'Deleting', 'Succeeded', 'Failed', 'Paused', 'Suspended', 'Provisioning', 'Updating', 'Suspending', 'Pausing', 'Resuming', 'Preparing', 'Scaling'
+	// ProvisioningState - The current deployment state of PowerBI Dedicated resource. The provisioningState is to indicate states for resource provisioning. Possible values include: 'Deleting', 'Succeeded', 'Failed', 'Paused', 'Suspended', 'Provisioning', 'Updating', 'Suspending', 'Pausing', 'Resuming', 'Preparing', 'Scaling'
 	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
 	// Administration - A collection of Dedicated capacity administrators
 	Administration *DedicatedCapacityAdministrators `json:"administration,omitempty"`
@@ -496,8 +506,8 @@ type OperationDisplay struct {
 	Operation *string `json:"operation,omitempty"`
 }
 
-// OperationListResult result listing capacities. It contains a list of operations and a URL link to get the next
-// set of results.
+// OperationListResult result listing capacities. It contains a list of operations and a URL link to get
+// the next set of results.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of capacities supported by the Microsoft.PowerBIDedicated resource provider.
@@ -512,20 +522,37 @@ type OperationListResultIterator struct {
 	page OperationListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OperationListResultIterator) Next() error {
+func (iter *OperationListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *OperationListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -547,6 +574,11 @@ func (iter OperationListResultIterator) Value() Operation {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the OperationListResultIterator type.
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return OperationListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (olr OperationListResult) IsEmpty() bool {
 	return olr.Value == nil || len(*olr.Value) == 0
@@ -554,11 +586,11 @@ func (olr OperationListResult) IsEmpty() bool {
 
 // operationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (olr OperationListResult) operationListResultPreparer() (*http.Request, error) {
+func (olr OperationListResult) operationListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if olr.NextLink == nil || len(to.String(olr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(olr.NextLink)))
@@ -566,19 +598,36 @@ func (olr OperationListResult) operationListResultPreparer() (*http.Request, err
 
 // OperationListResultPage contains a page of Operation values.
 type OperationListResultPage struct {
-	fn  func(OperationListResult) (OperationListResult, error)
+	fn  func(context.Context, OperationListResult) (OperationListResult, error)
 	olr OperationListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OperationListResultPage) Next() error {
-	next, err := page.fn(page.olr)
+func (page *OperationListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.olr)
 	if err != nil {
 		return err
 	}
 	page.olr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *OperationListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -597,6 +646,11 @@ func (page OperationListResultPage) Values() []Operation {
 		return nil
 	}
 	return *page.olr.Value
+}
+
+// Creates a new instance of the OperationListResultPage type.
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return OperationListResultPage{fn: getNextPage}
 }
 
 // Resource represents an instance of an PowerBI Dedicated resource.
@@ -653,7 +707,8 @@ type SkuDetailsForExistingResource struct {
 	Sku *ResourceSku `json:"sku,omitempty"`
 }
 
-// SkuEnumerationForExistingResourceResult an object that represents enumerating SKUs for existing resources
+// SkuEnumerationForExistingResourceResult an object that represents enumerating SKUs for existing
+// resources
 type SkuEnumerationForExistingResourceResult struct {
 	autorest.Response `json:"-"`
 	// Value - The collection of available SKUs for existing resources

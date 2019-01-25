@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewAggregatedCostClientWithBaseURI(baseURI string, subscriptionID string) A
 // Parameters:
 // managementGroupID - azure Management Group ID.
 func (client AggregatedCostClient) GetByManagementGroup(ctx context.Context, managementGroupID string) (result ManagementGroupAggregatedCostResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AggregatedCostClient.GetByManagementGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetByManagementGroupPreparer(ctx, managementGroupID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "consumption.AggregatedCostClient", "GetByManagementGroup", nil, "Failure preparing request")
@@ -111,6 +122,16 @@ func (client AggregatedCostClient) GetByManagementGroupResponder(resp *http.Resp
 // managementGroupID - azure Management Group ID.
 // billingPeriodName - billing Period Name.
 func (client AggregatedCostClient) GetForBillingPeriodByManagementGroup(ctx context.Context, managementGroupID string, billingPeriodName string) (result ManagementGroupAggregatedCostResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AggregatedCostClient.GetForBillingPeriodByManagementGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetForBillingPeriodByManagementGroupPreparer(ctx, managementGroupID, billingPeriodName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "consumption.AggregatedCostClient", "GetForBillingPeriodByManagementGroup", nil, "Failure preparing request")

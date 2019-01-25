@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewEncryptionProtectorsClientWithBaseURI(baseURI string, subscriptionID str
 // serverName - the name of the server.
 // parameters - the requested encryption protector resource state.
 func (client EncryptionProtectorsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, parameters EncryptionProtector) (result EncryptionProtectorsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EncryptionProtectorsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serverName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.EncryptionProtectorsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -96,10 +107,6 @@ func (client EncryptionProtectorsClient) CreateOrUpdateSender(req *http.Request)
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -123,6 +130,16 @@ func (client EncryptionProtectorsClient) CreateOrUpdateResponder(resp *http.Resp
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server.
 func (client EncryptionProtectorsClient) Get(ctx context.Context, resourceGroupName string, serverName string) (result EncryptionProtector, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EncryptionProtectorsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.EncryptionProtectorsClient", "Get", nil, "Failure preparing request")
@@ -192,6 +209,16 @@ func (client EncryptionProtectorsClient) GetResponder(resp *http.Response) (resu
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server.
 func (client EncryptionProtectorsClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string) (result EncryptionProtectorListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EncryptionProtectorsClient.ListByServer")
+		defer func() {
+			sc := -1
+			if result.eplr.Response.Response != nil {
+				sc = result.eplr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByServerNextResults
 	req, err := client.ListByServerPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
@@ -256,8 +283,8 @@ func (client EncryptionProtectorsClient) ListByServerResponder(resp *http.Respon
 }
 
 // listByServerNextResults retrieves the next set of results, if any.
-func (client EncryptionProtectorsClient) listByServerNextResults(lastResults EncryptionProtectorListResult) (result EncryptionProtectorListResult, err error) {
-	req, err := lastResults.encryptionProtectorListResultPreparer()
+func (client EncryptionProtectorsClient) listByServerNextResults(ctx context.Context, lastResults EncryptionProtectorListResult) (result EncryptionProtectorListResult, err error) {
+	req, err := lastResults.encryptionProtectorListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.EncryptionProtectorsClient", "listByServerNextResults", nil, "Failure preparing next results request")
 	}
@@ -278,6 +305,16 @@ func (client EncryptionProtectorsClient) listByServerNextResults(lastResults Enc
 
 // ListByServerComplete enumerates all values, automatically crossing page boundaries as required.
 func (client EncryptionProtectorsClient) ListByServerComplete(ctx context.Context, resourceGroupName string, serverName string) (result EncryptionProtectorListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EncryptionProtectorsClient.ListByServer")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByServer(ctx, resourceGroupName, serverName)
 	return
 }

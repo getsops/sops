@@ -22,30 +22,45 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // PolicySnippetsClient is the apiManagement Client
 type PolicySnippetsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewPolicySnippetsClient creates an instance of the PolicySnippetsClient client.
 func NewPolicySnippetsClient(subscriptionID string) PolicySnippetsClient {
 	return NewPolicySnippetsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewPolicySnippetsClientWithBaseURI creates an instance of the PolicySnippetsClient client.
 func NewPolicySnippetsClientWithBaseURI(baseURI string, subscriptionID string) PolicySnippetsClient {
 	return PolicySnippetsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByService lists all policy snippets.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // scope - policy scope.
 func (client PolicySnippetsClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, scope PolicyScopeContract) (result PolicySnippetsCollection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PolicySnippetsClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -75,6 +90,7 @@ func (client PolicySnippetsClient) ListByService(ctx context.Context, resourceGr
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServicePreparer prepares the ListByService request.
 func (client PolicySnippetsClient) ListByServicePreparer(ctx context.Context, resourceGroupName string, serviceName string, scope PolicyScopeContract) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -99,6 +115,7 @@ func (client PolicySnippetsClient) ListByServicePreparer(ctx context.Context, re
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceSender sends the ListByService request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicySnippetsClient) ListByServiceSender(req *http.Request) (*http.Response, error) {
@@ -106,6 +123,7 @@ func (client PolicySnippetsClient) ListByServiceSender(req *http.Request) (*http
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceResponder handles the response to the ListByService request. The method always
 // closes the http.Response Body.
 func (client PolicySnippetsClient) ListByServiceResponder(resp *http.Response) (result PolicySnippetsCollection, err error) {

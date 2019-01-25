@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ClusterUpgradesClient is the client for the ClusterUpgrades methods of the Servicefabric service.
 type ClusterUpgradesClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewClusterUpgradesClient creates an instance of the ClusterUpgradesClient client.
 func NewClusterUpgradesClient(timeout *int32) ClusterUpgradesClient {
 	return NewClusterUpgradesClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewClusterUpgradesClientWithBaseURI creates an instance of the ClusterUpgradesClient client.
 func NewClusterUpgradesClientWithBaseURI(baseURI string, timeout *int32) ClusterUpgradesClient {
 	return ClusterUpgradesClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Resume resume cluster upgrades
 // Parameters:
 // resumeClusterUpgrade - the upgrade of the cluster
@@ -64,6 +68,7 @@ func (client ClusterUpgradesClient) Resume(ctx context.Context, resumeClusterUpg
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResumePreparer prepares the Resume request.
 func (client ClusterUpgradesClient) ResumePreparer(ctx context.Context, resumeClusterUpgrade ResumeClusterUpgrade) (*http.Request, error) {
 	const APIVersion = "1.0.0"
@@ -84,6 +89,7 @@ func (client ClusterUpgradesClient) ResumePreparer(ctx context.Context, resumeCl
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResumeSender sends the Resume request. The method will close the
 // http.Response Body if it receives an error.
 func (client ClusterUpgradesClient) ResumeSender(req *http.Request) (*http.Response, error) {
@@ -91,6 +97,7 @@ func (client ClusterUpgradesClient) ResumeSender(req *http.Request) (*http.Respo
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResumeResponder handles the response to the Resume request. The method always
 // closes the http.Response Body.
 func (client ClusterUpgradesClient) ResumeResponder(resp *http.Response) (result String, err error) {
@@ -104,6 +111,7 @@ func (client ClusterUpgradesClient) ResumeResponder(resp *http.Response) (result
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Rollback rollback cluster upgrades
 func (client ClusterUpgradesClient) Rollback(ctx context.Context) (result String, err error) {
 	req, err := client.RollbackPreparer(ctx)
@@ -127,6 +135,7 @@ func (client ClusterUpgradesClient) Rollback(ctx context.Context) (result String
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RollbackPreparer prepares the Rollback request.
 func (client ClusterUpgradesClient) RollbackPreparer(ctx context.Context) (*http.Request, error) {
 	const APIVersion = "1.0.0"
@@ -145,6 +154,7 @@ func (client ClusterUpgradesClient) RollbackPreparer(ctx context.Context) (*http
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RollbackSender sends the Rollback request. The method will close the
 // http.Response Body if it receives an error.
 func (client ClusterUpgradesClient) RollbackSender(req *http.Request) (*http.Response, error) {
@@ -152,6 +162,7 @@ func (client ClusterUpgradesClient) RollbackSender(req *http.Request) (*http.Res
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RollbackResponder handles the response to the Rollback request. The method always
 // closes the http.Response Body.
 func (client ClusterUpgradesClient) RollbackResponder(resp *http.Response) (result String, err error) {
@@ -165,6 +176,7 @@ func (client ClusterUpgradesClient) RollbackResponder(resp *http.Response) (resu
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Start start cluster upgrades
 // Parameters:
 // startClusterUpgrade - the description of the start cluster upgrade
@@ -190,6 +202,7 @@ func (client ClusterUpgradesClient) Start(ctx context.Context, startClusterUpgra
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartPreparer prepares the Start request.
 func (client ClusterUpgradesClient) StartPreparer(ctx context.Context, startClusterUpgrade StartClusterUpgrade) (*http.Request, error) {
 	const APIVersion = "1.0.0"
@@ -210,6 +223,7 @@ func (client ClusterUpgradesClient) StartPreparer(ctx context.Context, startClus
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartSender sends the Start request. The method will close the
 // http.Response Body if it receives an error.
 func (client ClusterUpgradesClient) StartSender(req *http.Request) (*http.Response, error) {
@@ -217,6 +231,7 @@ func (client ClusterUpgradesClient) StartSender(req *http.Request) (*http.Respon
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartResponder handles the response to the Start request. The method always
 // closes the http.Response Body.
 func (client ClusterUpgradesClient) StartResponder(resp *http.Response) (result String, err error) {
@@ -230,6 +245,7 @@ func (client ClusterUpgradesClient) StartResponder(resp *http.Response) (result 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Update update cluster upgrades
 // Parameters:
 // updateClusterUpgrade - the description of the update cluster upgrade
@@ -255,6 +271,7 @@ func (client ClusterUpgradesClient) Update(ctx context.Context, updateClusterUpg
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdatePreparer prepares the Update request.
 func (client ClusterUpgradesClient) UpdatePreparer(ctx context.Context, updateClusterUpgrade UpdateClusterUpgrade) (*http.Request, error) {
 	const APIVersion = "1.0.0"
@@ -275,6 +292,7 @@ func (client ClusterUpgradesClient) UpdatePreparer(ctx context.Context, updateCl
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client ClusterUpgradesClient) UpdateSender(req *http.Request) (*http.Response, error) {
@@ -282,6 +300,7 @@ func (client ClusterUpgradesClient) UpdateSender(req *http.Request) (*http.Respo
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateResponder handles the response to the Update request. The method always
 // closes the http.Response Body.
 func (client ClusterUpgradesClient) UpdateResponder(resp *http.Response) (result String, err error) {

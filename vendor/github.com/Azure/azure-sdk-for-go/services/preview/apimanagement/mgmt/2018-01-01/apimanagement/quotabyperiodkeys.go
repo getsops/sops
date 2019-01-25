@@ -22,24 +22,29 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // QuotaByPeriodKeysClient is the apiManagement Client
 type QuotaByPeriodKeysClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewQuotaByPeriodKeysClient creates an instance of the QuotaByPeriodKeysClient client.
 func NewQuotaByPeriodKeysClient(subscriptionID string) QuotaByPeriodKeysClient {
 	return NewQuotaByPeriodKeysClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewQuotaByPeriodKeysClientWithBaseURI creates an instance of the QuotaByPeriodKeysClient client.
 func NewQuotaByPeriodKeysClientWithBaseURI(baseURI string, subscriptionID string) QuotaByPeriodKeysClient {
 	return QuotaByPeriodKeysClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Get gets the value of the quota counter associated with the counter-key in the policy for the specific period in
 // service instance.
 // Parameters:
@@ -51,6 +56,16 @@ func NewQuotaByPeriodKeysClientWithBaseURI(baseURI string, subscriptionID string
 // by "ba" key
 // quotaPeriodKey - quota period key identifier.
 func (client QuotaByPeriodKeysClient) Get(ctx context.Context, resourceGroupName string, serviceName string, quotaCounterKey string, quotaPeriodKey string) (result QuotaCounterContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/QuotaByPeriodKeysClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -80,6 +95,7 @@ func (client QuotaByPeriodKeysClient) Get(ctx context.Context, resourceGroupName
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetPreparer prepares the Get request.
 func (client QuotaByPeriodKeysClient) GetPreparer(ctx context.Context, resourceGroupName string, serviceName string, quotaCounterKey string, quotaPeriodKey string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -103,6 +119,7 @@ func (client QuotaByPeriodKeysClient) GetPreparer(ctx context.Context, resourceG
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client QuotaByPeriodKeysClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -110,6 +127,7 @@ func (client QuotaByPeriodKeysClient) GetSender(req *http.Request) (*http.Respon
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client QuotaByPeriodKeysClient) GetResponder(resp *http.Response) (result QuotaCounterContract, err error) {
@@ -123,6 +141,7 @@ func (client QuotaByPeriodKeysClient) GetResponder(resp *http.Response) (result 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Update updates an existing quota counter value in the specified service instance.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -134,6 +153,16 @@ func (client QuotaByPeriodKeysClient) GetResponder(resp *http.Response) (result 
 // quotaPeriodKey - quota period key identifier.
 // parameters - the value of the Quota counter to be applied on the specified period.
 func (client QuotaByPeriodKeysClient) Update(ctx context.Context, resourceGroupName string, serviceName string, quotaCounterKey string, quotaPeriodKey string, parameters QuotaCounterValueContractProperties) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/QuotaByPeriodKeysClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -163,6 +192,7 @@ func (client QuotaByPeriodKeysClient) Update(ctx context.Context, resourceGroupN
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdatePreparer prepares the Update request.
 func (client QuotaByPeriodKeysClient) UpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, quotaCounterKey string, quotaPeriodKey string, parameters QuotaCounterValueContractProperties) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -188,6 +218,7 @@ func (client QuotaByPeriodKeysClient) UpdatePreparer(ctx context.Context, resour
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client QuotaByPeriodKeysClient) UpdateSender(req *http.Request) (*http.Response, error) {
@@ -195,6 +226,7 @@ func (client QuotaByPeriodKeysClient) UpdateSender(req *http.Request) (*http.Res
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateResponder handles the response to the Update request. The method always
 // closes the http.Response Body.
 func (client QuotaByPeriodKeysClient) UpdateResponder(resp *http.Response) (result autorest.Response, err error) {

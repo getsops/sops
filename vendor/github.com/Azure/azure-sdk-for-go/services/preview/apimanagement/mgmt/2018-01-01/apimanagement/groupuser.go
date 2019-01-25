@@ -22,24 +22,29 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GroupUserClient is the apiManagement Client
 type GroupUserClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewGroupUserClient creates an instance of the GroupUserClient client.
 func NewGroupUserClient(subscriptionID string) GroupUserClient {
 	return NewGroupUserClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewGroupUserClientWithBaseURI creates an instance of the GroupUserClient client.
 func NewGroupUserClientWithBaseURI(baseURI string, subscriptionID string) GroupUserClient {
 	return GroupUserClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CheckEntityExists checks that user entity specified by identifier is associated with the group entity.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -47,6 +52,16 @@ func NewGroupUserClientWithBaseURI(baseURI string, subscriptionID string) GroupU
 // groupID - group identifier. Must be unique in the current API Management service instance.
 // UID - user identifier. Must be unique in the current API Management service instance.
 func (client GroupUserClient) CheckEntityExists(ctx context.Context, resourceGroupName string, serviceName string, groupID string, UID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupUserClient.CheckEntityExists")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -84,6 +99,7 @@ func (client GroupUserClient) CheckEntityExists(ctx context.Context, resourceGro
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CheckEntityExistsPreparer prepares the CheckEntityExists request.
 func (client GroupUserClient) CheckEntityExistsPreparer(ctx context.Context, resourceGroupName string, serviceName string, groupID string, UID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -107,6 +123,7 @@ func (client GroupUserClient) CheckEntityExistsPreparer(ctx context.Context, res
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CheckEntityExistsSender sends the CheckEntityExists request. The method will close the
 // http.Response Body if it receives an error.
 func (client GroupUserClient) CheckEntityExistsSender(req *http.Request) (*http.Response, error) {
@@ -114,6 +131,7 @@ func (client GroupUserClient) CheckEntityExistsSender(req *http.Request) (*http.
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CheckEntityExistsResponder handles the response to the CheckEntityExists request. The method always
 // closes the http.Response Body.
 func (client GroupUserClient) CheckEntityExistsResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -126,6 +144,7 @@ func (client GroupUserClient) CheckEntityExistsResponder(resp *http.Response) (r
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Create adds a user to the specified group.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -133,6 +152,16 @@ func (client GroupUserClient) CheckEntityExistsResponder(resp *http.Response) (r
 // groupID - group identifier. Must be unique in the current API Management service instance.
 // UID - user identifier. Must be unique in the current API Management service instance.
 func (client GroupUserClient) Create(ctx context.Context, resourceGroupName string, serviceName string, groupID string, UID string) (result UserContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupUserClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -170,6 +199,7 @@ func (client GroupUserClient) Create(ctx context.Context, resourceGroupName stri
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreatePreparer prepares the Create request.
 func (client GroupUserClient) CreatePreparer(ctx context.Context, resourceGroupName string, serviceName string, groupID string, UID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -193,6 +223,7 @@ func (client GroupUserClient) CreatePreparer(ctx context.Context, resourceGroupN
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateSender sends the Create request. The method will close the
 // http.Response Body if it receives an error.
 func (client GroupUserClient) CreateSender(req *http.Request) (*http.Response, error) {
@@ -200,6 +231,7 @@ func (client GroupUserClient) CreateSender(req *http.Request) (*http.Response, e
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateResponder handles the response to the Create request. The method always
 // closes the http.Response Body.
 func (client GroupUserClient) CreateResponder(resp *http.Response) (result UserContract, err error) {
@@ -213,6 +245,7 @@ func (client GroupUserClient) CreateResponder(resp *http.Response) (result UserC
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Delete remove existing user from existing group.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -220,6 +253,16 @@ func (client GroupUserClient) CreateResponder(resp *http.Response) (result UserC
 // groupID - group identifier. Must be unique in the current API Management service instance.
 // UID - user identifier. Must be unique in the current API Management service instance.
 func (client GroupUserClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, groupID string, UID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupUserClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -257,6 +300,7 @@ func (client GroupUserClient) Delete(ctx context.Context, resourceGroupName stri
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeletePreparer prepares the Delete request.
 func (client GroupUserClient) DeletePreparer(ctx context.Context, resourceGroupName string, serviceName string, groupID string, UID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -280,6 +324,7 @@ func (client GroupUserClient) DeletePreparer(ctx context.Context, resourceGroupN
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client GroupUserClient) DeleteSender(req *http.Request) (*http.Response, error) {
@@ -287,6 +332,7 @@ func (client GroupUserClient) DeleteSender(req *http.Request) (*http.Response, e
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteResponder handles the response to the Delete request. The method always
 // closes the http.Response Body.
 func (client GroupUserClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -299,6 +345,7 @@ func (client GroupUserClient) DeleteResponder(resp *http.Response) (result autor
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // List lists a collection of the members of the group, specified by its identifier.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -316,6 +363,16 @@ func (client GroupUserClient) DeleteResponder(resp *http.Response) (result autor
 // top - number of records to return.
 // skip - number of records to skip.
 func (client GroupUserClient) List(ctx context.Context, resourceGroupName string, serviceName string, groupID string, filter string, top *int32, skip *int32) (result UserCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupUserClient.List")
+		defer func() {
+			sc := -1
+			if result.uc.Response.Response != nil {
+				sc = result.uc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -356,6 +413,7 @@ func (client GroupUserClient) List(ctx context.Context, resourceGroupName string
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListPreparer prepares the List request.
 func (client GroupUserClient) ListPreparer(ctx context.Context, resourceGroupName string, serviceName string, groupID string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -387,6 +445,7 @@ func (client GroupUserClient) ListPreparer(ctx context.Context, resourceGroupNam
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client GroupUserClient) ListSender(req *http.Request) (*http.Response, error) {
@@ -394,6 +453,7 @@ func (client GroupUserClient) ListSender(req *http.Request) (*http.Response, err
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListResponder handles the response to the List request. The method always
 // closes the http.Response Body.
 func (client GroupUserClient) ListResponder(resp *http.Response) (result UserCollection, err error) {
@@ -408,8 +468,8 @@ func (client GroupUserClient) ListResponder(resp *http.Response) (result UserCol
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client GroupUserClient) listNextResults(lastResults UserCollection) (result UserCollection, err error) {
-	req, err := lastResults.userCollectionPreparer()
+func (client GroupUserClient) listNextResults(ctx context.Context, lastResults UserCollection) (result UserCollection, err error) {
+	req, err := lastResults.userCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.GroupUserClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -428,8 +488,19 @@ func (client GroupUserClient) listNextResults(lastResults UserCollection) (resul
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client GroupUserClient) ListComplete(ctx context.Context, resourceGroupName string, serviceName string, groupID string, filter string, top *int32, skip *int32) (result UserCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupUserClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, serviceName, groupID, filter, top, skip)
 	return
 }

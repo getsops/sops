@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -49,6 +50,16 @@ func NewSourceControlSyncJobStreamsClientWithBaseURI(baseURI string, subscriptio
 // sourceControlSyncJobID - the source control sync job id.
 // streamID - the id of the sync job stream.
 func (client SourceControlSyncJobStreamsClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string, sourceControlName string, sourceControlSyncJobID uuid.UUID, streamID string) (result SourceControlSyncJobStreamByID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SourceControlSyncJobStreamsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -130,6 +141,16 @@ func (client SourceControlSyncJobStreamsClient) GetResponder(resp *http.Response
 // sourceControlSyncJobID - the source control sync job id.
 // filter - the filter to apply on the operation.
 func (client SourceControlSyncJobStreamsClient) ListBySyncJob(ctx context.Context, resourceGroupName string, automationAccountName string, sourceControlName string, sourceControlSyncJobID uuid.UUID, filter string) (result SourceControlSyncJobStreamsListBySyncJobPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SourceControlSyncJobStreamsClient.ListBySyncJob")
+		defer func() {
+			sc := -1
+			if result.scsjslbsj.Response.Response != nil {
+				sc = result.scsjslbsj.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -207,8 +228,8 @@ func (client SourceControlSyncJobStreamsClient) ListBySyncJobResponder(resp *htt
 }
 
 // listBySyncJobNextResults retrieves the next set of results, if any.
-func (client SourceControlSyncJobStreamsClient) listBySyncJobNextResults(lastResults SourceControlSyncJobStreamsListBySyncJob) (result SourceControlSyncJobStreamsListBySyncJob, err error) {
-	req, err := lastResults.sourceControlSyncJobStreamsListBySyncJobPreparer()
+func (client SourceControlSyncJobStreamsClient) listBySyncJobNextResults(ctx context.Context, lastResults SourceControlSyncJobStreamsListBySyncJob) (result SourceControlSyncJobStreamsListBySyncJob, err error) {
+	req, err := lastResults.sourceControlSyncJobStreamsListBySyncJobPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "automation.SourceControlSyncJobStreamsClient", "listBySyncJobNextResults", nil, "Failure preparing next results request")
 	}
@@ -229,6 +250,16 @@ func (client SourceControlSyncJobStreamsClient) listBySyncJobNextResults(lastRes
 
 // ListBySyncJobComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SourceControlSyncJobStreamsClient) ListBySyncJobComplete(ctx context.Context, resourceGroupName string, automationAccountName string, sourceControlName string, sourceControlSyncJobID uuid.UUID, filter string) (result SourceControlSyncJobStreamsListBySyncJobIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SourceControlSyncJobStreamsClient.ListBySyncJob")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBySyncJob(ctx, resourceGroupName, automationAccountName, sourceControlName, sourceControlSyncJobID, filter)
 	return
 }

@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewExportConfigurationsClientWithBaseURI(baseURI string, subscriptionID str
 // exportProperties - properties that need to be specified to create a Continuous Export configuration of a
 // Application Insights component.
 func (client ExportConfigurationsClient) Create(ctx context.Context, resourceGroupName string, resourceName string, exportProperties ApplicationInsightsComponentExportRequest) (result ListApplicationInsightsComponentExportConfiguration, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExportConfigurationsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, resourceGroupName, resourceName, exportProperties)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ExportConfigurationsClient", "Create", nil, "Failure preparing request")
@@ -116,6 +127,16 @@ func (client ExportConfigurationsClient) CreateResponder(resp *http.Response) (r
 // resourceName - the name of the Application Insights component resource.
 // exportID - the Continuous Export configuration ID. This is unique within a Application Insights component.
 func (client ExportConfigurationsClient) Delete(ctx context.Context, resourceGroupName string, resourceName string, exportID string) (result ApplicationInsightsComponentExportConfiguration, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExportConfigurationsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, resourceName, exportID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ExportConfigurationsClient", "Delete", nil, "Failure preparing request")
@@ -185,6 +206,16 @@ func (client ExportConfigurationsClient) DeleteResponder(resp *http.Response) (r
 // resourceName - the name of the Application Insights component resource.
 // exportID - the Continuous Export configuration ID. This is unique within a Application Insights component.
 func (client ExportConfigurationsClient) Get(ctx context.Context, resourceGroupName string, resourceName string, exportID string) (result ApplicationInsightsComponentExportConfiguration, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExportConfigurationsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, resourceName, exportID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ExportConfigurationsClient", "Get", nil, "Failure preparing request")
@@ -253,6 +284,16 @@ func (client ExportConfigurationsClient) GetResponder(resp *http.Response) (resu
 // resourceGroupName - the name of the resource group.
 // resourceName - the name of the Application Insights component resource.
 func (client ExportConfigurationsClient) List(ctx context.Context, resourceGroupName string, resourceName string) (result ListApplicationInsightsComponentExportConfiguration, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExportConfigurationsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ExportConfigurationsClient", "List", nil, "Failure preparing request")
@@ -322,6 +363,16 @@ func (client ExportConfigurationsClient) ListResponder(resp *http.Response) (res
 // exportID - the Continuous Export configuration ID. This is unique within a Application Insights component.
 // exportProperties - properties that need to be specified to update the Continuous Export configuration.
 func (client ExportConfigurationsClient) Update(ctx context.Context, resourceGroupName string, resourceName string, exportID string, exportProperties ApplicationInsightsComponentExportRequest) (result ApplicationInsightsComponentExportConfiguration, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExportConfigurationsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, resourceName, exportID, exportProperties)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ExportConfigurationsClient", "Update", nil, "Failure preparing request")

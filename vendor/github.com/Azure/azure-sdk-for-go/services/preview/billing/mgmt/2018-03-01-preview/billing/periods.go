@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewPeriodsClientWithBaseURI(baseURI string, subscriptionID string) PeriodsC
 // Parameters:
 // billingPeriodName - the name of a BillingPeriod resource.
 func (client PeriodsClient) Get(ctx context.Context, billingPeriodName string) (result Period, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PeriodsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, billingPeriodName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "billing.PeriodsClient", "Get", nil, "Failure preparing request")
@@ -117,6 +128,16 @@ func (client PeriodsClient) GetResponder(resp *http.Response) (result Period, er
 // specifies a starting point to use for subsequent calls.
 // top - may be used to limit the number of results to the most recent N billing periods.
 func (client PeriodsClient) List(ctx context.Context, filter string, skiptoken string, top *int32) (result PeriodsListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PeriodsClient.List")
+		defer func() {
+			sc := -1
+			if result.plr.Response.Response != nil {
+				sc = result.plr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -197,8 +218,8 @@ func (client PeriodsClient) ListResponder(resp *http.Response) (result PeriodsLi
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client PeriodsClient) listNextResults(lastResults PeriodsListResult) (result PeriodsListResult, err error) {
-	req, err := lastResults.periodsListResultPreparer()
+func (client PeriodsClient) listNextResults(ctx context.Context, lastResults PeriodsListResult) (result PeriodsListResult, err error) {
+	req, err := lastResults.periodsListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "billing.PeriodsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -219,6 +240,16 @@ func (client PeriodsClient) listNextResults(lastResults PeriodsListResult) (resu
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client PeriodsClient) ListComplete(ctx context.Context, filter string, skiptoken string, top *int32) (result PeriodsListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PeriodsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, filter, skiptoken, top)
 	return
 }

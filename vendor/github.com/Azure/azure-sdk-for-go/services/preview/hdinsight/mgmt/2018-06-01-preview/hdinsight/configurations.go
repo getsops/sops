@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewConfigurationsClientWithBaseURI(baseURI string, subscriptionID string) C
 // clusterName - the name of the cluster.
 // configurationName - the name of the cluster configuration.
 func (client ConfigurationsClient) Get(ctx context.Context, resourceGroupName string, clusterName string, configurationName string) (result SetString, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConfigurationsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, clusterName, configurationName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "hdinsight.ConfigurationsClient", "Get", nil, "Failure preparing request")
@@ -116,6 +127,16 @@ func (client ConfigurationsClient) GetResponder(resp *http.Response) (result Set
 // configurationName - the name of the cluster configuration.
 // parameters - the cluster configurations.
 func (client ConfigurationsClient) Update(ctx context.Context, resourceGroupName string, clusterName string, configurationName string, parameters map[string]*string) (result ConfigurationsUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConfigurationsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -167,10 +188,6 @@ func (client ConfigurationsClient) UpdateSender(req *http.Request) (future Confi
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
 	if err != nil {
 		return
 	}

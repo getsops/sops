@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewBandwidthSettingsClientWithBaseURI(baseURI string, subscriptionID string
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client BandwidthSettingsClient) CreateOrUpdate(ctx context.Context, bandwidthSettingName string, parameters BandwidthSetting, resourceGroupName string, managerName string) (result BandwidthSettingsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BandwidthSettingsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.BandwidthRateSettingProperties", Name: validation.Null, Rule: true,
@@ -105,10 +116,6 @@ func (client BandwidthSettingsClient) CreateOrUpdateSender(req *http.Request) (f
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -132,6 +139,16 @@ func (client BandwidthSettingsClient) CreateOrUpdateResponder(resp *http.Respons
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client BandwidthSettingsClient) Delete(ctx context.Context, bandwidthSettingName string, resourceGroupName string, managerName string) (result BandwidthSettingsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BandwidthSettingsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -185,10 +202,6 @@ func (client BandwidthSettingsClient) DeleteSender(req *http.Request) (future Ba
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -211,6 +224,16 @@ func (client BandwidthSettingsClient) DeleteResponder(resp *http.Response) (resu
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client BandwidthSettingsClient) Get(ctx context.Context, bandwidthSettingName string, resourceGroupName string, managerName string) (result BandwidthSetting, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BandwidthSettingsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -286,6 +309,16 @@ func (client BandwidthSettingsClient) GetResponder(resp *http.Response) (result 
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client BandwidthSettingsClient) ListByManager(ctx context.Context, resourceGroupName string, managerName string) (result BandwidthSettingList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BandwidthSettingsClient.ListByManager")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},

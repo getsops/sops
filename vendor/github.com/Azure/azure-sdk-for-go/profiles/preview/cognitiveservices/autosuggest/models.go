@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,10 +22,9 @@ package autosuggest
 import original "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v1.0/autosuggest"
 
 const (
-	DefaultBaseURI = original.DefaultBaseURI
+	DefaultEndpoint = original.DefaultEndpoint
 )
 
-type BaseClient = original.BaseClient
 type ErrorCode = original.ErrorCode
 
 const (
@@ -109,37 +108,38 @@ const (
 	TypeThing               TypeBasicResponseBase = original.TypeThing
 )
 
-type BasicAction = original.BasicAction
 type Action = original.Action
-type BasicAnswer = original.BasicAnswer
 type Answer = original.Answer
+type BaseClient = original.BaseClient
+type BasicAction = original.BasicAction
+type BasicAnswer = original.BasicAnswer
 type BasicCreativeWork = original.BasicCreativeWork
-type CreativeWork = original.CreativeWork
 type BasicError = original.BasicError
+type BasicIdentifiable = original.BasicIdentifiable
+type BasicQueryContext = original.BasicQueryContext
+type BasicResponse = original.BasicResponse
+type BasicResponseBase = original.BasicResponseBase
+type BasicSearchResultsAnswer = original.BasicSearchResultsAnswer
+type BasicSuggestionsSuggestionGroup = original.BasicSuggestionsSuggestionGroup
+type BasicThing = original.BasicThing
+type CreativeWork = original.CreativeWork
 type Error = original.Error
 type ErrorResponse = original.ErrorResponse
-type BasicIdentifiable = original.BasicIdentifiable
 type Identifiable = original.Identifiable
-type BasicQueryContext = original.BasicQueryContext
 type QueryContext = original.QueryContext
-type BasicResponse = original.BasicResponse
 type Response = original.Response
-type BasicResponseBase = original.BasicResponseBase
 type ResponseBase = original.ResponseBase
 type SearchAction = original.SearchAction
-type BasicSearchResultsAnswer = original.BasicSearchResultsAnswer
 type SearchResultsAnswer = original.SearchResultsAnswer
 type Suggestions = original.Suggestions
-type BasicSuggestionsSuggestionGroup = original.BasicSuggestionsSuggestionGroup
 type SuggestionsSuggestionGroup = original.SuggestionsSuggestionGroup
-type BasicThing = original.BasicThing
 type Thing = original.Thing
 
 func New() BaseClient {
 	return original.New()
 }
-func NewWithBaseURI(baseURI string) BaseClient {
-	return original.NewWithBaseURI(baseURI)
+func NewWithoutDefaults(endpoint string) BaseClient {
+	return original.NewWithoutDefaults(endpoint)
 }
 func PossibleErrorCodeValues() []ErrorCode {
 	return original.PossibleErrorCodeValues()
@@ -156,9 +156,6 @@ func PossibleScenarioTypeValues() []ScenarioType {
 func PossibleSearchKindValues() []SearchKind {
 	return original.PossibleSearchKindValues()
 }
-func PossibleTypeValues() []Type {
-	return original.PossibleTypeValues()
-}
 func PossibleTypeBasicErrorValues() []TypeBasicError {
 	return original.PossibleTypeBasicErrorValues()
 }
@@ -167,6 +164,9 @@ func PossibleTypeBasicQueryContextValues() []TypeBasicQueryContext {
 }
 func PossibleTypeBasicResponseBaseValues() []TypeBasicResponseBase {
 	return original.PossibleTypeBasicResponseBaseValues()
+}
+func PossibleTypeValues() []Type {
+	return original.PossibleTypeValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

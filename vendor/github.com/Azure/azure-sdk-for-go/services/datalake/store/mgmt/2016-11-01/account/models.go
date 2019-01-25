@@ -18,14 +18,19 @@ package account
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/datalake/store/mgmt/2016-11-01/account"
 
 // DataLakeStoreAccountState enumerates the values for data lake store account state.
 type DataLakeStoreAccountState string
@@ -228,7 +233,8 @@ func PossibleTrustedIDProviderStateValues() []TrustedIDProviderState {
 	return []TrustedIDProviderState{TrustedIDProviderStateDisabled, TrustedIDProviderStateEnabled}
 }
 
-// AccountsCreateFutureType an abstraction for monitoring and retrieving the results of a long-running operation.
+// AccountsCreateFutureType an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type AccountsCreateFutureType struct {
 	azure.Future
 }
@@ -256,7 +262,8 @@ func (future *AccountsCreateFutureType) Result(client AccountsClient) (dlsa Data
 	return
 }
 
-// AccountsDeleteFutureType an abstraction for monitoring and retrieving the results of a long-running operation.
+// AccountsDeleteFutureType an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type AccountsDeleteFutureType struct {
 	azure.Future
 }
@@ -278,7 +285,8 @@ func (future *AccountsDeleteFutureType) Result(client AccountsClient) (ar autore
 	return
 }
 
-// AccountsUpdateFutureType an abstraction for monitoring and retrieving the results of a long-running operation.
+// AccountsUpdateFutureType an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type AccountsUpdateFutureType struct {
 	azure.Future
 }
@@ -434,8 +442,8 @@ type CreateDataLakeStoreAccountProperties struct {
 	NewTier TierType `json:"newTier,omitempty"`
 }
 
-// CreateFirewallRuleWithAccountParameters the parameters used to create a new firewall rule while creating a new
-// Data Lake Store account.
+// CreateFirewallRuleWithAccountParameters the parameters used to create a new firewall rule while creating
+// a new Data Lake Store account.
 type CreateFirewallRuleWithAccountParameters struct {
 	// Name - The unique name of the firewall rule to create.
 	Name *string `json:"name,omitempty"`
@@ -527,7 +535,8 @@ func (coufrp *CreateOrUpdateFirewallRuleParameters) UnmarshalJSON(body []byte) e
 	return nil
 }
 
-// CreateOrUpdateFirewallRuleProperties the firewall rule properties to use when creating a new firewall rule.
+// CreateOrUpdateFirewallRuleProperties the firewall rule properties to use when creating a new firewall
+// rule.
 type CreateOrUpdateFirewallRuleProperties struct {
 	// StartIPAddress - The start IP address for the firewall rule. This can be either ipv4 or ipv6. Start and End should be in the same protocol.
 	StartIPAddress *string `json:"startIpAddress,omitempty"`
@@ -574,8 +583,8 @@ func (coutipp *CreateOrUpdateTrustedIDProviderParameters) UnmarshalJSON(body []b
 	return nil
 }
 
-// CreateOrUpdateTrustedIDProviderProperties the trusted identity provider properties to use when creating a new
-// trusted identity provider.
+// CreateOrUpdateTrustedIDProviderProperties the trusted identity provider properties to use when creating
+// a new trusted identity provider.
 type CreateOrUpdateTrustedIDProviderProperties struct {
 	// IDProvider - The URL of this trusted identity provider.
 	IDProvider *string `json:"idProvider,omitempty"`
@@ -620,15 +629,15 @@ func (couvnrp *CreateOrUpdateVirtualNetworkRuleParameters) UnmarshalJSON(body []
 	return nil
 }
 
-// CreateOrUpdateVirtualNetworkRuleProperties the virtual network rule properties to use when creating a new
-// virtual network rule.
+// CreateOrUpdateVirtualNetworkRuleProperties the virtual network rule properties to use when creating a
+// new virtual network rule.
 type CreateOrUpdateVirtualNetworkRuleProperties struct {
 	// SubnetID - The resource identifier for the subnet.
 	SubnetID *string `json:"subnetId,omitempty"`
 }
 
-// CreateTrustedIDProviderWithAccountParameters the parameters used to create a new trusted identity provider while
-// creating a new Data Lake Store account.
+// CreateTrustedIDProviderWithAccountParameters the parameters used to create a new trusted identity
+// provider while creating a new Data Lake Store account.
 type CreateTrustedIDProviderWithAccountParameters struct {
 	// Name - The unique name of the trusted identity provider to create.
 	Name *string `json:"name,omitempty"`
@@ -681,8 +690,8 @@ func (ctipwap *CreateTrustedIDProviderWithAccountParameters) UnmarshalJSON(body 
 	return nil
 }
 
-// CreateVirtualNetworkRuleWithAccountParameters the parameters used to create a new virtual network rule while
-// creating a new Data Lake Store account.
+// CreateVirtualNetworkRuleWithAccountParameters the parameters used to create a new virtual network rule
+// while creating a new Data Lake Store account.
 type CreateVirtualNetworkRuleWithAccountParameters struct {
 	// Name - The unique name of the virtual network rule to create.
 	Name *string `json:"name,omitempty"`
@@ -977,27 +986,44 @@ type DataLakeStoreAccountListResult struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// DataLakeStoreAccountListResultIterator provides access to a complete listing of DataLakeStoreAccountBasic
-// values.
+// DataLakeStoreAccountListResultIterator provides access to a complete listing of
+// DataLakeStoreAccountBasic values.
 type DataLakeStoreAccountListResultIterator struct {
 	i    int
 	page DataLakeStoreAccountListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *DataLakeStoreAccountListResultIterator) Next() error {
+func (iter *DataLakeStoreAccountListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DataLakeStoreAccountListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *DataLakeStoreAccountListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1019,6 +1045,11 @@ func (iter DataLakeStoreAccountListResultIterator) Value() DataLakeStoreAccountB
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the DataLakeStoreAccountListResultIterator type.
+func NewDataLakeStoreAccountListResultIterator(page DataLakeStoreAccountListResultPage) DataLakeStoreAccountListResultIterator {
+	return DataLakeStoreAccountListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (dlsalr DataLakeStoreAccountListResult) IsEmpty() bool {
 	return dlsalr.Value == nil || len(*dlsalr.Value) == 0
@@ -1026,11 +1057,11 @@ func (dlsalr DataLakeStoreAccountListResult) IsEmpty() bool {
 
 // dataLakeStoreAccountListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (dlsalr DataLakeStoreAccountListResult) dataLakeStoreAccountListResultPreparer() (*http.Request, error) {
+func (dlsalr DataLakeStoreAccountListResult) dataLakeStoreAccountListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if dlsalr.NextLink == nil || len(to.String(dlsalr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(dlsalr.NextLink)))
@@ -1038,19 +1069,36 @@ func (dlsalr DataLakeStoreAccountListResult) dataLakeStoreAccountListResultPrepa
 
 // DataLakeStoreAccountListResultPage contains a page of DataLakeStoreAccountBasic values.
 type DataLakeStoreAccountListResultPage struct {
-	fn     func(DataLakeStoreAccountListResult) (DataLakeStoreAccountListResult, error)
+	fn     func(context.Context, DataLakeStoreAccountListResult) (DataLakeStoreAccountListResult, error)
 	dlsalr DataLakeStoreAccountListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *DataLakeStoreAccountListResultPage) Next() error {
-	next, err := page.fn(page.dlsalr)
+func (page *DataLakeStoreAccountListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DataLakeStoreAccountListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.dlsalr)
 	if err != nil {
 		return err
 	}
 	page.dlsalr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *DataLakeStoreAccountListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1069,6 +1117,11 @@ func (page DataLakeStoreAccountListResultPage) Values() []DataLakeStoreAccountBa
 		return nil
 	}
 	return *page.dlsalr.Value
+}
+
+// Creates a new instance of the DataLakeStoreAccountListResultPage type.
+func NewDataLakeStoreAccountListResultPage(getNextPage func(context.Context, DataLakeStoreAccountListResult) (DataLakeStoreAccountListResult, error)) DataLakeStoreAccountListResultPage {
+	return DataLakeStoreAccountListResultPage{fn: getNextPage}
 }
 
 // DataLakeStoreAccountProperties data Lake Store account properties information.
@@ -1111,8 +1164,8 @@ type DataLakeStoreAccountProperties struct {
 	Endpoint *string `json:"endpoint,omitempty"`
 }
 
-// DataLakeStoreAccountPropertiesBasic the basic account specific properties that are associated with an underlying
-// Data Lake Store account.
+// DataLakeStoreAccountPropertiesBasic the basic account specific properties that are associated with an
+// underlying Data Lake Store account.
 type DataLakeStoreAccountPropertiesBasic struct {
 	// AccountID - The unique identifier associated with this Data Lake Store account.
 	AccountID *uuid.UUID `json:"accountId,omitempty"`
@@ -1243,20 +1296,37 @@ type FirewallRuleListResultIterator struct {
 	page FirewallRuleListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *FirewallRuleListResultIterator) Next() error {
+func (iter *FirewallRuleListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FirewallRuleListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *FirewallRuleListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1278,6 +1348,11 @@ func (iter FirewallRuleListResultIterator) Value() FirewallRule {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the FirewallRuleListResultIterator type.
+func NewFirewallRuleListResultIterator(page FirewallRuleListResultPage) FirewallRuleListResultIterator {
+	return FirewallRuleListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (frlr FirewallRuleListResult) IsEmpty() bool {
 	return frlr.Value == nil || len(*frlr.Value) == 0
@@ -1285,11 +1360,11 @@ func (frlr FirewallRuleListResult) IsEmpty() bool {
 
 // firewallRuleListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (frlr FirewallRuleListResult) firewallRuleListResultPreparer() (*http.Request, error) {
+func (frlr FirewallRuleListResult) firewallRuleListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if frlr.NextLink == nil || len(to.String(frlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(frlr.NextLink)))
@@ -1297,19 +1372,36 @@ func (frlr FirewallRuleListResult) firewallRuleListResultPreparer() (*http.Reque
 
 // FirewallRuleListResultPage contains a page of FirewallRule values.
 type FirewallRuleListResultPage struct {
-	fn   func(FirewallRuleListResult) (FirewallRuleListResult, error)
+	fn   func(context.Context, FirewallRuleListResult) (FirewallRuleListResult, error)
 	frlr FirewallRuleListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *FirewallRuleListResultPage) Next() error {
-	next, err := page.fn(page.frlr)
+func (page *FirewallRuleListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FirewallRuleListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.frlr)
 	if err != nil {
 		return err
 	}
 	page.frlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *FirewallRuleListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1328,6 +1420,11 @@ func (page FirewallRuleListResultPage) Values() []FirewallRule {
 		return nil
 	}
 	return *page.frlr.Value
+}
+
+// Creates a new instance of the FirewallRuleListResultPage type.
+func NewFirewallRuleListResultPage(getNextPage func(context.Context, FirewallRuleListResult) (FirewallRuleListResult, error)) FirewallRuleListResultPage {
+	return FirewallRuleListResultPage{fn: getNextPage}
 }
 
 // FirewallRuleProperties the firewall rule properties.
@@ -1532,20 +1629,37 @@ type TrustedIDProviderListResultIterator struct {
 	page TrustedIDProviderListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *TrustedIDProviderListResultIterator) Next() error {
+func (iter *TrustedIDProviderListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TrustedIDProviderListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *TrustedIDProviderListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1567,6 +1681,11 @@ func (iter TrustedIDProviderListResultIterator) Value() TrustedIDProvider {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the TrustedIDProviderListResultIterator type.
+func NewTrustedIDProviderListResultIterator(page TrustedIDProviderListResultPage) TrustedIDProviderListResultIterator {
+	return TrustedIDProviderListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (tiplr TrustedIDProviderListResult) IsEmpty() bool {
 	return tiplr.Value == nil || len(*tiplr.Value) == 0
@@ -1574,11 +1693,11 @@ func (tiplr TrustedIDProviderListResult) IsEmpty() bool {
 
 // trustedIDProviderListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (tiplr TrustedIDProviderListResult) trustedIDProviderListResultPreparer() (*http.Request, error) {
+func (tiplr TrustedIDProviderListResult) trustedIDProviderListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if tiplr.NextLink == nil || len(to.String(tiplr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(tiplr.NextLink)))
@@ -1586,19 +1705,36 @@ func (tiplr TrustedIDProviderListResult) trustedIDProviderListResultPreparer() (
 
 // TrustedIDProviderListResultPage contains a page of TrustedIDProvider values.
 type TrustedIDProviderListResultPage struct {
-	fn    func(TrustedIDProviderListResult) (TrustedIDProviderListResult, error)
+	fn    func(context.Context, TrustedIDProviderListResult) (TrustedIDProviderListResult, error)
 	tiplr TrustedIDProviderListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *TrustedIDProviderListResultPage) Next() error {
-	next, err := page.fn(page.tiplr)
+func (page *TrustedIDProviderListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TrustedIDProviderListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.tiplr)
 	if err != nil {
 		return err
 	}
 	page.tiplr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *TrustedIDProviderListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1617,6 +1753,11 @@ func (page TrustedIDProviderListResultPage) Values() []TrustedIDProvider {
 		return nil
 	}
 	return *page.tiplr.Value
+}
+
+// Creates a new instance of the TrustedIDProviderListResultPage type.
+func NewTrustedIDProviderListResultPage(getNextPage func(context.Context, TrustedIDProviderListResult) (TrustedIDProviderListResult, error)) TrustedIDProviderListResultPage {
+	return TrustedIDProviderListResultPage{fn: getNextPage}
 }
 
 // TrustedIDProviderProperties the trusted identity provider properties.
@@ -1753,8 +1894,8 @@ type UpdateFirewallRuleProperties struct {
 	EndIPAddress *string `json:"endIpAddress,omitempty"`
 }
 
-// UpdateFirewallRuleWithAccountParameters the parameters used to update a firewall rule while updating a Data Lake
-// Store account.
+// UpdateFirewallRuleWithAccountParameters the parameters used to update a firewall rule while updating a
+// Data Lake Store account.
 type UpdateFirewallRuleWithAccountParameters struct {
 	// Name - The unique name of the firewall rule to update.
 	Name *string `json:"name,omitempty"`
@@ -1852,15 +1993,15 @@ func (utipp *UpdateTrustedIDProviderParameters) UnmarshalJSON(body []byte) error
 	return nil
 }
 
-// UpdateTrustedIDProviderProperties the trusted identity provider properties to use when updating a trusted
-// identity provider.
+// UpdateTrustedIDProviderProperties the trusted identity provider properties to use when updating a
+// trusted identity provider.
 type UpdateTrustedIDProviderProperties struct {
 	// IDProvider - The URL of this trusted identity provider.
 	IDProvider *string `json:"idProvider,omitempty"`
 }
 
-// UpdateTrustedIDProviderWithAccountParameters the parameters used to update a trusted identity provider while
-// updating a Data Lake Store account.
+// UpdateTrustedIDProviderWithAccountParameters the parameters used to update a trusted identity provider
+// while updating a Data Lake Store account.
 type UpdateTrustedIDProviderWithAccountParameters struct {
 	// Name - The unique name of the trusted identity provider to update.
 	Name *string `json:"name,omitempty"`
@@ -1952,8 +2093,8 @@ func (uvnrp *UpdateVirtualNetworkRuleParameters) UnmarshalJSON(body []byte) erro
 	return nil
 }
 
-// UpdateVirtualNetworkRuleProperties the virtual network rule properties to use when updating a virtual network
-// rule.
+// UpdateVirtualNetworkRuleProperties the virtual network rule properties to use when updating a virtual
+// network rule.
 type UpdateVirtualNetworkRuleProperties struct {
 	// SubnetID - The resource identifier for the subnet.
 	SubnetID *string `json:"subnetId,omitempty"`
@@ -2110,20 +2251,37 @@ type VirtualNetworkRuleListResultIterator struct {
 	page VirtualNetworkRuleListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *VirtualNetworkRuleListResultIterator) Next() error {
+func (iter *VirtualNetworkRuleListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkRuleListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *VirtualNetworkRuleListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -2145,6 +2303,11 @@ func (iter VirtualNetworkRuleListResultIterator) Value() VirtualNetworkRule {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the VirtualNetworkRuleListResultIterator type.
+func NewVirtualNetworkRuleListResultIterator(page VirtualNetworkRuleListResultPage) VirtualNetworkRuleListResultIterator {
+	return VirtualNetworkRuleListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (vnrlr VirtualNetworkRuleListResult) IsEmpty() bool {
 	return vnrlr.Value == nil || len(*vnrlr.Value) == 0
@@ -2152,11 +2315,11 @@ func (vnrlr VirtualNetworkRuleListResult) IsEmpty() bool {
 
 // virtualNetworkRuleListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (vnrlr VirtualNetworkRuleListResult) virtualNetworkRuleListResultPreparer() (*http.Request, error) {
+func (vnrlr VirtualNetworkRuleListResult) virtualNetworkRuleListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if vnrlr.NextLink == nil || len(to.String(vnrlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(vnrlr.NextLink)))
@@ -2164,19 +2327,36 @@ func (vnrlr VirtualNetworkRuleListResult) virtualNetworkRuleListResultPreparer()
 
 // VirtualNetworkRuleListResultPage contains a page of VirtualNetworkRule values.
 type VirtualNetworkRuleListResultPage struct {
-	fn    func(VirtualNetworkRuleListResult) (VirtualNetworkRuleListResult, error)
+	fn    func(context.Context, VirtualNetworkRuleListResult) (VirtualNetworkRuleListResult, error)
 	vnrlr VirtualNetworkRuleListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *VirtualNetworkRuleListResultPage) Next() error {
-	next, err := page.fn(page.vnrlr)
+func (page *VirtualNetworkRuleListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkRuleListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.vnrlr)
 	if err != nil {
 		return err
 	}
 	page.vnrlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *VirtualNetworkRuleListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -2195,6 +2375,11 @@ func (page VirtualNetworkRuleListResultPage) Values() []VirtualNetworkRule {
 		return nil
 	}
 	return *page.vnrlr.Value
+}
+
+// Creates a new instance of the VirtualNetworkRuleListResultPage type.
+func NewVirtualNetworkRuleListResultPage(getNextPage func(context.Context, VirtualNetworkRuleListResult) (VirtualNetworkRuleListResult, error)) VirtualNetworkRuleListResultPage {
+	return VirtualNetworkRuleListResultPage{fn: getNextPage}
 }
 
 // VirtualNetworkRuleProperties the virtual network rule properties.

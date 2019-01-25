@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceGroupMembersClient is the client for the ServiceGroupMembers methods of the Servicefabric service.
 type ServiceGroupMembersClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewServiceGroupMembersClient creates an instance of the ServiceGroupMembersClient client.
 func NewServiceGroupMembersClient(timeout *int32) ServiceGroupMembersClient {
 	return NewServiceGroupMembersClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewServiceGroupMembersClientWithBaseURI creates an instance of the ServiceGroupMembersClient client.
 func NewServiceGroupMembersClientWithBaseURI(baseURI string, timeout *int32) ServiceGroupMembersClient {
 	return ServiceGroupMembersClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get service group members
 // Parameters:
 // applicationName - the name of the application
@@ -65,6 +69,7 @@ func (client ServiceGroupMembersClient) Get(ctx context.Context, applicationName
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client ServiceGroupMembersClient) GetPreparer(ctx context.Context, applicationName string, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -88,6 +93,7 @@ func (client ServiceGroupMembersClient) GetPreparer(ctx context.Context, applica
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceGroupMembersClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -95,6 +101,7 @@ func (client ServiceGroupMembersClient) GetSender(req *http.Request) (*http.Resp
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client ServiceGroupMembersClient) GetResponder(resp *http.Response) (result ServiceGroupMember, err error) {

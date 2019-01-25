@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,15 +19,16 @@
 
 package operationalinsights
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/operationalinsights/mgmt/2015-11-01-preview/operationalinsights"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/preview/operationalinsights/mgmt/2015-11-01-preview/operationalinsights"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type DataSourcesClient = original.DataSourcesClient
-type LinkedServicesClient = original.LinkedServicesClient
 type DataSourceKind = original.DataSourceKind
 
 const (
@@ -71,15 +72,18 @@ const (
 	Unlimited  SkuNameEnum = original.Unlimited
 )
 
+type BaseClient = original.BaseClient
 type DataSource = original.DataSource
 type DataSourceFilter = original.DataSourceFilter
 type DataSourceListResult = original.DataSourceListResult
 type DataSourceListResultIterator = original.DataSourceListResultIterator
 type DataSourceListResultPage = original.DataSourceListResultPage
+type DataSourcesClient = original.DataSourcesClient
 type IntelligencePack = original.IntelligencePack
 type LinkedService = original.LinkedService
 type LinkedServiceListResult = original.LinkedServiceListResult
 type LinkedServiceProperties = original.LinkedServiceProperties
+type LinkedServicesClient = original.LinkedServicesClient
 type ListIntelligencePack = original.ListIntelligencePack
 type ManagementGroup = original.ManagementGroup
 type ManagementGroupProperties = original.ManagementGroupProperties
@@ -89,6 +93,7 @@ type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
 type OperationListResultIterator = original.OperationListResultIterator
 type OperationListResultPage = original.OperationListResultPage
+type OperationsClient = original.OperationsClient
 type ProxyResource = original.ProxyResource
 type Resource = original.Resource
 type SharedKeys = original.SharedKeys
@@ -99,15 +104,17 @@ type WorkspaceListManagementGroupsResult = original.WorkspaceListManagementGroup
 type WorkspaceListResult = original.WorkspaceListResult
 type WorkspaceListUsagesResult = original.WorkspaceListUsagesResult
 type WorkspaceProperties = original.WorkspaceProperties
-type WorkspacesCreateOrUpdateFuture = original.WorkspacesCreateOrUpdateFuture
-type OperationsClient = original.OperationsClient
 type WorkspacesClient = original.WorkspacesClient
+type WorkspacesCreateOrUpdateFuture = original.WorkspacesCreateOrUpdateFuture
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func NewDataSourceListResultIterator(page DataSourceListResultPage) DataSourceListResultIterator {
+	return original.NewDataSourceListResultIterator(page)
+}
+func NewDataSourceListResultPage(getNextPage func(context.Context, DataSourceListResult) (DataSourceListResult, error)) DataSourceListResultPage {
+	return original.NewDataSourceListResultPage(getNextPage)
 }
 func NewDataSourcesClient(subscriptionID string) DataSourcesClient {
 	return original.NewDataSourcesClient(subscriptionID)
@@ -121,6 +128,27 @@ func NewLinkedServicesClient(subscriptionID string) LinkedServicesClient {
 func NewLinkedServicesClientWithBaseURI(baseURI string, subscriptionID string) LinkedServicesClient {
 	return original.NewLinkedServicesClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return original.NewOperationListResultIterator(page)
+}
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return original.NewOperationListResultPage(getNextPage)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
+}
+func NewWorkspacesClient(subscriptionID string) WorkspacesClient {
+	return original.NewWorkspacesClient(subscriptionID)
+}
+func NewWorkspacesClientWithBaseURI(baseURI string, subscriptionID string) WorkspacesClient {
+	return original.NewWorkspacesClientWithBaseURI(baseURI, subscriptionID)
+}
 func PossibleDataSourceKindValues() []DataSourceKind {
 	return original.PossibleDataSourceKindValues()
 }
@@ -130,21 +158,9 @@ func PossibleEntityStatusValues() []EntityStatus {
 func PossibleSkuNameEnumValues() []SkuNameEnum {
 	return original.PossibleSkuNameEnumValues()
 }
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"
 }
 func Version() string {
 	return original.Version()
-}
-func NewWorkspacesClient(subscriptionID string) WorkspacesClient {
-	return original.NewWorkspacesClient(subscriptionID)
-}
-func NewWorkspacesClientWithBaseURI(baseURI string, subscriptionID string) WorkspacesClient {
-	return original.NewWorkspacesClientWithBaseURI(baseURI, subscriptionID)
 }

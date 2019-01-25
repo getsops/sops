@@ -24,6 +24,9 @@ import (
 	"net/http"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/visualstudio/mgmt/2014-04-01-preview/visualstudio"
+
 // AccountResource the response to an account resource GET request.
 type AccountResource struct {
 	autorest.Response `json:"-"`
@@ -95,12 +98,29 @@ func (arr AccountResourceRequest) MarshalJSON() ([]byte, error) {
 	if arr.Location != nil {
 		objectMap["location"] = arr.Location
 	}
-	objectMap["operationType"] = arr.OperationType
+	if arr.OperationType != nil {
+		objectMap["operationType"] = arr.OperationType
+	}
 	if arr.Properties != nil {
 		objectMap["properties"] = arr.Properties
 	}
 	if arr.Tags != nil {
 		objectMap["tags"] = arr.Tags
+	}
+	return json.Marshal(objectMap)
+}
+
+// AccountTagRequest the body of a Patch request to add tags to a Visual Studio account resource.
+type AccountTagRequest struct {
+	// Tags - The custom tags of the resource.
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for AccountTagRequest.
+func (atr AccountTagRequest) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if atr.Tags != nil {
+		objectMap["tags"] = atr.Tags
 	}
 	return json.Marshal(objectMap)
 }
@@ -287,15 +307,16 @@ func (pr ProjectResource) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// ProjectResourceListResult the response to a request to list Team Services project resources in a resource
-// group/account.
+// ProjectResourceListResult the response to a request to list Team Services project resources in a
+// resource group/account.
 type ProjectResourceListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of project resource details.
 	Value *[]ProjectResource `json:"value,omitempty"`
 }
 
-// ProjectsCreateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ProjectsCreateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ProjectsCreateFuture struct {
 	azure.Future
 }

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -53,6 +54,16 @@ func NewMarketplacesByDepartmentClientWithBaseURI(baseURI string, subscriptionID
 // contains a nextLink element, the value of the nextLink element will include a skiptoken parameter that
 // specifies a starting point to use for subsequent calls.
 func (client MarketplacesByDepartmentClient) List(ctx context.Context, departmentID string, filter string, top *int32, skiptoken string) (result MarketplacesListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MarketplacesByDepartmentClient.List")
+		defer func() {
+			sc := -1
+			if result.mlr.Response.Response != nil {
+				sc = result.mlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -133,8 +144,8 @@ func (client MarketplacesByDepartmentClient) ListResponder(resp *http.Response) 
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client MarketplacesByDepartmentClient) listNextResults(lastResults MarketplacesListResult) (result MarketplacesListResult, err error) {
-	req, err := lastResults.marketplacesListResultPreparer()
+func (client MarketplacesByDepartmentClient) listNextResults(ctx context.Context, lastResults MarketplacesListResult) (result MarketplacesListResult, err error) {
+	req, err := lastResults.marketplacesListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "consumption.MarketplacesByDepartmentClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -155,6 +166,16 @@ func (client MarketplacesByDepartmentClient) listNextResults(lastResults Marketp
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client MarketplacesByDepartmentClient) ListComplete(ctx context.Context, departmentID string, filter string, top *int32, skiptoken string) (result MarketplacesListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MarketplacesByDepartmentClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, departmentID, filter, top, skiptoken)
 	return
 }
@@ -172,6 +193,16 @@ func (client MarketplacesByDepartmentClient) ListComplete(ctx context.Context, d
 // contains a nextLink element, the value of the nextLink element will include a skiptoken parameter that
 // specifies a starting point to use for subsequent calls.
 func (client MarketplacesByDepartmentClient) ListByBillingPeriod(ctx context.Context, departmentID string, billingPeriodName string, filter string, top *int32, skiptoken string) (result MarketplacesListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MarketplacesByDepartmentClient.ListByBillingPeriod")
+		defer func() {
+			sc := -1
+			if result.mlr.Response.Response != nil {
+				sc = result.mlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -253,8 +284,8 @@ func (client MarketplacesByDepartmentClient) ListByBillingPeriodResponder(resp *
 }
 
 // listByBillingPeriodNextResults retrieves the next set of results, if any.
-func (client MarketplacesByDepartmentClient) listByBillingPeriodNextResults(lastResults MarketplacesListResult) (result MarketplacesListResult, err error) {
-	req, err := lastResults.marketplacesListResultPreparer()
+func (client MarketplacesByDepartmentClient) listByBillingPeriodNextResults(ctx context.Context, lastResults MarketplacesListResult) (result MarketplacesListResult, err error) {
+	req, err := lastResults.marketplacesListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "consumption.MarketplacesByDepartmentClient", "listByBillingPeriodNextResults", nil, "Failure preparing next results request")
 	}
@@ -275,6 +306,16 @@ func (client MarketplacesByDepartmentClient) listByBillingPeriodNextResults(last
 
 // ListByBillingPeriodComplete enumerates all values, automatically crossing page boundaries as required.
 func (client MarketplacesByDepartmentClient) ListByBillingPeriodComplete(ctx context.Context, departmentID string, billingPeriodName string, filter string, top *int32, skiptoken string) (result MarketplacesListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MarketplacesByDepartmentClient.ListByBillingPeriod")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByBillingPeriod(ctx, departmentID, billingPeriodName, filter, top, skiptoken)
 	return
 }

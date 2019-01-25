@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewAPIDiagnosticClientWithBaseURI(baseURI string, subscriptionID string) AP
 // parameters - create parameters.
 // ifMatch - eTag of the Entity. Not required when creating an entity, but required when updating an entity.
 func (client APIDiagnosticClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, apiid string, diagnosticID string, parameters DiagnosticContract, ifMatch string) (result DiagnosticContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIDiagnosticClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -182,6 +193,16 @@ func (client APIDiagnosticClient) CreateOrUpdateResponder(resp *http.Response) (
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client APIDiagnosticClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, diagnosticID string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIDiagnosticClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -269,6 +290,16 @@ func (client APIDiagnosticClient) DeleteResponder(resp *http.Response) (result a
 // apiid - API identifier. Must be unique in the current API Management service instance.
 // diagnosticID - diagnostic identifier. Must be unique in the current API Management service instance.
 func (client APIDiagnosticClient) Get(ctx context.Context, resourceGroupName string, serviceName string, apiid string, diagnosticID string) (result DiagnosticContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIDiagnosticClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -356,6 +387,16 @@ func (client APIDiagnosticClient) GetResponder(resp *http.Response) (result Diag
 // apiid - API identifier. Must be unique in the current API Management service instance.
 // diagnosticID - diagnostic identifier. Must be unique in the current API Management service instance.
 func (client APIDiagnosticClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, apiid string, diagnosticID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIDiagnosticClient.GetEntityTag")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -446,6 +487,16 @@ func (client APIDiagnosticClient) GetEntityTagResponder(resp *http.Response) (re
 // top - number of records to return.
 // skip - number of records to skip.
 func (client APIDiagnosticClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result DiagnosticCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIDiagnosticClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.dc.Response.Response != nil {
+				sc = result.dc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -538,8 +589,8 @@ func (client APIDiagnosticClient) ListByServiceResponder(resp *http.Response) (r
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client APIDiagnosticClient) listByServiceNextResults(lastResults DiagnosticCollection) (result DiagnosticCollection, err error) {
-	req, err := lastResults.diagnosticCollectionPreparer()
+func (client APIDiagnosticClient) listByServiceNextResults(ctx context.Context, lastResults DiagnosticCollection) (result DiagnosticCollection, err error) {
+	req, err := lastResults.diagnosticCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.APIDiagnosticClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -560,6 +611,16 @@ func (client APIDiagnosticClient) listByServiceNextResults(lastResults Diagnosti
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client APIDiagnosticClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result DiagnosticCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIDiagnosticClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, apiid, filter, top, skip)
 	return
 }
@@ -574,6 +635,16 @@ func (client APIDiagnosticClient) ListByServiceComplete(ctx context.Context, res
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client APIDiagnosticClient) Update(ctx context.Context, resourceGroupName string, serviceName string, apiid string, diagnosticID string, parameters DiagnosticContract, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIDiagnosticClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},

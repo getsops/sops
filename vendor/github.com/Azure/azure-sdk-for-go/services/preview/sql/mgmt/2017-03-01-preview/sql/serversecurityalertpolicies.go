@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewServerSecurityAlertPoliciesClientWithBaseURI(baseURI string, subscriptio
 // serverName - the name of the server.
 // parameters - the server security alert policy.
 func (client ServerSecurityAlertPoliciesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, parameters ServerSecurityAlertPolicy) (result ServerSecurityAlertPoliciesCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServerSecurityAlertPoliciesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serverName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServerSecurityAlertPoliciesClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -96,10 +107,6 @@ func (client ServerSecurityAlertPoliciesClient) CreateOrUpdateSender(req *http.R
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -123,6 +130,16 @@ func (client ServerSecurityAlertPoliciesClient) CreateOrUpdateResponder(resp *ht
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server.
 func (client ServerSecurityAlertPoliciesClient) Get(ctx context.Context, resourceGroupName string, serverName string) (result ServerSecurityAlertPolicy, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServerSecurityAlertPoliciesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServerSecurityAlertPoliciesClient", "Get", nil, "Failure preparing request")

@@ -22,6 +22,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/search/mgmt/2015-02-28/search"
+
 // ProvisioningState enumerates the values for provisioning state.
 type ProvisioningState string
 
@@ -95,7 +98,8 @@ type ListQueryKeysResult struct {
 	Value *[]QueryKey `json:"value,omitempty"`
 }
 
-// QueryKey describes an API key for a given Azure Search service that has permissions for query operations only.
+// QueryKey describes an API key for a given Azure Search service that has permissions for query operations
+// only.
 type QueryKey struct {
 	// Name - The name of the query API key; may be empty.
 	Name *string `json:"name,omitempty"`

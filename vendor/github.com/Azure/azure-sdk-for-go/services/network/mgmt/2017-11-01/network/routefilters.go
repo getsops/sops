@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewRouteFiltersClientWithBaseURI(baseURI string, subscriptionID string) Rou
 // routeFilterName - the name of the route filter.
 // routeFilterParameters - parameters supplied to the create or update route filter operation.
 func (client RouteFiltersClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, routeFilterName string, routeFilterParameters RouteFilter) (result RouteFiltersCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RouteFiltersClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, routeFilterName, routeFilterParameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.RouteFiltersClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -92,10 +103,6 @@ func (client RouteFiltersClient) CreateOrUpdateSender(req *http.Request) (future
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -118,6 +125,16 @@ func (client RouteFiltersClient) CreateOrUpdateResponder(resp *http.Response) (r
 // resourceGroupName - the name of the resource group.
 // routeFilterName - the name of the route filter.
 func (client RouteFiltersClient) Delete(ctx context.Context, resourceGroupName string, routeFilterName string) (result RouteFiltersDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RouteFiltersClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, routeFilterName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.RouteFiltersClient", "Delete", nil, "Failure preparing request")
@@ -163,10 +180,6 @@ func (client RouteFiltersClient) DeleteSender(req *http.Request) (future RouteFi
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -189,6 +202,16 @@ func (client RouteFiltersClient) DeleteResponder(resp *http.Response) (result au
 // routeFilterName - the name of the route filter.
 // expand - expands referenced express route bgp peering resources.
 func (client RouteFiltersClient) Get(ctx context.Context, resourceGroupName string, routeFilterName string, expand string) (result RouteFilter, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RouteFiltersClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, routeFilterName, expand)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.RouteFiltersClient", "Get", nil, "Failure preparing request")
@@ -256,6 +279,16 @@ func (client RouteFiltersClient) GetResponder(resp *http.Response) (result Route
 
 // List gets all route filters in a subscription.
 func (client RouteFiltersClient) List(ctx context.Context) (result RouteFilterListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RouteFiltersClient.List")
+		defer func() {
+			sc := -1
+			if result.rflr.Response.Response != nil {
+				sc = result.rflr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -318,8 +351,8 @@ func (client RouteFiltersClient) ListResponder(resp *http.Response) (result Rout
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client RouteFiltersClient) listNextResults(lastResults RouteFilterListResult) (result RouteFilterListResult, err error) {
-	req, err := lastResults.routeFilterListResultPreparer()
+func (client RouteFiltersClient) listNextResults(ctx context.Context, lastResults RouteFilterListResult) (result RouteFilterListResult, err error) {
+	req, err := lastResults.routeFilterListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "network.RouteFiltersClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -340,6 +373,16 @@ func (client RouteFiltersClient) listNextResults(lastResults RouteFilterListResu
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client RouteFiltersClient) ListComplete(ctx context.Context) (result RouteFilterListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RouteFiltersClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -348,6 +391,16 @@ func (client RouteFiltersClient) ListComplete(ctx context.Context) (result Route
 // Parameters:
 // resourceGroupName - the name of the resource group.
 func (client RouteFiltersClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result RouteFilterListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RouteFiltersClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.rflr.Response.Response != nil {
+				sc = result.rflr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -411,8 +464,8 @@ func (client RouteFiltersClient) ListByResourceGroupResponder(resp *http.Respons
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client RouteFiltersClient) listByResourceGroupNextResults(lastResults RouteFilterListResult) (result RouteFilterListResult, err error) {
-	req, err := lastResults.routeFilterListResultPreparer()
+func (client RouteFiltersClient) listByResourceGroupNextResults(ctx context.Context, lastResults RouteFilterListResult) (result RouteFilterListResult, err error) {
+	req, err := lastResults.routeFilterListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "network.RouteFiltersClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -433,6 +486,16 @@ func (client RouteFiltersClient) listByResourceGroupNextResults(lastResults Rout
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client RouteFiltersClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result RouteFilterListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RouteFiltersClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -443,6 +506,16 @@ func (client RouteFiltersClient) ListByResourceGroupComplete(ctx context.Context
 // routeFilterName - the name of the route filter.
 // routeFilterParameters - parameters supplied to the update route filter operation.
 func (client RouteFiltersClient) Update(ctx context.Context, resourceGroupName string, routeFilterName string, routeFilterParameters PatchRouteFilter) (result RouteFiltersUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RouteFiltersClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, routeFilterName, routeFilterParameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.RouteFiltersClient", "Update", nil, "Failure preparing request")
@@ -487,10 +560,6 @@ func (client RouteFiltersClient) UpdateSender(req *http.Request) (future RouteFi
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK))
 	if err != nil {
 		return
 	}

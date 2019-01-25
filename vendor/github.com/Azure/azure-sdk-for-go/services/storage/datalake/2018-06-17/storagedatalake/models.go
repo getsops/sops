@@ -22,6 +22,9 @@ import (
 	"io"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/storage/datalake/2018-06-17/storagedatalake"
+
 // PathGetPropertiesAction enumerates the values for path get properties action.
 type PathGetPropertiesAction string
 

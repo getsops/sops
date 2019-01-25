@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceHealthsClient is the client for the ServiceHealths methods of the Servicefabric service.
 type ServiceHealthsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewServiceHealthsClient creates an instance of the ServiceHealthsClient client.
 func NewServiceHealthsClient(timeout *int32) ServiceHealthsClient {
 	return NewServiceHealthsClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewServiceHealthsClientWithBaseURI creates an instance of the ServiceHealthsClient client.
 func NewServiceHealthsClientWithBaseURI(baseURI string, timeout *int32) ServiceHealthsClient {
 	return ServiceHealthsClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get service healths
 // Parameters:
 // serviceName - the name of the service
@@ -64,6 +68,7 @@ func (client ServiceHealthsClient) Get(ctx context.Context, serviceName string) 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client ServiceHealthsClient) GetPreparer(ctx context.Context, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -86,6 +91,7 @@ func (client ServiceHealthsClient) GetPreparer(ctx context.Context, serviceName 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceHealthsClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -93,6 +99,7 @@ func (client ServiceHealthsClient) GetSender(req *http.Request) (*http.Response,
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client ServiceHealthsClient) GetResponder(resp *http.Response) (result ServiceHealth, err error) {
@@ -106,6 +113,7 @@ func (client ServiceHealthsClient) GetResponder(resp *http.Response) (result Ser
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Send send service healths
 // Parameters:
 // serviceName - the name of the service
@@ -132,6 +140,7 @@ func (client ServiceHealthsClient) Send(ctx context.Context, serviceName string,
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SendPreparer prepares the Send request.
 func (client ServiceHealthsClient) SendPreparer(ctx context.Context, serviceName string, serviceHealthReport ServiceHealthReport) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -156,6 +165,7 @@ func (client ServiceHealthsClient) SendPreparer(ctx context.Context, serviceName
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SendSender sends the Send request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceHealthsClient) SendSender(req *http.Request) (*http.Response, error) {
@@ -163,6 +173,7 @@ func (client ServiceHealthsClient) SendSender(req *http.Request) (*http.Response
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SendResponder handles the response to the Send request. The method always
 // closes the http.Response Body.
 func (client ServiceHealthsClient) SendResponder(resp *http.Response) (result String, err error) {

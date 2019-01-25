@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,21 +21,17 @@ package prediction
 
 import original "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v1.1/customvision/prediction"
 
-const (
-	DefaultBaseURI = original.DefaultBaseURI
-)
-
 type BaseClient = original.BaseClient
 type BoundingBox = original.BoundingBox
 type ImagePrediction = original.ImagePrediction
 type ImageURL = original.ImageURL
 type Model = original.Model
 
-func New(aPIKey string) BaseClient {
-	return original.New(aPIKey)
+func New(aPIKey string, endpoint string) BaseClient {
+	return original.New(aPIKey, endpoint)
 }
-func NewWithBaseURI(baseURI string, aPIKey string) BaseClient {
-	return original.NewWithBaseURI(baseURI, aPIKey)
+func NewWithoutDefaults(aPIKey string, endpoint string) BaseClient {
+	return original.NewWithoutDefaults(aPIKey, endpoint)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

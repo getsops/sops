@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
 // namespaceName - the namespace name.
 // parameters - the notificationHub name.
 func (client Client) CheckNotificationHubAvailability(ctx context.Context, resourceGroupName string, namespaceName string, parameters CheckAvailabilityParameters) (result CheckAvailabilityResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.CheckNotificationHubAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Name", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -123,6 +134,16 @@ func (client Client) CheckNotificationHubAvailabilityResponder(resp *http.Respon
 // notificationHubName - the notification hub name.
 // parameters - parameters supplied to the create/update a NotificationHub Resource.
 func (client Client) CreateOrUpdate(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, parameters CreateOrUpdateParameters) (result ResourceType, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Properties", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -202,6 +223,16 @@ func (client Client) CreateOrUpdateResponder(resp *http.Response) (result Resour
 // authorizationRuleName - authorization Rule Name.
 // parameters - the shared access authorization rule.
 func (client Client) CreateOrUpdateAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, authorizationRuleName string, parameters SharedAccessAuthorizationRuleCreateOrUpdateParameters) (result SharedAccessAuthorizationRuleResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.CreateOrUpdateAuthorizationRule")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Properties", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -281,6 +312,16 @@ func (client Client) CreateOrUpdateAuthorizationRuleResponder(resp *http.Respons
 // notificationHubName - the notification hub name.
 // parameters - debug send parameters
 func (client Client) DebugSend(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, parameters *interface{}) (result DebugSendResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.DebugSend")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DebugSendPreparer(ctx, resourceGroupName, namespaceName, notificationHubName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "notificationhubs.Client", "DebugSend", nil, "Failure preparing request")
@@ -355,6 +396,16 @@ func (client Client) DebugSendResponder(resp *http.Response) (result DebugSendRe
 // namespaceName - the namespace name.
 // notificationHubName - the notification hub name.
 func (client Client) Delete(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, namespaceName, notificationHubName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "notificationhubs.Client", "Delete", nil, "Failure preparing request")
@@ -424,6 +475,16 @@ func (client Client) DeleteResponder(resp *http.Response) (result autorest.Respo
 // notificationHubName - the notification hub name.
 // authorizationRuleName - authorization Rule Name.
 func (client Client) DeleteAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, authorizationRuleName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.DeleteAuthorizationRule")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteAuthorizationRulePreparer(ctx, resourceGroupName, namespaceName, notificationHubName, authorizationRuleName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "notificationhubs.Client", "DeleteAuthorizationRule", nil, "Failure preparing request")
@@ -493,6 +554,16 @@ func (client Client) DeleteAuthorizationRuleResponder(resp *http.Response) (resu
 // namespaceName - the namespace name.
 // notificationHubName - the notification hub name.
 func (client Client) Get(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string) (result ResourceType, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, namespaceName, notificationHubName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "notificationhubs.Client", "Get", nil, "Failure preparing request")
@@ -563,6 +634,16 @@ func (client Client) GetResponder(resp *http.Response) (result ResourceType, err
 // notificationHubName - the notification hub name.
 // authorizationRuleName - authorization rule name.
 func (client Client) GetAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, authorizationRuleName string) (result SharedAccessAuthorizationRuleResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetAuthorizationRule")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetAuthorizationRulePreparer(ctx, resourceGroupName, namespaceName, notificationHubName, authorizationRuleName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "notificationhubs.Client", "GetAuthorizationRule", nil, "Failure preparing request")
@@ -633,6 +714,16 @@ func (client Client) GetAuthorizationRuleResponder(resp *http.Response) (result 
 // namespaceName - the namespace name.
 // notificationHubName - the notification hub name.
 func (client Client) GetPnsCredentials(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string) (result PnsCredentialsResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetPnsCredentials")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPnsCredentialsPreparer(ctx, resourceGroupName, namespaceName, notificationHubName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "notificationhubs.Client", "GetPnsCredentials", nil, "Failure preparing request")
@@ -701,6 +792,16 @@ func (client Client) GetPnsCredentialsResponder(resp *http.Response) (result Pns
 // resourceGroupName - the name of the resource group.
 // namespaceName - the namespace name.
 func (client Client) List(ctx context.Context, resourceGroupName string, namespaceName string) (result ListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.List")
+		defer func() {
+			sc := -1
+			if result.lr.Response.Response != nil {
+				sc = result.lr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, namespaceName)
 	if err != nil {
@@ -765,8 +866,8 @@ func (client Client) ListResponder(resp *http.Response) (result ListResult, err 
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client Client) listNextResults(lastResults ListResult) (result ListResult, err error) {
-	req, err := lastResults.listResultPreparer()
+func (client Client) listNextResults(ctx context.Context, lastResults ListResult) (result ListResult, err error) {
+	req, err := lastResults.listResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "notificationhubs.Client", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -787,6 +888,16 @@ func (client Client) listNextResults(lastResults ListResult) (result ListResult,
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListComplete(ctx context.Context, resourceGroupName string, namespaceName string) (result ListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, namespaceName)
 	return
 }
@@ -797,6 +908,16 @@ func (client Client) ListComplete(ctx context.Context, resourceGroupName string,
 // namespaceName - the namespace name
 // notificationHubName - the notification hub name.
 func (client Client) ListAuthorizationRules(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string) (result SharedAccessAuthorizationRuleListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListAuthorizationRules")
+		defer func() {
+			sc := -1
+			if result.saarlr.Response.Response != nil {
+				sc = result.saarlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listAuthorizationRulesNextResults
 	req, err := client.ListAuthorizationRulesPreparer(ctx, resourceGroupName, namespaceName, notificationHubName)
 	if err != nil {
@@ -862,8 +983,8 @@ func (client Client) ListAuthorizationRulesResponder(resp *http.Response) (resul
 }
 
 // listAuthorizationRulesNextResults retrieves the next set of results, if any.
-func (client Client) listAuthorizationRulesNextResults(lastResults SharedAccessAuthorizationRuleListResult) (result SharedAccessAuthorizationRuleListResult, err error) {
-	req, err := lastResults.sharedAccessAuthorizationRuleListResultPreparer()
+func (client Client) listAuthorizationRulesNextResults(ctx context.Context, lastResults SharedAccessAuthorizationRuleListResult) (result SharedAccessAuthorizationRuleListResult, err error) {
+	req, err := lastResults.sharedAccessAuthorizationRuleListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "notificationhubs.Client", "listAuthorizationRulesNextResults", nil, "Failure preparing next results request")
 	}
@@ -884,6 +1005,16 @@ func (client Client) listAuthorizationRulesNextResults(lastResults SharedAccessA
 
 // ListAuthorizationRulesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListAuthorizationRulesComplete(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string) (result SharedAccessAuthorizationRuleListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListAuthorizationRules")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListAuthorizationRules(ctx, resourceGroupName, namespaceName, notificationHubName)
 	return
 }
@@ -895,6 +1026,16 @@ func (client Client) ListAuthorizationRulesComplete(ctx context.Context, resourc
 // notificationHubName - the notification hub name.
 // authorizationRuleName - the connection string of the NotificationHub for the specified authorizationRule.
 func (client Client) ListKeys(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, authorizationRuleName string) (result ResourceListKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListKeysPreparer(ctx, resourceGroupName, namespaceName, notificationHubName, authorizationRuleName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "notificationhubs.Client", "ListKeys", nil, "Failure preparing request")
@@ -966,6 +1107,16 @@ func (client Client) ListKeysResponder(resp *http.Response) (result ResourceList
 // notificationHubName - the notification hub name.
 // parameters - parameters supplied to patch a NotificationHub Resource.
 func (client Client) Patch(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, parameters *PatchParameters) (result ResourceType, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Patch")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PatchPreparer(ctx, resourceGroupName, namespaceName, notificationHubName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "notificationhubs.Client", "Patch", nil, "Failure preparing request")
@@ -1042,6 +1193,16 @@ func (client Client) PatchResponder(resp *http.Response) (result ResourceType, e
 // authorizationRuleName - the connection string of the NotificationHub for the specified authorizationRule.
 // parameters - parameters supplied to regenerate the NotificationHub Authorization Rule Key.
 func (client Client) RegenerateKeys(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, authorizationRuleName string, parameters PolicykeyResource) (result ResourceListKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.RegenerateKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RegenerateKeysPreparer(ctx, resourceGroupName, namespaceName, notificationHubName, authorizationRuleName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "notificationhubs.Client", "RegenerateKeys", nil, "Failure preparing request")

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewNotificationClientWithBaseURI(baseURI string, subscriptionID string) Not
 // serviceName - the name of the API Management service.
 // notificationName - notification Name Identifier.
 func (client NotificationClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, notificationName NotificationName) (result NotificationContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NotificationClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -123,6 +134,16 @@ func (client NotificationClient) CreateOrUpdateResponder(resp *http.Response) (r
 // serviceName - the name of the API Management service.
 // notificationName - notification Name Identifier.
 func (client NotificationClient) Get(ctx context.Context, resourceGroupName string, serviceName string, notificationName NotificationName) (result NotificationContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NotificationClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -201,6 +222,16 @@ func (client NotificationClient) GetResponder(resp *http.Response) (result Notif
 // top - number of records to return.
 // skip - number of records to skip.
 func (client NotificationClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, top *int32, skip *int32) (result NotificationCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NotificationClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.nc.Response.Response != nil {
+				sc = result.nc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -285,8 +316,8 @@ func (client NotificationClient) ListByServiceResponder(resp *http.Response) (re
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client NotificationClient) listByServiceNextResults(lastResults NotificationCollection) (result NotificationCollection, err error) {
-	req, err := lastResults.notificationCollectionPreparer()
+func (client NotificationClient) listByServiceNextResults(ctx context.Context, lastResults NotificationCollection) (result NotificationCollection, err error) {
+	req, err := lastResults.notificationCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.NotificationClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -307,6 +338,16 @@ func (client NotificationClient) listByServiceNextResults(lastResults Notificati
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client NotificationClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, top *int32, skip *int32) (result NotificationCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NotificationClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, top, skip)
 	return
 }

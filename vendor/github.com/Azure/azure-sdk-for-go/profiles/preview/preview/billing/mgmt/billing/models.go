@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,25 +19,29 @@
 
 package billing
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/billing/mgmt/2018-03-01-preview/billing"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/preview/billing/mgmt/2018-03-01-preview/billing"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
 type BaseClient = original.BaseClient
-type EnrollmentAccountsClient = original.EnrollmentAccountsClient
-type InvoicesClient = original.InvoicesClient
 type DownloadURL = original.DownloadURL
 type EnrollmentAccount = original.EnrollmentAccount
 type EnrollmentAccountListResult = original.EnrollmentAccountListResult
 type EnrollmentAccountListResultIterator = original.EnrollmentAccountListResultIterator
 type EnrollmentAccountListResultPage = original.EnrollmentAccountListResultPage
 type EnrollmentAccountProperties = original.EnrollmentAccountProperties
+type EnrollmentAccountsClient = original.EnrollmentAccountsClient
 type ErrorDetails = original.ErrorDetails
 type ErrorResponse = original.ErrorResponse
 type Invoice = original.Invoice
 type InvoiceProperties = original.InvoiceProperties
+type InvoicesClient = original.InvoicesClient
 type InvoicesListResult = original.InvoicesListResult
 type InvoicesListResultIterator = original.InvoicesListResultIterator
 type InvoicesListResultPage = original.InvoicesListResultPage
@@ -46,20 +50,23 @@ type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
 type OperationListResultIterator = original.OperationListResultIterator
 type OperationListResultPage = original.OperationListResultPage
+type OperationsClient = original.OperationsClient
 type Period = original.Period
 type PeriodProperties = original.PeriodProperties
+type PeriodsClient = original.PeriodsClient
 type PeriodsListResult = original.PeriodsListResult
 type PeriodsListResultIterator = original.PeriodsListResultIterator
 type PeriodsListResultPage = original.PeriodsListResultPage
 type Resource = original.Resource
-type OperationsClient = original.OperationsClient
-type PeriodsClient = original.PeriodsClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func NewEnrollmentAccountListResultIterator(page EnrollmentAccountListResultPage) EnrollmentAccountListResultIterator {
+	return original.NewEnrollmentAccountListResultIterator(page)
+}
+func NewEnrollmentAccountListResultPage(getNextPage func(context.Context, EnrollmentAccountListResult) (EnrollmentAccountListResult, error)) EnrollmentAccountListResultPage {
+	return original.NewEnrollmentAccountListResultPage(getNextPage)
 }
 func NewEnrollmentAccountsClient(subscriptionID string) EnrollmentAccountsClient {
 	return original.NewEnrollmentAccountsClient(subscriptionID)
@@ -73,6 +80,18 @@ func NewInvoicesClient(subscriptionID string) InvoicesClient {
 func NewInvoicesClientWithBaseURI(baseURI string, subscriptionID string) InvoicesClient {
 	return original.NewInvoicesClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewInvoicesListResultIterator(page InvoicesListResultPage) InvoicesListResultIterator {
+	return original.NewInvoicesListResultIterator(page)
+}
+func NewInvoicesListResultPage(getNextPage func(context.Context, InvoicesListResult) (InvoicesListResult, error)) InvoicesListResultPage {
+	return original.NewInvoicesListResultPage(getNextPage)
+}
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return original.NewOperationListResultIterator(page)
+}
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return original.NewOperationListResultPage(getNextPage)
+}
 func NewOperationsClient(subscriptionID string) OperationsClient {
 	return original.NewOperationsClient(subscriptionID)
 }
@@ -84,6 +103,15 @@ func NewPeriodsClient(subscriptionID string) PeriodsClient {
 }
 func NewPeriodsClientWithBaseURI(baseURI string, subscriptionID string) PeriodsClient {
 	return original.NewPeriodsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewPeriodsListResultIterator(page PeriodsListResultPage) PeriodsListResultIterator {
+	return original.NewPeriodsListResultIterator(page)
+}
+func NewPeriodsListResultPage(getNextPage func(context.Context, PeriodsListResult) (PeriodsListResult, error)) PeriodsListResultPage {
+	return original.NewPeriodsListResultPage(getNextPage)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

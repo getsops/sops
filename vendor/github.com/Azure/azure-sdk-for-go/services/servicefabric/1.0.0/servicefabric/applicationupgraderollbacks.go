@@ -24,22 +24,26 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationUpgradeRollbacksClient is the client for the ApplicationUpgradeRollbacks methods of the Servicefabric
 // service.
 type ApplicationUpgradeRollbacksClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewApplicationUpgradeRollbacksClient creates an instance of the ApplicationUpgradeRollbacksClient client.
 func NewApplicationUpgradeRollbacksClient(timeout *int32) ApplicationUpgradeRollbacksClient {
 	return NewApplicationUpgradeRollbacksClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewApplicationUpgradeRollbacksClientWithBaseURI creates an instance of the ApplicationUpgradeRollbacksClient client.
 func NewApplicationUpgradeRollbacksClientWithBaseURI(baseURI string, timeout *int32) ApplicationUpgradeRollbacksClient {
 	return ApplicationUpgradeRollbacksClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Start start application upgrade rollbacks
 // Parameters:
 // applicationName - the name of the application
@@ -65,6 +69,7 @@ func (client ApplicationUpgradeRollbacksClient) Start(ctx context.Context, appli
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartPreparer prepares the Start request.
 func (client ApplicationUpgradeRollbacksClient) StartPreparer(ctx context.Context, applicationName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -87,6 +92,7 @@ func (client ApplicationUpgradeRollbacksClient) StartPreparer(ctx context.Contex
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartSender sends the Start request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationUpgradeRollbacksClient) StartSender(req *http.Request) (*http.Response, error) {
@@ -94,6 +100,7 @@ func (client ApplicationUpgradeRollbacksClient) StartSender(req *http.Request) (
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartResponder handles the response to the Start request. The method always
 // closes the http.Response Body.
 func (client ApplicationUpgradeRollbacksClient) StartResponder(resp *http.Response) (result String, err error) {

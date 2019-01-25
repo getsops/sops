@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationManifestsClient is the client for the ApplicationManifests methods of the Servicefabric service.
 type ApplicationManifestsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewApplicationManifestsClient creates an instance of the ApplicationManifestsClient client.
 func NewApplicationManifestsClient(timeout *int32) ApplicationManifestsClient {
 	return NewApplicationManifestsClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewApplicationManifestsClientWithBaseURI creates an instance of the ApplicationManifestsClient client.
 func NewApplicationManifestsClientWithBaseURI(baseURI string, timeout *int32) ApplicationManifestsClient {
 	return ApplicationManifestsClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get application manifests
 // Parameters:
 // applicationTypeName - the name of the application type
@@ -65,6 +69,7 @@ func (client ApplicationManifestsClient) Get(ctx context.Context, applicationTyp
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client ApplicationManifestsClient) GetPreparer(ctx context.Context, applicationTypeName string, applicationTypeVersion string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -88,6 +93,7 @@ func (client ApplicationManifestsClient) GetPreparer(ctx context.Context, applic
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationManifestsClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -95,6 +101,7 @@ func (client ApplicationManifestsClient) GetSender(req *http.Request) (*http.Res
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client ApplicationManifestsClient) GetResponder(resp *http.Response) (result ApplicationManifest, err error) {

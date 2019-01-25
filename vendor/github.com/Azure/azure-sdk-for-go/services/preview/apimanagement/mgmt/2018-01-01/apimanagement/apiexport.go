@@ -22,24 +22,29 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // APIExportClient is the apiManagement Client
 type APIExportClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewAPIExportClient creates an instance of the APIExportClient client.
 func NewAPIExportClient(subscriptionID string) APIExportClient {
 	return NewAPIExportClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewAPIExportClientWithBaseURI creates an instance of the APIExportClient client.
 func NewAPIExportClientWithBaseURI(baseURI string, subscriptionID string) APIExportClient {
 	return APIExportClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Get gets the details of the API specified by its identifier in the format specified to the Storage Blob with SAS Key
 // valid for 5 minutes.
 // Parameters:
@@ -50,6 +55,16 @@ func NewAPIExportClientWithBaseURI(baseURI string, subscriptionID string) APIExp
 // formatParameter - format in which to export the Api Details to the Storage Blob with Sas Key valid for 5
 // minutes.
 func (client APIExportClient) Get(ctx context.Context, resourceGroupName string, serviceName string, apiid string, formatParameter ExportFormat) (result APIExportResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIExportClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -83,6 +98,7 @@ func (client APIExportClient) Get(ctx context.Context, resourceGroupName string,
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetPreparer prepares the Get request.
 func (client APIExportClient) GetPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, formatParameter ExportFormat) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -107,6 +123,7 @@ func (client APIExportClient) GetPreparer(ctx context.Context, resourceGroupName
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIExportClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -114,6 +131,7 @@ func (client APIExportClient) GetSender(req *http.Request) (*http.Response, erro
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client APIExportClient) GetResponder(resp *http.Response) (result APIExportResult, err error) {

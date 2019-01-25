@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -42,6 +43,16 @@ func NewExamplesClient(endpoint string) ExamplesClient {
 // versionID - the version ID.
 // exampleLabelObject - an example label with the expected intent and entities.
 func (client ExamplesClient) Add(ctx context.Context, appID uuid.UUID, versionID string, exampleLabelObject ExampleLabelObject) (result LabelExampleResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExamplesClient.Add")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddPreparer(ctx, appID, versionID, exampleLabelObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ExamplesClient", "Add", nil, "Failure preparing request")
@@ -109,6 +120,16 @@ func (client ExamplesClient) AddResponder(resp *http.Response) (result LabelExam
 // versionID - the version ID.
 // exampleLabelObjectArray - array of examples.
 func (client ExamplesClient) Batch(ctx context.Context, appID uuid.UUID, versionID string, exampleLabelObjectArray []ExampleLabelObject) (result ListBatchLabelExample, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExamplesClient.Batch")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: exampleLabelObjectArray,
 			Constraints: []validation.Constraint{{Target: "exampleLabelObjectArray", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -182,6 +203,16 @@ func (client ExamplesClient) BatchResponder(resp *http.Response) (result ListBat
 // versionID - the version ID.
 // exampleID - the example ID.
 func (client ExamplesClient) Delete(ctx context.Context, appID uuid.UUID, versionID string, exampleID int32) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExamplesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, appID, versionID, exampleID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ExamplesClient", "Delete", nil, "Failure preparing request")
@@ -249,6 +280,16 @@ func (client ExamplesClient) DeleteResponder(resp *http.Response) (result Operat
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client ExamplesClient) List(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (result ListLabeledUtterance, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExamplesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,

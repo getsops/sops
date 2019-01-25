@@ -2,17 +2,18 @@
   "meta": {
     "after_scripts": [
       "dep ensure",
-      "go generate ./profiles/...",
+      "go generate ./profiles/generate.go",
       "gofmt -w ./profiles/",
       "gofmt -w ./services/"
     ],
     "autorest_options": {
-      "use": "@microsoft.azure/autorest.go@~2.1.110",
+      "use": "@microsoft.azure/autorest.go@~2.1.127",
       "go": "",
       "verbose": "",
       "sdkrel:go-sdk-folder": ".",
       "multiapi": "",
-      "use-onever": ""
+      "use-onever": "",
+      "preview-chk": ""
     },
     "repotag": "azure-sdk-for-go",
     "envs": {

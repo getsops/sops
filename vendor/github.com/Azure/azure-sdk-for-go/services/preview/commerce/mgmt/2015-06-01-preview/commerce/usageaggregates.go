@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -55,6 +56,16 @@ func NewUsageAggregatesClientWithBaseURI(baseURI string, subscriptionID string) 
 // call, enabling paging through a large result set. If not present, the data is retrieved from the beginning
 // of the day/hour (based on the granularity) passed in.
 func (client UsageAggregatesClient) List(ctx context.Context, reportedStartTime date.Time, reportedEndTime date.Time, showDetails *bool, aggregationGranularity AggregationGranularity, continuationToken string) (result UsageAggregationListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UsageAggregatesClient.List")
+		defer func() {
+			sc := -1
+			if result.ualr.Response.Response != nil {
+				sc = result.ualr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, reportedStartTime, reportedEndTime, showDetails, aggregationGranularity, continuationToken)
 	if err != nil {
@@ -130,8 +141,8 @@ func (client UsageAggregatesClient) ListResponder(resp *http.Response) (result U
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client UsageAggregatesClient) listNextResults(lastResults UsageAggregationListResult) (result UsageAggregationListResult, err error) {
-	req, err := lastResults.usageAggregationListResultPreparer()
+func (client UsageAggregatesClient) listNextResults(ctx context.Context, lastResults UsageAggregationListResult) (result UsageAggregationListResult, err error) {
+	req, err := lastResults.usageAggregationListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "commerce.UsageAggregatesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -152,6 +163,16 @@ func (client UsageAggregatesClient) listNextResults(lastResults UsageAggregation
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client UsageAggregatesClient) ListComplete(ctx context.Context, reportedStartTime date.Time, reportedEndTime date.Time, showDetails *bool, aggregationGranularity AggregationGranularity, continuationToken string) (result UsageAggregationListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UsageAggregatesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, reportedStartTime, reportedEndTime, showDetails, aggregationGranularity, continuationToken)
 	return
 }

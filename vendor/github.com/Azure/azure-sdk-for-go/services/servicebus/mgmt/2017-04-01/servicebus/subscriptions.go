@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewSubscriptionsClientWithBaseURI(baseURI string, subscriptionID string) Su
 // subscriptionName - the subscription name.
 // parameters - parameters supplied to create a subscription resource.
 func (client SubscriptionsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, subscriptionName string, parameters SBSubscription) (result SBSubscription, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -136,6 +147,16 @@ func (client SubscriptionsClient) CreateOrUpdateResponder(resp *http.Response) (
 // topicName - the topic name.
 // subscriptionName - the subscription name.
 func (client SubscriptionsClient) Delete(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, subscriptionName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -221,6 +242,16 @@ func (client SubscriptionsClient) DeleteResponder(resp *http.Response) (result a
 // topicName - the topic name.
 // subscriptionName - the subscription name.
 func (client SubscriptionsClient) Get(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, subscriptionName string) (result SBSubscription, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -310,6 +341,16 @@ func (client SubscriptionsClient) GetResponder(resp *http.Response) (result SBSu
 // starting point to use for subsequent calls.
 // top - may be used to limit the number of results to the most recent N usageDetails.
 func (client SubscriptionsClient) ListByTopic(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, skip *int32, top *int32) (result SBSubscriptionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionsClient.ListByTopic")
+		defer func() {
+			sc := -1
+			if result.sslr.Response.Response != nil {
+				sc = result.sslr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -403,8 +444,8 @@ func (client SubscriptionsClient) ListByTopicResponder(resp *http.Response) (res
 }
 
 // listByTopicNextResults retrieves the next set of results, if any.
-func (client SubscriptionsClient) listByTopicNextResults(lastResults SBSubscriptionListResult) (result SBSubscriptionListResult, err error) {
-	req, err := lastResults.sBSubscriptionListResultPreparer()
+func (client SubscriptionsClient) listByTopicNextResults(ctx context.Context, lastResults SBSubscriptionListResult) (result SBSubscriptionListResult, err error) {
+	req, err := lastResults.sBSubscriptionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "servicebus.SubscriptionsClient", "listByTopicNextResults", nil, "Failure preparing next results request")
 	}
@@ -425,6 +466,16 @@ func (client SubscriptionsClient) listByTopicNextResults(lastResults SBSubscript
 
 // ListByTopicComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SubscriptionsClient) ListByTopicComplete(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, skip *int32, top *int32) (result SBSubscriptionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionsClient.ListByTopic")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByTopic(ctx, resourceGroupName, namespaceName, topicName, skip, top)
 	return
 }

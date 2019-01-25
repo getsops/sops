@@ -18,13 +18,18 @@ package logic
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/logic/mgmt/2015-02-01-preview/logic"
 
 // KeyType enumerates the values for key type.
 type KeyType string
@@ -514,20 +519,37 @@ type WorkflowAccessKeyListResultIterator struct {
 	page WorkflowAccessKeyListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *WorkflowAccessKeyListResultIterator) Next() error {
+func (iter *WorkflowAccessKeyListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowAccessKeyListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *WorkflowAccessKeyListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -549,6 +571,11 @@ func (iter WorkflowAccessKeyListResultIterator) Value() WorkflowAccessKey {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the WorkflowAccessKeyListResultIterator type.
+func NewWorkflowAccessKeyListResultIterator(page WorkflowAccessKeyListResultPage) WorkflowAccessKeyListResultIterator {
+	return WorkflowAccessKeyListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (waklr WorkflowAccessKeyListResult) IsEmpty() bool {
 	return waklr.Value == nil || len(*waklr.Value) == 0
@@ -556,11 +583,11 @@ func (waklr WorkflowAccessKeyListResult) IsEmpty() bool {
 
 // workflowAccessKeyListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (waklr WorkflowAccessKeyListResult) workflowAccessKeyListResultPreparer() (*http.Request, error) {
+func (waklr WorkflowAccessKeyListResult) workflowAccessKeyListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if waklr.NextLink == nil || len(to.String(waklr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(waklr.NextLink)))
@@ -568,19 +595,36 @@ func (waklr WorkflowAccessKeyListResult) workflowAccessKeyListResultPreparer() (
 
 // WorkflowAccessKeyListResultPage contains a page of WorkflowAccessKey values.
 type WorkflowAccessKeyListResultPage struct {
-	fn    func(WorkflowAccessKeyListResult) (WorkflowAccessKeyListResult, error)
+	fn    func(context.Context, WorkflowAccessKeyListResult) (WorkflowAccessKeyListResult, error)
 	waklr WorkflowAccessKeyListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *WorkflowAccessKeyListResultPage) Next() error {
-	next, err := page.fn(page.waklr)
+func (page *WorkflowAccessKeyListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowAccessKeyListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.waklr)
 	if err != nil {
 		return err
 	}
 	page.waklr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *WorkflowAccessKeyListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -599,6 +643,11 @@ func (page WorkflowAccessKeyListResultPage) Values() []WorkflowAccessKey {
 		return nil
 	}
 	return *page.waklr.Value
+}
+
+// Creates a new instance of the WorkflowAccessKeyListResultPage type.
+func NewWorkflowAccessKeyListResultPage(getNextPage func(context.Context, WorkflowAccessKeyListResult) (WorkflowAccessKeyListResult, error)) WorkflowAccessKeyListResultPage {
+	return WorkflowAccessKeyListResultPage{fn: getNextPage}
 }
 
 // WorkflowAccessKeyProperties ...
@@ -630,20 +679,37 @@ type WorkflowListResultIterator struct {
 	page WorkflowListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *WorkflowListResultIterator) Next() error {
+func (iter *WorkflowListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *WorkflowListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -665,6 +731,11 @@ func (iter WorkflowListResultIterator) Value() Workflow {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the WorkflowListResultIterator type.
+func NewWorkflowListResultIterator(page WorkflowListResultPage) WorkflowListResultIterator {
+	return WorkflowListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (wlr WorkflowListResult) IsEmpty() bool {
 	return wlr.Value == nil || len(*wlr.Value) == 0
@@ -672,11 +743,11 @@ func (wlr WorkflowListResult) IsEmpty() bool {
 
 // workflowListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (wlr WorkflowListResult) workflowListResultPreparer() (*http.Request, error) {
+func (wlr WorkflowListResult) workflowListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if wlr.NextLink == nil || len(to.String(wlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(wlr.NextLink)))
@@ -684,19 +755,36 @@ func (wlr WorkflowListResult) workflowListResultPreparer() (*http.Request, error
 
 // WorkflowListResultPage contains a page of Workflow values.
 type WorkflowListResultPage struct {
-	fn  func(WorkflowListResult) (WorkflowListResult, error)
+	fn  func(context.Context, WorkflowListResult) (WorkflowListResult, error)
 	wlr WorkflowListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *WorkflowListResultPage) Next() error {
-	next, err := page.fn(page.wlr)
+func (page *WorkflowListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.wlr)
 	if err != nil {
 		return err
 	}
 	page.wlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *WorkflowListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -715,6 +803,11 @@ func (page WorkflowListResultPage) Values() []Workflow {
 		return nil
 	}
 	return *page.wlr.Value
+}
+
+// Creates a new instance of the WorkflowListResultPage type.
+func NewWorkflowListResultPage(getNextPage func(context.Context, WorkflowListResult) (WorkflowListResult, error)) WorkflowListResultPage {
+	return WorkflowListResultPage{fn: getNextPage}
 }
 
 // WorkflowOutputParameter ...
@@ -792,7 +885,9 @@ func (wp WorkflowProperties) MarshalJSON() ([]byte, error) {
 	if wp.DefinitionLink != nil {
 		objectMap["definitionLink"] = wp.DefinitionLink
 	}
-	objectMap["definition"] = wp.Definition
+	if wp.Definition != nil {
+		objectMap["definition"] = wp.Definition
+	}
 	if wp.ParametersLink != nil {
 		objectMap["parametersLink"] = wp.ParametersLink
 	}
@@ -987,20 +1082,37 @@ type WorkflowRunActionListResultIterator struct {
 	page WorkflowRunActionListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *WorkflowRunActionListResultIterator) Next() error {
+func (iter *WorkflowRunActionListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowRunActionListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *WorkflowRunActionListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1022,6 +1134,11 @@ func (iter WorkflowRunActionListResultIterator) Value() WorkflowRunAction {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the WorkflowRunActionListResultIterator type.
+func NewWorkflowRunActionListResultIterator(page WorkflowRunActionListResultPage) WorkflowRunActionListResultIterator {
+	return WorkflowRunActionListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (wralr WorkflowRunActionListResult) IsEmpty() bool {
 	return wralr.Value == nil || len(*wralr.Value) == 0
@@ -1029,11 +1146,11 @@ func (wralr WorkflowRunActionListResult) IsEmpty() bool {
 
 // workflowRunActionListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (wralr WorkflowRunActionListResult) workflowRunActionListResultPreparer() (*http.Request, error) {
+func (wralr WorkflowRunActionListResult) workflowRunActionListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if wralr.NextLink == nil || len(to.String(wralr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(wralr.NextLink)))
@@ -1041,19 +1158,36 @@ func (wralr WorkflowRunActionListResult) workflowRunActionListResultPreparer() (
 
 // WorkflowRunActionListResultPage contains a page of WorkflowRunAction values.
 type WorkflowRunActionListResultPage struct {
-	fn    func(WorkflowRunActionListResult) (WorkflowRunActionListResult, error)
+	fn    func(context.Context, WorkflowRunActionListResult) (WorkflowRunActionListResult, error)
 	wralr WorkflowRunActionListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *WorkflowRunActionListResultPage) Next() error {
-	next, err := page.fn(page.wralr)
+func (page *WorkflowRunActionListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowRunActionListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.wralr)
 	if err != nil {
 		return err
 	}
 	page.wralr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *WorkflowRunActionListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1072,6 +1206,11 @@ func (page WorkflowRunActionListResultPage) Values() []WorkflowRunAction {
 		return nil
 	}
 	return *page.wralr.Value
+}
+
+// Creates a new instance of the WorkflowRunActionListResultPage type.
+func NewWorkflowRunActionListResultPage(getNextPage func(context.Context, WorkflowRunActionListResult) (WorkflowRunActionListResult, error)) WorkflowRunActionListResultPage {
+	return WorkflowRunActionListResultPage{fn: getNextPage}
 }
 
 // WorkflowRunActionProperties ...
@@ -1115,20 +1254,37 @@ type WorkflowRunListResultIterator struct {
 	page WorkflowRunListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *WorkflowRunListResultIterator) Next() error {
+func (iter *WorkflowRunListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowRunListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *WorkflowRunListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1150,6 +1306,11 @@ func (iter WorkflowRunListResultIterator) Value() WorkflowRun {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the WorkflowRunListResultIterator type.
+func NewWorkflowRunListResultIterator(page WorkflowRunListResultPage) WorkflowRunListResultIterator {
+	return WorkflowRunListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (wrlr WorkflowRunListResult) IsEmpty() bool {
 	return wrlr.Value == nil || len(*wrlr.Value) == 0
@@ -1157,11 +1318,11 @@ func (wrlr WorkflowRunListResult) IsEmpty() bool {
 
 // workflowRunListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (wrlr WorkflowRunListResult) workflowRunListResultPreparer() (*http.Request, error) {
+func (wrlr WorkflowRunListResult) workflowRunListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if wrlr.NextLink == nil || len(to.String(wrlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(wrlr.NextLink)))
@@ -1169,19 +1330,36 @@ func (wrlr WorkflowRunListResult) workflowRunListResultPreparer() (*http.Request
 
 // WorkflowRunListResultPage contains a page of WorkflowRun values.
 type WorkflowRunListResultPage struct {
-	fn   func(WorkflowRunListResult) (WorkflowRunListResult, error)
+	fn   func(context.Context, WorkflowRunListResult) (WorkflowRunListResult, error)
 	wrlr WorkflowRunListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *WorkflowRunListResultPage) Next() error {
-	next, err := page.fn(page.wrlr)
+func (page *WorkflowRunListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowRunListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.wrlr)
 	if err != nil {
 		return err
 	}
 	page.wrlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *WorkflowRunListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1200,6 +1378,11 @@ func (page WorkflowRunListResultPage) Values() []WorkflowRun {
 		return nil
 	}
 	return *page.wrlr.Value
+}
+
+// Creates a new instance of the WorkflowRunListResultPage type.
+func NewWorkflowRunListResultPage(getNextPage func(context.Context, WorkflowRunListResult) (WorkflowRunListResult, error)) WorkflowRunListResultPage {
+	return WorkflowRunListResultPage{fn: getNextPage}
 }
 
 // WorkflowRunProperties ...
@@ -1239,7 +1422,9 @@ func (wrp WorkflowRunProperties) MarshalJSON() ([]byte, error) {
 	if wrp.Code != nil {
 		objectMap["code"] = wrp.Code
 	}
-	objectMap["error"] = wrp.Error
+	if wrp.Error != nil {
+		objectMap["error"] = wrp.Error
+	}
 	if wrp.CorrelationID != nil {
 		objectMap["correlationId"] = wrp.CorrelationID
 	}
@@ -1503,26 +1688,44 @@ type WorkflowTriggerHistoryListResult struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// WorkflowTriggerHistoryListResultIterator provides access to a complete listing of WorkflowTriggerHistory values.
+// WorkflowTriggerHistoryListResultIterator provides access to a complete listing of WorkflowTriggerHistory
+// values.
 type WorkflowTriggerHistoryListResultIterator struct {
 	i    int
 	page WorkflowTriggerHistoryListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *WorkflowTriggerHistoryListResultIterator) Next() error {
+func (iter *WorkflowTriggerHistoryListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowTriggerHistoryListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *WorkflowTriggerHistoryListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1544,6 +1747,11 @@ func (iter WorkflowTriggerHistoryListResultIterator) Value() WorkflowTriggerHist
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the WorkflowTriggerHistoryListResultIterator type.
+func NewWorkflowTriggerHistoryListResultIterator(page WorkflowTriggerHistoryListResultPage) WorkflowTriggerHistoryListResultIterator {
+	return WorkflowTriggerHistoryListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (wthlr WorkflowTriggerHistoryListResult) IsEmpty() bool {
 	return wthlr.Value == nil || len(*wthlr.Value) == 0
@@ -1551,11 +1759,11 @@ func (wthlr WorkflowTriggerHistoryListResult) IsEmpty() bool {
 
 // workflowTriggerHistoryListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (wthlr WorkflowTriggerHistoryListResult) workflowTriggerHistoryListResultPreparer() (*http.Request, error) {
+func (wthlr WorkflowTriggerHistoryListResult) workflowTriggerHistoryListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if wthlr.NextLink == nil || len(to.String(wthlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(wthlr.NextLink)))
@@ -1563,19 +1771,36 @@ func (wthlr WorkflowTriggerHistoryListResult) workflowTriggerHistoryListResultPr
 
 // WorkflowTriggerHistoryListResultPage contains a page of WorkflowTriggerHistory values.
 type WorkflowTriggerHistoryListResultPage struct {
-	fn    func(WorkflowTriggerHistoryListResult) (WorkflowTriggerHistoryListResult, error)
+	fn    func(context.Context, WorkflowTriggerHistoryListResult) (WorkflowTriggerHistoryListResult, error)
 	wthlr WorkflowTriggerHistoryListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *WorkflowTriggerHistoryListResultPage) Next() error {
-	next, err := page.fn(page.wthlr)
+func (page *WorkflowTriggerHistoryListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowTriggerHistoryListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.wthlr)
 	if err != nil {
 		return err
 	}
 	page.wthlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *WorkflowTriggerHistoryListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1594,6 +1819,11 @@ func (page WorkflowTriggerHistoryListResultPage) Values() []WorkflowTriggerHisto
 		return nil
 	}
 	return *page.wthlr.Value
+}
+
+// Creates a new instance of the WorkflowTriggerHistoryListResultPage type.
+func NewWorkflowTriggerHistoryListResultPage(getNextPage func(context.Context, WorkflowTriggerHistoryListResult) (WorkflowTriggerHistoryListResult, error)) WorkflowTriggerHistoryListResultPage {
+	return WorkflowTriggerHistoryListResultPage{fn: getNextPage}
 }
 
 // WorkflowTriggerHistoryProperties ...
@@ -1635,20 +1865,37 @@ type WorkflowTriggerListResultIterator struct {
 	page WorkflowTriggerListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *WorkflowTriggerListResultIterator) Next() error {
+func (iter *WorkflowTriggerListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowTriggerListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *WorkflowTriggerListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1670,6 +1917,11 @@ func (iter WorkflowTriggerListResultIterator) Value() WorkflowTrigger {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the WorkflowTriggerListResultIterator type.
+func NewWorkflowTriggerListResultIterator(page WorkflowTriggerListResultPage) WorkflowTriggerListResultIterator {
+	return WorkflowTriggerListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (wtlr WorkflowTriggerListResult) IsEmpty() bool {
 	return wtlr.Value == nil || len(*wtlr.Value) == 0
@@ -1677,11 +1929,11 @@ func (wtlr WorkflowTriggerListResult) IsEmpty() bool {
 
 // workflowTriggerListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (wtlr WorkflowTriggerListResult) workflowTriggerListResultPreparer() (*http.Request, error) {
+func (wtlr WorkflowTriggerListResult) workflowTriggerListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if wtlr.NextLink == nil || len(to.String(wtlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(wtlr.NextLink)))
@@ -1689,19 +1941,36 @@ func (wtlr WorkflowTriggerListResult) workflowTriggerListResultPreparer() (*http
 
 // WorkflowTriggerListResultPage contains a page of WorkflowTrigger values.
 type WorkflowTriggerListResultPage struct {
-	fn   func(WorkflowTriggerListResult) (WorkflowTriggerListResult, error)
+	fn   func(context.Context, WorkflowTriggerListResult) (WorkflowTriggerListResult, error)
 	wtlr WorkflowTriggerListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *WorkflowTriggerListResultPage) Next() error {
-	next, err := page.fn(page.wtlr)
+func (page *WorkflowTriggerListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowTriggerListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.wtlr)
 	if err != nil {
 		return err
 	}
 	page.wtlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *WorkflowTriggerListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1720,6 +1989,11 @@ func (page WorkflowTriggerListResultPage) Values() []WorkflowTrigger {
 		return nil
 	}
 	return *page.wtlr.Value
+}
+
+// Creates a new instance of the WorkflowTriggerListResultPage type.
+func NewWorkflowTriggerListResultPage(getNextPage func(context.Context, WorkflowTriggerListResult) (WorkflowTriggerListResult, error)) WorkflowTriggerListResultPage {
+	return WorkflowTriggerListResultPage{fn: getNextPage}
 }
 
 // WorkflowTriggerProperties ...
@@ -1914,7 +2188,9 @@ func (wvp WorkflowVersionProperties) MarshalJSON() ([]byte, error) {
 	if wvp.DefinitionLink != nil {
 		objectMap["definitionLink"] = wvp.DefinitionLink
 	}
-	objectMap["definition"] = wvp.Definition
+	if wvp.Definition != nil {
+		objectMap["definition"] = wvp.Definition
+	}
 	if wvp.ParametersLink != nil {
 		objectMap["parametersLink"] = wvp.ParametersLink
 	}

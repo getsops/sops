@@ -18,12 +18,17 @@ package managedapplications
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2018-06-01/managedapplications"
 
 // ApplicationArtifactType enumerates the values for application artifact type.
 type ApplicationArtifactType string
@@ -454,26 +459,44 @@ type ApplicationDefinitionListResult struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ApplicationDefinitionListResultIterator provides access to a complete listing of ApplicationDefinition values.
+// ApplicationDefinitionListResultIterator provides access to a complete listing of ApplicationDefinition
+// values.
 type ApplicationDefinitionListResultIterator struct {
 	i    int
 	page ApplicationDefinitionListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ApplicationDefinitionListResultIterator) Next() error {
+func (iter *ApplicationDefinitionListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationDefinitionListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ApplicationDefinitionListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -495,6 +518,11 @@ func (iter ApplicationDefinitionListResultIterator) Value() ApplicationDefinitio
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ApplicationDefinitionListResultIterator type.
+func NewApplicationDefinitionListResultIterator(page ApplicationDefinitionListResultPage) ApplicationDefinitionListResultIterator {
+	return ApplicationDefinitionListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (adlr ApplicationDefinitionListResult) IsEmpty() bool {
 	return adlr.Value == nil || len(*adlr.Value) == 0
@@ -502,11 +530,11 @@ func (adlr ApplicationDefinitionListResult) IsEmpty() bool {
 
 // applicationDefinitionListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (adlr ApplicationDefinitionListResult) applicationDefinitionListResultPreparer() (*http.Request, error) {
+func (adlr ApplicationDefinitionListResult) applicationDefinitionListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if adlr.NextLink == nil || len(to.String(adlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(adlr.NextLink)))
@@ -514,19 +542,36 @@ func (adlr ApplicationDefinitionListResult) applicationDefinitionListResultPrepa
 
 // ApplicationDefinitionListResultPage contains a page of ApplicationDefinition values.
 type ApplicationDefinitionListResultPage struct {
-	fn   func(ApplicationDefinitionListResult) (ApplicationDefinitionListResult, error)
+	fn   func(context.Context, ApplicationDefinitionListResult) (ApplicationDefinitionListResult, error)
 	adlr ApplicationDefinitionListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ApplicationDefinitionListResultPage) Next() error {
-	next, err := page.fn(page.adlr)
+func (page *ApplicationDefinitionListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationDefinitionListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.adlr)
 	if err != nil {
 		return err
 	}
 	page.adlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ApplicationDefinitionListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -545,6 +590,11 @@ func (page ApplicationDefinitionListResultPage) Values() []ApplicationDefinition
 		return nil
 	}
 	return *page.adlr.Value
+}
+
+// Creates a new instance of the ApplicationDefinitionListResultPage type.
+func NewApplicationDefinitionListResultPage(getNextPage func(context.Context, ApplicationDefinitionListResult) (ApplicationDefinitionListResult, error)) ApplicationDefinitionListResultPage {
+	return ApplicationDefinitionListResultPage{fn: getNextPage}
 }
 
 // ApplicationDefinitionProperties the managed application definition properties.
@@ -569,8 +619,8 @@ type ApplicationDefinitionProperties struct {
 	CreateUIDefinition interface{} `json:"createUiDefinition,omitempty"`
 }
 
-// ApplicationDefinitionsCreateOrUpdateByIDFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ApplicationDefinitionsCreateOrUpdateByIDFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
 type ApplicationDefinitionsCreateOrUpdateByIDFuture struct {
 	azure.Future
 }
@@ -650,8 +700,8 @@ func (future *ApplicationDefinitionsDeleteByIDFuture) Result(client ApplicationD
 	return
 }
 
-// ApplicationDefinitionsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ApplicationDefinitionsDeleteFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ApplicationDefinitionsDeleteFuture struct {
 	azure.Future
 }
@@ -688,20 +738,37 @@ type ApplicationListResultIterator struct {
 	page ApplicationListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ApplicationListResultIterator) Next() error {
+func (iter *ApplicationListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ApplicationListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -723,6 +790,11 @@ func (iter ApplicationListResultIterator) Value() Application {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ApplicationListResultIterator type.
+func NewApplicationListResultIterator(page ApplicationListResultPage) ApplicationListResultIterator {
+	return ApplicationListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (alr ApplicationListResult) IsEmpty() bool {
 	return alr.Value == nil || len(*alr.Value) == 0
@@ -730,11 +802,11 @@ func (alr ApplicationListResult) IsEmpty() bool {
 
 // applicationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (alr ApplicationListResult) applicationListResultPreparer() (*http.Request, error) {
+func (alr ApplicationListResult) applicationListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if alr.NextLink == nil || len(to.String(alr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(alr.NextLink)))
@@ -742,19 +814,36 @@ func (alr ApplicationListResult) applicationListResultPreparer() (*http.Request,
 
 // ApplicationListResultPage contains a page of Application values.
 type ApplicationListResultPage struct {
-	fn  func(ApplicationListResult) (ApplicationListResult, error)
+	fn  func(context.Context, ApplicationListResult) (ApplicationListResult, error)
 	alr ApplicationListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ApplicationListResultPage) Next() error {
-	next, err := page.fn(page.alr)
+func (page *ApplicationListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.alr)
 	if err != nil {
 		return err
 	}
 	page.alr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ApplicationListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -773,6 +862,11 @@ func (page ApplicationListResultPage) Values() []Application {
 		return nil
 	}
 	return *page.alr.Value
+}
+
+// Creates a new instance of the ApplicationListResultPage type.
+func NewApplicationListResultPage(getNextPage func(context.Context, ApplicationListResult) (ApplicationListResult, error)) ApplicationListResultPage {
+	return ApplicationListResultPage{fn: getNextPage}
 }
 
 // ApplicationPatchable information about managed application.
@@ -990,8 +1084,8 @@ type ApplicationProviderAuthorization struct {
 	RoleDefinitionID *string `json:"roleDefinitionId,omitempty"`
 }
 
-// ApplicationsCreateOrUpdateByIDFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ApplicationsCreateOrUpdateByIDFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ApplicationsCreateOrUpdateByIDFuture struct {
 	azure.Future
 }
@@ -1019,8 +1113,8 @@ func (future *ApplicationsCreateOrUpdateByIDFuture) Result(client ApplicationsCl
 	return
 }
 
-// ApplicationsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ApplicationsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ApplicationsCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -1071,7 +1165,8 @@ func (future *ApplicationsDeleteByIDFuture) Result(client ApplicationsClient) (a
 	return
 }
 
-// ApplicationsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ApplicationsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ApplicationsDeleteFuture struct {
 	azure.Future
 }
@@ -1093,8 +1188,8 @@ func (future *ApplicationsDeleteFuture) Result(client ApplicationsClient) (ar au
 	return
 }
 
-// ErrorResponse error reponse indicates managed application is not able to process the incoming request. The
-// reason is provided in the error message.
+// ErrorResponse error response indicates managed application is not able to process the incoming request.
+// The reason is provided in the error message.
 type ErrorResponse struct {
 	// HTTPStatus - Http status code.
 	HTTPStatus *string `json:"httpStatus,omitempty"`

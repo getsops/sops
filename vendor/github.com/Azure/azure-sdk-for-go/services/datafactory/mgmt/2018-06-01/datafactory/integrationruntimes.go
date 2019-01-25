@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewIntegrationRuntimesClientWithBaseURI(baseURI string, subscriptionID stri
 // integrationRuntimeName - the integration runtime name.
 // createLinkedIntegrationRuntimeRequest - the linked integration runtime properties.
 func (client IntegrationRuntimesClient) CreateLinkedIntegrationRuntime(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, createLinkedIntegrationRuntimeRequest CreateLinkedIntegrationRuntimeRequest) (result IntegrationRuntimeStatusResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimesClient.CreateLinkedIntegrationRuntime")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -138,6 +149,16 @@ func (client IntegrationRuntimesClient) CreateLinkedIntegrationRuntimeResponder(
 // ifMatch - eTag of the integration runtime entity. Should only be specified for update, for which it should
 // match existing entity or can be * for unconditional update.
 func (client IntegrationRuntimesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, integrationRuntime IntegrationRuntimeResource, ifMatch string) (result IntegrationRuntimeResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -231,6 +252,16 @@ func (client IntegrationRuntimesClient) CreateOrUpdateResponder(resp *http.Respo
 // factoryName - the factory name.
 // integrationRuntimeName - the integration runtime name.
 func (client IntegrationRuntimesClient) Delete(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -317,6 +348,16 @@ func (client IntegrationRuntimesClient) DeleteResponder(resp *http.Response) (re
 // ifNoneMatch - eTag of the integration runtime entity. Should only be specified for get. If the ETag matches
 // the existing entity tag, or if * was provided, then no content will be returned.
 func (client IntegrationRuntimesClient) Get(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, ifNoneMatch string) (result IntegrationRuntimeResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -407,6 +448,16 @@ func (client IntegrationRuntimesClient) GetResponder(resp *http.Response) (resul
 // factoryName - the factory name.
 // integrationRuntimeName - the integration runtime name.
 func (client IntegrationRuntimesClient) GetConnectionInfo(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (result IntegrationRuntimeConnectionInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimesClient.GetConnectionInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -493,6 +544,16 @@ func (client IntegrationRuntimesClient) GetConnectionInfoResponder(resp *http.Re
 // factoryName - the factory name.
 // integrationRuntimeName - the integration runtime name.
 func (client IntegrationRuntimesClient) GetMonitoringData(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (result IntegrationRuntimeMonitoringData, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimesClient.GetMonitoringData")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -578,6 +639,16 @@ func (client IntegrationRuntimesClient) GetMonitoringDataResponder(resp *http.Re
 // factoryName - the factory name.
 // integrationRuntimeName - the integration runtime name.
 func (client IntegrationRuntimesClient) GetStatus(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (result IntegrationRuntimeStatusResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimesClient.GetStatus")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -663,6 +734,16 @@ func (client IntegrationRuntimesClient) GetStatusResponder(resp *http.Response) 
 // factoryName - the factory name.
 // integrationRuntimeName - the integration runtime name.
 func (client IntegrationRuntimesClient) ListAuthKeys(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (result IntegrationRuntimeAuthKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimesClient.ListAuthKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -747,6 +828,16 @@ func (client IntegrationRuntimesClient) ListAuthKeysResponder(resp *http.Respons
 // resourceGroupName - the resource group name.
 // factoryName - the factory name.
 func (client IntegrationRuntimesClient) ListByFactory(ctx context.Context, resourceGroupName string, factoryName string) (result IntegrationRuntimeListResponsePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimesClient.ListByFactory")
+		defer func() {
+			sc := -1
+			if result.irlr.Response.Response != nil {
+				sc = result.irlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -823,8 +914,8 @@ func (client IntegrationRuntimesClient) ListByFactoryResponder(resp *http.Respon
 }
 
 // listByFactoryNextResults retrieves the next set of results, if any.
-func (client IntegrationRuntimesClient) listByFactoryNextResults(lastResults IntegrationRuntimeListResponse) (result IntegrationRuntimeListResponse, err error) {
-	req, err := lastResults.integrationRuntimeListResponsePreparer()
+func (client IntegrationRuntimesClient) listByFactoryNextResults(ctx context.Context, lastResults IntegrationRuntimeListResponse) (result IntegrationRuntimeListResponse, err error) {
+	req, err := lastResults.integrationRuntimeListResponsePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "datafactory.IntegrationRuntimesClient", "listByFactoryNextResults", nil, "Failure preparing next results request")
 	}
@@ -845,6 +936,16 @@ func (client IntegrationRuntimesClient) listByFactoryNextResults(lastResults Int
 
 // ListByFactoryComplete enumerates all values, automatically crossing page boundaries as required.
 func (client IntegrationRuntimesClient) ListByFactoryComplete(ctx context.Context, resourceGroupName string, factoryName string) (result IntegrationRuntimeListResponseIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimesClient.ListByFactory")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByFactory(ctx, resourceGroupName, factoryName)
 	return
 }
@@ -856,6 +957,16 @@ func (client IntegrationRuntimesClient) ListByFactoryComplete(ctx context.Contex
 // integrationRuntimeName - the integration runtime name.
 // regenerateKeyParameters - the parameters for regenerating integration runtime authentication key.
 func (client IntegrationRuntimesClient) RegenerateAuthKey(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, regenerateKeyParameters IntegrationRuntimeRegenerateKeyParameters) (result IntegrationRuntimeAuthKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimesClient.RegenerateAuthKey")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -944,6 +1055,16 @@ func (client IntegrationRuntimesClient) RegenerateAuthKeyResponder(resp *http.Re
 // integrationRuntimeName - the integration runtime name.
 // linkedIntegrationRuntimeRequest - the data factory name for the linked integration runtime.
 func (client IntegrationRuntimesClient) RemoveLinks(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, linkedIntegrationRuntimeRequest LinkedIntegrationRuntimeRequest) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimesClient.RemoveLinks")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1032,6 +1153,16 @@ func (client IntegrationRuntimesClient) RemoveLinksResponder(resp *http.Response
 // factoryName - the factory name.
 // integrationRuntimeName - the integration runtime name.
 func (client IntegrationRuntimesClient) Start(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (result IntegrationRuntimesStartFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimesClient.Start")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1094,10 +1225,6 @@ func (client IntegrationRuntimesClient) StartSender(req *http.Request) (future I
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -1121,6 +1248,16 @@ func (client IntegrationRuntimesClient) StartResponder(resp *http.Response) (res
 // factoryName - the factory name.
 // integrationRuntimeName - the integration runtime name.
 func (client IntegrationRuntimesClient) Stop(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (result IntegrationRuntimesStopFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimesClient.Stop")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1183,10 +1320,6 @@ func (client IntegrationRuntimesClient) StopSender(req *http.Request) (future In
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -1212,6 +1345,16 @@ func (client IntegrationRuntimesClient) StopResponder(resp *http.Response) (resu
 // factoryName - the factory name.
 // integrationRuntimeName - the integration runtime name.
 func (client IntegrationRuntimesClient) SyncCredentials(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimesClient.SyncCredentials")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1297,6 +1440,16 @@ func (client IntegrationRuntimesClient) SyncCredentialsResponder(resp *http.Resp
 // integrationRuntimeName - the integration runtime name.
 // updateIntegrationRuntimeRequest - the parameters for updating an integration runtime.
 func (client IntegrationRuntimesClient) Update(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, updateIntegrationRuntimeRequest UpdateIntegrationRuntimeRequest) (result IntegrationRuntimeResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1378,12 +1531,22 @@ func (client IntegrationRuntimesClient) UpdateResponder(resp *http.Response) (re
 	return
 }
 
-// Upgrade upgrade self-hosted integration runtime to latest version if availably.
+// Upgrade upgrade self-hosted integration runtime to latest version if availability.
 // Parameters:
 // resourceGroupName - the resource group name.
 // factoryName - the factory name.
 // integrationRuntimeName - the integration runtime name.
 func (client IntegrationRuntimesClient) Upgrade(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimesClient.Upgrade")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

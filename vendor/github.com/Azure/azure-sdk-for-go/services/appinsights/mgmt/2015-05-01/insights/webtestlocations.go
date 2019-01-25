@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewWebTestLocationsClientWithBaseURI(baseURI string, subscriptionID string)
 // resourceGroupName - the name of the resource group.
 // resourceName - the name of the Application Insights component resource.
 func (client WebTestLocationsClient) List(ctx context.Context, resourceGroupName string, resourceName string) (result ApplicationInsightsWebTestLocationsListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WebTestLocationsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.WebTestLocationsClient", "List", nil, "Failure preparing request")

@@ -22,24 +22,29 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // IdentityProviderClient is the apiManagement Client
 type IdentityProviderClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewIdentityProviderClient creates an instance of the IdentityProviderClient client.
 func NewIdentityProviderClient(subscriptionID string) IdentityProviderClient {
 	return NewIdentityProviderClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewIdentityProviderClientWithBaseURI creates an instance of the IdentityProviderClient client.
 func NewIdentityProviderClientWithBaseURI(baseURI string, subscriptionID string) IdentityProviderClient {
 	return IdentityProviderClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdate creates or Updates the IdentityProvider configuration.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -48,6 +53,16 @@ func NewIdentityProviderClientWithBaseURI(baseURI string, subscriptionID string)
 // parameters - create parameters.
 // ifMatch - eTag of the Entity. Not required when creating an entity, but required when updating an entity.
 func (client IdentityProviderClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType, parameters IdentityProviderContract, ifMatch string) (result IdentityProviderContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -84,6 +99,7 @@ func (client IdentityProviderClient) CreateOrUpdate(ctx context.Context, resourc
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
 func (client IdentityProviderClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType, parameters IdentityProviderContract, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -112,6 +128,7 @@ func (client IdentityProviderClient) CreateOrUpdatePreparer(ctx context.Context,
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client IdentityProviderClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
@@ -119,6 +136,7 @@ func (client IdentityProviderClient) CreateOrUpdateSender(req *http.Request) (*h
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
 // closes the http.Response Body.
 func (client IdentityProviderClient) CreateOrUpdateResponder(resp *http.Response) (result IdentityProviderContract, err error) {
@@ -132,6 +150,7 @@ func (client IdentityProviderClient) CreateOrUpdateResponder(resp *http.Response
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Delete deletes the specified identity provider configuration.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -140,6 +159,16 @@ func (client IdentityProviderClient) CreateOrUpdateResponder(resp *http.Response
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client IdentityProviderClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -169,6 +198,7 @@ func (client IdentityProviderClient) Delete(ctx context.Context, resourceGroupNa
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeletePreparer prepares the Delete request.
 func (client IdentityProviderClient) DeletePreparer(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -192,6 +222,7 @@ func (client IdentityProviderClient) DeletePreparer(ctx context.Context, resourc
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client IdentityProviderClient) DeleteSender(req *http.Request) (*http.Response, error) {
@@ -199,6 +230,7 @@ func (client IdentityProviderClient) DeleteSender(req *http.Request) (*http.Resp
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteResponder handles the response to the Delete request. The method always
 // closes the http.Response Body.
 func (client IdentityProviderClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -211,12 +243,23 @@ func (client IdentityProviderClient) DeleteResponder(resp *http.Response) (resul
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Get gets the configuration details of the identity Provider configured in specified service instance.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // identityProviderName - identity Provider Type identifier.
 func (client IdentityProviderClient) Get(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType) (result IdentityProviderContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -246,6 +289,7 @@ func (client IdentityProviderClient) Get(ctx context.Context, resourceGroupName 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetPreparer prepares the Get request.
 func (client IdentityProviderClient) GetPreparer(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -268,6 +312,7 @@ func (client IdentityProviderClient) GetPreparer(ctx context.Context, resourceGr
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client IdentityProviderClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -275,6 +320,7 @@ func (client IdentityProviderClient) GetSender(req *http.Request) (*http.Respons
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client IdentityProviderClient) GetResponder(resp *http.Response) (result IdentityProviderContract, err error) {
@@ -288,12 +334,23 @@ func (client IdentityProviderClient) GetResponder(resp *http.Response) (result I
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTag gets the entity state (Etag) version of the identityProvider specified by its identifier.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // identityProviderName - identity Provider Type identifier.
 func (client IdentityProviderClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.GetEntityTag")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -323,6 +380,7 @@ func (client IdentityProviderClient) GetEntityTag(ctx context.Context, resourceG
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagPreparer prepares the GetEntityTag request.
 func (client IdentityProviderClient) GetEntityTagPreparer(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -345,6 +403,7 @@ func (client IdentityProviderClient) GetEntityTagPreparer(ctx context.Context, r
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagSender sends the GetEntityTag request. The method will close the
 // http.Response Body if it receives an error.
 func (client IdentityProviderClient) GetEntityTagSender(req *http.Request) (*http.Response, error) {
@@ -352,6 +411,7 @@ func (client IdentityProviderClient) GetEntityTagSender(req *http.Request) (*htt
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagResponder handles the response to the GetEntityTag request. The method always
 // closes the http.Response Body.
 func (client IdentityProviderClient) GetEntityTagResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -364,11 +424,22 @@ func (client IdentityProviderClient) GetEntityTagResponder(resp *http.Response) 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByService lists a collection of Identity Provider configured in the specified service instance.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client IdentityProviderClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string) (result IdentityProviderListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.ipl.Response.Response != nil {
+				sc = result.ipl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -399,6 +470,7 @@ func (client IdentityProviderClient) ListByService(ctx context.Context, resource
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServicePreparer prepares the ListByService request.
 func (client IdentityProviderClient) ListByServicePreparer(ctx context.Context, resourceGroupName string, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -420,6 +492,7 @@ func (client IdentityProviderClient) ListByServicePreparer(ctx context.Context, 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceSender sends the ListByService request. The method will close the
 // http.Response Body if it receives an error.
 func (client IdentityProviderClient) ListByServiceSender(req *http.Request) (*http.Response, error) {
@@ -427,6 +500,7 @@ func (client IdentityProviderClient) ListByServiceSender(req *http.Request) (*ht
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceResponder handles the response to the ListByService request. The method always
 // closes the http.Response Body.
 func (client IdentityProviderClient) ListByServiceResponder(resp *http.Response) (result IdentityProviderList, err error) {
@@ -441,8 +515,8 @@ func (client IdentityProviderClient) ListByServiceResponder(resp *http.Response)
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client IdentityProviderClient) listByServiceNextResults(lastResults IdentityProviderList) (result IdentityProviderList, err error) {
-	req, err := lastResults.identityProviderListPreparer()
+func (client IdentityProviderClient) listByServiceNextResults(ctx context.Context, lastResults IdentityProviderList) (result IdentityProviderList, err error) {
+	req, err := lastResults.identityProviderListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.IdentityProviderClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -461,12 +535,24 @@ func (client IdentityProviderClient) listByServiceNextResults(lastResults Identi
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client IdentityProviderClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string) (result IdentityProviderListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName)
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Update updates an existing IdentityProvider configuration.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -476,6 +562,16 @@ func (client IdentityProviderClient) ListByServiceComplete(ctx context.Context, 
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client IdentityProviderClient) Update(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType, parameters IdentityProviderUpdateParameters, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -505,6 +601,7 @@ func (client IdentityProviderClient) Update(ctx context.Context, resourceGroupNa
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdatePreparer prepares the Update request.
 func (client IdentityProviderClient) UpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType, parameters IdentityProviderUpdateParameters, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -530,6 +627,7 @@ func (client IdentityProviderClient) UpdatePreparer(ctx context.Context, resourc
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client IdentityProviderClient) UpdateSender(req *http.Request) (*http.Response, error) {
@@ -537,6 +635,7 @@ func (client IdentityProviderClient) UpdateSender(req *http.Request) (*http.Resp
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateResponder handles the response to the Update request. The method always
 // closes the http.Response Body.
 func (client IdentityProviderClient) UpdateResponder(resp *http.Response) (result autorest.Response, err error) {

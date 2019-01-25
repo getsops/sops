@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,16 +47,26 @@ func NewAppliancesClientWithBaseURI(baseURI string, subscriptionID string) Appli
 // applianceName - the name of the appliance.
 // parameters - parameters supplied to the create or update an appliance.
 func (client AppliancesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, applianceName string, parameters Appliance) (result AppliancesCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppliancesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}},
 		{TargetValue: applianceName,
 			Constraints: []validation.Constraint{{Target: "applianceName", Name: validation.MaxLength, Rule: 64, Chain: nil},
 				{Target: "applianceName", Name: validation.MinLength, Rule: 3, Chain: nil}}},
 		{TargetValue: parameters,
-			Constraints: []validation.Constraint{{Target: "parameters.ApplianceProperties", Name: validation.Null, Rule: true,
+			Constraints: []validation.Constraint{{Target: "parameters.ApplianceProperties", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "parameters.ApplianceProperties.ManagedResourceGroupID", Name: validation.Null, Rule: true, Chain: nil}}},
 				{Target: "parameters.Plan", Name: validation.Null, Rule: false,
 					Chain: []validation.Constraint{{Target: "parameters.Plan.Name", Name: validation.Null, Rule: true, Chain: nil},
@@ -63,7 +74,7 @@ func (client AppliancesClient) CreateOrUpdate(ctx context.Context, resourceGroup
 						{Target: "parameters.Plan.Product", Name: validation.Null, Rule: true, Chain: nil},
 						{Target: "parameters.Plan.Version", Name: validation.Null, Rule: true, Chain: nil},
 					}},
-				{Target: "parameters.Kind", Name: validation.Null, Rule: true,
+				{Target: "parameters.Kind", Name: validation.Null, Rule: false,
 					Chain: []validation.Constraint{{Target: "parameters.Kind", Name: validation.Pattern, Rule: `^[-\w\._,\(\)]+$`, Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("managedapplications.AppliancesClient", "CreateOrUpdate", err.Error())
 	}
@@ -115,10 +126,6 @@ func (client AppliancesClient) CreateOrUpdateSender(req *http.Request) (future A
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -143,9 +150,19 @@ func (client AppliancesClient) CreateOrUpdateResponder(resp *http.Response) (res
 // /subscriptions/{guid}/resourceGroups/{resource-group-name}/Microsoft.Solutions/appliances/{appliance-name}
 // parameters - parameters supplied to the create or update an appliance.
 func (client AppliancesClient) CreateOrUpdateByID(ctx context.Context, applianceID string, parameters Appliance) (result AppliancesCreateOrUpdateByIDFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppliancesClient.CreateOrUpdateByID")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
-			Constraints: []validation.Constraint{{Target: "parameters.ApplianceProperties", Name: validation.Null, Rule: true,
+			Constraints: []validation.Constraint{{Target: "parameters.ApplianceProperties", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "parameters.ApplianceProperties.ManagedResourceGroupID", Name: validation.Null, Rule: true, Chain: nil}}},
 				{Target: "parameters.Plan", Name: validation.Null, Rule: false,
 					Chain: []validation.Constraint{{Target: "parameters.Plan.Name", Name: validation.Null, Rule: true, Chain: nil},
@@ -153,7 +170,7 @@ func (client AppliancesClient) CreateOrUpdateByID(ctx context.Context, appliance
 						{Target: "parameters.Plan.Product", Name: validation.Null, Rule: true, Chain: nil},
 						{Target: "parameters.Plan.Version", Name: validation.Null, Rule: true, Chain: nil},
 					}},
-				{Target: "parameters.Kind", Name: validation.Null, Rule: true,
+				{Target: "parameters.Kind", Name: validation.Null, Rule: false,
 					Chain: []validation.Constraint{{Target: "parameters.Kind", Name: validation.Pattern, Rule: `^[-\w\._,\(\)]+$`, Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("managedapplications.AppliancesClient", "CreateOrUpdateByID", err.Error())
 	}
@@ -203,10 +220,6 @@ func (client AppliancesClient) CreateOrUpdateByIDSender(req *http.Request) (futu
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -229,11 +242,21 @@ func (client AppliancesClient) CreateOrUpdateByIDResponder(resp *http.Response) 
 // resourceGroupName - the name of the resource group. The name is case insensitive.
 // applianceName - the name of the appliance.
 func (client AppliancesClient) Delete(ctx context.Context, resourceGroupName string, applianceName string) (result AppliancesDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppliancesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}},
 		{TargetValue: applianceName,
 			Constraints: []validation.Constraint{{Target: "applianceName", Name: validation.MaxLength, Rule: 64, Chain: nil},
 				{Target: "applianceName", Name: validation.MinLength, Rule: 3, Chain: nil}}}}); err != nil {
@@ -285,10 +308,6 @@ func (client AppliancesClient) DeleteSender(req *http.Request) (future Appliance
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -311,6 +330,16 @@ func (client AppliancesClient) DeleteResponder(resp *http.Response) (result auto
 // resource type. Use the format,
 // /subscriptions/{guid}/resourceGroups/{resource-group-name}/Microsoft.Solutions/appliances/{appliance-name}
 func (client AppliancesClient) DeleteByID(ctx context.Context, applianceID string) (result AppliancesDeleteByIDFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppliancesClient.DeleteByID")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteByIDPreparer(ctx, applianceID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "managedapplications.AppliancesClient", "DeleteByID", nil, "Failure preparing request")
@@ -354,10 +383,6 @@ func (client AppliancesClient) DeleteByIDSender(req *http.Request) (future Appli
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -379,11 +404,21 @@ func (client AppliancesClient) DeleteByIDResponder(resp *http.Response) (result 
 // resourceGroupName - the name of the resource group. The name is case insensitive.
 // applianceName - the name of the appliance.
 func (client AppliancesClient) Get(ctx context.Context, resourceGroupName string, applianceName string) (result Appliance, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppliancesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}},
 		{TargetValue: applianceName,
 			Constraints: []validation.Constraint{{Target: "applianceName", Name: validation.MaxLength, Rule: 64, Chain: nil},
 				{Target: "applianceName", Name: validation.MinLength, Rule: 3, Chain: nil}}}}); err != nil {
@@ -458,6 +493,16 @@ func (client AppliancesClient) GetResponder(resp *http.Response) (result Applian
 // resource type. Use the format,
 // /subscriptions/{guid}/resourceGroups/{resource-group-name}/Microsoft.Solutions/appliances/{appliance-name}
 func (client AppliancesClient) GetByID(ctx context.Context, applianceID string) (result Appliance, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppliancesClient.GetByID")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetByIDPreparer(ctx, applianceID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "managedapplications.AppliancesClient", "GetByID", nil, "Failure preparing request")
@@ -522,11 +567,21 @@ func (client AppliancesClient) GetByIDResponder(resp *http.Response) (result App
 // Parameters:
 // resourceGroupName - the name of the resource group. The name is case insensitive.
 func (client AppliancesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result ApplianceListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppliancesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.alr.Response.Response != nil {
+				sc = result.alr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}}}); err != nil {
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("managedapplications.AppliancesClient", "ListByResourceGroup", err.Error())
 	}
 
@@ -593,8 +648,8 @@ func (client AppliancesClient) ListByResourceGroupResponder(resp *http.Response)
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client AppliancesClient) listByResourceGroupNextResults(lastResults ApplianceListResult) (result ApplianceListResult, err error) {
-	req, err := lastResults.applianceListResultPreparer()
+func (client AppliancesClient) listByResourceGroupNextResults(ctx context.Context, lastResults ApplianceListResult) (result ApplianceListResult, err error) {
+	req, err := lastResults.applianceListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "managedapplications.AppliancesClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -615,12 +670,32 @@ func (client AppliancesClient) listByResourceGroupNextResults(lastResults Applia
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AppliancesClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result ApplianceListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppliancesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
 
 // ListBySubscription gets all the appliances within a subscription.
 func (client AppliancesClient) ListBySubscription(ctx context.Context) (result ApplianceListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppliancesClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.alr.Response.Response != nil {
+				sc = result.alr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listBySubscriptionNextResults
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
@@ -683,8 +758,8 @@ func (client AppliancesClient) ListBySubscriptionResponder(resp *http.Response) 
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client AppliancesClient) listBySubscriptionNextResults(lastResults ApplianceListResult) (result ApplianceListResult, err error) {
-	req, err := lastResults.applianceListResultPreparer()
+func (client AppliancesClient) listBySubscriptionNextResults(ctx context.Context, lastResults ApplianceListResult) (result ApplianceListResult, err error) {
+	req, err := lastResults.applianceListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "managedapplications.AppliancesClient", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -705,6 +780,16 @@ func (client AppliancesClient) listBySubscriptionNextResults(lastResults Applian
 
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AppliancesClient) ListBySubscriptionComplete(ctx context.Context) (result ApplianceListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppliancesClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBySubscription(ctx)
 	return
 }
@@ -715,11 +800,21 @@ func (client AppliancesClient) ListBySubscriptionComplete(ctx context.Context) (
 // applianceName - the name of the appliance.
 // parameters - parameters supplied to update an existing appliance.
 func (client AppliancesClient) Update(ctx context.Context, resourceGroupName string, applianceName string, parameters *Appliance) (result Appliance, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppliancesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}},
 		{TargetValue: applianceName,
 			Constraints: []validation.Constraint{{Target: "applianceName", Name: validation.MaxLength, Rule: 64, Chain: nil},
 				{Target: "applianceName", Name: validation.MinLength, Rule: 3, Chain: nil}}}}); err != nil {
@@ -800,6 +895,16 @@ func (client AppliancesClient) UpdateResponder(resp *http.Response) (result Appl
 // /subscriptions/{guid}/resourceGroups/{resource-group-name}/Microsoft.Solutions/appliances/{appliance-name}
 // parameters - parameters supplied to update an existing appliance.
 func (client AppliancesClient) UpdateByID(ctx context.Context, applianceID string, parameters *Appliance) (result Appliance, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppliancesClient.UpdateByID")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateByIDPreparer(ctx, applianceID, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "managedapplications.AppliancesClient", "UpdateByID", nil, "Failure preparing request")

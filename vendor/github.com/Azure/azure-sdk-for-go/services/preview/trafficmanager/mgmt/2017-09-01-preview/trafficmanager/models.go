@@ -23,6 +23,9 @@ import (
 	"github.com/Azure/go-autorest/autorest/date"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/trafficmanager/mgmt/2017-09-01-preview/trafficmanager"
+
 // EndpointMonitorStatus enumerates the values for endpoint monitor status.
 type EndpointMonitorStatus string
 
@@ -133,8 +136,8 @@ func PossibleTrafficRoutingMethodValues() []TrafficRoutingMethod {
 	return []TrafficRoutingMethod{Geographic, Performance, Priority, Weighted}
 }
 
-// CheckTrafficManagerRelativeDNSNameAvailabilityParameters parameters supplied to check Traffic Manager name
-// operation.
+// CheckTrafficManagerRelativeDNSNameAvailabilityParameters parameters supplied to check Traffic Manager
+// name operation.
 type CheckTrafficManagerRelativeDNSNameAvailabilityParameters struct {
 	// Name - The name of the resource.
 	Name *string `json:"name,omitempty"`
@@ -186,7 +189,7 @@ type Endpoint struct {
 	ID *string `json:"id,omitempty"`
 	// Name - The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource. Ex- Microsoft.Network/trafficmanagerProfiles.
+	// Type - The type of the resource. Ex- Microsoft.Network/trafficManagerProfiles.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -281,7 +284,8 @@ type EndpointProperties struct {
 	GeoMapping *[]string `json:"geoMapping,omitempty"`
 }
 
-// GeographicHierarchy class representing the Geographic hierarchy used with the Geographic traffic routing method.
+// GeographicHierarchy class representing the Geographic hierarchy used with the Geographic traffic routing
+// method.
 type GeographicHierarchy struct {
 	autorest.Response `json:"-"`
 	// GeographicHierarchyProperties - The properties of the Geographic Hierarchy resource.
@@ -290,7 +294,7 @@ type GeographicHierarchy struct {
 	ID *string `json:"id,omitempty"`
 	// Name - The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource. Ex- Microsoft.Network/trafficmanagerProfiles.
+	// Type - The type of the resource. Ex- Microsoft.Network/trafficManagerProfiles.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -363,8 +367,8 @@ func (gh *GeographicHierarchy) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// GeographicHierarchyProperties class representing the properties of the Geographic hierarchy used with the
-// Geographic traffic routing method.
+// GeographicHierarchyProperties class representing the properties of the Geographic hierarchy used with
+// the Geographic traffic routing method.
 type GeographicHierarchyProperties struct {
 	// GeographicHierarchy - The region at the root of the hierarchy from all the regions in the hierarchy can be retrieved.
 	GeographicHierarchy *Region `json:"geographicHierarchy,omitempty"`
@@ -387,7 +391,7 @@ type HeatMapModel struct {
 	ID *string `json:"id,omitempty"`
 	// Name - The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource. Ex- Microsoft.Network/trafficmanagerProfiles.
+	// Type - The type of the resource. Ex- Microsoft.Network/trafficManagerProfiles.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -518,7 +522,7 @@ type Profile struct {
 	ID *string `json:"id,omitempty"`
 	// Name - The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource. Ex- Microsoft.Network/trafficmanagerProfiles.
+	// Type - The type of the resource. Ex- Microsoft.Network/trafficManagerProfiles.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -643,7 +647,7 @@ type ProxyResource struct {
 	ID *string `json:"id,omitempty"`
 	// Name - The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource. Ex- Microsoft.Network/trafficmanagerProfiles.
+	// Type - The type of the resource. Ex- Microsoft.Network/trafficManagerProfiles.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -657,7 +661,8 @@ type QueryExperience struct {
 	Latency *float64 `json:"latency,omitempty"`
 }
 
-// Region class representing a region in the Geographic hierarchy used with the Geographic traffic routing method.
+// Region class representing a region in the Geographic hierarchy used with the Geographic traffic routing
+// method.
 type Region struct {
 	// Code - The code of the region
 	Code *string `json:"code,omitempty"`
@@ -673,7 +678,7 @@ type Resource struct {
 	ID *string `json:"id,omitempty"`
 	// Name - The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource. Ex- Microsoft.Network/trafficmanagerProfiles.
+	// Type - The type of the resource. Ex- Microsoft.Network/trafficManagerProfiles.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -687,7 +692,7 @@ type TrackedResource struct {
 	ID *string `json:"id,omitempty"`
 	// Name - The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource. Ex- Microsoft.Network/trafficmanagerProfiles.
+	// Type - The type of the resource. Ex- Microsoft.Network/trafficManagerProfiles.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -733,6 +738,6 @@ type UserMetricsKeyModel struct {
 	ID *string `json:"id,omitempty"`
 	// Name - The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource. Ex- Microsoft.Network/trafficmanagerProfiles.
+	// Type - The type of the resource. Ex- Microsoft.Network/trafficManagerProfiles.
 	Type *string `json:"type,omitempty"`
 }

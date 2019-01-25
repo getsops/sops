@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedServicePackagesClient is the client for the DeployedServicePackages methods of the Servicefabric service.
 type DeployedServicePackagesClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewDeployedServicePackagesClient creates an instance of the DeployedServicePackagesClient client.
 func NewDeployedServicePackagesClient(timeout *int32) DeployedServicePackagesClient {
 	return NewDeployedServicePackagesClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewDeployedServicePackagesClientWithBaseURI creates an instance of the DeployedServicePackagesClient client.
 func NewDeployedServicePackagesClientWithBaseURI(baseURI string, timeout *int32) DeployedServicePackagesClient {
 	return DeployedServicePackagesClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get deployed service packages
 // Parameters:
 // nodeName - the name of the node
@@ -65,6 +69,7 @@ func (client DeployedServicePackagesClient) Get(ctx context.Context, nodeName st
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client DeployedServicePackagesClient) GetPreparer(ctx context.Context, nodeName string, applicationName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -88,6 +93,7 @@ func (client DeployedServicePackagesClient) GetPreparer(ctx context.Context, nod
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client DeployedServicePackagesClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -95,6 +101,7 @@ func (client DeployedServicePackagesClient) GetSender(req *http.Request) (*http.
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client DeployedServicePackagesClient) GetResponder(resp *http.Response) (result ListDeployedServicePackage, err error) {

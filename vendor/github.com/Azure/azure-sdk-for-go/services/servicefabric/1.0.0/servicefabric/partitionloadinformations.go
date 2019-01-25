@@ -24,22 +24,26 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PartitionLoadInformationsClient is the client for the PartitionLoadInformations methods of the Servicefabric
 // service.
 type PartitionLoadInformationsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewPartitionLoadInformationsClient creates an instance of the PartitionLoadInformationsClient client.
 func NewPartitionLoadInformationsClient(timeout *int32) PartitionLoadInformationsClient {
 	return NewPartitionLoadInformationsClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewPartitionLoadInformationsClientWithBaseURI creates an instance of the PartitionLoadInformationsClient client.
 func NewPartitionLoadInformationsClientWithBaseURI(baseURI string, timeout *int32) PartitionLoadInformationsClient {
 	return PartitionLoadInformationsClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get partition load informations
 // Parameters:
 // partitionID - the id of the partition
@@ -65,6 +69,7 @@ func (client PartitionLoadInformationsClient) Get(ctx context.Context, partition
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client PartitionLoadInformationsClient) GetPreparer(ctx context.Context, partitionID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -87,6 +92,7 @@ func (client PartitionLoadInformationsClient) GetPreparer(ctx context.Context, p
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client PartitionLoadInformationsClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -94,6 +100,7 @@ func (client PartitionLoadInformationsClient) GetSender(req *http.Request) (*htt
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client PartitionLoadInformationsClient) GetResponder(resp *http.Response) (result PartitionLoadInformation, err error) {

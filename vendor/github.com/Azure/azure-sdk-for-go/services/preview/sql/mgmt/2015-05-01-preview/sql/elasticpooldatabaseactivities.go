@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewElasticPoolDatabaseActivitiesClientWithBaseURI(baseURI string, subscript
 // serverName - the name of the server.
 // elasticPoolName - the name of the elastic pool.
 func (client ElasticPoolDatabaseActivitiesClient) ListByElasticPool(ctx context.Context, resourceGroupName string, serverName string, elasticPoolName string) (result ElasticPoolDatabaseActivityListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ElasticPoolDatabaseActivitiesClient.ListByElasticPool")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByElasticPoolPreparer(ctx, resourceGroupName, serverName, elasticPoolName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ElasticPoolDatabaseActivitiesClient", "ListByElasticPool", nil, "Failure preparing request")

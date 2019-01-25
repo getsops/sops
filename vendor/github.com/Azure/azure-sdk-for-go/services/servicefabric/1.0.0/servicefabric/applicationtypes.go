@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ApplicationTypesClient is the client for the ApplicationTypes methods of the Servicefabric service.
 type ApplicationTypesClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewApplicationTypesClient creates an instance of the ApplicationTypesClient client.
 func NewApplicationTypesClient(timeout *int32) ApplicationTypesClient {
 	return NewApplicationTypesClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewApplicationTypesClientWithBaseURI creates an instance of the ApplicationTypesClient client.
 func NewApplicationTypesClientWithBaseURI(baseURI string, timeout *int32) ApplicationTypesClient {
 	return ApplicationTypesClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get application types
 // Parameters:
 // applicationTypeName - the name of the application type
@@ -64,6 +68,7 @@ func (client ApplicationTypesClient) Get(ctx context.Context, applicationTypeNam
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client ApplicationTypesClient) GetPreparer(ctx context.Context, applicationTypeName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -86,6 +91,7 @@ func (client ApplicationTypesClient) GetPreparer(ctx context.Context, applicatio
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationTypesClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -93,6 +99,7 @@ func (client ApplicationTypesClient) GetSender(req *http.Request) (*http.Respons
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client ApplicationTypesClient) GetResponder(resp *http.Response) (result ListApplicationType, err error) {
@@ -106,6 +113,7 @@ func (client ApplicationTypesClient) GetResponder(resp *http.Response) (result L
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // List list application types
 func (client ApplicationTypesClient) List(ctx context.Context) (result ListApplicationType, err error) {
 	req, err := client.ListPreparer(ctx)
@@ -129,6 +137,7 @@ func (client ApplicationTypesClient) List(ctx context.Context) (result ListAppli
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListPreparer prepares the List request.
 func (client ApplicationTypesClient) ListPreparer(ctx context.Context) (*http.Request, error) {
 	const APIVersion = "1.0.0"
@@ -147,6 +156,7 @@ func (client ApplicationTypesClient) ListPreparer(ctx context.Context) (*http.Re
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationTypesClient) ListSender(req *http.Request) (*http.Response, error) {
@@ -154,6 +164,7 @@ func (client ApplicationTypesClient) ListSender(req *http.Request) (*http.Respon
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListResponder handles the response to the List request. The method always
 // closes the http.Response Body.
 func (client ApplicationTypesClient) ListResponder(resp *http.Response) (result ListApplicationType, err error) {
@@ -167,6 +178,7 @@ func (client ApplicationTypesClient) ListResponder(resp *http.Response) (result 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Register register application types
 // Parameters:
 // registerApplicationType - the type of the register application
@@ -192,6 +204,7 @@ func (client ApplicationTypesClient) Register(ctx context.Context, registerAppli
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RegisterPreparer prepares the Register request.
 func (client ApplicationTypesClient) RegisterPreparer(ctx context.Context, registerApplicationType RegisterApplicationType) (*http.Request, error) {
 	const APIVersion = "1.0.0"
@@ -212,6 +225,7 @@ func (client ApplicationTypesClient) RegisterPreparer(ctx context.Context, regis
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RegisterSender sends the Register request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationTypesClient) RegisterSender(req *http.Request) (*http.Response, error) {
@@ -219,6 +233,7 @@ func (client ApplicationTypesClient) RegisterSender(req *http.Request) (*http.Re
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RegisterResponder handles the response to the Register request. The method always
 // closes the http.Response Body.
 func (client ApplicationTypesClient) RegisterResponder(resp *http.Response) (result String, err error) {
@@ -232,6 +247,7 @@ func (client ApplicationTypesClient) RegisterResponder(resp *http.Response) (res
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Unregister unregister application types
 // Parameters:
 // applicationTypeName - the name of the application type
@@ -258,6 +274,7 @@ func (client ApplicationTypesClient) Unregister(ctx context.Context, application
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnregisterPreparer prepares the Unregister request.
 func (client ApplicationTypesClient) UnregisterPreparer(ctx context.Context, applicationTypeName string, unregisterApplicationType UnregisterApplicationType) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -282,6 +299,7 @@ func (client ApplicationTypesClient) UnregisterPreparer(ctx context.Context, app
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnregisterSender sends the Unregister request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationTypesClient) UnregisterSender(req *http.Request) (*http.Response, error) {
@@ -289,6 +307,7 @@ func (client ApplicationTypesClient) UnregisterSender(req *http.Request) (*http.
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnregisterResponder handles the response to the Unregister request. The method always
 // closes the http.Response Body.
 func (client ApplicationTypesClient) UnregisterResponder(resp *http.Response) (result String, err error) {

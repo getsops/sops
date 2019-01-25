@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceDescriptionsClient is the client for the ServiceDescriptions methods of the Servicefabric service.
 type ServiceDescriptionsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewServiceDescriptionsClient creates an instance of the ServiceDescriptionsClient client.
 func NewServiceDescriptionsClient(timeout *int32) ServiceDescriptionsClient {
 	return NewServiceDescriptionsClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewServiceDescriptionsClientWithBaseURI creates an instance of the ServiceDescriptionsClient client.
 func NewServiceDescriptionsClientWithBaseURI(baseURI string, timeout *int32) ServiceDescriptionsClient {
 	return ServiceDescriptionsClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get service descriptions
 // Parameters:
 // serviceName - the name of the service
@@ -64,6 +68,7 @@ func (client ServiceDescriptionsClient) Get(ctx context.Context, serviceName str
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client ServiceDescriptionsClient) GetPreparer(ctx context.Context, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -86,6 +91,7 @@ func (client ServiceDescriptionsClient) GetPreparer(ctx context.Context, service
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceDescriptionsClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -93,6 +99,7 @@ func (client ServiceDescriptionsClient) GetSender(req *http.Request) (*http.Resp
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client ServiceDescriptionsClient) GetResponder(resp *http.Response) (result ServiceDescriptionModel, err error) {

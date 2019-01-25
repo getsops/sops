@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewSettingsClientWithBaseURI(baseURI string, subscriptionID string, ascLoca
 // Parameters:
 // settingName - name of setting
 func (client SettingsClient) Get(ctx context.Context, settingName string) (result SettingModel, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SettingsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -113,6 +124,16 @@ func (client SettingsClient) GetResponder(resp *http.Response) (result SettingMo
 
 // List settings about different configurations in security center
 func (client SettingsClient) List(ctx context.Context) (result SettingsListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SettingsClient.List")
+		defer func() {
+			sc := -1
+			if result.sl.Response.Response != nil {
+				sc = result.sl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -181,8 +202,8 @@ func (client SettingsClient) ListResponder(resp *http.Response) (result Settings
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client SettingsClient) listNextResults(lastResults SettingsList) (result SettingsList, err error) {
-	req, err := lastResults.settingsListPreparer()
+func (client SettingsClient) listNextResults(ctx context.Context, lastResults SettingsList) (result SettingsList, err error) {
+	req, err := lastResults.settingsListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.SettingsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -203,6 +224,16 @@ func (client SettingsClient) listNextResults(lastResults SettingsList) (result S
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SettingsClient) ListComplete(ctx context.Context) (result SettingsListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SettingsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -212,6 +243,16 @@ func (client SettingsClient) ListComplete(ctx context.Context) (result SettingsL
 // settingName - name of setting
 // setting - setting object
 func (client SettingsClient) Update(ctx context.Context, settingName string, setting BasicSetting) (result SettingModel, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SettingsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {

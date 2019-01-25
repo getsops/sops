@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,49 +19,13 @@
 
 package computervision
 
-import original "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v1.0/computervision"
-
-type BaseClient = original.BaseClient
-type AzureRegions = original.AzureRegions
-
-const (
-	Australiaeast  AzureRegions = original.Australiaeast
-	Brazilsouth    AzureRegions = original.Brazilsouth
-	Eastasia       AzureRegions = original.Eastasia
-	Eastus         AzureRegions = original.Eastus
-	Eastus2        AzureRegions = original.Eastus2
-	Northeurope    AzureRegions = original.Northeurope
-	Southcentralus AzureRegions = original.Southcentralus
-	Southeastasia  AzureRegions = original.Southeastasia
-	Westcentralus  AzureRegions = original.Westcentralus
-	Westeurope     AzureRegions = original.Westeurope
-	Westus         AzureRegions = original.Westus
-	Westus2        AzureRegions = original.Westus2
-)
+import original "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v2.0/computervision"
 
 type Details = original.Details
 
 const (
 	Celebrities Details = original.Celebrities
 	Landmarks   Details = original.Landmarks
-)
-
-type ErrorCodes = original.ErrorCodes
-
-const (
-	BadArgument               ErrorCodes = original.BadArgument
-	FailedToProcess           ErrorCodes = original.FailedToProcess
-	InternalServerError       ErrorCodes = original.InternalServerError
-	InvalidDetails            ErrorCodes = original.InvalidDetails
-	InvalidImageFormat        ErrorCodes = original.InvalidImageFormat
-	InvalidImageSize          ErrorCodes = original.InvalidImageSize
-	InvalidImageURL           ErrorCodes = original.InvalidImageURL
-	NotSupportedImage         ErrorCodes = original.NotSupportedImage
-	NotSupportedLanguage      ErrorCodes = original.NotSupportedLanguage
-	NotSupportedVisualFeature ErrorCodes = original.NotSupportedVisualFeature
-	StorageException          ErrorCodes = original.StorageException
-	Timeout                   ErrorCodes = original.Timeout
-	Unspecified               ErrorCodes = original.Unspecified
 )
 
 type Gender = original.Gender
@@ -112,6 +76,13 @@ const (
 	Succeeded  TextOperationStatusCodes = original.Succeeded
 )
 
+type TextRecognitionMode = original.TextRecognitionMode
+
+const (
+	Handwritten TextRecognitionMode = original.Handwritten
+	Printed     TextRecognitionMode = original.Printed
+)
+
 type VisualFeatureTypes = original.VisualFeatureTypes
 
 const (
@@ -121,15 +92,21 @@ const (
 	VisualFeatureTypesDescription VisualFeatureTypes = original.VisualFeatureTypesDescription
 	VisualFeatureTypesFaces       VisualFeatureTypes = original.VisualFeatureTypesFaces
 	VisualFeatureTypesImageType   VisualFeatureTypes = original.VisualFeatureTypesImageType
+	VisualFeatureTypesObjects     VisualFeatureTypes = original.VisualFeatureTypesObjects
 	VisualFeatureTypesTags        VisualFeatureTypes = original.VisualFeatureTypesTags
 )
 
 type AdultInfo = original.AdultInfo
+type AreaOfInterestResult = original.AreaOfInterestResult
+type BaseClient = original.BaseClient
+type BoundingRect = original.BoundingRect
 type Category = original.Category
 type CategoryDetail = original.CategoryDetail
 type CelebritiesModel = original.CelebritiesModel
 type CelebrityResults = original.CelebrityResults
 type ColorInfo = original.ColorInfo
+type DetectResult = original.DetectResult
+type DetectedObject = original.DetectedObject
 type DomainModelResults = original.DomainModelResults
 type Error = original.Error
 type FaceDescription = original.FaceDescription
@@ -143,10 +120,11 @@ type ImageTag = original.ImageTag
 type ImageType = original.ImageType
 type ImageURL = original.ImageURL
 type LandmarkResults = original.LandmarkResults
-type LandmarkResultsLandmarksItem = original.LandmarkResultsLandmarksItem
+type LandmarksModel = original.LandmarksModel
 type Line = original.Line
 type ListModelsResult = original.ListModelsResult
 type ModelDescription = original.ModelDescription
+type ObjectHierarchy = original.ObjectHierarchy
 type OcrLine = original.OcrLine
 type OcrRegion = original.OcrRegion
 type OcrResult = original.OcrResult
@@ -157,20 +135,14 @@ type TagResult = original.TagResult
 type TextOperationResult = original.TextOperationResult
 type Word = original.Word
 
-func New(azureRegion AzureRegions) BaseClient {
-	return original.New(azureRegion)
+func New(endpoint string) BaseClient {
+	return original.New(endpoint)
 }
-func NewWithoutDefaults(azureRegion AzureRegions) BaseClient {
-	return original.NewWithoutDefaults(azureRegion)
-}
-func PossibleAzureRegionsValues() []AzureRegions {
-	return original.PossibleAzureRegionsValues()
+func NewWithoutDefaults(endpoint string) BaseClient {
+	return original.NewWithoutDefaults(endpoint)
 }
 func PossibleDetailsValues() []Details {
 	return original.PossibleDetailsValues()
-}
-func PossibleErrorCodesValues() []ErrorCodes {
-	return original.PossibleErrorCodesValues()
 }
 func PossibleGenderValues() []Gender {
 	return original.PossibleGenderValues()
@@ -180,6 +152,9 @@ func PossibleOcrLanguagesValues() []OcrLanguages {
 }
 func PossibleTextOperationStatusCodesValues() []TextOperationStatusCodes {
 	return original.PossibleTextOperationStatusCodesValues()
+}
+func PossibleTextRecognitionModeValues() []TextRecognitionMode {
+	return original.PossibleTextRecognitionModeValues()
 }
 func PossibleVisualFeatureTypesValues() []VisualFeatureTypes {
 	return original.PossibleVisualFeatureTypesValues()

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -51,6 +52,16 @@ func NewJobTargetGroupsClientWithBaseURI(baseURI string, subscriptionID string) 
 // targetGroupName - the name of the target group.
 // parameters - the requested state of the target group.
 func (client JobTargetGroupsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, targetGroupName string, parameters JobTargetGroup) (result JobTargetGroup, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobTargetGroupsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.JobTargetGroupProperties", Name: validation.Null, Rule: false,
@@ -132,6 +143,16 @@ func (client JobTargetGroupsClient) CreateOrUpdateResponder(resp *http.Response)
 // jobAgentName - the name of the job agent.
 // targetGroupName - the name of the target group.
 func (client JobTargetGroupsClient) Delete(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, targetGroupName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobTargetGroupsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, serverName, jobAgentName, targetGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobTargetGroupsClient", "Delete", nil, "Failure preparing request")
@@ -203,6 +224,16 @@ func (client JobTargetGroupsClient) DeleteResponder(resp *http.Response) (result
 // jobAgentName - the name of the job agent.
 // targetGroupName - the name of the target group.
 func (client JobTargetGroupsClient) Get(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, targetGroupName string) (result JobTargetGroup, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobTargetGroupsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, jobAgentName, targetGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobTargetGroupsClient", "Get", nil, "Failure preparing request")
@@ -274,6 +305,16 @@ func (client JobTargetGroupsClient) GetResponder(resp *http.Response) (result Jo
 // serverName - the name of the server.
 // jobAgentName - the name of the job agent.
 func (client JobTargetGroupsClient) ListByAgent(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string) (result JobTargetGroupListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobTargetGroupsClient.ListByAgent")
+		defer func() {
+			sc := -1
+			if result.jtglr.Response.Response != nil {
+				sc = result.jtglr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByAgentNextResults
 	req, err := client.ListByAgentPreparer(ctx, resourceGroupName, serverName, jobAgentName)
 	if err != nil {
@@ -339,8 +380,8 @@ func (client JobTargetGroupsClient) ListByAgentResponder(resp *http.Response) (r
 }
 
 // listByAgentNextResults retrieves the next set of results, if any.
-func (client JobTargetGroupsClient) listByAgentNextResults(lastResults JobTargetGroupListResult) (result JobTargetGroupListResult, err error) {
-	req, err := lastResults.jobTargetGroupListResultPreparer()
+func (client JobTargetGroupsClient) listByAgentNextResults(ctx context.Context, lastResults JobTargetGroupListResult) (result JobTargetGroupListResult, err error) {
+	req, err := lastResults.jobTargetGroupListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.JobTargetGroupsClient", "listByAgentNextResults", nil, "Failure preparing next results request")
 	}
@@ -361,6 +402,16 @@ func (client JobTargetGroupsClient) listByAgentNextResults(lastResults JobTarget
 
 // ListByAgentComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobTargetGroupsClient) ListByAgentComplete(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string) (result JobTargetGroupListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobTargetGroupsClient.ListByAgent")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByAgent(ctx, resourceGroupName, serverName, jobAgentName)
 	return
 }

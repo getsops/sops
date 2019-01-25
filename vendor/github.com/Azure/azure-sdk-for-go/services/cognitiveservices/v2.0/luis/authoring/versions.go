@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -42,6 +43,16 @@ func NewVersionsClient(endpoint string) VersionsClient {
 // versionID - the version ID.
 // versionCloneObject - a model containing the new version ID.
 func (client VersionsClient) Clone(ctx context.Context, appID uuid.UUID, versionID string, versionCloneObject *TaskUpdateObject) (result String, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VersionsClient.Clone")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ClonePreparer(ctx, appID, versionID, versionCloneObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.VersionsClient", "Clone", nil, "Failure preparing request")
@@ -111,6 +122,16 @@ func (client VersionsClient) CloneResponder(resp *http.Response) (result String,
 // appID - the application ID.
 // versionID - the version ID.
 func (client VersionsClient) Delete(ctx context.Context, appID uuid.UUID, versionID string) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VersionsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, appID, versionID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.VersionsClient", "Delete", nil, "Failure preparing request")
@@ -176,6 +197,16 @@ func (client VersionsClient) DeleteResponder(resp *http.Response) (result Operat
 // versionID - the version ID.
 // utterance - the utterance text to delete.
 func (client VersionsClient) DeleteUnlabelledUtterance(ctx context.Context, appID uuid.UUID, versionID string, utterance string) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VersionsClient.DeleteUnlabelledUtterance")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteUnlabelledUtterancePreparer(ctx, appID, versionID, utterance)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.VersionsClient", "DeleteUnlabelledUtterance", nil, "Failure preparing request")
@@ -242,6 +273,16 @@ func (client VersionsClient) DeleteUnlabelledUtteranceResponder(resp *http.Respo
 // appID - the application ID.
 // versionID - the version ID.
 func (client VersionsClient) Export(ctx context.Context, appID uuid.UUID, versionID string) (result LuisApp, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VersionsClient.Export")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ExportPreparer(ctx, appID, versionID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.VersionsClient", "Export", nil, "Failure preparing request")
@@ -306,6 +347,16 @@ func (client VersionsClient) ExportResponder(resp *http.Response) (result LuisAp
 // appID - the application ID.
 // versionID - the version ID.
 func (client VersionsClient) Get(ctx context.Context, appID uuid.UUID, versionID string) (result VersionInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VersionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, appID, versionID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.VersionsClient", "Get", nil, "Failure preparing request")
@@ -372,6 +423,16 @@ func (client VersionsClient) GetResponder(resp *http.Response) (result VersionIn
 // versionID - the new versionId to import. If not specified, the versionId will be read from the imported
 // object.
 func (client VersionsClient) Import(ctx context.Context, appID uuid.UUID, luisApp LuisApp, versionID string) (result String, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VersionsClient.Import")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ImportPreparer(ctx, appID, luisApp, versionID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.VersionsClient", "Import", nil, "Failure preparing request")
@@ -444,6 +505,16 @@ func (client VersionsClient) ImportResponder(resp *http.Response) (result String
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client VersionsClient) List(ctx context.Context, appID uuid.UUID, skip *int32, take *int32) (result ListVersionInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VersionsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -533,6 +604,16 @@ func (client VersionsClient) ListResponder(resp *http.Response) (result ListVers
 // versionID - the version ID.
 // versionUpdateObject - a model containing Name and Description of the application.
 func (client VersionsClient) Update(ctx context.Context, appID uuid.UUID, versionID string, versionUpdateObject TaskUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VersionsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, appID, versionID, versionUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.VersionsClient", "Update", nil, "Failure preparing request")

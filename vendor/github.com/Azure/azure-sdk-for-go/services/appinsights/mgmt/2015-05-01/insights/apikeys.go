@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewAPIKeysClientWithBaseURI(baseURI string, subscriptionID string) APIKeysC
 // APIKeyProperties - properties that need to be specified to create an API key of a Application Insights
 // component.
 func (client APIKeysClient) Create(ctx context.Context, resourceGroupName string, resourceName string, APIKeyProperties APIKeyRequest) (result ApplicationInsightsComponentAPIKey, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIKeysClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, resourceGroupName, resourceName, APIKeyProperties)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.APIKeysClient", "Create", nil, "Failure preparing request")
@@ -116,6 +127,16 @@ func (client APIKeysClient) CreateResponder(resp *http.Response) (result Applica
 // resourceName - the name of the Application Insights component resource.
 // keyID - the API Key ID. This is unique within a Application Insights component.
 func (client APIKeysClient) Delete(ctx context.Context, resourceGroupName string, resourceName string, keyID string) (result ApplicationInsightsComponentAPIKey, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIKeysClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, resourceName, keyID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.APIKeysClient", "Delete", nil, "Failure preparing request")
@@ -185,6 +206,16 @@ func (client APIKeysClient) DeleteResponder(resp *http.Response) (result Applica
 // resourceName - the name of the Application Insights component resource.
 // keyID - the API Key ID. This is unique within a Application Insights component.
 func (client APIKeysClient) Get(ctx context.Context, resourceGroupName string, resourceName string, keyID string) (result ApplicationInsightsComponentAPIKey, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIKeysClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, resourceName, keyID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.APIKeysClient", "Get", nil, "Failure preparing request")
@@ -253,6 +284,16 @@ func (client APIKeysClient) GetResponder(resp *http.Response) (result Applicatio
 // resourceGroupName - the name of the resource group.
 // resourceName - the name of the Application Insights component resource.
 func (client APIKeysClient) List(ctx context.Context, resourceGroupName string, resourceName string) (result ApplicationInsightsComponentAPIKeyListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIKeysClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.APIKeysClient", "List", nil, "Failure preparing request")

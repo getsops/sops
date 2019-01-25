@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewObjectDataTypesClientWithBaseURI(baseURI string, subscriptionID string) 
 // moduleName - the name of module.
 // typeName - the name of type.
 func (client ObjectDataTypesClient) ListFieldsByModuleAndType(ctx context.Context, resourceGroupName string, automationAccountName string, moduleName string, typeName string) (result TypeFieldListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ObjectDataTypesClient.ListFieldsByModuleAndType")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -125,6 +136,16 @@ func (client ObjectDataTypesClient) ListFieldsByModuleAndTypeResponder(resp *htt
 // automationAccountName - the name of the automation account.
 // typeName - the name of type.
 func (client ObjectDataTypesClient) ListFieldsByType(ctx context.Context, resourceGroupName string, automationAccountName string, typeName string) (result TypeFieldListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ObjectDataTypesClient.ListFieldsByType")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

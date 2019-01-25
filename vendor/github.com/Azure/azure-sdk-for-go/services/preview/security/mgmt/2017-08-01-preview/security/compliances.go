@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewCompliancesClientWithBaseURI(baseURI string, subscriptionID string, ascL
 // management group (/providers/Microsoft.Management/managementGroups/mgName).
 // complianceName - name of the Compliance
 func (client CompliancesClient) Get(ctx context.Context, scope string, complianceName string) (result Compliance, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CompliancesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, scope, complianceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "security.CompliancesClient", "Get", nil, "Failure preparing request")
@@ -111,6 +122,16 @@ func (client CompliancesClient) GetResponder(resp *http.Response) (result Compli
 // scope - scope of the query, can be subscription (/subscriptions/0b06d9ea-afe6-4779-bd59-30e5c2d9d13f) or
 // management group (/providers/Microsoft.Management/managementGroups/mgName).
 func (client CompliancesClient) List(ctx context.Context, scope string) (result ComplianceListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CompliancesClient.List")
+		defer func() {
+			sc := -1
+			if result.cl.Response.Response != nil {
+				sc = result.cl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, scope)
 	if err != nil {
@@ -173,8 +194,8 @@ func (client CompliancesClient) ListResponder(resp *http.Response) (result Compl
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client CompliancesClient) listNextResults(lastResults ComplianceList) (result ComplianceList, err error) {
-	req, err := lastResults.complianceListPreparer()
+func (client CompliancesClient) listNextResults(ctx context.Context, lastResults ComplianceList) (result ComplianceList, err error) {
+	req, err := lastResults.complianceListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.CompliancesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -195,6 +216,16 @@ func (client CompliancesClient) listNextResults(lastResults ComplianceList) (res
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client CompliancesClient) ListComplete(ctx context.Context, scope string) (result ComplianceListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CompliancesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, scope)
 	return
 }

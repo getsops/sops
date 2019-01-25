@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -40,6 +41,16 @@ func NewPersonGroupClient(endpoint string) PersonGroupClient {
 // personGroupID - id referencing a particular person group.
 // body - request body for creating new person group.
 func (client PersonGroupClient) Create(ctx context.Context, personGroupID string, body NameAndUserDataContract) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PersonGroupClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -116,6 +127,16 @@ func (client PersonGroupClient) CreateResponder(resp *http.Response) (result aut
 // Parameters:
 // personGroupID - id referencing a particular person group.
 func (client PersonGroupClient) Delete(ctx context.Context, personGroupID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PersonGroupClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -184,6 +205,16 @@ func (client PersonGroupClient) DeleteResponder(resp *http.Response) (result aut
 // Parameters:
 // personGroupID - id referencing a particular person group.
 func (client PersonGroupClient) Get(ctx context.Context, personGroupID string) (result PersonGroup, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PersonGroupClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -253,6 +284,16 @@ func (client PersonGroupClient) GetResponder(resp *http.Response) (result Person
 // Parameters:
 // personGroupID - id referencing a particular person group.
 func (client PersonGroupClient) GetTrainingStatus(ctx context.Context, personGroupID string) (result TrainingStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PersonGroupClient.GetTrainingStatus")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -323,6 +364,16 @@ func (client PersonGroupClient) GetTrainingStatusResponder(resp *http.Response) 
 // start - list person groups from the least personGroupId greater than the "start".
 // top - the number of person groups to list.
 func (client PersonGroupClient) List(ctx context.Context, start string, top *int32) (result ListPersonGroup, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PersonGroupClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: start,
 			Constraints: []validation.Constraint{{Target: "start", Name: validation.MaxLength, Rule: 64, Chain: nil}}},
@@ -403,6 +454,16 @@ func (client PersonGroupClient) ListResponder(resp *http.Response) (result ListP
 // Parameters:
 // personGroupID - id referencing a particular person group.
 func (client PersonGroupClient) Train(ctx context.Context, personGroupID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PersonGroupClient.Train")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -473,6 +534,16 @@ func (client PersonGroupClient) TrainResponder(resp *http.Response) (result auto
 // personGroupID - id referencing a particular person group.
 // body - request body for updating person group.
 func (client PersonGroupClient) Update(ctx context.Context, personGroupID string, body NameAndUserDataContract) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PersonGroupClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},

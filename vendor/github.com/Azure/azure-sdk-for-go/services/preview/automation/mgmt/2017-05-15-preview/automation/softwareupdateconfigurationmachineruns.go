@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -50,6 +51,16 @@ func NewSoftwareUpdateConfigurationMachineRunsClientWithBaseURI(baseURI string, 
 // softwareUpdateConfigurationMachineRunID - the Id of the software update configuration machine run.
 // clientRequestID - identifies this specific client request.
 func (client SoftwareUpdateConfigurationMachineRunsClient) GetByID(ctx context.Context, resourceGroupName string, automationAccountName string, softwareUpdateConfigurationMachineRunID uuid.UUID, clientRequestID string) (result SoftwareUpdateConfigurationMachineRun, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SoftwareUpdateConfigurationMachineRunsClient.GetByID")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -135,6 +146,16 @@ func (client SoftwareUpdateConfigurationMachineRunsClient) GetByIDResponder(resp
 // skip - number of entries you skip before returning results
 // top - maximum number of entries returned in the results collection
 func (client SoftwareUpdateConfigurationMachineRunsClient) List(ctx context.Context, resourceGroupName string, automationAccountName string, clientRequestID string, filter string, skip string, top string) (result SoftwareUpdateConfigurationMachineRunListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SoftwareUpdateConfigurationMachineRunsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

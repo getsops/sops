@@ -25,22 +25,26 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // LinkedServicesClient is the the Azure Data Factory V2 management API provides a RESTful set of web services that
 // interact with Azure Data Factory V2 services.
 type LinkedServicesClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // NewLinkedServicesClient creates an instance of the LinkedServicesClient client.
 func NewLinkedServicesClient(subscriptionID string) LinkedServicesClient {
 	return NewLinkedServicesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // NewLinkedServicesClientWithBaseURI creates an instance of the LinkedServicesClient client.
 func NewLinkedServicesClientWithBaseURI(baseURI string, subscriptionID string) LinkedServicesClient {
 	return LinkedServicesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // CreateOrUpdate creates or updates a linked service.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -94,6 +98,7 @@ func (client LinkedServicesClient) CreateOrUpdate(ctx context.Context, resourceG
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
 func (client LinkedServicesClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, factoryName string, linkedServiceName string, linkedService LinkedServiceResource, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -122,6 +127,7 @@ func (client LinkedServicesClient) CreateOrUpdatePreparer(ctx context.Context, r
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client LinkedServicesClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
@@ -129,6 +135,7 @@ func (client LinkedServicesClient) CreateOrUpdateSender(req *http.Request) (*htt
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
 // closes the http.Response Body.
 func (client LinkedServicesClient) CreateOrUpdateResponder(resp *http.Response) (result LinkedServiceResource, err error) {
@@ -142,6 +149,7 @@ func (client LinkedServicesClient) CreateOrUpdateResponder(resp *http.Response) 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // Delete deletes a linked service.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -185,6 +193,7 @@ func (client LinkedServicesClient) Delete(ctx context.Context, resourceGroupName
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // DeletePreparer prepares the Delete request.
 func (client LinkedServicesClient) DeletePreparer(ctx context.Context, resourceGroupName string, factoryName string, linkedServiceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -207,6 +216,7 @@ func (client LinkedServicesClient) DeletePreparer(ctx context.Context, resourceG
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client LinkedServicesClient) DeleteSender(req *http.Request) (*http.Response, error) {
@@ -214,6 +224,7 @@ func (client LinkedServicesClient) DeleteSender(req *http.Request) (*http.Respon
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // DeleteResponder handles the response to the Delete request. The method always
 // closes the http.Response Body.
 func (client LinkedServicesClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -226,6 +237,7 @@ func (client LinkedServicesClient) DeleteResponder(resp *http.Response) (result 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // Get gets a linked service.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -269,6 +281,7 @@ func (client LinkedServicesClient) Get(ctx context.Context, resourceGroupName st
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetPreparer prepares the Get request.
 func (client LinkedServicesClient) GetPreparer(ctx context.Context, resourceGroupName string, factoryName string, linkedServiceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -291,6 +304,7 @@ func (client LinkedServicesClient) GetPreparer(ctx context.Context, resourceGrou
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client LinkedServicesClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -298,6 +312,7 @@ func (client LinkedServicesClient) GetSender(req *http.Request) (*http.Response,
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client LinkedServicesClient) GetResponder(resp *http.Response) (result LinkedServiceResource, err error) {
@@ -311,6 +326,7 @@ func (client LinkedServicesClient) GetResponder(resp *http.Response) (result Lin
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListByFactory lists linked services.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -350,6 +366,7 @@ func (client LinkedServicesClient) ListByFactory(ctx context.Context, resourceGr
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListByFactoryPreparer prepares the ListByFactory request.
 func (client LinkedServicesClient) ListByFactoryPreparer(ctx context.Context, resourceGroupName string, factoryName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -371,6 +388,7 @@ func (client LinkedServicesClient) ListByFactoryPreparer(ctx context.Context, re
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListByFactorySender sends the ListByFactory request. The method will close the
 // http.Response Body if it receives an error.
 func (client LinkedServicesClient) ListByFactorySender(req *http.Request) (*http.Response, error) {
@@ -378,6 +396,7 @@ func (client LinkedServicesClient) ListByFactorySender(req *http.Request) (*http
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListByFactoryResponder handles the response to the ListByFactory request. The method always
 // closes the http.Response Body.
 func (client LinkedServicesClient) ListByFactoryResponder(resp *http.Response) (result LinkedServiceListResponse, err error) {
@@ -412,6 +431,7 @@ func (client LinkedServicesClient) listByFactoryNextResults(lastResults LinkedSe
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListByFactoryComplete enumerates all values, automatically crossing page boundaries as required.
 func (client LinkedServicesClient) ListByFactoryComplete(ctx context.Context, resourceGroupName string, factoryName string) (result LinkedServiceListResponseIterator, err error) {
 	result.page, err = client.ListByFactory(ctx, resourceGroupName, factoryName)

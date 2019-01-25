@@ -22,6 +22,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/cognitiveservices/v1.0/visualsearch"
+
 // Currency enumerates the values for currency.
 type Currency string
 
@@ -1593,8 +1596,8 @@ type BasicCreativeWork interface {
 	AsCreativeWork() (*CreativeWork, bool)
 }
 
-// CreativeWork the most generic kind of creative work, including books, movies, photographs, software programs,
-// etc.
+// CreativeWork the most generic kind of creative work, including books, movies, photographs, software
+// programs, etc.
 type CreativeWork struct {
 	// ThumbnailURL - The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
@@ -2073,8 +2076,8 @@ func (cw *CreativeWork) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// CropArea a JSON object consisting of coordinates specifying the four corners of a cropped rectangle within the
-// input image.
+// CropArea a JSON object consisting of coordinates specifying the four corners of a cropped rectangle
+// within the input image.
 type CropArea struct {
 	// Top - The top coordinate of the region to be cropped. The coordinate is a fractional value of the original image's height and is measured from the top edge of the image. Specify the coordinate as a value from 0.0 through 1.0.
 	Top *float64 `json:"top,omitempty"`
@@ -2323,8 +2326,8 @@ func (er ErrorResponse) AsBasicResponseBase() (BasicResponseBase, bool) {
 	return &er, true
 }
 
-// Filters a key-value object consisting of filters that may be specified to limit the results returned by the API.
-// Current available filters: site.
+// Filters a key-value object consisting of filters that may be specified to limit the results returned by
+// the API. Current available filters: site.
 type Filters struct {
 	// Site - The URL of the site to return similar images and similar products from. (e.g., "www.bing.com", "bing.com").
 	Site *string `json:"site,omitempty"`
@@ -3716,8 +3719,8 @@ func (iea *ImageEntityAction) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ImageInfo a JSON object that identities the image to get insights of . It also includes the optional crop area
-// that you use to identify the region of interest in the image.
+// ImageInfo a JSON object that identities the image to get insights of . It also includes the optional
+// crop area that you use to identify the region of interest in the image.
 type ImageInfo struct {
 	// ImageInsightsToken - An image insights token. To get the insights token, call one of the Image Search APIs (for example, /images/search). In the search results, the [Image](https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-images-api-v7-reference#image) object's [imageInsightsToken](https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-images-api-v7-reference#image-imageinsightstoken) field contains the token. The imageInsightsToken and url fields mutually exclusive; do not specify both. Do not specify an insights token if the request includes the image form data.
 	ImageInsightsToken *string `json:"imageInsightsToken,omitempty"`
@@ -4449,13 +4452,13 @@ type ImageObject struct {
 	Thumbnail *ImageObject `json:"thumbnail,omitempty"`
 	// ImageInsightsToken - The token that you use in a subsequent call to Visual Search API to get additional information about the image. For information about using this token, see the imageInsightsToken field inside the knowledgeRequest request parameter.
 	ImageInsightsToken *string `json:"imageInsightsToken,omitempty"`
-	// InsightsMetadata - A count of the number of websites where you can shop or perform other actions related to the image. For example, if the image is of an apple pie, this object includes a count of the number of websites where you can buy an apple pie. To indicate the number of offers in your UX, include badging such as a shopping cart icon that contains the count. When the user clicks on the icon, use imageInisghtsToken in a subsequent Visual Search API call to get the list of shopping websites.
+	// InsightsMetadata - A count of the number of websites where you can shop or perform other actions related to the image. For example, if the image is of an apple pie, this object includes a count of the number of websites where you can buy an apple pie. To indicate the number of offers in your UX, include badging such as a shopping cart icon that contains the count. When the user clicks on the icon, use imageInsightsToken in a subsequent Visual Search API call to get the list of shopping websites.
 	InsightsMetadata *ImagesImageMetadata `json:"insightsMetadata,omitempty"`
 	// ImageID - Unique Id for the image.
 	ImageID *string `json:"imageId,omitempty"`
 	// AccentColor - A three-byte hexadecimal number that represents the color that dominates the image. Use the color as the temporary background in your client until the image is loaded.
 	AccentColor *string `json:"accentColor,omitempty"`
-	// VisualWords - For interal use only.
+	// VisualWords - For internal use only.
 	VisualWords *string `json:"visualWords,omitempty"`
 	// ContentURL - Original URL to retrieve the source (file) for the media object (e.g., the source URL for the image).
 	ContentURL *string `json:"contentUrl,omitempty"`
@@ -4463,7 +4466,7 @@ type ImageObject struct {
 	HostPageURL *string `json:"hostPageUrl,omitempty"`
 	// ContentSize - Size of the media object content. Use format "value unit" (e.g., "1024 B").
 	ContentSize *string `json:"contentSize,omitempty"`
-	// EncodingFormat - Encoding format (e.g., mp3, mp4, jpeg, etc).
+	// EncodingFormat - Encoding format (e.g., png, gif, jpeg, etc).
 	EncodingFormat *string `json:"encodingFormat,omitempty"`
 	// HostPageDisplayURL - Display URL of the page that hosts the media object.
 	HostPageDisplayURL *string `json:"hostPageDisplayUrl,omitempty"`
@@ -6498,8 +6501,8 @@ func (issa *ImageShoppingSourcesAction) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ImagesImageMetadata defines a count of the number of websites where you can shop or perform other actions
-// related to the image.
+// ImagesImageMetadata defines a count of the number of websites where you can shop or perform other
+// actions related to the image.
 type ImagesImageMetadata struct {
 	// ShoppingSourcesCount - The number of websites that sell the products seen in the image.
 	ShoppingSourcesCount *int32 `json:"shoppingSourcesCount,omitempty"`
@@ -6925,8 +6928,8 @@ type BasicIntangible interface {
 	AsIntangible() (*Intangible, bool)
 }
 
-// Intangible a utility class that serves as the umbrella for a number of 'intangible' things such as quantities,
-// structured values, etc.
+// Intangible a utility class that serves as the umbrella for a number of 'intangible' things such as
+// quantities, structured values, etc.
 type Intangible struct {
 	// Name - The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
@@ -7217,8 +7220,8 @@ func (i Intangible) AsBasicResponseBase() (BasicResponseBase, bool) {
 	return &i, true
 }
 
-// KnowledgeRequest a JSON object containing information about the request, such as filters for the resulting
-// actions.
+// KnowledgeRequest a JSON object containing information about the request, such as filters for the
+// resulting actions.
 type KnowledgeRequest struct {
 	// Filters - A key-value object consisting of filters that may be specified to limit the results returned by the API.
 	Filters *Filters `json:"filters,omitempty"`
@@ -7238,7 +7241,7 @@ type MediaObject struct {
 	HostPageURL *string `json:"hostPageUrl,omitempty"`
 	// ContentSize - Size of the media object content. Use format "value unit" (e.g., "1024 B").
 	ContentSize *string `json:"contentSize,omitempty"`
-	// EncodingFormat - Encoding format (e.g., mp3, mp4, jpeg, etc).
+	// EncodingFormat - Encoding format (e.g., png, gif, jpeg, etc).
 	EncodingFormat *string `json:"encodingFormat,omitempty"`
 	// HostPageDisplayURL - Display URL of the page that hosts the media object.
 	HostPageDisplayURL *string `json:"hostPageDisplayUrl,omitempty"`
@@ -7772,8 +7775,8 @@ func (mo *MediaObject) UnmarshalJSON(body []byte) error {
 }
 
 // NormalizedQuadrilateral defines a region of an image. The region is a convex quadrilateral defined by
-// coordinates of its top left, top right, bottom left, and bottom right points. The coordinates are fractional
-// values of the original image's width and height in the range 0.0 through 1.0.
+// coordinates of its top left, top right, bottom left, and bottom right points. The coordinates are
+// fractional values of the original image's width and height in the range 0.0 through 1.0.
 type NormalizedQuadrilateral struct {
 	// TopLeft - The top left corner coordinate.
 	TopLeft *Point2D `json:"topLeft,omitempty"`
@@ -9784,8 +9787,8 @@ type RelatedSearchesModule struct {
 	Value *[]Query `json:"value,omitempty"`
 }
 
-// Request a JSON object that contains information about the image to get insights of. Specify this object only in
-// a knowledgeRequest form data.
+// Request a JSON object that contains information about the image to get insights of. Specify this object
+// only in a knowledgeRequest form data.
 type Request struct {
 	// ImageInfo - A JSON object that identities the image to get insights of.
 	ImageInfo *ImageInfo `json:"imageInfo,omitempty"`
@@ -9829,7 +9832,8 @@ type BasicResponse interface {
 	AsResponse() (*Response, bool)
 }
 
-// Response defines a response. All schemas that return at the root of the response must inherit from this object.
+// Response defines a response. All schemas that return at the root of the response must inherit from this
+// object.
 type Response struct {
 	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`

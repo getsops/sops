@@ -18,13 +18,18 @@ package datamigration
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/datamigration/mgmt/2018-03-31-preview/datamigration"
 
 // AuthenticationType enumerates the values for authentication type.
 type AuthenticationType string
@@ -790,8 +795,8 @@ func (ci ConnectionInfo) AsBasicConnectionInfo() (BasicConnectionInfo, bool) {
 	return &ci, true
 }
 
-// ConnectToSourceSQLServerTaskInput input for the task that validates connection to SQL Server and also validates
-// source server requirements
+// ConnectToSourceSQLServerTaskInput input for the task that validates connection to SQL Server and also
+// validates source server requirements
 type ConnectToSourceSQLServerTaskInput struct {
 	// SourceConnectionInfo - Connection information for Source SQL Server
 	SourceConnectionInfo *SQLConnectionInfo `json:"sourceConnectionInfo,omitempty"`
@@ -914,8 +919,8 @@ func (ctsssto ConnectToSourceSQLServerTaskOutput) AsBasicConnectToSourceSQLServe
 	return &ctsssto, true
 }
 
-// ConnectToSourceSQLServerTaskOutputAgentJobLevel agentJob level output for the task that validates connection to
-// SQL Server and also validates source server requirements
+// ConnectToSourceSQLServerTaskOutputAgentJobLevel agentJob level output for the task that validates
+// connection to SQL Server and also validates source server requirements
 type ConnectToSourceSQLServerTaskOutputAgentJobLevel struct {
 	// Name - AgentJob name
 	Name *string `json:"name,omitempty"`
@@ -927,7 +932,7 @@ type ConnectToSourceSQLServerTaskOutputAgentJobLevel struct {
 	JobOwner *string `json:"jobOwner,omitempty"`
 	// LastExecutedOn - UTC Date and time when the AgentJob was last executed.
 	LastExecutedOn *date.Time `json:"lastExecutedOn,omitempty"`
-	// MigrationEligibility - Information about eligiblity of agent job for migration.
+	// MigrationEligibility - Information about eligibility of agent job for migration.
 	MigrationEligibility *MigrationEligibilityInfo `json:"migrationEligibility,omitempty"`
 	// ID - Result identifier
 	ID *string `json:"id,omitempty"`
@@ -996,8 +1001,8 @@ func (ctssstoajl ConnectToSourceSQLServerTaskOutputAgentJobLevel) AsBasicConnect
 	return &ctssstoajl, true
 }
 
-// ConnectToSourceSQLServerTaskOutputDatabaseLevel database level output for the task that validates connection to
-// SQL Server and also validates source server requirements
+// ConnectToSourceSQLServerTaskOutputDatabaseLevel database level output for the task that validates
+// connection to SQL Server and also validates source server requirements
 type ConnectToSourceSQLServerTaskOutputDatabaseLevel struct {
 	// Name - Database name
 	Name *string `json:"name,omitempty"`
@@ -1073,8 +1078,8 @@ func (ctssstodl ConnectToSourceSQLServerTaskOutputDatabaseLevel) AsBasicConnectT
 	return &ctssstodl, true
 }
 
-// ConnectToSourceSQLServerTaskOutputLoginLevel login level output for the task that validates connection to SQL
-// Server and also validates source server requirements
+// ConnectToSourceSQLServerTaskOutputLoginLevel login level output for the task that validates connection
+// to SQL Server and also validates source server requirements
 type ConnectToSourceSQLServerTaskOutputLoginLevel struct {
 	// Name - Login name.
 	Name *string `json:"name,omitempty"`
@@ -1084,7 +1089,7 @@ type ConnectToSourceSQLServerTaskOutputLoginLevel struct {
 	DefaultDatabase *string `json:"defaultDatabase,omitempty"`
 	// IsEnabled - The state of the login.
 	IsEnabled *bool `json:"isEnabled,omitempty"`
-	// MigrationEligibility - Information about eligiblity of login for migration.
+	// MigrationEligibility - Information about eligibility of login for migration.
 	MigrationEligibility *MigrationEligibilityInfo `json:"migrationEligibility,omitempty"`
 	// ID - Result identifier
 	ID *string `json:"id,omitempty"`
@@ -1150,8 +1155,8 @@ func (ctssstoll ConnectToSourceSQLServerTaskOutputLoginLevel) AsBasicConnectToSo
 	return &ctssstoll, true
 }
 
-// ConnectToSourceSQLServerTaskOutputTaskLevel task level output for the task that validates connection to SQL
-// Server and also validates source server requirements
+// ConnectToSourceSQLServerTaskOutputTaskLevel task level output for the task that validates connection to
+// SQL Server and also validates source server requirements
 type ConnectToSourceSQLServerTaskOutputTaskLevel struct {
 	// Databases - Source databases as a map from database name to database id
 	Databases map[string]*string `json:"databases"`
@@ -1232,8 +1237,8 @@ func (ctssstotl ConnectToSourceSQLServerTaskOutputTaskLevel) AsBasicConnectToSou
 	return &ctssstotl, true
 }
 
-// ConnectToSourceSQLServerTaskProperties properties for the task that validates connection to SQL Server and also
-// validates source server requirements
+// ConnectToSourceSQLServerTaskProperties properties for the task that validates connection to SQL Server
+// and also validates source server requirements
 type ConnectToSourceSQLServerTaskProperties struct {
 	// Input - Task input
 	Input *ConnectToSourceSQLServerTaskInput `json:"input,omitempty"`
@@ -1411,8 +1416,8 @@ func (cttsdto ConnectToTargetSQLDbTaskOutput) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// ConnectToTargetSQLDbTaskProperties properties for the task that validates connection to SQL DB and target server
-// requirements
+// ConnectToTargetSQLDbTaskProperties properties for the task that validates connection to SQL DB and
+// target server requirements
 type ConnectToTargetSQLDbTaskProperties struct {
 	// Input - Task input
 	Input *ConnectToTargetSQLDbTaskInput `json:"input,omitempty"`
@@ -1500,8 +1505,8 @@ type ConnectToTargetSQLMITaskInput struct {
 	TargetConnectionInfo *SQLConnectionInfo `json:"targetConnectionInfo,omitempty"`
 }
 
-// ConnectToTargetSQLMITaskOutput output for the task that validates connection to Azure SQL Database Managed
-// Instance.
+// ConnectToTargetSQLMITaskOutput output for the task that validates connection to Azure SQL Database
+// Managed Instance.
 type ConnectToTargetSQLMITaskOutput struct {
 	// ID - Result identifier
 	ID *string `json:"id,omitempty"`
@@ -1517,8 +1522,8 @@ type ConnectToTargetSQLMITaskOutput struct {
 	ValidationErrors *[]ReportableException `json:"validationErrors,omitempty"`
 }
 
-// ConnectToTargetSQLMITaskProperties properties for the task that validates connection to Azure SQL Database
-// Managed Instance
+// ConnectToTargetSQLMITaskProperties properties for the task that validates connection to Azure SQL
+// Database Managed Instance
 type ConnectToTargetSQLMITaskProperties struct {
 	// Input - Task input
 	Input *ConnectToTargetSQLMITaskInput `json:"input,omitempty"`
@@ -1852,7 +1857,8 @@ func (gutsto GetUserTablesSQLTaskOutput) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// GetUserTablesSQLTaskProperties properties for the task that collects user tables for the given list of databases
+// GetUserTablesSQLTaskProperties properties for the task that collects user tables for the given list of
+// databases
 type GetUserTablesSQLTaskProperties struct {
 	// Input - Task input
 	Input *GetUserTablesSQLTaskInput `json:"input,omitempty"`
@@ -1933,7 +1939,8 @@ func (gutstp GetUserTablesSQLTaskProperties) AsBasicProjectTaskProperties() (Bas
 	return &gutstp, true
 }
 
-// MigrateSQLServerSQLDbDatabaseInput database specific information for SQL to Azure SQL DB migration task inputs
+// MigrateSQLServerSQLDbDatabaseInput database specific information for SQL to Azure SQL DB migration task
+// inputs
 type MigrateSQLServerSQLDbDatabaseInput struct {
 	// Name - Name of the database
 	Name *string `json:"name,omitempty"`
@@ -1963,8 +1970,8 @@ func (msssddi MigrateSQLServerSQLDbDatabaseInput) MarshalJSON() ([]byte, error) 
 	return json.Marshal(objectMap)
 }
 
-// MigrateSQLServerSQLDbTaskInput input for the task that migrates on-prem SQL Server databases to Azure SQL
-// Database
+// MigrateSQLServerSQLDbTaskInput input for the task that migrates on-prem SQL Server databases to Azure
+// SQL Database
 type MigrateSQLServerSQLDbTaskInput struct {
 	// SelectedDatabases - Databases to migrate
 	SelectedDatabases *[]MigrateSQLServerSQLDbDatabaseInput `json:"selectedDatabases,omitempty"`
@@ -2483,8 +2490,8 @@ func (msssdtotl MigrateSQLServerSQLDbTaskOutputTableLevel) AsBasicMigrateSQLServ
 	return &msssdtotl, true
 }
 
-// MigrateSQLServerSQLDbTaskProperties properties for the task that migrates on-prem SQL Server databases to Azure
-// SQL Database
+// MigrateSQLServerSQLDbTaskProperties properties for the task that migrates on-prem SQL Server databases
+// to Azure SQL Database
 type MigrateSQLServerSQLDbTaskProperties struct {
 	// Input - Task input
 	Input *MigrateSQLServerSQLDbTaskInput `json:"input,omitempty"`
@@ -2624,8 +2631,8 @@ func (msssdtp *MigrateSQLServerSQLDbTaskProperties) UnmarshalJSON(body []byte) e
 	return nil
 }
 
-// MigrateSQLServerSQLMIDatabaseInput database specific information for SQL to Azure SQL DB Managed Instance
-// migration task inputs
+// MigrateSQLServerSQLMIDatabaseInput database specific information for SQL to Azure SQL DB Managed
+// Instance migration task inputs
 type MigrateSQLServerSQLMIDatabaseInput struct {
 	// Name - Name of the database
 	Name *string `json:"name,omitempty"`
@@ -2635,8 +2642,8 @@ type MigrateSQLServerSQLMIDatabaseInput struct {
 	BackupFileShare *FileShare `json:"backupFileShare,omitempty"`
 }
 
-// MigrateSQLServerSQLMITaskInput input for task that migrates SQL Server databases to Azure SQL Database Managed
-// Instance.
+// MigrateSQLServerSQLMITaskInput input for task that migrates SQL Server databases to Azure SQL Database
+// Managed Instance.
 type MigrateSQLServerSQLMITaskInput struct {
 	// SelectedDatabases - Databases to migrate
 	SelectedDatabases *[]MigrateSQLServerSQLMIDatabaseInput `json:"selectedDatabases,omitempty"`
@@ -2665,8 +2672,8 @@ type BasicMigrateSQLServerSQLMITaskOutput interface {
 	AsMigrateSQLServerSQLMITaskOutput() (*MigrateSQLServerSQLMITaskOutput, bool)
 }
 
-// MigrateSQLServerSQLMITaskOutput output for task that migrates SQL Server databases to Azure SQL Database Managed
-// Instance.
+// MigrateSQLServerSQLMITaskOutput output for task that migrates SQL Server databases to Azure SQL Database
+// Managed Instance.
 type MigrateSQLServerSQLMITaskOutput struct {
 	// ID - Result identifier
 	ID *string `json:"id,omitempty"`
@@ -3245,8 +3252,8 @@ func (msssmtoml MigrateSQLServerSQLMITaskOutputMigrationLevel) AsBasicMigrateSQL
 	return &msssmtoml, true
 }
 
-// MigrateSQLServerSQLMITaskProperties properties for task that migrates SQL Server databases to Azure SQL Database
-// Managed Instance
+// MigrateSQLServerSQLMITaskProperties properties for task that migrates SQL Server databases to Azure SQL
+// Database Managed Instance
 type MigrateSQLServerSQLMITaskProperties struct {
 	// Input - Task input
 	Input *MigrateSQLServerSQLMITaskInput `json:"input,omitempty"`
@@ -3386,7 +3393,8 @@ func (msssmtp *MigrateSQLServerSQLMITaskProperties) UnmarshalJSON(body []byte) e
 	return nil
 }
 
-// MigrateSQLServerSQLServerDatabaseInput database specific information for SQL to SQL migration task inputs
+// MigrateSQLServerSQLServerDatabaseInput database specific information for SQL to SQL migration task
+// inputs
 type MigrateSQLServerSQLServerDatabaseInput struct {
 	// Name - Name of the database
 	Name *string `json:"name,omitempty"`
@@ -3406,7 +3414,8 @@ type MigrationEligibilityInfo struct {
 	ValidationMessages *[]string `json:"validationMessages,omitempty"`
 }
 
-// MigrationReportResult migration validation report result, contains the url for downloading the generated report.
+// MigrationReportResult migration validation report result, contains the url for downloading the generated
+// report.
 type MigrationReportResult struct {
 	// ID - Migration validation result identifier
 	ID *string `json:"id,omitempty"`
@@ -3658,20 +3667,37 @@ type ProjectListIterator struct {
 	page ProjectListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ProjectListIterator) Next() error {
+func (iter *ProjectListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ProjectListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -3693,6 +3719,11 @@ func (iter ProjectListIterator) Value() Project {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ProjectListIterator type.
+func NewProjectListIterator(page ProjectListPage) ProjectListIterator {
+	return ProjectListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (pl ProjectList) IsEmpty() bool {
 	return pl.Value == nil || len(*pl.Value) == 0
@@ -3700,11 +3731,11 @@ func (pl ProjectList) IsEmpty() bool {
 
 // projectListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (pl ProjectList) projectListPreparer() (*http.Request, error) {
+func (pl ProjectList) projectListPreparer(ctx context.Context) (*http.Request, error) {
 	if pl.NextLink == nil || len(to.String(pl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(pl.NextLink)))
@@ -3712,19 +3743,36 @@ func (pl ProjectList) projectListPreparer() (*http.Request, error) {
 
 // ProjectListPage contains a page of Project values.
 type ProjectListPage struct {
-	fn func(ProjectList) (ProjectList, error)
+	fn func(context.Context, ProjectList) (ProjectList, error)
 	pl ProjectList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ProjectListPage) Next() error {
-	next, err := page.fn(page.pl)
+func (page *ProjectListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.pl)
 	if err != nil {
 		return err
 	}
 	page.pl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ProjectListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -3743,6 +3791,11 @@ func (page ProjectListPage) Values() []Project {
 		return nil
 	}
 	return *page.pl.Value
+}
+
+// Creates a new instance of the ProjectListPage type.
+func NewProjectListPage(getNextPage func(context.Context, ProjectList) (ProjectList, error)) ProjectListPage {
+	return ProjectListPage{fn: getNextPage}
 }
 
 // ProjectMetadata common metadata for migration projects
@@ -4128,20 +4181,37 @@ type QuotaListIterator struct {
 	page QuotaListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *QuotaListIterator) Next() error {
+func (iter *QuotaListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/QuotaListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *QuotaListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -4163,6 +4233,11 @@ func (iter QuotaListIterator) Value() Quota {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the QuotaListIterator type.
+func NewQuotaListIterator(page QuotaListPage) QuotaListIterator {
+	return QuotaListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ql QuotaList) IsEmpty() bool {
 	return ql.Value == nil || len(*ql.Value) == 0
@@ -4170,11 +4245,11 @@ func (ql QuotaList) IsEmpty() bool {
 
 // quotaListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ql QuotaList) quotaListPreparer() (*http.Request, error) {
+func (ql QuotaList) quotaListPreparer(ctx context.Context) (*http.Request, error) {
 	if ql.NextLink == nil || len(to.String(ql.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ql.NextLink)))
@@ -4182,19 +4257,36 @@ func (ql QuotaList) quotaListPreparer() (*http.Request, error) {
 
 // QuotaListPage contains a page of Quota values.
 type QuotaListPage struct {
-	fn func(QuotaList) (QuotaList, error)
+	fn func(context.Context, QuotaList) (QuotaList, error)
 	ql QuotaList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *QuotaListPage) Next() error {
-	next, err := page.fn(page.ql)
+func (page *QuotaListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/QuotaListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.ql)
 	if err != nil {
 		return err
 	}
 	page.ql = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *QuotaListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -4213,6 +4305,11 @@ func (page QuotaListPage) Values() []Quota {
 		return nil
 	}
 	return *page.ql.Value
+}
+
+// Creates a new instance of the QuotaListPage type.
+func NewQuotaListPage(getNextPage func(context.Context, QuotaList) (QuotaList, error)) QuotaListPage {
+	return QuotaListPage{fn: getNextPage}
 }
 
 // QuotaName the name of the quota
@@ -4275,7 +4372,7 @@ type ResourceSku struct {
 	Restrictions *[]ResourceSkuRestrictions `json:"restrictions,omitempty"`
 }
 
-// ResourceSkuCapabilities describes The SKU capabilites object.
+// ResourceSkuCapabilities describes The SKU capabilities object.
 type ResourceSkuCapabilities struct {
 	// Name - An invariant to describe the feature.
 	Name *string `json:"name,omitempty"`
@@ -4330,20 +4427,37 @@ type ResourceSkusResultIterator struct {
 	page ResourceSkusResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResourceSkusResultIterator) Next() error {
+func (iter *ResourceSkusResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceSkusResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResourceSkusResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -4365,6 +4479,11 @@ func (iter ResourceSkusResultIterator) Value() ResourceSku {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResourceSkusResultIterator type.
+func NewResourceSkusResultIterator(page ResourceSkusResultPage) ResourceSkusResultIterator {
+	return ResourceSkusResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rsr ResourceSkusResult) IsEmpty() bool {
 	return rsr.Value == nil || len(*rsr.Value) == 0
@@ -4372,11 +4491,11 @@ func (rsr ResourceSkusResult) IsEmpty() bool {
 
 // resourceSkusResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rsr ResourceSkusResult) resourceSkusResultPreparer() (*http.Request, error) {
+func (rsr ResourceSkusResult) resourceSkusResultPreparer(ctx context.Context) (*http.Request, error) {
 	if rsr.NextLink == nil || len(to.String(rsr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rsr.NextLink)))
@@ -4384,19 +4503,36 @@ func (rsr ResourceSkusResult) resourceSkusResultPreparer() (*http.Request, error
 
 // ResourceSkusResultPage contains a page of ResourceSku values.
 type ResourceSkusResultPage struct {
-	fn  func(ResourceSkusResult) (ResourceSkusResult, error)
+	fn  func(context.Context, ResourceSkusResult) (ResourceSkusResult, error)
 	rsr ResourceSkusResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResourceSkusResultPage) Next() error {
-	next, err := page.fn(page.rsr)
+func (page *ResourceSkusResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceSkusResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rsr)
 	if err != nil {
 		return err
 	}
 	page.rsr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResourceSkusResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -4415,6 +4551,11 @@ func (page ResourceSkusResultPage) Values() []ResourceSku {
 		return nil
 	}
 	return *page.rsr.Value
+}
+
+// Creates a new instance of the ResourceSkusResultPage type.
+func NewResourceSkusResultPage(getNextPage func(context.Context, ResourceSkusResult) (ResourceSkusResult, error)) ResourceSkusResultPage {
+	return ResourceSkusResultPage{fn: getNextPage}
 }
 
 // SchemaComparisonValidationResult results for schema comparison between the source and target
@@ -4447,7 +4588,8 @@ func (scvr SchemaComparisonValidationResult) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// SchemaComparisonValidationResultType description about the errors happen while performing migration validation
+// SchemaComparisonValidationResultType description about the errors happen while performing migration
+// validation
 type SchemaComparisonValidationResultType struct {
 	// ObjectName - Name of the object that has the difference
 	ObjectName *string `json:"objectName,omitempty"`
@@ -4624,20 +4766,37 @@ type ServiceListIterator struct {
 	page ServiceListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ServiceListIterator) Next() error {
+func (iter *ServiceListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ServiceListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -4659,6 +4818,11 @@ func (iter ServiceListIterator) Value() Service {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ServiceListIterator type.
+func NewServiceListIterator(page ServiceListPage) ServiceListIterator {
+	return ServiceListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (sl ServiceList) IsEmpty() bool {
 	return sl.Value == nil || len(*sl.Value) == 0
@@ -4666,11 +4830,11 @@ func (sl ServiceList) IsEmpty() bool {
 
 // serviceListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (sl ServiceList) serviceListPreparer() (*http.Request, error) {
+func (sl ServiceList) serviceListPreparer(ctx context.Context) (*http.Request, error) {
 	if sl.NextLink == nil || len(to.String(sl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(sl.NextLink)))
@@ -4678,19 +4842,36 @@ func (sl ServiceList) serviceListPreparer() (*http.Request, error) {
 
 // ServiceListPage contains a page of Service values.
 type ServiceListPage struct {
-	fn func(ServiceList) (ServiceList, error)
+	fn func(context.Context, ServiceList) (ServiceList, error)
 	sl ServiceList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ServiceListPage) Next() error {
-	next, err := page.fn(page.sl)
+func (page *ServiceListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.sl)
 	if err != nil {
 		return err
 	}
 	page.sl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ServiceListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -4709,6 +4890,11 @@ func (page ServiceListPage) Values() []Service {
 		return nil
 	}
 	return *page.sl.Value
+}
+
+// Creates a new instance of the ServiceListPage type.
+func NewServiceListPage(getNextPage func(context.Context, ServiceList) (ServiceList, error)) ServiceListPage {
+	return ServiceListPage{fn: getNextPage}
 }
 
 // ServiceOperation description of an action supported by the Data Migration Service
@@ -4746,20 +4932,37 @@ type ServiceOperationListIterator struct {
 	page ServiceOperationListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ServiceOperationListIterator) Next() error {
+func (iter *ServiceOperationListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceOperationListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ServiceOperationListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -4781,6 +4984,11 @@ func (iter ServiceOperationListIterator) Value() ServiceOperation {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ServiceOperationListIterator type.
+func NewServiceOperationListIterator(page ServiceOperationListPage) ServiceOperationListIterator {
+	return ServiceOperationListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (sol ServiceOperationList) IsEmpty() bool {
 	return sol.Value == nil || len(*sol.Value) == 0
@@ -4788,11 +4996,11 @@ func (sol ServiceOperationList) IsEmpty() bool {
 
 // serviceOperationListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (sol ServiceOperationList) serviceOperationListPreparer() (*http.Request, error) {
+func (sol ServiceOperationList) serviceOperationListPreparer(ctx context.Context) (*http.Request, error) {
 	if sol.NextLink == nil || len(to.String(sol.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(sol.NextLink)))
@@ -4800,19 +5008,36 @@ func (sol ServiceOperationList) serviceOperationListPreparer() (*http.Request, e
 
 // ServiceOperationListPage contains a page of ServiceOperation values.
 type ServiceOperationListPage struct {
-	fn  func(ServiceOperationList) (ServiceOperationList, error)
+	fn  func(context.Context, ServiceOperationList) (ServiceOperationList, error)
 	sol ServiceOperationList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ServiceOperationListPage) Next() error {
-	next, err := page.fn(page.sol)
+func (page *ServiceOperationListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceOperationListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.sol)
 	if err != nil {
 		return err
 	}
 	page.sol = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ServiceOperationListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -4831,6 +5056,11 @@ func (page ServiceOperationListPage) Values() []ServiceOperation {
 		return nil
 	}
 	return *page.sol.Value
+}
+
+// Creates a new instance of the ServiceOperationListPage type.
+func NewServiceOperationListPage(getNextPage func(context.Context, ServiceOperationList) (ServiceOperationList, error)) ServiceOperationListPage {
+	return ServiceOperationListPage{fn: getNextPage}
 }
 
 // ServiceProperties properties of the Data Migration service instance
@@ -4872,7 +5102,8 @@ func (future *ServicesCreateOrUpdateFuture) Result(client ServicesClient) (s Ser
 	return
 }
 
-// ServicesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ServicesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ServicesDeleteFuture struct {
 	azure.Future
 }
@@ -4923,20 +5154,37 @@ type ServiceSkuListIterator struct {
 	page ServiceSkuListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ServiceSkuListIterator) Next() error {
+func (iter *ServiceSkuListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceSkuListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ServiceSkuListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -4958,6 +5206,11 @@ func (iter ServiceSkuListIterator) Value() AvailableServiceSku {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ServiceSkuListIterator type.
+func NewServiceSkuListIterator(page ServiceSkuListPage) ServiceSkuListIterator {
+	return ServiceSkuListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ssl ServiceSkuList) IsEmpty() bool {
 	return ssl.Value == nil || len(*ssl.Value) == 0
@@ -4965,11 +5218,11 @@ func (ssl ServiceSkuList) IsEmpty() bool {
 
 // serviceSkuListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ssl ServiceSkuList) serviceSkuListPreparer() (*http.Request, error) {
+func (ssl ServiceSkuList) serviceSkuListPreparer(ctx context.Context) (*http.Request, error) {
 	if ssl.NextLink == nil || len(to.String(ssl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ssl.NextLink)))
@@ -4977,19 +5230,36 @@ func (ssl ServiceSkuList) serviceSkuListPreparer() (*http.Request, error) {
 
 // ServiceSkuListPage contains a page of AvailableServiceSku values.
 type ServiceSkuListPage struct {
-	fn  func(ServiceSkuList) (ServiceSkuList, error)
+	fn  func(context.Context, ServiceSkuList) (ServiceSkuList, error)
 	ssl ServiceSkuList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ServiceSkuListPage) Next() error {
-	next, err := page.fn(page.ssl)
+func (page *ServiceSkuListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceSkuListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.ssl)
 	if err != nil {
 		return err
 	}
 	page.ssl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ServiceSkuListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -5010,7 +5280,13 @@ func (page ServiceSkuListPage) Values() []AvailableServiceSku {
 	return *page.ssl.Value
 }
 
-// ServicesStartFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// Creates a new instance of the ServiceSkuListPage type.
+func NewServiceSkuListPage(getNextPage func(context.Context, ServiceSkuList) (ServiceSkuList, error)) ServiceSkuListPage {
+	return ServiceSkuListPage{fn: getNextPage}
+}
+
+// ServicesStartFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ServicesStartFuture struct {
 	azure.Future
 }
@@ -5067,7 +5343,8 @@ type ServiceStatusResponse struct {
 	SupportedTaskTypes *[]string `json:"supportedTaskTypes,omitempty"`
 }
 
-// ServicesUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ServicesUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ServicesUpdateFuture struct {
 	azure.Future
 }
@@ -5194,20 +5471,37 @@ type TaskListIterator struct {
 	page TaskListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *TaskListIterator) Next() error {
+func (iter *TaskListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TaskListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *TaskListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -5229,6 +5523,11 @@ func (iter TaskListIterator) Value() ProjectTask {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the TaskListIterator type.
+func NewTaskListIterator(page TaskListPage) TaskListIterator {
+	return TaskListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (tl TaskList) IsEmpty() bool {
 	return tl.Value == nil || len(*tl.Value) == 0
@@ -5236,11 +5535,11 @@ func (tl TaskList) IsEmpty() bool {
 
 // taskListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (tl TaskList) taskListPreparer() (*http.Request, error) {
+func (tl TaskList) taskListPreparer(ctx context.Context) (*http.Request, error) {
 	if tl.NextLink == nil || len(to.String(tl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(tl.NextLink)))
@@ -5248,19 +5547,36 @@ func (tl TaskList) taskListPreparer() (*http.Request, error) {
 
 // TaskListPage contains a page of ProjectTask values.
 type TaskListPage struct {
-	fn func(TaskList) (TaskList, error)
+	fn func(context.Context, TaskList) (TaskList, error)
 	tl TaskList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *TaskListPage) Next() error {
-	next, err := page.fn(page.tl)
+func (page *TaskListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TaskListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.tl)
 	if err != nil {
 		return err
 	}
 	page.tl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *TaskListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -5279,6 +5595,11 @@ func (page TaskListPage) Values() []ProjectTask {
 		return nil
 	}
 	return *page.tl.Value
+}
+
+// Creates a new instance of the TaskListPage type.
+func NewTaskListPage(getNextPage func(context.Context, TaskList) (TaskList, error)) TaskListPage {
+	return TaskListPage{fn: getNextPage}
 }
 
 // TrackedResource ARM tracked top level resource.
@@ -5316,8 +5637,8 @@ func (tr TrackedResource) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// ValidateMigrationInputSQLServerSQLMITaskInput input for task that validates migration input for SQL to Azure SQL
-// Managed Instance
+// ValidateMigrationInputSQLServerSQLMITaskInput input for task that validates migration input for SQL to
+// Azure SQL Managed Instance
 type ValidateMigrationInputSQLServerSQLMITaskInput struct {
 	// TargetConnectionInfo - Information for connecting to target
 	TargetConnectionInfo *SQLConnectionInfo `json:"targetConnectionInfo,omitempty"`
@@ -5329,8 +5650,8 @@ type ValidateMigrationInputSQLServerSQLMITaskInput struct {
 	BackupBlobShare *BlobShare `json:"backupBlobShare,omitempty"`
 }
 
-// ValidateMigrationInputSQLServerSQLMITaskOutput output for task that validates migration input for SQL to Azure
-// SQL Managed Instance migrations
+// ValidateMigrationInputSQLServerSQLMITaskOutput output for task that validates migration input for SQL to
+// Azure SQL Managed Instance migrations
 type ValidateMigrationInputSQLServerSQLMITaskOutput struct {
 	// ID - Result identifier
 	ID *string `json:"id,omitempty"`
@@ -5346,8 +5667,8 @@ type ValidateMigrationInputSQLServerSQLMITaskOutput struct {
 	BackupStorageAccountErrors *[]ReportableException `json:"backupStorageAccountErrors,omitempty"`
 }
 
-// ValidateMigrationInputSQLServerSQLMITaskProperties properties for task that validates migration input for SQL to
-// Azure SQL Database Managed Instance
+// ValidateMigrationInputSQLServerSQLMITaskProperties properties for task that validates migration input
+// for SQL to Azure SQL Database Managed Instance
 type ValidateMigrationInputSQLServerSQLMITaskProperties struct {
 	// Input - Task input
 	Input *ValidateMigrationInputSQLServerSQLMITaskInput `json:"input,omitempty"`

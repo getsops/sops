@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ClusterHealthsClient is the client for the ClusterHealths methods of the Servicefabric service.
 type ClusterHealthsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewClusterHealthsClient creates an instance of the ClusterHealthsClient client.
 func NewClusterHealthsClient(timeout *int32) ClusterHealthsClient {
 	return NewClusterHealthsClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewClusterHealthsClientWithBaseURI creates an instance of the ClusterHealthsClient client.
 func NewClusterHealthsClientWithBaseURI(baseURI string, timeout *int32) ClusterHealthsClient {
 	return ClusterHealthsClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get cluster healths
 // Parameters:
 // eventsHealthStateFilter - the filter of the events health state
@@ -66,6 +70,7 @@ func (client ClusterHealthsClient) Get(ctx context.Context, eventsHealthStateFil
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client ClusterHealthsClient) GetPreparer(ctx context.Context, eventsHealthStateFilter string, nodesHealthStateFilter string, applicationsHealthStateFilter string) (*http.Request, error) {
 	const APIVersion = "1.0.0"
@@ -93,6 +98,7 @@ func (client ClusterHealthsClient) GetPreparer(ctx context.Context, eventsHealth
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ClusterHealthsClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -100,6 +106,7 @@ func (client ClusterHealthsClient) GetSender(req *http.Request) (*http.Response,
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client ClusterHealthsClient) GetResponder(resp *http.Response) (result ClusterHealth, err error) {
@@ -113,6 +120,7 @@ func (client ClusterHealthsClient) GetResponder(resp *http.Response) (result Clu
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Send report cluster healths
 // Parameters:
 // clusterHealthReport - the report of the cluster health
@@ -138,6 +146,7 @@ func (client ClusterHealthsClient) Send(ctx context.Context, clusterHealthReport
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SendPreparer prepares the Send request.
 func (client ClusterHealthsClient) SendPreparer(ctx context.Context, clusterHealthReport ClusterHealthReport) (*http.Request, error) {
 	const APIVersion = "1.0.0"
@@ -158,6 +167,7 @@ func (client ClusterHealthsClient) SendPreparer(ctx context.Context, clusterHeal
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SendSender sends the Send request. The method will close the
 // http.Response Body if it receives an error.
 func (client ClusterHealthsClient) SendSender(req *http.Request) (*http.Response, error) {
@@ -165,6 +175,7 @@ func (client ClusterHealthsClient) SendSender(req *http.Request) (*http.Response
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SendResponder handles the response to the Send request. The method always
 // closes the http.Response Body.
 func (client ClusterHealthsClient) SendResponder(resp *http.Response) (result String, err error) {

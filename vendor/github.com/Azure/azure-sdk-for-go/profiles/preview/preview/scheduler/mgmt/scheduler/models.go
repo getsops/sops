@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,15 +19,16 @@
 
 package scheduler
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/scheduler/mgmt/2014-08-01-preview/scheduler"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/preview/scheduler/mgmt/2014-08-01-preview/scheduler"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type JobCollectionsClient = original.JobCollectionsClient
-type JobsClient = original.JobsClient
 type DayOfWeek = original.DayOfWeek
 
 const (
@@ -144,6 +145,7 @@ const (
 	Standard SkuDefinition = original.Standard
 )
 
+type BaseClient = original.BaseClient
 type BasicAuthentication = original.BasicAuthentication
 type ClientCertAuthentication = original.ClientCertAuthentication
 type HTTPAuthentication = original.HTTPAuthentication
@@ -155,6 +157,7 @@ type JobCollectionListResultIterator = original.JobCollectionListResultIterator
 type JobCollectionListResultPage = original.JobCollectionListResultPage
 type JobCollectionProperties = original.JobCollectionProperties
 type JobCollectionQuota = original.JobCollectionQuota
+type JobCollectionsClient = original.JobCollectionsClient
 type JobDefinition = original.JobDefinition
 type JobErrorAction = original.JobErrorAction
 type JobHistoryDefinition = original.JobHistoryDefinition
@@ -173,6 +176,7 @@ type JobRecurrenceSchedule = original.JobRecurrenceSchedule
 type JobRecurrenceScheduleMonthlyOccurrence = original.JobRecurrenceScheduleMonthlyOccurrence
 type JobStateFilter = original.JobStateFilter
 type JobStatus = original.JobStatus
+type JobsClient = original.JobsClient
 type OAuthAuthentication = original.OAuthAuthentication
 type RetryPolicy = original.RetryPolicy
 type ServiceBusAuthentication = original.ServiceBusAuthentication
@@ -186,8 +190,11 @@ type StorageQueueMessage = original.StorageQueueMessage
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func NewJobCollectionListResultIterator(page JobCollectionListResultPage) JobCollectionListResultIterator {
+	return original.NewJobCollectionListResultIterator(page)
+}
+func NewJobCollectionListResultPage(getNextPage func(context.Context, JobCollectionListResult) (JobCollectionListResult, error)) JobCollectionListResultPage {
+	return original.NewJobCollectionListResultPage(getNextPage)
 }
 func NewJobCollectionsClient(subscriptionID string) JobCollectionsClient {
 	return original.NewJobCollectionsClient(subscriptionID)
@@ -195,11 +202,26 @@ func NewJobCollectionsClient(subscriptionID string) JobCollectionsClient {
 func NewJobCollectionsClientWithBaseURI(baseURI string, subscriptionID string) JobCollectionsClient {
 	return original.NewJobCollectionsClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewJobHistoryListResultIterator(page JobHistoryListResultPage) JobHistoryListResultIterator {
+	return original.NewJobHistoryListResultIterator(page)
+}
+func NewJobHistoryListResultPage(getNextPage func(context.Context, JobHistoryListResult) (JobHistoryListResult, error)) JobHistoryListResultPage {
+	return original.NewJobHistoryListResultPage(getNextPage)
+}
+func NewJobListResultIterator(page JobListResultPage) JobListResultIterator {
+	return original.NewJobListResultIterator(page)
+}
+func NewJobListResultPage(getNextPage func(context.Context, JobListResult) (JobListResult, error)) JobListResultPage {
+	return original.NewJobListResultPage(getNextPage)
+}
 func NewJobsClient(subscriptionID string) JobsClient {
 	return original.NewJobsClient(subscriptionID)
 }
 func NewJobsClientWithBaseURI(baseURI string, subscriptionID string) JobsClient {
 	return original.NewJobsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleDayOfWeekValues() []DayOfWeek {
 	return original.PossibleDayOfWeekValues()

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -51,6 +52,16 @@ func NewBackupLongTermRetentionPoliciesClientWithBaseURI(baseURI string, subscri
 // databaseName - the name of the database
 // parameters - the required parameters to update a backup long term retention policy
 func (client BackupLongTermRetentionPoliciesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, databaseName string, parameters BackupLongTermRetentionPolicy) (result BackupLongTermRetentionPoliciesCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BackupLongTermRetentionPoliciesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.BackupLongTermRetentionPolicyProperties", Name: validation.Null, Rule: false,
@@ -107,10 +118,6 @@ func (client BackupLongTermRetentionPoliciesClient) CreateOrUpdateSender(req *ht
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -135,6 +142,16 @@ func (client BackupLongTermRetentionPoliciesClient) CreateOrUpdateResponder(resp
 // serverName - the name of the server.
 // databaseName - the name of the database.
 func (client BackupLongTermRetentionPoliciesClient) Get(ctx context.Context, resourceGroupName string, serverName string, databaseName string) (result BackupLongTermRetentionPolicy, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BackupLongTermRetentionPoliciesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, databaseName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.BackupLongTermRetentionPoliciesClient", "Get", nil, "Failure preparing request")
@@ -206,6 +223,16 @@ func (client BackupLongTermRetentionPoliciesClient) GetResponder(resp *http.Resp
 // serverName - the name of the server.
 // databaseName - the name of the database.
 func (client BackupLongTermRetentionPoliciesClient) ListByDatabase(ctx context.Context, resourceGroupName string, serverName string, databaseName string) (result BackupLongTermRetentionPolicyListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BackupLongTermRetentionPoliciesClient.ListByDatabase")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByDatabasePreparer(ctx, resourceGroupName, serverName, databaseName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.BackupLongTermRetentionPoliciesClient", "ListByDatabase", nil, "Failure preparing request")

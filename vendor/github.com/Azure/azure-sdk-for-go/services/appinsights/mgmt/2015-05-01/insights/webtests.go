@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewWebTestsClientWithBaseURI(baseURI string, subscriptionID string) WebTest
 // webTestDefinition - properties that need to be specified to create or update an Application Insights web
 // test definition.
 func (client WebTestsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, webTestName string, webTestDefinition WebTest) (result WebTest, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WebTestsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: webTestDefinition,
 			Constraints: []validation.Constraint{{Target: "webTestDefinition.WebTestProperties", Name: validation.Null, Rule: false,
@@ -126,6 +137,16 @@ func (client WebTestsClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // resourceGroupName - the name of the resource group.
 // webTestName - the name of the Application Insights webtest resource.
 func (client WebTestsClient) Delete(ctx context.Context, resourceGroupName string, webTestName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WebTestsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, webTestName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.WebTestsClient", "Delete", nil, "Failure preparing request")
@@ -192,6 +213,16 @@ func (client WebTestsClient) DeleteResponder(resp *http.Response) (result autore
 // resourceGroupName - the name of the resource group.
 // webTestName - the name of the Application Insights webtest resource.
 func (client WebTestsClient) Get(ctx context.Context, resourceGroupName string, webTestName string) (result WebTest, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WebTestsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, webTestName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.WebTestsClient", "Get", nil, "Failure preparing request")
@@ -254,8 +285,18 @@ func (client WebTestsClient) GetResponder(resp *http.Response) (result WebTest, 
 	return
 }
 
-// List get all Application Insights web test alerts definitioned within a subscription.
+// List get all Application Insights web test alerts definitions within a subscription.
 func (client WebTestsClient) List(ctx context.Context) (result WebTestListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WebTestsClient.List")
+		defer func() {
+			sc := -1
+			if result.wtlr.Response.Response != nil {
+				sc = result.wtlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -318,8 +359,8 @@ func (client WebTestsClient) ListResponder(resp *http.Response) (result WebTestL
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client WebTestsClient) listNextResults(lastResults WebTestListResult) (result WebTestListResult, err error) {
-	req, err := lastResults.webTestListResultPreparer()
+func (client WebTestsClient) listNextResults(ctx context.Context, lastResults WebTestListResult) (result WebTestListResult, err error) {
+	req, err := lastResults.webTestListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "insights.WebTestsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -340,6 +381,16 @@ func (client WebTestsClient) listNextResults(lastResults WebTestListResult) (res
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WebTestsClient) ListComplete(ctx context.Context) (result WebTestListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WebTestsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -349,6 +400,16 @@ func (client WebTestsClient) ListComplete(ctx context.Context) (result WebTestLi
 // componentName - the name of the Application Insights component resource.
 // resourceGroupName - the name of the resource group.
 func (client WebTestsClient) ListByComponent(ctx context.Context, componentName string, resourceGroupName string) (result WebTestListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WebTestsClient.ListByComponent")
+		defer func() {
+			sc := -1
+			if result.wtlr.Response.Response != nil {
+				sc = result.wtlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByComponentNextResults
 	req, err := client.ListByComponentPreparer(ctx, componentName, resourceGroupName)
 	if err != nil {
@@ -413,8 +474,8 @@ func (client WebTestsClient) ListByComponentResponder(resp *http.Response) (resu
 }
 
 // listByComponentNextResults retrieves the next set of results, if any.
-func (client WebTestsClient) listByComponentNextResults(lastResults WebTestListResult) (result WebTestListResult, err error) {
-	req, err := lastResults.webTestListResultPreparer()
+func (client WebTestsClient) listByComponentNextResults(ctx context.Context, lastResults WebTestListResult) (result WebTestListResult, err error) {
+	req, err := lastResults.webTestListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "insights.WebTestsClient", "listByComponentNextResults", nil, "Failure preparing next results request")
 	}
@@ -435,6 +496,16 @@ func (client WebTestsClient) listByComponentNextResults(lastResults WebTestListR
 
 // ListByComponentComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WebTestsClient) ListByComponentComplete(ctx context.Context, componentName string, resourceGroupName string) (result WebTestListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WebTestsClient.ListByComponent")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByComponent(ctx, componentName, resourceGroupName)
 	return
 }
@@ -443,6 +514,16 @@ func (client WebTestsClient) ListByComponentComplete(ctx context.Context, compon
 // Parameters:
 // resourceGroupName - the name of the resource group.
 func (client WebTestsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result WebTestListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WebTestsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.wtlr.Response.Response != nil {
+				sc = result.wtlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -506,8 +587,8 @@ func (client WebTestsClient) ListByResourceGroupResponder(resp *http.Response) (
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client WebTestsClient) listByResourceGroupNextResults(lastResults WebTestListResult) (result WebTestListResult, err error) {
-	req, err := lastResults.webTestListResultPreparer()
+func (client WebTestsClient) listByResourceGroupNextResults(ctx context.Context, lastResults WebTestListResult) (result WebTestListResult, err error) {
+	req, err := lastResults.webTestListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "insights.WebTestsClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -528,6 +609,16 @@ func (client WebTestsClient) listByResourceGroupNextResults(lastResults WebTestL
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WebTestsClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result WebTestListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WebTestsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -538,6 +629,16 @@ func (client WebTestsClient) ListByResourceGroupComplete(ctx context.Context, re
 // webTestName - the name of the Application Insights webtest resource.
 // webTestTags - updated tag information to set into the web test instance.
 func (client WebTestsClient) UpdateTags(ctx context.Context, resourceGroupName string, webTestName string, webTestTags TagsResource) (result WebTest, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WebTestsClient.UpdateTags")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateTagsPreparer(ctx, resourceGroupName, webTestName, webTestTags)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.WebTestsClient", "UpdateTags", nil, "Failure preparing request")

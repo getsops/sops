@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ClusterManifestsClient is the client for the ClusterManifests methods of the Servicefabric service.
 type ClusterManifestsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewClusterManifestsClient creates an instance of the ClusterManifestsClient client.
 func NewClusterManifestsClient(timeout *int32) ClusterManifestsClient {
 	return NewClusterManifestsClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewClusterManifestsClientWithBaseURI creates an instance of the ClusterManifestsClient client.
 func NewClusterManifestsClientWithBaseURI(baseURI string, timeout *int32) ClusterManifestsClient {
 	return ClusterManifestsClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get cluster manifests
 func (client ClusterManifestsClient) Get(ctx context.Context) (result String, err error) {
 	req, err := client.GetPreparer(ctx)
@@ -62,6 +66,7 @@ func (client ClusterManifestsClient) Get(ctx context.Context) (result String, er
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client ClusterManifestsClient) GetPreparer(ctx context.Context) (*http.Request, error) {
 	const APIVersion = "1.0.0"
@@ -80,6 +85,7 @@ func (client ClusterManifestsClient) GetPreparer(ctx context.Context) (*http.Req
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ClusterManifestsClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -87,6 +93,7 @@ func (client ClusterManifestsClient) GetSender(req *http.Request) (*http.Respons
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client ClusterManifestsClient) GetResponder(resp *http.Response) (result String, err error) {

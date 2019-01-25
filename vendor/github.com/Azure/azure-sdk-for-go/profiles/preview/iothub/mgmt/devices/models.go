@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,16 +19,16 @@
 
 package devices
 
-import original "github.com/Azure/azure-sdk-for-go/services/iothub/mgmt/2018-04-01/devices"
+import (
+	"context"
 
-type CertificatesClient = original.CertificatesClient
+	original "github.com/Azure/azure-sdk-for-go/services/iothub/mgmt/2018-12-01-preview/devices"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type IotHubResourceClient = original.IotHubResourceClient
 type AccessRights = original.AccessRights
 
 const (
@@ -65,6 +65,13 @@ const (
 	Unknown   EndpointHealthStatus = original.Unknown
 )
 
+type IPFilterActionType = original.IPFilterActionType
+
+const (
+	Accept IPFilterActionType = original.Accept
+	Reject IPFilterActionType = original.Reject
+)
+
 type IotHubNameUnavailabilityReason = original.IotHubNameUnavailabilityReason
 
 const (
@@ -98,13 +105,6 @@ const (
 	Basic    IotHubSkuTier = original.Basic
 	Free     IotHubSkuTier = original.Free
 	Standard IotHubSkuTier = original.Standard
-)
-
-type IPFilterActionType = original.IPFilterActionType
-
-const (
-	Accept IPFilterActionType = original.Accept
-	Reject IPFilterActionType = original.Reject
 )
 
 type JobStatus = original.JobStatus
@@ -167,6 +167,7 @@ const (
 	Undefined TestResultStatus = original.Undefined
 )
 
+type BaseClient = original.BaseClient
 type CertificateBodyDescription = original.CertificateBodyDescription
 type CertificateDescription = original.CertificateDescription
 type CertificateListDescription = original.CertificateListDescription
@@ -174,6 +175,7 @@ type CertificateProperties = original.CertificateProperties
 type CertificatePropertiesWithNonce = original.CertificatePropertiesWithNonce
 type CertificateVerificationDescription = original.CertificateVerificationDescription
 type CertificateWithNonceDescription = original.CertificateWithNonceDescription
+type CertificatesClient = original.CertificatesClient
 type CloudToDeviceProperties = original.CloudToDeviceProperties
 type EndpointHealthData = original.EndpointHealthData
 type EndpointHealthDataListResult = original.EndpointHealthDataListResult
@@ -188,6 +190,7 @@ type EventHubProperties = original.EventHubProperties
 type ExportDevicesRequest = original.ExportDevicesRequest
 type FallbackRouteProperties = original.FallbackRouteProperties
 type FeedbackProperties = original.FeedbackProperties
+type IPFilterRule = original.IPFilterRule
 type ImportDevicesRequest = original.ImportDevicesRequest
 type IotHubCapacity = original.IotHubCapacity
 type IotHubDescription = original.IotHubDescription
@@ -196,10 +199,12 @@ type IotHubDescriptionListResultIterator = original.IotHubDescriptionListResultI
 type IotHubDescriptionListResultPage = original.IotHubDescriptionListResultPage
 type IotHubNameAvailabilityInfo = original.IotHubNameAvailabilityInfo
 type IotHubProperties = original.IotHubProperties
+type IotHubPropertiesDeviceStreams = original.IotHubPropertiesDeviceStreams
 type IotHubQuotaMetricInfo = original.IotHubQuotaMetricInfo
 type IotHubQuotaMetricInfoListResult = original.IotHubQuotaMetricInfoListResult
 type IotHubQuotaMetricInfoListResultIterator = original.IotHubQuotaMetricInfoListResultIterator
 type IotHubQuotaMetricInfoListResultPage = original.IotHubQuotaMetricInfoListResultPage
+type IotHubResourceClient = original.IotHubResourceClient
 type IotHubResourceCreateOrUpdateFuture = original.IotHubResourceCreateOrUpdateFuture
 type IotHubResourceDeleteFuture = original.IotHubResourceDeleteFuture
 type IotHubResourceUpdateFuture = original.IotHubResourceUpdateFuture
@@ -208,7 +213,6 @@ type IotHubSkuDescriptionListResult = original.IotHubSkuDescriptionListResult
 type IotHubSkuDescriptionListResultIterator = original.IotHubSkuDescriptionListResultIterator
 type IotHubSkuDescriptionListResultPage = original.IotHubSkuDescriptionListResultPage
 type IotHubSkuInfo = original.IotHubSkuInfo
-type IPFilterRule = original.IPFilterRule
 type JobResponse = original.JobResponse
 type JobResponseListResult = original.JobResponseListResult
 type JobResponseListResultIterator = original.JobResponseListResultIterator
@@ -222,9 +226,11 @@ type OperationInputs = original.OperationInputs
 type OperationListResult = original.OperationListResult
 type OperationListResultIterator = original.OperationListResultIterator
 type OperationListResultPage = original.OperationListResultPage
+type OperationsClient = original.OperationsClient
 type OperationsMonitoringProperties = original.OperationsMonitoringProperties
 type RegistryStatistics = original.RegistryStatistics
 type Resource = original.Resource
+type ResourceProviderCommonClient = original.ResourceProviderCommonClient
 type RouteCompilationError = original.RouteCompilationError
 type RouteErrorPosition = original.RouteErrorPosition
 type RouteErrorRange = original.RouteErrorRange
@@ -252,26 +258,84 @@ type TestRouteResult = original.TestRouteResult
 type TestRouteResultDetails = original.TestRouteResultDetails
 type UserSubscriptionQuota = original.UserSubscriptionQuota
 type UserSubscriptionQuotaListResult = original.UserSubscriptionQuotaListResult
-type OperationsClient = original.OperationsClient
-type ResourceProviderCommonClient = original.ResourceProviderCommonClient
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
 func NewCertificatesClient(subscriptionID string) CertificatesClient {
 	return original.NewCertificatesClient(subscriptionID)
 }
 func NewCertificatesClientWithBaseURI(baseURI string, subscriptionID string) CertificatesClient {
 	return original.NewCertificatesClientWithBaseURI(baseURI, subscriptionID)
 }
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
+func NewEndpointHealthDataListResultIterator(page EndpointHealthDataListResultPage) EndpointHealthDataListResultIterator {
+	return original.NewEndpointHealthDataListResultIterator(page)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func NewEndpointHealthDataListResultPage(getNextPage func(context.Context, EndpointHealthDataListResult) (EndpointHealthDataListResult, error)) EndpointHealthDataListResultPage {
+	return original.NewEndpointHealthDataListResultPage(getNextPage)
+}
+func NewEventHubConsumerGroupsListResultIterator(page EventHubConsumerGroupsListResultPage) EventHubConsumerGroupsListResultIterator {
+	return original.NewEventHubConsumerGroupsListResultIterator(page)
+}
+func NewEventHubConsumerGroupsListResultPage(getNextPage func(context.Context, EventHubConsumerGroupsListResult) (EventHubConsumerGroupsListResult, error)) EventHubConsumerGroupsListResultPage {
+	return original.NewEventHubConsumerGroupsListResultPage(getNextPage)
+}
+func NewIotHubDescriptionListResultIterator(page IotHubDescriptionListResultPage) IotHubDescriptionListResultIterator {
+	return original.NewIotHubDescriptionListResultIterator(page)
+}
+func NewIotHubDescriptionListResultPage(getNextPage func(context.Context, IotHubDescriptionListResult) (IotHubDescriptionListResult, error)) IotHubDescriptionListResultPage {
+	return original.NewIotHubDescriptionListResultPage(getNextPage)
+}
+func NewIotHubQuotaMetricInfoListResultIterator(page IotHubQuotaMetricInfoListResultPage) IotHubQuotaMetricInfoListResultIterator {
+	return original.NewIotHubQuotaMetricInfoListResultIterator(page)
+}
+func NewIotHubQuotaMetricInfoListResultPage(getNextPage func(context.Context, IotHubQuotaMetricInfoListResult) (IotHubQuotaMetricInfoListResult, error)) IotHubQuotaMetricInfoListResultPage {
+	return original.NewIotHubQuotaMetricInfoListResultPage(getNextPage)
 }
 func NewIotHubResourceClient(subscriptionID string) IotHubResourceClient {
 	return original.NewIotHubResourceClient(subscriptionID)
 }
 func NewIotHubResourceClientWithBaseURI(baseURI string, subscriptionID string) IotHubResourceClient {
 	return original.NewIotHubResourceClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewIotHubSkuDescriptionListResultIterator(page IotHubSkuDescriptionListResultPage) IotHubSkuDescriptionListResultIterator {
+	return original.NewIotHubSkuDescriptionListResultIterator(page)
+}
+func NewIotHubSkuDescriptionListResultPage(getNextPage func(context.Context, IotHubSkuDescriptionListResult) (IotHubSkuDescriptionListResult, error)) IotHubSkuDescriptionListResultPage {
+	return original.NewIotHubSkuDescriptionListResultPage(getNextPage)
+}
+func NewJobResponseListResultIterator(page JobResponseListResultPage) JobResponseListResultIterator {
+	return original.NewJobResponseListResultIterator(page)
+}
+func NewJobResponseListResultPage(getNextPage func(context.Context, JobResponseListResult) (JobResponseListResult, error)) JobResponseListResultPage {
+	return original.NewJobResponseListResultPage(getNextPage)
+}
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return original.NewOperationListResultIterator(page)
+}
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return original.NewOperationListResultPage(getNextPage)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewResourceProviderCommonClient(subscriptionID string) ResourceProviderCommonClient {
+	return original.NewResourceProviderCommonClient(subscriptionID)
+}
+func NewResourceProviderCommonClientWithBaseURI(baseURI string, subscriptionID string) ResourceProviderCommonClient {
+	return original.NewResourceProviderCommonClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewSharedAccessSignatureAuthorizationRuleListResultIterator(page SharedAccessSignatureAuthorizationRuleListResultPage) SharedAccessSignatureAuthorizationRuleListResultIterator {
+	return original.NewSharedAccessSignatureAuthorizationRuleListResultIterator(page)
+}
+func NewSharedAccessSignatureAuthorizationRuleListResultPage(getNextPage func(context.Context, SharedAccessSignatureAuthorizationRuleListResult) (SharedAccessSignatureAuthorizationRuleListResult, error)) SharedAccessSignatureAuthorizationRuleListResultPage {
+	return original.NewSharedAccessSignatureAuthorizationRuleListResultPage(getNextPage)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleAccessRightsValues() []AccessRights {
 	return original.PossibleAccessRightsValues()
@@ -282,20 +346,20 @@ func PossibleCapabilitiesValues() []Capabilities {
 func PossibleEndpointHealthStatusValues() []EndpointHealthStatus {
 	return original.PossibleEndpointHealthStatusValues()
 }
+func PossibleIPFilterActionTypeValues() []IPFilterActionType {
+	return original.PossibleIPFilterActionTypeValues()
+}
 func PossibleIotHubNameUnavailabilityReasonValues() []IotHubNameUnavailabilityReason {
 	return original.PossibleIotHubNameUnavailabilityReasonValues()
 }
 func PossibleIotHubScaleTypeValues() []IotHubScaleType {
 	return original.PossibleIotHubScaleTypeValues()
 }
-func PossibleIotHubSkuValues() []IotHubSku {
-	return original.PossibleIotHubSkuValues()
-}
 func PossibleIotHubSkuTierValues() []IotHubSkuTier {
 	return original.PossibleIotHubSkuTierValues()
 }
-func PossibleIPFilterActionTypeValues() []IPFilterActionType {
-	return original.PossibleIPFilterActionTypeValues()
+func PossibleIotHubSkuValues() []IotHubSku {
+	return original.PossibleIotHubSkuValues()
 }
 func PossibleJobStatusValues() []JobStatus {
 	return original.PossibleJobStatusValues()
@@ -314,18 +378,6 @@ func PossibleRoutingSourceValues() []RoutingSource {
 }
 func PossibleTestResultStatusValues() []TestResultStatus {
 	return original.PossibleTestResultStatusValues()
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewResourceProviderCommonClient(subscriptionID string) ResourceProviderCommonClient {
-	return original.NewResourceProviderCommonClient(subscriptionID)
-}
-func NewResourceProviderCommonClientWithBaseURI(baseURI string, subscriptionID string) ResourceProviderCommonClient {
-	return original.NewResourceProviderCommonClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

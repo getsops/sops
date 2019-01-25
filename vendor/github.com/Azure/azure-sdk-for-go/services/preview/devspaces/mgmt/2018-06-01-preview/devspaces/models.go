@@ -18,12 +18,17 @@ package devspaces
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/devspaces/mgmt/2018-06-01-preview/devspaces"
 
 // InstanceType enumerates the values for instance type.
 type InstanceType string
@@ -48,6 +53,8 @@ const (
 	Canceled ProvisioningState = "Canceled"
 	// Creating ...
 	Creating ProvisioningState = "Creating"
+	// Deleted ...
+	Deleted ProvisioningState = "Deleted"
 	// Deleting ...
 	Deleting ProvisioningState = "Deleting"
 	// Failed ...
@@ -60,7 +67,7 @@ const (
 
 // PossibleProvisioningStateValues returns an array of possible values for the ProvisioningState const type.
 func PossibleProvisioningStateValues() []ProvisioningState {
-	return []ProvisioningState{Canceled, Creating, Deleting, Failed, Succeeded, Updating}
+	return []ProvisioningState{Canceled, Creating, Deleted, Deleting, Failed, Succeeded, Updating}
 }
 
 // SkuTier enumerates the values for sku tier.
@@ -74,6 +81,15 @@ const (
 // PossibleSkuTierValues returns an array of possible values for the SkuTier const type.
 func PossibleSkuTierValues() []SkuTier {
 	return []SkuTier{Standard}
+}
+
+// ContainerHostMapping container host mapping object specifying the Container host resource ID and its
+// associated Controller resource.
+type ContainerHostMapping struct {
+	// ContainerHostResourceID - ARM ID of the Container Host resource
+	ContainerHostResourceID *string `json:"containerHostResourceId,omitempty"`
+	// MappedControllerResourceID - ARM ID of the mapped Controller resource
+	MappedControllerResourceID *string `json:"mappedControllerResourceId,omitempty"`
 }
 
 // Controller ...
@@ -281,20 +297,37 @@ type ControllerListIterator struct {
 	page ControllerListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ControllerListIterator) Next() error {
+func (iter *ControllerListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ControllerListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ControllerListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -316,6 +349,11 @@ func (iter ControllerListIterator) Value() Controller {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ControllerListIterator type.
+func NewControllerListIterator(page ControllerListPage) ControllerListIterator {
+	return ControllerListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (cl ControllerList) IsEmpty() bool {
 	return cl.Value == nil || len(*cl.Value) == 0
@@ -323,11 +361,11 @@ func (cl ControllerList) IsEmpty() bool {
 
 // controllerListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (cl ControllerList) controllerListPreparer() (*http.Request, error) {
+func (cl ControllerList) controllerListPreparer(ctx context.Context) (*http.Request, error) {
 	if cl.NextLink == nil || len(to.String(cl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(cl.NextLink)))
@@ -335,19 +373,36 @@ func (cl ControllerList) controllerListPreparer() (*http.Request, error) {
 
 // ControllerListPage contains a page of Controller values.
 type ControllerListPage struct {
-	fn func(ControllerList) (ControllerList, error)
+	fn func(context.Context, ControllerList) (ControllerList, error)
 	cl ControllerList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ControllerListPage) Next() error {
-	next, err := page.fn(page.cl)
+func (page *ControllerListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ControllerListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.cl)
 	if err != nil {
 		return err
 	}
 	page.cl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ControllerListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -368,9 +423,14 @@ func (page ControllerListPage) Values() []Controller {
 	return *page.cl.Value
 }
 
+// Creates a new instance of the ControllerListPage type.
+func NewControllerListPage(getNextPage func(context.Context, ControllerList) (ControllerList, error)) ControllerListPage {
+	return ControllerListPage{fn: getNextPage}
+}
+
 // ControllerProperties ...
 type ControllerProperties struct {
-	// ProvisioningState - Provisioning state of the Azure Dev Spaces Controller. Possible values include: 'Succeeded', 'Failed', 'Canceled', 'Updating', 'Creating', 'Deleting'
+	// ProvisioningState - Provisioning state of the Azure Dev Spaces Controller. Possible values include: 'Succeeded', 'Failed', 'Canceled', 'Updating', 'Creating', 'Deleting', 'Deleted'
 	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
 	// HostSuffix - DNS suffix for public endpoints running in the Azure Dev Spaces Controller.
 	HostSuffix *string `json:"hostSuffix,omitempty"`
@@ -382,7 +442,8 @@ type ControllerProperties struct {
 	TargetContainerHostCredentialsBase64 *string `json:"targetContainerHostCredentialsBase64,omitempty"`
 }
 
-// ControllersCreateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ControllersCreateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ControllersCreateFuture struct {
 	azure.Future
 }
@@ -410,7 +471,8 @@ func (future *ControllersCreateFuture) Result(client ControllersClient) (c Contr
 	return
 }
 
-// ControllersDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ControllersDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ControllersDeleteFuture struct {
 	azure.Future
 }
@@ -457,14 +519,14 @@ type ErrorDetails struct {
 	Target *string `json:"target,omitempty"`
 }
 
-// ErrorResponse error response indicates that the service is not able to process the incoming request. The reason
-// is provided in the error message.
+// ErrorResponse error response indicates that the service is not able to process the incoming request. The
+// reason is provided in the error message.
 type ErrorResponse struct {
 	// Error - The details of the error.
 	Error *ErrorDetails `json:"error,omitempty"`
 }
 
-// KubernetesConnectionDetails ...
+// KubernetesConnectionDetails contains information used to connect to a Kubernetes cluster
 type KubernetesConnectionDetails struct {
 	// KubeConfig - Gets the kubeconfig for the cluster.
 	KubeConfig *string `json:"kubeConfig,omitempty"`
@@ -500,13 +562,15 @@ func (kcd KubernetesConnectionDetails) AsBasicOrchestratorSpecificConnectionDeta
 	return &kcd, true
 }
 
-// BasicOrchestratorSpecificConnectionDetails ...
+// BasicOrchestratorSpecificConnectionDetails base class for types that supply values used to connect to container
+// orchestrators
 type BasicOrchestratorSpecificConnectionDetails interface {
 	AsKubernetesConnectionDetails() (*KubernetesConnectionDetails, bool)
 	AsOrchestratorSpecificConnectionDetails() (*OrchestratorSpecificConnectionDetails, bool)
 }
 
-// OrchestratorSpecificConnectionDetails ...
+// OrchestratorSpecificConnectionDetails base class for types that supply values used to connect to container
+// orchestrators
 type OrchestratorSpecificConnectionDetails struct {
 	// InstanceType - Possible values include: 'InstanceTypeOrchestratorSpecificConnectionDetails', 'InstanceTypeKubernetes'
 	InstanceType InstanceType `json:"instanceType,omitempty"`
@@ -619,20 +683,37 @@ type ResourceProviderOperationListIterator struct {
 	page ResourceProviderOperationListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResourceProviderOperationListIterator) Next() error {
+func (iter *ResourceProviderOperationListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceProviderOperationListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResourceProviderOperationListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -654,6 +735,11 @@ func (iter ResourceProviderOperationListIterator) Value() ResourceProviderOperat
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResourceProviderOperationListIterator type.
+func NewResourceProviderOperationListIterator(page ResourceProviderOperationListPage) ResourceProviderOperationListIterator {
+	return ResourceProviderOperationListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rpol ResourceProviderOperationList) IsEmpty() bool {
 	return rpol.Value == nil || len(*rpol.Value) == 0
@@ -661,11 +747,11 @@ func (rpol ResourceProviderOperationList) IsEmpty() bool {
 
 // resourceProviderOperationListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rpol ResourceProviderOperationList) resourceProviderOperationListPreparer() (*http.Request, error) {
+func (rpol ResourceProviderOperationList) resourceProviderOperationListPreparer(ctx context.Context) (*http.Request, error) {
 	if rpol.NextLink == nil || len(to.String(rpol.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rpol.NextLink)))
@@ -673,19 +759,36 @@ func (rpol ResourceProviderOperationList) resourceProviderOperationListPreparer(
 
 // ResourceProviderOperationListPage contains a page of ResourceProviderOperationDefinition values.
 type ResourceProviderOperationListPage struct {
-	fn   func(ResourceProviderOperationList) (ResourceProviderOperationList, error)
+	fn   func(context.Context, ResourceProviderOperationList) (ResourceProviderOperationList, error)
 	rpol ResourceProviderOperationList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResourceProviderOperationListPage) Next() error {
-	next, err := page.fn(page.rpol)
+func (page *ResourceProviderOperationListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceProviderOperationListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rpol)
 	if err != nil {
 		return err
 	}
 	page.rpol = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResourceProviderOperationListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -704,6 +807,17 @@ func (page ResourceProviderOperationListPage) Values() []ResourceProviderOperati
 		return nil
 	}
 	return *page.rpol.Value
+}
+
+// Creates a new instance of the ResourceProviderOperationListPage type.
+func NewResourceProviderOperationListPage(getNextPage func(context.Context, ResourceProviderOperationList) (ResourceProviderOperationList, error)) ResourceProviderOperationListPage {
+	return ResourceProviderOperationListPage{fn: getNextPage}
+}
+
+// SetObject ...
+type SetObject struct {
+	autorest.Response `json:"-"`
+	Value             interface{} `json:"value,omitempty"`
 }
 
 // Sku model representing SKU for Azure Dev Spaces Controller.

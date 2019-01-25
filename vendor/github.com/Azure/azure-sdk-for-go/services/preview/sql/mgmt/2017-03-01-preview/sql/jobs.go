@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewJobsClientWithBaseURI(baseURI string, subscriptionID string) JobsClient 
 // jobName - the name of the job to get.
 // parameters - the requested job state.
 func (client JobsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string, parameters Job) (result Job, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serverName, jobAgentName, jobName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -124,6 +135,16 @@ func (client JobsClient) CreateOrUpdateResponder(resp *http.Response) (result Jo
 // jobAgentName - the name of the job agent.
 // jobName - the name of the job to delete.
 func (client JobsClient) Delete(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, serverName, jobAgentName, jobName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobsClient", "Delete", nil, "Failure preparing request")
@@ -195,6 +216,16 @@ func (client JobsClient) DeleteResponder(resp *http.Response) (result autorest.R
 // jobAgentName - the name of the job agent.
 // jobName - the name of the job to get.
 func (client JobsClient) Get(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string) (result Job, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, jobAgentName, jobName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobsClient", "Get", nil, "Failure preparing request")
@@ -266,6 +297,16 @@ func (client JobsClient) GetResponder(resp *http.Response) (result Job, err erro
 // serverName - the name of the server.
 // jobAgentName - the name of the job agent.
 func (client JobsClient) ListByAgent(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string) (result JobListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.ListByAgent")
+		defer func() {
+			sc := -1
+			if result.jlr.Response.Response != nil {
+				sc = result.jlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByAgentNextResults
 	req, err := client.ListByAgentPreparer(ctx, resourceGroupName, serverName, jobAgentName)
 	if err != nil {
@@ -331,8 +372,8 @@ func (client JobsClient) ListByAgentResponder(resp *http.Response) (result JobLi
 }
 
 // listByAgentNextResults retrieves the next set of results, if any.
-func (client JobsClient) listByAgentNextResults(lastResults JobListResult) (result JobListResult, err error) {
-	req, err := lastResults.jobListResultPreparer()
+func (client JobsClient) listByAgentNextResults(ctx context.Context, lastResults JobListResult) (result JobListResult, err error) {
+	req, err := lastResults.jobListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.JobsClient", "listByAgentNextResults", nil, "Failure preparing next results request")
 	}
@@ -353,6 +394,16 @@ func (client JobsClient) listByAgentNextResults(lastResults JobListResult) (resu
 
 // ListByAgentComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobsClient) ListByAgentComplete(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string) (result JobListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.ListByAgent")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByAgent(ctx, resourceGroupName, serverName, jobAgentName)
 	return
 }

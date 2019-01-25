@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -49,6 +50,16 @@ func NewSourceControlSyncJobClientWithBaseURI(baseURI string, subscriptionID str
 // sourceControlSyncJobID - the source control sync job id.
 // parameters - the parameters supplied to the create source control sync job operation.
 func (client SourceControlSyncJobClient) Create(ctx context.Context, resourceGroupName string, automationAccountName string, sourceControlName string, sourceControlSyncJobID uuid.UUID, parameters SourceControlSyncJobCreateParameters) (result SourceControlSyncJob, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SourceControlSyncJobClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -135,6 +146,16 @@ func (client SourceControlSyncJobClient) CreateResponder(resp *http.Response) (r
 // sourceControlName - the source control name.
 // sourceControlSyncJobID - the source control sync job id.
 func (client SourceControlSyncJobClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string, sourceControlName string, sourceControlSyncJobID uuid.UUID) (result SourceControlSyncJobByID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SourceControlSyncJobClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -214,6 +235,16 @@ func (client SourceControlSyncJobClient) GetResponder(resp *http.Response) (resu
 // sourceControlName - the source control name.
 // filter - the filter to apply on the operation.
 func (client SourceControlSyncJobClient) ListByAutomationAccount(ctx context.Context, resourceGroupName string, automationAccountName string, sourceControlName string, filter string) (result SourceControlSyncJobListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SourceControlSyncJobClient.ListByAutomationAccount")
+		defer func() {
+			sc := -1
+			if result.scsjlr.Response.Response != nil {
+				sc = result.scsjlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -290,8 +321,8 @@ func (client SourceControlSyncJobClient) ListByAutomationAccountResponder(resp *
 }
 
 // listByAutomationAccountNextResults retrieves the next set of results, if any.
-func (client SourceControlSyncJobClient) listByAutomationAccountNextResults(lastResults SourceControlSyncJobListResult) (result SourceControlSyncJobListResult, err error) {
-	req, err := lastResults.sourceControlSyncJobListResultPreparer()
+func (client SourceControlSyncJobClient) listByAutomationAccountNextResults(ctx context.Context, lastResults SourceControlSyncJobListResult) (result SourceControlSyncJobListResult, err error) {
+	req, err := lastResults.sourceControlSyncJobListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "automation.SourceControlSyncJobClient", "listByAutomationAccountNextResults", nil, "Failure preparing next results request")
 	}
@@ -312,6 +343,16 @@ func (client SourceControlSyncJobClient) listByAutomationAccountNextResults(last
 
 // ListByAutomationAccountComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SourceControlSyncJobClient) ListByAutomationAccountComplete(ctx context.Context, resourceGroupName string, automationAccountName string, sourceControlName string, filter string) (result SourceControlSyncJobListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SourceControlSyncJobClient.ListByAutomationAccount")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByAutomationAccount(ctx, resourceGroupName, automationAccountName, sourceControlName, filter)
 	return
 }

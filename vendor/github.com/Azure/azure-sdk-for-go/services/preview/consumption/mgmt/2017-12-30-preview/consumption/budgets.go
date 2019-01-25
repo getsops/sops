@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewBudgetsClientWithBaseURI(baseURI string, subscriptionID string, name str
 // Parameters:
 // parameters - parameters supplied to the Create Budget operation.
 func (client BudgetsClient) CreateOrUpdate(ctx context.Context, parameters Budget) (result Budget, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BudgetsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.BudgetProperties", Name: validation.Null, Rule: false,
@@ -123,6 +134,16 @@ func (client BudgetsClient) CreateOrUpdateResponder(resp *http.Response) (result
 
 // Delete the operation to delete a budget.
 func (client BudgetsClient) Delete(ctx context.Context) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BudgetsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "consumption.BudgetsClient", "Delete", nil, "Failure preparing request")
@@ -185,6 +206,16 @@ func (client BudgetsClient) DeleteResponder(resp *http.Response) (result autores
 
 // Get gets the budget for a subscription by budget name.
 func (client BudgetsClient) Get(ctx context.Context) (result Budget, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BudgetsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "consumption.BudgetsClient", "Get", nil, "Failure preparing request")
@@ -248,6 +279,16 @@ func (client BudgetsClient) GetResponder(resp *http.Response) (result Budget, er
 
 // List lists all budgets for a subscription.
 func (client BudgetsClient) List(ctx context.Context) (result BudgetsListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BudgetsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "consumption.BudgetsClient", "List", nil, "Failure preparing request")

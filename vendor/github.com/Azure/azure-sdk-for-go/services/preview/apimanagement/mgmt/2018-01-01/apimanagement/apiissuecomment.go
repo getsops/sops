@@ -22,24 +22,29 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // APIIssueCommentClient is the apiManagement Client
 type APIIssueCommentClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewAPIIssueCommentClient creates an instance of the APIIssueCommentClient client.
 func NewAPIIssueCommentClient(subscriptionID string) APIIssueCommentClient {
 	return NewAPIIssueCommentClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewAPIIssueCommentClientWithBaseURI creates an instance of the APIIssueCommentClient client.
 func NewAPIIssueCommentClientWithBaseURI(baseURI string, subscriptionID string) APIIssueCommentClient {
 	return APIIssueCommentClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdate creates a new Comment for the Issue in an API or updates an existing one.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -51,6 +56,16 @@ func NewAPIIssueCommentClientWithBaseURI(baseURI string, subscriptionID string) 
 // ifMatch - eTag of the Issue Entity. ETag should match the current entity state from the header response of
 // the GET request or it should be * for unconditional update.
 func (client APIIssueCommentClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, commentID string, parameters IssueCommentContract, ifMatch string) (result IssueCommentContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueCommentClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -97,6 +112,7 @@ func (client APIIssueCommentClient) CreateOrUpdate(ctx context.Context, resource
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
 func (client APIIssueCommentClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, commentID string, parameters IssueCommentContract, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -127,6 +143,7 @@ func (client APIIssueCommentClient) CreateOrUpdatePreparer(ctx context.Context, 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIIssueCommentClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
@@ -134,6 +151,7 @@ func (client APIIssueCommentClient) CreateOrUpdateSender(req *http.Request) (*ht
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
 // closes the http.Response Body.
 func (client APIIssueCommentClient) CreateOrUpdateResponder(resp *http.Response) (result IssueCommentContract, err error) {
@@ -147,6 +165,7 @@ func (client APIIssueCommentClient) CreateOrUpdateResponder(resp *http.Response)
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Delete deletes the specified comment from an Issue.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -157,6 +176,16 @@ func (client APIIssueCommentClient) CreateOrUpdateResponder(resp *http.Response)
 // ifMatch - eTag of the Issue Entity. ETag should match the current entity state from the header response of
 // the GET request or it should be * for unconditional update.
 func (client APIIssueCommentClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, commentID string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueCommentClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -198,6 +227,7 @@ func (client APIIssueCommentClient) Delete(ctx context.Context, resourceGroupNam
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeletePreparer prepares the Delete request.
 func (client APIIssueCommentClient) DeletePreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, commentID string, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -223,6 +253,7 @@ func (client APIIssueCommentClient) DeletePreparer(ctx context.Context, resource
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIIssueCommentClient) DeleteSender(req *http.Request) (*http.Response, error) {
@@ -230,6 +261,7 @@ func (client APIIssueCommentClient) DeleteSender(req *http.Request) (*http.Respo
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteResponder handles the response to the Delete request. The method always
 // closes the http.Response Body.
 func (client APIIssueCommentClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -242,6 +274,7 @@ func (client APIIssueCommentClient) DeleteResponder(resp *http.Response) (result
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Get gets the details of the issue Comment for an API specified by its identifier.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -250,6 +283,16 @@ func (client APIIssueCommentClient) DeleteResponder(resp *http.Response) (result
 // issueID - issue identifier. Must be unique in the current API Management service instance.
 // commentID - comment identifier within an Issue. Must be unique in the current Issue.
 func (client APIIssueCommentClient) Get(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, commentID string) (result IssueCommentContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueCommentClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -291,6 +334,7 @@ func (client APIIssueCommentClient) Get(ctx context.Context, resourceGroupName s
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetPreparer prepares the Get request.
 func (client APIIssueCommentClient) GetPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, commentID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -315,6 +359,7 @@ func (client APIIssueCommentClient) GetPreparer(ctx context.Context, resourceGro
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIIssueCommentClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -322,6 +367,7 @@ func (client APIIssueCommentClient) GetSender(req *http.Request) (*http.Response
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client APIIssueCommentClient) GetResponder(resp *http.Response) (result IssueCommentContract, err error) {
@@ -335,6 +381,7 @@ func (client APIIssueCommentClient) GetResponder(resp *http.Response) (result Is
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTag gets the entity state (Etag) version of the issue Comment for an API specified by its identifier.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -343,6 +390,16 @@ func (client APIIssueCommentClient) GetResponder(resp *http.Response) (result Is
 // issueID - issue identifier. Must be unique in the current API Management service instance.
 // commentID - comment identifier within an Issue. Must be unique in the current Issue.
 func (client APIIssueCommentClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, commentID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueCommentClient.GetEntityTag")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -384,6 +441,7 @@ func (client APIIssueCommentClient) GetEntityTag(ctx context.Context, resourceGr
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagPreparer prepares the GetEntityTag request.
 func (client APIIssueCommentClient) GetEntityTagPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, commentID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -408,6 +466,7 @@ func (client APIIssueCommentClient) GetEntityTagPreparer(ctx context.Context, re
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagSender sends the GetEntityTag request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIIssueCommentClient) GetEntityTagSender(req *http.Request) (*http.Response, error) {
@@ -415,6 +474,7 @@ func (client APIIssueCommentClient) GetEntityTagSender(req *http.Request) (*http
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagResponder handles the response to the GetEntityTag request. The method always
 // closes the http.Response Body.
 func (client APIIssueCommentClient) GetEntityTagResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -427,6 +487,7 @@ func (client APIIssueCommentClient) GetEntityTagResponder(resp *http.Response) (
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByService lists all comments for the Issue assosiated with the specified API.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -440,6 +501,16 @@ func (client APIIssueCommentClient) GetEntityTagResponder(resp *http.Response) (
 // top - number of records to return.
 // skip - number of records to skip.
 func (client APIIssueCommentClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, filter string, top *int32, skip *int32) (result IssueCommentCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueCommentClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.icc.Response.Response != nil {
+				sc = result.icc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -484,6 +555,7 @@ func (client APIIssueCommentClient) ListByService(ctx context.Context, resourceG
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServicePreparer prepares the ListByService request.
 func (client APIIssueCommentClient) ListByServicePreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -516,6 +588,7 @@ func (client APIIssueCommentClient) ListByServicePreparer(ctx context.Context, r
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceSender sends the ListByService request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIIssueCommentClient) ListByServiceSender(req *http.Request) (*http.Response, error) {
@@ -523,6 +596,7 @@ func (client APIIssueCommentClient) ListByServiceSender(req *http.Request) (*htt
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceResponder handles the response to the ListByService request. The method always
 // closes the http.Response Body.
 func (client APIIssueCommentClient) ListByServiceResponder(resp *http.Response) (result IssueCommentCollection, err error) {
@@ -537,8 +611,8 @@ func (client APIIssueCommentClient) ListByServiceResponder(resp *http.Response) 
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client APIIssueCommentClient) listByServiceNextResults(lastResults IssueCommentCollection) (result IssueCommentCollection, err error) {
-	req, err := lastResults.issueCommentCollectionPreparer()
+func (client APIIssueCommentClient) listByServiceNextResults(ctx context.Context, lastResults IssueCommentCollection) (result IssueCommentCollection, err error) {
+	req, err := lastResults.issueCommentCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.APIIssueCommentClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -557,8 +631,19 @@ func (client APIIssueCommentClient) listByServiceNextResults(lastResults IssueCo
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client APIIssueCommentClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, filter string, top *int32, skip *int32) (result IssueCommentCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueCommentClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, apiid, issueID, filter, top, skip)
 	return
 }

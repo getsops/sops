@@ -25,22 +25,26 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // IntegrationRuntimesClient is the the Azure Data Factory V2 management API provides a RESTful set of web services
 // that interact with Azure Data Factory V2 services.
 type IntegrationRuntimesClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // NewIntegrationRuntimesClient creates an instance of the IntegrationRuntimesClient client.
 func NewIntegrationRuntimesClient(subscriptionID string) IntegrationRuntimesClient {
 	return NewIntegrationRuntimesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // NewIntegrationRuntimesClientWithBaseURI creates an instance of the IntegrationRuntimesClient client.
 func NewIntegrationRuntimesClientWithBaseURI(baseURI string, subscriptionID string) IntegrationRuntimesClient {
 	return IntegrationRuntimesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // CreateOrUpdate creates or updates an integration runtime.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -89,6 +93,7 @@ func (client IntegrationRuntimesClient) CreateOrUpdate(ctx context.Context, reso
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
 func (client IntegrationRuntimesClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, integrationRuntime IntegrationRuntimeResource, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -117,6 +122,7 @@ func (client IntegrationRuntimesClient) CreateOrUpdatePreparer(ctx context.Conte
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client IntegrationRuntimesClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
@@ -124,6 +130,7 @@ func (client IntegrationRuntimesClient) CreateOrUpdateSender(req *http.Request) 
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
 // closes the http.Response Body.
 func (client IntegrationRuntimesClient) CreateOrUpdateResponder(resp *http.Response) (result IntegrationRuntimeResource, err error) {
@@ -137,6 +144,7 @@ func (client IntegrationRuntimesClient) CreateOrUpdateResponder(resp *http.Respo
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // Delete deletes an integration runtime.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -180,6 +188,7 @@ func (client IntegrationRuntimesClient) Delete(ctx context.Context, resourceGrou
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // DeletePreparer prepares the Delete request.
 func (client IntegrationRuntimesClient) DeletePreparer(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -202,6 +211,7 @@ func (client IntegrationRuntimesClient) DeletePreparer(ctx context.Context, reso
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client IntegrationRuntimesClient) DeleteSender(req *http.Request) (*http.Response, error) {
@@ -209,6 +219,7 @@ func (client IntegrationRuntimesClient) DeleteSender(req *http.Request) (*http.R
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // DeleteResponder handles the response to the Delete request. The method always
 // closes the http.Response Body.
 func (client IntegrationRuntimesClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -221,6 +232,7 @@ func (client IntegrationRuntimesClient) DeleteResponder(resp *http.Response) (re
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // Get gets an integration runtime.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -264,6 +276,7 @@ func (client IntegrationRuntimesClient) Get(ctx context.Context, resourceGroupNa
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetPreparer prepares the Get request.
 func (client IntegrationRuntimesClient) GetPreparer(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -286,6 +299,7 @@ func (client IntegrationRuntimesClient) GetPreparer(ctx context.Context, resourc
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client IntegrationRuntimesClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -293,6 +307,7 @@ func (client IntegrationRuntimesClient) GetSender(req *http.Request) (*http.Resp
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client IntegrationRuntimesClient) GetResponder(resp *http.Response) (result IntegrationRuntimeResource, err error) {
@@ -306,6 +321,7 @@ func (client IntegrationRuntimesClient) GetResponder(resp *http.Response) (resul
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetConnectionInfo gets the on-premises integration runtime connection information for encrypting the on-premises
 // data source credentials.
 // Parameters:
@@ -350,6 +366,7 @@ func (client IntegrationRuntimesClient) GetConnectionInfo(ctx context.Context, r
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetConnectionInfoPreparer prepares the GetConnectionInfo request.
 func (client IntegrationRuntimesClient) GetConnectionInfoPreparer(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -372,6 +389,7 @@ func (client IntegrationRuntimesClient) GetConnectionInfoPreparer(ctx context.Co
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetConnectionInfoSender sends the GetConnectionInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client IntegrationRuntimesClient) GetConnectionInfoSender(req *http.Request) (*http.Response, error) {
@@ -379,6 +397,7 @@ func (client IntegrationRuntimesClient) GetConnectionInfoSender(req *http.Reques
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetConnectionInfoResponder handles the response to the GetConnectionInfo request. The method always
 // closes the http.Response Body.
 func (client IntegrationRuntimesClient) GetConnectionInfoResponder(resp *http.Response) (result IntegrationRuntimeConnectionInfo, err error) {
@@ -392,6 +411,7 @@ func (client IntegrationRuntimesClient) GetConnectionInfoResponder(resp *http.Re
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetMonitoringData get the integration runtime monitoring data, which includes the monitor data for all the nodes
 // under this integration runtime.
 // Parameters:
@@ -436,6 +456,7 @@ func (client IntegrationRuntimesClient) GetMonitoringData(ctx context.Context, r
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetMonitoringDataPreparer prepares the GetMonitoringData request.
 func (client IntegrationRuntimesClient) GetMonitoringDataPreparer(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -458,6 +479,7 @@ func (client IntegrationRuntimesClient) GetMonitoringDataPreparer(ctx context.Co
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetMonitoringDataSender sends the GetMonitoringData request. The method will close the
 // http.Response Body if it receives an error.
 func (client IntegrationRuntimesClient) GetMonitoringDataSender(req *http.Request) (*http.Response, error) {
@@ -465,6 +487,7 @@ func (client IntegrationRuntimesClient) GetMonitoringDataSender(req *http.Reques
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetMonitoringDataResponder handles the response to the GetMonitoringData request. The method always
 // closes the http.Response Body.
 func (client IntegrationRuntimesClient) GetMonitoringDataResponder(resp *http.Response) (result IntegrationRuntimeMonitoringData, err error) {
@@ -478,6 +501,7 @@ func (client IntegrationRuntimesClient) GetMonitoringDataResponder(resp *http.Re
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetStatus gets detailed status information for an integration runtime.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -521,6 +545,7 @@ func (client IntegrationRuntimesClient) GetStatus(ctx context.Context, resourceG
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetStatusPreparer prepares the GetStatus request.
 func (client IntegrationRuntimesClient) GetStatusPreparer(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -543,6 +568,7 @@ func (client IntegrationRuntimesClient) GetStatusPreparer(ctx context.Context, r
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetStatusSender sends the GetStatus request. The method will close the
 // http.Response Body if it receives an error.
 func (client IntegrationRuntimesClient) GetStatusSender(req *http.Request) (*http.Response, error) {
@@ -550,6 +576,7 @@ func (client IntegrationRuntimesClient) GetStatusSender(req *http.Request) (*htt
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // GetStatusResponder handles the response to the GetStatus request. The method always
 // closes the http.Response Body.
 func (client IntegrationRuntimesClient) GetStatusResponder(resp *http.Response) (result IntegrationRuntimeStatusResponse, err error) {
@@ -563,6 +590,7 @@ func (client IntegrationRuntimesClient) GetStatusResponder(resp *http.Response) 
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListAuthKeys retrieves the authentication keys for an integration runtime.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -606,6 +634,7 @@ func (client IntegrationRuntimesClient) ListAuthKeys(ctx context.Context, resour
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListAuthKeysPreparer prepares the ListAuthKeys request.
 func (client IntegrationRuntimesClient) ListAuthKeysPreparer(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -628,6 +657,7 @@ func (client IntegrationRuntimesClient) ListAuthKeysPreparer(ctx context.Context
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListAuthKeysSender sends the ListAuthKeys request. The method will close the
 // http.Response Body if it receives an error.
 func (client IntegrationRuntimesClient) ListAuthKeysSender(req *http.Request) (*http.Response, error) {
@@ -635,6 +665,7 @@ func (client IntegrationRuntimesClient) ListAuthKeysSender(req *http.Request) (*
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListAuthKeysResponder handles the response to the ListAuthKeys request. The method always
 // closes the http.Response Body.
 func (client IntegrationRuntimesClient) ListAuthKeysResponder(resp *http.Response) (result IntegrationRuntimeAuthKeys, err error) {
@@ -648,6 +679,7 @@ func (client IntegrationRuntimesClient) ListAuthKeysResponder(resp *http.Respons
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListByFactory lists integration runtimes.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -687,6 +719,7 @@ func (client IntegrationRuntimesClient) ListByFactory(ctx context.Context, resou
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListByFactoryPreparer prepares the ListByFactory request.
 func (client IntegrationRuntimesClient) ListByFactoryPreparer(ctx context.Context, resourceGroupName string, factoryName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -708,6 +741,7 @@ func (client IntegrationRuntimesClient) ListByFactoryPreparer(ctx context.Contex
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListByFactorySender sends the ListByFactory request. The method will close the
 // http.Response Body if it receives an error.
 func (client IntegrationRuntimesClient) ListByFactorySender(req *http.Request) (*http.Response, error) {
@@ -715,6 +749,7 @@ func (client IntegrationRuntimesClient) ListByFactorySender(req *http.Request) (
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListByFactoryResponder handles the response to the ListByFactory request. The method always
 // closes the http.Response Body.
 func (client IntegrationRuntimesClient) ListByFactoryResponder(resp *http.Response) (result IntegrationRuntimeListResponse, err error) {
@@ -749,12 +784,14 @@ func (client IntegrationRuntimesClient) listByFactoryNextResults(lastResults Int
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // ListByFactoryComplete enumerates all values, automatically crossing page boundaries as required.
 func (client IntegrationRuntimesClient) ListByFactoryComplete(ctx context.Context, resourceGroupName string, factoryName string) (result IntegrationRuntimeListResponseIterator, err error) {
 	result.page, err = client.ListByFactory(ctx, resourceGroupName, factoryName)
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // RegenerateAuthKey regenerates the authentication key for an integration runtime.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -799,6 +836,7 @@ func (client IntegrationRuntimesClient) RegenerateAuthKey(ctx context.Context, r
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // RegenerateAuthKeyPreparer prepares the RegenerateAuthKey request.
 func (client IntegrationRuntimesClient) RegenerateAuthKeyPreparer(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, regenerateKeyParameters IntegrationRuntimeRegenerateKeyParameters) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -823,6 +861,7 @@ func (client IntegrationRuntimesClient) RegenerateAuthKeyPreparer(ctx context.Co
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // RegenerateAuthKeySender sends the RegenerateAuthKey request. The method will close the
 // http.Response Body if it receives an error.
 func (client IntegrationRuntimesClient) RegenerateAuthKeySender(req *http.Request) (*http.Response, error) {
@@ -830,6 +869,7 @@ func (client IntegrationRuntimesClient) RegenerateAuthKeySender(req *http.Reques
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // RegenerateAuthKeyResponder handles the response to the RegenerateAuthKey request. The method always
 // closes the http.Response Body.
 func (client IntegrationRuntimesClient) RegenerateAuthKeyResponder(resp *http.Response) (result IntegrationRuntimeAuthKeys, err error) {
@@ -843,6 +883,7 @@ func (client IntegrationRuntimesClient) RegenerateAuthKeyResponder(resp *http.Re
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // RemoveNode remove a node from integration runtime.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -887,6 +928,7 @@ func (client IntegrationRuntimesClient) RemoveNode(ctx context.Context, resource
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // RemoveNodePreparer prepares the RemoveNode request.
 func (client IntegrationRuntimesClient) RemoveNodePreparer(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, removeNodeParameters IntegrationRuntimeRemoveNodeRequest) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -911,6 +953,7 @@ func (client IntegrationRuntimesClient) RemoveNodePreparer(ctx context.Context, 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // RemoveNodeSender sends the RemoveNode request. The method will close the
 // http.Response Body if it receives an error.
 func (client IntegrationRuntimesClient) RemoveNodeSender(req *http.Request) (*http.Response, error) {
@@ -918,6 +961,7 @@ func (client IntegrationRuntimesClient) RemoveNodeSender(req *http.Request) (*ht
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // RemoveNodeResponder handles the response to the RemoveNode request. The method always
 // closes the http.Response Body.
 func (client IntegrationRuntimesClient) RemoveNodeResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -930,6 +974,7 @@ func (client IntegrationRuntimesClient) RemoveNodeResponder(resp *http.Response)
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // Start starts a ManagedReserved type integration runtime.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -967,6 +1012,7 @@ func (client IntegrationRuntimesClient) Start(ctx context.Context, resourceGroup
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // StartPreparer prepares the Start request.
 func (client IntegrationRuntimesClient) StartPreparer(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -989,6 +1035,7 @@ func (client IntegrationRuntimesClient) StartPreparer(ctx context.Context, resou
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // StartSender sends the Start request. The method will close the
 // http.Response Body if it receives an error.
 func (client IntegrationRuntimesClient) StartSender(req *http.Request) (future IntegrationRuntimesStartFuture, err error) {
@@ -1004,6 +1051,7 @@ func (client IntegrationRuntimesClient) StartSender(req *http.Request) (future I
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // StartResponder handles the response to the Start request. The method always
 // closes the http.Response Body.
 func (client IntegrationRuntimesClient) StartResponder(resp *http.Response) (result IntegrationRuntimeStatusResponse, err error) {
@@ -1017,6 +1065,7 @@ func (client IntegrationRuntimesClient) StartResponder(resp *http.Response) (res
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // Stop stops a ManagedReserved type integration runtime.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -1054,6 +1103,7 @@ func (client IntegrationRuntimesClient) Stop(ctx context.Context, resourceGroupN
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // StopPreparer prepares the Stop request.
 func (client IntegrationRuntimesClient) StopPreparer(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1076,6 +1126,7 @@ func (client IntegrationRuntimesClient) StopPreparer(ctx context.Context, resour
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // StopSender sends the Stop request. The method will close the
 // http.Response Body if it receives an error.
 func (client IntegrationRuntimesClient) StopSender(req *http.Request) (future IntegrationRuntimesStopFuture, err error) {
@@ -1091,6 +1142,7 @@ func (client IntegrationRuntimesClient) StopSender(req *http.Request) (future In
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // StopResponder handles the response to the Stop request. The method always
 // closes the http.Response Body.
 func (client IntegrationRuntimesClient) StopResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -1103,6 +1155,7 @@ func (client IntegrationRuntimesClient) StopResponder(resp *http.Response) (resu
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // SyncCredentials force the integration runtime to synchronize credentials across integration runtime nodes, and this
 // will override the credentials across all worker nodes with those available on the dispatcher node. If you already
 // have the latest credential backup file, you should manually import it (preferred) on any self-hosted integration
@@ -1149,6 +1202,7 @@ func (client IntegrationRuntimesClient) SyncCredentials(ctx context.Context, res
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // SyncCredentialsPreparer prepares the SyncCredentials request.
 func (client IntegrationRuntimesClient) SyncCredentialsPreparer(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1171,6 +1225,7 @@ func (client IntegrationRuntimesClient) SyncCredentialsPreparer(ctx context.Cont
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // SyncCredentialsSender sends the SyncCredentials request. The method will close the
 // http.Response Body if it receives an error.
 func (client IntegrationRuntimesClient) SyncCredentialsSender(req *http.Request) (*http.Response, error) {
@@ -1178,6 +1233,7 @@ func (client IntegrationRuntimesClient) SyncCredentialsSender(req *http.Request)
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // SyncCredentialsResponder handles the response to the SyncCredentials request. The method always
 // closes the http.Response Body.
 func (client IntegrationRuntimesClient) SyncCredentialsResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -1190,6 +1246,7 @@ func (client IntegrationRuntimesClient) SyncCredentialsResponder(resp *http.Resp
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // Update updates an integration runtime.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -1234,6 +1291,7 @@ func (client IntegrationRuntimesClient) Update(ctx context.Context, resourceGrou
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // UpdatePreparer prepares the Update request.
 func (client IntegrationRuntimesClient) UpdatePreparer(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, updateIntegrationRuntimeRequest UpdateIntegrationRuntimeRequest) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1258,6 +1316,7 @@ func (client IntegrationRuntimesClient) UpdatePreparer(ctx context.Context, reso
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client IntegrationRuntimesClient) UpdateSender(req *http.Request) (*http.Response, error) {
@@ -1265,6 +1324,7 @@ func (client IntegrationRuntimesClient) UpdateSender(req *http.Request) (*http.R
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // UpdateResponder handles the response to the Update request. The method always
 // closes the http.Response Body.
 func (client IntegrationRuntimesClient) UpdateResponder(resp *http.Response) (result IntegrationRuntimeStatusResponse, err error) {
@@ -1278,6 +1338,7 @@ func (client IntegrationRuntimesClient) UpdateResponder(resp *http.Response) (re
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // Upgrade upgrade self-hosted integration runtime to latest version if availably.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -1321,6 +1382,7 @@ func (client IntegrationRuntimesClient) Upgrade(ctx context.Context, resourceGro
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // UpgradePreparer prepares the Upgrade request.
 func (client IntegrationRuntimesClient) UpgradePreparer(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1343,6 +1405,7 @@ func (client IntegrationRuntimesClient) UpgradePreparer(ctx context.Context, res
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // UpgradeSender sends the Upgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client IntegrationRuntimesClient) UpgradeSender(req *http.Request) (*http.Response, error) {
@@ -1350,6 +1413,7 @@ func (client IntegrationRuntimesClient) UpgradeSender(req *http.Request) (*http.
 		azure.DoRetryWithRegistration(client.Client))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory instead
 // UpgradeResponder handles the response to the Upgrade request. The method always
 // closes the http.Response Body.
 func (client IntegrationRuntimesClient) UpgradeResponder(resp *http.Response) (result autorest.Response, err error) {

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewConfigurationClientWithBaseURI(baseURI string, subscriptionID string) Co
 // resourceGroupName - name of the resource group within the Azure subscription.
 // clusterName - the name of the Event Hubs Cluster.
 func (client ConfigurationClient) Get(ctx context.Context, resourceGroupName string, clusterName string) (result ClusterQuotaConfigurationProperties, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConfigurationClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -126,6 +137,16 @@ func (client ConfigurationClient) GetResponder(resp *http.Response) (result Clus
 // clusterName - the name of the Event Hubs Cluster.
 // parameters - parameters for creating an Event Hubs Cluster resource.
 func (client ConfigurationClient) Patch(ctx context.Context, resourceGroupName string, clusterName string, parameters ClusterQuotaConfigurationProperties) (result ClusterQuotaConfigurationProperties, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConfigurationClient.Patch")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

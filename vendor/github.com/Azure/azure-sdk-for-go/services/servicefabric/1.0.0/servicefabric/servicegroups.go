@@ -24,21 +24,25 @@ import (
 	"net/http"
 )
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ServiceGroupsClient is the client for the ServiceGroups methods of the Servicefabric service.
 type ServiceGroupsClient struct {
 	BaseClient
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewServiceGroupsClient creates an instance of the ServiceGroupsClient client.
 func NewServiceGroupsClient(timeout *int32) ServiceGroupsClient {
 	return NewServiceGroupsClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewServiceGroupsClientWithBaseURI creates an instance of the ServiceGroupsClient client.
 func NewServiceGroupsClientWithBaseURI(baseURI string, timeout *int32) ServiceGroupsClient {
 	return ServiceGroupsClient{NewWithBaseURI(baseURI, timeout)}
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Create create service groups
 // Parameters:
 // applicationName - the name of the service group
@@ -65,6 +69,7 @@ func (client ServiceGroupsClient) Create(ctx context.Context, applicationName st
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreatePreparer prepares the Create request.
 func (client ServiceGroupsClient) CreatePreparer(ctx context.Context, applicationName string, createServiceGroupDescription BasicCreateServiceGroupDescription) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -89,6 +94,7 @@ func (client ServiceGroupsClient) CreatePreparer(ctx context.Context, applicatio
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateSender sends the Create request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceGroupsClient) CreateSender(req *http.Request) (*http.Response, error) {
@@ -96,6 +102,7 @@ func (client ServiceGroupsClient) CreateSender(req *http.Request) (*http.Respons
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateResponder handles the response to the Create request. The method always
 // closes the http.Response Body.
 func (client ServiceGroupsClient) CreateResponder(resp *http.Response) (result String, err error) {
@@ -109,6 +116,7 @@ func (client ServiceGroupsClient) CreateResponder(resp *http.Response) (result S
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Remove remove service groups
 // Parameters:
 // applicationName - the name of the application
@@ -135,6 +143,7 @@ func (client ServiceGroupsClient) Remove(ctx context.Context, applicationName st
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemovePreparer prepares the Remove request.
 func (client ServiceGroupsClient) RemovePreparer(ctx context.Context, applicationName string, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -158,6 +167,7 @@ func (client ServiceGroupsClient) RemovePreparer(ctx context.Context, applicatio
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveSender sends the Remove request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceGroupsClient) RemoveSender(req *http.Request) (*http.Response, error) {
@@ -165,6 +175,7 @@ func (client ServiceGroupsClient) RemoveSender(req *http.Request) (*http.Respons
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveResponder handles the response to the Remove request. The method always
 // closes the http.Response Body.
 func (client ServiceGroupsClient) RemoveResponder(resp *http.Response) (result String, err error) {
@@ -178,6 +189,7 @@ func (client ServiceGroupsClient) RemoveResponder(resp *http.Response) (result S
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Update update service groups
 // Parameters:
 // applicationName - the name of the application
@@ -205,6 +217,7 @@ func (client ServiceGroupsClient) Update(ctx context.Context, applicationName st
 	return
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdatePreparer prepares the Update request.
 func (client ServiceGroupsClient) UpdatePreparer(ctx context.Context, applicationName string, serviceName string, updateServiceGroupDescription BasicUpdateServiceGroupDescription) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -230,6 +243,7 @@ func (client ServiceGroupsClient) UpdatePreparer(ctx context.Context, applicatio
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceGroupsClient) UpdateSender(req *http.Request) (*http.Response, error) {
@@ -237,6 +251,7 @@ func (client ServiceGroupsClient) UpdateSender(req *http.Request) (*http.Respons
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
+// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateResponder handles the response to the Update request. The method always
 // closes the http.Response Body.
 func (client ServiceGroupsClient) UpdateResponder(resp *http.Response) (result String, err error) {
