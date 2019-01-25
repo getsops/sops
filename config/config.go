@@ -75,9 +75,10 @@ type gcpKmsKey struct {
 }
 
 type kmsKey struct {
-	Arn     string             `yaml:"arn"`
-	Role    string             `yaml:"role,omitempty"`
-	Context map[string]*string `yaml:"context"`
+	Arn        string             `yaml:"arn"`
+	Role       string             `yaml:"role,omitempty"`
+	Context    map[string]*string `yaml:"context"`
+	AwsProfile string             `yaml:"aws_profile"`
 }
 
 type azureKVKey struct {
@@ -90,6 +91,7 @@ type creationRule struct {
 	FilenameRegex     string `yaml:"filename_regex"`
 	PathRegex         string `yaml:"path_regex"`
 	KMS               string
+	AwsProfile        string `yaml:"aws_profile"`
 	PGP               string
 	GCPKMS            string     `yaml:"gcp_kms"`
 	AzureKeyVault     string     `yaml:"azure_keyvault"`
@@ -175,7 +177,7 @@ func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContex
 		for _, k := range pgp.MasterKeysFromFingerprintString(rule.PGP) {
 			keyGroup = append(keyGroup, k)
 		}
-		for _, k := range kms.MasterKeysFromArnString(rule.KMS, kmsEncryptionContext) {
+		for _, k := range kms.MasterKeysFromArnString(rule.KMS, kmsEncryptionContext, rule.AwsProfile) {
 			keyGroup = append(keyGroup, k)
 		}
 		for _, k := range gcpkms.MasterKeysFromResourceIDString(rule.GCPKMS) {
