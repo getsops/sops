@@ -7,6 +7,7 @@ package azkv //import "go.mozilla.org/sops/azkv"
 import (
 	"context"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"os"
 	"regexp"
@@ -92,6 +93,10 @@ func newAuthorizer() (autorest.Authorizer, error) {
 		settings.resource = strings.TrimSuffix(settings.environment.KeyVaultEndpoint, "/")
 	}
 
+	if os.Getenv("MSI_ENDPOINT") != "" {
+		settings.authMethod = "msi"
+	}
+
 	// 1. Client credentials
 	if (settings.clientSecret != "") || settings.authMethod == "clientcredentials" {
 		config := auth.NewClientCredentialsConfig(settings.clientID, settings.clientSecret, settings.tenantID)
@@ -124,15 +129,16 @@ func newAuthorizer() (autorest.Authorizer, error) {
 		return config.Authorizer()
 	}
 
-	// TODO: Removed until we decide how to handle prompt on stdout, etc.
-	// // 5. Device Code
-	// if settings.authMethod == "devicecode" {
-	// 	// TODO: This will be required on every execution. Consider caching.
-	// 	config := auth.NewDeviceFlowConfig(settings.clientID, settings.tenantID)
-	// 	return config.Authorizer()
-	// }
+	// 5. Device Code
+	if settings.authMethod == "devicecode" {
+		// TODO: Removed until we decide how to handle prompt on stdout, etc.
+		//// TODO: This will be required on every execution. Consider caching.
+		//config := auth.NewDeviceFlowConfig(settings.clientID, settings.tenantID)
+		//return config.Authorizer()
+		return nil, errors.New("device code flow not implemented")
+	}
 
-	// 5. CLI
+	// 6. CLI
 	return auth.NewAuthorizerFromCLIWithResource(settings.resource)
 }
 
