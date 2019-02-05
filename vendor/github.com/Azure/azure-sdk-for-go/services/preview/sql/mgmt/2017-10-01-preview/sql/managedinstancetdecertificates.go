@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -51,16 +50,6 @@ func NewManagedInstanceTdeCertificatesClientWithBaseURI(baseURI string, subscrip
 // managedInstanceName - the name of the managed instance.
 // parameters - the requested TDE certificate to be created or updated.
 func (client ManagedInstanceTdeCertificatesClient) Create(ctx context.Context, resourceGroupName string, managedInstanceName string, parameters TdeCertificate) (result ManagedInstanceTdeCertificatesCreateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ManagedInstanceTdeCertificatesClient.Create")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.TdeCertificateProperties", Name: validation.Null, Rule: false,
@@ -112,6 +101,10 @@ func (client ManagedInstanceTdeCertificatesClient) CreateSender(req *http.Reques
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

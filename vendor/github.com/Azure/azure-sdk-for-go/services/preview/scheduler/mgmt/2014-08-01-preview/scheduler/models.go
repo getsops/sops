@@ -18,17 +18,12 @@ package scheduler
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
-	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
-
-// The package's fully qualified name.
-const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/scheduler/mgmt/2014-08-01-preview/scheduler"
 
 // DayOfWeek enumerates the values for day of week.
 type DayOfWeek string
@@ -416,37 +411,20 @@ type JobCollectionListResultIterator struct {
 	page JobCollectionListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *JobCollectionListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobCollectionListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *JobCollectionListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *JobCollectionListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -468,11 +446,6 @@ func (iter JobCollectionListResultIterator) Value() JobCollectionDefinition {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the JobCollectionListResultIterator type.
-func NewJobCollectionListResultIterator(page JobCollectionListResultPage) JobCollectionListResultIterator {
-	return JobCollectionListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (jclr JobCollectionListResult) IsEmpty() bool {
 	return jclr.Value == nil || len(*jclr.Value) == 0
@@ -480,11 +453,11 @@ func (jclr JobCollectionListResult) IsEmpty() bool {
 
 // jobCollectionListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (jclr JobCollectionListResult) jobCollectionListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (jclr JobCollectionListResult) jobCollectionListResultPreparer() (*http.Request, error) {
 	if jclr.NextLink == nil || len(to.String(jclr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(jclr.NextLink)))
@@ -492,36 +465,19 @@ func (jclr JobCollectionListResult) jobCollectionListResultPreparer(ctx context.
 
 // JobCollectionListResultPage contains a page of JobCollectionDefinition values.
 type JobCollectionListResultPage struct {
-	fn   func(context.Context, JobCollectionListResult) (JobCollectionListResult, error)
+	fn   func(JobCollectionListResult) (JobCollectionListResult, error)
 	jclr JobCollectionListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *JobCollectionListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobCollectionListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.jclr)
+func (page *JobCollectionListResultPage) Next() error {
+	next, err := page.fn(page.jclr)
 	if err != nil {
 		return err
 	}
 	page.jclr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *JobCollectionListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -540,11 +496,6 @@ func (page JobCollectionListResultPage) Values() []JobCollectionDefinition {
 		return nil
 	}
 	return *page.jclr.Value
-}
-
-// Creates a new instance of the JobCollectionListResultPage type.
-func NewJobCollectionListResultPage(getNextPage func(context.Context, JobCollectionListResult) (JobCollectionListResult, error)) JobCollectionListResultPage {
-	return JobCollectionListResultPage{fn: getNextPage}
 }
 
 // JobCollectionProperties ...
@@ -649,37 +600,20 @@ type JobHistoryListResultIterator struct {
 	page JobHistoryListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *JobHistoryListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobHistoryListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *JobHistoryListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *JobHistoryListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -701,11 +635,6 @@ func (iter JobHistoryListResultIterator) Value() JobHistoryDefinition {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the JobHistoryListResultIterator type.
-func NewJobHistoryListResultIterator(page JobHistoryListResultPage) JobHistoryListResultIterator {
-	return JobHistoryListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (jhlr JobHistoryListResult) IsEmpty() bool {
 	return jhlr.Value == nil || len(*jhlr.Value) == 0
@@ -713,11 +642,11 @@ func (jhlr JobHistoryListResult) IsEmpty() bool {
 
 // jobHistoryListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (jhlr JobHistoryListResult) jobHistoryListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (jhlr JobHistoryListResult) jobHistoryListResultPreparer() (*http.Request, error) {
 	if jhlr.NextLink == nil || len(to.String(jhlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(jhlr.NextLink)))
@@ -725,36 +654,19 @@ func (jhlr JobHistoryListResult) jobHistoryListResultPreparer(ctx context.Contex
 
 // JobHistoryListResultPage contains a page of JobHistoryDefinition values.
 type JobHistoryListResultPage struct {
-	fn   func(context.Context, JobHistoryListResult) (JobHistoryListResult, error)
+	fn   func(JobHistoryListResult) (JobHistoryListResult, error)
 	jhlr JobHistoryListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *JobHistoryListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobHistoryListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.jhlr)
+func (page *JobHistoryListResultPage) Next() error {
+	next, err := page.fn(page.jhlr)
 	if err != nil {
 		return err
 	}
 	page.jhlr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *JobHistoryListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -775,11 +687,6 @@ func (page JobHistoryListResultPage) Values() []JobHistoryDefinition {
 	return *page.jhlr.Value
 }
 
-// Creates a new instance of the JobHistoryListResultPage type.
-func NewJobHistoryListResultPage(getNextPage func(context.Context, JobHistoryListResult) (JobHistoryListResult, error)) JobHistoryListResultPage {
-	return JobHistoryListResultPage{fn: getNextPage}
-}
-
 // JobListResult ...
 type JobListResult struct {
 	autorest.Response `json:"-"`
@@ -795,37 +702,20 @@ type JobListResultIterator struct {
 	page JobListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *JobListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *JobListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *JobListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -847,11 +737,6 @@ func (iter JobListResultIterator) Value() JobDefinition {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the JobListResultIterator type.
-func NewJobListResultIterator(page JobListResultPage) JobListResultIterator {
-	return JobListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (jlr JobListResult) IsEmpty() bool {
 	return jlr.Value == nil || len(*jlr.Value) == 0
@@ -859,11 +744,11 @@ func (jlr JobListResult) IsEmpty() bool {
 
 // jobListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (jlr JobListResult) jobListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (jlr JobListResult) jobListResultPreparer() (*http.Request, error) {
 	if jlr.NextLink == nil || len(to.String(jlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(jlr.NextLink)))
@@ -871,36 +756,19 @@ func (jlr JobListResult) jobListResultPreparer(ctx context.Context) (*http.Reque
 
 // JobListResultPage contains a page of JobDefinition values.
 type JobListResultPage struct {
-	fn  func(context.Context, JobListResult) (JobListResult, error)
+	fn  func(JobListResult) (JobListResult, error)
 	jlr JobListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *JobListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.jlr)
+func (page *JobListResultPage) Next() error {
+	next, err := page.fn(page.jlr)
 	if err != nil {
 		return err
 	}
 	page.jlr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *JobListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -919,11 +787,6 @@ func (page JobListResultPage) Values() []JobDefinition {
 		return nil
 	}
 	return *page.jlr.Value
-}
-
-// Creates a new instance of the JobListResultPage type.
-func NewJobListResultPage(getNextPage func(context.Context, JobListResult) (JobListResult, error)) JobListResultPage {
-	return JobListResultPage{fn: getNextPage}
 }
 
 // JobMaxRecurrence ...

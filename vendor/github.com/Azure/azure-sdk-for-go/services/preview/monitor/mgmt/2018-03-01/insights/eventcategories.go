@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -43,16 +42,6 @@ func NewEventCategoriesClientWithBaseURI(baseURI string, subscriptionID string) 
 // List get the list of available event categories supported in the Activity Logs Service.<br>The current list includes
 // the following: Administrative, Security, ServiceHealth, Alert, Recommendation, Policy.
 func (client EventCategoriesClient) List(ctx context.Context) (result EventCategoryCollection, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EventCategoriesClient.List")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.EventCategoriesClient", "List", nil, "Failure preparing request")

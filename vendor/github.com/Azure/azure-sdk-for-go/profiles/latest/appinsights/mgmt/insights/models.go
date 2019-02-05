@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2018 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,16 +19,24 @@
 
 package insights
 
-import (
-	"context"
+import original "github.com/Azure/azure-sdk-for-go/services/appinsights/mgmt/2015-05-01/insights"
 
-	original "github.com/Azure/azure-sdk-for-go/services/appinsights/mgmt/2015-05-01/insights"
-)
+type AnalyticsItemsClient = original.AnalyticsItemsClient
+type AnnotationsClient = original.AnnotationsClient
+type APIKeysClient = original.APIKeysClient
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
+type BaseClient = original.BaseClient
+type ComponentAvailableFeaturesClient = original.ComponentAvailableFeaturesClient
+type ComponentCurrentBillingFeaturesClient = original.ComponentCurrentBillingFeaturesClient
+type ComponentFeatureCapabilitiesClient = original.ComponentFeatureCapabilitiesClient
+type ComponentQuotaStatusClient = original.ComponentQuotaStatusClient
+type ComponentsClient = original.ComponentsClient
+type ExportConfigurationsClient = original.ExportConfigurationsClient
+type FavoritesClient = original.FavoritesClient
 type ApplicationType = original.ApplicationType
 
 const (
@@ -131,18 +139,15 @@ const (
 	Ping      WebTestKind = original.Ping
 )
 
-type APIKeyRequest = original.APIKeyRequest
-type APIKeysClient = original.APIKeysClient
-type AnalyticsItemsClient = original.AnalyticsItemsClient
 type Annotation = original.Annotation
 type AnnotationError = original.AnnotationError
-type AnnotationsClient = original.AnnotationsClient
 type AnnotationsListResult = original.AnnotationsListResult
+type APIKeyRequest = original.APIKeyRequest
 type ApplicationInsightsComponent = original.ApplicationInsightsComponent
-type ApplicationInsightsComponentAPIKey = original.ApplicationInsightsComponentAPIKey
-type ApplicationInsightsComponentAPIKeyListResult = original.ApplicationInsightsComponentAPIKeyListResult
 type ApplicationInsightsComponentAnalyticsItem = original.ApplicationInsightsComponentAnalyticsItem
 type ApplicationInsightsComponentAnalyticsItemProperties = original.ApplicationInsightsComponentAnalyticsItemProperties
+type ApplicationInsightsComponentAPIKey = original.ApplicationInsightsComponentAPIKey
+type ApplicationInsightsComponentAPIKeyListResult = original.ApplicationInsightsComponentAPIKeyListResult
 type ApplicationInsightsComponentAvailableFeatures = original.ApplicationInsightsComponentAvailableFeatures
 type ApplicationInsightsComponentBillingFeatures = original.ApplicationInsightsComponentBillingFeatures
 type ApplicationInsightsComponentDataVolumeCap = original.ApplicationInsightsComponentDataVolumeCap
@@ -161,21 +166,13 @@ type ApplicationInsightsComponentProperties = original.ApplicationInsightsCompon
 type ApplicationInsightsComponentQuotaStatus = original.ApplicationInsightsComponentQuotaStatus
 type ApplicationInsightsComponentWebTestLocation = original.ApplicationInsightsComponentWebTestLocation
 type ApplicationInsightsWebTestLocationsListResult = original.ApplicationInsightsWebTestLocationsListResult
-type BaseClient = original.BaseClient
-type ComponentAvailableFeaturesClient = original.ComponentAvailableFeaturesClient
-type ComponentCurrentBillingFeaturesClient = original.ComponentCurrentBillingFeaturesClient
-type ComponentFeatureCapabilitiesClient = original.ComponentFeatureCapabilitiesClient
 type ComponentPurgeBody = original.ComponentPurgeBody
 type ComponentPurgeBodyFilters = original.ComponentPurgeBodyFilters
 type ComponentPurgeResponse = original.ComponentPurgeResponse
 type ComponentPurgeStatusResponse = original.ComponentPurgeStatusResponse
-type ComponentQuotaStatusClient = original.ComponentQuotaStatusClient
-type ComponentsClient = original.ComponentsClient
 type ComponentsResource = original.ComponentsResource
 type ErrorFieldContract = original.ErrorFieldContract
 type ErrorResponse = original.ErrorResponse
-type ExportConfigurationsClient = original.ExportConfigurationsClient
-type FavoritesClient = original.FavoritesClient
 type InnerError = original.InnerError
 type LinkProperties = original.LinkProperties
 type ListAnnotation = original.ListAnnotation
@@ -188,8 +185,6 @@ type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
 type OperationListResultIterator = original.OperationListResultIterator
 type OperationListResultPage = original.OperationListResultPage
-type OperationsClient = original.OperationsClient
-type ProactiveDetectionConfigurationsClient = original.ProactiveDetectionConfigurationsClient
 type SetObject = original.SetObject
 type TagsResource = original.TagsResource
 type WebTest = original.WebTest
@@ -197,32 +192,25 @@ type WebTestGeolocation = original.WebTestGeolocation
 type WebTestListResult = original.WebTestListResult
 type WebTestListResultIterator = original.WebTestListResultIterator
 type WebTestListResultPage = original.WebTestListResultPage
-type WebTestLocationsClient = original.WebTestLocationsClient
 type WebTestProperties = original.WebTestProperties
 type WebTestPropertiesConfiguration = original.WebTestPropertiesConfiguration
-type WebTestsClient = original.WebTestsClient
 type WebtestsResource = original.WebtestsResource
-type WorkItemConfiguration = original.WorkItemConfiguration
-type WorkItemConfigurationError = original.WorkItemConfigurationError
-type WorkItemConfigurationsClient = original.WorkItemConfigurationsClient
-type WorkItemConfigurationsListResult = original.WorkItemConfigurationsListResult
-type WorkItemCreateConfiguration = original.WorkItemCreateConfiguration
 type Workbook = original.Workbook
 type WorkbookError = original.WorkbookError
 type WorkbookProperties = original.WorkbookProperties
 type WorkbookResource = original.WorkbookResource
-type WorkbooksClient = original.WorkbooksClient
 type WorkbooksListResult = original.WorkbooksListResult
+type WorkItemConfiguration = original.WorkItemConfiguration
+type WorkItemConfigurationError = original.WorkItemConfigurationError
+type WorkItemConfigurationsListResult = original.WorkItemConfigurationsListResult
+type WorkItemCreateConfiguration = original.WorkItemCreateConfiguration
+type OperationsClient = original.OperationsClient
+type ProactiveDetectionConfigurationsClient = original.ProactiveDetectionConfigurationsClient
+type WebTestLocationsClient = original.WebTestLocationsClient
+type WebTestsClient = original.WebTestsClient
+type WorkbooksClient = original.WorkbooksClient
+type WorkItemConfigurationsClient = original.WorkItemConfigurationsClient
 
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
-}
-func NewAPIKeysClient(subscriptionID string) APIKeysClient {
-	return original.NewAPIKeysClient(subscriptionID)
-}
-func NewAPIKeysClientWithBaseURI(baseURI string, subscriptionID string) APIKeysClient {
-	return original.NewAPIKeysClientWithBaseURI(baseURI, subscriptionID)
-}
 func NewAnalyticsItemsClient(subscriptionID string) AnalyticsItemsClient {
 	return original.NewAnalyticsItemsClient(subscriptionID)
 }
@@ -235,11 +223,17 @@ func NewAnnotationsClient(subscriptionID string) AnnotationsClient {
 func NewAnnotationsClientWithBaseURI(baseURI string, subscriptionID string) AnnotationsClient {
 	return original.NewAnnotationsClientWithBaseURI(baseURI, subscriptionID)
 }
-func NewApplicationInsightsComponentListResultIterator(page ApplicationInsightsComponentListResultPage) ApplicationInsightsComponentListResultIterator {
-	return original.NewApplicationInsightsComponentListResultIterator(page)
+func NewAPIKeysClient(subscriptionID string) APIKeysClient {
+	return original.NewAPIKeysClient(subscriptionID)
 }
-func NewApplicationInsightsComponentListResultPage(getNextPage func(context.Context, ApplicationInsightsComponentListResult) (ApplicationInsightsComponentListResult, error)) ApplicationInsightsComponentListResultPage {
-	return original.NewApplicationInsightsComponentListResultPage(getNextPage)
+func NewAPIKeysClientWithBaseURI(baseURI string, subscriptionID string) APIKeysClient {
+	return original.NewAPIKeysClientWithBaseURI(baseURI, subscriptionID)
+}
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewComponentAvailableFeaturesClient(subscriptionID string) ComponentAvailableFeaturesClient {
 	return original.NewComponentAvailableFeaturesClient(subscriptionID)
@@ -283,57 +277,6 @@ func NewFavoritesClient(subscriptionID string) FavoritesClient {
 func NewFavoritesClientWithBaseURI(baseURI string, subscriptionID string) FavoritesClient {
 	return original.NewFavoritesClientWithBaseURI(baseURI, subscriptionID)
 }
-func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
-	return original.NewOperationListResultIterator(page)
-}
-func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
-	return original.NewOperationListResultPage(getNextPage)
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewProactiveDetectionConfigurationsClient(subscriptionID string) ProactiveDetectionConfigurationsClient {
-	return original.NewProactiveDetectionConfigurationsClient(subscriptionID)
-}
-func NewProactiveDetectionConfigurationsClientWithBaseURI(baseURI string, subscriptionID string) ProactiveDetectionConfigurationsClient {
-	return original.NewProactiveDetectionConfigurationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewWebTestListResultIterator(page WebTestListResultPage) WebTestListResultIterator {
-	return original.NewWebTestListResultIterator(page)
-}
-func NewWebTestListResultPage(getNextPage func(context.Context, WebTestListResult) (WebTestListResult, error)) WebTestListResultPage {
-	return original.NewWebTestListResultPage(getNextPage)
-}
-func NewWebTestLocationsClient(subscriptionID string) WebTestLocationsClient {
-	return original.NewWebTestLocationsClient(subscriptionID)
-}
-func NewWebTestLocationsClientWithBaseURI(baseURI string, subscriptionID string) WebTestLocationsClient {
-	return original.NewWebTestLocationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewWebTestsClient(subscriptionID string) WebTestsClient {
-	return original.NewWebTestsClient(subscriptionID)
-}
-func NewWebTestsClientWithBaseURI(baseURI string, subscriptionID string) WebTestsClient {
-	return original.NewWebTestsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
-}
-func NewWorkItemConfigurationsClient(subscriptionID string) WorkItemConfigurationsClient {
-	return original.NewWorkItemConfigurationsClient(subscriptionID)
-}
-func NewWorkItemConfigurationsClientWithBaseURI(baseURI string, subscriptionID string) WorkItemConfigurationsClient {
-	return original.NewWorkItemConfigurationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewWorkbooksClient(subscriptionID string) WorkbooksClient {
-	return original.NewWorkbooksClient(subscriptionID)
-}
-func NewWorkbooksClientWithBaseURI(baseURI string, subscriptionID string) WorkbooksClient {
-	return original.NewWorkbooksClientWithBaseURI(baseURI, subscriptionID)
-}
 func PossibleApplicationTypeValues() []ApplicationType {
 	return original.PossibleApplicationTypeValues()
 }
@@ -349,17 +292,17 @@ func PossibleFavoriteTypeValues() []FavoriteType {
 func PossibleFlowTypeValues() []FlowType {
 	return original.PossibleFlowTypeValues()
 }
-func PossibleItemScopePathValues() []ItemScopePath {
-	return original.PossibleItemScopePathValues()
-}
 func PossibleItemScopeValues() []ItemScope {
 	return original.PossibleItemScopeValues()
 }
-func PossibleItemTypeParameterValues() []ItemTypeParameter {
-	return original.PossibleItemTypeParameterValues()
+func PossibleItemScopePathValues() []ItemScopePath {
+	return original.PossibleItemScopePathValues()
 }
 func PossibleItemTypeValues() []ItemType {
 	return original.PossibleItemTypeValues()
+}
+func PossibleItemTypeParameterValues() []ItemTypeParameter {
+	return original.PossibleItemTypeParameterValues()
 }
 func PossiblePurgeStateValues() []PurgeState {
 	return original.PossiblePurgeStateValues()
@@ -373,9 +316,45 @@ func PossibleSharedTypeKindValues() []SharedTypeKind {
 func PossibleWebTestKindValues() []WebTestKind {
 	return original.PossibleWebTestKindValues()
 }
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProactiveDetectionConfigurationsClient(subscriptionID string) ProactiveDetectionConfigurationsClient {
+	return original.NewProactiveDetectionConfigurationsClient(subscriptionID)
+}
+func NewProactiveDetectionConfigurationsClientWithBaseURI(baseURI string, subscriptionID string) ProactiveDetectionConfigurationsClient {
+	return original.NewProactiveDetectionConfigurationsClientWithBaseURI(baseURI, subscriptionID)
+}
 func UserAgent() string {
 	return original.UserAgent() + " profiles/latest"
 }
 func Version() string {
 	return original.Version()
+}
+func NewWebTestLocationsClient(subscriptionID string) WebTestLocationsClient {
+	return original.NewWebTestLocationsClient(subscriptionID)
+}
+func NewWebTestLocationsClientWithBaseURI(baseURI string, subscriptionID string) WebTestLocationsClient {
+	return original.NewWebTestLocationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWebTestsClient(subscriptionID string) WebTestsClient {
+	return original.NewWebTestsClient(subscriptionID)
+}
+func NewWebTestsClientWithBaseURI(baseURI string, subscriptionID string) WebTestsClient {
+	return original.NewWebTestsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWorkbooksClient(subscriptionID string) WorkbooksClient {
+	return original.NewWorkbooksClient(subscriptionID)
+}
+func NewWorkbooksClientWithBaseURI(baseURI string, subscriptionID string) WorkbooksClient {
+	return original.NewWorkbooksClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWorkItemConfigurationsClient(subscriptionID string) WorkItemConfigurationsClient {
+	return original.NewWorkItemConfigurationsClient(subscriptionID)
+}
+func NewWorkItemConfigurationsClientWithBaseURI(baseURI string, subscriptionID string) WorkItemConfigurationsClient {
+	return original.NewWorkItemConfigurationsClientWithBaseURI(baseURI, subscriptionID)
 }

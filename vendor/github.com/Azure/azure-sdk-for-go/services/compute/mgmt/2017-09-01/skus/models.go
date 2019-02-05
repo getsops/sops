@@ -18,15 +18,10 @@ package skus
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
-	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/to"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
-
-// The package's fully qualified name.
-const fqdn = "github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2017-09-01/skus"
 
 // ResourceSkuCapacityScaleType enumerates the values for resource sku capacity scale type.
 type ResourceSkuCapacityScaleType string
@@ -105,7 +100,7 @@ type ResourceSku struct {
 	Restrictions *[]ResourceSkuRestrictions `json:"restrictions,omitempty"`
 }
 
-// ResourceSkuCapabilities describes The SKU capabilities object.
+// ResourceSkuCapabilities describes The SKU capabilites object.
 type ResourceSkuCapabilities struct {
 	// Name - An invariant to describe the feature.
 	Name *string `json:"name,omitempty"`
@@ -178,37 +173,20 @@ type ResourceSkusResultIterator struct {
 	page ResourceSkusResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResourceSkusResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceSkusResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *ResourceSkusResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *ResourceSkusResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -230,11 +208,6 @@ func (iter ResourceSkusResultIterator) Value() ResourceSku {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the ResourceSkusResultIterator type.
-func NewResourceSkusResultIterator(page ResourceSkusResultPage) ResourceSkusResultIterator {
-	return ResourceSkusResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (rsr ResourceSkusResult) IsEmpty() bool {
 	return rsr.Value == nil || len(*rsr.Value) == 0
@@ -242,11 +215,11 @@ func (rsr ResourceSkusResult) IsEmpty() bool {
 
 // resourceSkusResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rsr ResourceSkusResult) resourceSkusResultPreparer(ctx context.Context) (*http.Request, error) {
+func (rsr ResourceSkusResult) resourceSkusResultPreparer() (*http.Request, error) {
 	if rsr.NextLink == nil || len(to.String(rsr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rsr.NextLink)))
@@ -254,36 +227,19 @@ func (rsr ResourceSkusResult) resourceSkusResultPreparer(ctx context.Context) (*
 
 // ResourceSkusResultPage contains a page of ResourceSku values.
 type ResourceSkusResultPage struct {
-	fn  func(context.Context, ResourceSkusResult) (ResourceSkusResult, error)
+	fn  func(ResourceSkusResult) (ResourceSkusResult, error)
 	rsr ResourceSkusResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResourceSkusResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceSkusResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.rsr)
+func (page *ResourceSkusResultPage) Next() error {
+	next, err := page.fn(page.rsr)
 	if err != nil {
 		return err
 	}
 	page.rsr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *ResourceSkusResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -302,9 +258,4 @@ func (page ResourceSkusResultPage) Values() []ResourceSku {
 		return nil
 	}
 	return *page.rsr.Value
-}
-
-// Creates a new instance of the ResourceSkusResultPage type.
-func NewResourceSkusResultPage(getNextPage func(context.Context, ResourceSkusResult) (ResourceSkusResult, error)) ResourceSkusResultPage {
-	return ResourceSkusResultPage{fn: getNextPage}
 }

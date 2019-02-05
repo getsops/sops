@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -51,16 +50,6 @@ func NewRateCardClientWithBaseURI(baseURI string, subscriptionID string) RateCar
 // time. All the 4 query parameters 'OfferDurableId',  'Currency', 'Locale', 'Region' are required to be a part
 // of the $filter.
 func (client RateCardClient) Get(ctx context.Context, filter string) (result ResourceRateCardInfo, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RateCardClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, filter)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "commerce.RateCardClient", "Get", nil, "Failure preparing request")

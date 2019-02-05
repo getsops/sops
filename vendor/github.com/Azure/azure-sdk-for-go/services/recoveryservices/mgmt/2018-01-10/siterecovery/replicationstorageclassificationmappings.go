@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,16 +49,6 @@ func NewReplicationStorageClassificationMappingsClientWithBaseURI(baseURI string
 // storageClassificationMappingName - storage classification mapping name.
 // pairingInput - pairing input.
 func (client ReplicationStorageClassificationMappingsClient) Create(ctx context.Context, fabricName string, storageClassificationName string, storageClassificationMappingName string, pairingInput StorageClassificationMappingInput) (result ReplicationStorageClassificationMappingsCreateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationStorageClassificationMappingsClient.Create")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.CreatePreparer(ctx, fabricName, storageClassificationName, storageClassificationMappingName, pairingInput)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationStorageClassificationMappingsClient", "Create", nil, "Failure preparing request")
@@ -110,6 +99,10 @@ func (client ReplicationStorageClassificationMappingsClient) CreateSender(req *h
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -133,16 +126,6 @@ func (client ReplicationStorageClassificationMappingsClient) CreateResponder(res
 // storageClassificationName - storage classification name.
 // storageClassificationMappingName - storage classification mapping name.
 func (client ReplicationStorageClassificationMappingsClient) Delete(ctx context.Context, fabricName string, storageClassificationName string, storageClassificationMappingName string) (result ReplicationStorageClassificationMappingsDeleteFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationStorageClassificationMappingsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, fabricName, storageClassificationName, storageClassificationMappingName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationStorageClassificationMappingsClient", "Delete", nil, "Failure preparing request")
@@ -191,6 +174,10 @@ func (client ReplicationStorageClassificationMappingsClient) DeleteSender(req *h
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -213,16 +200,6 @@ func (client ReplicationStorageClassificationMappingsClient) DeleteResponder(res
 // storageClassificationName - storage classification name.
 // storageClassificationMappingName - storage classification mapping name.
 func (client ReplicationStorageClassificationMappingsClient) Get(ctx context.Context, fabricName string, storageClassificationName string, storageClassificationMappingName string) (result StorageClassificationMapping, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationStorageClassificationMappingsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, fabricName, storageClassificationName, storageClassificationMappingName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationStorageClassificationMappingsClient", "Get", nil, "Failure preparing request")
@@ -290,16 +267,6 @@ func (client ReplicationStorageClassificationMappingsClient) GetResponder(resp *
 
 // List lists the storage classification mappings in the vault.
 func (client ReplicationStorageClassificationMappingsClient) List(ctx context.Context) (result StorageClassificationMappingCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationStorageClassificationMappingsClient.List")
-		defer func() {
-			sc := -1
-			if result.scmc.Response.Response != nil {
-				sc = result.scmc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -364,8 +331,8 @@ func (client ReplicationStorageClassificationMappingsClient) ListResponder(resp 
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ReplicationStorageClassificationMappingsClient) listNextResults(ctx context.Context, lastResults StorageClassificationMappingCollection) (result StorageClassificationMappingCollection, err error) {
-	req, err := lastResults.storageClassificationMappingCollectionPreparer(ctx)
+func (client ReplicationStorageClassificationMappingsClient) listNextResults(lastResults StorageClassificationMappingCollection) (result StorageClassificationMappingCollection, err error) {
+	req, err := lastResults.storageClassificationMappingCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "siterecovery.ReplicationStorageClassificationMappingsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -386,16 +353,6 @@ func (client ReplicationStorageClassificationMappingsClient) listNextResults(ctx
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReplicationStorageClassificationMappingsClient) ListComplete(ctx context.Context) (result StorageClassificationMappingCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationStorageClassificationMappingsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -403,18 +360,8 @@ func (client ReplicationStorageClassificationMappingsClient) ListComplete(ctx co
 // ListByReplicationStorageClassifications lists the storage classification mappings for the fabric.
 // Parameters:
 // fabricName - fabric name.
-// storageClassificationName - storage classification name.
+// storageClassificationName - storage classfication name.
 func (client ReplicationStorageClassificationMappingsClient) ListByReplicationStorageClassifications(ctx context.Context, fabricName string, storageClassificationName string) (result StorageClassificationMappingCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationStorageClassificationMappingsClient.ListByReplicationStorageClassifications")
-		defer func() {
-			sc := -1
-			if result.scmc.Response.Response != nil {
-				sc = result.scmc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByReplicationStorageClassificationsNextResults
 	req, err := client.ListByReplicationStorageClassificationsPreparer(ctx, fabricName, storageClassificationName)
 	if err != nil {
@@ -481,8 +428,8 @@ func (client ReplicationStorageClassificationMappingsClient) ListByReplicationSt
 }
 
 // listByReplicationStorageClassificationsNextResults retrieves the next set of results, if any.
-func (client ReplicationStorageClassificationMappingsClient) listByReplicationStorageClassificationsNextResults(ctx context.Context, lastResults StorageClassificationMappingCollection) (result StorageClassificationMappingCollection, err error) {
-	req, err := lastResults.storageClassificationMappingCollectionPreparer(ctx)
+func (client ReplicationStorageClassificationMappingsClient) listByReplicationStorageClassificationsNextResults(lastResults StorageClassificationMappingCollection) (result StorageClassificationMappingCollection, err error) {
+	req, err := lastResults.storageClassificationMappingCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "siterecovery.ReplicationStorageClassificationMappingsClient", "listByReplicationStorageClassificationsNextResults", nil, "Failure preparing next results request")
 	}
@@ -503,16 +450,6 @@ func (client ReplicationStorageClassificationMappingsClient) listByReplicationSt
 
 // ListByReplicationStorageClassificationsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReplicationStorageClassificationMappingsClient) ListByReplicationStorageClassificationsComplete(ctx context.Context, fabricName string, storageClassificationName string) (result StorageClassificationMappingCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationStorageClassificationMappingsClient.ListByReplicationStorageClassifications")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByReplicationStorageClassifications(ctx, fabricName, storageClassificationName)
 	return
 }

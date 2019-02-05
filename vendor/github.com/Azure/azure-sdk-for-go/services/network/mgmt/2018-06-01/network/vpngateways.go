@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,16 +45,6 @@ func NewVpnGatewaysClientWithBaseURI(baseURI string, subscriptionID string) VpnG
 // gatewayName - the name of the gateway.
 // vpnGatewayParameters - parameters supplied to create or Update a virtual wan vpn gateway.
 func (client VpnGatewaysClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, gatewayName string, vpnGatewayParameters VpnGateway) (result VpnGatewaysCreateOrUpdateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/VpnGatewaysClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, gatewayName, vpnGatewayParameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.VpnGatewaysClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -103,6 +92,10 @@ func (client VpnGatewaysClient) CreateOrUpdateSender(req *http.Request) (future 
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -125,16 +118,6 @@ func (client VpnGatewaysClient) CreateOrUpdateResponder(resp *http.Response) (re
 // resourceGroupName - the resource group name of the VpnGateway.
 // gatewayName - the name of the gateway.
 func (client VpnGatewaysClient) Delete(ctx context.Context, resourceGroupName string, gatewayName string) (result VpnGatewaysDeleteFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/VpnGatewaysClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, gatewayName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.VpnGatewaysClient", "Delete", nil, "Failure preparing request")
@@ -180,6 +163,10 @@ func (client VpnGatewaysClient) DeleteSender(req *http.Request) (future VpnGatew
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -201,16 +188,6 @@ func (client VpnGatewaysClient) DeleteResponder(resp *http.Response) (result aut
 // resourceGroupName - the resource group name of the VpnGateway.
 // gatewayName - the name of the gateway.
 func (client VpnGatewaysClient) Get(ctx context.Context, resourceGroupName string, gatewayName string) (result VpnGateway, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/VpnGatewaysClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, gatewayName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.VpnGatewaysClient", "Get", nil, "Failure preparing request")
@@ -275,16 +252,6 @@ func (client VpnGatewaysClient) GetResponder(resp *http.Response) (result VpnGat
 
 // List lists all the VpnGateways in a subscription.
 func (client VpnGatewaysClient) List(ctx context.Context) (result ListVpnGatewaysResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/VpnGatewaysClient.List")
-		defer func() {
-			sc := -1
-			if result.lvgr.Response.Response != nil {
-				sc = result.lvgr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -347,8 +314,8 @@ func (client VpnGatewaysClient) ListResponder(resp *http.Response) (result ListV
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client VpnGatewaysClient) listNextResults(ctx context.Context, lastResults ListVpnGatewaysResult) (result ListVpnGatewaysResult, err error) {
-	req, err := lastResults.listVpnGatewaysResultPreparer(ctx)
+func (client VpnGatewaysClient) listNextResults(lastResults ListVpnGatewaysResult) (result ListVpnGatewaysResult, err error) {
+	req, err := lastResults.listVpnGatewaysResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "network.VpnGatewaysClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -369,16 +336,6 @@ func (client VpnGatewaysClient) listNextResults(ctx context.Context, lastResults
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client VpnGatewaysClient) ListComplete(ctx context.Context) (result ListVpnGatewaysResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/VpnGatewaysClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -387,16 +344,6 @@ func (client VpnGatewaysClient) ListComplete(ctx context.Context) (result ListVp
 // Parameters:
 // resourceGroupName - the resource group name of the VpnGateway.
 func (client VpnGatewaysClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result ListVpnGatewaysResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/VpnGatewaysClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.lvgr.Response.Response != nil {
-				sc = result.lvgr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -460,8 +407,8 @@ func (client VpnGatewaysClient) ListByResourceGroupResponder(resp *http.Response
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client VpnGatewaysClient) listByResourceGroupNextResults(ctx context.Context, lastResults ListVpnGatewaysResult) (result ListVpnGatewaysResult, err error) {
-	req, err := lastResults.listVpnGatewaysResultPreparer(ctx)
+func (client VpnGatewaysClient) listByResourceGroupNextResults(lastResults ListVpnGatewaysResult) (result ListVpnGatewaysResult, err error) {
+	req, err := lastResults.listVpnGatewaysResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "network.VpnGatewaysClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -482,16 +429,6 @@ func (client VpnGatewaysClient) listByResourceGroupNextResults(ctx context.Conte
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client VpnGatewaysClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result ListVpnGatewaysResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/VpnGatewaysClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -502,16 +439,6 @@ func (client VpnGatewaysClient) ListByResourceGroupComplete(ctx context.Context,
 // gatewayName - the name of the gateway.
 // vpnGatewayParameters - parameters supplied to update a virtual wan vpn gateway tags.
 func (client VpnGatewaysClient) UpdateTags(ctx context.Context, resourceGroupName string, gatewayName string, vpnGatewayParameters TagsObject) (result VpnGatewaysUpdateTagsFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/VpnGatewaysClient.UpdateTags")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.UpdateTagsPreparer(ctx, resourceGroupName, gatewayName, vpnGatewayParameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.VpnGatewaysClient", "UpdateTags", nil, "Failure preparing request")
@@ -556,6 +483,10 @@ func (client VpnGatewaysClient) UpdateTagsSender(req *http.Request) (future VpnG
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
 	if err != nil {
 		return
 	}

@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,16 +44,6 @@ func NewDiagnosticSettingsCategoryClientWithBaseURI(baseURI string, subscription
 // resourceURI - the identifier of the resource.
 // name - the name of the diagnostic setting.
 func (client DiagnosticSettingsCategoryClient) Get(ctx context.Context, resourceURI string, name string) (result DiagnosticSettingsCategoryResource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticSettingsCategoryClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceURI, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.DiagnosticSettingsCategoryClient", "Get", nil, "Failure preparing request")
@@ -120,16 +109,6 @@ func (client DiagnosticSettingsCategoryClient) GetResponder(resp *http.Response)
 // Parameters:
 // resourceURI - the identifier of the resource.
 func (client DiagnosticSettingsCategoryClient) List(ctx context.Context, resourceURI string) (result DiagnosticSettingsCategoryResourceCollection, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticSettingsCategoryClient.List")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ListPreparer(ctx, resourceURI)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.DiagnosticSettingsCategoryClient", "List", nil, "Failure preparing request")

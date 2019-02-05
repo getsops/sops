@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,20 +49,10 @@ func NewTransformationsClientWithBaseURI(baseURI string, subscriptionID string) 
 // jobName - the name of the streaming job.
 // transformationName - the name of the transformation.
 // ifMatch - the ETag of the transformation. Omit this value to always overwrite the current transformation.
-// Specify the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+// Specify the last-seen ETag value to prevent accidentally overwritting concurrent changes.
 // ifNoneMatch - set to '*' to allow a new transformation to be created, but to prevent updating an existing
 // transformation. Other values will result in a 412 Pre-condition Failed response.
 func (client TransformationsClient) CreateOrReplace(ctx context.Context, transformation Transformation, resourceGroupName string, jobName string, transformationName string, ifMatch string, ifNoneMatch string) (result Transformation, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TransformationsClient.CreateOrReplace")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.CreateOrReplacePreparer(ctx, transformation, resourceGroupName, jobName, transformationName, ifMatch, ifNoneMatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "streamanalytics.TransformationsClient", "CreateOrReplace", nil, "Failure preparing request")
@@ -144,16 +133,6 @@ func (client TransformationsClient) CreateOrReplaceResponder(resp *http.Response
 // jobName - the name of the streaming job.
 // transformationName - the name of the transformation.
 func (client TransformationsClient) Get(ctx context.Context, resourceGroupName string, jobName string, transformationName string) (result Transformation, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TransformationsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, jobName, transformationName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "streamanalytics.TransformationsClient", "Get", nil, "Failure preparing request")
@@ -229,18 +208,8 @@ func (client TransformationsClient) GetResponder(resp *http.Response) (result Tr
 // jobName - the name of the streaming job.
 // transformationName - the name of the transformation.
 // ifMatch - the ETag of the transformation. Omit this value to always overwrite the current transformation.
-// Specify the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+// Specify the last-seen ETag value to prevent accidentally overwritting concurrent changes.
 func (client TransformationsClient) Update(ctx context.Context, transformation Transformation, resourceGroupName string, jobName string, transformationName string, ifMatch string) (result Transformation, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TransformationsClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.UpdatePreparer(ctx, transformation, resourceGroupName, jobName, transformationName, ifMatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "streamanalytics.TransformationsClient", "Update", nil, "Failure preparing request")

@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -51,16 +50,6 @@ func NewClustersClientWithBaseURI(baseURI string, subscriptionID string) Cluster
 // through 64 characters long.
 // parameters - the parameters to provide for the Cluster creation.
 func (client ClustersClient) Create(ctx context.Context, resourceGroupName string, workspaceName string, clusterName string, parameters ClusterCreateParameters) (result ClustersCreateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ClustersClient.Create")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},
@@ -163,6 +152,10 @@ func (client ClustersClient) CreateSender(req *http.Request) (future ClustersCre
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -189,16 +182,6 @@ func (client ClustersClient) CreateResponder(resp *http.Response) (result Cluste
 // combination of alphanumeric characters along with dash (-) and underscore (_). The name must be from 1
 // through 64 characters long.
 func (client ClustersClient) Delete(ctx context.Context, resourceGroupName string, workspaceName string, clusterName string) (result ClustersDeleteFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ClustersClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},
@@ -259,6 +242,10 @@ func (client ClustersClient) DeleteSender(req *http.Request) (future ClustersDel
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -284,16 +271,6 @@ func (client ClustersClient) DeleteResponder(resp *http.Response) (result autore
 // combination of alphanumeric characters along with dash (-) and underscore (_). The name must be from 1
 // through 64 characters long.
 func (client ClustersClient) Get(ctx context.Context, resourceGroupName string, workspaceName string, clusterName string) (result Cluster, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ClustersClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},
@@ -378,16 +355,6 @@ func (client ClustersClient) GetResponder(resp *http.Response) (result Cluster, 
 // characters along with dash (-) and underscore (_). The name must be from 1 through 64 characters long.
 // maxResults - the maximum number of items to return in the response. A maximum of 1000 files can be returned.
 func (client ClustersClient) ListByWorkspace(ctx context.Context, resourceGroupName string, workspaceName string, maxResults *int32) (result ClusterListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ClustersClient.ListByWorkspace")
-		defer func() {
-			sc := -1
-			if result.clr.Response.Response != nil {
-				sc = result.clr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},
@@ -472,8 +439,8 @@ func (client ClustersClient) ListByWorkspaceResponder(resp *http.Response) (resu
 }
 
 // listByWorkspaceNextResults retrieves the next set of results, if any.
-func (client ClustersClient) listByWorkspaceNextResults(ctx context.Context, lastResults ClusterListResult) (result ClusterListResult, err error) {
-	req, err := lastResults.clusterListResultPreparer(ctx)
+func (client ClustersClient) listByWorkspaceNextResults(lastResults ClusterListResult) (result ClusterListResult, err error) {
+	req, err := lastResults.clusterListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "batchai.ClustersClient", "listByWorkspaceNextResults", nil, "Failure preparing next results request")
 	}
@@ -494,16 +461,6 @@ func (client ClustersClient) listByWorkspaceNextResults(ctx context.Context, las
 
 // ListByWorkspaceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ClustersClient) ListByWorkspaceComplete(ctx context.Context, resourceGroupName string, workspaceName string, maxResults *int32) (result ClusterListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ClustersClient.ListByWorkspace")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByWorkspace(ctx, resourceGroupName, workspaceName, maxResults)
 	return
 }
@@ -517,16 +474,6 @@ func (client ClustersClient) ListByWorkspaceComplete(ctx context.Context, resour
 // combination of alphanumeric characters along with dash (-) and underscore (_). The name must be from 1
 // through 64 characters long.
 func (client ClustersClient) ListRemoteLoginInformation(ctx context.Context, resourceGroupName string, workspaceName string, clusterName string) (result RemoteLoginInformationListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ClustersClient.ListRemoteLoginInformation")
-		defer func() {
-			sc := -1
-			if result.rlilr.Response.Response != nil {
-				sc = result.rlilr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},
@@ -606,8 +553,8 @@ func (client ClustersClient) ListRemoteLoginInformationResponder(resp *http.Resp
 }
 
 // listRemoteLoginInformationNextResults retrieves the next set of results, if any.
-func (client ClustersClient) listRemoteLoginInformationNextResults(ctx context.Context, lastResults RemoteLoginInformationListResult) (result RemoteLoginInformationListResult, err error) {
-	req, err := lastResults.remoteLoginInformationListResultPreparer(ctx)
+func (client ClustersClient) listRemoteLoginInformationNextResults(lastResults RemoteLoginInformationListResult) (result RemoteLoginInformationListResult, err error) {
+	req, err := lastResults.remoteLoginInformationListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "batchai.ClustersClient", "listRemoteLoginInformationNextResults", nil, "Failure preparing next results request")
 	}
@@ -628,16 +575,6 @@ func (client ClustersClient) listRemoteLoginInformationNextResults(ctx context.C
 
 // ListRemoteLoginInformationComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ClustersClient) ListRemoteLoginInformationComplete(ctx context.Context, resourceGroupName string, workspaceName string, clusterName string) (result RemoteLoginInformationListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ClustersClient.ListRemoteLoginInformation")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListRemoteLoginInformation(ctx, resourceGroupName, workspaceName, clusterName)
 	return
 }
@@ -652,16 +589,6 @@ func (client ClustersClient) ListRemoteLoginInformationComplete(ctx context.Cont
 // through 64 characters long.
 // parameters - additional parameters for cluster update.
 func (client ClustersClient) Update(ctx context.Context, resourceGroupName string, workspaceName string, clusterName string, parameters ClusterUpdateParameters) (result Cluster, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ClustersClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},

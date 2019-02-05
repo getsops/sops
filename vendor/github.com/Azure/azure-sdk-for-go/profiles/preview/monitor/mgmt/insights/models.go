@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2018 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,12 +19,27 @@
 
 package insights
 
-import original "github.com/Azure/azure-sdk-for-go/services/monitor/mgmt/2017-09-01/insights"
+import original "github.com/Azure/azure-sdk-for-go/services/monitor/mgmt/2018-03-01/insights"
+
+type ActionGroupsClient = original.ActionGroupsClient
+type ActivityLogAlertsClient = original.ActivityLogAlertsClient
+type ActivityLogsClient = original.ActivityLogsClient
+type AlertRuleIncidentsClient = original.AlertRuleIncidentsClient
+type AlertRulesClient = original.AlertRulesClient
+type AutoscaleSettingsClient = original.AutoscaleSettingsClient
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
+type BaseClient = original.BaseClient
+type DiagnosticSettingsClient = original.DiagnosticSettingsClient
+type DiagnosticSettingsCategoryClient = original.DiagnosticSettingsCategoryClient
+type EventCategoriesClient = original.EventCategoriesClient
+type LogProfilesClient = original.LogProfilesClient
+type MetricBaselineClient = original.MetricBaselineClient
+type MetricDefinitionsClient = original.MetricDefinitionsClient
+type MetricsClient = original.MetricsClient
 type AggregationType = original.AggregationType
 
 const (
@@ -198,7 +213,6 @@ type ActionGroupList = original.ActionGroupList
 type ActionGroupPatch = original.ActionGroupPatch
 type ActionGroupPatchBody = original.ActionGroupPatchBody
 type ActionGroupResource = original.ActionGroupResource
-type ActionGroupsClient = original.ActionGroupsClient
 type ActivityLogAlert = original.ActivityLogAlert
 type ActivityLogAlertActionGroup = original.ActivityLogAlertActionGroup
 type ActivityLogAlertActionList = original.ActivityLogAlertActionList
@@ -208,14 +222,10 @@ type ActivityLogAlertList = original.ActivityLogAlertList
 type ActivityLogAlertPatch = original.ActivityLogAlertPatch
 type ActivityLogAlertPatchBody = original.ActivityLogAlertPatchBody
 type ActivityLogAlertResource = original.ActivityLogAlertResource
-type ActivityLogAlertsClient = original.ActivityLogAlertsClient
-type ActivityLogsClient = original.ActivityLogsClient
 type AlertRule = original.AlertRule
-type AlertRuleIncidentsClient = original.AlertRuleIncidentsClient
 type AlertRuleResource = original.AlertRuleResource
 type AlertRuleResourceCollection = original.AlertRuleResourceCollection
 type AlertRuleResourcePatch = original.AlertRuleResourcePatch
-type AlertRulesClient = original.AlertRulesClient
 type AutomationRunbookReceiver = original.AutomationRunbookReceiver
 type AutoscaleNotification = original.AutoscaleNotification
 type AutoscaleProfile = original.AutoscaleProfile
@@ -225,30 +235,23 @@ type AutoscaleSettingResourceCollection = original.AutoscaleSettingResourceColle
 type AutoscaleSettingResourceCollectionIterator = original.AutoscaleSettingResourceCollectionIterator
 type AutoscaleSettingResourceCollectionPage = original.AutoscaleSettingResourceCollectionPage
 type AutoscaleSettingResourcePatch = original.AutoscaleSettingResourcePatch
-type AutoscaleSettingsClient = original.AutoscaleSettingsClient
 type AzureAppPushReceiver = original.AzureAppPushReceiver
-type BaseClient = original.BaseClient
+type AzureFunctionReceiver = original.AzureFunctionReceiver
 type Baseline = original.Baseline
 type BaselineMetadataValue = original.BaselineMetadataValue
 type BaselineProperties = original.BaselineProperties
 type BaselineResponse = original.BaselineResponse
-type BasicRuleAction = original.BasicRuleAction
-type BasicRuleCondition = original.BasicRuleCondition
-type BasicRuleDataSource = original.BasicRuleDataSource
 type CalculateBaselineResponse = original.CalculateBaselineResponse
 type DiagnosticSettings = original.DiagnosticSettings
 type DiagnosticSettingsCategory = original.DiagnosticSettingsCategory
-type DiagnosticSettingsCategoryClient = original.DiagnosticSettingsCategoryClient
 type DiagnosticSettingsCategoryResource = original.DiagnosticSettingsCategoryResource
 type DiagnosticSettingsCategoryResourceCollection = original.DiagnosticSettingsCategoryResourceCollection
-type DiagnosticSettingsClient = original.DiagnosticSettingsClient
 type DiagnosticSettingsResource = original.DiagnosticSettingsResource
 type DiagnosticSettingsResourceCollection = original.DiagnosticSettingsResourceCollection
 type EmailNotification = original.EmailNotification
 type EmailReceiver = original.EmailReceiver
 type EnableRequest = original.EnableRequest
 type ErrorResponse = original.ErrorResponse
-type EventCategoriesClient = original.EventCategoriesClient
 type EventCategoryCollection = original.EventCategoryCollection
 type EventData = original.EventData
 type EventDataCollection = original.EventDataCollection
@@ -260,37 +263,36 @@ type IncidentListResult = original.IncidentListResult
 type ItsmReceiver = original.ItsmReceiver
 type LocalizableString = original.LocalizableString
 type LocationThresholdRuleCondition = original.LocationThresholdRuleCondition
+type LogicAppReceiver = original.LogicAppReceiver
 type LogProfileCollection = original.LogProfileCollection
 type LogProfileProperties = original.LogProfileProperties
 type LogProfileResource = original.LogProfileResource
 type LogProfileResourcePatch = original.LogProfileResourcePatch
-type LogProfilesClient = original.LogProfilesClient
 type LogSettings = original.LogSettings
 type ManagementEventAggregationCondition = original.ManagementEventAggregationCondition
 type ManagementEventRuleCondition = original.ManagementEventRuleCondition
 type MetadataValue = original.MetadataValue
 type Metric = original.Metric
 type MetricAvailability = original.MetricAvailability
-type MetricBaselineClient = original.MetricBaselineClient
 type MetricDefinition = original.MetricDefinition
 type MetricDefinitionCollection = original.MetricDefinitionCollection
-type MetricDefinitionsClient = original.MetricDefinitionsClient
 type MetricSettings = original.MetricSettings
 type MetricTrigger = original.MetricTrigger
 type MetricValue = original.MetricValue
-type MetricsClient = original.MetricsClient
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
-type OperationsClient = original.OperationsClient
 type ProxyOnlyResource = original.ProxyOnlyResource
 type Recurrence = original.Recurrence
 type RecurrentSchedule = original.RecurrentSchedule
 type Resource = original.Resource
 type Response = original.Response
 type RetentionPolicy = original.RetentionPolicy
+type BasicRuleAction = original.BasicRuleAction
 type RuleAction = original.RuleAction
+type BasicRuleCondition = original.BasicRuleCondition
 type RuleCondition = original.RuleCondition
+type BasicRuleDataSource = original.BasicRuleDataSource
 type RuleDataSource = original.RuleDataSource
 type RuleEmailAction = original.RuleEmailAction
 type RuleManagementEventClaimsDataSource = original.RuleManagementEventClaimsDataSource
@@ -302,7 +304,6 @@ type ScaleCapacity = original.ScaleCapacity
 type ScaleRule = original.ScaleRule
 type SenderAuthorization = original.SenderAuthorization
 type SmsReceiver = original.SmsReceiver
-type TenantActivityLogsClient = original.TenantActivityLogsClient
 type ThresholdRuleCondition = original.ThresholdRuleCondition
 type TimeSeriesElement = original.TimeSeriesElement
 type TimeSeriesInformation = original.TimeSeriesInformation
@@ -310,10 +311,9 @@ type TimeWindow = original.TimeWindow
 type VoiceReceiver = original.VoiceReceiver
 type WebhookNotification = original.WebhookNotification
 type WebhookReceiver = original.WebhookReceiver
+type OperationsClient = original.OperationsClient
+type TenantActivityLogsClient = original.TenantActivityLogsClient
 
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
-}
 func NewActionGroupsClient(subscriptionID string) ActionGroupsClient {
 	return original.NewActionGroupsClient(subscriptionID)
 }
@@ -350,17 +350,23 @@ func NewAutoscaleSettingsClient(subscriptionID string) AutoscaleSettingsClient {
 func NewAutoscaleSettingsClientWithBaseURI(baseURI string, subscriptionID string) AutoscaleSettingsClient {
 	return original.NewAutoscaleSettingsClientWithBaseURI(baseURI, subscriptionID)
 }
-func NewDiagnosticSettingsCategoryClient(subscriptionID string) DiagnosticSettingsCategoryClient {
-	return original.NewDiagnosticSettingsCategoryClient(subscriptionID)
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
 }
-func NewDiagnosticSettingsCategoryClientWithBaseURI(baseURI string, subscriptionID string) DiagnosticSettingsCategoryClient {
-	return original.NewDiagnosticSettingsCategoryClientWithBaseURI(baseURI, subscriptionID)
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewDiagnosticSettingsClient(subscriptionID string) DiagnosticSettingsClient {
 	return original.NewDiagnosticSettingsClient(subscriptionID)
 }
 func NewDiagnosticSettingsClientWithBaseURI(baseURI string, subscriptionID string) DiagnosticSettingsClient {
 	return original.NewDiagnosticSettingsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewDiagnosticSettingsCategoryClient(subscriptionID string) DiagnosticSettingsCategoryClient {
+	return original.NewDiagnosticSettingsCategoryClient(subscriptionID)
+}
+func NewDiagnosticSettingsCategoryClientWithBaseURI(baseURI string, subscriptionID string) DiagnosticSettingsCategoryClient {
+	return original.NewDiagnosticSettingsCategoryClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewEventCategoriesClient(subscriptionID string) EventCategoriesClient {
 	return original.NewEventCategoriesClient(subscriptionID)
@@ -392,6 +398,60 @@ func NewMetricsClient(subscriptionID string) MetricsClient {
 func NewMetricsClientWithBaseURI(baseURI string, subscriptionID string) MetricsClient {
 	return original.NewMetricsClientWithBaseURI(baseURI, subscriptionID)
 }
+func PossibleAggregationTypeValues() []AggregationType {
+	return original.PossibleAggregationTypeValues()
+}
+func PossibleCategoryTypeValues() []CategoryType {
+	return original.PossibleCategoryTypeValues()
+}
+func PossibleComparisonOperationTypeValues() []ComparisonOperationType {
+	return original.PossibleComparisonOperationTypeValues()
+}
+func PossibleConditionOperatorValues() []ConditionOperator {
+	return original.PossibleConditionOperatorValues()
+}
+func PossibleEventLevelValues() []EventLevel {
+	return original.PossibleEventLevelValues()
+}
+func PossibleMetricStatisticTypeValues() []MetricStatisticType {
+	return original.PossibleMetricStatisticTypeValues()
+}
+func PossibleOdataTypeValues() []OdataType {
+	return original.PossibleOdataTypeValues()
+}
+func PossibleOdataTypeBasicRuleActionValues() []OdataTypeBasicRuleAction {
+	return original.PossibleOdataTypeBasicRuleActionValues()
+}
+func PossibleOdataTypeBasicRuleConditionValues() []OdataTypeBasicRuleCondition {
+	return original.PossibleOdataTypeBasicRuleConditionValues()
+}
+func PossibleReceiverStatusValues() []ReceiverStatus {
+	return original.PossibleReceiverStatusValues()
+}
+func PossibleRecurrenceFrequencyValues() []RecurrenceFrequency {
+	return original.PossibleRecurrenceFrequencyValues()
+}
+func PossibleResultTypeValues() []ResultType {
+	return original.PossibleResultTypeValues()
+}
+func PossibleScaleDirectionValues() []ScaleDirection {
+	return original.PossibleScaleDirectionValues()
+}
+func PossibleScaleTypeValues() []ScaleType {
+	return original.PossibleScaleTypeValues()
+}
+func PossibleSensitivityValues() []Sensitivity {
+	return original.PossibleSensitivityValues()
+}
+func PossibleTimeAggregationOperatorValues() []TimeAggregationOperator {
+	return original.PossibleTimeAggregationOperatorValues()
+}
+func PossibleTimeAggregationTypeValues() []TimeAggregationType {
+	return original.PossibleTimeAggregationTypeValues()
+}
+func PossibleUnitValues() []Unit {
+	return original.PossibleUnitValues()
+}
 func NewOperationsClient(subscriptionID string) OperationsClient {
 	return original.NewOperationsClient(subscriptionID)
 }
@@ -403,9 +463,6 @@ func NewTenantActivityLogsClient(subscriptionID string) TenantActivityLogsClient
 }
 func NewTenantActivityLogsClientWithBaseURI(baseURI string, subscriptionID string) TenantActivityLogsClient {
 	return original.NewTenantActivityLogsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

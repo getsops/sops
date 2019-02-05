@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,16 +49,6 @@ func NewKpiClientWithBaseURI(baseURI string, subscriptionID string) KpiClient {
 // kpiName - the name of the KPI.
 // parameters - parameters supplied to the create/update KPI operation.
 func (client KpiClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, kpiName string, parameters KpiResourceFormat) (result KpiCreateOrUpdateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/KpiClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: kpiName,
 			Constraints: []validation.Constraint{{Target: "kpiName", Name: validation.MaxLength, Rule: 512, Chain: nil},
@@ -126,6 +115,10 @@ func (client KpiClient) CreateOrUpdateSender(req *http.Request) (future KpiCreat
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -149,16 +142,6 @@ func (client KpiClient) CreateOrUpdateResponder(resp *http.Response) (result Kpi
 // hubName - the name of the hub.
 // kpiName - the name of the KPI.
 func (client KpiClient) Delete(ctx context.Context, resourceGroupName string, hubName string, kpiName string) (result KpiDeleteFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/KpiClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, hubName, kpiName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "customerinsights.KpiClient", "Delete", nil, "Failure preparing request")
@@ -205,6 +188,10 @@ func (client KpiClient) DeleteSender(req *http.Request) (future KpiDeleteFuture,
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -227,16 +214,6 @@ func (client KpiClient) DeleteResponder(resp *http.Response) (result autorest.Re
 // hubName - the name of the hub.
 // kpiName - the name of the KPI.
 func (client KpiClient) Get(ctx context.Context, resourceGroupName string, hubName string, kpiName string) (result KpiResourceFormat, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/KpiClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, hubName, kpiName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "customerinsights.KpiClient", "Get", nil, "Failure preparing request")
@@ -305,16 +282,6 @@ func (client KpiClient) GetResponder(resp *http.Response) (result KpiResourceFor
 // resourceGroupName - the name of the resource group.
 // hubName - the name of the hub.
 func (client KpiClient) ListByHub(ctx context.Context, resourceGroupName string, hubName string) (result KpiListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/KpiClient.ListByHub")
-		defer func() {
-			sc := -1
-			if result.klr.Response.Response != nil {
-				sc = result.klr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByHubNextResults
 	req, err := client.ListByHubPreparer(ctx, resourceGroupName, hubName)
 	if err != nil {
@@ -379,8 +346,8 @@ func (client KpiClient) ListByHubResponder(resp *http.Response) (result KpiListR
 }
 
 // listByHubNextResults retrieves the next set of results, if any.
-func (client KpiClient) listByHubNextResults(ctx context.Context, lastResults KpiListResult) (result KpiListResult, err error) {
-	req, err := lastResults.kpiListResultPreparer(ctx)
+func (client KpiClient) listByHubNextResults(lastResults KpiListResult) (result KpiListResult, err error) {
+	req, err := lastResults.kpiListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "customerinsights.KpiClient", "listByHubNextResults", nil, "Failure preparing next results request")
 	}
@@ -401,16 +368,6 @@ func (client KpiClient) listByHubNextResults(ctx context.Context, lastResults Kp
 
 // ListByHubComplete enumerates all values, automatically crossing page boundaries as required.
 func (client KpiClient) ListByHubComplete(ctx context.Context, resourceGroupName string, hubName string) (result KpiListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/KpiClient.ListByHub")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByHub(ctx, resourceGroupName, hubName)
 	return
 }
@@ -421,16 +378,6 @@ func (client KpiClient) ListByHubComplete(ctx context.Context, resourceGroupName
 // hubName - the name of the hub.
 // kpiName - the name of the KPI.
 func (client KpiClient) Reprocess(ctx context.Context, resourceGroupName string, hubName string, kpiName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/KpiClient.Reprocess")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ReprocessPreparer(ctx, resourceGroupName, hubName, kpiName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "customerinsights.KpiClient", "Reprocess", nil, "Failure preparing request")

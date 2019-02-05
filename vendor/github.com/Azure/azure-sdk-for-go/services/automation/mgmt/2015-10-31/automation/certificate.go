@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewCertificateClientWithBaseURI(baseURI string, subscriptionID string) Cert
 // certificateName - the parameters supplied to the create or update certificate operation.
 // parameters - the parameters supplied to the create or update certificate operation.
 func (client CertificateClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, automationAccountName string, certificateName string, parameters CertificateCreateOrUpdateParameters) (result Certificate, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -141,16 +130,6 @@ func (client CertificateClient) CreateOrUpdateResponder(resp *http.Response) (re
 // automationAccountName - the name of the automation account.
 // certificateName - the name of certificate.
 func (client CertificateClient) Delete(ctx context.Context, resourceGroupName string, automationAccountName string, certificateName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -227,16 +206,6 @@ func (client CertificateClient) DeleteResponder(resp *http.Response) (result aut
 // automationAccountName - the name of the automation account.
 // certificateName - the name of certificate.
 func (client CertificateClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string, certificateName string) (result Certificate, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -313,16 +282,6 @@ func (client CertificateClient) GetResponder(resp *http.Response) (result Certif
 // resourceGroupName - name of an Azure Resource group.
 // automationAccountName - the name of the automation account.
 func (client CertificateClient) ListByAutomationAccount(ctx context.Context, resourceGroupName string, automationAccountName string) (result CertificateListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateClient.ListByAutomationAccount")
-		defer func() {
-			sc := -1
-			if result.clr.Response.Response != nil {
-				sc = result.clr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -395,8 +354,8 @@ func (client CertificateClient) ListByAutomationAccountResponder(resp *http.Resp
 }
 
 // listByAutomationAccountNextResults retrieves the next set of results, if any.
-func (client CertificateClient) listByAutomationAccountNextResults(ctx context.Context, lastResults CertificateListResult) (result CertificateListResult, err error) {
-	req, err := lastResults.certificateListResultPreparer(ctx)
+func (client CertificateClient) listByAutomationAccountNextResults(lastResults CertificateListResult) (result CertificateListResult, err error) {
+	req, err := lastResults.certificateListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "automation.CertificateClient", "listByAutomationAccountNextResults", nil, "Failure preparing next results request")
 	}
@@ -417,16 +376,6 @@ func (client CertificateClient) listByAutomationAccountNextResults(ctx context.C
 
 // ListByAutomationAccountComplete enumerates all values, automatically crossing page boundaries as required.
 func (client CertificateClient) ListByAutomationAccountComplete(ctx context.Context, resourceGroupName string, automationAccountName string) (result CertificateListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateClient.ListByAutomationAccount")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByAutomationAccount(ctx, resourceGroupName, automationAccountName)
 	return
 }
@@ -438,16 +387,6 @@ func (client CertificateClient) ListByAutomationAccountComplete(ctx context.Cont
 // certificateName - the parameters supplied to the update certificate operation.
 // parameters - the parameters supplied to the update certificate operation.
 func (client CertificateClient) Update(ctx context.Context, resourceGroupName string, automationAccountName string, certificateName string, parameters CertificateUpdateParameters) (result Certificate, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

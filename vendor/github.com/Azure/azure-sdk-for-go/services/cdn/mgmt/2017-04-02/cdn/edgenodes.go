@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -43,16 +42,6 @@ func NewEdgeNodesClientWithBaseURI(baseURI string, subscriptionID string) EdgeNo
 
 // List edgenodes are the global Point of Presence (POP) locations used to deliver CDN content to end users.
 func (client EdgeNodesClient) List(ctx context.Context) (result EdgenodeResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EdgeNodesClient.List")
-		defer func() {
-			sc := -1
-			if result.er.Response.Response != nil {
-				sc = result.er.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -111,8 +100,8 @@ func (client EdgeNodesClient) ListResponder(resp *http.Response) (result Edgenod
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client EdgeNodesClient) listNextResults(ctx context.Context, lastResults EdgenodeResult) (result EdgenodeResult, err error) {
-	req, err := lastResults.edgenodeResultPreparer(ctx)
+func (client EdgeNodesClient) listNextResults(lastResults EdgenodeResult) (result EdgenodeResult, err error) {
+	req, err := lastResults.edgenodeResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "cdn.EdgeNodesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -133,16 +122,6 @@ func (client EdgeNodesClient) listNextResults(ctx context.Context, lastResults E
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client EdgeNodesClient) ListComplete(ctx context.Context) (result EdgenodeResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EdgeNodesClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }

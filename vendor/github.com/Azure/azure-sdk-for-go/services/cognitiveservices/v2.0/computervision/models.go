@@ -23,9 +23,6 @@ import (
 	"io"
 )
 
-// The package's fully qualified name.
-const fqdn = "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v2.0/computervision"
-
 // Details enumerates the values for details.
 type Details string
 
@@ -39,6 +36,43 @@ const (
 // PossibleDetailsValues returns an array of possible values for the Details const type.
 func PossibleDetailsValues() []Details {
 	return []Details{Celebrities, Landmarks}
+}
+
+// ErrorCodes enumerates the values for error codes.
+type ErrorCodes string
+
+const (
+	// BadArgument ...
+	BadArgument ErrorCodes = "BadArgument"
+	// FailedToProcess ...
+	FailedToProcess ErrorCodes = "FailedToProcess"
+	// InternalServerError ...
+	InternalServerError ErrorCodes = "InternalServerError"
+	// InvalidDetails ...
+	InvalidDetails ErrorCodes = "InvalidDetails"
+	// InvalidImageFormat ...
+	InvalidImageFormat ErrorCodes = "InvalidImageFormat"
+	// InvalidImageSize ...
+	InvalidImageSize ErrorCodes = "InvalidImageSize"
+	// InvalidImageURL ...
+	InvalidImageURL ErrorCodes = "InvalidImageUrl"
+	// NotSupportedImage ...
+	NotSupportedImage ErrorCodes = "NotSupportedImage"
+	// NotSupportedLanguage ...
+	NotSupportedLanguage ErrorCodes = "NotSupportedLanguage"
+	// NotSupportedVisualFeature ...
+	NotSupportedVisualFeature ErrorCodes = "NotSupportedVisualFeature"
+	// StorageException ...
+	StorageException ErrorCodes = "StorageException"
+	// Timeout ...
+	Timeout ErrorCodes = "Timeout"
+	// Unspecified ...
+	Unspecified ErrorCodes = "Unspecified"
+)
+
+// PossibleErrorCodesValues returns an array of possible values for the ErrorCodes const type.
+func PossibleErrorCodesValues() []ErrorCodes {
+	return []ErrorCodes{BadArgument, FailedToProcess, InternalServerError, InvalidDetails, InvalidImageFormat, InvalidImageSize, InvalidImageURL, NotSupportedImage, NotSupportedLanguage, NotSupportedVisualFeature, StorageException, Timeout, Unspecified}
 }
 
 // Gender enumerates the values for gender.
@@ -171,49 +205,25 @@ const (
 	VisualFeatureTypesFaces VisualFeatureTypes = "Faces"
 	// VisualFeatureTypesImageType ...
 	VisualFeatureTypesImageType VisualFeatureTypes = "ImageType"
-	// VisualFeatureTypesObjects ...
-	VisualFeatureTypesObjects VisualFeatureTypes = "Objects"
 	// VisualFeatureTypesTags ...
 	VisualFeatureTypesTags VisualFeatureTypes = "Tags"
 )
 
 // PossibleVisualFeatureTypesValues returns an array of possible values for the VisualFeatureTypes const type.
 func PossibleVisualFeatureTypesValues() []VisualFeatureTypes {
-	return []VisualFeatureTypes{VisualFeatureTypesAdult, VisualFeatureTypesCategories, VisualFeatureTypesColor, VisualFeatureTypesDescription, VisualFeatureTypesFaces, VisualFeatureTypesImageType, VisualFeatureTypesObjects, VisualFeatureTypesTags}
+	return []VisualFeatureTypes{VisualFeatureTypesAdult, VisualFeatureTypesCategories, VisualFeatureTypesColor, VisualFeatureTypesDescription, VisualFeatureTypesFaces, VisualFeatureTypesImageType, VisualFeatureTypesTags}
 }
 
 // AdultInfo an object describing whether the image contains adult-oriented content and/or is racy.
 type AdultInfo struct {
 	// IsAdultContent - A value indicating if the image contains adult-oriented content.
 	IsAdultContent *bool `json:"isAdultContent,omitempty"`
-	// IsRacyContent - A value indicating if the image is racy.
+	// IsRacyContent - A value indicating if the image is race.
 	IsRacyContent *bool `json:"isRacyContent,omitempty"`
-	// AdultScore - Score from 0 to 1 that indicates how much the content is considered adult-oriented within the image.
+	// AdultScore - Score from 0 to 1 that indicates how much of adult content is within the image.
 	AdultScore *float64 `json:"adultScore,omitempty"`
 	// RacyScore - Score from 0 to 1 that indicates how suggestive is the image.
 	RacyScore *float64 `json:"racyScore,omitempty"`
-}
-
-// AreaOfInterestResult result of AreaOfInterest operation.
-type AreaOfInterestResult struct {
-	autorest.Response `json:"-"`
-	// AreaOfInterest - A bounding box for an area of interest inside an image.
-	AreaOfInterest *BoundingRect `json:"areaOfInterest,omitempty"`
-	// RequestID - Id of the REST API request.
-	RequestID *string        `json:"requestId,omitempty"`
-	Metadata  *ImageMetadata `json:"metadata,omitempty"`
-}
-
-// BoundingRect a bounding box for an area inside an image.
-type BoundingRect struct {
-	// X - X-coordinate of the top left point of the area, in pixels.
-	X *int32 `json:"x,omitempty"`
-	// Y - Y-coordinate of the top left point of the area, in pixels.
-	Y *int32 `json:"y,omitempty"`
-	// W - Width measured from the top-left point of the area, in pixels.
-	W *int32 `json:"w,omitempty"`
-	// H - Height measured from the top-left point of the area, in pixels.
-	H *int32 `json:"h,omitempty"`
 }
 
 // Category an object describing identified category.
@@ -221,8 +231,7 @@ type Category struct {
 	// Name - Name of the category.
 	Name *string `json:"name,omitempty"`
 	// Score - Scoring of the category.
-	Score *float64 `json:"score,omitempty"`
-	// Detail - Details of the identified category.
+	Score  *float64        `json:"score,omitempty"`
 	Detail *CategoryDetail `json:"detail,omitempty"`
 }
 
@@ -238,15 +247,13 @@ type CategoryDetail struct {
 type CelebritiesModel struct {
 	// Name - Name of the celebrity.
 	Name *string `json:"name,omitempty"`
-	// Confidence - Confidence level for the celebrity recognition as a value ranging from 0 to 1.
-	Confidence *float64 `json:"confidence,omitempty"`
-	// FaceRectangle - Location of the identified face in the image.
+	// Confidence - Level of confidence ranging from 0 to 1.
+	Confidence    *float64       `json:"confidence,omitempty"`
 	FaceRectangle *FaceRectangle `json:"faceRectangle,omitempty"`
 }
 
-// CelebrityResults result of domain-specific classifications for the domain of celebrities.
+// CelebrityResults list of celebrities recognized in the image.
 type CelebrityResults struct {
-	// Celebrities - List of celebrities recognized in the image.
 	Celebrities *[]CelebritiesModel `json:"celebrities,omitempty"`
 	// RequestID - Id of the REST API request.
 	RequestID *string        `json:"requestId,omitempty"`
@@ -267,43 +274,20 @@ type ColorInfo struct {
 	IsBWImg *bool `json:"isBWImg,omitempty"`
 }
 
-// DetectedObject an object detected in an image.
-type DetectedObject struct {
-	// Rectangle - Approximate location of the detected object.
-	Rectangle *BoundingRect `json:"rectangle,omitempty"`
-	// Object - Label for the object.
-	Object *string `json:"object,omitempty"`
-	// Confidence - Confidence score of having observed the object in the image, as a value ranging from 0 to 1.
-	Confidence *float64 `json:"confidence,omitempty"`
-	// Parent - The parent object, from a taxonomy perspective.
-	// The parent object is a more generic form of this object.  For example, a 'bulldog' would have a parent of 'dog'.
-	Parent *ObjectHierarchy `json:"parent,omitempty"`
-}
-
-// DetectResult result of a DetectImage call.
-type DetectResult struct {
-	autorest.Response `json:"-"`
-	// Objects - An array of detected objects.
-	Objects *[]DetectedObject `json:"objects,omitempty"`
-	// RequestID - Id of the REST API request.
-	RequestID *string        `json:"requestId,omitempty"`
-	Metadata  *ImageMetadata `json:"metadata,omitempty"`
-}
-
 // DomainModelResults result of image analysis using a specific domain model including additional metadata.
 type DomainModelResults struct {
 	autorest.Response `json:"-"`
-	// Result - Model-specific response.
+	// Result - Model-specific response
 	Result interface{} `json:"result,omitempty"`
 	// RequestID - Id of the REST API request.
 	RequestID *string        `json:"requestId,omitempty"`
 	Metadata  *ImageMetadata `json:"metadata,omitempty"`
 }
 
-// Error details about the API request error.
+// Error ...
 type Error struct {
-	// Code - The error code.
-	Code interface{} `json:"code,omitempty"`
+	// Code - The error code. Possible values include: 'InvalidImageURL', 'InvalidImageFormat', 'InvalidImageSize', 'NotSupportedVisualFeature', 'NotSupportedImage', 'InvalidDetails', 'NotSupportedLanguage', 'BadArgument', 'FailedToProcess', 'Timeout', 'InternalServerError', 'Unspecified', 'StorageException'
+	Code ErrorCodes `json:"code,omitempty"`
 	// Message - A message explaining the error reported by the service.
 	Message *string `json:"message,omitempty"`
 	// RequestID - A unique request identifier.
@@ -315,20 +299,19 @@ type FaceDescription struct {
 	// Age - Possible age of the face.
 	Age *int32 `json:"age,omitempty"`
 	// Gender - Possible gender of the face. Possible values include: 'Male', 'Female'
-	Gender Gender `json:"gender,omitempty"`
-	// FaceRectangle - Rectangle in the image containing the identified face.
+	Gender        Gender         `json:"gender,omitempty"`
 	FaceRectangle *FaceRectangle `json:"faceRectangle,omitempty"`
 }
 
 // FaceRectangle an object describing face rectangle.
 type FaceRectangle struct {
-	// Left - X-coordinate of the top left point of the face, in pixels.
+	// Left - X-coordinate of the top left point of the face.
 	Left *int32 `json:"left,omitempty"`
-	// Top - Y-coordinate of the top left point of the face, in pixels.
+	// Top - Y-coordinate of the top left point of the face.
 	Top *int32 `json:"top,omitempty"`
-	// Width - Width measured from the top-left point of the face, in pixels.
+	// Width - Width measured from the top-left point of the face.
 	Width *int32 `json:"width,omitempty"`
-	// Height - Height measured from the top-left point of the face, in pixels.
+	// Height - Height measured from the top-left point of the face.
 	Height *int32 `json:"height,omitempty"`
 }
 
@@ -337,38 +320,31 @@ type ImageAnalysis struct {
 	autorest.Response `json:"-"`
 	// Categories - An array indicating identified categories.
 	Categories *[]Category `json:"categories,omitempty"`
-	// Adult - An object describing whether the image contains adult-oriented content and/or is racy.
-	Adult *AdultInfo `json:"adult,omitempty"`
-	// Color - An object providing additional metadata describing color attributes.
-	Color *ColorInfo `json:"color,omitempty"`
-	// ImageType - An object providing possible image types and matching confidence levels.
-	ImageType *ImageType `json:"imageType,omitempty"`
+	Adult      *AdultInfo  `json:"adult,omitempty"`
+	Color      *ColorInfo  `json:"color,omitempty"`
+	ImageType  *ImageType  `json:"imageType,omitempty"`
 	// Tags - A list of tags with confidence level.
-	Tags *[]ImageTag `json:"tags,omitempty"`
-	// Description - A collection of content tags, along with a list of captions sorted by confidence level, and image metadata.
+	Tags        *[]ImageTag              `json:"tags,omitempty"`
 	Description *ImageDescriptionDetails `json:"description,omitempty"`
 	// Faces - An array of possible faces within the image.
 	Faces *[]FaceDescription `json:"faces,omitempty"`
-	// Objects - Array of objects describing what was detected in the image.
-	Objects *[]DetectedObject `json:"objects,omitempty"`
-	// RequestID - Id of the REST API request.
+	// RequestID - Id of the request for tracking purposes.
 	RequestID *string        `json:"requestId,omitempty"`
 	Metadata  *ImageMetadata `json:"metadata,omitempty"`
 }
 
 // ImageCaption an image caption, i.e. a brief description of what the image depicts.
 type ImageCaption struct {
-	// Text - The text of the caption.
+	// Text - The text of the caption
 	Text *string `json:"text,omitempty"`
-	// Confidence - The level of confidence the service has in the caption.
+	// Confidence - The level of confidence the service has in the caption
 	Confidence *float64 `json:"confidence,omitempty"`
 }
 
-// ImageDescription a collection of content tags, along with a list of captions sorted by confidence level,
-// and image metadata.
+// ImageDescription a collection of content tags, along with a list of captions sorted by confidence level, and
+// image metadata.
 type ImageDescription struct {
-	autorest.Response `json:"-"`
-	// ImageDescriptionDetails - A collection of content tags, along with a list of captions sorted by confidence level, and image metadata.
+	autorest.Response        `json:"-"`
 	*ImageDescriptionDetails `json:"description,omitempty"`
 	// RequestID - Id of the REST API request.
 	RequestID *string        `json:"requestId,omitempty"`
@@ -432,8 +408,8 @@ func (ID *ImageDescription) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ImageDescriptionDetails a collection of content tags, along with a list of captions sorted by confidence
-// level, and image metadata.
+// ImageDescriptionDetails a collection of content tags, along with a list of captions sorted by confidence level,
+// and image metadata.
 type ImageDescriptionDetails struct {
 	// Tags - A collection of image tags.
 	Tags *[]string `json:"tags,omitempty"`
@@ -441,23 +417,23 @@ type ImageDescriptionDetails struct {
 	Captions *[]ImageCaption `json:"captions,omitempty"`
 }
 
-// ImageMetadata image metadata.
+// ImageMetadata image metadata
 type ImageMetadata struct {
-	// Width - Image width, in pixels.
+	// Width - Image width
 	Width *int32 `json:"width,omitempty"`
-	// Height - Image height, in pixels.
+	// Height - Image height
 	Height *int32 `json:"height,omitempty"`
-	// Format - Image format.
+	// Format - Image format
 	Format *string `json:"format,omitempty"`
 }
 
-// ImageTag an entity observation in the image, along with the confidence score.
+// ImageTag an image caption, i.e. a brief description of what the image depicts.
 type ImageTag struct {
-	// Name - Name of the entity.
+	// Name - The tag value
 	Name *string `json:"name,omitempty"`
-	// Confidence - The level of confidence that the entity was observed.
+	// Confidence - The level of confidence the service has in the caption
 	Confidence *float64 `json:"confidence,omitempty"`
-	// Hint - Optional hint/details for this tag.
+	// Hint - Optional categorization for the tag
 	Hint *string `json:"hint,omitempty"`
 }
 
@@ -471,24 +447,23 @@ type ImageType struct {
 
 // ImageURL ...
 type ImageURL struct {
-	// URL - Publicly reachable URL of an image.
+	// URL - Publicly reachable URL of an image
 	URL *string `json:"url,omitempty"`
 }
 
-// LandmarkResults result of domain-specific classifications for the domain of landmarks.
+// LandmarkResults list of landmarks recognized in the image.
 type LandmarkResults struct {
-	// Landmarks - List of landmarks recognized in the image.
 	Landmarks *[]LandmarksModel `json:"landmarks,omitempty"`
 	// RequestID - Id of the REST API request.
 	RequestID *string        `json:"requestId,omitempty"`
 	Metadata  *ImageMetadata `json:"metadata,omitempty"`
 }
 
-// LandmarksModel a landmark recognized in the image.
+// LandmarksModel a landmark recognized in the image
 type LandmarksModel struct {
 	// Name - Name of the landmark.
 	Name *string `json:"name,omitempty"`
-	// Confidence - Confidence level for the landmark recognition as a value ranging from 0 to 1.
+	// Confidence - Confidence level for the landmark recognition.
 	Confidence *float64 `json:"confidence,omitempty"`
 }
 
@@ -508,21 +483,8 @@ type ListModelsResult struct {
 
 // ModelDescription an object describing supported model by name and categories.
 type ModelDescription struct {
-	// Name - The name of the model.
-	Name *string `json:"name,omitempty"`
-	// Categories - Categories of the model.
+	Name       *string   `json:"name,omitempty"`
 	Categories *[]string `json:"categories,omitempty"`
-}
-
-// ObjectHierarchy an object detected inside an image.
-type ObjectHierarchy struct {
-	// Object - Label for the object.
-	Object *string `json:"object,omitempty"`
-	// Confidence - Confidence score of having observed the object in the image, as a value ranging from 0 to 1.
-	Confidence *float64 `json:"confidence,omitempty"`
-	// Parent - The parent object, from a taxonomy perspective.
-	// The parent object is a more generic form of this object.  For example, a 'bulldog' would have a parent of 'dog'.
-	Parent *ObjectHierarchy `json:"parent,omitempty"`
 }
 
 // OcrLine an object describing a single recognized line of text.
@@ -536,9 +498,8 @@ type OcrLine struct {
 // OcrRegion a region consists of multiple lines (e.g. a column of text in a multi-column document).
 type OcrRegion struct {
 	// BoundingBox - Bounding box of a recognized region. The four integers represent the x-coordinate of the left edge, the y-coordinate of the top edge, width, and height of the bounding box, in the coordinate system of the input image, after it has been rotated around its center according to the detected text angle (see textAngle property), with the origin at the top-left corner, and the y-axis pointing down.
-	BoundingBox *string `json:"boundingBox,omitempty"`
-	// Lines - An array of recognized lines of text.
-	Lines *[]OcrLine `json:"lines,omitempty"`
+	BoundingBox *string    `json:"boundingBox,omitempty"`
+	Lines       *[]OcrLine `json:"lines,omitempty"`
 }
 
 // OcrResult ...
@@ -548,7 +509,7 @@ type OcrResult struct {
 	Language *string `json:"language,omitempty"`
 	// TextAngle - The angle, in degrees, of the detected text with respect to the closest horizontal or vertical direction. After rotating the input image clockwise by this angle, the recognized text lines become horizontal or vertical. In combination with the orientation property it can be used to overlay recognition results correctly on the original image, by rotating either the original image or recognition results by a suitable angle around the center of the original image. If the angle cannot be confidently detected, this property is not present. If the image contains text at different angles, only part of the text will be recognized correctly.
 	TextAngle *float64 `json:"textAngle,omitempty"`
-	// Orientation - Orientation of the text recognized in the image. The value (up, down, left, or right) refers to the direction that the top of the recognized text is facing, after the image has been rotated around its center according to the detected text angle (see textAngle property).
+	// Orientation - Orientation of the text recognized in the image. The value (up,down,left, or right) refers to the direction that the top of the recognized text is facing, after the image has been rotated around its center according to the detected text angle (see textAngle property).
 	Orientation *string `json:"orientation,omitempty"`
 	// Regions - An array of objects, where each object represents a region of recognized text.
 	Regions *[]OcrRegion `json:"regions,omitempty"`

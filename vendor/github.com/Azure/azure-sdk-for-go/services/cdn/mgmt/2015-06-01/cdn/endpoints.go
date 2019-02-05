@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,16 +49,6 @@ func NewEndpointsClientWithBaseURI(baseURI string, subscriptionID string) Endpoi
 // profileName - name of the CDN profile within the resource group.
 // resourceGroupName - name of the resource group within the Azure subscription.
 func (client EndpointsClient) Create(ctx context.Context, endpointName string, endpointProperties EndpointCreateParameters, profileName string, resourceGroupName string) (result EndpointsCreateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.Create")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: endpointProperties,
 			Constraints: []validation.Constraint{{Target: "endpointProperties.Location", Name: validation.Null, Rule: true, Chain: nil},
@@ -116,6 +105,10 @@ func (client EndpointsClient) CreateSender(req *http.Request) (future EndpointsC
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -139,16 +132,6 @@ func (client EndpointsClient) CreateResponder(resp *http.Response) (result Endpo
 // profileName - name of the CDN profile within the resource group.
 // resourceGroupName - name of the resource group within the Azure subscription.
 func (client EndpointsClient) DeleteIfExists(ctx context.Context, endpointName string, profileName string, resourceGroupName string) (result EndpointsDeleteIfExistsFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.DeleteIfExists")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeleteIfExistsPreparer(ctx, endpointName, profileName, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "cdn.EndpointsClient", "DeleteIfExists", nil, "Failure preparing request")
@@ -195,6 +178,10 @@ func (client EndpointsClient) DeleteIfExistsSender(req *http.Request) (future En
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -217,16 +204,6 @@ func (client EndpointsClient) DeleteIfExistsResponder(resp *http.Response) (resu
 // profileName - name of the CDN profile within the resource group.
 // resourceGroupName - name of the resource group within the Azure subscription.
 func (client EndpointsClient) Get(ctx context.Context, endpointName string, profileName string, resourceGroupName string) (result Endpoint, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, endpointName, profileName, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "cdn.EndpointsClient", "Get", nil, "Failure preparing request")
@@ -295,16 +272,6 @@ func (client EndpointsClient) GetResponder(resp *http.Response) (result Endpoint
 // profileName - name of the CDN profile within the resource group.
 // resourceGroupName - name of the resource group within the Azure subscription.
 func (client EndpointsClient) ListByProfile(ctx context.Context, profileName string, resourceGroupName string) (result EndpointListResult, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.ListByProfile")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ListByProfilePreparer(ctx, profileName, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "cdn.EndpointsClient", "ListByProfile", nil, "Failure preparing request")
@@ -374,16 +341,6 @@ func (client EndpointsClient) ListByProfileResponder(resp *http.Response) (resul
 // profileName - name of the CDN profile within the resource group.
 // resourceGroupName - name of the resource group within the Azure subscription.
 func (client EndpointsClient) LoadContent(ctx context.Context, endpointName string, contentFilePaths LoadParameters, profileName string, resourceGroupName string) (result EndpointsLoadContentFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.LoadContent")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: contentFilePaths,
 			Constraints: []validation.Constraint{{Target: "contentFilePaths.ContentPaths", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -438,6 +395,10 @@ func (client EndpointsClient) LoadContentSender(req *http.Request) (future Endpo
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -461,16 +422,6 @@ func (client EndpointsClient) LoadContentResponder(resp *http.Response) (result 
 // profileName - name of the CDN profile within the resource group.
 // resourceGroupName - name of the resource group within the Azure subscription.
 func (client EndpointsClient) PurgeContent(ctx context.Context, endpointName string, contentFilePaths PurgeParameters, profileName string, resourceGroupName string) (result EndpointsPurgeContentFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.PurgeContent")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: contentFilePaths,
 			Constraints: []validation.Constraint{{Target: "contentFilePaths.ContentPaths", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -525,6 +476,10 @@ func (client EndpointsClient) PurgeContentSender(req *http.Request) (future Endp
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -547,16 +502,6 @@ func (client EndpointsClient) PurgeContentResponder(resp *http.Response) (result
 // profileName - name of the CDN profile within the resource group.
 // resourceGroupName - name of the resource group within the Azure subscription.
 func (client EndpointsClient) Start(ctx context.Context, endpointName string, profileName string, resourceGroupName string) (result EndpointsStartFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.Start")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.StartPreparer(ctx, endpointName, profileName, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "cdn.EndpointsClient", "Start", nil, "Failure preparing request")
@@ -603,6 +548,10 @@ func (client EndpointsClient) StartSender(req *http.Request) (future EndpointsSt
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -626,16 +575,6 @@ func (client EndpointsClient) StartResponder(resp *http.Response) (result Endpoi
 // profileName - name of the CDN profile within the resource group.
 // resourceGroupName - name of the resource group within the Azure subscription.
 func (client EndpointsClient) Stop(ctx context.Context, endpointName string, profileName string, resourceGroupName string) (result EndpointsStopFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.Stop")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.StopPreparer(ctx, endpointName, profileName, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "cdn.EndpointsClient", "Stop", nil, "Failure preparing request")
@@ -682,6 +621,10 @@ func (client EndpointsClient) StopSender(req *http.Request) (future EndpointsSto
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -706,16 +649,6 @@ func (client EndpointsClient) StopResponder(resp *http.Response) (result Endpoin
 // profileName - name of the CDN profile within the resource group.
 // resourceGroupName - name of the resource group within the Azure subscription.
 func (client EndpointsClient) Update(ctx context.Context, endpointName string, endpointProperties EndpointUpdateParameters, profileName string, resourceGroupName string) (result EndpointsUpdateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.UpdatePreparer(ctx, endpointName, endpointProperties, profileName, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "cdn.EndpointsClient", "Update", nil, "Failure preparing request")
@@ -764,6 +697,10 @@ func (client EndpointsClient) UpdateSender(req *http.Request) (future EndpointsU
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -788,16 +725,6 @@ func (client EndpointsClient) UpdateResponder(resp *http.Response) (result Endpo
 // profileName - name of the CDN profile within the resource group.
 // resourceGroupName - name of the resource group within the Azure subscription.
 func (client EndpointsClient) ValidateCustomDomain(ctx context.Context, endpointName string, customDomainProperties ValidateCustomDomainInput, profileName string, resourceGroupName string) (result ValidateCustomDomainOutput, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.ValidateCustomDomain")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: customDomainProperties,
 			Constraints: []validation.Constraint{{Target: "customDomainProperties.HostName", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {

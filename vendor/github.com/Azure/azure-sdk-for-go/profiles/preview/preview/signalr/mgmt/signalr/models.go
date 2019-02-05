@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2018 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,16 +19,13 @@
 
 package signalr
 
-import (
-	"context"
-
-	original "github.com/Azure/azure-sdk-for-go/services/preview/signalr/mgmt/2018-03-01-preview/signalr"
-)
+import original "github.com/Azure/azure-sdk-for-go/services/preview/signalr/mgmt/2018-03-01-preview/signalr"
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
+type BaseClient = original.BaseClient
 type KeyType = original.KeyType
 
 const (
@@ -59,8 +56,6 @@ const (
 	Standard SkuTier = original.Standard
 )
 
-type BaseClient = original.BaseClient
-type Client = original.Client
 type CreateOrUpdateFuture = original.CreateOrUpdateFuture
 type CreateOrUpdateProperties = original.CreateOrUpdateProperties
 type CreateParameters = original.CreateParameters
@@ -76,7 +71,6 @@ type OperationList = original.OperationList
 type OperationListIterator = original.OperationListIterator
 type OperationListPage = original.OperationListPage
 type OperationProperties = original.OperationProperties
-type OperationsClient = original.OperationsClient
 type Properties = original.Properties
 type RegenerateKeyFuture = original.RegenerateKeyFuture
 type RegenerateKeyParameters = original.RegenerateKeyParameters
@@ -95,46 +89,12 @@ type UsageList = original.UsageList
 type UsageListIterator = original.UsageListIterator
 type UsageListPage = original.UsageListPage
 type UsageName = original.UsageName
+type OperationsClient = original.OperationsClient
+type Client = original.Client
 type UsagesClient = original.UsagesClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
-}
-func NewClient(subscriptionID string) Client {
-	return original.NewClient(subscriptionID)
-}
-func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
-	return original.NewClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewOperationListIterator(page OperationListPage) OperationListIterator {
-	return original.NewOperationListIterator(page)
-}
-func NewOperationListPage(getNextPage func(context.Context, OperationList) (OperationList, error)) OperationListPage {
-	return original.NewOperationListPage(getNextPage)
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewResourceListIterator(page ResourceListPage) ResourceListIterator {
-	return original.NewResourceListIterator(page)
-}
-func NewResourceListPage(getNextPage func(context.Context, ResourceList) (ResourceList, error)) ResourceListPage {
-	return original.NewResourceListPage(getNextPage)
-}
-func NewUsageListIterator(page UsageListPage) UsageListIterator {
-	return original.NewUsageListIterator(page)
-}
-func NewUsageListPage(getNextPage func(context.Context, UsageList) (UsageList, error)) UsageListPage {
-	return original.NewUsageListPage(getNextPage)
-}
-func NewUsagesClient(subscriptionID string) UsagesClient {
-	return original.NewUsagesClient(subscriptionID)
-}
-func NewUsagesClientWithBaseURI(baseURI string, subscriptionID string) UsagesClient {
-	return original.NewUsagesClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 	return original.NewWithBaseURI(baseURI, subscriptionID)
@@ -147,6 +107,24 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 }
 func PossibleSkuTierValues() []SkuTier {
 	return original.PossibleSkuTierValues()
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewClient(subscriptionID string) Client {
+	return original.NewClient(subscriptionID)
+}
+func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
+	return original.NewClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewUsagesClient(subscriptionID string) UsagesClient {
+	return original.NewUsagesClient(subscriptionID)
+}
+func NewUsagesClientWithBaseURI(baseURI string, subscriptionID string) UsagesClient {
+	return original.NewUsagesClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

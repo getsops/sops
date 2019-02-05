@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,22 +46,14 @@ func NewScheduledQueryRulesClientWithBaseURI(baseURI string, subscriptionID stri
 // ruleName - the name of the rule.
 // parameters - the parameters of the rule to create or update.
 func (client ScheduledQueryRulesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, ruleName string, parameters LogSearchRuleResource) (result LogSearchRuleResource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduledQueryRulesClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.LogSearchRule", Name: validation.Null, Rule: true,
 				Chain: []validation.Constraint{{Target: "parameters.LogSearchRule.Source", Name: validation.Null, Rule: true,
-					Chain: []validation.Constraint{{Target: "parameters.LogSearchRule.Source.DataSourceID", Name: validation.Null, Rule: true, Chain: nil}}},
-					{Target: "parameters.LogSearchRule.Schedule", Name: validation.Null, Rule: false,
+					Chain: []validation.Constraint{{Target: "parameters.LogSearchRule.Source.Query", Name: validation.Null, Rule: true, Chain: nil},
+						{Target: "parameters.LogSearchRule.Source.DataSourceID", Name: validation.Null, Rule: true, Chain: nil},
+					}},
+					{Target: "parameters.LogSearchRule.Schedule", Name: validation.Null, Rule: true,
 						Chain: []validation.Constraint{{Target: "parameters.LogSearchRule.Schedule.FrequencyInMinutes", Name: validation.Null, Rule: true, Chain: nil},
 							{Target: "parameters.LogSearchRule.Schedule.TimeWindowInMinutes", Name: validation.Null, Rule: true, Chain: nil},
 						}},
@@ -140,16 +131,6 @@ func (client ScheduledQueryRulesClient) CreateOrUpdateResponder(resp *http.Respo
 // resourceGroupName - the name of the resource group.
 // ruleName - the name of the rule.
 func (client ScheduledQueryRulesClient) Delete(ctx context.Context, resourceGroupName string, ruleName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduledQueryRulesClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, ruleName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ScheduledQueryRulesClient", "Delete", nil, "Failure preparing request")
@@ -216,16 +197,6 @@ func (client ScheduledQueryRulesClient) DeleteResponder(resp *http.Response) (re
 // resourceGroupName - the name of the resource group.
 // ruleName - the name of the rule.
 func (client ScheduledQueryRulesClient) Get(ctx context.Context, resourceGroupName string, ruleName string) (result LogSearchRuleResource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduledQueryRulesClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, ruleName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ScheduledQueryRulesClient", "Get", nil, "Failure preparing request")
@@ -294,16 +265,6 @@ func (client ScheduledQueryRulesClient) GetResponder(resp *http.Response) (resul
 // filter - the filter to apply on the operation. For more information please see
 // https://msdn.microsoft.com/en-us/library/azure/dn931934.aspx
 func (client ScheduledQueryRulesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, filter string) (result LogSearchRuleResourceCollection, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduledQueryRulesClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName, filter)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ScheduledQueryRulesClient", "ListByResourceGroup", nil, "Failure preparing request")
@@ -373,16 +334,6 @@ func (client ScheduledQueryRulesClient) ListByResourceGroupResponder(resp *http.
 // filter - the filter to apply on the operation. For more information please see
 // https://msdn.microsoft.com/en-us/library/azure/dn931934.aspx
 func (client ScheduledQueryRulesClient) ListBySubscription(ctx context.Context, filter string) (result LogSearchRuleResourceCollection, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduledQueryRulesClient.ListBySubscription")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ListBySubscriptionPreparer(ctx, filter)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ScheduledQueryRulesClient", "ListBySubscription", nil, "Failure preparing request")
@@ -452,16 +403,6 @@ func (client ScheduledQueryRulesClient) ListBySubscriptionResponder(resp *http.R
 // ruleName - the name of the rule.
 // parameters - the parameters of the rule to update.
 func (client ScheduledQueryRulesClient) Update(ctx context.Context, resourceGroupName string, ruleName string, parameters LogSearchRuleResourcePatch) (result LogSearchRuleResource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduledQueryRulesClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, ruleName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ScheduledQueryRulesClient", "Update", nil, "Failure preparing request")

@@ -18,18 +18,13 @@ package operationalinsights
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
-	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
-
-// The package's fully qualified name.
-const fqdn = "github.com/Azure/azure-sdk-for-go/services/operationalinsights/mgmt/2015-03-20/operationalinsights"
 
 // PurgeState enumerates the values for purge state.
 type PurgeState string
@@ -102,7 +97,7 @@ type ListLinkTarget struct {
 	Value             *[]LinkTarget `json:"value,omitempty"`
 }
 
-// Operation supported operation of OperationalInsights resource provider.
+// Operation supported operation of OperationsManagement resource provider.
 type Operation struct {
 	// Name - Operation name: {provider}/{resource}/{operation}
 	Name *string `json:"name,omitempty"`
@@ -112,7 +107,7 @@ type Operation struct {
 
 // OperationDisplay display metadata associated with the operation.
 type OperationDisplay struct {
-	// Provider - Service provider: OperationalInsights.
+	// Provider - Service provider: Microsoft OperationsManagement.
 	Provider *string `json:"provider,omitempty"`
 	// Resource - Resource on which the operation is performed etc.
 	Resource *string `json:"resource,omitempty"`
@@ -120,10 +115,10 @@ type OperationDisplay struct {
 	Operation *string `json:"operation,omitempty"`
 }
 
-// OperationListResult result of the request to list OperationalInsights operations.
+// OperationListResult result of the request to list solution operations.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
-	// Value - List of operations supported by the OperationalInsights resource provider.
+	// Value - List of solution operations supported by the OperationsManagement resource provider.
 	Value *[]Operation `json:"value,omitempty"`
 }
 
@@ -201,9 +196,9 @@ type SavedSearch struct {
 	Name *string `json:"name,omitempty"`
 	// Type - The type of the saved search.
 	Type *string `json:"type,omitempty"`
-	// ETag - The ETag of the saved search.
+	// ETag - The etag of the saved search.
 	ETag *string `json:"eTag,omitempty"`
-	// SavedSearchProperties - The properties of the saved search.
+	// SavedSearchProperties - Gets or sets properties of the saved search.
 	*SavedSearchProperties `json:"properties,omitempty"`
 }
 
@@ -288,11 +283,11 @@ func (ss *SavedSearch) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// SavedSearchesListResult the saved search list operation response.
+// SavedSearchesListResult the saved search operation response.
 type SavedSearchesListResult struct {
 	autorest.Response `json:"-"`
 	// Metadata - The metadata from search results.
-	Metadata *SearchMetadata `json:"__metadata,omitempty"`
+	Metadata *SearchMetadata `json:"metaData,omitempty"`
 	// Value - The array of result values.
 	Value *[]SavedSearch `json:"value,omitempty"`
 }
@@ -305,7 +300,7 @@ type SavedSearchProperties struct {
 	DisplayName *string `json:"displayName,omitempty"`
 	// Query - The query expression for the saved search. Please see https://docs.microsoft.com/en-us/azure/log-analytics/log-analytics-search-reference for reference.
 	Query *string `json:"query,omitempty"`
-	// Version - The version number of the query language. The current version is 2 and is the default.
+	// Version - The version number of the query lanuage. Only verion 1 is allowed here.
 	Version *int64 `json:"version,omitempty"`
 	// Tags - The tags attached to the saved search.
 	Tags *[]Tag `json:"tags,omitempty"`
@@ -386,7 +381,7 @@ type SearchMetadataSchema struct {
 type SearchParameters struct {
 	// Top - The number to get from the top.
 	Top *int64 `json:"top,omitempty"`
-	// Highlight - The highlight that looks for all occurrences of a string.
+	// Highlight - The highlight that looks for all occurences of a string.
 	Highlight *SearchHighlight `json:"highlight,omitempty"`
 	// Query - The query to search.
 	Query *string `json:"query,omitempty"`
@@ -433,15 +428,6 @@ type SearchSort struct {
 	Name *string `json:"name,omitempty"`
 	// Order - The sort order of the search. Possible values include: 'Asc', 'Desc'
 	Order SearchSortEnum `json:"order,omitempty"`
-}
-
-// SharedKeys the shared keys for a workspace.
-type SharedKeys struct {
-	autorest.Response `json:"-"`
-	// PrimarySharedKey - The primary shared key of a workspace.
-	PrimarySharedKey *string `json:"primarySharedKey,omitempty"`
-	// SecondarySharedKey - The secondary shared key of a workspace.
-	SecondarySharedKey *string `json:"secondarySharedKey,omitempty"`
 }
 
 // StorageAccount describes a storage account connection.
@@ -565,7 +551,7 @@ func (si *StorageInsight) UnmarshalJSON(body []byte) error {
 // StorageInsightListResult the list storage insights operation response.
 type StorageInsightListResult struct {
 	autorest.Response `json:"-"`
-	// Value - A list of storage insight items.
+	// Value - Gets or sets a list of storage insight instances.
 	Value *[]StorageInsight `json:"value,omitempty"`
 	// OdataNextLink - The link (url) to the next page of results.
 	OdataNextLink *string `json:"@odata.nextLink,omitempty"`
@@ -577,37 +563,20 @@ type StorageInsightListResultIterator struct {
 	page StorageInsightListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *StorageInsightListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/StorageInsightListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *StorageInsightListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *StorageInsightListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -629,11 +598,6 @@ func (iter StorageInsightListResultIterator) Value() StorageInsight {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the StorageInsightListResultIterator type.
-func NewStorageInsightListResultIterator(page StorageInsightListResultPage) StorageInsightListResultIterator {
-	return StorageInsightListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (silr StorageInsightListResult) IsEmpty() bool {
 	return silr.Value == nil || len(*silr.Value) == 0
@@ -641,11 +605,11 @@ func (silr StorageInsightListResult) IsEmpty() bool {
 
 // storageInsightListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (silr StorageInsightListResult) storageInsightListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (silr StorageInsightListResult) storageInsightListResultPreparer() (*http.Request, error) {
 	if silr.OdataNextLink == nil || len(to.String(silr.OdataNextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(silr.OdataNextLink)))
@@ -653,36 +617,19 @@ func (silr StorageInsightListResult) storageInsightListResultPreparer(ctx contex
 
 // StorageInsightListResultPage contains a page of StorageInsight values.
 type StorageInsightListResultPage struct {
-	fn   func(context.Context, StorageInsightListResult) (StorageInsightListResult, error)
+	fn   func(StorageInsightListResult) (StorageInsightListResult, error)
 	silr StorageInsightListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *StorageInsightListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/StorageInsightListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.silr)
+func (page *StorageInsightListResultPage) Next() error {
+	next, err := page.fn(page.silr)
 	if err != nil {
 		return err
 	}
 	page.silr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *StorageInsightListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -701,11 +648,6 @@ func (page StorageInsightListResultPage) Values() []StorageInsight {
 		return nil
 	}
 	return *page.silr.Value
-}
-
-// Creates a new instance of the StorageInsightListResultPage type.
-func NewStorageInsightListResultPage(getNextPage func(context.Context, StorageInsightListResult) (StorageInsightListResult, error)) StorageInsightListResultPage {
-	return StorageInsightListResultPage{fn: getNextPage}
 }
 
 // StorageInsightProperties storage insight properties.
@@ -752,8 +694,6 @@ type WorkspacePurgeBodyFilters struct {
 	Operator *string `json:"operator,omitempty"`
 	// Value - the value for the operator to function over. This can be a number (e.g., > 100), a string (timestamp >= '2017-09-01') or array of values.
 	Value interface{} `json:"value,omitempty"`
-	// Key - When filtering over custom dimensions, this key will be used as the name of the custom dimension.
-	Key *string `json:"key,omitempty"`
 }
 
 // WorkspacePurgeResponse response containing operationId for a specific purge action.
@@ -770,8 +710,8 @@ type WorkspacePurgeStatusResponse struct {
 	Status PurgeState `json:"status,omitempty"`
 }
 
-// WorkspacesGetSearchResultsFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// WorkspacesGetSearchResultsFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type WorkspacesGetSearchResultsFuture struct {
 	azure.Future
 }

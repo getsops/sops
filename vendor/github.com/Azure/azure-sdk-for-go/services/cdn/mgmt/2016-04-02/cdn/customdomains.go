@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -51,16 +50,6 @@ func NewCustomDomainsClientWithBaseURI(baseURI string, subscriptionID string) Cu
 // profileName - name of the CDN profile within the resource group.
 // resourceGroupName - name of the resource group within the Azure subscription.
 func (client CustomDomainsClient) Create(ctx context.Context, customDomainName string, customDomainProperties CustomDomainParameters, endpointName string, profileName string, resourceGroupName string) (result CustomDomainsCreateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomDomainsClient.Create")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: customDomainProperties,
 			Constraints: []validation.Constraint{{Target: "customDomainProperties.CustomDomainPropertiesParameters", Name: validation.Null, Rule: false,
@@ -117,6 +106,10 @@ func (client CustomDomainsClient) CreateSender(req *http.Request) (future Custom
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -141,16 +134,6 @@ func (client CustomDomainsClient) CreateResponder(resp *http.Response) (result C
 // profileName - name of the CDN profile within the resource group.
 // resourceGroupName - name of the resource group within the Azure subscription.
 func (client CustomDomainsClient) DeleteIfExists(ctx context.Context, customDomainName string, endpointName string, profileName string, resourceGroupName string) (result CustomDomainsDeleteIfExistsFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomDomainsClient.DeleteIfExists")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeleteIfExistsPreparer(ctx, customDomainName, endpointName, profileName, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "cdn.CustomDomainsClient", "DeleteIfExists", nil, "Failure preparing request")
@@ -198,6 +181,10 @@ func (client CustomDomainsClient) DeleteIfExistsSender(req *http.Request) (futur
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -222,16 +209,6 @@ func (client CustomDomainsClient) DeleteIfExistsResponder(resp *http.Response) (
 // profileName - name of the CDN profile within the resource group.
 // resourceGroupName - name of the resource group within the Azure subscription.
 func (client CustomDomainsClient) Get(ctx context.Context, customDomainName string, endpointName string, profileName string, resourceGroupName string) (result CustomDomain, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomDomainsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, customDomainName, endpointName, profileName, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "cdn.CustomDomainsClient", "Get", nil, "Failure preparing request")
@@ -302,16 +279,6 @@ func (client CustomDomainsClient) GetResponder(resp *http.Response) (result Cust
 // profileName - name of the CDN profile within the resource group.
 // resourceGroupName - name of the resource group within the Azure subscription.
 func (client CustomDomainsClient) ListByEndpoint(ctx context.Context, endpointName string, profileName string, resourceGroupName string) (result CustomDomainListResult, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomDomainsClient.ListByEndpoint")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ListByEndpointPreparer(ctx, endpointName, profileName, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "cdn.CustomDomainsClient", "ListByEndpoint", nil, "Failure preparing request")
@@ -383,16 +350,6 @@ func (client CustomDomainsClient) ListByEndpointResponder(resp *http.Response) (
 // profileName - name of the CDN profile within the resource group.
 // resourceGroupName - name of the resource group within the Azure subscription.
 func (client CustomDomainsClient) Update(ctx context.Context, customDomainName string, customDomainProperties CustomDomainParameters, endpointName string, profileName string, resourceGroupName string) (result ErrorResponse, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomDomainsClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.UpdatePreparer(ctx, customDomainName, customDomainProperties, endpointName, profileName, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "cdn.CustomDomainsClient", "Update", nil, "Failure preparing request")

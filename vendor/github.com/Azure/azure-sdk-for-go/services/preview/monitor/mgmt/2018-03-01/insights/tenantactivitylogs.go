@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -63,16 +62,6 @@ func NewTenantActivityLogsClientWithBaseURI(baseURI string, subscriptionID strin
 // *operationId*, *operationName*, *properties*, *resourceGroupName*, *resourceProviderName*, *resourceId*,
 // *status*, *submissionTimestamp*, *subStatus*, *subscriptionId*
 func (client TenantActivityLogsClient) List(ctx context.Context, filter string, selectParameter string) (result EventDataCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TenantActivityLogsClient.List")
-		defer func() {
-			sc := -1
-			if result.edc.Response.Response != nil {
-				sc = result.edc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, filter, selectParameter)
 	if err != nil {
@@ -137,8 +126,8 @@ func (client TenantActivityLogsClient) ListResponder(resp *http.Response) (resul
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client TenantActivityLogsClient) listNextResults(ctx context.Context, lastResults EventDataCollection) (result EventDataCollection, err error) {
-	req, err := lastResults.eventDataCollectionPreparer(ctx)
+func (client TenantActivityLogsClient) listNextResults(lastResults EventDataCollection) (result EventDataCollection, err error) {
+	req, err := lastResults.eventDataCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "insights.TenantActivityLogsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -159,16 +148,6 @@ func (client TenantActivityLogsClient) listNextResults(ctx context.Context, last
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TenantActivityLogsClient) ListComplete(ctx context.Context, filter string, selectParameter string) (result EventDataCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TenantActivityLogsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, filter, selectParameter)
 	return
 }

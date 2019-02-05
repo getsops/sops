@@ -24,9 +24,6 @@ import (
 	"net/http"
 )
 
-// The package's fully qualified name.
-const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/containerservice/mgmt/2015-11-01-preview/containerservice"
-
 // OchestratorTypes enumerates the values for ochestrator types.
 type OchestratorTypes string
 
@@ -159,7 +156,7 @@ type AgentPoolProfile struct {
 	VMSize VMSizeTypes `json:"vmSize,omitempty"`
 	// DNSPrefix - DNS prefix to be used to create FQDN for this agent pool
 	DNSPrefix *string `json:"dnsPrefix,omitempty"`
-	// Fqdn - FQDN for the agent pool
+	// Fqdn - FDQN for the agent pool
 	Fqdn *string `json:"fqdn,omitempty"`
 }
 
@@ -272,8 +269,7 @@ func (cs *ContainerService) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// CreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// CreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type CreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -350,7 +346,7 @@ type MasterProfile struct {
 	Count *int32 `json:"count,omitempty"`
 	// DNSPrefix - DNS prefix to be used to create FQDN for master
 	DNSPrefix *string `json:"dnsPrefix,omitempty"`
-	// Fqdn - FQDN for the master
+	// Fqdn - FDQN for the master
 	Fqdn *string `json:"fqdn,omitempty"`
 }
 

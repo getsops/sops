@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewPricingsClientWithBaseURI(baseURI string, subscriptionID string, ascLoca
 // pricingName - name of the pricing configuration
 // pricing - pricing object
 func (client PricingsClient) CreateOrUpdateResourceGroupPricing(ctx context.Context, resourceGroupName string, pricingName string, pricing Pricing) (result Pricing, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PricingsClient.CreateOrUpdateResourceGroupPricing")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -138,16 +127,6 @@ func (client PricingsClient) CreateOrUpdateResourceGroupPricingResponder(resp *h
 // insensitive.
 // pricingName - name of the pricing configuration
 func (client PricingsClient) GetResourceGroupPricing(ctx context.Context, resourceGroupName string, pricingName string) (result Pricing, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PricingsClient.GetResourceGroupPricing")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -225,16 +204,6 @@ func (client PricingsClient) GetResourceGroupPricingResponder(resp *http.Respons
 // Parameters:
 // pricingName - name of the pricing configuration
 func (client PricingsClient) GetSubscriptionPricing(ctx context.Context, pricingName string) (result Pricing, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PricingsClient.GetSubscriptionPricing")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -304,16 +273,6 @@ func (client PricingsClient) GetSubscriptionPricingResponder(resp *http.Response
 
 // List security pricing configurations in the subscription
 func (client PricingsClient) List(ctx context.Context) (result PricingListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PricingsClient.List")
-		defer func() {
-			sc := -1
-			if result.pl.Response.Response != nil {
-				sc = result.pl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -382,8 +341,8 @@ func (client PricingsClient) ListResponder(resp *http.Response) (result PricingL
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client PricingsClient) listNextResults(ctx context.Context, lastResults PricingList) (result PricingList, err error) {
-	req, err := lastResults.pricingListPreparer(ctx)
+func (client PricingsClient) listNextResults(lastResults PricingList) (result PricingList, err error) {
+	req, err := lastResults.pricingListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.PricingsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -404,16 +363,6 @@ func (client PricingsClient) listNextResults(ctx context.Context, lastResults Pr
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client PricingsClient) ListComplete(ctx context.Context) (result PricingListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PricingsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -423,16 +372,6 @@ func (client PricingsClient) ListComplete(ctx context.Context) (result PricingLi
 // resourceGroupName - the name of the resource group within the user's subscription. The name is case
 // insensitive.
 func (client PricingsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result PricingListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PricingsClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.pl.Response.Response != nil {
-				sc = result.pl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -506,8 +445,8 @@ func (client PricingsClient) ListByResourceGroupResponder(resp *http.Response) (
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client PricingsClient) listByResourceGroupNextResults(ctx context.Context, lastResults PricingList) (result PricingList, err error) {
-	req, err := lastResults.pricingListPreparer(ctx)
+func (client PricingsClient) listByResourceGroupNextResults(lastResults PricingList) (result PricingList, err error) {
+	req, err := lastResults.pricingListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.PricingsClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -528,16 +467,6 @@ func (client PricingsClient) listByResourceGroupNextResults(ctx context.Context,
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client PricingsClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result PricingListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PricingsClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -547,16 +476,6 @@ func (client PricingsClient) ListByResourceGroupComplete(ctx context.Context, re
 // pricingName - name of the pricing configuration
 // pricing - pricing object
 func (client PricingsClient) UpdateSubscriptionPricing(ctx context.Context, pricingName string, pricing Pricing) (result Pricing, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PricingsClient.UpdateSubscriptionPricing")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {

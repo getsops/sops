@@ -18,16 +18,11 @@ package azurestack
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
-	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/to"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
-
-// The package's fully qualified name.
-const fqdn = "github.com/Azure/azure-sdk-for-go/services/azurestack/mgmt/2017-06-01/azurestack"
 
 // ComputeRole enumerates the values for compute role.
 type ComputeRole string
@@ -102,7 +97,7 @@ type ActivationKeyResult struct {
 	ActivationKey *string `json:"activationKey,omitempty"`
 }
 
-// CustomerSubscription customer subscription.
+// CustomerSubscription customer subcription.
 type CustomerSubscription struct {
 	autorest.Response `json:"-"`
 	// CustomerSubscriptionProperties - Customer subscription properties.
@@ -113,7 +108,7 @@ type CustomerSubscription struct {
 	Name *string `json:"name,omitempty"`
 	// Type - Type of Resource.
 	Type *string `json:"type,omitempty"`
-	// Etag - The entity tag used for optimistic concurrency when modifying the resource.
+	// Etag - The entity tag used for optimistic concurency when modifying the resource.
 	Etag *string `json:"etag,omitempty"`
 }
 
@@ -213,37 +208,20 @@ type CustomerSubscriptionListIterator struct {
 	page CustomerSubscriptionListPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *CustomerSubscriptionListIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomerSubscriptionListIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *CustomerSubscriptionListIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *CustomerSubscriptionListIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -265,11 +243,6 @@ func (iter CustomerSubscriptionListIterator) Value() CustomerSubscription {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the CustomerSubscriptionListIterator type.
-func NewCustomerSubscriptionListIterator(page CustomerSubscriptionListPage) CustomerSubscriptionListIterator {
-	return CustomerSubscriptionListIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (csl CustomerSubscriptionList) IsEmpty() bool {
 	return csl.Value == nil || len(*csl.Value) == 0
@@ -277,11 +250,11 @@ func (csl CustomerSubscriptionList) IsEmpty() bool {
 
 // customerSubscriptionListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (csl CustomerSubscriptionList) customerSubscriptionListPreparer(ctx context.Context) (*http.Request, error) {
+func (csl CustomerSubscriptionList) customerSubscriptionListPreparer() (*http.Request, error) {
 	if csl.NextLink == nil || len(to.String(csl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(csl.NextLink)))
@@ -289,36 +262,19 @@ func (csl CustomerSubscriptionList) customerSubscriptionListPreparer(ctx context
 
 // CustomerSubscriptionListPage contains a page of CustomerSubscription values.
 type CustomerSubscriptionListPage struct {
-	fn  func(context.Context, CustomerSubscriptionList) (CustomerSubscriptionList, error)
+	fn  func(CustomerSubscriptionList) (CustomerSubscriptionList, error)
 	csl CustomerSubscriptionList
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *CustomerSubscriptionListPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomerSubscriptionListPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.csl)
+func (page *CustomerSubscriptionListPage) Next() error {
+	next, err := page.fn(page.csl)
 	if err != nil {
 		return err
 	}
 	page.csl = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *CustomerSubscriptionListPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -337,11 +293,6 @@ func (page CustomerSubscriptionListPage) Values() []CustomerSubscription {
 		return nil
 	}
 	return *page.csl.Value
-}
-
-// Creates a new instance of the CustomerSubscriptionListPage type.
-func NewCustomerSubscriptionListPage(getNextPage func(context.Context, CustomerSubscriptionList) (CustomerSubscriptionList, error)) CustomerSubscriptionListPage {
-	return CustomerSubscriptionListPage{fn: getNextPage}
 }
 
 // CustomerSubscriptionProperties customer subscription properties.
@@ -380,8 +331,8 @@ type ErrorDetails struct {
 	Target *string `json:"target,omitempty"`
 }
 
-// ErrorResponse error response indicates that the service is not able to process the incoming request. The
-// reason is provided in the error message.
+// ErrorResponse error response indicates that the service is not able to process the incoming request. The reason
+// is provided in the error message.
 type ErrorResponse struct {
 	// Error - The details of the error.
 	Error *ErrorDetails `json:"error,omitempty"`
@@ -457,7 +408,7 @@ func (ep *ExtendedProduct) UnmarshalJSON(body []byte) error {
 
 // ExtendedProductProperties product information.
 type ExtendedProductProperties struct {
-	// ComputeRole - Specifies kind of compute role included in the package. Possible values include: 'None', 'IaaS', 'PaaS'
+	// ComputeRole - Specifies kind of compute role inclided in the package. Possible values include: 'None', 'IaaS', 'PaaS'
 	ComputeRole ComputeRole `json:"computeRole,omitempty"`
 	// IsSystemExtension - Specifies if product is a Virtual Machine Extension.
 	IsSystemExtension *bool `json:"isSystemExtension,omitempty"`
@@ -645,37 +596,20 @@ type OperationListIterator struct {
 	page OperationListPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OperationListIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *OperationListIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *OperationListIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -697,11 +631,6 @@ func (iter OperationListIterator) Value() Operation {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the OperationListIterator type.
-func NewOperationListIterator(page OperationListPage) OperationListIterator {
-	return OperationListIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (ol OperationList) IsEmpty() bool {
 	return ol.Value == nil || len(*ol.Value) == 0
@@ -709,11 +638,11 @@ func (ol OperationList) IsEmpty() bool {
 
 // operationListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ol OperationList) operationListPreparer(ctx context.Context) (*http.Request, error) {
+func (ol OperationList) operationListPreparer() (*http.Request, error) {
 	if ol.NextLink == nil || len(to.String(ol.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ol.NextLink)))
@@ -721,36 +650,19 @@ func (ol OperationList) operationListPreparer(ctx context.Context) (*http.Reques
 
 // OperationListPage contains a page of Operation values.
 type OperationListPage struct {
-	fn func(context.Context, OperationList) (OperationList, error)
+	fn func(OperationList) (OperationList, error)
 	ol OperationList
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OperationListPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.ol)
+func (page *OperationListPage) Next() error {
+	next, err := page.fn(page.ol)
 	if err != nil {
 		return err
 	}
 	page.ol = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *OperationListPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -769,11 +681,6 @@ func (page OperationListPage) Values() []Operation {
 		return nil
 	}
 	return *page.ol.Value
-}
-
-// Creates a new instance of the OperationListPage type.
-func NewOperationListPage(getNextPage func(context.Context, OperationList) (OperationList, error)) OperationListPage {
-	return OperationListPage{fn: getNextPage}
 }
 
 // OsDiskImage OS disk image.
@@ -795,7 +702,7 @@ type Product struct {
 	Name *string `json:"name,omitempty"`
 	// Type - Type of Resource.
 	Type *string `json:"type,omitempty"`
-	// Etag - The entity tag used for optimistic concurrency when modifying the resource.
+	// Etag - The entity tag used for optimistic concurency when modifying the resource.
 	Etag *string `json:"etag,omitempty"`
 }
 
@@ -903,37 +810,20 @@ type ProductListIterator struct {
 	page ProductListPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ProductListIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ProductListIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *ProductListIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *ProductListIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -955,11 +845,6 @@ func (iter ProductListIterator) Value() Product {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the ProductListIterator type.
-func NewProductListIterator(page ProductListPage) ProductListIterator {
-	return ProductListIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (pl ProductList) IsEmpty() bool {
 	return pl.Value == nil || len(*pl.Value) == 0
@@ -967,11 +852,11 @@ func (pl ProductList) IsEmpty() bool {
 
 // productListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (pl ProductList) productListPreparer(ctx context.Context) (*http.Request, error) {
+func (pl ProductList) productListPreparer() (*http.Request, error) {
 	if pl.NextLink == nil || len(to.String(pl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(pl.NextLink)))
@@ -979,36 +864,19 @@ func (pl ProductList) productListPreparer(ctx context.Context) (*http.Request, e
 
 // ProductListPage contains a page of Product values.
 type ProductListPage struct {
-	fn func(context.Context, ProductList) (ProductList, error)
+	fn func(ProductList) (ProductList, error)
 	pl ProductList
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ProductListPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ProductListPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.pl)
+func (page *ProductListPage) Next() error {
+	next, err := page.fn(page.pl)
 	if err != nil {
 		return err
 	}
 	page.pl = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *ProductListPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1027,11 +895,6 @@ func (page ProductListPage) Values() []Product {
 		return nil
 	}
 	return *page.pl.Value
-}
-
-// Creates a new instance of the ProductListPage type.
-func NewProductListPage(getNextPage func(context.Context, ProductList) (ProductList, error)) ProductListPage {
-	return ProductListPage{fn: getNextPage}
 }
 
 // ProductNestedProperties properties portion of the product resource.
@@ -1093,7 +956,7 @@ type Registration struct {
 	Location *string `json:"location,omitempty"`
 	// Tags - Custom tags for the resource.
 	Tags map[string]*string `json:"tags"`
-	// Etag - The entity tag used for optimistic concurrency when modifying the resource.
+	// Etag - The entity tag used for optimistic concurency when modifying the resource.
 	Etag *string `json:"etag,omitempty"`
 }
 
@@ -1217,37 +1080,20 @@ type RegistrationListIterator struct {
 	page RegistrationListPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *RegistrationListIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RegistrationListIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *RegistrationListIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *RegistrationListIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1269,11 +1115,6 @@ func (iter RegistrationListIterator) Value() Registration {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the RegistrationListIterator type.
-func NewRegistrationListIterator(page RegistrationListPage) RegistrationListIterator {
-	return RegistrationListIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (rl RegistrationList) IsEmpty() bool {
 	return rl.Value == nil || len(*rl.Value) == 0
@@ -1281,11 +1122,11 @@ func (rl RegistrationList) IsEmpty() bool {
 
 // registrationListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rl RegistrationList) registrationListPreparer(ctx context.Context) (*http.Request, error) {
+func (rl RegistrationList) registrationListPreparer() (*http.Request, error) {
 	if rl.NextLink == nil || len(to.String(rl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rl.NextLink)))
@@ -1293,36 +1134,19 @@ func (rl RegistrationList) registrationListPreparer(ctx context.Context) (*http.
 
 // RegistrationListPage contains a page of Registration values.
 type RegistrationListPage struct {
-	fn func(context.Context, RegistrationList) (RegistrationList, error)
+	fn func(RegistrationList) (RegistrationList, error)
 	rl RegistrationList
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *RegistrationListPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RegistrationListPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.rl)
+func (page *RegistrationListPage) Next() error {
+	next, err := page.fn(page.rl)
 	if err != nil {
 		return err
 	}
 	page.rl = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *RegistrationListPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1341,11 +1165,6 @@ func (page RegistrationListPage) Values() []Registration {
 		return nil
 	}
 	return *page.rl.Value
-}
-
-// Creates a new instance of the RegistrationListPage type.
-func NewRegistrationListPage(getNextPage func(context.Context, RegistrationList) (RegistrationList, error)) RegistrationListPage {
-	return RegistrationListPage{fn: getNextPage}
 }
 
 // RegistrationParameter registration resource
@@ -1401,7 +1220,7 @@ func (rp *RegistrationParameter) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// RegistrationParameterProperties properties of the Azure Stack registration resource
+// RegistrationParameterProperties properties of the Azure Stack regstration resource
 type RegistrationParameterProperties struct {
 	// RegistrationToken - The token identifying registered Azure Stack
 	RegistrationToken *string `json:"registrationToken,omitempty"`
@@ -1425,7 +1244,7 @@ type Resource struct {
 	Name *string `json:"name,omitempty"`
 	// Type - Type of Resource.
 	Type *string `json:"type,omitempty"`
-	// Etag - The entity tag used for optimistic concurrency when modifying the resource.
+	// Etag - The entity tag used for optimistic concurency when modifying the resource.
 	Etag *string `json:"etag,omitempty"`
 }
 
@@ -1441,7 +1260,7 @@ type TrackedResource struct {
 	Location *string `json:"location,omitempty"`
 	// Tags - Custom tags for the resource.
 	Tags map[string]*string `json:"tags"`
-	// Etag - The entity tag used for optimistic concurrency when modifying the resource.
+	// Etag - The entity tag used for optimistic concurency when modifying the resource.
 	Etag *string `json:"etag,omitempty"`
 }
 
@@ -1477,7 +1296,7 @@ type URI struct {
 
 // VirtualMachineExtensionProductProperties product information.
 type VirtualMachineExtensionProductProperties struct {
-	// ComputeRole - Specifies kind of compute role included in the package. Possible values include: 'None', 'IaaS', 'PaaS'
+	// ComputeRole - Specifies kind of compute role inclided in the package. Possible values include: 'None', 'IaaS', 'PaaS'
 	ComputeRole ComputeRole `json:"computeRole,omitempty"`
 	// IsSystemExtension - Specifies if product is a Virtual Machine Extension.
 	IsSystemExtension *bool `json:"isSystemExtension,omitempty"`

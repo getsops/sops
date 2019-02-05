@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewIdentityProviderClientWithBaseURI(baseURI string, subscriptionID string)
 // identityProviderName - identity Provider Type identifier.
 // parameters - create parameters.
 func (client IdentityProviderClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType, parameters IdentityProviderContract) (result IdentityProviderContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -146,16 +135,6 @@ func (client IdentityProviderClient) CreateOrUpdateResponder(resp *http.Response
 // ifMatch - the entity state (Etag) version of the backend to delete. A value of "*" can be used for If-Match
 // to unconditionally apply the operation.
 func (client IdentityProviderClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -233,16 +212,6 @@ func (client IdentityProviderClient) DeleteResponder(resp *http.Response) (resul
 // serviceName - the name of the API Management service.
 // identityProviderName - identity Provider Type identifier.
 func (client IdentityProviderClient) Get(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType) (result IdentityProviderContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -320,16 +289,6 @@ func (client IdentityProviderClient) GetResponder(resp *http.Response) (result I
 // serviceName - the name of the API Management service.
 // identityProviderName - identity Provider Type identifier.
 func (client IdentityProviderClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.GetEntityTag")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -405,16 +364,6 @@ func (client IdentityProviderClient) GetEntityTagResponder(resp *http.Response) 
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client IdentityProviderClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string) (result IdentityProviderList, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.ListByService")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -494,16 +443,6 @@ func (client IdentityProviderClient) ListByServiceResponder(resp *http.Response)
 // ifMatch - the entity state (Etag) version of the identity provider configuration to update. A value of "*"
 // can be used for If-Match to unconditionally apply the operation.
 func (client IdentityProviderClient) Update(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType, parameters IdentityProviderUpdateParameters, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},

@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,21 +46,11 @@ func NewManagementLocksClientWithBaseURI(baseURI string, subscriptionID string) 
 // lockName - the lock name.
 // parameters - the management lock parameters.
 func (client ManagementLocksClient) CreateOrUpdateAtResourceGroupLevel(ctx context.Context, resourceGroupName string, lockName string, parameters ManagementLockObject) (result ManagementLockObject, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementLocksClient.CreateOrUpdateAtResourceGroupLevel")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}}}); err != nil {
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("locks.ManagementLocksClient", "CreateOrUpdateAtResourceGroupLevel", err.Error())
 	}
 
@@ -139,21 +128,11 @@ func (client ManagementLocksClient) CreateOrUpdateAtResourceGroupLevelResponder(
 // lockName - the name of lock.
 // parameters - create or update management lock parameters.
 func (client ManagementLocksClient) CreateOrUpdateAtResourceLevel(ctx context.Context, resourceGroupName string, resourceProviderNamespace string, parentResourcePath string, resourceType string, resourceName string, lockName string, parameters ManagementLockObject) (result ManagementLockObject, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementLocksClient.CreateOrUpdateAtResourceLevel")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}}}); err != nil {
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("locks.ManagementLocksClient", "CreateOrUpdateAtResourceLevel", err.Error())
 	}
 
@@ -230,16 +209,6 @@ func (client ManagementLocksClient) CreateOrUpdateAtResourceLevelResponder(resp 
 // lockName - the name of lock.
 // parameters - the management lock parameters.
 func (client ManagementLocksClient) CreateOrUpdateAtSubscriptionLevel(ctx context.Context, lockName string, parameters ManagementLockObject) (result ManagementLockObject, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementLocksClient.CreateOrUpdateAtSubscriptionLevel")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.CreateOrUpdateAtSubscriptionLevelPreparer(ctx, lockName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "locks.ManagementLocksClient", "CreateOrUpdateAtSubscriptionLevel", nil, "Failure preparing request")
@@ -308,21 +277,11 @@ func (client ManagementLocksClient) CreateOrUpdateAtSubscriptionLevelResponder(r
 // resourceGroupName - the resource group name.
 // lockName - the name of lock.
 func (client ManagementLocksClient) DeleteAtResourceGroupLevel(ctx context.Context, resourceGroupName string, lockName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementLocksClient.DeleteAtResourceGroupLevel")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}}}); err != nil {
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("locks.ManagementLocksClient", "DeleteAtResourceGroupLevel", err.Error())
 	}
 
@@ -396,21 +355,11 @@ func (client ManagementLocksClient) DeleteAtResourceGroupLevelResponder(resp *ht
 // resourceName - resource identity.
 // lockName - the name of lock.
 func (client ManagementLocksClient) DeleteAtResourceLevel(ctx context.Context, resourceGroupName string, resourceProviderNamespace string, parentResourcePath string, resourceType string, resourceName string, lockName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementLocksClient.DeleteAtResourceLevel")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}}}); err != nil {
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("locks.ManagementLocksClient", "DeleteAtResourceLevel", err.Error())
 	}
 
@@ -483,16 +432,6 @@ func (client ManagementLocksClient) DeleteAtResourceLevelResponder(resp *http.Re
 // Parameters:
 // lockName - the name of lock.
 func (client ManagementLocksClient) DeleteAtSubscriptionLevel(ctx context.Context, lockName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementLocksClient.DeleteAtSubscriptionLevel")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeleteAtSubscriptionLevelPreparer(ctx, lockName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "locks.ManagementLocksClient", "DeleteAtSubscriptionLevel", nil, "Failure preparing request")
@@ -557,16 +496,6 @@ func (client ManagementLocksClient) DeleteAtSubscriptionLevelResponder(resp *htt
 // Parameters:
 // lockName - name of the management lock.
 func (client ManagementLocksClient) Get(ctx context.Context, lockName string) (result ManagementLockObject, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementLocksClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, lockName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "locks.ManagementLocksClient", "Get", nil, "Failure preparing request")
@@ -633,21 +562,11 @@ func (client ManagementLocksClient) GetResponder(resp *http.Response) (result Ma
 // resourceGroupName - the resource group name.
 // lockName - the lock name.
 func (client ManagementLocksClient) GetAtResourceGroupLevel(ctx context.Context, resourceGroupName string, lockName string) (result ManagementLockObject, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementLocksClient.GetAtResourceGroupLevel")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}}}); err != nil {
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("locks.ManagementLocksClient", "GetAtResourceGroupLevel", err.Error())
 	}
 
@@ -718,21 +637,11 @@ func (client ManagementLocksClient) GetAtResourceGroupLevelResponder(resp *http.
 // resourceGroupName - resource group name.
 // filter - the filter to apply on the operation.
 func (client ManagementLocksClient) ListAtResourceGroupLevel(ctx context.Context, resourceGroupName string, filter string) (result ManagementLockListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementLocksClient.ListAtResourceGroupLevel")
-		defer func() {
-			sc := -1
-			if result.mllr.Response.Response != nil {
-				sc = result.mllr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}}}); err != nil {
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("locks.ManagementLocksClient", "ListAtResourceGroupLevel", err.Error())
 	}
 
@@ -802,8 +711,8 @@ func (client ManagementLocksClient) ListAtResourceGroupLevelResponder(resp *http
 }
 
 // listAtResourceGroupLevelNextResults retrieves the next set of results, if any.
-func (client ManagementLocksClient) listAtResourceGroupLevelNextResults(ctx context.Context, lastResults ManagementLockListResult) (result ManagementLockListResult, err error) {
-	req, err := lastResults.managementLockListResultPreparer(ctx)
+func (client ManagementLocksClient) listAtResourceGroupLevelNextResults(lastResults ManagementLockListResult) (result ManagementLockListResult, err error) {
+	req, err := lastResults.managementLockListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "locks.ManagementLocksClient", "listAtResourceGroupLevelNextResults", nil, "Failure preparing next results request")
 	}
@@ -824,16 +733,6 @@ func (client ManagementLocksClient) listAtResourceGroupLevelNextResults(ctx cont
 
 // ListAtResourceGroupLevelComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ManagementLocksClient) ListAtResourceGroupLevelComplete(ctx context.Context, resourceGroupName string, filter string) (result ManagementLockListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementLocksClient.ListAtResourceGroupLevel")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListAtResourceGroupLevel(ctx, resourceGroupName, filter)
 	return
 }
@@ -847,21 +746,11 @@ func (client ManagementLocksClient) ListAtResourceGroupLevelComplete(ctx context
 // resourceName - resource identity.
 // filter - the filter to apply on the operation.
 func (client ManagementLocksClient) ListAtResourceLevel(ctx context.Context, resourceGroupName string, resourceProviderNamespace string, parentResourcePath string, resourceType string, resourceName string, filter string) (result ManagementLockListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementLocksClient.ListAtResourceLevel")
-		defer func() {
-			sc := -1
-			if result.mllr.Response.Response != nil {
-				sc = result.mllr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}}}); err != nil {
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("locks.ManagementLocksClient", "ListAtResourceLevel", err.Error())
 	}
 
@@ -935,8 +824,8 @@ func (client ManagementLocksClient) ListAtResourceLevelResponder(resp *http.Resp
 }
 
 // listAtResourceLevelNextResults retrieves the next set of results, if any.
-func (client ManagementLocksClient) listAtResourceLevelNextResults(ctx context.Context, lastResults ManagementLockListResult) (result ManagementLockListResult, err error) {
-	req, err := lastResults.managementLockListResultPreparer(ctx)
+func (client ManagementLocksClient) listAtResourceLevelNextResults(lastResults ManagementLockListResult) (result ManagementLockListResult, err error) {
+	req, err := lastResults.managementLockListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "locks.ManagementLocksClient", "listAtResourceLevelNextResults", nil, "Failure preparing next results request")
 	}
@@ -957,16 +846,6 @@ func (client ManagementLocksClient) listAtResourceLevelNextResults(ctx context.C
 
 // ListAtResourceLevelComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ManagementLocksClient) ListAtResourceLevelComplete(ctx context.Context, resourceGroupName string, resourceProviderNamespace string, parentResourcePath string, resourceType string, resourceName string, filter string) (result ManagementLockListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementLocksClient.ListAtResourceLevel")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListAtResourceLevel(ctx, resourceGroupName, resourceProviderNamespace, parentResourcePath, resourceType, resourceName, filter)
 	return
 }
@@ -975,16 +854,6 @@ func (client ManagementLocksClient) ListAtResourceLevelComplete(ctx context.Cont
 // Parameters:
 // filter - the filter to apply on the operation.
 func (client ManagementLocksClient) ListAtSubscriptionLevel(ctx context.Context, filter string) (result ManagementLockListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementLocksClient.ListAtSubscriptionLevel")
-		defer func() {
-			sc := -1
-			if result.mllr.Response.Response != nil {
-				sc = result.mllr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listAtSubscriptionLevelNextResults
 	req, err := client.ListAtSubscriptionLevelPreparer(ctx, filter)
 	if err != nil {
@@ -1050,8 +919,8 @@ func (client ManagementLocksClient) ListAtSubscriptionLevelResponder(resp *http.
 }
 
 // listAtSubscriptionLevelNextResults retrieves the next set of results, if any.
-func (client ManagementLocksClient) listAtSubscriptionLevelNextResults(ctx context.Context, lastResults ManagementLockListResult) (result ManagementLockListResult, err error) {
-	req, err := lastResults.managementLockListResultPreparer(ctx)
+func (client ManagementLocksClient) listAtSubscriptionLevelNextResults(lastResults ManagementLockListResult) (result ManagementLockListResult, err error) {
+	req, err := lastResults.managementLockListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "locks.ManagementLocksClient", "listAtSubscriptionLevelNextResults", nil, "Failure preparing next results request")
 	}
@@ -1072,16 +941,6 @@ func (client ManagementLocksClient) listAtSubscriptionLevelNextResults(ctx conte
 
 // ListAtSubscriptionLevelComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ManagementLocksClient) ListAtSubscriptionLevelComplete(ctx context.Context, filter string) (result ManagementLockListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementLocksClient.ListAtSubscriptionLevel")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListAtSubscriptionLevel(ctx, filter)
 	return
 }

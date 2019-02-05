@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,16 +46,6 @@ func NewActionGroupsClientWithBaseURI(baseURI string, subscriptionID string) Act
 // actionGroupName - the name of the action group.
 // actionGroup - the action group to create or use for the update.
 func (client ActionGroupsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, actionGroupName string, actionGroup ActionGroupResource) (result ActionGroupResource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ActionGroupsClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: actionGroup,
 			Constraints: []validation.Constraint{{Target: "actionGroup.ActionGroup", Name: validation.Null, Rule: false,
@@ -96,7 +85,7 @@ func (client ActionGroupsClient) CreateOrUpdatePreparer(ctx context.Context, res
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-09-01"
+	const APIVersion = "2018-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -136,16 +125,6 @@ func (client ActionGroupsClient) CreateOrUpdateResponder(resp *http.Response) (r
 // resourceGroupName - the name of the resource group.
 // actionGroupName - the name of the action group.
 func (client ActionGroupsClient) Delete(ctx context.Context, resourceGroupName string, actionGroupName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ActionGroupsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, actionGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ActionGroupsClient", "Delete", nil, "Failure preparing request")
@@ -175,7 +154,7 @@ func (client ActionGroupsClient) DeletePreparer(ctx context.Context, resourceGro
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-09-01"
+	const APIVersion = "2018-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -214,16 +193,6 @@ func (client ActionGroupsClient) DeleteResponder(resp *http.Response) (result au
 // actionGroupName - the name of the action group.
 // enableRequest - the receiver to re-enable.
 func (client ActionGroupsClient) EnableReceiver(ctx context.Context, resourceGroupName string, actionGroupName string, enableRequest EnableRequest) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ActionGroupsClient.EnableReceiver")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: enableRequest,
 			Constraints: []validation.Constraint{{Target: "enableRequest.ReceiverName", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -259,7 +228,7 @@ func (client ActionGroupsClient) EnableReceiverPreparer(ctx context.Context, res
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-09-01"
+	const APIVersion = "2018-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -298,16 +267,6 @@ func (client ActionGroupsClient) EnableReceiverResponder(resp *http.Response) (r
 // resourceGroupName - the name of the resource group.
 // actionGroupName - the name of the action group.
 func (client ActionGroupsClient) Get(ctx context.Context, resourceGroupName string, actionGroupName string) (result ActionGroupResource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ActionGroupsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, actionGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ActionGroupsClient", "Get", nil, "Failure preparing request")
@@ -337,7 +296,7 @@ func (client ActionGroupsClient) GetPreparer(ctx context.Context, resourceGroupN
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-09-01"
+	const APIVersion = "2018-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -374,16 +333,6 @@ func (client ActionGroupsClient) GetResponder(resp *http.Response) (result Actio
 // Parameters:
 // resourceGroupName - the name of the resource group.
 func (client ActionGroupsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result ActionGroupList, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ActionGroupsClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ActionGroupsClient", "ListByResourceGroup", nil, "Failure preparing request")
@@ -412,7 +361,7 @@ func (client ActionGroupsClient) ListByResourceGroupPreparer(ctx context.Context
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-09-01"
+	const APIVersion = "2018-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -447,16 +396,6 @@ func (client ActionGroupsClient) ListByResourceGroupResponder(resp *http.Respons
 
 // ListBySubscriptionID get a list of all action groups in a subscription.
 func (client ActionGroupsClient) ListBySubscriptionID(ctx context.Context) (result ActionGroupList, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ActionGroupsClient.ListBySubscriptionID")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ListBySubscriptionIDPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ActionGroupsClient", "ListBySubscriptionID", nil, "Failure preparing request")
@@ -484,7 +423,7 @@ func (client ActionGroupsClient) ListBySubscriptionIDPreparer(ctx context.Contex
 		"subscriptionId": autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-09-01"
+	const APIVersion = "2018-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -523,16 +462,6 @@ func (client ActionGroupsClient) ListBySubscriptionIDResponder(resp *http.Respon
 // actionGroupName - the name of the action group.
 // actionGroupPatch - parameters supplied to the operation.
 func (client ActionGroupsClient) Update(ctx context.Context, resourceGroupName string, actionGroupName string, actionGroupPatch ActionGroupPatchBody) (result ActionGroupResource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ActionGroupsClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, actionGroupName, actionGroupPatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ActionGroupsClient", "Update", nil, "Failure preparing request")
@@ -562,7 +491,7 @@ func (client ActionGroupsClient) UpdatePreparer(ctx context.Context, resourceGro
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-09-01"
+	const APIVersion = "2018-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}

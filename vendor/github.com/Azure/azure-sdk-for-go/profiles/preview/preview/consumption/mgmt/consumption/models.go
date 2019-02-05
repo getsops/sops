@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2018 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,16 +19,15 @@
 
 package consumption
 
-import (
-	"context"
+import original "github.com/Azure/azure-sdk-for-go/services/preview/consumption/mgmt/2017-12-30-preview/consumption"
 
-	original "github.com/Azure/azure-sdk-for-go/services/preview/consumption/mgmt/2017-12-30-preview/consumption"
-)
+type BudgetsClient = original.BudgetsClient
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
+type BaseClient = original.BaseClient
 type OperatorType = original.OperatorType
 
 const (
@@ -45,12 +44,10 @@ const (
 	Quarterly TimeGrainType = original.Quarterly
 )
 
-type BaseClient = original.BaseClient
 type Budget = original.Budget
 type BudgetProperties = original.BudgetProperties
-type BudgetTimePeriod = original.BudgetTimePeriod
-type BudgetsClient = original.BudgetsClient
 type BudgetsListResult = original.BudgetsListResult
+type BudgetTimePeriod = original.BudgetTimePeriod
 type CurrentSpend = original.CurrentSpend
 type ErrorDetails = original.ErrorDetails
 type ErrorResponse = original.ErrorResponse
@@ -60,29 +57,17 @@ type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
 type OperationListResultIterator = original.OperationListResultIterator
 type OperationListResultPage = original.OperationListResultPage
-type OperationsClient = original.OperationsClient
 type ProxyResource = original.ProxyResource
+type OperationsClient = original.OperationsClient
 
-func New(subscriptionID string, name string) BaseClient {
-	return original.New(subscriptionID, name)
-}
 func NewBudgetsClient(subscriptionID string, name string) BudgetsClient {
 	return original.NewBudgetsClient(subscriptionID, name)
 }
 func NewBudgetsClientWithBaseURI(baseURI string, subscriptionID string, name string) BudgetsClient {
 	return original.NewBudgetsClientWithBaseURI(baseURI, subscriptionID, name)
 }
-func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
-	return original.NewOperationListResultIterator(page)
-}
-func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
-	return original.NewOperationListResultPage(getNextPage)
-}
-func NewOperationsClient(subscriptionID string, name string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID, name)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string, name string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID, name)
+func New(subscriptionID string, name string) BaseClient {
+	return original.New(subscriptionID, name)
 }
 func NewWithBaseURI(baseURI string, subscriptionID string, name string) BaseClient {
 	return original.NewWithBaseURI(baseURI, subscriptionID, name)
@@ -92,6 +77,12 @@ func PossibleOperatorTypeValues() []OperatorType {
 }
 func PossibleTimeGrainTypeValues() []TimeGrainType {
 	return original.PossibleTimeGrainTypeValues()
+}
+func NewOperationsClient(subscriptionID string, name string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID, name)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string, name string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID, name)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

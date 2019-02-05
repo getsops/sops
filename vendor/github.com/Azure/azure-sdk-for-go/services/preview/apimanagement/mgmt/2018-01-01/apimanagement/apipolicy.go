@@ -22,29 +22,24 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // APIPolicyClient is the apiManagement Client
 type APIPolicyClient struct {
 	BaseClient
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewAPIPolicyClient creates an instance of the APIPolicyClient client.
 func NewAPIPolicyClient(subscriptionID string) APIPolicyClient {
 	return NewAPIPolicyClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewAPIPolicyClientWithBaseURI creates an instance of the APIPolicyClient client.
 func NewAPIPolicyClientWithBaseURI(baseURI string, subscriptionID string) APIPolicyClient {
 	return APIPolicyClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdate creates or updates policy configuration for the API.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -54,16 +49,6 @@ func NewAPIPolicyClientWithBaseURI(baseURI string, subscriptionID string) APIPol
 // parameters - the policy contents to apply.
 // ifMatch - eTag of the Entity. Not required when creating an entity, but required when updating an entity.
 func (client APIPolicyClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, apiid string, parameters PolicyContract, ifMatch string) (result PolicyContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIPolicyClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -100,7 +85,6 @@ func (client APIPolicyClient) CreateOrUpdate(ctx context.Context, resourceGroupN
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
 func (client APIPolicyClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, parameters PolicyContract, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -130,7 +114,6 @@ func (client APIPolicyClient) CreateOrUpdatePreparer(ctx context.Context, resour
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIPolicyClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
@@ -138,7 +121,6 @@ func (client APIPolicyClient) CreateOrUpdateSender(req *http.Request) (*http.Res
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
 // closes the http.Response Body.
 func (client APIPolicyClient) CreateOrUpdateResponder(resp *http.Response) (result PolicyContract, err error) {
@@ -152,7 +134,6 @@ func (client APIPolicyClient) CreateOrUpdateResponder(resp *http.Response) (resu
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Delete deletes the policy configuration at the Api.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -162,16 +143,6 @@ func (client APIPolicyClient) CreateOrUpdateResponder(resp *http.Response) (resu
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client APIPolicyClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIPolicyClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -205,7 +176,6 @@ func (client APIPolicyClient) Delete(ctx context.Context, resourceGroupName stri
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeletePreparer prepares the Delete request.
 func (client APIPolicyClient) DeletePreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -230,7 +200,6 @@ func (client APIPolicyClient) DeletePreparer(ctx context.Context, resourceGroupN
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIPolicyClient) DeleteSender(req *http.Request) (*http.Response, error) {
@@ -238,7 +207,6 @@ func (client APIPolicyClient) DeleteSender(req *http.Request) (*http.Response, e
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteResponder handles the response to the Delete request. The method always
 // closes the http.Response Body.
 func (client APIPolicyClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -251,7 +219,6 @@ func (client APIPolicyClient) DeleteResponder(resp *http.Response) (result autor
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Get get the policy configuration at the API level.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -259,16 +226,6 @@ func (client APIPolicyClient) DeleteResponder(resp *http.Response) (result autor
 // apiid - API revision identifier. Must be unique in the current API Management service instance. Non-current
 // revision has ;rev=n as a suffix where n is the revision number.
 func (client APIPolicyClient) Get(ctx context.Context, resourceGroupName string, serviceName string, apiid string) (result PolicyContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIPolicyClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -302,7 +259,6 @@ func (client APIPolicyClient) Get(ctx context.Context, resourceGroupName string,
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetPreparer prepares the Get request.
 func (client APIPolicyClient) GetPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -326,7 +282,6 @@ func (client APIPolicyClient) GetPreparer(ctx context.Context, resourceGroupName
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIPolicyClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -334,7 +289,6 @@ func (client APIPolicyClient) GetSender(req *http.Request) (*http.Response, erro
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client APIPolicyClient) GetResponder(resp *http.Response) (result PolicyContract, err error) {
@@ -348,7 +302,6 @@ func (client APIPolicyClient) GetResponder(resp *http.Response) (result PolicyCo
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTag gets the entity state (Etag) version of the API policy specified by its identifier.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -356,16 +309,6 @@ func (client APIPolicyClient) GetResponder(resp *http.Response) (result PolicyCo
 // apiid - API revision identifier. Must be unique in the current API Management service instance. Non-current
 // revision has ;rev=n as a suffix where n is the revision number.
 func (client APIPolicyClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, apiid string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIPolicyClient.GetEntityTag")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -399,7 +342,6 @@ func (client APIPolicyClient) GetEntityTag(ctx context.Context, resourceGroupNam
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagPreparer prepares the GetEntityTag request.
 func (client APIPolicyClient) GetEntityTagPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -423,7 +365,6 @@ func (client APIPolicyClient) GetEntityTagPreparer(ctx context.Context, resource
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagSender sends the GetEntityTag request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIPolicyClient) GetEntityTagSender(req *http.Request) (*http.Response, error) {
@@ -431,7 +372,6 @@ func (client APIPolicyClient) GetEntityTagSender(req *http.Request) (*http.Respo
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagResponder handles the response to the GetEntityTag request. The method always
 // closes the http.Response Body.
 func (client APIPolicyClient) GetEntityTagResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -444,7 +384,6 @@ func (client APIPolicyClient) GetEntityTagResponder(resp *http.Response) (result
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByAPI get the policy configuration at the API level.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -452,16 +391,6 @@ func (client APIPolicyClient) GetEntityTagResponder(resp *http.Response) (result
 // apiid - API revision identifier. Must be unique in the current API Management service instance. Non-current
 // revision has ;rev=n as a suffix where n is the revision number.
 func (client APIPolicyClient) ListByAPI(ctx context.Context, resourceGroupName string, serviceName string, apiid string) (result PolicyCollection, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIPolicyClient.ListByAPI")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -495,7 +424,6 @@ func (client APIPolicyClient) ListByAPI(ctx context.Context, resourceGroupName s
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByAPIPreparer prepares the ListByAPI request.
 func (client APIPolicyClient) ListByAPIPreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -518,7 +446,6 @@ func (client APIPolicyClient) ListByAPIPreparer(ctx context.Context, resourceGro
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByAPISender sends the ListByAPI request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIPolicyClient) ListByAPISender(req *http.Request) (*http.Response, error) {
@@ -526,7 +453,6 @@ func (client APIPolicyClient) ListByAPISender(req *http.Request) (*http.Response
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByAPIResponder handles the response to the ListByAPI request. The method always
 // closes the http.Response Body.
 func (client APIPolicyClient) ListByAPIResponder(resp *http.Response) (result PolicyCollection, err error) {

@@ -21,29 +21,24 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // JobsClient is the client for the Jobs methods of the Scheduler service.
 type JobsClient struct {
 	BaseClient
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // NewJobsClient creates an instance of the JobsClient client.
 func NewJobsClient(subscriptionID string) JobsClient {
 	return NewJobsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // NewJobsClientWithBaseURI creates an instance of the JobsClient client.
 func NewJobsClientWithBaseURI(baseURI string, subscriptionID string) JobsClient {
 	return JobsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // CreateOrUpdate provisions a new job or updates an existing job.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -51,16 +46,6 @@ func NewJobsClientWithBaseURI(baseURI string, subscriptionID string) JobsClient 
 // jobName - the job name.
 // job - the job definition.
 func (client JobsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, jobCollectionName string, jobName string, job JobDefinition) (result JobDefinition, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, jobCollectionName, jobName, job)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "scheduler.JobsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -82,7 +67,6 @@ func (client JobsClient) CreateOrUpdate(ctx context.Context, resourceGroupName s
 	return
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
 func (client JobsClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, jobCollectionName string, jobName string, job JobDefinition) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -107,7 +91,6 @@ func (client JobsClient) CreateOrUpdatePreparer(ctx context.Context, resourceGro
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobsClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
@@ -115,7 +98,6 @@ func (client JobsClient) CreateOrUpdateSender(req *http.Request) (*http.Response
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
 // closes the http.Response Body.
 func (client JobsClient) CreateOrUpdateResponder(resp *http.Response) (result JobDefinition, err error) {
@@ -129,23 +111,12 @@ func (client JobsClient) CreateOrUpdateResponder(resp *http.Response) (result Jo
 	return
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // Delete deletes a job.
 // Parameters:
 // resourceGroupName - the resource group name.
 // jobCollectionName - the job collection name.
 // jobName - the job name.
 func (client JobsClient) Delete(ctx context.Context, resourceGroupName string, jobCollectionName string, jobName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, jobCollectionName, jobName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "scheduler.JobsClient", "Delete", nil, "Failure preparing request")
@@ -167,7 +138,6 @@ func (client JobsClient) Delete(ctx context.Context, resourceGroupName string, j
 	return
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // DeletePreparer prepares the Delete request.
 func (client JobsClient) DeletePreparer(ctx context.Context, resourceGroupName string, jobCollectionName string, jobName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -190,7 +160,6 @@ func (client JobsClient) DeletePreparer(ctx context.Context, resourceGroupName s
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobsClient) DeleteSender(req *http.Request) (*http.Response, error) {
@@ -198,7 +167,6 @@ func (client JobsClient) DeleteSender(req *http.Request) (*http.Response, error)
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // DeleteResponder handles the response to the Delete request. The method always
 // closes the http.Response Body.
 func (client JobsClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -211,23 +179,12 @@ func (client JobsClient) DeleteResponder(resp *http.Response) (result autorest.R
 	return
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // Get gets a job.
 // Parameters:
 // resourceGroupName - the resource group name.
 // jobCollectionName - the job collection name.
 // jobName - the job name.
 func (client JobsClient) Get(ctx context.Context, resourceGroupName string, jobCollectionName string, jobName string) (result JobDefinition, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, jobCollectionName, jobName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "scheduler.JobsClient", "Get", nil, "Failure preparing request")
@@ -249,7 +206,6 @@ func (client JobsClient) Get(ctx context.Context, resourceGroupName string, jobC
 	return
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // GetPreparer prepares the Get request.
 func (client JobsClient) GetPreparer(ctx context.Context, resourceGroupName string, jobCollectionName string, jobName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -272,7 +228,6 @@ func (client JobsClient) GetPreparer(ctx context.Context, resourceGroupName stri
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobsClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -280,7 +235,6 @@ func (client JobsClient) GetSender(req *http.Request) (*http.Response, error) {
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client JobsClient) GetResponder(resp *http.Response) (result JobDefinition, err error) {
@@ -294,7 +248,6 @@ func (client JobsClient) GetResponder(resp *http.Response) (result JobDefinition
 	return
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // List lists all jobs under the specified job collection.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -303,16 +256,6 @@ func (client JobsClient) GetResponder(resp *http.Response) (result JobDefinition
 // skip - the (0-based) index of the job history list from which to begin requesting entries.
 // filter - the filter to apply on the job state.
 func (client JobsClient) List(ctx context.Context, resourceGroupName string, jobCollectionName string, top *int32, skip *int32, filter string) (result JobListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.List")
-		defer func() {
-			sc := -1
-			if result.jlr.Response.Response != nil {
-				sc = result.jlr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, jobCollectionName, top, skip, filter)
 	if err != nil {
@@ -335,7 +278,6 @@ func (client JobsClient) List(ctx context.Context, resourceGroupName string, job
 	return
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // ListPreparer prepares the List request.
 func (client JobsClient) ListPreparer(ctx context.Context, resourceGroupName string, jobCollectionName string, top *int32, skip *int32, filter string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -366,7 +308,6 @@ func (client JobsClient) ListPreparer(ctx context.Context, resourceGroupName str
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobsClient) ListSender(req *http.Request) (*http.Response, error) {
@@ -374,7 +315,6 @@ func (client JobsClient) ListSender(req *http.Request) (*http.Response, error) {
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // ListResponder handles the response to the List request. The method always
 // closes the http.Response Body.
 func (client JobsClient) ListResponder(resp *http.Response) (result JobListResult, err error) {
@@ -389,8 +329,8 @@ func (client JobsClient) ListResponder(resp *http.Response) (result JobListResul
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client JobsClient) listNextResults(ctx context.Context, lastResults JobListResult) (result JobListResult, err error) {
-	req, err := lastResults.jobListResultPreparer(ctx)
+func (client JobsClient) listNextResults(lastResults JobListResult) (result JobListResult, err error) {
+	req, err := lastResults.jobListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "scheduler.JobsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -409,24 +349,12 @@ func (client JobsClient) listNextResults(ctx context.Context, lastResults JobLis
 	return
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobsClient) ListComplete(ctx context.Context, resourceGroupName string, jobCollectionName string, top *int32, skip *int32, filter string) (result JobListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, resourceGroupName, jobCollectionName, top, skip, filter)
 	return
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // ListJobHistory lists job history.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -436,16 +364,6 @@ func (client JobsClient) ListComplete(ctx context.Context, resourceGroupName str
 // skip - the (0-based) index of the job history list from which to begin requesting entries.
 // filter - the filter to apply on the job state.
 func (client JobsClient) ListJobHistory(ctx context.Context, resourceGroupName string, jobCollectionName string, jobName string, top *int32, skip *int32, filter string) (result JobHistoryListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.ListJobHistory")
-		defer func() {
-			sc := -1
-			if result.jhlr.Response.Response != nil {
-				sc = result.jhlr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listJobHistoryNextResults
 	req, err := client.ListJobHistoryPreparer(ctx, resourceGroupName, jobCollectionName, jobName, top, skip, filter)
 	if err != nil {
@@ -468,7 +386,6 @@ func (client JobsClient) ListJobHistory(ctx context.Context, resourceGroupName s
 	return
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // ListJobHistoryPreparer prepares the ListJobHistory request.
 func (client JobsClient) ListJobHistoryPreparer(ctx context.Context, resourceGroupName string, jobCollectionName string, jobName string, top *int32, skip *int32, filter string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -500,7 +417,6 @@ func (client JobsClient) ListJobHistoryPreparer(ctx context.Context, resourceGro
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // ListJobHistorySender sends the ListJobHistory request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobsClient) ListJobHistorySender(req *http.Request) (*http.Response, error) {
@@ -508,7 +424,6 @@ func (client JobsClient) ListJobHistorySender(req *http.Request) (*http.Response
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // ListJobHistoryResponder handles the response to the ListJobHistory request. The method always
 // closes the http.Response Body.
 func (client JobsClient) ListJobHistoryResponder(resp *http.Response) (result JobHistoryListResult, err error) {
@@ -523,8 +438,8 @@ func (client JobsClient) ListJobHistoryResponder(resp *http.Response) (result Jo
 }
 
 // listJobHistoryNextResults retrieves the next set of results, if any.
-func (client JobsClient) listJobHistoryNextResults(ctx context.Context, lastResults JobHistoryListResult) (result JobHistoryListResult, err error) {
-	req, err := lastResults.jobHistoryListResultPreparer(ctx)
+func (client JobsClient) listJobHistoryNextResults(lastResults JobHistoryListResult) (result JobHistoryListResult, err error) {
+	req, err := lastResults.jobHistoryListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "scheduler.JobsClient", "listJobHistoryNextResults", nil, "Failure preparing next results request")
 	}
@@ -543,24 +458,12 @@ func (client JobsClient) listJobHistoryNextResults(ctx context.Context, lastResu
 	return
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // ListJobHistoryComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobsClient) ListJobHistoryComplete(ctx context.Context, resourceGroupName string, jobCollectionName string, jobName string, top *int32, skip *int32, filter string) (result JobHistoryListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.ListJobHistory")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListJobHistory(ctx, resourceGroupName, jobCollectionName, jobName, top, skip, filter)
 	return
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // Patch patches an existing job.
 // Parameters:
 // resourceGroupName - the resource group name.
@@ -568,16 +471,6 @@ func (client JobsClient) ListJobHistoryComplete(ctx context.Context, resourceGro
 // jobName - the job name.
 // job - the job definition.
 func (client JobsClient) Patch(ctx context.Context, resourceGroupName string, jobCollectionName string, jobName string, job JobDefinition) (result JobDefinition, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Patch")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.PatchPreparer(ctx, resourceGroupName, jobCollectionName, jobName, job)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "scheduler.JobsClient", "Patch", nil, "Failure preparing request")
@@ -599,7 +492,6 @@ func (client JobsClient) Patch(ctx context.Context, resourceGroupName string, jo
 	return
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // PatchPreparer prepares the Patch request.
 func (client JobsClient) PatchPreparer(ctx context.Context, resourceGroupName string, jobCollectionName string, jobName string, job JobDefinition) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -624,7 +516,6 @@ func (client JobsClient) PatchPreparer(ctx context.Context, resourceGroupName st
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // PatchSender sends the Patch request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobsClient) PatchSender(req *http.Request) (*http.Response, error) {
@@ -632,7 +523,6 @@ func (client JobsClient) PatchSender(req *http.Request) (*http.Response, error) 
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // PatchResponder handles the response to the Patch request. The method always
 // closes the http.Response Body.
 func (client JobsClient) PatchResponder(resp *http.Response) (result JobDefinition, err error) {
@@ -646,23 +536,12 @@ func (client JobsClient) PatchResponder(resp *http.Response) (result JobDefiniti
 	return
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // Run runs a job.
 // Parameters:
 // resourceGroupName - the resource group name.
 // jobCollectionName - the job collection name.
 // jobName - the job name.
 func (client JobsClient) Run(ctx context.Context, resourceGroupName string, jobCollectionName string, jobName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Run")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.RunPreparer(ctx, resourceGroupName, jobCollectionName, jobName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "scheduler.JobsClient", "Run", nil, "Failure preparing request")
@@ -684,7 +563,6 @@ func (client JobsClient) Run(ctx context.Context, resourceGroupName string, jobC
 	return
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // RunPreparer prepares the Run request.
 func (client JobsClient) RunPreparer(ctx context.Context, resourceGroupName string, jobCollectionName string, jobName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -707,7 +585,6 @@ func (client JobsClient) RunPreparer(ctx context.Context, resourceGroupName stri
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // RunSender sends the Run request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobsClient) RunSender(req *http.Request) (*http.Response, error) {
@@ -715,7 +592,6 @@ func (client JobsClient) RunSender(req *http.Request) (*http.Response, error) {
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use github.com/Azure/azure-sdk-for-go/services/logic/mgmt/2016-06-01/logic instead.
 // RunResponder handles the response to the Run request. The method always
 // closes the http.Response Body.
 func (client JobsClient) RunResponder(resp *http.Response) (result autorest.Response, err error) {

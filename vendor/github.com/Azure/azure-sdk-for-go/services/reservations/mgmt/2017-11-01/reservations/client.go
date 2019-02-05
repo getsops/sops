@@ -24,7 +24,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -56,16 +55,6 @@ func NewWithBaseURI(baseURI string) BaseClient {
 // Parameters:
 // subscriptionID - id of the subscription
 func (client BaseClient) GetAppliedReservationList(ctx context.Context, subscriptionID string) (result AppliedReservations, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetAppliedReservationList")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetAppliedReservationListPreparer(ctx, subscriptionID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "reservations.BaseClient", "GetAppliedReservationList", nil, "Failure preparing request")
@@ -130,16 +119,6 @@ func (client BaseClient) GetAppliedReservationListResponder(resp *http.Response)
 // Parameters:
 // subscriptionID - id of the subscription
 func (client BaseClient) GetCatalog(ctx context.Context, subscriptionID string) (result ListCatalog, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetCatalog")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetCatalogPreparer(ctx, subscriptionID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "reservations.BaseClient", "GetCatalog", nil, "Failure preparing request")

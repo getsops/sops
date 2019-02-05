@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -51,16 +50,6 @@ func NewServerCommunicationLinksClientWithBaseURI(baseURI string, subscriptionID
 // communicationLinkName - the name of the server communication link.
 // parameters - the required parameters for creating a server communication link.
 func (client ServerCommunicationLinksClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, communicationLinkName string, parameters ServerCommunicationLink) (result ServerCommunicationLinksCreateOrUpdateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServerCommunicationLinksClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.ServerCommunicationLinkProperties", Name: validation.Null, Rule: false,
@@ -116,6 +105,10 @@ func (client ServerCommunicationLinksClient) CreateOrUpdateSender(req *http.Requ
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -140,16 +133,6 @@ func (client ServerCommunicationLinksClient) CreateOrUpdateResponder(resp *http.
 // serverName - the name of the server.
 // communicationLinkName - the name of the server communication link.
 func (client ServerCommunicationLinksClient) Delete(ctx context.Context, resourceGroupName string, serverName string, communicationLinkName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServerCommunicationLinksClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, serverName, communicationLinkName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServerCommunicationLinksClient", "Delete", nil, "Failure preparing request")
@@ -219,16 +202,6 @@ func (client ServerCommunicationLinksClient) DeleteResponder(resp *http.Response
 // serverName - the name of the server.
 // communicationLinkName - the name of the server communication link.
 func (client ServerCommunicationLinksClient) Get(ctx context.Context, resourceGroupName string, serverName string, communicationLinkName string) (result ServerCommunicationLink, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServerCommunicationLinksClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, communicationLinkName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServerCommunicationLinksClient", "Get", nil, "Failure preparing request")
@@ -298,16 +271,6 @@ func (client ServerCommunicationLinksClient) GetResponder(resp *http.Response) (
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server.
 func (client ServerCommunicationLinksClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string) (result ServerCommunicationLinkListResult, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServerCommunicationLinksClient.ListByServer")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ListByServerPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServerCommunicationLinksClient", "ListByServer", nil, "Failure preparing request")

@@ -22,29 +22,24 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // PropertyClient is the apiManagement Client
 type PropertyClient struct {
 	BaseClient
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewPropertyClient creates an instance of the PropertyClient client.
 func NewPropertyClient(subscriptionID string) PropertyClient {
 	return NewPropertyClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewPropertyClientWithBaseURI creates an instance of the PropertyClient client.
 func NewPropertyClientWithBaseURI(baseURI string, subscriptionID string) PropertyClient {
 	return PropertyClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdate creates or updates a property.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -53,16 +48,6 @@ func NewPropertyClientWithBaseURI(baseURI string, subscriptionID string) Propert
 // parameters - create parameters.
 // ifMatch - eTag of the Entity. Not required when creating an entity, but required when updating an entity.
 func (client PropertyClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, propID string, parameters PropertyContract, ifMatch string) (result PropertyContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PropertyClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -107,7 +92,6 @@ func (client PropertyClient) CreateOrUpdate(ctx context.Context, resourceGroupNa
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
 func (client PropertyClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, propID string, parameters PropertyContract, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -136,7 +120,6 @@ func (client PropertyClient) CreateOrUpdatePreparer(ctx context.Context, resourc
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client PropertyClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
@@ -144,7 +127,6 @@ func (client PropertyClient) CreateOrUpdateSender(req *http.Request) (*http.Resp
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
 // closes the http.Response Body.
 func (client PropertyClient) CreateOrUpdateResponder(resp *http.Response) (result PropertyContract, err error) {
@@ -158,7 +140,6 @@ func (client PropertyClient) CreateOrUpdateResponder(resp *http.Response) (resul
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Delete deletes specific property from the the API Management service instance.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -167,16 +148,6 @@ func (client PropertyClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client PropertyClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, propID string, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PropertyClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -209,7 +180,6 @@ func (client PropertyClient) Delete(ctx context.Context, resourceGroupName strin
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeletePreparer prepares the Delete request.
 func (client PropertyClient) DeletePreparer(ctx context.Context, resourceGroupName string, serviceName string, propID string, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -233,7 +203,6 @@ func (client PropertyClient) DeletePreparer(ctx context.Context, resourceGroupNa
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client PropertyClient) DeleteSender(req *http.Request) (*http.Response, error) {
@@ -241,7 +210,6 @@ func (client PropertyClient) DeleteSender(req *http.Request) (*http.Response, er
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteResponder handles the response to the Delete request. The method always
 // closes the http.Response Body.
 func (client PropertyClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -254,23 +222,12 @@ func (client PropertyClient) DeleteResponder(resp *http.Response) (result autore
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Get gets the details of the property specified by its identifier.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // propID - identifier of the property.
 func (client PropertyClient) Get(ctx context.Context, resourceGroupName string, serviceName string, propID string) (result PropertyContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PropertyClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -303,7 +260,6 @@ func (client PropertyClient) Get(ctx context.Context, resourceGroupName string, 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetPreparer prepares the Get request.
 func (client PropertyClient) GetPreparer(ctx context.Context, resourceGroupName string, serviceName string, propID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -326,7 +282,6 @@ func (client PropertyClient) GetPreparer(ctx context.Context, resourceGroupName 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client PropertyClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -334,7 +289,6 @@ func (client PropertyClient) GetSender(req *http.Request) (*http.Response, error
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client PropertyClient) GetResponder(resp *http.Response) (result PropertyContract, err error) {
@@ -348,23 +302,12 @@ func (client PropertyClient) GetResponder(resp *http.Response) (result PropertyC
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTag gets the entity state (Etag) version of the property specified by its identifier.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // propID - identifier of the property.
 func (client PropertyClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, propID string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PropertyClient.GetEntityTag")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -397,7 +340,6 @@ func (client PropertyClient) GetEntityTag(ctx context.Context, resourceGroupName
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagPreparer prepares the GetEntityTag request.
 func (client PropertyClient) GetEntityTagPreparer(ctx context.Context, resourceGroupName string, serviceName string, propID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -420,7 +362,6 @@ func (client PropertyClient) GetEntityTagPreparer(ctx context.Context, resourceG
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagSender sends the GetEntityTag request. The method will close the
 // http.Response Body if it receives an error.
 func (client PropertyClient) GetEntityTagSender(req *http.Request) (*http.Response, error) {
@@ -428,7 +369,6 @@ func (client PropertyClient) GetEntityTagSender(req *http.Request) (*http.Respon
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagResponder handles the response to the GetEntityTag request. The method always
 // closes the http.Response Body.
 func (client PropertyClient) GetEntityTagResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -441,7 +381,6 @@ func (client PropertyClient) GetEntityTagResponder(resp *http.Response) (result 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByService lists a collection of properties defined within a service instance.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -453,16 +392,6 @@ func (client PropertyClient) GetEntityTagResponder(resp *http.Response) (result 
 // top - number of records to return.
 // skip - number of records to skip.
 func (client PropertyClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result PropertyCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PropertyClient.ListByService")
-		defer func() {
-			sc := -1
-			if result.pc.Response.Response != nil {
-				sc = result.pc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -499,7 +428,6 @@ func (client PropertyClient) ListByService(ctx context.Context, resourceGroupNam
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServicePreparer prepares the ListByService request.
 func (client PropertyClient) ListByServicePreparer(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -530,7 +458,6 @@ func (client PropertyClient) ListByServicePreparer(ctx context.Context, resource
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceSender sends the ListByService request. The method will close the
 // http.Response Body if it receives an error.
 func (client PropertyClient) ListByServiceSender(req *http.Request) (*http.Response, error) {
@@ -538,7 +465,6 @@ func (client PropertyClient) ListByServiceSender(req *http.Request) (*http.Respo
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceResponder handles the response to the ListByService request. The method always
 // closes the http.Response Body.
 func (client PropertyClient) ListByServiceResponder(resp *http.Response) (result PropertyCollection, err error) {
@@ -553,8 +479,8 @@ func (client PropertyClient) ListByServiceResponder(resp *http.Response) (result
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client PropertyClient) listByServiceNextResults(ctx context.Context, lastResults PropertyCollection) (result PropertyCollection, err error) {
-	req, err := lastResults.propertyCollectionPreparer(ctx)
+func (client PropertyClient) listByServiceNextResults(lastResults PropertyCollection) (result PropertyCollection, err error) {
+	req, err := lastResults.propertyCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.PropertyClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -573,24 +499,12 @@ func (client PropertyClient) listByServiceNextResults(ctx context.Context, lastR
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client PropertyClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result PropertyCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PropertyClient.ListByService")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Update updates the specific property.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -600,16 +514,6 @@ func (client PropertyClient) ListByServiceComplete(ctx context.Context, resource
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client PropertyClient) Update(ctx context.Context, resourceGroupName string, serviceName string, propID string, parameters PropertyUpdateParameters, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PropertyClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -642,7 +546,6 @@ func (client PropertyClient) Update(ctx context.Context, resourceGroupName strin
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdatePreparer prepares the Update request.
 func (client PropertyClient) UpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, propID string, parameters PropertyUpdateParameters, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -668,7 +571,6 @@ func (client PropertyClient) UpdatePreparer(ctx context.Context, resourceGroupNa
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client PropertyClient) UpdateSender(req *http.Request) (*http.Response, error) {
@@ -676,7 +578,6 @@ func (client PropertyClient) UpdateSender(req *http.Request) (*http.Response, er
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateResponder handles the response to the Update request. The method always
 // closes the http.Response Body.
 func (client PropertyClient) UpdateResponder(resp *http.Response) (result autorest.Response, err error) {

@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,16 +46,6 @@ func NewMetricAlertsClientWithBaseURI(baseURI string, subscriptionID string) Met
 // ruleName - the name of the rule.
 // parameters - the parameters of the rule to create or update.
 func (client MetricAlertsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, ruleName string, parameters MetricAlertResource) (result MetricAlertResource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/MetricAlertsClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.MetricAlertProperties", Name: validation.Null, Rule: true,
@@ -134,21 +123,11 @@ func (client MetricAlertsClient) CreateOrUpdateResponder(resp *http.Response) (r
 	return
 }
 
-// Delete delete an alert rule definition.
+// Delete delete an alert rule defitiniton.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // ruleName - the name of the rule.
 func (client MetricAlertsClient) Delete(ctx context.Context, resourceGroupName string, ruleName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/MetricAlertsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, ruleName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.MetricAlertsClient", "Delete", nil, "Failure preparing request")
@@ -210,21 +189,11 @@ func (client MetricAlertsClient) DeleteResponder(resp *http.Response) (result au
 	return
 }
 
-// Get retrieve an alert rule definition.
+// Get retrieve an alert rule definiton.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // ruleName - the name of the rule.
 func (client MetricAlertsClient) Get(ctx context.Context, resourceGroupName string, ruleName string) (result MetricAlertResource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/MetricAlertsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, ruleName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.MetricAlertsClient", "Get", nil, "Failure preparing request")
@@ -287,20 +256,10 @@ func (client MetricAlertsClient) GetResponder(resp *http.Response) (result Metri
 	return
 }
 
-// ListByResourceGroup retrieve alert rule definitions in a resource group.
+// ListByResourceGroup retrieve alert rule defintions in a resource group.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 func (client MetricAlertsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result MetricAlertResourceCollection, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/MetricAlertsClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.MetricAlertsClient", "ListByResourceGroup", nil, "Failure preparing request")
@@ -364,16 +323,6 @@ func (client MetricAlertsClient) ListByResourceGroupResponder(resp *http.Respons
 
 // ListBySubscription retrieve alert rule definitions in a subscription.
 func (client MetricAlertsClient) ListBySubscription(ctx context.Context) (result MetricAlertResourceCollection, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/MetricAlertsClient.ListBySubscription")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.MetricAlertsClient", "ListBySubscription", nil, "Failure preparing request")
@@ -440,16 +389,6 @@ func (client MetricAlertsClient) ListBySubscriptionResponder(resp *http.Response
 // ruleName - the name of the rule.
 // parameters - the parameters of the rule to update.
 func (client MetricAlertsClient) Update(ctx context.Context, resourceGroupName string, ruleName string, parameters MetricAlertResourcePatch) (result MetricAlertResource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/MetricAlertsClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, ruleName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.MetricAlertsClient", "Update", nil, "Failure preparing request")

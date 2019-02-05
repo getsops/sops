@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,16 +46,6 @@ func NewSetDefinitionsClientWithBaseURI(baseURI string, subscriptionID string) S
 // policySetDefinitionName - the name of the policy set definition to create.
 // parameters - the policy set definition properties.
 func (client SetDefinitionsClient) CreateOrUpdate(ctx context.Context, policySetDefinitionName string, parameters SetDefinition) (result SetDefinition, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SetDefinitionsClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.SetDefinitionProperties", Name: validation.Null, Rule: false,
@@ -133,16 +122,6 @@ func (client SetDefinitionsClient) CreateOrUpdateResponder(resp *http.Response) 
 // parameters - the policy set definition properties.
 // managementGroupID - the ID of the management group.
 func (client SetDefinitionsClient) CreateOrUpdateAtManagementGroup(ctx context.Context, policySetDefinitionName string, parameters SetDefinition, managementGroupID string) (result SetDefinition, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SetDefinitionsClient.CreateOrUpdateAtManagementGroup")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.SetDefinitionProperties", Name: validation.Null, Rule: false,
@@ -217,16 +196,6 @@ func (client SetDefinitionsClient) CreateOrUpdateAtManagementGroupResponder(resp
 // Parameters:
 // policySetDefinitionName - the name of the policy set definition to delete.
 func (client SetDefinitionsClient) Delete(ctx context.Context, policySetDefinitionName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SetDefinitionsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, policySetDefinitionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.SetDefinitionsClient", "Delete", nil, "Failure preparing request")
@@ -292,16 +261,6 @@ func (client SetDefinitionsClient) DeleteResponder(resp *http.Response) (result 
 // policySetDefinitionName - the name of the policy set definition to delete.
 // managementGroupID - the ID of the management group.
 func (client SetDefinitionsClient) DeleteAtManagementGroup(ctx context.Context, policySetDefinitionName string, managementGroupID string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SetDefinitionsClient.DeleteAtManagementGroup")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeleteAtManagementGroupPreparer(ctx, policySetDefinitionName, managementGroupID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.SetDefinitionsClient", "DeleteAtManagementGroup", nil, "Failure preparing request")
@@ -366,16 +325,6 @@ func (client SetDefinitionsClient) DeleteAtManagementGroupResponder(resp *http.R
 // Parameters:
 // policySetDefinitionName - the name of the policy set definition to get.
 func (client SetDefinitionsClient) Get(ctx context.Context, policySetDefinitionName string) (result SetDefinition, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SetDefinitionsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, policySetDefinitionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.SetDefinitionsClient", "Get", nil, "Failure preparing request")
@@ -442,16 +391,6 @@ func (client SetDefinitionsClient) GetResponder(resp *http.Response) (result Set
 // policySetDefinitionName - the name of the policy set definition to get.
 // managementGroupID - the ID of the management group.
 func (client SetDefinitionsClient) GetAtManagementGroup(ctx context.Context, policySetDefinitionName string, managementGroupID string) (result SetDefinition, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SetDefinitionsClient.GetAtManagementGroup")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetAtManagementGroupPreparer(ctx, policySetDefinitionName, managementGroupID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.SetDefinitionsClient", "GetAtManagementGroup", nil, "Failure preparing request")
@@ -517,16 +456,6 @@ func (client SetDefinitionsClient) GetAtManagementGroupResponder(resp *http.Resp
 // Parameters:
 // policySetDefinitionName - the name of the policy set definition to get.
 func (client SetDefinitionsClient) GetBuiltIn(ctx context.Context, policySetDefinitionName string) (result SetDefinition, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SetDefinitionsClient.GetBuiltIn")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetBuiltInPreparer(ctx, policySetDefinitionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.SetDefinitionsClient", "GetBuiltIn", nil, "Failure preparing request")
@@ -589,16 +518,6 @@ func (client SetDefinitionsClient) GetBuiltInResponder(resp *http.Response) (res
 
 // List gets all the policy set definitions for a subscription.
 func (client SetDefinitionsClient) List(ctx context.Context) (result SetDefinitionListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SetDefinitionsClient.List")
-		defer func() {
-			sc := -1
-			if result.sdlr.Response.Response != nil {
-				sc = result.sdlr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -661,8 +580,8 @@ func (client SetDefinitionsClient) ListResponder(resp *http.Response) (result Se
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client SetDefinitionsClient) listNextResults(ctx context.Context, lastResults SetDefinitionListResult) (result SetDefinitionListResult, err error) {
-	req, err := lastResults.setDefinitionListResultPreparer(ctx)
+func (client SetDefinitionsClient) listNextResults(lastResults SetDefinitionListResult) (result SetDefinitionListResult, err error) {
+	req, err := lastResults.setDefinitionListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "policy.SetDefinitionsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -683,32 +602,12 @@ func (client SetDefinitionsClient) listNextResults(ctx context.Context, lastResu
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SetDefinitionsClient) ListComplete(ctx context.Context) (result SetDefinitionListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SetDefinitionsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }
 
 // ListBuiltIn gets all the built in policy set definitions.
 func (client SetDefinitionsClient) ListBuiltIn(ctx context.Context) (result SetDefinitionListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SetDefinitionsClient.ListBuiltIn")
-		defer func() {
-			sc := -1
-			if result.sdlr.Response.Response != nil {
-				sc = result.sdlr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listBuiltInNextResults
 	req, err := client.ListBuiltInPreparer(ctx)
 	if err != nil {
@@ -767,8 +666,8 @@ func (client SetDefinitionsClient) ListBuiltInResponder(resp *http.Response) (re
 }
 
 // listBuiltInNextResults retrieves the next set of results, if any.
-func (client SetDefinitionsClient) listBuiltInNextResults(ctx context.Context, lastResults SetDefinitionListResult) (result SetDefinitionListResult, err error) {
-	req, err := lastResults.setDefinitionListResultPreparer(ctx)
+func (client SetDefinitionsClient) listBuiltInNextResults(lastResults SetDefinitionListResult) (result SetDefinitionListResult, err error) {
+	req, err := lastResults.setDefinitionListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "policy.SetDefinitionsClient", "listBuiltInNextResults", nil, "Failure preparing next results request")
 	}
@@ -789,16 +688,6 @@ func (client SetDefinitionsClient) listBuiltInNextResults(ctx context.Context, l
 
 // ListBuiltInComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SetDefinitionsClient) ListBuiltInComplete(ctx context.Context) (result SetDefinitionListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SetDefinitionsClient.ListBuiltIn")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListBuiltIn(ctx)
 	return
 }
@@ -807,16 +696,6 @@ func (client SetDefinitionsClient) ListBuiltInComplete(ctx context.Context) (res
 // Parameters:
 // managementGroupID - the ID of the management group.
 func (client SetDefinitionsClient) ListByManagementGroup(ctx context.Context, managementGroupID string) (result SetDefinitionListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SetDefinitionsClient.ListByManagementGroup")
-		defer func() {
-			sc := -1
-			if result.sdlr.Response.Response != nil {
-				sc = result.sdlr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByManagementGroupNextResults
 	req, err := client.ListByManagementGroupPreparer(ctx, managementGroupID)
 	if err != nil {
@@ -879,8 +758,8 @@ func (client SetDefinitionsClient) ListByManagementGroupResponder(resp *http.Res
 }
 
 // listByManagementGroupNextResults retrieves the next set of results, if any.
-func (client SetDefinitionsClient) listByManagementGroupNextResults(ctx context.Context, lastResults SetDefinitionListResult) (result SetDefinitionListResult, err error) {
-	req, err := lastResults.setDefinitionListResultPreparer(ctx)
+func (client SetDefinitionsClient) listByManagementGroupNextResults(lastResults SetDefinitionListResult) (result SetDefinitionListResult, err error) {
+	req, err := lastResults.setDefinitionListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "policy.SetDefinitionsClient", "listByManagementGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -901,16 +780,6 @@ func (client SetDefinitionsClient) listByManagementGroupNextResults(ctx context.
 
 // ListByManagementGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SetDefinitionsClient) ListByManagementGroupComplete(ctx context.Context, managementGroupID string) (result SetDefinitionListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SetDefinitionsClient.ListByManagementGroup")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByManagementGroup(ctx, managementGroupID)
 	return
 }

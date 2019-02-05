@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,16 +48,6 @@ func NewServerDNSAliasesClientWithBaseURI(baseURI string, subscriptionID string)
 // serverName - the name of the server that the alias is pointing to.
 // DNSAliasName - the name of the server dns alias.
 func (client ServerDNSAliasesClient) Acquire(ctx context.Context, resourceGroupName string, serverName string, DNSAliasName string, parameters ServerDNSAliasAcquisition) (result ServerDNSAliasesAcquireFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServerDNSAliasesClient.Acquire")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.AcquirePreparer(ctx, resourceGroupName, serverName, DNSAliasName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServerDNSAliasesClient", "Acquire", nil, "Failure preparing request")
@@ -107,6 +96,10 @@ func (client ServerDNSAliasesClient) AcquireSender(req *http.Request) (future Se
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -130,16 +123,6 @@ func (client ServerDNSAliasesClient) AcquireResponder(resp *http.Response) (resu
 // serverName - the name of the server that the alias is pointing to.
 // DNSAliasName - the name of the server DNS alias.
 func (client ServerDNSAliasesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, DNSAliasName string) (result ServerDNSAliasesCreateOrUpdateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServerDNSAliasesClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serverName, DNSAliasName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServerDNSAliasesClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -186,6 +169,10 @@ func (client ServerDNSAliasesClient) CreateOrUpdateSender(req *http.Request) (fu
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -210,16 +197,6 @@ func (client ServerDNSAliasesClient) CreateOrUpdateResponder(resp *http.Response
 // serverName - the name of the server that the alias is pointing to.
 // DNSAliasName - the name of the server DNS alias.
 func (client ServerDNSAliasesClient) Delete(ctx context.Context, resourceGroupName string, serverName string, DNSAliasName string) (result ServerDNSAliasesDeleteFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServerDNSAliasesClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, serverName, DNSAliasName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServerDNSAliasesClient", "Delete", nil, "Failure preparing request")
@@ -266,6 +243,10 @@ func (client ServerDNSAliasesClient) DeleteSender(req *http.Request) (future Ser
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -289,16 +270,6 @@ func (client ServerDNSAliasesClient) DeleteResponder(resp *http.Response) (resul
 // serverName - the name of the server that the alias is pointing to.
 // DNSAliasName - the name of the server DNS alias.
 func (client ServerDNSAliasesClient) Get(ctx context.Context, resourceGroupName string, serverName string, DNSAliasName string) (result ServerDNSAlias, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServerDNSAliasesClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, DNSAliasName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServerDNSAliasesClient", "Get", nil, "Failure preparing request")
@@ -368,16 +339,6 @@ func (client ServerDNSAliasesClient) GetResponder(resp *http.Response) (result S
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server that the alias is pointing to.
 func (client ServerDNSAliasesClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string) (result ServerDNSAliasListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServerDNSAliasesClient.ListByServer")
-		defer func() {
-			sc := -1
-			if result.sdalr.Response.Response != nil {
-				sc = result.sdalr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByServerNextResults
 	req, err := client.ListByServerPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
@@ -442,8 +403,8 @@ func (client ServerDNSAliasesClient) ListByServerResponder(resp *http.Response) 
 }
 
 // listByServerNextResults retrieves the next set of results, if any.
-func (client ServerDNSAliasesClient) listByServerNextResults(ctx context.Context, lastResults ServerDNSAliasListResult) (result ServerDNSAliasListResult, err error) {
-	req, err := lastResults.serverDNSAliasListResultPreparer(ctx)
+func (client ServerDNSAliasesClient) listByServerNextResults(lastResults ServerDNSAliasListResult) (result ServerDNSAliasListResult, err error) {
+	req, err := lastResults.serverDNSAliasListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.ServerDNSAliasesClient", "listByServerNextResults", nil, "Failure preparing next results request")
 	}
@@ -464,16 +425,6 @@ func (client ServerDNSAliasesClient) listByServerNextResults(ctx context.Context
 
 // ListByServerComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServerDNSAliasesClient) ListByServerComplete(ctx context.Context, resourceGroupName string, serverName string) (result ServerDNSAliasListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServerDNSAliasesClient.ListByServer")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByServer(ctx, resourceGroupName, serverName)
 	return
 }

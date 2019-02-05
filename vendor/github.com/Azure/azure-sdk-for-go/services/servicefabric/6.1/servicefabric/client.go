@@ -34,20 +34,17 @@ const (
 	DefaultBaseURI = "http://localhost:19080"
 )
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // BaseClient is the base client for Servicefabric.
 type BaseClient struct {
 	autorest.Client
 	BaseURI string
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // New creates an instance of the BaseClient client.
 func New() BaseClient {
 	return NewWithBaseURI(DefaultBaseURI)
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewWithBaseURI creates an instance of the BaseClient client.
 func NewWithBaseURI(baseURI string) BaseClient {
 	return BaseClient{
@@ -56,7 +53,6 @@ func NewWithBaseURI(baseURI string) BaseClient {
 	}
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CancelOperation the following is a list of APIs that start fault operations that may be cancelled using
 // CancelOperation -
 // - StartDataLoss
@@ -116,7 +112,6 @@ func (client BaseClient) CancelOperation(ctx context.Context, operationID uuid.U
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CancelOperationPreparer prepares the CancelOperation request.
 func (client BaseClient) CancelOperationPreparer(ctx context.Context, operationID uuid.UUID, force bool, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -139,7 +134,6 @@ func (client BaseClient) CancelOperationPreparer(ctx context.Context, operationI
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CancelOperationSender sends the CancelOperation request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CancelOperationSender(req *http.Request) (*http.Response, error) {
@@ -147,7 +141,6 @@ func (client BaseClient) CancelOperationSender(req *http.Request) (*http.Respons
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CancelOperationResponder handles the response to the CancelOperation request. The method always
 // closes the http.Response Body.
 func (client BaseClient) CancelOperationResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -160,7 +153,6 @@ func (client BaseClient) CancelOperationResponder(resp *http.Response) (result a
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CancelRepairTask this API supports the Service Fabric platform; it is not meant to be used directly from your code.
 // Parameters:
 // repairTaskCancelDescription - describes the repair task to be cancelled.
@@ -192,7 +184,6 @@ func (client BaseClient) CancelRepairTask(ctx context.Context, repairTaskCancelD
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CancelRepairTaskPreparer prepares the CancelRepairTask request.
 func (client BaseClient) CancelRepairTaskPreparer(ctx context.Context, repairTaskCancelDescription RepairTaskCancelDescription) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -210,7 +201,6 @@ func (client BaseClient) CancelRepairTaskPreparer(ctx context.Context, repairTas
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CancelRepairTaskSender sends the CancelRepairTask request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CancelRepairTaskSender(req *http.Request) (*http.Response, error) {
@@ -218,7 +208,6 @@ func (client BaseClient) CancelRepairTaskSender(req *http.Request) (*http.Respon
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CancelRepairTaskResponder handles the response to the CancelRepairTask request. The method always
 // closes the http.Response Body.
 func (client BaseClient) CancelRepairTaskResponder(resp *http.Response) (result RepairTaskUpdateInfo, err error) {
@@ -232,7 +221,6 @@ func (client BaseClient) CancelRepairTaskResponder(resp *http.Response) (result 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CommitImageStoreUploadSession when all file chunks have been uploaded, the upload session needs to be committed
 // explicitly to complete the upload. Image store preserves the upload session until the expiration time, which is 30
 // minutes after the last chunk received.
@@ -273,7 +261,6 @@ func (client BaseClient) CommitImageStoreUploadSession(ctx context.Context, sess
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CommitImageStoreUploadSessionPreparer prepares the CommitImageStoreUploadSession request.
 func (client BaseClient) CommitImageStoreUploadSessionPreparer(ctx context.Context, sessionID uuid.UUID, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -295,7 +282,6 @@ func (client BaseClient) CommitImageStoreUploadSessionPreparer(ctx context.Conte
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CommitImageStoreUploadSessionSender sends the CommitImageStoreUploadSession request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CommitImageStoreUploadSessionSender(req *http.Request) (*http.Response, error) {
@@ -303,7 +289,6 @@ func (client BaseClient) CommitImageStoreUploadSessionSender(req *http.Request) 
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CommitImageStoreUploadSessionResponder handles the response to the CommitImageStoreUploadSession request. The method always
 // closes the http.Response Body.
 func (client BaseClient) CommitImageStoreUploadSessionResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -316,7 +301,6 @@ func (client BaseClient) CommitImageStoreUploadSessionResponder(resp *http.Respo
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CopyImageStoreContent copies the image store content from the source image store relative path to the destination
 // image store relative path.
 // Parameters:
@@ -358,7 +342,6 @@ func (client BaseClient) CopyImageStoreContent(ctx context.Context, imageStoreCo
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CopyImageStoreContentPreparer prepares the CopyImageStoreContent request.
 func (client BaseClient) CopyImageStoreContentPreparer(ctx context.Context, imageStoreCopyDescription ImageStoreCopyDescription, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -381,7 +364,6 @@ func (client BaseClient) CopyImageStoreContentPreparer(ctx context.Context, imag
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CopyImageStoreContentSender sends the CopyImageStoreContent request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CopyImageStoreContentSender(req *http.Request) (*http.Response, error) {
@@ -389,7 +371,6 @@ func (client BaseClient) CopyImageStoreContentSender(req *http.Request) (*http.R
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CopyImageStoreContentResponder handles the response to the CopyImageStoreContent request. The method always
 // closes the http.Response Body.
 func (client BaseClient) CopyImageStoreContentResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -402,7 +383,6 @@ func (client BaseClient) CopyImageStoreContentResponder(resp *http.Response) (re
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateApplication creates a Service Fabric application using the specified description.
 // Parameters:
 // applicationDescription - description for creating an application.
@@ -450,7 +430,6 @@ func (client BaseClient) CreateApplication(ctx context.Context, applicationDescr
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateApplicationPreparer prepares the CreateApplication request.
 func (client BaseClient) CreateApplicationPreparer(ctx context.Context, applicationDescription ApplicationDescription, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -473,7 +452,6 @@ func (client BaseClient) CreateApplicationPreparer(ctx context.Context, applicat
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateApplicationSender sends the CreateApplication request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CreateApplicationSender(req *http.Request) (*http.Response, error) {
@@ -481,7 +459,6 @@ func (client BaseClient) CreateApplicationSender(req *http.Request) (*http.Respo
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateApplicationResponder handles the response to the CreateApplication request. The method always
 // closes the http.Response Body.
 func (client BaseClient) CreateApplicationResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -494,7 +471,6 @@ func (client BaseClient) CreateApplicationResponder(resp *http.Response) (result
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateComposeDeployment compose is a file format that describes multi-container applications. This API allows
 // deploying container based applications defined in compose format in a Service Fabric cluster. Once the deployment is
 // created it's status can be tracked via `GetComposeDeploymentStatus` API.
@@ -537,7 +513,6 @@ func (client BaseClient) CreateComposeDeployment(ctx context.Context, createComp
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateComposeDeploymentPreparer prepares the CreateComposeDeployment request.
 func (client BaseClient) CreateComposeDeploymentPreparer(ctx context.Context, createComposeDeploymentDescription CreateComposeDeploymentDescription, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0-preview"
@@ -560,7 +535,6 @@ func (client BaseClient) CreateComposeDeploymentPreparer(ctx context.Context, cr
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateComposeDeploymentSender sends the CreateComposeDeployment request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CreateComposeDeploymentSender(req *http.Request) (*http.Response, error) {
@@ -568,7 +542,6 @@ func (client BaseClient) CreateComposeDeploymentSender(req *http.Request) (*http
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateComposeDeploymentResponder handles the response to the CreateComposeDeployment request. The method always
 // closes the http.Response Body.
 func (client BaseClient) CreateComposeDeploymentResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -581,7 +554,6 @@ func (client BaseClient) CreateComposeDeploymentResponder(resp *http.Response) (
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateName creates the specified Service Fabric name.
 // Parameters:
 // nameDescription - describes the Service Fabric name to be created.
@@ -621,7 +593,6 @@ func (client BaseClient) CreateName(ctx context.Context, nameDescription NameDes
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateNamePreparer prepares the CreateName request.
 func (client BaseClient) CreateNamePreparer(ctx context.Context, nameDescription NameDescription, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -644,7 +615,6 @@ func (client BaseClient) CreateNamePreparer(ctx context.Context, nameDescription
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateNameSender sends the CreateName request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CreateNameSender(req *http.Request) (*http.Response, error) {
@@ -652,7 +622,6 @@ func (client BaseClient) CreateNameSender(req *http.Request) (*http.Response, er
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateNameResponder handles the response to the CreateName request. The method always
 // closes the http.Response Body.
 func (client BaseClient) CreateNameResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -665,7 +634,6 @@ func (client BaseClient) CreateNameResponder(resp *http.Response) (result autore
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateRepairTask for clusters that have the Repair Manager Service configured,
 // this API provides a way to create repair tasks that run automatically or manually.
 // For repair tasks that run automatically, an appropriate repair executor
@@ -708,7 +676,6 @@ func (client BaseClient) CreateRepairTask(ctx context.Context, repairTask Repair
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateRepairTaskPreparer prepares the CreateRepairTask request.
 func (client BaseClient) CreateRepairTaskPreparer(ctx context.Context, repairTask RepairTask) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -726,7 +693,6 @@ func (client BaseClient) CreateRepairTaskPreparer(ctx context.Context, repairTas
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateRepairTaskSender sends the CreateRepairTask request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CreateRepairTaskSender(req *http.Request) (*http.Response, error) {
@@ -734,7 +700,6 @@ func (client BaseClient) CreateRepairTaskSender(req *http.Request) (*http.Respon
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateRepairTaskResponder handles the response to the CreateRepairTask request. The method always
 // closes the http.Response Body.
 func (client BaseClient) CreateRepairTaskResponder(resp *http.Response) (result RepairTaskUpdateInfo, err error) {
@@ -748,7 +713,6 @@ func (client BaseClient) CreateRepairTaskResponder(resp *http.Response) (result 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateService this api allows creating a new Service Fabric stateless or stateful service under a specified Service
 // Fabric application. The description for creating the service includes partitioning information and optional
 // properties for placement and load balancing. Some of the properties can later be modified using `UpdateService` API.
@@ -797,7 +761,6 @@ func (client BaseClient) CreateService(ctx context.Context, applicationID string
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateServicePreparer prepares the CreateService request.
 func (client BaseClient) CreateServicePreparer(ctx context.Context, applicationID string, serviceDescription BasicServiceDescription, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -824,7 +787,6 @@ func (client BaseClient) CreateServicePreparer(ctx context.Context, applicationI
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateServiceSender sends the CreateService request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CreateServiceSender(req *http.Request) (*http.Response, error) {
@@ -832,7 +794,6 @@ func (client BaseClient) CreateServiceSender(req *http.Request) (*http.Response,
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateServiceResponder handles the response to the CreateService request. The method always
 // closes the http.Response Body.
 func (client BaseClient) CreateServiceResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -845,7 +806,6 @@ func (client BaseClient) CreateServiceResponder(resp *http.Response) (result aut
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateServiceFromTemplate creates a Service Fabric service from the service template defined in the application
 // manifest. A service template contains the properties that will be same for the service instance of the same type.
 // The API allows overriding the properties that are usually different for different services of the same service type.
@@ -895,7 +855,6 @@ func (client BaseClient) CreateServiceFromTemplate(ctx context.Context, applicat
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateServiceFromTemplatePreparer prepares the CreateServiceFromTemplate request.
 func (client BaseClient) CreateServiceFromTemplatePreparer(ctx context.Context, applicationID string, serviceFromTemplateDescription ServiceFromTemplateDescription, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -922,7 +881,6 @@ func (client BaseClient) CreateServiceFromTemplatePreparer(ctx context.Context, 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateServiceFromTemplateSender sends the CreateServiceFromTemplate request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CreateServiceFromTemplateSender(req *http.Request) (*http.Response, error) {
@@ -930,7 +888,6 @@ func (client BaseClient) CreateServiceFromTemplateSender(req *http.Request) (*ht
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // CreateServiceFromTemplateResponder handles the response to the CreateServiceFromTemplate request. The method always
 // closes the http.Response Body.
 func (client BaseClient) CreateServiceFromTemplateResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -943,7 +900,6 @@ func (client BaseClient) CreateServiceFromTemplateResponder(resp *http.Response)
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteApplication deletes an existing Service Fabric application. An application must be created before it can be
 // deleted. Deleting an application will delete all services that are part of that application. By default Service
 // Fabric will try to close service replicas in a graceful manner and then delete the service. However if service is
@@ -993,7 +949,6 @@ func (client BaseClient) DeleteApplication(ctx context.Context, applicationID st
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteApplicationPreparer prepares the DeleteApplication request.
 func (client BaseClient) DeleteApplicationPreparer(ctx context.Context, applicationID string, forceRemove *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1021,7 +976,6 @@ func (client BaseClient) DeleteApplicationPreparer(ctx context.Context, applicat
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteApplicationSender sends the DeleteApplication request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DeleteApplicationSender(req *http.Request) (*http.Response, error) {
@@ -1029,7 +983,6 @@ func (client BaseClient) DeleteApplicationSender(req *http.Request) (*http.Respo
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteApplicationResponder handles the response to the DeleteApplication request. The method always
 // closes the http.Response Body.
 func (client BaseClient) DeleteApplicationResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -1042,7 +995,6 @@ func (client BaseClient) DeleteApplicationResponder(resp *http.Response) (result
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteImageStoreContent deletes existing image store content being found within the given image store relative path.
 // This can be used to delete uploaded application packages once they are provisioned.
 // Parameters:
@@ -1081,7 +1033,6 @@ func (client BaseClient) DeleteImageStoreContent(ctx context.Context, contentPat
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteImageStoreContentPreparer prepares the DeleteImageStoreContent request.
 func (client BaseClient) DeleteImageStoreContentPreparer(ctx context.Context, contentPath string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1106,7 +1057,6 @@ func (client BaseClient) DeleteImageStoreContentPreparer(ctx context.Context, co
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteImageStoreContentSender sends the DeleteImageStoreContent request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DeleteImageStoreContentSender(req *http.Request) (*http.Response, error) {
@@ -1114,7 +1064,6 @@ func (client BaseClient) DeleteImageStoreContentSender(req *http.Request) (*http
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteImageStoreContentResponder handles the response to the DeleteImageStoreContent request. The method always
 // closes the http.Response Body.
 func (client BaseClient) DeleteImageStoreContentResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -1127,7 +1076,6 @@ func (client BaseClient) DeleteImageStoreContentResponder(resp *http.Response) (
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteImageStoreUploadSession the DELETE request will cause the existing upload session to expire and remove any
 // previously uploaded file chunks.
 // Parameters:
@@ -1167,7 +1115,6 @@ func (client BaseClient) DeleteImageStoreUploadSession(ctx context.Context, sess
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteImageStoreUploadSessionPreparer prepares the DeleteImageStoreUploadSession request.
 func (client BaseClient) DeleteImageStoreUploadSessionPreparer(ctx context.Context, sessionID uuid.UUID, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -1189,7 +1136,6 @@ func (client BaseClient) DeleteImageStoreUploadSessionPreparer(ctx context.Conte
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteImageStoreUploadSessionSender sends the DeleteImageStoreUploadSession request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DeleteImageStoreUploadSessionSender(req *http.Request) (*http.Response, error) {
@@ -1197,7 +1143,6 @@ func (client BaseClient) DeleteImageStoreUploadSessionSender(req *http.Request) 
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteImageStoreUploadSessionResponder handles the response to the DeleteImageStoreUploadSession request. The method always
 // closes the http.Response Body.
 func (client BaseClient) DeleteImageStoreUploadSessionResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -1210,7 +1155,6 @@ func (client BaseClient) DeleteImageStoreUploadSessionResponder(resp *http.Respo
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteName deletes the specified Service Fabric name. A name must be created before it can be deleted. Deleting a
 // name with child properties will fail.
 // Parameters:
@@ -1249,7 +1193,6 @@ func (client BaseClient) DeleteName(ctx context.Context, nameID string, timeout 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteNamePreparer prepares the DeleteName request.
 func (client BaseClient) DeleteNamePreparer(ctx context.Context, nameID string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1274,7 +1217,6 @@ func (client BaseClient) DeleteNamePreparer(ctx context.Context, nameID string, 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteNameSender sends the DeleteName request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DeleteNameSender(req *http.Request) (*http.Response, error) {
@@ -1282,7 +1224,6 @@ func (client BaseClient) DeleteNameSender(req *http.Request) (*http.Response, er
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteNameResponder handles the response to the DeleteName request. The method always
 // closes the http.Response Body.
 func (client BaseClient) DeleteNameResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -1295,7 +1236,6 @@ func (client BaseClient) DeleteNameResponder(resp *http.Response) (result autore
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteProperty deletes the specified Service Fabric property under a given name. A property must be created before
 // it can be deleted.
 // Parameters:
@@ -1335,7 +1275,6 @@ func (client BaseClient) DeleteProperty(ctx context.Context, nameID string, prop
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeletePropertyPreparer prepares the DeleteProperty request.
 func (client BaseClient) DeletePropertyPreparer(ctx context.Context, nameID string, propertyName string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1361,7 +1300,6 @@ func (client BaseClient) DeletePropertyPreparer(ctx context.Context, nameID stri
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeletePropertySender sends the DeleteProperty request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DeletePropertySender(req *http.Request) (*http.Response, error) {
@@ -1369,7 +1307,6 @@ func (client BaseClient) DeletePropertySender(req *http.Request) (*http.Response
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeletePropertyResponder handles the response to the DeleteProperty request. The method always
 // closes the http.Response Body.
 func (client BaseClient) DeletePropertyResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -1382,7 +1319,6 @@ func (client BaseClient) DeletePropertyResponder(resp *http.Response) (result au
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteRepairTask this API supports the Service Fabric platform; it is not meant to be used directly from your code.
 // Parameters:
 // repairTaskDeleteDescription - describes the repair task to be deleted.
@@ -1414,7 +1350,6 @@ func (client BaseClient) DeleteRepairTask(ctx context.Context, repairTaskDeleteD
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteRepairTaskPreparer prepares the DeleteRepairTask request.
 func (client BaseClient) DeleteRepairTaskPreparer(ctx context.Context, repairTaskDeleteDescription RepairTaskDeleteDescription) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -1432,7 +1367,6 @@ func (client BaseClient) DeleteRepairTaskPreparer(ctx context.Context, repairTas
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteRepairTaskSender sends the DeleteRepairTask request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DeleteRepairTaskSender(req *http.Request) (*http.Response, error) {
@@ -1440,7 +1374,6 @@ func (client BaseClient) DeleteRepairTaskSender(req *http.Request) (*http.Respon
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteRepairTaskResponder handles the response to the DeleteRepairTask request. The method always
 // closes the http.Response Body.
 func (client BaseClient) DeleteRepairTaskResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -1453,7 +1386,6 @@ func (client BaseClient) DeleteRepairTaskResponder(resp *http.Response) (result 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteService deletes an existing Service Fabric service. A service must be created before it can be deleted. By
 // default Service Fabric will try to close service replicas in a graceful manner and then delete the service. However
 // if service is having issues closing the replica gracefully, the delete operation may take a long time or get stuck.
@@ -1501,7 +1433,6 @@ func (client BaseClient) DeleteService(ctx context.Context, serviceID string, fo
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteServicePreparer prepares the DeleteService request.
 func (client BaseClient) DeleteServicePreparer(ctx context.Context, serviceID string, forceRemove *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1529,7 +1460,6 @@ func (client BaseClient) DeleteServicePreparer(ctx context.Context, serviceID st
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteServiceSender sends the DeleteService request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DeleteServiceSender(req *http.Request) (*http.Response, error) {
@@ -1537,7 +1467,6 @@ func (client BaseClient) DeleteServiceSender(req *http.Request) (*http.Response,
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeleteServiceResponder handles the response to the DeleteService request. The method always
 // closes the http.Response Body.
 func (client BaseClient) DeleteServiceResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -1550,7 +1479,6 @@ func (client BaseClient) DeleteServiceResponder(resp *http.Response) (result aut
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedServicePackageToNode this API provides a way to download code packages including the container images on a
 // specific node outside of the normal application deployment and upgrade path. This is useful for the large code
 // packages and container iamges to be present on the node before the actual application deployment and upgrade, thus
@@ -1598,7 +1526,6 @@ func (client BaseClient) DeployedServicePackageToNode(ctx context.Context, nodeN
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedServicePackageToNodePreparer prepares the DeployedServicePackageToNode request.
 func (client BaseClient) DeployedServicePackageToNodePreparer(ctx context.Context, nodeName string, deployServicePackageToNodeDescription DeployServicePackageToNodeDescription, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1625,7 +1552,6 @@ func (client BaseClient) DeployedServicePackageToNodePreparer(ctx context.Contex
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedServicePackageToNodeSender sends the DeployedServicePackageToNode request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DeployedServicePackageToNodeSender(req *http.Request) (*http.Response, error) {
@@ -1633,7 +1559,6 @@ func (client BaseClient) DeployedServicePackageToNodeSender(req *http.Request) (
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DeployedServicePackageToNodeResponder handles the response to the DeployedServicePackageToNode request. The method always
 // closes the http.Response Body.
 func (client BaseClient) DeployedServicePackageToNodeResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -1646,7 +1571,6 @@ func (client BaseClient) DeployedServicePackageToNodeResponder(resp *http.Respon
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DisableNode deactivate a Service Fabric cluster node with the specified deactivation intent. Once the deactivation
 // is in progress, the deactivation intent can be increased, but not decreased (for example, a node which is was
 // deactivated with the Pause intent can be deactivated further with Restart, but not the other way around. Nodes may
@@ -1690,7 +1614,6 @@ func (client BaseClient) DisableNode(ctx context.Context, nodeName string, deact
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DisableNodePreparer prepares the DisableNode request.
 func (client BaseClient) DisableNodePreparer(ctx context.Context, nodeName string, deactivationIntentDescription DeactivationIntentDescription, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1717,7 +1640,6 @@ func (client BaseClient) DisableNodePreparer(ctx context.Context, nodeName strin
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DisableNodeSender sends the DisableNode request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DisableNodeSender(req *http.Request) (*http.Response, error) {
@@ -1725,7 +1647,6 @@ func (client BaseClient) DisableNodeSender(req *http.Request) (*http.Response, e
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DisableNodeResponder handles the response to the DisableNode request. The method always
 // closes the http.Response Body.
 func (client BaseClient) DisableNodeResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -1738,7 +1659,6 @@ func (client BaseClient) DisableNodeResponder(resp *http.Response) (result autor
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // EnableNode activates a Service Fabric cluster node which is currently deactivated. Once activated, the node will
 // again become a viable target for placing new replicas, and any deactivated replicas remaining on the node will be
 // reactivated.
@@ -1778,7 +1698,6 @@ func (client BaseClient) EnableNode(ctx context.Context, nodeName string, timeou
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // EnableNodePreparer prepares the EnableNode request.
 func (client BaseClient) EnableNodePreparer(ctx context.Context, nodeName string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1803,7 +1722,6 @@ func (client BaseClient) EnableNodePreparer(ctx context.Context, nodeName string
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // EnableNodeSender sends the EnableNode request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) EnableNodeSender(req *http.Request) (*http.Response, error) {
@@ -1811,7 +1729,6 @@ func (client BaseClient) EnableNodeSender(req *http.Request) (*http.Response, er
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // EnableNodeResponder handles the response to the EnableNode request. The method always
 // closes the http.Response Body.
 func (client BaseClient) EnableNodeResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -1824,7 +1741,6 @@ func (client BaseClient) EnableNodeResponder(resp *http.Response) (result autore
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ForceApproveRepairTask this API supports the Service Fabric platform; it is not meant to be used directly from your
 // code.
 // Parameters:
@@ -1857,7 +1773,6 @@ func (client BaseClient) ForceApproveRepairTask(ctx context.Context, repairTaskA
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ForceApproveRepairTaskPreparer prepares the ForceApproveRepairTask request.
 func (client BaseClient) ForceApproveRepairTaskPreparer(ctx context.Context, repairTaskApproveDescription RepairTaskApproveDescription) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -1875,7 +1790,6 @@ func (client BaseClient) ForceApproveRepairTaskPreparer(ctx context.Context, rep
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ForceApproveRepairTaskSender sends the ForceApproveRepairTask request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ForceApproveRepairTaskSender(req *http.Request) (*http.Response, error) {
@@ -1883,7 +1797,6 @@ func (client BaseClient) ForceApproveRepairTaskSender(req *http.Request) (*http.
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ForceApproveRepairTaskResponder handles the response to the ForceApproveRepairTask request. The method always
 // closes the http.Response Body.
 func (client BaseClient) ForceApproveRepairTaskResponder(resp *http.Response) (result RepairTaskUpdateInfo, err error) {
@@ -1897,7 +1810,6 @@ func (client BaseClient) ForceApproveRepairTaskResponder(resp *http.Response) (r
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetAadMetadata gets the Azure Active Directory metadata used for secured connection to cluster.
 // This API is not supposed to be called separately. It provides information needed to set up an Azure Active Directory
 // secured connection with a Service Fabric cluster.
@@ -1936,7 +1848,6 @@ func (client BaseClient) GetAadMetadata(ctx context.Context, timeout *int64) (re
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetAadMetadataPreparer prepares the GetAadMetadata request.
 func (client BaseClient) GetAadMetadataPreparer(ctx context.Context, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -1957,7 +1868,6 @@ func (client BaseClient) GetAadMetadataPreparer(ctx context.Context, timeout *in
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetAadMetadataSender sends the GetAadMetadata request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetAadMetadataSender(req *http.Request) (*http.Response, error) {
@@ -1965,7 +1875,6 @@ func (client BaseClient) GetAadMetadataSender(req *http.Request) (*http.Response
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetAadMetadataResponder handles the response to the GetAadMetadata request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetAadMetadataResponder(resp *http.Response) (result AadMetadataObject, err error) {
@@ -1979,7 +1888,6 @@ func (client BaseClient) GetAadMetadataResponder(resp *http.Response) (result Aa
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationHealth returns the heath state of the service fabric application. The response reports either Ok,
 // Error or Warning health state. If the entity is not found in the health store, it will return Error.
 // Parameters:
@@ -2075,7 +1983,6 @@ func (client BaseClient) GetApplicationHealth(ctx context.Context, applicationID
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationHealthPreparer prepares the GetApplicationHealth request.
 func (client BaseClient) GetApplicationHealthPreparer(ctx context.Context, applicationID string, eventsHealthStateFilter *int32, deployedApplicationsHealthStateFilter *int32, servicesHealthStateFilter *int32, excludeHealthStatistics *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -2120,7 +2027,6 @@ func (client BaseClient) GetApplicationHealthPreparer(ctx context.Context, appli
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationHealthSender sends the GetApplicationHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationHealthSender(req *http.Request) (*http.Response, error) {
@@ -2128,7 +2034,6 @@ func (client BaseClient) GetApplicationHealthSender(req *http.Request) (*http.Re
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationHealthResponder handles the response to the GetApplicationHealth request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetApplicationHealthResponder(resp *http.Response) (result ApplicationHealth, err error) {
@@ -2142,7 +2047,6 @@ func (client BaseClient) GetApplicationHealthResponder(resp *http.Response) (res
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationHealthUsingPolicy gets the health of a Service Fabric application. Use EventsHealthStateFilter to
 // filter the collection of health events reported on the node based on the health state. Use ClusterHealthPolicies to
 // override the health policies used to evaluate the health.
@@ -2243,7 +2147,6 @@ func (client BaseClient) GetApplicationHealthUsingPolicy(ctx context.Context, ap
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationHealthUsingPolicyPreparer prepares the GetApplicationHealthUsingPolicy request.
 func (client BaseClient) GetApplicationHealthUsingPolicyPreparer(ctx context.Context, applicationID string, eventsHealthStateFilter *int32, deployedApplicationsHealthStateFilter *int32, servicesHealthStateFilter *int32, excludeHealthStatistics *bool, applicationHealthPolicy *ApplicationHealthPolicy, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -2293,7 +2196,6 @@ func (client BaseClient) GetApplicationHealthUsingPolicyPreparer(ctx context.Con
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationHealthUsingPolicySender sends the GetApplicationHealthUsingPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationHealthUsingPolicySender(req *http.Request) (*http.Response, error) {
@@ -2301,7 +2203,6 @@ func (client BaseClient) GetApplicationHealthUsingPolicySender(req *http.Request
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationHealthUsingPolicyResponder handles the response to the GetApplicationHealthUsingPolicy request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetApplicationHealthUsingPolicyResponder(resp *http.Response) (result ApplicationHealth, err error) {
@@ -2315,7 +2216,6 @@ func (client BaseClient) GetApplicationHealthUsingPolicyResponder(resp *http.Res
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationInfo returns the information about the application that was created or in the process of being created
 // in the Service Fabric cluster and whose name matches the one specified as the parameter. The response includes the
 // name, type, status, parameters and other details about the application.
@@ -2361,7 +2261,6 @@ func (client BaseClient) GetApplicationInfo(ctx context.Context, applicationID s
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationInfoPreparer prepares the GetApplicationInfo request.
 func (client BaseClient) GetApplicationInfoPreparer(ctx context.Context, applicationID string, excludeApplicationParameters *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -2391,7 +2290,6 @@ func (client BaseClient) GetApplicationInfoPreparer(ctx context.Context, applica
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationInfoSender sends the GetApplicationInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationInfoSender(req *http.Request) (*http.Response, error) {
@@ -2399,7 +2297,6 @@ func (client BaseClient) GetApplicationInfoSender(req *http.Request) (*http.Resp
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationInfoResponder handles the response to the GetApplicationInfo request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetApplicationInfoResponder(resp *http.Response) (result ApplicationInfo, err error) {
@@ -2413,7 +2310,6 @@ func (client BaseClient) GetApplicationInfoResponder(resp *http.Response) (resul
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationInfoList gets the information about the applications that were created or in the process of being
 // created in the Service Fabric cluster and match filters specified as the parameter. The response includes the name,
 // type, status, parameters and other details about the application. If the applications do not fit in a page, one page
@@ -2478,7 +2374,6 @@ func (client BaseClient) GetApplicationInfoList(ctx context.Context, application
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationInfoListPreparer prepares the GetApplicationInfoList request.
 func (client BaseClient) GetApplicationInfoListPreparer(ctx context.Context, applicationDefinitionKindFilter *int32, applicationTypeName string, excludeApplicationParameters *bool, continuationToken string, maxResults *int64, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.1"
@@ -2520,7 +2415,6 @@ func (client BaseClient) GetApplicationInfoListPreparer(ctx context.Context, app
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationInfoListSender sends the GetApplicationInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationInfoListSender(req *http.Request) (*http.Response, error) {
@@ -2528,7 +2422,6 @@ func (client BaseClient) GetApplicationInfoListSender(req *http.Request) (*http.
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationInfoListResponder handles the response to the GetApplicationInfoList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetApplicationInfoListResponder(resp *http.Response) (result PagedApplicationInfoList, err error) {
@@ -2542,7 +2435,6 @@ func (client BaseClient) GetApplicationInfoListResponder(resp *http.Response) (r
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationLoadInfo returns the load information about the application that was created or in the process of
 // being created in the Service Fabric cluster and whose name matches the one specified as the parameter. The response
 // includes the name, minimum nodes, maximum nodes, the number of nodes the app is occupying currently, and application
@@ -2587,7 +2479,6 @@ func (client BaseClient) GetApplicationLoadInfo(ctx context.Context, application
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationLoadInfoPreparer prepares the GetApplicationLoadInfo request.
 func (client BaseClient) GetApplicationLoadInfoPreparer(ctx context.Context, applicationID string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -2612,7 +2503,6 @@ func (client BaseClient) GetApplicationLoadInfoPreparer(ctx context.Context, app
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationLoadInfoSender sends the GetApplicationLoadInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationLoadInfoSender(req *http.Request) (*http.Response, error) {
@@ -2620,7 +2510,6 @@ func (client BaseClient) GetApplicationLoadInfoSender(req *http.Request) (*http.
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationLoadInfoResponder handles the response to the GetApplicationLoadInfo request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetApplicationLoadInfoResponder(resp *http.Response) (result ApplicationLoadInfo, err error) {
@@ -2634,7 +2523,6 @@ func (client BaseClient) GetApplicationLoadInfoResponder(resp *http.Response) (r
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationManifest gets the manifest describing an application type. The response contains the application
 // manifest XML as a string.
 // Parameters:
@@ -2674,7 +2562,6 @@ func (client BaseClient) GetApplicationManifest(ctx context.Context, application
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationManifestPreparer prepares the GetApplicationManifest request.
 func (client BaseClient) GetApplicationManifestPreparer(ctx context.Context, applicationTypeName string, applicationTypeVersion string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -2700,7 +2587,6 @@ func (client BaseClient) GetApplicationManifestPreparer(ctx context.Context, app
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationManifestSender sends the GetApplicationManifest request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationManifestSender(req *http.Request) (*http.Response, error) {
@@ -2708,7 +2594,6 @@ func (client BaseClient) GetApplicationManifestSender(req *http.Request) (*http.
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationManifestResponder handles the response to the GetApplicationManifest request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetApplicationManifestResponder(resp *http.Response) (result ApplicationTypeManifest, err error) {
@@ -2722,7 +2607,6 @@ func (client BaseClient) GetApplicationManifestResponder(resp *http.Response) (r
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationNameInfo the GetApplicationName endpoint returns the name of the application for the specified
 // service.
 // Parameters:
@@ -2765,7 +2649,6 @@ func (client BaseClient) GetApplicationNameInfo(ctx context.Context, serviceID s
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationNameInfoPreparer prepares the GetApplicationNameInfo request.
 func (client BaseClient) GetApplicationNameInfoPreparer(ctx context.Context, serviceID string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -2790,7 +2673,6 @@ func (client BaseClient) GetApplicationNameInfoPreparer(ctx context.Context, ser
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationNameInfoSender sends the GetApplicationNameInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationNameInfoSender(req *http.Request) (*http.Response, error) {
@@ -2798,7 +2680,6 @@ func (client BaseClient) GetApplicationNameInfoSender(req *http.Request) (*http.
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationNameInfoResponder handles the response to the GetApplicationNameInfo request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetApplicationNameInfoResponder(resp *http.Response) (result ApplicationNameInfo, err error) {
@@ -2812,7 +2693,6 @@ func (client BaseClient) GetApplicationNameInfoResponder(resp *http.Response) (r
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationTypeInfoList returns the information about the application types that are provisioned or in the
 // process of being provisioned in the Service Fabric cluster. Each version of an application type is returned as one
 // application type. The response includes the name, version, status and other details about the application type. This
@@ -2878,7 +2758,6 @@ func (client BaseClient) GetApplicationTypeInfoList(ctx context.Context, applica
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationTypeInfoListPreparer prepares the GetApplicationTypeInfoList request.
 func (client BaseClient) GetApplicationTypeInfoListPreparer(ctx context.Context, applicationTypeDefinitionKindFilter *int32, excludeApplicationParameters *bool, continuationToken string, maxResults *int64, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -2917,7 +2796,6 @@ func (client BaseClient) GetApplicationTypeInfoListPreparer(ctx context.Context,
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationTypeInfoListSender sends the GetApplicationTypeInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationTypeInfoListSender(req *http.Request) (*http.Response, error) {
@@ -2925,7 +2803,6 @@ func (client BaseClient) GetApplicationTypeInfoListSender(req *http.Request) (*h
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationTypeInfoListResponder handles the response to the GetApplicationTypeInfoList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetApplicationTypeInfoListResponder(resp *http.Response) (result PagedApplicationTypeInfoList, err error) {
@@ -2939,7 +2816,6 @@ func (client BaseClient) GetApplicationTypeInfoListResponder(resp *http.Response
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationTypeInfoListByName returns the information about the application types that are provisioned or in the
 // process of being provisioned in the Service Fabric cluster. These results are of application types whose name match
 // exactly the one specified as the parameter, and which comply with the given query parameters. All versions of the
@@ -3002,7 +2878,6 @@ func (client BaseClient) GetApplicationTypeInfoListByName(ctx context.Context, a
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationTypeInfoListByNamePreparer prepares the GetApplicationTypeInfoListByName request.
 func (client BaseClient) GetApplicationTypeInfoListByNamePreparer(ctx context.Context, applicationTypeName string, applicationTypeVersion string, excludeApplicationParameters *bool, continuationToken string, maxResults *int64, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -3043,7 +2918,6 @@ func (client BaseClient) GetApplicationTypeInfoListByNamePreparer(ctx context.Co
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationTypeInfoListByNameSender sends the GetApplicationTypeInfoListByName request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationTypeInfoListByNameSender(req *http.Request) (*http.Response, error) {
@@ -3051,7 +2925,6 @@ func (client BaseClient) GetApplicationTypeInfoListByNameSender(req *http.Reques
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationTypeInfoListByNameResponder handles the response to the GetApplicationTypeInfoListByName request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetApplicationTypeInfoListByNameResponder(resp *http.Response) (result PagedApplicationTypeInfoList, err error) {
@@ -3065,7 +2938,6 @@ func (client BaseClient) GetApplicationTypeInfoListByNameResponder(resp *http.Re
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationUpgrade returns information about the state of the latest application upgrade along with details to
 // aid debugging application health issues.
 // Parameters:
@@ -3108,7 +2980,6 @@ func (client BaseClient) GetApplicationUpgrade(ctx context.Context, applicationI
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationUpgradePreparer prepares the GetApplicationUpgrade request.
 func (client BaseClient) GetApplicationUpgradePreparer(ctx context.Context, applicationID string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -3133,7 +3004,6 @@ func (client BaseClient) GetApplicationUpgradePreparer(ctx context.Context, appl
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationUpgradeSender sends the GetApplicationUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationUpgradeSender(req *http.Request) (*http.Response, error) {
@@ -3141,7 +3011,6 @@ func (client BaseClient) GetApplicationUpgradeSender(req *http.Request) (*http.R
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetApplicationUpgradeResponder handles the response to the GetApplicationUpgrade request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetApplicationUpgradeResponder(resp *http.Response) (result ApplicationUpgradeProgressInfo, err error) {
@@ -3155,7 +3024,6 @@ func (client BaseClient) GetApplicationUpgradeResponder(resp *http.Response) (re
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetChaosReport you can either specify the ContinuationToken to get the next segment of the Chaos report or you can
 // specify the time-range
 // through StartTimeUtc and EndTimeUtc, but you cannot specify both the ContinuationToken and the time-range in the
@@ -3208,7 +3076,6 @@ func (client BaseClient) GetChaosReport(ctx context.Context, continuationToken s
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetChaosReportPreparer prepares the GetChaosReport request.
 func (client BaseClient) GetChaosReportPreparer(ctx context.Context, continuationToken string, startTimeUtc string, endTimeUtc string, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -3238,7 +3105,6 @@ func (client BaseClient) GetChaosReportPreparer(ctx context.Context, continuatio
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetChaosReportSender sends the GetChaosReport request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetChaosReportSender(req *http.Request) (*http.Response, error) {
@@ -3246,7 +3112,6 @@ func (client BaseClient) GetChaosReportSender(req *http.Request) (*http.Response
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetChaosReportResponder handles the response to the GetChaosReport request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetChaosReportResponder(resp *http.Response) (result ChaosReport, err error) {
@@ -3260,7 +3125,6 @@ func (client BaseClient) GetChaosReportResponder(resp *http.Response) (result Ch
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterConfiguration get the Service Fabric standalone cluster configuration. The cluster configuration contains
 // properties of the cluster that include different node types on the cluster,
 // security configurations, fault and upgrade domain topologies etc.
@@ -3300,7 +3164,6 @@ func (client BaseClient) GetClusterConfiguration(ctx context.Context, configurat
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterConfigurationPreparer prepares the GetClusterConfiguration request.
 func (client BaseClient) GetClusterConfigurationPreparer(ctx context.Context, configurationAPIVersion string, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -3322,7 +3185,6 @@ func (client BaseClient) GetClusterConfigurationPreparer(ctx context.Context, co
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterConfigurationSender sends the GetClusterConfiguration request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterConfigurationSender(req *http.Request) (*http.Response, error) {
@@ -3330,7 +3192,6 @@ func (client BaseClient) GetClusterConfigurationSender(req *http.Request) (*http
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterConfigurationResponder handles the response to the GetClusterConfiguration request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetClusterConfigurationResponder(resp *http.Response) (result ClusterConfiguration, err error) {
@@ -3344,7 +3205,6 @@ func (client BaseClient) GetClusterConfigurationResponder(resp *http.Response) (
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterConfigurationUpgradeStatus get the cluster configuration upgrade status details of a Service Fabric
 // standalone cluster.
 // Parameters:
@@ -3382,7 +3242,6 @@ func (client BaseClient) GetClusterConfigurationUpgradeStatus(ctx context.Contex
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterConfigurationUpgradeStatusPreparer prepares the GetClusterConfigurationUpgradeStatus request.
 func (client BaseClient) GetClusterConfigurationUpgradeStatusPreparer(ctx context.Context, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -3403,7 +3262,6 @@ func (client BaseClient) GetClusterConfigurationUpgradeStatusPreparer(ctx contex
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterConfigurationUpgradeStatusSender sends the GetClusterConfigurationUpgradeStatus request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterConfigurationUpgradeStatusSender(req *http.Request) (*http.Response, error) {
@@ -3411,7 +3269,6 @@ func (client BaseClient) GetClusterConfigurationUpgradeStatusSender(req *http.Re
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterConfigurationUpgradeStatusResponder handles the response to the GetClusterConfigurationUpgradeStatus request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetClusterConfigurationUpgradeStatusResponder(resp *http.Response) (result ClusterConfigurationUpgradeStatusInfo, err error) {
@@ -3425,7 +3282,6 @@ func (client BaseClient) GetClusterConfigurationUpgradeStatusResponder(resp *htt
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterHealth gets the health of a Service Fabric cluster.
 // Use EventsHealthStateFilter to filter the collection of health events reported on the cluster based on the health
 // state.
@@ -3527,7 +3383,6 @@ func (client BaseClient) GetClusterHealth(ctx context.Context, nodesHealthStateF
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterHealthPreparer prepares the GetClusterHealth request.
 func (client BaseClient) GetClusterHealthPreparer(ctx context.Context, nodesHealthStateFilter *int32, applicationsHealthStateFilter *int32, eventsHealthStateFilter *int32, excludeHealthStatistics *bool, includeSystemApplicationHealthStatistics *bool, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -3573,7 +3428,6 @@ func (client BaseClient) GetClusterHealthPreparer(ctx context.Context, nodesHeal
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterHealthSender sends the GetClusterHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterHealthSender(req *http.Request) (*http.Response, error) {
@@ -3581,7 +3435,6 @@ func (client BaseClient) GetClusterHealthSender(req *http.Request) (*http.Respon
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterHealthResponder handles the response to the GetClusterHealth request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetClusterHealthResponder(resp *http.Response) (result ClusterHealth, err error) {
@@ -3595,7 +3448,6 @@ func (client BaseClient) GetClusterHealthResponder(resp *http.Response) (result 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterHealthChunk gets the health of a Service Fabric cluster using health chunks. Includes the aggregated
 // health state of the cluster, but none of the cluster entities.
 // To expand the cluster health and get the health state of all or some of the entities, use the POST URI and specify
@@ -3635,7 +3487,6 @@ func (client BaseClient) GetClusterHealthChunk(ctx context.Context, timeout *int
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterHealthChunkPreparer prepares the GetClusterHealthChunk request.
 func (client BaseClient) GetClusterHealthChunkPreparer(ctx context.Context, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -3656,7 +3507,6 @@ func (client BaseClient) GetClusterHealthChunkPreparer(ctx context.Context, time
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterHealthChunkSender sends the GetClusterHealthChunk request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterHealthChunkSender(req *http.Request) (*http.Response, error) {
@@ -3664,7 +3514,6 @@ func (client BaseClient) GetClusterHealthChunkSender(req *http.Request) (*http.R
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterHealthChunkResponder handles the response to the GetClusterHealthChunk request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetClusterHealthChunkResponder(resp *http.Response) (result ClusterHealthChunk, err error) {
@@ -3678,7 +3527,6 @@ func (client BaseClient) GetClusterHealthChunkResponder(resp *http.Response) (re
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterHealthChunkUsingPolicyAndAdvancedFilters gets the health of a Service Fabric cluster using health chunks.
 // The health evaluation is done based on the input cluster health chunk query description.
 // The query description allows users to specify health policies for evaluating the cluster and its children.
@@ -3737,7 +3585,6 @@ func (client BaseClient) GetClusterHealthChunkUsingPolicyAndAdvancedFilters(ctx 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterHealthChunkUsingPolicyAndAdvancedFiltersPreparer prepares the GetClusterHealthChunkUsingPolicyAndAdvancedFilters request.
 func (client BaseClient) GetClusterHealthChunkUsingPolicyAndAdvancedFiltersPreparer(ctx context.Context, clusterHealthChunkQueryDescription *ClusterHealthChunkQueryDescription, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -3763,7 +3610,6 @@ func (client BaseClient) GetClusterHealthChunkUsingPolicyAndAdvancedFiltersPrepa
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterHealthChunkUsingPolicyAndAdvancedFiltersSender sends the GetClusterHealthChunkUsingPolicyAndAdvancedFilters request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterHealthChunkUsingPolicyAndAdvancedFiltersSender(req *http.Request) (*http.Response, error) {
@@ -3771,7 +3617,6 @@ func (client BaseClient) GetClusterHealthChunkUsingPolicyAndAdvancedFiltersSende
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterHealthChunkUsingPolicyAndAdvancedFiltersResponder handles the response to the GetClusterHealthChunkUsingPolicyAndAdvancedFilters request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetClusterHealthChunkUsingPolicyAndAdvancedFiltersResponder(resp *http.Response) (result ClusterHealthChunk, err error) {
@@ -3785,7 +3630,6 @@ func (client BaseClient) GetClusterHealthChunkUsingPolicyAndAdvancedFiltersRespo
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterHealthUsingPolicy gets the health of a Service Fabric cluster.
 // Use EventsHealthStateFilter to filter the collection of health events reported on the cluster based on the health
 // state.
@@ -3896,7 +3740,6 @@ func (client BaseClient) GetClusterHealthUsingPolicy(ctx context.Context, nodesH
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterHealthUsingPolicyPreparer prepares the GetClusterHealthUsingPolicy request.
 func (client BaseClient) GetClusterHealthUsingPolicyPreparer(ctx context.Context, nodesHealthStateFilter *int32, applicationsHealthStateFilter *int32, eventsHealthStateFilter *int32, excludeHealthStatistics *bool, includeSystemApplicationHealthStatistics *bool, clusterHealthPolicies *ClusterHealthPolicies, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -3947,7 +3790,6 @@ func (client BaseClient) GetClusterHealthUsingPolicyPreparer(ctx context.Context
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterHealthUsingPolicySender sends the GetClusterHealthUsingPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterHealthUsingPolicySender(req *http.Request) (*http.Response, error) {
@@ -3955,7 +3797,6 @@ func (client BaseClient) GetClusterHealthUsingPolicySender(req *http.Request) (*
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterHealthUsingPolicyResponder handles the response to the GetClusterHealthUsingPolicy request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetClusterHealthUsingPolicyResponder(resp *http.Response) (result ClusterHealth, err error) {
@@ -3969,7 +3810,6 @@ func (client BaseClient) GetClusterHealthUsingPolicyResponder(resp *http.Respons
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterManifest get the Service Fabric cluster manifest. The cluster manifest contains properties of the cluster
 // that include different node types on the cluster,
 // security configurations, fault and upgrade domain topologies etc.
@@ -4016,7 +3856,6 @@ func (client BaseClient) GetClusterManifest(ctx context.Context, timeout *int64)
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterManifestPreparer prepares the GetClusterManifest request.
 func (client BaseClient) GetClusterManifestPreparer(ctx context.Context, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -4037,7 +3876,6 @@ func (client BaseClient) GetClusterManifestPreparer(ctx context.Context, timeout
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterManifestSender sends the GetClusterManifest request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterManifestSender(req *http.Request) (*http.Response, error) {
@@ -4045,7 +3883,6 @@ func (client BaseClient) GetClusterManifestSender(req *http.Request) (*http.Resp
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterManifestResponder handles the response to the GetClusterManifest request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetClusterManifestResponder(resp *http.Response) (result ClusterManifest, err error) {
@@ -4059,7 +3896,6 @@ func (client BaseClient) GetClusterManifestResponder(resp *http.Response) (resul
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterUpgradeProgress gets the current progress of the ongoing cluster upgrade. If no upgrade is currently in
 // progress, gets the last state of the previous cluster upgrade.
 // Parameters:
@@ -4097,7 +3933,6 @@ func (client BaseClient) GetClusterUpgradeProgress(ctx context.Context, timeout 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterUpgradeProgressPreparer prepares the GetClusterUpgradeProgress request.
 func (client BaseClient) GetClusterUpgradeProgressPreparer(ctx context.Context, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -4118,7 +3953,6 @@ func (client BaseClient) GetClusterUpgradeProgressPreparer(ctx context.Context, 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterUpgradeProgressSender sends the GetClusterUpgradeProgress request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterUpgradeProgressSender(req *http.Request) (*http.Response, error) {
@@ -4126,7 +3960,6 @@ func (client BaseClient) GetClusterUpgradeProgressSender(req *http.Request) (*ht
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetClusterUpgradeProgressResponder handles the response to the GetClusterUpgradeProgress request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetClusterUpgradeProgressResponder(resp *http.Response) (result ClusterUpgradeProgressObject, err error) {
@@ -4140,7 +3973,6 @@ func (client BaseClient) GetClusterUpgradeProgressResponder(resp *http.Response)
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetComposeDeploymentStatus returns the status of the compose deployment that was created or in the process of being
 // created in the Service Fabric cluster and whose name matches the one specified as the parameter. The response
 // includes the name, status and other details about the deployment.
@@ -4180,7 +4012,6 @@ func (client BaseClient) GetComposeDeploymentStatus(ctx context.Context, deploym
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetComposeDeploymentStatusPreparer prepares the GetComposeDeploymentStatus request.
 func (client BaseClient) GetComposeDeploymentStatusPreparer(ctx context.Context, deploymentName string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -4205,7 +4036,6 @@ func (client BaseClient) GetComposeDeploymentStatusPreparer(ctx context.Context,
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetComposeDeploymentStatusSender sends the GetComposeDeploymentStatus request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetComposeDeploymentStatusSender(req *http.Request) (*http.Response, error) {
@@ -4213,7 +4043,6 @@ func (client BaseClient) GetComposeDeploymentStatusSender(req *http.Request) (*h
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetComposeDeploymentStatusResponder handles the response to the GetComposeDeploymentStatus request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetComposeDeploymentStatusResponder(resp *http.Response) (result ComposeDeploymentStatusInfo, err error) {
@@ -4227,7 +4056,6 @@ func (client BaseClient) GetComposeDeploymentStatusResponder(resp *http.Response
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetComposeDeploymentStatusList gets the status about the compose deployments that were created or in the process of
 // being created in the Service Fabric cluster. The response includes the name, status and other details about the
 // compose deployments. If the list of deployments do not fit in a page, one page of results is returned as well as a
@@ -4280,7 +4108,6 @@ func (client BaseClient) GetComposeDeploymentStatusList(ctx context.Context, con
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetComposeDeploymentStatusListPreparer prepares the GetComposeDeploymentStatusList request.
 func (client BaseClient) GetComposeDeploymentStatusListPreparer(ctx context.Context, continuationToken string, maxResults *int64, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0-preview"
@@ -4309,7 +4136,6 @@ func (client BaseClient) GetComposeDeploymentStatusListPreparer(ctx context.Cont
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetComposeDeploymentStatusListSender sends the GetComposeDeploymentStatusList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetComposeDeploymentStatusListSender(req *http.Request) (*http.Response, error) {
@@ -4317,7 +4143,6 @@ func (client BaseClient) GetComposeDeploymentStatusListSender(req *http.Request)
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetComposeDeploymentStatusListResponder handles the response to the GetComposeDeploymentStatusList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetComposeDeploymentStatusListResponder(resp *http.Response) (result PagedComposeDeploymentStatusInfoList, err error) {
@@ -4331,7 +4156,6 @@ func (client BaseClient) GetComposeDeploymentStatusListResponder(resp *http.Resp
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetComposeDeploymentUpgradeProgress returns the information about the state of the compose deployment upgrade along
 // with details to aid debugging application health issues.
 // Parameters:
@@ -4370,7 +4194,6 @@ func (client BaseClient) GetComposeDeploymentUpgradeProgress(ctx context.Context
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetComposeDeploymentUpgradeProgressPreparer prepares the GetComposeDeploymentUpgradeProgress request.
 func (client BaseClient) GetComposeDeploymentUpgradeProgressPreparer(ctx context.Context, deploymentName string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -4395,7 +4218,6 @@ func (client BaseClient) GetComposeDeploymentUpgradeProgressPreparer(ctx context
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetComposeDeploymentUpgradeProgressSender sends the GetComposeDeploymentUpgradeProgress request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetComposeDeploymentUpgradeProgressSender(req *http.Request) (*http.Response, error) {
@@ -4403,7 +4225,6 @@ func (client BaseClient) GetComposeDeploymentUpgradeProgressSender(req *http.Req
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetComposeDeploymentUpgradeProgressResponder handles the response to the GetComposeDeploymentUpgradeProgress request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetComposeDeploymentUpgradeProgressResponder(resp *http.Response) (result ComposeDeploymentUpgradeProgressInfo, err error) {
@@ -4417,7 +4238,6 @@ func (client BaseClient) GetComposeDeploymentUpgradeProgressResponder(resp *http
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetContainerLogsDeployedOnNode gets the container logs for container deployed on a Service Fabric node for the given
 // code package.
 // Parameters:
@@ -4466,7 +4286,6 @@ func (client BaseClient) GetContainerLogsDeployedOnNode(ctx context.Context, nod
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetContainerLogsDeployedOnNodePreparer prepares the GetContainerLogsDeployedOnNode request.
 func (client BaseClient) GetContainerLogsDeployedOnNodePreparer(ctx context.Context, nodeName string, applicationID string, serviceManifestName string, codePackageName string, tail string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -4497,7 +4316,6 @@ func (client BaseClient) GetContainerLogsDeployedOnNodePreparer(ctx context.Cont
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetContainerLogsDeployedOnNodeSender sends the GetContainerLogsDeployedOnNode request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetContainerLogsDeployedOnNodeSender(req *http.Request) (*http.Response, error) {
@@ -4505,7 +4323,6 @@ func (client BaseClient) GetContainerLogsDeployedOnNodeSender(req *http.Request)
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetContainerLogsDeployedOnNodeResponder handles the response to the GetContainerLogsDeployedOnNode request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetContainerLogsDeployedOnNodeResponder(resp *http.Response) (result ContainerLogs, err error) {
@@ -4519,7 +4336,6 @@ func (client BaseClient) GetContainerLogsDeployedOnNodeResponder(resp *http.Resp
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDataLossProgress gets the progress of a data loss operation started with StartDataLoss, using the OperationId.
 // Parameters:
 // serviceID - the identity of the service. This is typically the full name of the service without the
@@ -4564,7 +4380,6 @@ func (client BaseClient) GetDataLossProgress(ctx context.Context, serviceID stri
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDataLossProgressPreparer prepares the GetDataLossProgress request.
 func (client BaseClient) GetDataLossProgressPreparer(ctx context.Context, serviceID string, partitionID uuid.UUID, operationID uuid.UUID, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -4591,7 +4406,6 @@ func (client BaseClient) GetDataLossProgressPreparer(ctx context.Context, servic
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDataLossProgressSender sends the GetDataLossProgress request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDataLossProgressSender(req *http.Request) (*http.Response, error) {
@@ -4599,7 +4413,6 @@ func (client BaseClient) GetDataLossProgressSender(req *http.Request) (*http.Res
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDataLossProgressResponder handles the response to the GetDataLossProgress request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetDataLossProgressResponder(resp *http.Response) (result PartitionDataLossProgress, err error) {
@@ -4613,7 +4426,6 @@ func (client BaseClient) GetDataLossProgressResponder(resp *http.Response) (resu
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedApplicationHealth gets the information about health of an application deployed on a Service Fabric node.
 // Use EventsHealthStateFilter to optionally filter for the collection of HealthEvent objects reported on the deployed
 // application based on health state. Use DeployedServicePackagesHealthStateFilter to optionally filter for
@@ -4695,7 +4507,6 @@ func (client BaseClient) GetDeployedApplicationHealth(ctx context.Context, nodeN
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedApplicationHealthPreparer prepares the GetDeployedApplicationHealth request.
 func (client BaseClient) GetDeployedApplicationHealthPreparer(ctx context.Context, nodeName string, applicationID string, eventsHealthStateFilter *int32, deployedServicePackagesHealthStateFilter *int32, excludeHealthStatistics *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -4736,7 +4547,6 @@ func (client BaseClient) GetDeployedApplicationHealthPreparer(ctx context.Contex
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedApplicationHealthSender sends the GetDeployedApplicationHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedApplicationHealthSender(req *http.Request) (*http.Response, error) {
@@ -4744,7 +4554,6 @@ func (client BaseClient) GetDeployedApplicationHealthSender(req *http.Request) (
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedApplicationHealthResponder handles the response to the GetDeployedApplicationHealth request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetDeployedApplicationHealthResponder(resp *http.Response) (result DeployedApplicationHealth, err error) {
@@ -4758,7 +4567,6 @@ func (client BaseClient) GetDeployedApplicationHealthResponder(resp *http.Respon
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedApplicationHealthUsingPolicy gets the information about health of an application deployed on a Service
 // Fabric node using the specified policy. Use EventsHealthStateFilter to optionally filter for the collection of
 // HealthEvent objects reported on the deployed application based on health state. Use
@@ -4847,7 +4655,6 @@ func (client BaseClient) GetDeployedApplicationHealthUsingPolicy(ctx context.Con
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedApplicationHealthUsingPolicyPreparer prepares the GetDeployedApplicationHealthUsingPolicy request.
 func (client BaseClient) GetDeployedApplicationHealthUsingPolicyPreparer(ctx context.Context, nodeName string, applicationID string, eventsHealthStateFilter *int32, deployedServicePackagesHealthStateFilter *int32, applicationHealthPolicy *ApplicationHealthPolicy, excludeHealthStatistics *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -4893,7 +4700,6 @@ func (client BaseClient) GetDeployedApplicationHealthUsingPolicyPreparer(ctx con
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedApplicationHealthUsingPolicySender sends the GetDeployedApplicationHealthUsingPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedApplicationHealthUsingPolicySender(req *http.Request) (*http.Response, error) {
@@ -4901,7 +4707,6 @@ func (client BaseClient) GetDeployedApplicationHealthUsingPolicySender(req *http
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedApplicationHealthUsingPolicyResponder handles the response to the GetDeployedApplicationHealthUsingPolicy request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetDeployedApplicationHealthUsingPolicyResponder(resp *http.Response) (result DeployedApplicationHealth, err error) {
@@ -4915,7 +4720,6 @@ func (client BaseClient) GetDeployedApplicationHealthUsingPolicyResponder(resp *
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedApplicationInfo gets the information about an application deployed on a Service Fabric node.  This query
 // returns system application information if the application ID provided is for system application. Results encompass
 // deployed applications in active, activating, and downloading states. This query requires that the node name
@@ -4967,7 +4771,6 @@ func (client BaseClient) GetDeployedApplicationInfo(ctx context.Context, nodeNam
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedApplicationInfoPreparer prepares the GetDeployedApplicationInfo request.
 func (client BaseClient) GetDeployedApplicationInfoPreparer(ctx context.Context, nodeName string, applicationID string, timeout *int64, includeHealthState *bool) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -4998,7 +4801,6 @@ func (client BaseClient) GetDeployedApplicationInfoPreparer(ctx context.Context,
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedApplicationInfoSender sends the GetDeployedApplicationInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedApplicationInfoSender(req *http.Request) (*http.Response, error) {
@@ -5006,7 +4808,6 @@ func (client BaseClient) GetDeployedApplicationInfoSender(req *http.Request) (*h
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedApplicationInfoResponder handles the response to the GetDeployedApplicationInfo request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetDeployedApplicationInfoResponder(resp *http.Response) (result DeployedApplicationInfo, err error) {
@@ -5020,7 +4821,6 @@ func (client BaseClient) GetDeployedApplicationInfoResponder(resp *http.Response
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedApplicationInfoList gets the list of applications deployed on a Service Fabric node. The results do not
 // include information about deployed system applications unless explicitly queried for by ID. Results encompass
 // deployed applications in active, activating, and downloading states. This query requires that the node name
@@ -5080,7 +4880,6 @@ func (client BaseClient) GetDeployedApplicationInfoList(ctx context.Context, nod
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedApplicationInfoListPreparer prepares the GetDeployedApplicationInfoList request.
 func (client BaseClient) GetDeployedApplicationInfoListPreparer(ctx context.Context, nodeName string, timeout *int64, includeHealthState *bool, continuationToken string, maxResults *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -5118,7 +4917,6 @@ func (client BaseClient) GetDeployedApplicationInfoListPreparer(ctx context.Cont
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedApplicationInfoListSender sends the GetDeployedApplicationInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedApplicationInfoListSender(req *http.Request) (*http.Response, error) {
@@ -5126,7 +4924,6 @@ func (client BaseClient) GetDeployedApplicationInfoListSender(req *http.Request)
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedApplicationInfoListResponder handles the response to the GetDeployedApplicationInfoList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetDeployedApplicationInfoListResponder(resp *http.Response) (result PagedDeployedApplicationInfoList, err error) {
@@ -5140,7 +4937,6 @@ func (client BaseClient) GetDeployedApplicationInfoListResponder(resp *http.Resp
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedCodePackageInfoList gets the list of code packages deployed on a Service Fabric node for the given
 // application.
 // Parameters:
@@ -5188,7 +4984,6 @@ func (client BaseClient) GetDeployedCodePackageInfoList(ctx context.Context, nod
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedCodePackageInfoListPreparer prepares the GetDeployedCodePackageInfoList request.
 func (client BaseClient) GetDeployedCodePackageInfoListPreparer(ctx context.Context, nodeName string, applicationID string, serviceManifestName string, codePackageName string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -5220,7 +5015,6 @@ func (client BaseClient) GetDeployedCodePackageInfoListPreparer(ctx context.Cont
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedCodePackageInfoListSender sends the GetDeployedCodePackageInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedCodePackageInfoListSender(req *http.Request) (*http.Response, error) {
@@ -5228,7 +5022,6 @@ func (client BaseClient) GetDeployedCodePackageInfoListSender(req *http.Request)
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedCodePackageInfoListResponder handles the response to the GetDeployedCodePackageInfoList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetDeployedCodePackageInfoListResponder(resp *http.Response) (result ListDeployedCodePackageInfo, err error) {
@@ -5242,7 +5035,6 @@ func (client BaseClient) GetDeployedCodePackageInfoListResponder(resp *http.Resp
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServicePackageHealth gets the information about health of service package for a specific application
 // deployed on a Service Fabric node. Use EventsHealthStateFilter to optionally filter for the collection of
 // HealthEvent objects reported on the deployed service package based on health state.
@@ -5303,7 +5095,6 @@ func (client BaseClient) GetDeployedServicePackageHealth(ctx context.Context, no
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServicePackageHealthPreparer prepares the GetDeployedServicePackageHealth request.
 func (client BaseClient) GetDeployedServicePackageHealthPreparer(ctx context.Context, nodeName string, applicationID string, servicePackageName string, eventsHealthStateFilter *int32, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -5335,7 +5126,6 @@ func (client BaseClient) GetDeployedServicePackageHealthPreparer(ctx context.Con
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServicePackageHealthSender sends the GetDeployedServicePackageHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServicePackageHealthSender(req *http.Request) (*http.Response, error) {
@@ -5343,7 +5133,6 @@ func (client BaseClient) GetDeployedServicePackageHealthSender(req *http.Request
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServicePackageHealthResponder handles the response to the GetDeployedServicePackageHealth request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetDeployedServicePackageHealthResponder(resp *http.Response) (result DeployedServicePackageHealth, err error) {
@@ -5357,7 +5146,6 @@ func (client BaseClient) GetDeployedServicePackageHealthResponder(resp *http.Res
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServicePackageHealthUsingPolicy gets the information about health of an service package for a specific
 // application deployed on a Service Fabric node. using the specified policy. Use EventsHealthStateFilter to optionally
 // filter for the collection of HealthEvent objects reported on the deployed service package based on health state. Use
@@ -5425,7 +5213,6 @@ func (client BaseClient) GetDeployedServicePackageHealthUsingPolicy(ctx context.
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServicePackageHealthUsingPolicyPreparer prepares the GetDeployedServicePackageHealthUsingPolicy request.
 func (client BaseClient) GetDeployedServicePackageHealthUsingPolicyPreparer(ctx context.Context, nodeName string, applicationID string, servicePackageName string, eventsHealthStateFilter *int32, applicationHealthPolicy *ApplicationHealthPolicy, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -5462,7 +5249,6 @@ func (client BaseClient) GetDeployedServicePackageHealthUsingPolicyPreparer(ctx 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServicePackageHealthUsingPolicySender sends the GetDeployedServicePackageHealthUsingPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServicePackageHealthUsingPolicySender(req *http.Request) (*http.Response, error) {
@@ -5470,7 +5256,6 @@ func (client BaseClient) GetDeployedServicePackageHealthUsingPolicySender(req *h
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServicePackageHealthUsingPolicyResponder handles the response to the GetDeployedServicePackageHealthUsingPolicy request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetDeployedServicePackageHealthUsingPolicyResponder(resp *http.Response) (result DeployedServicePackageHealth, err error) {
@@ -5484,7 +5269,6 @@ func (client BaseClient) GetDeployedServicePackageHealthUsingPolicyResponder(res
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServicePackageInfoList returns the information about the service packages deployed on a Service Fabric
 // node for the given application.
 // Parameters:
@@ -5528,7 +5312,6 @@ func (client BaseClient) GetDeployedServicePackageInfoList(ctx context.Context, 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServicePackageInfoListPreparer prepares the GetDeployedServicePackageInfoList request.
 func (client BaseClient) GetDeployedServicePackageInfoListPreparer(ctx context.Context, nodeName string, applicationID string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -5554,7 +5337,6 @@ func (client BaseClient) GetDeployedServicePackageInfoListPreparer(ctx context.C
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServicePackageInfoListSender sends the GetDeployedServicePackageInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServicePackageInfoListSender(req *http.Request) (*http.Response, error) {
@@ -5562,7 +5344,6 @@ func (client BaseClient) GetDeployedServicePackageInfoListSender(req *http.Reque
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServicePackageInfoListResponder handles the response to the GetDeployedServicePackageInfoList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetDeployedServicePackageInfoListResponder(resp *http.Response) (result ListDeployedServicePackageInfo, err error) {
@@ -5576,7 +5357,6 @@ func (client BaseClient) GetDeployedServicePackageInfoListResponder(resp *http.R
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServicePackageInfoListByName returns the information about the service packages deployed on a Service
 // Fabric node for the given application. These results are of service packages whose name match exactly the service
 // package name specified as the parameter.
@@ -5622,7 +5402,6 @@ func (client BaseClient) GetDeployedServicePackageInfoListByName(ctx context.Con
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServicePackageInfoListByNamePreparer prepares the GetDeployedServicePackageInfoListByName request.
 func (client BaseClient) GetDeployedServicePackageInfoListByNamePreparer(ctx context.Context, nodeName string, applicationID string, servicePackageName string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -5649,7 +5428,6 @@ func (client BaseClient) GetDeployedServicePackageInfoListByNamePreparer(ctx con
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServicePackageInfoListByNameSender sends the GetDeployedServicePackageInfoListByName request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServicePackageInfoListByNameSender(req *http.Request) (*http.Response, error) {
@@ -5657,7 +5435,6 @@ func (client BaseClient) GetDeployedServicePackageInfoListByNameSender(req *http
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServicePackageInfoListByNameResponder handles the response to the GetDeployedServicePackageInfoListByName request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetDeployedServicePackageInfoListByNameResponder(resp *http.Response) (result ListDeployedServicePackageInfo, err error) {
@@ -5671,7 +5448,6 @@ func (client BaseClient) GetDeployedServicePackageInfoListByNameResponder(resp *
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceReplicaDetailInfo gets the details of the replica deployed on a Service Fabric node. The
 // information include service kind, service name, current service operation, current service operation start date
 // time, partition id, replica/instance id, reported load and other information.
@@ -5713,7 +5489,6 @@ func (client BaseClient) GetDeployedServiceReplicaDetailInfo(ctx context.Context
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceReplicaDetailInfoPreparer prepares the GetDeployedServiceReplicaDetailInfo request.
 func (client BaseClient) GetDeployedServiceReplicaDetailInfoPreparer(ctx context.Context, nodeName string, partitionID uuid.UUID, replicaID string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -5740,7 +5515,6 @@ func (client BaseClient) GetDeployedServiceReplicaDetailInfoPreparer(ctx context
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceReplicaDetailInfoSender sends the GetDeployedServiceReplicaDetailInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServiceReplicaDetailInfoSender(req *http.Request) (*http.Response, error) {
@@ -5748,7 +5522,6 @@ func (client BaseClient) GetDeployedServiceReplicaDetailInfoSender(req *http.Req
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceReplicaDetailInfoResponder handles the response to the GetDeployedServiceReplicaDetailInfo request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetDeployedServiceReplicaDetailInfoResponder(resp *http.Response) (result DeployedServiceReplicaDetailInfoModel, err error) {
@@ -5762,7 +5535,6 @@ func (client BaseClient) GetDeployedServiceReplicaDetailInfoResponder(resp *http
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceReplicaDetailInfoByPartitionID gets the details of the replica deployed on a Service Fabric node.
 // The information include service kind, service name, current service operation, current service operation start date
 // time, partition id, replica/instance id, reported load and other information.
@@ -5803,7 +5575,6 @@ func (client BaseClient) GetDeployedServiceReplicaDetailInfoByPartitionID(ctx co
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceReplicaDetailInfoByPartitionIDPreparer prepares the GetDeployedServiceReplicaDetailInfoByPartitionID request.
 func (client BaseClient) GetDeployedServiceReplicaDetailInfoByPartitionIDPreparer(ctx context.Context, nodeName string, partitionID uuid.UUID, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -5829,7 +5600,6 @@ func (client BaseClient) GetDeployedServiceReplicaDetailInfoByPartitionIDPrepare
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceReplicaDetailInfoByPartitionIDSender sends the GetDeployedServiceReplicaDetailInfoByPartitionID request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServiceReplicaDetailInfoByPartitionIDSender(req *http.Request) (*http.Response, error) {
@@ -5837,7 +5607,6 @@ func (client BaseClient) GetDeployedServiceReplicaDetailInfoByPartitionIDSender(
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceReplicaDetailInfoByPartitionIDResponder handles the response to the GetDeployedServiceReplicaDetailInfoByPartitionID request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetDeployedServiceReplicaDetailInfoByPartitionIDResponder(resp *http.Response) (result DeployedServiceReplicaDetailInfoModel, err error) {
@@ -5851,7 +5620,6 @@ func (client BaseClient) GetDeployedServiceReplicaDetailInfoByPartitionIDRespond
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceReplicaInfoList gets the list containing the information about replicas deployed on a Service
 // Fabric node. The information include partition id, replica id, status of the replica, name of the service, name of
 // the service type and other information. Use PartitionId or ServiceManifestName query parameters to return
@@ -5900,7 +5668,6 @@ func (client BaseClient) GetDeployedServiceReplicaInfoList(ctx context.Context, 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceReplicaInfoListPreparer prepares the GetDeployedServiceReplicaInfoList request.
 func (client BaseClient) GetDeployedServiceReplicaInfoListPreparer(ctx context.Context, nodeName string, applicationID string, partitionID *uuid.UUID, serviceManifestName string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -5932,7 +5699,6 @@ func (client BaseClient) GetDeployedServiceReplicaInfoListPreparer(ctx context.C
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceReplicaInfoListSender sends the GetDeployedServiceReplicaInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServiceReplicaInfoListSender(req *http.Request) (*http.Response, error) {
@@ -5940,7 +5706,6 @@ func (client BaseClient) GetDeployedServiceReplicaInfoListSender(req *http.Reque
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceReplicaInfoListResponder handles the response to the GetDeployedServiceReplicaInfoList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetDeployedServiceReplicaInfoListResponder(resp *http.Response) (result ListDeployedServiceReplicaInfo, err error) {
@@ -5954,7 +5719,6 @@ func (client BaseClient) GetDeployedServiceReplicaInfoListResponder(resp *http.R
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceTypeInfoByName gets the list containing the information about a specific service type from the
 // applications deployed on a node in a Service Fabric cluster. The response includes the name of the service type, its
 // registration status, the code package that registered it and activation id of the service package. Each entry
@@ -6004,7 +5768,6 @@ func (client BaseClient) GetDeployedServiceTypeInfoByName(ctx context.Context, n
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceTypeInfoByNamePreparer prepares the GetDeployedServiceTypeInfoByName request.
 func (client BaseClient) GetDeployedServiceTypeInfoByNamePreparer(ctx context.Context, nodeName string, applicationID string, serviceTypeName string, serviceManifestName string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -6034,7 +5797,6 @@ func (client BaseClient) GetDeployedServiceTypeInfoByNamePreparer(ctx context.Co
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceTypeInfoByNameSender sends the GetDeployedServiceTypeInfoByName request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServiceTypeInfoByNameSender(req *http.Request) (*http.Response, error) {
@@ -6042,7 +5804,6 @@ func (client BaseClient) GetDeployedServiceTypeInfoByNameSender(req *http.Reques
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceTypeInfoByNameResponder handles the response to the GetDeployedServiceTypeInfoByName request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetDeployedServiceTypeInfoByNameResponder(resp *http.Response) (result ListDeployedServiceTypeInfo, err error) {
@@ -6056,7 +5817,6 @@ func (client BaseClient) GetDeployedServiceTypeInfoByNameResponder(resp *http.Re
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceTypeInfoList gets the list containing the information about service types from the applications
 // deployed on a node in a Service Fabric cluster. The response includes the name of the service type, its registration
 // status, the code package that registered it and activation id of the service package.
@@ -6104,7 +5864,6 @@ func (client BaseClient) GetDeployedServiceTypeInfoList(ctx context.Context, nod
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceTypeInfoListPreparer prepares the GetDeployedServiceTypeInfoList request.
 func (client BaseClient) GetDeployedServiceTypeInfoListPreparer(ctx context.Context, nodeName string, applicationID string, serviceManifestName string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -6133,7 +5892,6 @@ func (client BaseClient) GetDeployedServiceTypeInfoListPreparer(ctx context.Cont
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceTypeInfoListSender sends the GetDeployedServiceTypeInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServiceTypeInfoListSender(req *http.Request) (*http.Response, error) {
@@ -6141,7 +5899,6 @@ func (client BaseClient) GetDeployedServiceTypeInfoListSender(req *http.Request)
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetDeployedServiceTypeInfoListResponder handles the response to the GetDeployedServiceTypeInfoList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetDeployedServiceTypeInfoListResponder(resp *http.Response) (result ListDeployedServiceTypeInfo, err error) {
@@ -6155,7 +5912,6 @@ func (client BaseClient) GetDeployedServiceTypeInfoListResponder(resp *http.Resp
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetFaultOperationList gets the a list of user-induced fault operations filtered by provided input.
 // Parameters:
 // typeFilter - used to filter on OperationType for user-induced operations.
@@ -6206,7 +5962,6 @@ func (client BaseClient) GetFaultOperationList(ctx context.Context, typeFilter i
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetFaultOperationListPreparer prepares the GetFaultOperationList request.
 func (client BaseClient) GetFaultOperationListPreparer(ctx context.Context, typeFilter int32, stateFilter int32, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -6229,7 +5984,6 @@ func (client BaseClient) GetFaultOperationListPreparer(ctx context.Context, type
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetFaultOperationListSender sends the GetFaultOperationList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetFaultOperationListSender(req *http.Request) (*http.Response, error) {
@@ -6237,7 +5991,6 @@ func (client BaseClient) GetFaultOperationListSender(req *http.Request) (*http.R
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetFaultOperationListResponder handles the response to the GetFaultOperationList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetFaultOperationListResponder(resp *http.Response) (result ListOperationStatus, err error) {
@@ -6251,7 +6004,6 @@ func (client BaseClient) GetFaultOperationListResponder(resp *http.Response) (re
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetImageStoreContent returns the information about the image store content at the specified contentPath relative to
 // the root of the image store.
 // Parameters:
@@ -6290,7 +6042,6 @@ func (client BaseClient) GetImageStoreContent(ctx context.Context, contentPath s
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetImageStoreContentPreparer prepares the GetImageStoreContent request.
 func (client BaseClient) GetImageStoreContentPreparer(ctx context.Context, contentPath string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -6315,7 +6066,6 @@ func (client BaseClient) GetImageStoreContentPreparer(ctx context.Context, conte
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetImageStoreContentSender sends the GetImageStoreContent request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetImageStoreContentSender(req *http.Request) (*http.Response, error) {
@@ -6323,7 +6073,6 @@ func (client BaseClient) GetImageStoreContentSender(req *http.Request) (*http.Re
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetImageStoreContentResponder handles the response to the GetImageStoreContent request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetImageStoreContentResponder(resp *http.Response) (result ImageStoreContent, err error) {
@@ -6337,7 +6086,6 @@ func (client BaseClient) GetImageStoreContentResponder(resp *http.Response) (res
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetImageStoreRootContent returns the information about the image store content at the root of the image store.
 // Parameters:
 // timeout - the server timeout for performing the operation in seconds. This specifies the time duration that
@@ -6374,7 +6122,6 @@ func (client BaseClient) GetImageStoreRootContent(ctx context.Context, timeout *
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetImageStoreRootContentPreparer prepares the GetImageStoreRootContent request.
 func (client BaseClient) GetImageStoreRootContentPreparer(ctx context.Context, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -6395,7 +6142,6 @@ func (client BaseClient) GetImageStoreRootContentPreparer(ctx context.Context, t
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetImageStoreRootContentSender sends the GetImageStoreRootContent request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetImageStoreRootContentSender(req *http.Request) (*http.Response, error) {
@@ -6403,7 +6149,6 @@ func (client BaseClient) GetImageStoreRootContentSender(req *http.Request) (*htt
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetImageStoreRootContentResponder handles the response to the GetImageStoreRootContent request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetImageStoreRootContentResponder(resp *http.Response) (result ImageStoreContent, err error) {
@@ -6417,7 +6162,6 @@ func (client BaseClient) GetImageStoreRootContentResponder(resp *http.Response) 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetImageStoreUploadSessionByID gets the image store upload session identified by the given ID. User can query the
 // upload session at any time during uploading.
 // Parameters:
@@ -6457,7 +6201,6 @@ func (client BaseClient) GetImageStoreUploadSessionByID(ctx context.Context, ses
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetImageStoreUploadSessionByIDPreparer prepares the GetImageStoreUploadSessionByID request.
 func (client BaseClient) GetImageStoreUploadSessionByIDPreparer(ctx context.Context, sessionID uuid.UUID, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -6479,7 +6222,6 @@ func (client BaseClient) GetImageStoreUploadSessionByIDPreparer(ctx context.Cont
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetImageStoreUploadSessionByIDSender sends the GetImageStoreUploadSessionByID request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetImageStoreUploadSessionByIDSender(req *http.Request) (*http.Response, error) {
@@ -6487,7 +6229,6 @@ func (client BaseClient) GetImageStoreUploadSessionByIDSender(req *http.Request)
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetImageStoreUploadSessionByIDResponder handles the response to the GetImageStoreUploadSessionByID request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetImageStoreUploadSessionByIDResponder(resp *http.Response) (result UploadSession, err error) {
@@ -6501,7 +6242,6 @@ func (client BaseClient) GetImageStoreUploadSessionByIDResponder(resp *http.Resp
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetImageStoreUploadSessionByPath gets the image store upload session associated with the given image store relative
 // path. User can query the upload session at any time during uploading.
 // Parameters:
@@ -6540,7 +6280,6 @@ func (client BaseClient) GetImageStoreUploadSessionByPath(ctx context.Context, c
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetImageStoreUploadSessionByPathPreparer prepares the GetImageStoreUploadSessionByPath request.
 func (client BaseClient) GetImageStoreUploadSessionByPathPreparer(ctx context.Context, contentPath string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -6565,7 +6304,6 @@ func (client BaseClient) GetImageStoreUploadSessionByPathPreparer(ctx context.Co
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetImageStoreUploadSessionByPathSender sends the GetImageStoreUploadSessionByPath request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetImageStoreUploadSessionByPathSender(req *http.Request) (*http.Response, error) {
@@ -6573,7 +6311,6 @@ func (client BaseClient) GetImageStoreUploadSessionByPathSender(req *http.Reques
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetImageStoreUploadSessionByPathResponder handles the response to the GetImageStoreUploadSessionByPath request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetImageStoreUploadSessionByPathResponder(resp *http.Response) (result UploadSession, err error) {
@@ -6587,7 +6324,6 @@ func (client BaseClient) GetImageStoreUploadSessionByPathResponder(resp *http.Re
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNameExistsInfo returns whether the specified Service Fabric name exists.
 // Parameters:
 // nameID - the Service Fabric name, without the 'fabric:' URI scheme.
@@ -6625,7 +6361,6 @@ func (client BaseClient) GetNameExistsInfo(ctx context.Context, nameID string, t
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNameExistsInfoPreparer prepares the GetNameExistsInfo request.
 func (client BaseClient) GetNameExistsInfoPreparer(ctx context.Context, nameID string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -6650,7 +6385,6 @@ func (client BaseClient) GetNameExistsInfoPreparer(ctx context.Context, nameID s
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNameExistsInfoSender sends the GetNameExistsInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetNameExistsInfoSender(req *http.Request) (*http.Response, error) {
@@ -6658,7 +6392,6 @@ func (client BaseClient) GetNameExistsInfoSender(req *http.Request) (*http.Respo
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNameExistsInfoResponder handles the response to the GetNameExistsInfo request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetNameExistsInfoResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -6671,7 +6404,6 @@ func (client BaseClient) GetNameExistsInfoResponder(resp *http.Response) (result
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeHealth gets the health of a Service Fabric node. Use EventsHealthStateFilter to filter the collection of
 // health events reported on the node based on the health state. If the node that you specify by name does not exist in
 // the health store, this returns an error.
@@ -6726,7 +6458,6 @@ func (client BaseClient) GetNodeHealth(ctx context.Context, nodeName string, eve
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeHealthPreparer prepares the GetNodeHealth request.
 func (client BaseClient) GetNodeHealthPreparer(ctx context.Context, nodeName string, eventsHealthStateFilter *int32, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -6756,7 +6487,6 @@ func (client BaseClient) GetNodeHealthPreparer(ctx context.Context, nodeName str
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeHealthSender sends the GetNodeHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetNodeHealthSender(req *http.Request) (*http.Response, error) {
@@ -6764,7 +6494,6 @@ func (client BaseClient) GetNodeHealthSender(req *http.Request) (*http.Response,
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeHealthResponder handles the response to the GetNodeHealth request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetNodeHealthResponder(resp *http.Response) (result NodeHealth, err error) {
@@ -6778,7 +6507,6 @@ func (client BaseClient) GetNodeHealthResponder(resp *http.Response) (result Nod
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeHealthUsingPolicy gets the health of a Service Fabric node. Use EventsHealthStateFilter to filter the
 // collection of health events reported on the node based on the health state. Use ClusterHealthPolicy in the POST body
 // to override the health policies used to evaluate the health. If the node that you specify by name does not exist in
@@ -6836,7 +6564,6 @@ func (client BaseClient) GetNodeHealthUsingPolicy(ctx context.Context, nodeName 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeHealthUsingPolicyPreparer prepares the GetNodeHealthUsingPolicy request.
 func (client BaseClient) GetNodeHealthUsingPolicyPreparer(ctx context.Context, nodeName string, eventsHealthStateFilter *int32, clusterHealthPolicy *ClusterHealthPolicy, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -6871,7 +6598,6 @@ func (client BaseClient) GetNodeHealthUsingPolicyPreparer(ctx context.Context, n
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeHealthUsingPolicySender sends the GetNodeHealthUsingPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetNodeHealthUsingPolicySender(req *http.Request) (*http.Response, error) {
@@ -6879,7 +6605,6 @@ func (client BaseClient) GetNodeHealthUsingPolicySender(req *http.Request) (*htt
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeHealthUsingPolicyResponder handles the response to the GetNodeHealthUsingPolicy request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetNodeHealthUsingPolicyResponder(resp *http.Response) (result NodeHealth, err error) {
@@ -6893,7 +6618,6 @@ func (client BaseClient) GetNodeHealthUsingPolicyResponder(resp *http.Response) 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeInfo gets the information about a specific node in the Service Fabric Cluster.The response include the name,
 // status, id, health, uptime and other details about the node.
 // Parameters:
@@ -6932,7 +6656,6 @@ func (client BaseClient) GetNodeInfo(ctx context.Context, nodeName string, timeo
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeInfoPreparer prepares the GetNodeInfo request.
 func (client BaseClient) GetNodeInfoPreparer(ctx context.Context, nodeName string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -6957,7 +6680,6 @@ func (client BaseClient) GetNodeInfoPreparer(ctx context.Context, nodeName strin
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeInfoSender sends the GetNodeInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetNodeInfoSender(req *http.Request) (*http.Response, error) {
@@ -6965,7 +6687,6 @@ func (client BaseClient) GetNodeInfoSender(req *http.Request) (*http.Response, e
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeInfoResponder handles the response to the GetNodeInfo request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetNodeInfoResponder(resp *http.Response) (result NodeInfo, err error) {
@@ -6979,7 +6700,6 @@ func (client BaseClient) GetNodeInfoResponder(resp *http.Response) (result NodeI
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeInfoList gets the list of nodes in the Service Fabric cluster. The response include the name, status, id,
 // health, uptime and other details about the node.
 // Parameters:
@@ -7024,7 +6744,6 @@ func (client BaseClient) GetNodeInfoList(ctx context.Context, continuationToken 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeInfoListPreparer prepares the GetNodeInfoList request.
 func (client BaseClient) GetNodeInfoListPreparer(ctx context.Context, continuationToken string, nodeStatusFilter NodeStatusFilterOptionalQueryParam, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -7053,7 +6772,6 @@ func (client BaseClient) GetNodeInfoListPreparer(ctx context.Context, continuati
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeInfoListSender sends the GetNodeInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetNodeInfoListSender(req *http.Request) (*http.Response, error) {
@@ -7061,7 +6779,6 @@ func (client BaseClient) GetNodeInfoListSender(req *http.Request) (*http.Respons
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeInfoListResponder handles the response to the GetNodeInfoList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetNodeInfoListResponder(resp *http.Response) (result PagedNodeInfoList, err error) {
@@ -7075,7 +6792,6 @@ func (client BaseClient) GetNodeInfoListResponder(resp *http.Response) (result P
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeLoadInfo retrieves the load information of a Service Fabric node for all the metrics that have load or
 // capacity defined.
 // Parameters:
@@ -7114,7 +6830,6 @@ func (client BaseClient) GetNodeLoadInfo(ctx context.Context, nodeName string, t
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeLoadInfoPreparer prepares the GetNodeLoadInfo request.
 func (client BaseClient) GetNodeLoadInfoPreparer(ctx context.Context, nodeName string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -7139,7 +6854,6 @@ func (client BaseClient) GetNodeLoadInfoPreparer(ctx context.Context, nodeName s
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeLoadInfoSender sends the GetNodeLoadInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetNodeLoadInfoSender(req *http.Request) (*http.Response, error) {
@@ -7147,7 +6861,6 @@ func (client BaseClient) GetNodeLoadInfoSender(req *http.Request) (*http.Respons
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeLoadInfoResponder handles the response to the GetNodeLoadInfo request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetNodeLoadInfoResponder(resp *http.Response) (result NodeLoadInfo, err error) {
@@ -7161,7 +6874,6 @@ func (client BaseClient) GetNodeLoadInfoResponder(resp *http.Response) (result N
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeTransitionProgress gets the progress of an operation started with StartNodeTransition using the provided
 // OperationId.
 // Parameters:
@@ -7202,7 +6914,6 @@ func (client BaseClient) GetNodeTransitionProgress(ctx context.Context, nodeName
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeTransitionProgressPreparer prepares the GetNodeTransitionProgress request.
 func (client BaseClient) GetNodeTransitionProgressPreparer(ctx context.Context, nodeName string, operationID uuid.UUID, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -7228,7 +6939,6 @@ func (client BaseClient) GetNodeTransitionProgressPreparer(ctx context.Context, 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeTransitionProgressSender sends the GetNodeTransitionProgress request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetNodeTransitionProgressSender(req *http.Request) (*http.Response, error) {
@@ -7236,7 +6946,6 @@ func (client BaseClient) GetNodeTransitionProgressSender(req *http.Request) (*ht
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetNodeTransitionProgressResponder handles the response to the GetNodeTransitionProgress request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetNodeTransitionProgressResponder(resp *http.Response) (result NodeTransitionProgress, err error) {
@@ -7250,7 +6959,6 @@ func (client BaseClient) GetNodeTransitionProgressResponder(resp *http.Response)
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionHealth gets the health information of the specified partition.
 // Use EventsHealthStateFilter to filter the collection of health events reported on the service based on the health
 // state.
@@ -7325,7 +7033,6 @@ func (client BaseClient) GetPartitionHealth(ctx context.Context, partitionID uui
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionHealthPreparer prepares the GetPartitionHealth request.
 func (client BaseClient) GetPartitionHealthPreparer(ctx context.Context, partitionID uuid.UUID, eventsHealthStateFilter *int32, replicasHealthStateFilter *int32, excludeHealthStatistics *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -7365,7 +7072,6 @@ func (client BaseClient) GetPartitionHealthPreparer(ctx context.Context, partiti
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionHealthSender sends the GetPartitionHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionHealthSender(req *http.Request) (*http.Response, error) {
@@ -7373,7 +7079,6 @@ func (client BaseClient) GetPartitionHealthSender(req *http.Request) (*http.Resp
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionHealthResponder handles the response to the GetPartitionHealth request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetPartitionHealthResponder(resp *http.Response) (result PartitionHealth, err error) {
@@ -7387,7 +7092,6 @@ func (client BaseClient) GetPartitionHealthResponder(resp *http.Response) (resul
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionHealthUsingPolicy gets the health information of the specified partition.
 // If the application health policy is specified, the health evaluation uses it to get the aggregated health state.
 // If the policy is not specified, the health evaluation uses the application health policy defined in the application
@@ -7470,7 +7174,6 @@ func (client BaseClient) GetPartitionHealthUsingPolicy(ctx context.Context, part
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionHealthUsingPolicyPreparer prepares the GetPartitionHealthUsingPolicy request.
 func (client BaseClient) GetPartitionHealthUsingPolicyPreparer(ctx context.Context, partitionID uuid.UUID, eventsHealthStateFilter *int32, replicasHealthStateFilter *int32, applicationHealthPolicy *ApplicationHealthPolicy, excludeHealthStatistics *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -7515,7 +7218,6 @@ func (client BaseClient) GetPartitionHealthUsingPolicyPreparer(ctx context.Conte
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionHealthUsingPolicySender sends the GetPartitionHealthUsingPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionHealthUsingPolicySender(req *http.Request) (*http.Response, error) {
@@ -7523,7 +7225,6 @@ func (client BaseClient) GetPartitionHealthUsingPolicySender(req *http.Request) 
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionHealthUsingPolicyResponder handles the response to the GetPartitionHealthUsingPolicy request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetPartitionHealthUsingPolicyResponder(resp *http.Response) (result PartitionHealth, err error) {
@@ -7537,7 +7238,6 @@ func (client BaseClient) GetPartitionHealthUsingPolicyResponder(resp *http.Respo
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionInfo the Partitions endpoint returns information about the specified partition. The response include the
 // partition id, partitioning scheme information, keys supported by the partition, status, health and other details
 // about the partition.
@@ -7577,7 +7277,6 @@ func (client BaseClient) GetPartitionInfo(ctx context.Context, partitionID uuid.
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionInfoPreparer prepares the GetPartitionInfo request.
 func (client BaseClient) GetPartitionInfoPreparer(ctx context.Context, partitionID uuid.UUID, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -7602,7 +7301,6 @@ func (client BaseClient) GetPartitionInfoPreparer(ctx context.Context, partition
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionInfoSender sends the GetPartitionInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionInfoSender(req *http.Request) (*http.Response, error) {
@@ -7610,7 +7308,6 @@ func (client BaseClient) GetPartitionInfoSender(req *http.Request) (*http.Respon
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionInfoResponder handles the response to the GetPartitionInfo request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetPartitionInfoResponder(resp *http.Response) (result ServicePartitionInfoModel, err error) {
@@ -7624,7 +7321,6 @@ func (client BaseClient) GetPartitionInfoResponder(resp *http.Response) (result 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionInfoList gets the list of partitions of a Service Fabric service. The response include the partition id,
 // partitioning scheme information, keys supported by the partition, status, health and other details about the
 // partition.
@@ -7673,7 +7369,6 @@ func (client BaseClient) GetPartitionInfoList(ctx context.Context, serviceID str
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionInfoListPreparer prepares the GetPartitionInfoList request.
 func (client BaseClient) GetPartitionInfoListPreparer(ctx context.Context, serviceID string, continuationToken string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -7701,7 +7396,6 @@ func (client BaseClient) GetPartitionInfoListPreparer(ctx context.Context, servi
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionInfoListSender sends the GetPartitionInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionInfoListSender(req *http.Request) (*http.Response, error) {
@@ -7709,7 +7403,6 @@ func (client BaseClient) GetPartitionInfoListSender(req *http.Request) (*http.Re
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionInfoListResponder handles the response to the GetPartitionInfoList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetPartitionInfoListResponder(resp *http.Response) (result PagedServicePartitionInfoList, err error) {
@@ -7723,7 +7416,6 @@ func (client BaseClient) GetPartitionInfoListResponder(resp *http.Response) (res
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionLoadInformation returns information about the specified partition.
 // The response includes a list of load information.
 // Each information includes load metric name, value and last reported time in UTC.
@@ -7763,7 +7455,6 @@ func (client BaseClient) GetPartitionLoadInformation(ctx context.Context, partit
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionLoadInformationPreparer prepares the GetPartitionLoadInformation request.
 func (client BaseClient) GetPartitionLoadInformationPreparer(ctx context.Context, partitionID uuid.UUID, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -7788,7 +7479,6 @@ func (client BaseClient) GetPartitionLoadInformationPreparer(ctx context.Context
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionLoadInformationSender sends the GetPartitionLoadInformation request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionLoadInformationSender(req *http.Request) (*http.Response, error) {
@@ -7796,7 +7486,6 @@ func (client BaseClient) GetPartitionLoadInformationSender(req *http.Request) (*
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionLoadInformationResponder handles the response to the GetPartitionLoadInformation request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetPartitionLoadInformationResponder(resp *http.Response) (result PartitionLoadInformation, err error) {
@@ -7810,7 +7499,6 @@ func (client BaseClient) GetPartitionLoadInformationResponder(resp *http.Respons
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionRestartProgress gets the progress of a PartitionRestart started with StartPartitionRestart using the
 // provided OperationId.
 // Parameters:
@@ -7856,7 +7544,6 @@ func (client BaseClient) GetPartitionRestartProgress(ctx context.Context, servic
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionRestartProgressPreparer prepares the GetPartitionRestartProgress request.
 func (client BaseClient) GetPartitionRestartProgressPreparer(ctx context.Context, serviceID string, partitionID uuid.UUID, operationID uuid.UUID, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -7883,7 +7570,6 @@ func (client BaseClient) GetPartitionRestartProgressPreparer(ctx context.Context
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionRestartProgressSender sends the GetPartitionRestartProgress request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionRestartProgressSender(req *http.Request) (*http.Response, error) {
@@ -7891,7 +7577,6 @@ func (client BaseClient) GetPartitionRestartProgressSender(req *http.Request) (*
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPartitionRestartProgressResponder handles the response to the GetPartitionRestartProgress request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetPartitionRestartProgressResponder(resp *http.Response) (result PartitionRestartProgress, err error) {
@@ -7905,7 +7590,6 @@ func (client BaseClient) GetPartitionRestartProgressResponder(resp *http.Respons
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPropertyInfo gets the specified Service Fabric property under a given name. This will always return both value
 // and metadata.
 // Parameters:
@@ -7945,7 +7629,6 @@ func (client BaseClient) GetPropertyInfo(ctx context.Context, nameID string, pro
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPropertyInfoPreparer prepares the GetPropertyInfo request.
 func (client BaseClient) GetPropertyInfoPreparer(ctx context.Context, nameID string, propertyName string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -7971,7 +7654,6 @@ func (client BaseClient) GetPropertyInfoPreparer(ctx context.Context, nameID str
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPropertyInfoSender sends the GetPropertyInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPropertyInfoSender(req *http.Request) (*http.Response, error) {
@@ -7979,7 +7661,6 @@ func (client BaseClient) GetPropertyInfoSender(req *http.Request) (*http.Respons
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPropertyInfoResponder handles the response to the GetPropertyInfo request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetPropertyInfoResponder(resp *http.Response) (result PropertyInfo, err error) {
@@ -7993,7 +7674,6 @@ func (client BaseClient) GetPropertyInfoResponder(resp *http.Response) (result P
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPropertyInfoList a Service Fabric name can have one or more named properties that stores custom information. This
 // operation gets the information about these properties in a paged list. The information include name, value and
 // metadata about each of the properties.
@@ -8040,7 +7720,6 @@ func (client BaseClient) GetPropertyInfoList(ctx context.Context, nameID string,
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPropertyInfoListPreparer prepares the GetPropertyInfoList request.
 func (client BaseClient) GetPropertyInfoListPreparer(ctx context.Context, nameID string, includeValues *bool, continuationToken string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -8073,7 +7752,6 @@ func (client BaseClient) GetPropertyInfoListPreparer(ctx context.Context, nameID
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPropertyInfoListSender sends the GetPropertyInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPropertyInfoListSender(req *http.Request) (*http.Response, error) {
@@ -8081,7 +7759,6 @@ func (client BaseClient) GetPropertyInfoListSender(req *http.Request) (*http.Res
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPropertyInfoListResponder handles the response to the GetPropertyInfoList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetPropertyInfoListResponder(resp *http.Response) (result PagedPropertyInfoList, err error) {
@@ -8095,7 +7772,6 @@ func (client BaseClient) GetPropertyInfoListResponder(resp *http.Response) (resu
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetProvisionedFabricCodeVersionInfoList gets a list of information about fabric code versions that are provisioned
 // in the cluster. The parameter CodeVersion can be used to optionally filter the output to only that particular
 // version.
@@ -8135,7 +7811,6 @@ func (client BaseClient) GetProvisionedFabricCodeVersionInfoList(ctx context.Con
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetProvisionedFabricCodeVersionInfoListPreparer prepares the GetProvisionedFabricCodeVersionInfoList request.
 func (client BaseClient) GetProvisionedFabricCodeVersionInfoListPreparer(ctx context.Context, codeVersion string, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -8159,7 +7834,6 @@ func (client BaseClient) GetProvisionedFabricCodeVersionInfoListPreparer(ctx con
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetProvisionedFabricCodeVersionInfoListSender sends the GetProvisionedFabricCodeVersionInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetProvisionedFabricCodeVersionInfoListSender(req *http.Request) (*http.Response, error) {
@@ -8167,7 +7841,6 @@ func (client BaseClient) GetProvisionedFabricCodeVersionInfoListSender(req *http
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetProvisionedFabricCodeVersionInfoListResponder handles the response to the GetProvisionedFabricCodeVersionInfoList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetProvisionedFabricCodeVersionInfoListResponder(resp *http.Response) (result ListFabricCodeVersionInfo, err error) {
@@ -8181,7 +7854,6 @@ func (client BaseClient) GetProvisionedFabricCodeVersionInfoListResponder(resp *
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetProvisionedFabricConfigVersionInfoList gets a list of information about fabric config versions that are
 // provisioned in the cluster. The parameter ConfigVersion can be used to optionally filter the output to only that
 // particular version.
@@ -8221,7 +7893,6 @@ func (client BaseClient) GetProvisionedFabricConfigVersionInfoList(ctx context.C
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetProvisionedFabricConfigVersionInfoListPreparer prepares the GetProvisionedFabricConfigVersionInfoList request.
 func (client BaseClient) GetProvisionedFabricConfigVersionInfoListPreparer(ctx context.Context, configVersion string, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -8245,7 +7916,6 @@ func (client BaseClient) GetProvisionedFabricConfigVersionInfoListPreparer(ctx c
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetProvisionedFabricConfigVersionInfoListSender sends the GetProvisionedFabricConfigVersionInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetProvisionedFabricConfigVersionInfoListSender(req *http.Request) (*http.Response, error) {
@@ -8253,7 +7923,6 @@ func (client BaseClient) GetProvisionedFabricConfigVersionInfoListSender(req *ht
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetProvisionedFabricConfigVersionInfoListResponder handles the response to the GetProvisionedFabricConfigVersionInfoList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetProvisionedFabricConfigVersionInfoListResponder(resp *http.Response) (result ListFabricConfigVersionInfo, err error) {
@@ -8267,7 +7936,6 @@ func (client BaseClient) GetProvisionedFabricConfigVersionInfoListResponder(resp
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetQuorumLossProgress gets the progress of a quorum loss operation started with StartQuorumLoss, using the provided
 // OperationId.
 // Parameters:
@@ -8313,7 +7981,6 @@ func (client BaseClient) GetQuorumLossProgress(ctx context.Context, serviceID st
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetQuorumLossProgressPreparer prepares the GetQuorumLossProgress request.
 func (client BaseClient) GetQuorumLossProgressPreparer(ctx context.Context, serviceID string, partitionID uuid.UUID, operationID uuid.UUID, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -8340,7 +8007,6 @@ func (client BaseClient) GetQuorumLossProgressPreparer(ctx context.Context, serv
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetQuorumLossProgressSender sends the GetQuorumLossProgress request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetQuorumLossProgressSender(req *http.Request) (*http.Response, error) {
@@ -8348,7 +8014,6 @@ func (client BaseClient) GetQuorumLossProgressSender(req *http.Request) (*http.R
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetQuorumLossProgressResponder handles the response to the GetQuorumLossProgress request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetQuorumLossProgressResponder(resp *http.Response) (result PartitionQuorumLossProgress, err error) {
@@ -8362,7 +8027,6 @@ func (client BaseClient) GetQuorumLossProgressResponder(resp *http.Response) (re
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetRepairTaskList this API supports the Service Fabric platform; it is not meant to be used directly from your code.
 // Parameters:
 // taskIDFilter - the repair task ID prefix to be matched.
@@ -8398,7 +8062,6 @@ func (client BaseClient) GetRepairTaskList(ctx context.Context, taskIDFilter str
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetRepairTaskListPreparer prepares the GetRepairTaskList request.
 func (client BaseClient) GetRepairTaskListPreparer(ctx context.Context, taskIDFilter string, stateFilter *int32, executorFilter string) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -8423,7 +8086,6 @@ func (client BaseClient) GetRepairTaskListPreparer(ctx context.Context, taskIDFi
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetRepairTaskListSender sends the GetRepairTaskList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetRepairTaskListSender(req *http.Request) (*http.Response, error) {
@@ -8431,7 +8093,6 @@ func (client BaseClient) GetRepairTaskListSender(req *http.Request) (*http.Respo
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetRepairTaskListResponder handles the response to the GetRepairTaskList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetRepairTaskListResponder(resp *http.Response) (result ListRepairTask, err error) {
@@ -8445,7 +8106,6 @@ func (client BaseClient) GetRepairTaskListResponder(resp *http.Response) (result
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetReplicaHealth gets the health of a Service Fabric replica.
 // Use EventsHealthStateFilter to filter the collection of health events reported on the replica based on the health
 // state.
@@ -8501,7 +8161,6 @@ func (client BaseClient) GetReplicaHealth(ctx context.Context, partitionID uuid.
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetReplicaHealthPreparer prepares the GetReplicaHealth request.
 func (client BaseClient) GetReplicaHealthPreparer(ctx context.Context, partitionID uuid.UUID, replicaID string, eventsHealthStateFilter *int32, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -8532,7 +8191,6 @@ func (client BaseClient) GetReplicaHealthPreparer(ctx context.Context, partition
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetReplicaHealthSender sends the GetReplicaHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetReplicaHealthSender(req *http.Request) (*http.Response, error) {
@@ -8540,7 +8198,6 @@ func (client BaseClient) GetReplicaHealthSender(req *http.Request) (*http.Respon
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetReplicaHealthResponder handles the response to the GetReplicaHealth request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetReplicaHealthResponder(resp *http.Response) (result ReplicaHealthModel, err error) {
@@ -8554,7 +8211,6 @@ func (client BaseClient) GetReplicaHealthResponder(resp *http.Response) (result 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetReplicaHealthUsingPolicy gets the health of a Service Fabric stateful service replica or stateless service
 // instance.
 // Use EventsHealthStateFilter to filter the collection of health events reported on the cluster based on the health
@@ -8618,7 +8274,6 @@ func (client BaseClient) GetReplicaHealthUsingPolicy(ctx context.Context, partit
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetReplicaHealthUsingPolicyPreparer prepares the GetReplicaHealthUsingPolicy request.
 func (client BaseClient) GetReplicaHealthUsingPolicyPreparer(ctx context.Context, partitionID uuid.UUID, replicaID string, eventsHealthStateFilter *int32, applicationHealthPolicy *ApplicationHealthPolicy, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -8654,7 +8309,6 @@ func (client BaseClient) GetReplicaHealthUsingPolicyPreparer(ctx context.Context
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetReplicaHealthUsingPolicySender sends the GetReplicaHealthUsingPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetReplicaHealthUsingPolicySender(req *http.Request) (*http.Response, error) {
@@ -8662,7 +8316,6 @@ func (client BaseClient) GetReplicaHealthUsingPolicySender(req *http.Request) (*
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetReplicaHealthUsingPolicyResponder handles the response to the GetReplicaHealthUsingPolicy request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetReplicaHealthUsingPolicyResponder(resp *http.Response) (result ReplicaHealthModel, err error) {
@@ -8676,7 +8329,6 @@ func (client BaseClient) GetReplicaHealthUsingPolicyResponder(resp *http.Respons
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetReplicaInfo the response include the id, role, status, health, node name, uptime, and other details about the
 // replica.
 // Parameters:
@@ -8721,7 +8373,6 @@ func (client BaseClient) GetReplicaInfo(ctx context.Context, partitionID uuid.UU
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetReplicaInfoPreparer prepares the GetReplicaInfo request.
 func (client BaseClient) GetReplicaInfoPreparer(ctx context.Context, partitionID uuid.UUID, replicaID string, continuationToken string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -8750,7 +8401,6 @@ func (client BaseClient) GetReplicaInfoPreparer(ctx context.Context, partitionID
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetReplicaInfoSender sends the GetReplicaInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetReplicaInfoSender(req *http.Request) (*http.Response, error) {
@@ -8758,7 +8408,6 @@ func (client BaseClient) GetReplicaInfoSender(req *http.Request) (*http.Response
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetReplicaInfoResponder handles the response to the GetReplicaInfo request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetReplicaInfoResponder(resp *http.Response) (result ReplicaInfoModel, err error) {
@@ -8772,7 +8421,6 @@ func (client BaseClient) GetReplicaInfoResponder(resp *http.Response) (result Re
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetReplicaInfoList the GetReplicas endpoint returns information about the replicas of the specified partition. The
 // respons include the id, role, status, health, node name, uptime, and other details about the replica.
 // Parameters:
@@ -8816,7 +8464,6 @@ func (client BaseClient) GetReplicaInfoList(ctx context.Context, partitionID uui
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetReplicaInfoListPreparer prepares the GetReplicaInfoList request.
 func (client BaseClient) GetReplicaInfoListPreparer(ctx context.Context, partitionID uuid.UUID, continuationToken string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -8844,7 +8491,6 @@ func (client BaseClient) GetReplicaInfoListPreparer(ctx context.Context, partiti
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetReplicaInfoListSender sends the GetReplicaInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetReplicaInfoListSender(req *http.Request) (*http.Response, error) {
@@ -8852,7 +8498,6 @@ func (client BaseClient) GetReplicaInfoListSender(req *http.Request) (*http.Resp
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetReplicaInfoListResponder handles the response to the GetReplicaInfoList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetReplicaInfoListResponder(resp *http.Response) (result PagedReplicaInfoList, err error) {
@@ -8866,7 +8511,6 @@ func (client BaseClient) GetReplicaInfoListResponder(resp *http.Response) (resul
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceDescription gets the description of an existing Service Fabric service. A service must be created before
 // its description can be obtained.
 // Parameters:
@@ -8909,7 +8553,6 @@ func (client BaseClient) GetServiceDescription(ctx context.Context, serviceID st
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceDescriptionPreparer prepares the GetServiceDescription request.
 func (client BaseClient) GetServiceDescriptionPreparer(ctx context.Context, serviceID string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -8934,7 +8577,6 @@ func (client BaseClient) GetServiceDescriptionPreparer(ctx context.Context, serv
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceDescriptionSender sends the GetServiceDescription request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceDescriptionSender(req *http.Request) (*http.Response, error) {
@@ -8942,7 +8584,6 @@ func (client BaseClient) GetServiceDescriptionSender(req *http.Request) (*http.R
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceDescriptionResponder handles the response to the GetServiceDescription request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetServiceDescriptionResponder(resp *http.Response) (result ServiceDescriptionModel, err error) {
@@ -8956,7 +8597,6 @@ func (client BaseClient) GetServiceDescriptionResponder(resp *http.Response) (re
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceHealth gets the health information of the specified service.
 // Use EventsHealthStateFilter to filter the collection of health events reported on the service based on the health
 // state.
@@ -9037,7 +8677,6 @@ func (client BaseClient) GetServiceHealth(ctx context.Context, serviceID string,
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceHealthPreparer prepares the GetServiceHealth request.
 func (client BaseClient) GetServiceHealthPreparer(ctx context.Context, serviceID string, eventsHealthStateFilter *int32, partitionsHealthStateFilter *int32, excludeHealthStatistics *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -9077,7 +8716,6 @@ func (client BaseClient) GetServiceHealthPreparer(ctx context.Context, serviceID
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceHealthSender sends the GetServiceHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceHealthSender(req *http.Request) (*http.Response, error) {
@@ -9085,7 +8723,6 @@ func (client BaseClient) GetServiceHealthSender(req *http.Request) (*http.Respon
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceHealthResponder handles the response to the GetServiceHealth request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetServiceHealthResponder(resp *http.Response) (result ServiceHealth, err error) {
@@ -9099,7 +8736,6 @@ func (client BaseClient) GetServiceHealthResponder(resp *http.Response) (result 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceHealthUsingPolicy gets the health information of the specified service.
 // If the application health policy is specified, the health evaluation uses it to get the aggregated health state.
 // If the policy is not specified, the health evaluation uses the application health policy defined in the application
@@ -9187,7 +8823,6 @@ func (client BaseClient) GetServiceHealthUsingPolicy(ctx context.Context, servic
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceHealthUsingPolicyPreparer prepares the GetServiceHealthUsingPolicy request.
 func (client BaseClient) GetServiceHealthUsingPolicyPreparer(ctx context.Context, serviceID string, eventsHealthStateFilter *int32, partitionsHealthStateFilter *int32, applicationHealthPolicy *ApplicationHealthPolicy, excludeHealthStatistics *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -9232,7 +8867,6 @@ func (client BaseClient) GetServiceHealthUsingPolicyPreparer(ctx context.Context
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceHealthUsingPolicySender sends the GetServiceHealthUsingPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceHealthUsingPolicySender(req *http.Request) (*http.Response, error) {
@@ -9240,7 +8874,6 @@ func (client BaseClient) GetServiceHealthUsingPolicySender(req *http.Request) (*
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceHealthUsingPolicyResponder handles the response to the GetServiceHealthUsingPolicy request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetServiceHealthUsingPolicyResponder(resp *http.Response) (result ServiceHealth, err error) {
@@ -9254,7 +8887,6 @@ func (client BaseClient) GetServiceHealthUsingPolicyResponder(resp *http.Respons
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceInfo returns the information about specified service belonging to the specified Service Fabric
 // application.
 // Parameters:
@@ -9302,7 +8934,6 @@ func (client BaseClient) GetServiceInfo(ctx context.Context, applicationID strin
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceInfoPreparer prepares the GetServiceInfo request.
 func (client BaseClient) GetServiceInfoPreparer(ctx context.Context, applicationID string, serviceID string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -9328,7 +8959,6 @@ func (client BaseClient) GetServiceInfoPreparer(ctx context.Context, application
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceInfoSender sends the GetServiceInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceInfoSender(req *http.Request) (*http.Response, error) {
@@ -9336,7 +8966,6 @@ func (client BaseClient) GetServiceInfoSender(req *http.Request) (*http.Response
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceInfoResponder handles the response to the GetServiceInfo request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetServiceInfoResponder(resp *http.Response) (result ServiceInfoModel, err error) {
@@ -9350,7 +8979,6 @@ func (client BaseClient) GetServiceInfoResponder(resp *http.Response) (result Se
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceInfoList returns the information about all services belonging to the application specified by the
 // application id.
 // Parameters:
@@ -9399,7 +9027,6 @@ func (client BaseClient) GetServiceInfoList(ctx context.Context, applicationID s
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceInfoListPreparer prepares the GetServiceInfoList request.
 func (client BaseClient) GetServiceInfoListPreparer(ctx context.Context, applicationID string, serviceTypeName string, continuationToken string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -9430,7 +9057,6 @@ func (client BaseClient) GetServiceInfoListPreparer(ctx context.Context, applica
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceInfoListSender sends the GetServiceInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceInfoListSender(req *http.Request) (*http.Response, error) {
@@ -9438,7 +9064,6 @@ func (client BaseClient) GetServiceInfoListSender(req *http.Request) (*http.Resp
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceInfoListResponder handles the response to the GetServiceInfoList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetServiceInfoListResponder(resp *http.Response) (result PagedServiceInfoList, err error) {
@@ -9452,7 +9077,6 @@ func (client BaseClient) GetServiceInfoListResponder(resp *http.Response) (resul
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceManifest gets the manifest describing a service type. The response contains the service manifest XML as a
 // string.
 // Parameters:
@@ -9494,7 +9118,6 @@ func (client BaseClient) GetServiceManifest(ctx context.Context, applicationType
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceManifestPreparer prepares the GetServiceManifest request.
 func (client BaseClient) GetServiceManifestPreparer(ctx context.Context, applicationTypeName string, applicationTypeVersion string, serviceManifestName string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -9521,7 +9144,6 @@ func (client BaseClient) GetServiceManifestPreparer(ctx context.Context, applica
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceManifestSender sends the GetServiceManifest request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceManifestSender(req *http.Request) (*http.Response, error) {
@@ -9529,7 +9151,6 @@ func (client BaseClient) GetServiceManifestSender(req *http.Request) (*http.Resp
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceManifestResponder handles the response to the GetServiceManifest request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetServiceManifestResponder(resp *http.Response) (result ServiceTypeManifest, err error) {
@@ -9543,7 +9164,6 @@ func (client BaseClient) GetServiceManifestResponder(resp *http.Response) (resul
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceNameInfo the GetServiceName endpoint returns the name of the service for the specified partition.
 // Parameters:
 // partitionID - the identity of the partition.
@@ -9581,7 +9201,6 @@ func (client BaseClient) GetServiceNameInfo(ctx context.Context, partitionID uui
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceNameInfoPreparer prepares the GetServiceNameInfo request.
 func (client BaseClient) GetServiceNameInfoPreparer(ctx context.Context, partitionID uuid.UUID, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -9606,7 +9225,6 @@ func (client BaseClient) GetServiceNameInfoPreparer(ctx context.Context, partiti
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceNameInfoSender sends the GetServiceNameInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceNameInfoSender(req *http.Request) (*http.Response, error) {
@@ -9614,7 +9232,6 @@ func (client BaseClient) GetServiceNameInfoSender(req *http.Request) (*http.Resp
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceNameInfoResponder handles the response to the GetServiceNameInfo request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetServiceNameInfoResponder(resp *http.Response) (result ServiceNameInfo, err error) {
@@ -9628,7 +9245,6 @@ func (client BaseClient) GetServiceNameInfoResponder(resp *http.Response) (resul
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceTypeInfoList gets the list containing the information about service types that are supported by a
 // provisioned application type in a Service Fabric cluster. The response includes the name of the service type, the
 // name and version of the service manifest the type is defined in, kind (stateless or stateless) of the service type
@@ -9670,7 +9286,6 @@ func (client BaseClient) GetServiceTypeInfoList(ctx context.Context, application
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceTypeInfoListPreparer prepares the GetServiceTypeInfoList request.
 func (client BaseClient) GetServiceTypeInfoListPreparer(ctx context.Context, applicationTypeName string, applicationTypeVersion string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -9696,7 +9311,6 @@ func (client BaseClient) GetServiceTypeInfoListPreparer(ctx context.Context, app
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceTypeInfoListSender sends the GetServiceTypeInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceTypeInfoListSender(req *http.Request) (*http.Response, error) {
@@ -9704,7 +9318,6 @@ func (client BaseClient) GetServiceTypeInfoListSender(req *http.Request) (*http.
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetServiceTypeInfoListResponder handles the response to the GetServiceTypeInfoList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetServiceTypeInfoListResponder(resp *http.Response) (result ListServiceTypeInfo, err error) {
@@ -9718,7 +9331,6 @@ func (client BaseClient) GetServiceTypeInfoListResponder(resp *http.Response) (r
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSubNameInfoList enumerates all the Service Fabric names under a given name. If the subnames do not fit in a page,
 // one page of results is returned as well as a continuation token which can be used to get the next page. Querying a
 // name that doesn't exist will fail.
@@ -9764,7 +9376,6 @@ func (client BaseClient) GetSubNameInfoList(ctx context.Context, nameID string, 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSubNameInfoListPreparer prepares the GetSubNameInfoList request.
 func (client BaseClient) GetSubNameInfoListPreparer(ctx context.Context, nameID string, recursive *bool, continuationToken string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -9797,7 +9408,6 @@ func (client BaseClient) GetSubNameInfoListPreparer(ctx context.Context, nameID 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSubNameInfoListSender sends the GetSubNameInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetSubNameInfoListSender(req *http.Request) (*http.Response, error) {
@@ -9805,7 +9415,6 @@ func (client BaseClient) GetSubNameInfoListSender(req *http.Request) (*http.Resp
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSubNameInfoListResponder handles the response to the GetSubNameInfoList request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetSubNameInfoListResponder(resp *http.Response) (result PagedSubNameInfoList, err error) {
@@ -9819,7 +9428,6 @@ func (client BaseClient) GetSubNameInfoListResponder(resp *http.Response) (resul
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetUpgradeOrchestrationServiceState get the service state of Service Fabric Upgrade Orchestration Service. This API
 // is internally used for support purposes.
 // Parameters:
@@ -9857,7 +9465,6 @@ func (client BaseClient) GetUpgradeOrchestrationServiceState(ctx context.Context
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetUpgradeOrchestrationServiceStatePreparer prepares the GetUpgradeOrchestrationServiceState request.
 func (client BaseClient) GetUpgradeOrchestrationServiceStatePreparer(ctx context.Context, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -9878,7 +9485,6 @@ func (client BaseClient) GetUpgradeOrchestrationServiceStatePreparer(ctx context
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetUpgradeOrchestrationServiceStateSender sends the GetUpgradeOrchestrationServiceState request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetUpgradeOrchestrationServiceStateSender(req *http.Request) (*http.Response, error) {
@@ -9886,7 +9492,6 @@ func (client BaseClient) GetUpgradeOrchestrationServiceStateSender(req *http.Req
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetUpgradeOrchestrationServiceStateResponder handles the response to the GetUpgradeOrchestrationServiceState request. The method always
 // closes the http.Response Body.
 func (client BaseClient) GetUpgradeOrchestrationServiceStateResponder(resp *http.Response) (result UpgradeOrchestrationServiceState, err error) {
@@ -9900,7 +9505,6 @@ func (client BaseClient) GetUpgradeOrchestrationServiceStateResponder(resp *http
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // InvokeInfrastructureCommand for clusters that have one or more instances of the Infrastructure Service configured,
 // this API provides a way to send infrastructure-specific commands to a particular
 // instance of the Infrastructure Service.
@@ -9948,7 +9552,6 @@ func (client BaseClient) InvokeInfrastructureCommand(ctx context.Context, comman
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // InvokeInfrastructureCommandPreparer prepares the InvokeInfrastructureCommand request.
 func (client BaseClient) InvokeInfrastructureCommandPreparer(ctx context.Context, command string, serviceID string, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -9973,7 +9576,6 @@ func (client BaseClient) InvokeInfrastructureCommandPreparer(ctx context.Context
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // InvokeInfrastructureCommandSender sends the InvokeInfrastructureCommand request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) InvokeInfrastructureCommandSender(req *http.Request) (*http.Response, error) {
@@ -9981,7 +9583,6 @@ func (client BaseClient) InvokeInfrastructureCommandSender(req *http.Request) (*
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // InvokeInfrastructureCommandResponder handles the response to the InvokeInfrastructureCommand request. The method always
 // closes the http.Response Body.
 func (client BaseClient) InvokeInfrastructureCommandResponder(resp *http.Response) (result String, err error) {
@@ -9995,7 +9596,6 @@ func (client BaseClient) InvokeInfrastructureCommandResponder(resp *http.Respons
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // InvokeInfrastructureQuery for clusters that have one or more instances of the Infrastructure Service configured,
 // this API provides a way to send infrastructure-specific queries to a particular
 // instance of the Infrastructure Service.
@@ -10043,7 +9643,6 @@ func (client BaseClient) InvokeInfrastructureQuery(ctx context.Context, command 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // InvokeInfrastructureQueryPreparer prepares the InvokeInfrastructureQuery request.
 func (client BaseClient) InvokeInfrastructureQueryPreparer(ctx context.Context, command string, serviceID string, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -10068,7 +9667,6 @@ func (client BaseClient) InvokeInfrastructureQueryPreparer(ctx context.Context, 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // InvokeInfrastructureQuerySender sends the InvokeInfrastructureQuery request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) InvokeInfrastructureQuerySender(req *http.Request) (*http.Response, error) {
@@ -10076,7 +9674,6 @@ func (client BaseClient) InvokeInfrastructureQuerySender(req *http.Request) (*ht
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // InvokeInfrastructureQueryResponder handles the response to the InvokeInfrastructureQuery request. The method always
 // closes the http.Response Body.
 func (client BaseClient) InvokeInfrastructureQueryResponder(resp *http.Response) (result String, err error) {
@@ -10090,7 +9687,6 @@ func (client BaseClient) InvokeInfrastructureQueryResponder(resp *http.Response)
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ProvisionApplicationType provisions a Service Fabric application type with the cluster. This is required before any
 // new applications can be instantiated.
 // The provision operation can be performed either on the application package specified by the
@@ -10134,7 +9730,6 @@ func (client BaseClient) ProvisionApplicationType(ctx context.Context, provision
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ProvisionApplicationTypePreparer prepares the ProvisionApplicationType request.
 func (client BaseClient) ProvisionApplicationTypePreparer(ctx context.Context, provisionApplicationTypeDescriptionBaseRequiredBodyParam BasicProvisionApplicationTypeDescriptionBase, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.1"
@@ -10157,7 +9752,6 @@ func (client BaseClient) ProvisionApplicationTypePreparer(ctx context.Context, p
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ProvisionApplicationTypeSender sends the ProvisionApplicationType request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ProvisionApplicationTypeSender(req *http.Request) (*http.Response, error) {
@@ -10165,7 +9759,6 @@ func (client BaseClient) ProvisionApplicationTypeSender(req *http.Request) (*htt
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ProvisionApplicationTypeResponder handles the response to the ProvisionApplicationType request. The method always
 // closes the http.Response Body.
 func (client BaseClient) ProvisionApplicationTypeResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -10178,7 +9771,6 @@ func (client BaseClient) ProvisionApplicationTypeResponder(resp *http.Response) 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ProvisionCluster validate and provision the code or configuration packages of a Service Fabric cluster.
 // Parameters:
 // provisionFabricDescription - describes the parameters for provisioning a cluster.
@@ -10216,7 +9808,6 @@ func (client BaseClient) ProvisionCluster(ctx context.Context, provisionFabricDe
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ProvisionClusterPreparer prepares the ProvisionCluster request.
 func (client BaseClient) ProvisionClusterPreparer(ctx context.Context, provisionFabricDescription ProvisionFabricDescription, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -10239,7 +9830,6 @@ func (client BaseClient) ProvisionClusterPreparer(ctx context.Context, provision
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ProvisionClusterSender sends the ProvisionCluster request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ProvisionClusterSender(req *http.Request) (*http.Response, error) {
@@ -10247,7 +9837,6 @@ func (client BaseClient) ProvisionClusterSender(req *http.Request) (*http.Respon
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ProvisionClusterResponder handles the response to the ProvisionCluster request. The method always
 // closes the http.Response Body.
 func (client BaseClient) ProvisionClusterResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -10260,7 +9849,6 @@ func (client BaseClient) ProvisionClusterResponder(resp *http.Response) (result 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PutProperty creates or updates the specified Service Fabric property under a given name.
 // Parameters:
 // nameID - the Service Fabric name, without the 'fabric:' URI scheme.
@@ -10302,7 +9890,6 @@ func (client BaseClient) PutProperty(ctx context.Context, nameID string, propert
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PutPropertyPreparer prepares the PutProperty request.
 func (client BaseClient) PutPropertyPreparer(ctx context.Context, nameID string, propertyDescription PropertyDescription, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -10329,7 +9916,6 @@ func (client BaseClient) PutPropertyPreparer(ctx context.Context, nameID string,
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PutPropertySender sends the PutProperty request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) PutPropertySender(req *http.Request) (*http.Response, error) {
@@ -10337,7 +9923,6 @@ func (client BaseClient) PutPropertySender(req *http.Request) (*http.Response, e
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // PutPropertyResponder handles the response to the PutProperty request. The method always
 // closes the http.Response Body.
 func (client BaseClient) PutPropertyResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -10350,7 +9935,6 @@ func (client BaseClient) PutPropertyResponder(resp *http.Response) (result autor
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RecoverAllPartitions indicates to the Service Fabric cluster that it should attempt to recover any services
 // (including system services) which are currently stuck in quorum loss. This operation should only be performed if it
 // is known that the replicas that are down cannot be recovered. Incorrect use of this API can cause potential data
@@ -10390,7 +9974,6 @@ func (client BaseClient) RecoverAllPartitions(ctx context.Context, timeout *int6
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RecoverAllPartitionsPreparer prepares the RecoverAllPartitions request.
 func (client BaseClient) RecoverAllPartitionsPreparer(ctx context.Context, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -10411,7 +9994,6 @@ func (client BaseClient) RecoverAllPartitionsPreparer(ctx context.Context, timeo
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RecoverAllPartitionsSender sends the RecoverAllPartitions request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RecoverAllPartitionsSender(req *http.Request) (*http.Response, error) {
@@ -10419,7 +10001,6 @@ func (client BaseClient) RecoverAllPartitionsSender(req *http.Request) (*http.Re
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RecoverAllPartitionsResponder handles the response to the RecoverAllPartitions request. The method always
 // closes the http.Response Body.
 func (client BaseClient) RecoverAllPartitionsResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -10432,7 +10013,6 @@ func (client BaseClient) RecoverAllPartitionsResponder(resp *http.Response) (res
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RecoverPartition indicates to the Service Fabric cluster that it should attempt to recover a specific partition
 // which is currently stuck in quorum loss. This operation should only be performed if it is known that the replicas
 // that are down cannot be recovered. Incorrect use of this API can cause potential data loss.
@@ -10472,7 +10052,6 @@ func (client BaseClient) RecoverPartition(ctx context.Context, partitionID uuid.
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RecoverPartitionPreparer prepares the RecoverPartition request.
 func (client BaseClient) RecoverPartitionPreparer(ctx context.Context, partitionID uuid.UUID, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -10497,7 +10076,6 @@ func (client BaseClient) RecoverPartitionPreparer(ctx context.Context, partition
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RecoverPartitionSender sends the RecoverPartition request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RecoverPartitionSender(req *http.Request) (*http.Response, error) {
@@ -10505,7 +10083,6 @@ func (client BaseClient) RecoverPartitionSender(req *http.Request) (*http.Respon
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RecoverPartitionResponder handles the response to the RecoverPartition request. The method always
 // closes the http.Response Body.
 func (client BaseClient) RecoverPartitionResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -10518,7 +10095,6 @@ func (client BaseClient) RecoverPartitionResponder(resp *http.Response) (result 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RecoverServicePartitions indicates to the Service Fabric cluster that it should attempt to recover the specified
 // service which is currently stuck in quorum loss. This operation should only be performed if it is known that the
 // replicas that are down cannot be recovered. Incorrect use of this API can cause potential data loss.
@@ -10562,7 +10138,6 @@ func (client BaseClient) RecoverServicePartitions(ctx context.Context, serviceID
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RecoverServicePartitionsPreparer prepares the RecoverServicePartitions request.
 func (client BaseClient) RecoverServicePartitionsPreparer(ctx context.Context, serviceID string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -10587,7 +10162,6 @@ func (client BaseClient) RecoverServicePartitionsPreparer(ctx context.Context, s
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RecoverServicePartitionsSender sends the RecoverServicePartitions request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RecoverServicePartitionsSender(req *http.Request) (*http.Response, error) {
@@ -10595,7 +10169,6 @@ func (client BaseClient) RecoverServicePartitionsSender(req *http.Request) (*htt
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RecoverServicePartitionsResponder handles the response to the RecoverServicePartitions request. The method always
 // closes the http.Response Body.
 func (client BaseClient) RecoverServicePartitionsResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -10608,7 +10181,6 @@ func (client BaseClient) RecoverServicePartitionsResponder(resp *http.Response) 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RecoverSystemPartitions indicates to the Service Fabric cluster that it should attempt to recover the system
 // services which are currently stuck in quorum loss. This operation should only be performed if it is known that the
 // replicas that are down cannot be recovered. Incorrect use of this API can cause potential data loss.
@@ -10647,7 +10219,6 @@ func (client BaseClient) RecoverSystemPartitions(ctx context.Context, timeout *i
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RecoverSystemPartitionsPreparer prepares the RecoverSystemPartitions request.
 func (client BaseClient) RecoverSystemPartitionsPreparer(ctx context.Context, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -10668,7 +10239,6 @@ func (client BaseClient) RecoverSystemPartitionsPreparer(ctx context.Context, ti
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RecoverSystemPartitionsSender sends the RecoverSystemPartitions request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RecoverSystemPartitionsSender(req *http.Request) (*http.Response, error) {
@@ -10676,7 +10246,6 @@ func (client BaseClient) RecoverSystemPartitionsSender(req *http.Request) (*http
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RecoverSystemPartitionsResponder handles the response to the RecoverSystemPartitions request. The method always
 // closes the http.Response Body.
 func (client BaseClient) RecoverSystemPartitionsResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -10689,7 +10258,6 @@ func (client BaseClient) RecoverSystemPartitionsResponder(resp *http.Response) (
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveComposeDeployment deletes an existing Service Fabric compose deployment.
 // Parameters:
 // deploymentName - the identity of the deployment.
@@ -10727,7 +10295,6 @@ func (client BaseClient) RemoveComposeDeployment(ctx context.Context, deployment
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveComposeDeploymentPreparer prepares the RemoveComposeDeployment request.
 func (client BaseClient) RemoveComposeDeploymentPreparer(ctx context.Context, deploymentName string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -10752,7 +10319,6 @@ func (client BaseClient) RemoveComposeDeploymentPreparer(ctx context.Context, de
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveComposeDeploymentSender sends the RemoveComposeDeployment request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RemoveComposeDeploymentSender(req *http.Request) (*http.Response, error) {
@@ -10760,7 +10326,6 @@ func (client BaseClient) RemoveComposeDeploymentSender(req *http.Request) (*http
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveComposeDeploymentResponder handles the response to the RemoveComposeDeployment request. The method always
 // closes the http.Response Body.
 func (client BaseClient) RemoveComposeDeploymentResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -10773,7 +10338,6 @@ func (client BaseClient) RemoveComposeDeploymentResponder(resp *http.Response) (
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveNodeState notifies Service Fabric that the persisted state on a node has been permanently removed or lost.
 // This implies that it is not possible to recover the persisted state of that node. This generally happens if a hard
 // disk has been wiped clean, or if a hard disk crashes. The node has to be down for this operation to be successful.
@@ -10816,7 +10380,6 @@ func (client BaseClient) RemoveNodeState(ctx context.Context, nodeName string, t
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveNodeStatePreparer prepares the RemoveNodeState request.
 func (client BaseClient) RemoveNodeStatePreparer(ctx context.Context, nodeName string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -10841,7 +10404,6 @@ func (client BaseClient) RemoveNodeStatePreparer(ctx context.Context, nodeName s
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveNodeStateSender sends the RemoveNodeState request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RemoveNodeStateSender(req *http.Request) (*http.Response, error) {
@@ -10849,7 +10411,6 @@ func (client BaseClient) RemoveNodeStateSender(req *http.Request) (*http.Respons
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveNodeStateResponder handles the response to the RemoveNodeState request. The method always
 // closes the http.Response Body.
 func (client BaseClient) RemoveNodeStateResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -10862,7 +10423,6 @@ func (client BaseClient) RemoveNodeStateResponder(resp *http.Response) (result a
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveReplica this API simulates a Service Fabric replica failure by removing a replica from a Service Fabric
 // cluster. The removal closes the replica, transitions the replica to the role None, and then removes all of the state
 // information of the replica from the cluster. This API tests the replica state removal path, and simulates the report
@@ -10910,7 +10470,6 @@ func (client BaseClient) RemoveReplica(ctx context.Context, nodeName string, par
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveReplicaPreparer prepares the RemoveReplica request.
 func (client BaseClient) RemoveReplicaPreparer(ctx context.Context, nodeName string, partitionID uuid.UUID, replicaID string, forceRemove *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -10940,7 +10499,6 @@ func (client BaseClient) RemoveReplicaPreparer(ctx context.Context, nodeName str
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveReplicaSender sends the RemoveReplica request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RemoveReplicaSender(req *http.Request) (*http.Response, error) {
@@ -10948,7 +10506,6 @@ func (client BaseClient) RemoveReplicaSender(req *http.Request) (*http.Response,
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RemoveReplicaResponder handles the response to the RemoveReplica request. The method always
 // closes the http.Response Body.
 func (client BaseClient) RemoveReplicaResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -10961,7 +10518,6 @@ func (client BaseClient) RemoveReplicaResponder(resp *http.Response) (result aut
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportApplicationHealth reports health state of the specified Service Fabric application. The report must contain
 // the information about the source of the health report and property on which it is reported.
 // The report is sent to a Service Fabric gateway Application, which forwards to the health store.
@@ -11026,7 +10582,6 @@ func (client BaseClient) ReportApplicationHealth(ctx context.Context, applicatio
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportApplicationHealthPreparer prepares the ReportApplicationHealth request.
 func (client BaseClient) ReportApplicationHealthPreparer(ctx context.Context, applicationID string, healthInformation HealthInformation, immediate *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -11058,7 +10613,6 @@ func (client BaseClient) ReportApplicationHealthPreparer(ctx context.Context, ap
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportApplicationHealthSender sends the ReportApplicationHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ReportApplicationHealthSender(req *http.Request) (*http.Response, error) {
@@ -11066,7 +10620,6 @@ func (client BaseClient) ReportApplicationHealthSender(req *http.Request) (*http
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportApplicationHealthResponder handles the response to the ReportApplicationHealth request. The method always
 // closes the http.Response Body.
 func (client BaseClient) ReportApplicationHealthResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -11079,7 +10632,6 @@ func (client BaseClient) ReportApplicationHealthResponder(resp *http.Response) (
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportClusterHealth sends a health report on a Service Fabric cluster. The report must contain the information about
 // the source of the health report and property on which it is reported.
 // The report is sent to a Service Fabric gateway node, which forwards to the health store.
@@ -11139,7 +10691,6 @@ func (client BaseClient) ReportClusterHealth(ctx context.Context, healthInformat
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportClusterHealthPreparer prepares the ReportClusterHealth request.
 func (client BaseClient) ReportClusterHealthPreparer(ctx context.Context, healthInformation HealthInformation, immediate *bool, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -11167,7 +10718,6 @@ func (client BaseClient) ReportClusterHealthPreparer(ctx context.Context, health
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportClusterHealthSender sends the ReportClusterHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ReportClusterHealthSender(req *http.Request) (*http.Response, error) {
@@ -11175,7 +10725,6 @@ func (client BaseClient) ReportClusterHealthSender(req *http.Request) (*http.Res
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportClusterHealthResponder handles the response to the ReportClusterHealth request. The method always
 // closes the http.Response Body.
 func (client BaseClient) ReportClusterHealthResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -11188,7 +10737,6 @@ func (client BaseClient) ReportClusterHealthResponder(resp *http.Response) (resu
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportDeployedApplicationHealth reports health state of the application deployed on a Service Fabric node. The
 // report must contain the information about the source of the health report and property on which it is reported.
 // The report is sent to a Service Fabric gateway Service, which forwards to the health store.
@@ -11254,7 +10802,6 @@ func (client BaseClient) ReportDeployedApplicationHealth(ctx context.Context, no
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportDeployedApplicationHealthPreparer prepares the ReportDeployedApplicationHealth request.
 func (client BaseClient) ReportDeployedApplicationHealthPreparer(ctx context.Context, nodeName string, applicationID string, healthInformation HealthInformation, immediate *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -11287,7 +10834,6 @@ func (client BaseClient) ReportDeployedApplicationHealthPreparer(ctx context.Con
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportDeployedApplicationHealthSender sends the ReportDeployedApplicationHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ReportDeployedApplicationHealthSender(req *http.Request) (*http.Response, error) {
@@ -11295,7 +10841,6 @@ func (client BaseClient) ReportDeployedApplicationHealthSender(req *http.Request
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportDeployedApplicationHealthResponder handles the response to the ReportDeployedApplicationHealth request. The method always
 // closes the http.Response Body.
 func (client BaseClient) ReportDeployedApplicationHealthResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -11308,7 +10853,6 @@ func (client BaseClient) ReportDeployedApplicationHealthResponder(resp *http.Res
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportDeployedServicePackageHealth reports health state of the service package of the application deployed on a
 // Service Fabric node. The report must contain the information about the source of the health report and property on
 // which it is reported.
@@ -11376,7 +10920,6 @@ func (client BaseClient) ReportDeployedServicePackageHealth(ctx context.Context,
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportDeployedServicePackageHealthPreparer prepares the ReportDeployedServicePackageHealth request.
 func (client BaseClient) ReportDeployedServicePackageHealthPreparer(ctx context.Context, nodeName string, applicationID string, servicePackageName string, healthInformation HealthInformation, immediate *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -11410,7 +10953,6 @@ func (client BaseClient) ReportDeployedServicePackageHealthPreparer(ctx context.
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportDeployedServicePackageHealthSender sends the ReportDeployedServicePackageHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ReportDeployedServicePackageHealthSender(req *http.Request) (*http.Response, error) {
@@ -11418,7 +10960,6 @@ func (client BaseClient) ReportDeployedServicePackageHealthSender(req *http.Requ
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportDeployedServicePackageHealthResponder handles the response to the ReportDeployedServicePackageHealth request. The method always
 // closes the http.Response Body.
 func (client BaseClient) ReportDeployedServicePackageHealthResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -11431,7 +10972,6 @@ func (client BaseClient) ReportDeployedServicePackageHealthResponder(resp *http.
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportNodeHealth reports health state of the specified Service Fabric node. The report must contain the information
 // about the source of the health report and property on which it is reported.
 // The report is sent to a Service Fabric gateway node, which forwards to the health store.
@@ -11492,7 +11032,6 @@ func (client BaseClient) ReportNodeHealth(ctx context.Context, nodeName string, 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportNodeHealthPreparer prepares the ReportNodeHealth request.
 func (client BaseClient) ReportNodeHealthPreparer(ctx context.Context, nodeName string, healthInformation HealthInformation, immediate *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -11524,7 +11063,6 @@ func (client BaseClient) ReportNodeHealthPreparer(ctx context.Context, nodeName 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportNodeHealthSender sends the ReportNodeHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ReportNodeHealthSender(req *http.Request) (*http.Response, error) {
@@ -11532,7 +11070,6 @@ func (client BaseClient) ReportNodeHealthSender(req *http.Request) (*http.Respon
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportNodeHealthResponder handles the response to the ReportNodeHealth request. The method always
 // closes the http.Response Body.
 func (client BaseClient) ReportNodeHealthResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -11545,7 +11082,6 @@ func (client BaseClient) ReportNodeHealthResponder(resp *http.Response) (result 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportPartitionHealth reports health state of the specified Service Fabric partition. The report must contain the
 // information about the source of the health report and property on which it is reported.
 // The report is sent to a Service Fabric gateway Partition, which forwards to the health store.
@@ -11606,7 +11142,6 @@ func (client BaseClient) ReportPartitionHealth(ctx context.Context, partitionID 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportPartitionHealthPreparer prepares the ReportPartitionHealth request.
 func (client BaseClient) ReportPartitionHealthPreparer(ctx context.Context, partitionID uuid.UUID, healthInformation HealthInformation, immediate *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -11638,7 +11173,6 @@ func (client BaseClient) ReportPartitionHealthPreparer(ctx context.Context, part
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportPartitionHealthSender sends the ReportPartitionHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ReportPartitionHealthSender(req *http.Request) (*http.Response, error) {
@@ -11646,7 +11180,6 @@ func (client BaseClient) ReportPartitionHealthSender(req *http.Request) (*http.R
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportPartitionHealthResponder handles the response to the ReportPartitionHealth request. The method always
 // closes the http.Response Body.
 func (client BaseClient) ReportPartitionHealthResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -11659,7 +11192,6 @@ func (client BaseClient) ReportPartitionHealthResponder(resp *http.Response) (re
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportReplicaHealth reports health state of the specified Service Fabric replica. The report must contain the
 // information about the source of the health report and property on which it is reported.
 // The report is sent to a Service Fabric gateway Replica, which forwards to the health store.
@@ -11723,7 +11255,6 @@ func (client BaseClient) ReportReplicaHealth(ctx context.Context, partitionID uu
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportReplicaHealthPreparer prepares the ReportReplicaHealth request.
 func (client BaseClient) ReportReplicaHealthPreparer(ctx context.Context, partitionID uuid.UUID, replicaID string, serviceKind ReplicaHealthReportServiceKindRequiredQueryParam, healthInformation HealthInformation, immediate *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -11757,7 +11288,6 @@ func (client BaseClient) ReportReplicaHealthPreparer(ctx context.Context, partit
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportReplicaHealthSender sends the ReportReplicaHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ReportReplicaHealthSender(req *http.Request) (*http.Response, error) {
@@ -11765,7 +11295,6 @@ func (client BaseClient) ReportReplicaHealthSender(req *http.Request) (*http.Res
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportReplicaHealthResponder handles the response to the ReportReplicaHealth request. The method always
 // closes the http.Response Body.
 func (client BaseClient) ReportReplicaHealthResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -11778,7 +11307,6 @@ func (client BaseClient) ReportReplicaHealthResponder(resp *http.Response) (resu
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportServiceHealth reports health state of the specified Service Fabric service. The report must contain the
 // information about the source of the health report and property on which it is reported.
 // The report is sent to a Service Fabric gateway Service, which forwards to the health store.
@@ -11843,7 +11371,6 @@ func (client BaseClient) ReportServiceHealth(ctx context.Context, serviceID stri
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportServiceHealthPreparer prepares the ReportServiceHealth request.
 func (client BaseClient) ReportServiceHealthPreparer(ctx context.Context, serviceID string, healthInformation HealthInformation, immediate *bool, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -11875,7 +11402,6 @@ func (client BaseClient) ReportServiceHealthPreparer(ctx context.Context, servic
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportServiceHealthSender sends the ReportServiceHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ReportServiceHealthSender(req *http.Request) (*http.Response, error) {
@@ -11883,7 +11409,6 @@ func (client BaseClient) ReportServiceHealthSender(req *http.Request) (*http.Res
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReportServiceHealthResponder handles the response to the ReportServiceHealth request. The method always
 // closes the http.Response Body.
 func (client BaseClient) ReportServiceHealthResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -11896,7 +11421,6 @@ func (client BaseClient) ReportServiceHealthResponder(resp *http.Response) (resu
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResetPartitionLoad resets the current load of a Service Fabric partition to the default load for the service.
 // Parameters:
 // partitionID - the identity of the partition.
@@ -11934,7 +11458,6 @@ func (client BaseClient) ResetPartitionLoad(ctx context.Context, partitionID uui
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResetPartitionLoadPreparer prepares the ResetPartitionLoad request.
 func (client BaseClient) ResetPartitionLoadPreparer(ctx context.Context, partitionID uuid.UUID, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -11959,7 +11482,6 @@ func (client BaseClient) ResetPartitionLoadPreparer(ctx context.Context, partiti
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResetPartitionLoadSender sends the ResetPartitionLoad request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ResetPartitionLoadSender(req *http.Request) (*http.Response, error) {
@@ -11967,7 +11489,6 @@ func (client BaseClient) ResetPartitionLoadSender(req *http.Request) (*http.Resp
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResetPartitionLoadResponder handles the response to the ResetPartitionLoad request. The method always
 // closes the http.Response Body.
 func (client BaseClient) ResetPartitionLoadResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -11980,7 +11501,6 @@ func (client BaseClient) ResetPartitionLoadResponder(resp *http.Response) (resul
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResolveService resolve a Service Fabric service partition, to get the endpoints of the service replicas.
 // Parameters:
 // serviceID - the identity of the service. This is typically the full name of the service without the
@@ -12034,7 +11554,6 @@ func (client BaseClient) ResolveService(ctx context.Context, serviceID string, p
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResolveServicePreparer prepares the ResolveService request.
 func (client BaseClient) ResolveServicePreparer(ctx context.Context, serviceID string, partitionKeyType *int32, partitionKeyValue string, previousRspVersion string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -12068,7 +11587,6 @@ func (client BaseClient) ResolveServicePreparer(ctx context.Context, serviceID s
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResolveServiceSender sends the ResolveService request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ResolveServiceSender(req *http.Request) (*http.Response, error) {
@@ -12076,7 +11594,6 @@ func (client BaseClient) ResolveServiceSender(req *http.Request) (*http.Response
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResolveServiceResponder handles the response to the ResolveService request. The method always
 // closes the http.Response Body.
 func (client BaseClient) ResolveServiceResponder(resp *http.Response) (result ResolvedServicePartition, err error) {
@@ -12090,7 +11607,6 @@ func (client BaseClient) ResolveServiceResponder(resp *http.Response) (result Re
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RestartDeployedCodePackage restarts a code package deployed on a Service Fabric node in a cluster. This aborts the
 // code package process, which will restart all the user service replicas hosted in that process.
 // Parameters:
@@ -12140,7 +11656,6 @@ func (client BaseClient) RestartDeployedCodePackage(ctx context.Context, nodeNam
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RestartDeployedCodePackagePreparer prepares the RestartDeployedCodePackage request.
 func (client BaseClient) RestartDeployedCodePackagePreparer(ctx context.Context, nodeName string, applicationID string, restartDeployedCodePackageDescription RestartDeployedCodePackageDescription, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -12168,7 +11683,6 @@ func (client BaseClient) RestartDeployedCodePackagePreparer(ctx context.Context,
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RestartDeployedCodePackageSender sends the RestartDeployedCodePackage request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RestartDeployedCodePackageSender(req *http.Request) (*http.Response, error) {
@@ -12176,7 +11690,6 @@ func (client BaseClient) RestartDeployedCodePackageSender(req *http.Request) (*h
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RestartDeployedCodePackageResponder handles the response to the RestartDeployedCodePackage request. The method always
 // closes the http.Response Body.
 func (client BaseClient) RestartDeployedCodePackageResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -12189,7 +11702,6 @@ func (client BaseClient) RestartDeployedCodePackageResponder(resp *http.Response
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RestartNode restarts a Service Fabric cluster node that is already started.
 // Parameters:
 // nodeName - the name of the node.
@@ -12231,7 +11743,6 @@ func (client BaseClient) RestartNode(ctx context.Context, nodeName string, resta
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RestartNodePreparer prepares the RestartNode request.
 func (client BaseClient) RestartNodePreparer(ctx context.Context, nodeName string, restartNodeDescription RestartNodeDescription, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -12258,7 +11769,6 @@ func (client BaseClient) RestartNodePreparer(ctx context.Context, nodeName strin
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RestartNodeSender sends the RestartNode request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RestartNodeSender(req *http.Request) (*http.Response, error) {
@@ -12266,7 +11776,6 @@ func (client BaseClient) RestartNodeSender(req *http.Request) (*http.Response, e
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RestartNodeResponder handles the response to the RestartNode request. The method always
 // closes the http.Response Body.
 func (client BaseClient) RestartNodeResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -12279,7 +11788,6 @@ func (client BaseClient) RestartNodeResponder(resp *http.Response) (result autor
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RestartReplica restarts a service replica of a persisted service running on a node. Warning - There are no safety
 // checks performed when this API is used. Incorrect use of this API can lead to availability loss for stateful
 // services.
@@ -12321,7 +11829,6 @@ func (client BaseClient) RestartReplica(ctx context.Context, nodeName string, pa
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RestartReplicaPreparer prepares the RestartReplica request.
 func (client BaseClient) RestartReplicaPreparer(ctx context.Context, nodeName string, partitionID uuid.UUID, replicaID string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -12348,7 +11855,6 @@ func (client BaseClient) RestartReplicaPreparer(ctx context.Context, nodeName st
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RestartReplicaSender sends the RestartReplica request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RestartReplicaSender(req *http.Request) (*http.Response, error) {
@@ -12356,7 +11862,6 @@ func (client BaseClient) RestartReplicaSender(req *http.Request) (*http.Response
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RestartReplicaResponder handles the response to the RestartReplica request. The method always
 // closes the http.Response Body.
 func (client BaseClient) RestartReplicaResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -12369,7 +11874,6 @@ func (client BaseClient) RestartReplicaResponder(resp *http.Response) (result au
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResumeApplicationUpgrade resumes an unmonitored manual Service Fabric application upgrade. Service Fabric upgrades
 // one upgrade domain at a time. For unmonitored manual upgrades, after Service Fabric finishes an upgrade domain, it
 // waits for you to call this API before proceeding to the next upgrade domain.
@@ -12416,7 +11920,6 @@ func (client BaseClient) ResumeApplicationUpgrade(ctx context.Context, applicati
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResumeApplicationUpgradePreparer prepares the ResumeApplicationUpgrade request.
 func (client BaseClient) ResumeApplicationUpgradePreparer(ctx context.Context, applicationID string, resumeApplicationUpgradeDescription ResumeApplicationUpgradeDescription, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -12443,7 +11946,6 @@ func (client BaseClient) ResumeApplicationUpgradePreparer(ctx context.Context, a
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResumeApplicationUpgradeSender sends the ResumeApplicationUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ResumeApplicationUpgradeSender(req *http.Request) (*http.Response, error) {
@@ -12451,7 +11953,6 @@ func (client BaseClient) ResumeApplicationUpgradeSender(req *http.Request) (*htt
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResumeApplicationUpgradeResponder handles the response to the ResumeApplicationUpgrade request. The method always
 // closes the http.Response Body.
 func (client BaseClient) ResumeApplicationUpgradeResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -12464,7 +11965,6 @@ func (client BaseClient) ResumeApplicationUpgradeResponder(resp *http.Response) 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResumeClusterUpgrade make the cluster code or configuration upgrade move on to the next upgrade domain if
 // appropriate.
 // Parameters:
@@ -12505,7 +12005,6 @@ func (client BaseClient) ResumeClusterUpgrade(ctx context.Context, resumeCluster
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResumeClusterUpgradePreparer prepares the ResumeClusterUpgrade request.
 func (client BaseClient) ResumeClusterUpgradePreparer(ctx context.Context, resumeClusterUpgradeDescription ResumeClusterUpgradeDescription, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -12528,7 +12027,6 @@ func (client BaseClient) ResumeClusterUpgradePreparer(ctx context.Context, resum
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResumeClusterUpgradeSender sends the ResumeClusterUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ResumeClusterUpgradeSender(req *http.Request) (*http.Response, error) {
@@ -12536,7 +12034,6 @@ func (client BaseClient) ResumeClusterUpgradeSender(req *http.Request) (*http.Re
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ResumeClusterUpgradeResponder handles the response to the ResumeClusterUpgrade request. The method always
 // closes the http.Response Body.
 func (client BaseClient) ResumeClusterUpgradeResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -12549,7 +12046,6 @@ func (client BaseClient) ResumeClusterUpgradeResponder(resp *http.Response) (res
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RollbackApplicationUpgrade starts rolling back the current application upgrade to the previous version. This API can
 // only be used to rollback the current in-progress upgrade that is rolling forward to new version. If the application
 // is not currently being upgraded use StartApplicationUpgrade API to upgrade it to desired version including rolling
@@ -12594,7 +12090,6 @@ func (client BaseClient) RollbackApplicationUpgrade(ctx context.Context, applica
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RollbackApplicationUpgradePreparer prepares the RollbackApplicationUpgrade request.
 func (client BaseClient) RollbackApplicationUpgradePreparer(ctx context.Context, applicationID string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -12619,7 +12114,6 @@ func (client BaseClient) RollbackApplicationUpgradePreparer(ctx context.Context,
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RollbackApplicationUpgradeSender sends the RollbackApplicationUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RollbackApplicationUpgradeSender(req *http.Request) (*http.Response, error) {
@@ -12627,7 +12121,6 @@ func (client BaseClient) RollbackApplicationUpgradeSender(req *http.Request) (*h
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RollbackApplicationUpgradeResponder handles the response to the RollbackApplicationUpgrade request. The method always
 // closes the http.Response Body.
 func (client BaseClient) RollbackApplicationUpgradeResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -12640,7 +12133,6 @@ func (client BaseClient) RollbackApplicationUpgradeResponder(resp *http.Response
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RollbackClusterUpgrade rollback the code or configuration upgrade of a Service Fabric cluster.
 // Parameters:
 // timeout - the server timeout for performing the operation in seconds. This specifies the time duration that
@@ -12677,7 +12169,6 @@ func (client BaseClient) RollbackClusterUpgrade(ctx context.Context, timeout *in
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RollbackClusterUpgradePreparer prepares the RollbackClusterUpgrade request.
 func (client BaseClient) RollbackClusterUpgradePreparer(ctx context.Context, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -12698,7 +12189,6 @@ func (client BaseClient) RollbackClusterUpgradePreparer(ctx context.Context, tim
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RollbackClusterUpgradeSender sends the RollbackClusterUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RollbackClusterUpgradeSender(req *http.Request) (*http.Response, error) {
@@ -12706,7 +12196,6 @@ func (client BaseClient) RollbackClusterUpgradeSender(req *http.Request) (*http.
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RollbackClusterUpgradeResponder handles the response to the RollbackClusterUpgrade request. The method always
 // closes the http.Response Body.
 func (client BaseClient) RollbackClusterUpgradeResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -12719,7 +12208,6 @@ func (client BaseClient) RollbackClusterUpgradeResponder(resp *http.Response) (r
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SetUpgradeOrchestrationServiceState update the service state of Service Fabric Upgrade Orchestration Service. This
 // API is internally used for support purposes.
 // Parameters:
@@ -12758,7 +12246,6 @@ func (client BaseClient) SetUpgradeOrchestrationServiceState(ctx context.Context
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SetUpgradeOrchestrationServiceStatePreparer prepares the SetUpgradeOrchestrationServiceState request.
 func (client BaseClient) SetUpgradeOrchestrationServiceStatePreparer(ctx context.Context, upgradeOrchestrationServiceState UpgradeOrchestrationServiceState, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -12781,7 +12268,6 @@ func (client BaseClient) SetUpgradeOrchestrationServiceStatePreparer(ctx context
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SetUpgradeOrchestrationServiceStateSender sends the SetUpgradeOrchestrationServiceState request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) SetUpgradeOrchestrationServiceStateSender(req *http.Request) (*http.Response, error) {
@@ -12789,7 +12275,6 @@ func (client BaseClient) SetUpgradeOrchestrationServiceStateSender(req *http.Req
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SetUpgradeOrchestrationServiceStateResponder handles the response to the SetUpgradeOrchestrationServiceState request. The method always
 // closes the http.Response Body.
 func (client BaseClient) SetUpgradeOrchestrationServiceStateResponder(resp *http.Response) (result UpgradeOrchestrationServiceStateSummary, err error) {
@@ -12803,7 +12288,6 @@ func (client BaseClient) SetUpgradeOrchestrationServiceStateResponder(resp *http
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartApplicationUpgrade validates the supplied application upgrade parameters and starts upgrading the application
 // if the parameters are valid.
 // Parameters:
@@ -12851,7 +12335,6 @@ func (client BaseClient) StartApplicationUpgrade(ctx context.Context, applicatio
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartApplicationUpgradePreparer prepares the StartApplicationUpgrade request.
 func (client BaseClient) StartApplicationUpgradePreparer(ctx context.Context, applicationID string, applicationUpgradeDescription ApplicationUpgradeDescription, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -12878,7 +12361,6 @@ func (client BaseClient) StartApplicationUpgradePreparer(ctx context.Context, ap
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartApplicationUpgradeSender sends the StartApplicationUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartApplicationUpgradeSender(req *http.Request) (*http.Response, error) {
@@ -12886,7 +12368,6 @@ func (client BaseClient) StartApplicationUpgradeSender(req *http.Request) (*http
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartApplicationUpgradeResponder handles the response to the StartApplicationUpgrade request. The method always
 // closes the http.Response Body.
 func (client BaseClient) StartApplicationUpgradeResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -12899,7 +12380,6 @@ func (client BaseClient) StartApplicationUpgradeResponder(resp *http.Response) (
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartChaos if Chaos is not already running in the cluster, it starts Chaos with the passed in Chaos parameters.
 // If Chaos is already running when this call is made, the call fails with the error code
 // FABRIC_E_CHAOS_ALREADY_RUNNING.
@@ -12958,7 +12438,6 @@ func (client BaseClient) StartChaos(ctx context.Context, chaosParameters ChaosPa
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartChaosPreparer prepares the StartChaos request.
 func (client BaseClient) StartChaosPreparer(ctx context.Context, chaosParameters ChaosParameters, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -12981,7 +12460,6 @@ func (client BaseClient) StartChaosPreparer(ctx context.Context, chaosParameters
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartChaosSender sends the StartChaos request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartChaosSender(req *http.Request) (*http.Response, error) {
@@ -12989,7 +12467,6 @@ func (client BaseClient) StartChaosSender(req *http.Request) (*http.Response, er
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartChaosResponder handles the response to the StartChaos request. The method always
 // closes the http.Response Body.
 func (client BaseClient) StartChaosResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -13002,7 +12479,6 @@ func (client BaseClient) StartChaosResponder(resp *http.Response) (result autore
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartClusterConfigurationUpgrade validate the supplied configuration upgrade parameters and start upgrading the
 // cluster configuration if the parameters are valid.
 // Parameters:
@@ -13043,7 +12519,6 @@ func (client BaseClient) StartClusterConfigurationUpgrade(ctx context.Context, c
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartClusterConfigurationUpgradePreparer prepares the StartClusterConfigurationUpgrade request.
 func (client BaseClient) StartClusterConfigurationUpgradePreparer(ctx context.Context, clusterConfigurationUpgradeDescription ClusterConfigurationUpgradeDescription, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -13066,7 +12541,6 @@ func (client BaseClient) StartClusterConfigurationUpgradePreparer(ctx context.Co
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartClusterConfigurationUpgradeSender sends the StartClusterConfigurationUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartClusterConfigurationUpgradeSender(req *http.Request) (*http.Response, error) {
@@ -13074,7 +12548,6 @@ func (client BaseClient) StartClusterConfigurationUpgradeSender(req *http.Reques
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartClusterConfigurationUpgradeResponder handles the response to the StartClusterConfigurationUpgrade request. The method always
 // closes the http.Response Body.
 func (client BaseClient) StartClusterConfigurationUpgradeResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -13087,7 +12560,6 @@ func (client BaseClient) StartClusterConfigurationUpgradeResponder(resp *http.Re
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartClusterUpgrade validate the supplied upgrade parameters and start upgrading the code or configuration version
 // of a Service Fabric cluster if the parameters are valid.
 // Parameters:
@@ -13137,7 +12609,6 @@ func (client BaseClient) StartClusterUpgrade(ctx context.Context, startClusterUp
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartClusterUpgradePreparer prepares the StartClusterUpgrade request.
 func (client BaseClient) StartClusterUpgradePreparer(ctx context.Context, startClusterUpgradeDescription StartClusterUpgradeDescription, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -13160,7 +12631,6 @@ func (client BaseClient) StartClusterUpgradePreparer(ctx context.Context, startC
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartClusterUpgradeSender sends the StartClusterUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartClusterUpgradeSender(req *http.Request) (*http.Response, error) {
@@ -13168,7 +12638,6 @@ func (client BaseClient) StartClusterUpgradeSender(req *http.Request) (*http.Res
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartClusterUpgradeResponder handles the response to the StartClusterUpgrade request. The method always
 // closes the http.Response Body.
 func (client BaseClient) StartClusterUpgradeResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -13181,7 +12650,6 @@ func (client BaseClient) StartClusterUpgradeResponder(resp *http.Response) (resu
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartComposeDeploymentUpgrade validates the supplied upgrade parameters and starts upgrading the deployment if the
 // parameters are valid.
 // Parameters:
@@ -13224,7 +12692,6 @@ func (client BaseClient) StartComposeDeploymentUpgrade(ctx context.Context, depl
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartComposeDeploymentUpgradePreparer prepares the StartComposeDeploymentUpgrade request.
 func (client BaseClient) StartComposeDeploymentUpgradePreparer(ctx context.Context, deploymentName string, composeDeploymentUpgradeDescription ComposeDeploymentUpgradeDescription, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -13251,7 +12718,6 @@ func (client BaseClient) StartComposeDeploymentUpgradePreparer(ctx context.Conte
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartComposeDeploymentUpgradeSender sends the StartComposeDeploymentUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartComposeDeploymentUpgradeSender(req *http.Request) (*http.Response, error) {
@@ -13259,7 +12725,6 @@ func (client BaseClient) StartComposeDeploymentUpgradeSender(req *http.Request) 
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartComposeDeploymentUpgradeResponder handles the response to the StartComposeDeploymentUpgrade request. The method always
 // closes the http.Response Body.
 func (client BaseClient) StartComposeDeploymentUpgradeResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -13272,7 +12737,6 @@ func (client BaseClient) StartComposeDeploymentUpgradeResponder(resp *http.Respo
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartDataLoss this API will induce data loss for the specified partition. It will trigger a call to the OnDataLoss
 // API of the partition.
 // Actual data loss will depend on the specified DataLossMode
@@ -13334,7 +12798,6 @@ func (client BaseClient) StartDataLoss(ctx context.Context, serviceID string, pa
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartDataLossPreparer prepares the StartDataLoss request.
 func (client BaseClient) StartDataLossPreparer(ctx context.Context, serviceID string, partitionID uuid.UUID, operationID uuid.UUID, dataLossMode DataLossModeRequiredQueryParam, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -13362,7 +12825,6 @@ func (client BaseClient) StartDataLossPreparer(ctx context.Context, serviceID st
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartDataLossSender sends the StartDataLoss request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartDataLossSender(req *http.Request) (*http.Response, error) {
@@ -13370,7 +12832,6 @@ func (client BaseClient) StartDataLossSender(req *http.Request) (*http.Response,
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartDataLossResponder handles the response to the StartDataLoss request. The method always
 // closes the http.Response Body.
 func (client BaseClient) StartDataLossResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -13383,7 +12844,6 @@ func (client BaseClient) StartDataLossResponder(resp *http.Response) (result aut
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartNodeTransition starts or stops a cluster node.  A cluster node is a process, not the OS instance itself.  To
 // start a node, pass in "Start" for the NodeTransitionType parameter.
 // To stop a node, pass in "Stop" for the NodeTransitionType parameter.  This API starts the operation - when the API
@@ -13434,7 +12894,6 @@ func (client BaseClient) StartNodeTransition(ctx context.Context, nodeName strin
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartNodeTransitionPreparer prepares the StartNodeTransition request.
 func (client BaseClient) StartNodeTransitionPreparer(ctx context.Context, nodeName string, operationID uuid.UUID, nodeTransitionType NodeTransitionTypeRequiredQueryParam, nodeInstanceID string, stopDurationInSeconds int32, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -13463,7 +12922,6 @@ func (client BaseClient) StartNodeTransitionPreparer(ctx context.Context, nodeNa
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartNodeTransitionSender sends the StartNodeTransition request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartNodeTransitionSender(req *http.Request) (*http.Response, error) {
@@ -13471,7 +12929,6 @@ func (client BaseClient) StartNodeTransitionSender(req *http.Request) (*http.Res
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartNodeTransitionResponder handles the response to the StartNodeTransition request. The method always
 // closes the http.Response Body.
 func (client BaseClient) StartNodeTransitionResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -13484,7 +12941,6 @@ func (client BaseClient) StartNodeTransitionResponder(resp *http.Response) (resu
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartPartitionRestart this API is useful for testing failover.
 //
 // If used to target a stateless service partition, RestartPartitionMode must be AllReplicasOrInstances.
@@ -13534,7 +12990,6 @@ func (client BaseClient) StartPartitionRestart(ctx context.Context, serviceID st
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartPartitionRestartPreparer prepares the StartPartitionRestart request.
 func (client BaseClient) StartPartitionRestartPreparer(ctx context.Context, serviceID string, partitionID uuid.UUID, operationID uuid.UUID, restartPartitionMode RestartPartitionModeRequiredQueryParam, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -13562,7 +13017,6 @@ func (client BaseClient) StartPartitionRestartPreparer(ctx context.Context, serv
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartPartitionRestartSender sends the StartPartitionRestart request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartPartitionRestartSender(req *http.Request) (*http.Response, error) {
@@ -13570,7 +13024,6 @@ func (client BaseClient) StartPartitionRestartSender(req *http.Request) (*http.R
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartPartitionRestartResponder handles the response to the StartPartitionRestart request. The method always
 // closes the http.Response Body.
 func (client BaseClient) StartPartitionRestartResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -13583,7 +13036,6 @@ func (client BaseClient) StartPartitionRestartResponder(resp *http.Response) (re
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartQuorumLoss induces quorum loss for a given stateful service partition.  This API is useful for a temporary
 // quorum loss situation on your service.
 //
@@ -13639,7 +13091,6 @@ func (client BaseClient) StartQuorumLoss(ctx context.Context, serviceID string, 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartQuorumLossPreparer prepares the StartQuorumLoss request.
 func (client BaseClient) StartQuorumLossPreparer(ctx context.Context, serviceID string, partitionID uuid.UUID, operationID uuid.UUID, quorumLossMode QuorumLossModeRequiredQueryParam, quorumLossDuration int32, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -13668,7 +13119,6 @@ func (client BaseClient) StartQuorumLossPreparer(ctx context.Context, serviceID 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartQuorumLossSender sends the StartQuorumLoss request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartQuorumLossSender(req *http.Request) (*http.Response, error) {
@@ -13676,7 +13126,6 @@ func (client BaseClient) StartQuorumLossSender(req *http.Request) (*http.Respons
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StartQuorumLossResponder handles the response to the StartQuorumLoss request. The method always
 // closes the http.Response Body.
 func (client BaseClient) StartQuorumLossResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -13689,7 +13138,6 @@ func (client BaseClient) StartQuorumLossResponder(resp *http.Response) (result a
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StopChaos stops Chaos from scheduling further faults; but, the in-flight faults are not affected.
 // Parameters:
 // timeout - the server timeout for performing the operation in seconds. This specifies the time duration that
@@ -13726,7 +13174,6 @@ func (client BaseClient) StopChaos(ctx context.Context, timeout *int64) (result 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StopChaosPreparer prepares the StopChaos request.
 func (client BaseClient) StopChaosPreparer(ctx context.Context, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -13747,7 +13194,6 @@ func (client BaseClient) StopChaosPreparer(ctx context.Context, timeout *int64) 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StopChaosSender sends the StopChaos request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StopChaosSender(req *http.Request) (*http.Response, error) {
@@ -13755,7 +13201,6 @@ func (client BaseClient) StopChaosSender(req *http.Request) (*http.Response, err
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // StopChaosResponder handles the response to the StopChaos request. The method always
 // closes the http.Response Body.
 func (client BaseClient) StopChaosResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -13768,7 +13213,6 @@ func (client BaseClient) StopChaosResponder(resp *http.Response) (result autores
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SubmitPropertyBatch submits a batch of property operations. Either all or none of the operations will be committed.
 // Parameters:
 // nameID - the Service Fabric name, without the 'fabric:' URI scheme.
@@ -13807,7 +13251,6 @@ func (client BaseClient) SubmitPropertyBatch(ctx context.Context, nameID string,
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SubmitPropertyBatchPreparer prepares the SubmitPropertyBatch request.
 func (client BaseClient) SubmitPropertyBatchPreparer(ctx context.Context, nameID string, propertyBatchDescriptionList PropertyBatchDescriptionList, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -13834,7 +13277,6 @@ func (client BaseClient) SubmitPropertyBatchPreparer(ctx context.Context, nameID
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SubmitPropertyBatchSender sends the SubmitPropertyBatch request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) SubmitPropertyBatchSender(req *http.Request) (*http.Response, error) {
@@ -13842,7 +13284,6 @@ func (client BaseClient) SubmitPropertyBatchSender(req *http.Request) (*http.Res
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SubmitPropertyBatchResponder handles the response to the SubmitPropertyBatch request. The method always
 // closes the http.Response Body.
 func (client BaseClient) SubmitPropertyBatchResponder(resp *http.Response) (result PropertyBatchInfoModel, err error) {
@@ -13856,7 +13297,6 @@ func (client BaseClient) SubmitPropertyBatchResponder(resp *http.Response) (resu
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnprovisionApplicationType removes or unregisters a Service Fabric application type from the cluster. This operation
 // can only be performed if all application instances of the application type has been deleted. Once the application
 // type is unregistered, no new application instances can be created for this particular application type.
@@ -13900,7 +13340,6 @@ func (client BaseClient) UnprovisionApplicationType(ctx context.Context, applica
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnprovisionApplicationTypePreparer prepares the UnprovisionApplicationType request.
 func (client BaseClient) UnprovisionApplicationTypePreparer(ctx context.Context, applicationTypeName string, unprovisionApplicationTypeDescriptionInfo UnprovisionApplicationTypeDescriptionInfo, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -13927,7 +13366,6 @@ func (client BaseClient) UnprovisionApplicationTypePreparer(ctx context.Context,
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnprovisionApplicationTypeSender sends the UnprovisionApplicationType request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UnprovisionApplicationTypeSender(req *http.Request) (*http.Response, error) {
@@ -13935,7 +13373,6 @@ func (client BaseClient) UnprovisionApplicationTypeSender(req *http.Request) (*h
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnprovisionApplicationTypeResponder handles the response to the UnprovisionApplicationType request. The method always
 // closes the http.Response Body.
 func (client BaseClient) UnprovisionApplicationTypeResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -13948,7 +13385,6 @@ func (client BaseClient) UnprovisionApplicationTypeResponder(resp *http.Response
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnprovisionCluster unprovision the code or configuration packages of a Service Fabric cluster. It is supported to
 // unprovision code and configuration separately.
 // Parameters:
@@ -13987,7 +13423,6 @@ func (client BaseClient) UnprovisionCluster(ctx context.Context, unprovisionFabr
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnprovisionClusterPreparer prepares the UnprovisionCluster request.
 func (client BaseClient) UnprovisionClusterPreparer(ctx context.Context, unprovisionFabricDescription UnprovisionFabricDescription, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -14010,7 +13445,6 @@ func (client BaseClient) UnprovisionClusterPreparer(ctx context.Context, unprovi
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnprovisionClusterSender sends the UnprovisionCluster request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UnprovisionClusterSender(req *http.Request) (*http.Response, error) {
@@ -14018,7 +13452,6 @@ func (client BaseClient) UnprovisionClusterSender(req *http.Request) (*http.Resp
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnprovisionClusterResponder handles the response to the UnprovisionCluster request. The method always
 // closes the http.Response Body.
 func (client BaseClient) UnprovisionClusterResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -14031,7 +13464,6 @@ func (client BaseClient) UnprovisionClusterResponder(resp *http.Response) (resul
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateApplicationUpgrade updates the parameters of an ongoing application upgrade from the ones specified at the
 // time of starting the application upgrade. This may be required to mitigate stuck application upgrades due to
 // incorrect parameters or issues in the application to make progress.
@@ -14078,7 +13510,6 @@ func (client BaseClient) UpdateApplicationUpgrade(ctx context.Context, applicati
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateApplicationUpgradePreparer prepares the UpdateApplicationUpgrade request.
 func (client BaseClient) UpdateApplicationUpgradePreparer(ctx context.Context, applicationID string, applicationUpgradeUpdateDescription ApplicationUpgradeUpdateDescription, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -14105,7 +13536,6 @@ func (client BaseClient) UpdateApplicationUpgradePreparer(ctx context.Context, a
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateApplicationUpgradeSender sends the UpdateApplicationUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UpdateApplicationUpgradeSender(req *http.Request) (*http.Response, error) {
@@ -14113,7 +13543,6 @@ func (client BaseClient) UpdateApplicationUpgradeSender(req *http.Request) (*htt
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateApplicationUpgradeResponder handles the response to the UpdateApplicationUpgrade request. The method always
 // closes the http.Response Body.
 func (client BaseClient) UpdateApplicationUpgradeResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -14126,7 +13555,6 @@ func (client BaseClient) UpdateApplicationUpgradeResponder(resp *http.Response) 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateClusterUpgrade update the upgrade parameters used during a Service Fabric cluster upgrade.
 // Parameters:
 // updateClusterUpgradeDescription - parameters for updating a cluster upgrade.
@@ -14175,7 +13603,6 @@ func (client BaseClient) UpdateClusterUpgrade(ctx context.Context, updateCluster
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateClusterUpgradePreparer prepares the UpdateClusterUpgrade request.
 func (client BaseClient) UpdateClusterUpgradePreparer(ctx context.Context, updateClusterUpgradeDescription UpdateClusterUpgradeDescription, timeout *int64) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -14198,7 +13625,6 @@ func (client BaseClient) UpdateClusterUpgradePreparer(ctx context.Context, updat
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateClusterUpgradeSender sends the UpdateClusterUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UpdateClusterUpgradeSender(req *http.Request) (*http.Response, error) {
@@ -14206,7 +13632,6 @@ func (client BaseClient) UpdateClusterUpgradeSender(req *http.Request) (*http.Re
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateClusterUpgradeResponder handles the response to the UpdateClusterUpgrade request. The method always
 // closes the http.Response Body.
 func (client BaseClient) UpdateClusterUpgradeResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -14219,7 +13644,6 @@ func (client BaseClient) UpdateClusterUpgradeResponder(resp *http.Response) (res
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateRepairExecutionState this API supports the Service Fabric platform; it is not meant to be used directly from
 // your code.
 // Parameters:
@@ -14253,7 +13677,6 @@ func (client BaseClient) UpdateRepairExecutionState(ctx context.Context, repairT
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateRepairExecutionStatePreparer prepares the UpdateRepairExecutionState request.
 func (client BaseClient) UpdateRepairExecutionStatePreparer(ctx context.Context, repairTask RepairTask) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -14271,7 +13694,6 @@ func (client BaseClient) UpdateRepairExecutionStatePreparer(ctx context.Context,
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateRepairExecutionStateSender sends the UpdateRepairExecutionState request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UpdateRepairExecutionStateSender(req *http.Request) (*http.Response, error) {
@@ -14279,7 +13701,6 @@ func (client BaseClient) UpdateRepairExecutionStateSender(req *http.Request) (*h
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateRepairExecutionStateResponder handles the response to the UpdateRepairExecutionState request. The method always
 // closes the http.Response Body.
 func (client BaseClient) UpdateRepairExecutionStateResponder(resp *http.Response) (result RepairTaskUpdateInfo, err error) {
@@ -14293,7 +13714,6 @@ func (client BaseClient) UpdateRepairExecutionStateResponder(resp *http.Response
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateRepairTaskHealthPolicy this API supports the Service Fabric platform; it is not meant to be used directly from
 // your code.
 // Parameters:
@@ -14326,7 +13746,6 @@ func (client BaseClient) UpdateRepairTaskHealthPolicy(ctx context.Context, repai
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateRepairTaskHealthPolicyPreparer prepares the UpdateRepairTaskHealthPolicy request.
 func (client BaseClient) UpdateRepairTaskHealthPolicyPreparer(ctx context.Context, repairTaskUpdateHealthPolicyDescription RepairTaskUpdateHealthPolicyDescription) (*http.Request, error) {
 	const APIVersion = "6.0"
@@ -14344,7 +13763,6 @@ func (client BaseClient) UpdateRepairTaskHealthPolicyPreparer(ctx context.Contex
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateRepairTaskHealthPolicySender sends the UpdateRepairTaskHealthPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UpdateRepairTaskHealthPolicySender(req *http.Request) (*http.Response, error) {
@@ -14352,7 +13770,6 @@ func (client BaseClient) UpdateRepairTaskHealthPolicySender(req *http.Request) (
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateRepairTaskHealthPolicyResponder handles the response to the UpdateRepairTaskHealthPolicy request. The method always
 // closes the http.Response Body.
 func (client BaseClient) UpdateRepairTaskHealthPolicyResponder(resp *http.Response) (result RepairTaskUpdateInfo, err error) {
@@ -14366,7 +13783,6 @@ func (client BaseClient) UpdateRepairTaskHealthPolicyResponder(resp *http.Respon
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateService this API allows updating properties of a running Service Fabric service. The set of properties that
 // can be updated are a subset of the properties that were specified at the time of creating the service. The current
 // set of properties can be obtained using `GetServiceDescription` API. Please note that updating the properties of a
@@ -14414,7 +13830,6 @@ func (client BaseClient) UpdateService(ctx context.Context, serviceID string, se
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateServicePreparer prepares the UpdateService request.
 func (client BaseClient) UpdateServicePreparer(ctx context.Context, serviceID string, serviceUpdateDescription BasicServiceUpdateDescription, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -14441,7 +13856,6 @@ func (client BaseClient) UpdateServicePreparer(ctx context.Context, serviceID st
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateServiceSender sends the UpdateService request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UpdateServiceSender(req *http.Request) (*http.Response, error) {
@@ -14449,7 +13863,6 @@ func (client BaseClient) UpdateServiceSender(req *http.Request) (*http.Response,
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UpdateServiceResponder handles the response to the UpdateService request. The method always
 // closes the http.Response Body.
 func (client BaseClient) UpdateServiceResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -14462,7 +13875,6 @@ func (client BaseClient) UpdateServiceResponder(resp *http.Response) (result aut
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UploadFile uploads contents of the file to the image store. Use this API if the file is small enough to upload again
 // if the connection fails. The file's data needs to be added to the request body. The contents will be uploaded to the
 // specified path. Image store service uses a mark file to indicate the availability of the folder. The mark file is an
@@ -14506,7 +13918,6 @@ func (client BaseClient) UploadFile(ctx context.Context, contentPath string, tim
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UploadFilePreparer prepares the UploadFile request.
 func (client BaseClient) UploadFilePreparer(ctx context.Context, contentPath string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -14531,7 +13942,6 @@ func (client BaseClient) UploadFilePreparer(ctx context.Context, contentPath str
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UploadFileSender sends the UploadFile request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UploadFileSender(req *http.Request) (*http.Response, error) {
@@ -14539,7 +13949,6 @@ func (client BaseClient) UploadFileSender(req *http.Request) (*http.Response, er
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UploadFileResponder handles the response to the UploadFile request. The method always
 // closes the http.Response Body.
 func (client BaseClient) UploadFileResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -14552,7 +13961,6 @@ func (client BaseClient) UploadFileResponder(resp *http.Response) (result autore
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UploadFileChunk uploads a file chunk to the image store with the specified upload session ID and image store
 // relative path. This API allows user to resume the file upload operation. user doesn't have to restart the file
 // upload from scratch whenever there is a network interruption. Use this option if the file size is large.
@@ -14602,7 +14010,6 @@ func (client BaseClient) UploadFileChunk(ctx context.Context, contentPath string
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UploadFileChunkPreparer prepares the UploadFileChunk request.
 func (client BaseClient) UploadFileChunkPreparer(ctx context.Context, contentPath string, sessionID uuid.UUID, contentRange string, timeout *int64) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -14629,7 +14036,6 @@ func (client BaseClient) UploadFileChunkPreparer(ctx context.Context, contentPat
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UploadFileChunkSender sends the UploadFileChunk request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UploadFileChunkSender(req *http.Request) (*http.Response, error) {
@@ -14637,7 +14043,6 @@ func (client BaseClient) UploadFileChunkSender(req *http.Request) (*http.Respons
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UploadFileChunkResponder handles the response to the UploadFileChunk request. The method always
 // closes the http.Response Body.
 func (client BaseClient) UploadFileChunkResponder(resp *http.Response) (result autorest.Response, err error) {

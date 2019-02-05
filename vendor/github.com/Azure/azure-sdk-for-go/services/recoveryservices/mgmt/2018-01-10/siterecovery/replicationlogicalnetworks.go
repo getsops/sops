@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,16 +45,6 @@ func NewReplicationLogicalNetworksClientWithBaseURI(baseURI string, subscription
 // fabricName - server Id.
 // logicalNetworkName - logical network name.
 func (client ReplicationLogicalNetworksClient) Get(ctx context.Context, fabricName string, logicalNetworkName string) (result LogicalNetwork, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationLogicalNetworksClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, fabricName, logicalNetworkName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationLogicalNetworksClient", "Get", nil, "Failure preparing request")
@@ -124,16 +113,6 @@ func (client ReplicationLogicalNetworksClient) GetResponder(resp *http.Response)
 // Parameters:
 // fabricName - server Id.
 func (client ReplicationLogicalNetworksClient) ListByReplicationFabrics(ctx context.Context, fabricName string) (result LogicalNetworkCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationLogicalNetworksClient.ListByReplicationFabrics")
-		defer func() {
-			sc := -1
-			if result.lnc.Response.Response != nil {
-				sc = result.lnc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByReplicationFabricsNextResults
 	req, err := client.ListByReplicationFabricsPreparer(ctx, fabricName)
 	if err != nil {
@@ -199,8 +178,8 @@ func (client ReplicationLogicalNetworksClient) ListByReplicationFabricsResponder
 }
 
 // listByReplicationFabricsNextResults retrieves the next set of results, if any.
-func (client ReplicationLogicalNetworksClient) listByReplicationFabricsNextResults(ctx context.Context, lastResults LogicalNetworkCollection) (result LogicalNetworkCollection, err error) {
-	req, err := lastResults.logicalNetworkCollectionPreparer(ctx)
+func (client ReplicationLogicalNetworksClient) listByReplicationFabricsNextResults(lastResults LogicalNetworkCollection) (result LogicalNetworkCollection, err error) {
+	req, err := lastResults.logicalNetworkCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "siterecovery.ReplicationLogicalNetworksClient", "listByReplicationFabricsNextResults", nil, "Failure preparing next results request")
 	}
@@ -221,16 +200,6 @@ func (client ReplicationLogicalNetworksClient) listByReplicationFabricsNextResul
 
 // ListByReplicationFabricsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReplicationLogicalNetworksClient) ListByReplicationFabricsComplete(ctx context.Context, fabricName string) (result LogicalNetworkCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationLogicalNetworksClient.ListByReplicationFabrics")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByReplicationFabrics(ctx, fabricName)
 	return
 }

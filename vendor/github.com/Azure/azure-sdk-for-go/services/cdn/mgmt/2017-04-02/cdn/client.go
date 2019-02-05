@@ -26,7 +26,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -61,16 +60,6 @@ func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 // Parameters:
 // checkNameAvailabilityInput - input to check.
 func (client BaseClient) CheckNameAvailability(ctx context.Context, checkNameAvailabilityInput CheckNameAvailabilityInput) (result CheckNameAvailabilityOutput, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.CheckNameAvailability")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: checkNameAvailabilityInput,
 			Constraints: []validation.Constraint{{Target: "checkNameAvailabilityInput.Name", Name: validation.Null, Rule: true, Chain: nil},
@@ -142,16 +131,6 @@ func (client BaseClient) CheckNameAvailabilityResponder(resp *http.Response) (re
 // Parameters:
 // validateProbeInput - input to check.
 func (client BaseClient) ValidateProbe(ctx context.Context, validateProbeInput ValidateProbeInput) (result ValidateProbeOutput, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ValidateProbe")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: validateProbeInput,
 			Constraints: []validation.Constraint{{Target: "validateProbeInput.ProbeURL", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {

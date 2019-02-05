@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,16 +49,6 @@ func NewCertificatesClientWithBaseURI(baseURI string, subscriptionID string) Cer
 // ifMatch - eTag of the Certificate. Do not specify for creating a brand new certificate. Required to update
 // an existing certificate.
 func (client CertificatesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, certificateName string, certificateDescription CertificateBodyDescription, ifMatch string) (result CertificateDescription, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: certificateName,
 			Constraints: []validation.Constraint{{Target: "certificateName", Name: validation.Pattern, Rule: `^[A-Za-z0-9-._]{1,64}$`, Chain: nil}}}}); err != nil {
@@ -142,16 +131,6 @@ func (client CertificatesClient) CreateOrUpdateResponder(resp *http.Response) (r
 // certificateName - the name of the certificate
 // ifMatch - eTag of the Certificate.
 func (client CertificatesClient) Delete(ctx context.Context, resourceGroupName string, resourceName string, certificateName string, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: certificateName,
 			Constraints: []validation.Constraint{{Target: "certificateName", Name: validation.Pattern, Rule: `^[A-Za-z0-9-._]{1,64}$`, Chain: nil}}}}); err != nil {
@@ -229,16 +208,6 @@ func (client CertificatesClient) DeleteResponder(resp *http.Response) (result au
 // certificateName - the name of the certificate
 // ifMatch - eTag of the Certificate.
 func (client CertificatesClient) GenerateVerificationCode(ctx context.Context, resourceGroupName string, resourceName string, certificateName string, ifMatch string) (result CertificateWithNonceDescription, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.GenerateVerificationCode")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: certificateName,
 			Constraints: []validation.Constraint{{Target: "certificateName", Name: validation.Pattern, Rule: `^[A-Za-z0-9-._]{1,64}$`, Chain: nil}}}}); err != nil {
@@ -315,16 +284,6 @@ func (client CertificatesClient) GenerateVerificationCodeResponder(resp *http.Re
 // resourceName - the name of the IoT hub.
 // certificateName - the name of the certificate
 func (client CertificatesClient) Get(ctx context.Context, resourceGroupName string, resourceName string, certificateName string) (result CertificateDescription, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: certificateName,
 			Constraints: []validation.Constraint{{Target: "certificateName", Name: validation.Pattern, Rule: `^[A-Za-z0-9-._]{1,64}$`, Chain: nil}}}}); err != nil {
@@ -399,16 +358,6 @@ func (client CertificatesClient) GetResponder(resp *http.Response) (result Certi
 // resourceGroupName - the name of the resource group that contains the IoT hub.
 // resourceName - the name of the IoT hub.
 func (client CertificatesClient) ListByIotHub(ctx context.Context, resourceGroupName string, resourceName string) (result CertificateListDescription, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.ListByIotHub")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ListByIotHubPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.CertificatesClient", "ListByIotHub", nil, "Failure preparing request")
@@ -480,16 +429,6 @@ func (client CertificatesClient) ListByIotHubResponder(resp *http.Response) (res
 // certificateVerificationBody - the name of the certificate
 // ifMatch - eTag of the Certificate.
 func (client CertificatesClient) Verify(ctx context.Context, resourceGroupName string, resourceName string, certificateName string, certificateVerificationBody CertificateVerificationDescription, ifMatch string) (result CertificateDescription, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.Verify")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: certificateName,
 			Constraints: []validation.Constraint{{Target: "certificateName", Name: validation.Pattern, Rule: `^[A-Za-z0-9-._]{1,64}$`, Chain: nil}}}}); err != nil {

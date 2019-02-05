@@ -21,11 +21,10 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
-// AdDomainServiceMembersClient is the REST APIs for Azure Active Directory Connect Health
+// AdDomainServiceMembersClient is the REST APIs for Azure Active Drectory Connect Health
 type AdDomainServiceMembersClient struct {
 	BaseClient
 }
@@ -49,16 +48,6 @@ func NewAdDomainServiceMembersClientWithBaseURI(baseURI string) AdDomainServiceM
 // query - the custom query.
 // takeCount - the take count , which specifies the number of elements that can be returned from a sequence.
 func (client AdDomainServiceMembersClient) List(ctx context.Context, serviceName string, isGroupbySite bool, filter string, query string, takeCount *int32) (result AddsServiceMembersPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AdDomainServiceMembersClient.List")
-		defer func() {
-			sc := -1
-			if result.asm.Response.Response != nil {
-				sc = result.asm.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, serviceName, isGroupbySite, filter, query, takeCount)
 	if err != nil {
@@ -133,8 +122,8 @@ func (client AdDomainServiceMembersClient) ListResponder(resp *http.Response) (r
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client AdDomainServiceMembersClient) listNextResults(ctx context.Context, lastResults AddsServiceMembers) (result AddsServiceMembers, err error) {
-	req, err := lastResults.addsServiceMembersPreparer(ctx)
+func (client AdDomainServiceMembersClient) listNextResults(lastResults AddsServiceMembers) (result AddsServiceMembers, err error) {
+	req, err := lastResults.addsServiceMembersPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "adhybridhealthservice.AdDomainServiceMembersClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -155,16 +144,6 @@ func (client AdDomainServiceMembersClient) listNextResults(ctx context.Context, 
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AdDomainServiceMembersClient) ListComplete(ctx context.Context, serviceName string, isGroupbySite bool, filter string, query string, takeCount *int32) (result AddsServiceMembersIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AdDomainServiceMembersClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, serviceName, isGroupbySite, filter, query, takeCount)
 	return
 }

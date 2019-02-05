@@ -21,7 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
+	"github.com/Azure/go-autorest/autorest/validation"
 	"net/http"
 )
 
@@ -33,7 +33,12 @@ type CustomInstanceClient struct {
 
 // NewCustomInstanceClient creates an instance of the CustomInstanceClient client.
 func NewCustomInstanceClient() CustomInstanceClient {
-	return CustomInstanceClient{New()}
+	return NewCustomInstanceClientWithBaseURI(DefaultBaseURI)
+}
+
+// NewCustomInstanceClientWithBaseURI creates an instance of the CustomInstanceClient client.
+func NewCustomInstanceClientWithBaseURI(baseURI string) CustomInstanceClient {
+	return CustomInstanceClient{NewWithBaseURI(baseURI)}
 }
 
 // Search sends the search request.
@@ -157,17 +162,13 @@ func NewCustomInstanceClient() CustomInstanceClient {
 // formatting. For example, use <b> tags to highlight query terms in display strings. The default is Raw. For
 // display strings that contain escapable HTML characters such as <, >, and &, if textFormat is set to HTML,
 // Bing escapes the characters as appropriate (for example, < is escaped to &lt;).
-func (client CustomInstanceClient) Search(ctx context.Context, customConfig string, query string, acceptLanguage string, userAgent string, clientID string, clientIP string, location string, countryCode string, count *int32, market string, offset *int32, safeSearch SafeSearch, setLang string, textDecorations *bool, textFormat TextFormat) (result SearchResponse, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomInstanceClient.Search")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
+func (client CustomInstanceClient) Search(ctx context.Context, customConfig int64, query string, acceptLanguage string, userAgent string, clientID string, clientIP string, location string, countryCode string, count *int32, market string, offset *int32, safeSearch SafeSearch, setLang string, textDecorations *bool, textFormat TextFormat) (result SearchResponse, err error) {
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: customConfig,
+			Constraints: []validation.Constraint{{Target: "customConfig", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("customsearch.CustomInstanceClient", "Search", err.Error())
 	}
+
 	req, err := client.SearchPreparer(ctx, customConfig, query, acceptLanguage, userAgent, clientID, clientIP, location, countryCode, count, market, offset, safeSearch, setLang, textDecorations, textFormat)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "customsearch.CustomInstanceClient", "Search", nil, "Failure preparing request")
@@ -190,11 +191,7 @@ func (client CustomInstanceClient) Search(ctx context.Context, customConfig stri
 }
 
 // SearchPreparer prepares the Search request.
-func (client CustomInstanceClient) SearchPreparer(ctx context.Context, customConfig string, query string, acceptLanguage string, userAgent string, clientID string, clientIP string, location string, countryCode string, count *int32, market string, offset *int32, safeSearch SafeSearch, setLang string, textDecorations *bool, textFormat TextFormat) (*http.Request, error) {
-	urlParameters := map[string]interface{}{
-		"Endpoint": client.Endpoint,
-	}
-
+func (client CustomInstanceClient) SearchPreparer(ctx context.Context, customConfig int64, query string, acceptLanguage string, userAgent string, clientID string, clientIP string, location string, countryCode string, count *int32, market string, offset *int32, safeSearch SafeSearch, setLang string, textDecorations *bool, textFormat TextFormat) (*http.Request, error) {
 	queryParameters := map[string]interface{}{
 		"customConfig": autorest.Encode("query", customConfig),
 		"q":            autorest.Encode("query", query),
@@ -228,7 +225,7 @@ func (client CustomInstanceClient) SearchPreparer(ctx context.Context, customCon
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
-		autorest.WithCustomBaseURL("{Endpoint}/bingcustomsearch/v7.0", urlParameters),
+		autorest.WithBaseURL(client.BaseURI),
 		autorest.WithPath("/search"),
 		autorest.WithQueryParameters(queryParameters),
 		autorest.WithHeader("X-BingApis-SDK", "true"))

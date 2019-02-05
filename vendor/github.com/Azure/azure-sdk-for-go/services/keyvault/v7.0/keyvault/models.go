@@ -18,17 +18,12 @@ package keyvault
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
-	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
-
-// The package's fully qualified name.
-const fqdn = "github.com/Azure/azure-sdk-for-go/services/keyvault/v7.0/keyvault"
 
 // ActionType enumerates the values for action type.
 type ActionType string
@@ -236,7 +231,7 @@ type AdministratorDetails struct {
 	FirstName *string `json:"first_name,omitempty"`
 	// LastName - Last name.
 	LastName *string `json:"last_name,omitempty"`
-	// EmailAddress - Email address.
+	// EmailAddress - Email addresss.
 	EmailAddress *string `json:"email,omitempty"`
 	// Phone - Phone number.
 	Phone *string `json:"phone,omitempty"`
@@ -433,44 +428,26 @@ type CertificateIssuerListResult struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// CertificateIssuerListResultIterator provides access to a complete listing of CertificateIssuerItem
-// values.
+// CertificateIssuerListResultIterator provides access to a complete listing of CertificateIssuerItem values.
 type CertificateIssuerListResultIterator struct {
 	i    int
 	page CertificateIssuerListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *CertificateIssuerListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateIssuerListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *CertificateIssuerListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *CertificateIssuerListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -492,11 +469,6 @@ func (iter CertificateIssuerListResultIterator) Value() CertificateIssuerItem {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the CertificateIssuerListResultIterator type.
-func NewCertificateIssuerListResultIterator(page CertificateIssuerListResultPage) CertificateIssuerListResultIterator {
-	return CertificateIssuerListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (cilr CertificateIssuerListResult) IsEmpty() bool {
 	return cilr.Value == nil || len(*cilr.Value) == 0
@@ -504,11 +476,11 @@ func (cilr CertificateIssuerListResult) IsEmpty() bool {
 
 // certificateIssuerListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (cilr CertificateIssuerListResult) certificateIssuerListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (cilr CertificateIssuerListResult) certificateIssuerListResultPreparer() (*http.Request, error) {
 	if cilr.NextLink == nil || len(to.String(cilr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(cilr.NextLink)))
@@ -516,36 +488,19 @@ func (cilr CertificateIssuerListResult) certificateIssuerListResultPreparer(ctx 
 
 // CertificateIssuerListResultPage contains a page of CertificateIssuerItem values.
 type CertificateIssuerListResultPage struct {
-	fn   func(context.Context, CertificateIssuerListResult) (CertificateIssuerListResult, error)
+	fn   func(CertificateIssuerListResult) (CertificateIssuerListResult, error)
 	cilr CertificateIssuerListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *CertificateIssuerListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateIssuerListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.cilr)
+func (page *CertificateIssuerListResultPage) Next() error {
+	next, err := page.fn(page.cilr)
 	if err != nil {
 		return err
 	}
 	page.cilr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *CertificateIssuerListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -564,11 +519,6 @@ func (page CertificateIssuerListResultPage) Values() []CertificateIssuerItem {
 		return nil
 	}
 	return *page.cilr.Value
-}
-
-// Creates a new instance of the CertificateIssuerListResultPage type.
-func NewCertificateIssuerListResultPage(getNextPage func(context.Context, CertificateIssuerListResult) (CertificateIssuerListResult, error)) CertificateIssuerListResultPage {
-	return CertificateIssuerListResultPage{fn: getNextPage}
 }
 
 // CertificateIssuerSetParameters the certificate issuer set parameters.
@@ -640,37 +590,20 @@ type CertificateListResultIterator struct {
 	page CertificateListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *CertificateListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *CertificateListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *CertificateListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -692,11 +625,6 @@ func (iter CertificateListResultIterator) Value() CertificateItem {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the CertificateListResultIterator type.
-func NewCertificateListResultIterator(page CertificateListResultPage) CertificateListResultIterator {
-	return CertificateListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (clr CertificateListResult) IsEmpty() bool {
 	return clr.Value == nil || len(*clr.Value) == 0
@@ -704,11 +632,11 @@ func (clr CertificateListResult) IsEmpty() bool {
 
 // certificateListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (clr CertificateListResult) certificateListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (clr CertificateListResult) certificateListResultPreparer() (*http.Request, error) {
 	if clr.NextLink == nil || len(to.String(clr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(clr.NextLink)))
@@ -716,36 +644,19 @@ func (clr CertificateListResult) certificateListResultPreparer(ctx context.Conte
 
 // CertificateListResultPage contains a page of CertificateItem values.
 type CertificateListResultPage struct {
-	fn  func(context.Context, CertificateListResult) (CertificateListResult, error)
+	fn  func(CertificateListResult) (CertificateListResult, error)
 	clr CertificateListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *CertificateListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.clr)
+func (page *CertificateListResultPage) Next() error {
+	next, err := page.fn(page.clr)
 	if err != nil {
 		return err
 	}
 	page.clr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *CertificateListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -764,11 +675,6 @@ func (page CertificateListResultPage) Values() []CertificateItem {
 		return nil
 	}
 	return *page.clr.Value
-}
-
-// Creates a new instance of the CertificateListResultPage type.
-func NewCertificateListResultPage(getNextPage func(context.Context, CertificateListResult) (CertificateListResult, error)) CertificateListResultPage {
-	return CertificateListResultPage{fn: getNextPage}
 }
 
 // CertificateMergeParameters the certificate merge parameters
@@ -877,7 +783,7 @@ func (cup CertificateUpdateParameters) MarshalJSON() ([]byte, error) {
 
 // Contact the contact information for the vault certificates.
 type Contact struct {
-	// EmailAddress - Email address.
+	// EmailAddress - Email addresss.
 	EmailAddress *string `json:"email,omitempty"`
 	// Name - Name.
 	Name *string `json:"name,omitempty"`
@@ -894,8 +800,8 @@ type Contacts struct {
 	ContactList *[]Contact `json:"contacts,omitempty"`
 }
 
-// DeletedCertificateBundle a Deleted Certificate consisting of its previous id, attributes and its tags,
-// as well as information on when it will be purged.
+// DeletedCertificateBundle a Deleted Certificate consisting of its previous id, attributes and its tags, as well
+// as information on when it will be purged.
 type DeletedCertificateBundle struct {
 	autorest.Response `json:"-"`
 	// RecoveryID - The url of the recovery object, used to identify and recover the deleted certificate.
@@ -1020,44 +926,26 @@ type DeletedCertificateListResult struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// DeletedCertificateListResultIterator provides access to a complete listing of DeletedCertificateItem
-// values.
+// DeletedCertificateListResultIterator provides access to a complete listing of DeletedCertificateItem values.
 type DeletedCertificateListResultIterator struct {
 	i    int
 	page DeletedCertificateListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *DeletedCertificateListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DeletedCertificateListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *DeletedCertificateListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *DeletedCertificateListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1079,11 +967,6 @@ func (iter DeletedCertificateListResultIterator) Value() DeletedCertificateItem 
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the DeletedCertificateListResultIterator type.
-func NewDeletedCertificateListResultIterator(page DeletedCertificateListResultPage) DeletedCertificateListResultIterator {
-	return DeletedCertificateListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (dclr DeletedCertificateListResult) IsEmpty() bool {
 	return dclr.Value == nil || len(*dclr.Value) == 0
@@ -1091,11 +974,11 @@ func (dclr DeletedCertificateListResult) IsEmpty() bool {
 
 // deletedCertificateListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (dclr DeletedCertificateListResult) deletedCertificateListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (dclr DeletedCertificateListResult) deletedCertificateListResultPreparer() (*http.Request, error) {
 	if dclr.NextLink == nil || len(to.String(dclr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(dclr.NextLink)))
@@ -1103,36 +986,19 @@ func (dclr DeletedCertificateListResult) deletedCertificateListResultPreparer(ct
 
 // DeletedCertificateListResultPage contains a page of DeletedCertificateItem values.
 type DeletedCertificateListResultPage struct {
-	fn   func(context.Context, DeletedCertificateListResult) (DeletedCertificateListResult, error)
+	fn   func(DeletedCertificateListResult) (DeletedCertificateListResult, error)
 	dclr DeletedCertificateListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *DeletedCertificateListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DeletedCertificateListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.dclr)
+func (page *DeletedCertificateListResultPage) Next() error {
+	next, err := page.fn(page.dclr)
 	if err != nil {
 		return err
 	}
 	page.dclr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *DeletedCertificateListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1151,11 +1017,6 @@ func (page DeletedCertificateListResultPage) Values() []DeletedCertificateItem {
 		return nil
 	}
 	return *page.dclr.Value
-}
-
-// Creates a new instance of the DeletedCertificateListResultPage type.
-func NewDeletedCertificateListResultPage(getNextPage func(context.Context, DeletedCertificateListResult) (DeletedCertificateListResult, error)) DeletedCertificateListResultPage {
-	return DeletedCertificateListResultPage{fn: getNextPage}
 }
 
 // DeletedKeyBundle a DeletedKeyBundle consisting of a WebKey plus its Attributes and deletion info
@@ -1264,37 +1125,20 @@ type DeletedKeyListResultIterator struct {
 	page DeletedKeyListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *DeletedKeyListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DeletedKeyListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *DeletedKeyListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *DeletedKeyListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1316,11 +1160,6 @@ func (iter DeletedKeyListResultIterator) Value() DeletedKeyItem {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the DeletedKeyListResultIterator type.
-func NewDeletedKeyListResultIterator(page DeletedKeyListResultPage) DeletedKeyListResultIterator {
-	return DeletedKeyListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (dklr DeletedKeyListResult) IsEmpty() bool {
 	return dklr.Value == nil || len(*dklr.Value) == 0
@@ -1328,11 +1167,11 @@ func (dklr DeletedKeyListResult) IsEmpty() bool {
 
 // deletedKeyListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (dklr DeletedKeyListResult) deletedKeyListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (dklr DeletedKeyListResult) deletedKeyListResultPreparer() (*http.Request, error) {
 	if dklr.NextLink == nil || len(to.String(dklr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(dklr.NextLink)))
@@ -1340,36 +1179,19 @@ func (dklr DeletedKeyListResult) deletedKeyListResultPreparer(ctx context.Contex
 
 // DeletedKeyListResultPage contains a page of DeletedKeyItem values.
 type DeletedKeyListResultPage struct {
-	fn   func(context.Context, DeletedKeyListResult) (DeletedKeyListResult, error)
+	fn   func(DeletedKeyListResult) (DeletedKeyListResult, error)
 	dklr DeletedKeyListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *DeletedKeyListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DeletedKeyListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.dklr)
+func (page *DeletedKeyListResultPage) Next() error {
+	next, err := page.fn(page.dklr)
 	if err != nil {
 		return err
 	}
 	page.dklr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *DeletedKeyListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1390,13 +1212,8 @@ func (page DeletedKeyListResultPage) Values() []DeletedKeyItem {
 	return *page.dklr.Value
 }
 
-// Creates a new instance of the DeletedKeyListResultPage type.
-func NewDeletedKeyListResultPage(getNextPage func(context.Context, DeletedKeyListResult) (DeletedKeyListResult, error)) DeletedKeyListResultPage {
-	return DeletedKeyListResultPage{fn: getNextPage}
-}
-
-// DeletedSasDefinitionBundle a deleted SAS definition bundle consisting of its previous id, attributes and
-// its tags, as well as information on when it will be purged.
+// DeletedSasDefinitionBundle a deleted SAS definition bundle consisting of its previous id, attributes and its
+// tags, as well as information on when it will be purged.
 type DeletedSasDefinitionBundle struct {
 	autorest.Response `json:"-"`
 	// RecoveryID - The url of the recovery object, used to identify and recover the deleted SAS definition.
@@ -1457,8 +1274,7 @@ func (dsdb DeletedSasDefinitionBundle) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// DeletedSasDefinitionItem the deleted SAS definition item containing metadata about the deleted SAS
-// definition.
+// DeletedSasDefinitionItem the deleted SAS definition item containing metadata about the deleted SAS definition.
 type DeletedSasDefinitionItem struct {
 	// RecoveryID - The url of the recovery object, used to identify and recover the deleted SAS definition.
 	RecoveryID *string `json:"recoveryId,omitempty"`
@@ -1512,44 +1328,26 @@ type DeletedSasDefinitionListResult struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// DeletedSasDefinitionListResultIterator provides access to a complete listing of DeletedSasDefinitionItem
-// values.
+// DeletedSasDefinitionListResultIterator provides access to a complete listing of DeletedSasDefinitionItem values.
 type DeletedSasDefinitionListResultIterator struct {
 	i    int
 	page DeletedSasDefinitionListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *DeletedSasDefinitionListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DeletedSasDefinitionListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *DeletedSasDefinitionListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *DeletedSasDefinitionListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1571,11 +1369,6 @@ func (iter DeletedSasDefinitionListResultIterator) Value() DeletedSasDefinitionI
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the DeletedSasDefinitionListResultIterator type.
-func NewDeletedSasDefinitionListResultIterator(page DeletedSasDefinitionListResultPage) DeletedSasDefinitionListResultIterator {
-	return DeletedSasDefinitionListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (dsdlr DeletedSasDefinitionListResult) IsEmpty() bool {
 	return dsdlr.Value == nil || len(*dsdlr.Value) == 0
@@ -1583,11 +1376,11 @@ func (dsdlr DeletedSasDefinitionListResult) IsEmpty() bool {
 
 // deletedSasDefinitionListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (dsdlr DeletedSasDefinitionListResult) deletedSasDefinitionListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (dsdlr DeletedSasDefinitionListResult) deletedSasDefinitionListResultPreparer() (*http.Request, error) {
 	if dsdlr.NextLink == nil || len(to.String(dsdlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(dsdlr.NextLink)))
@@ -1595,36 +1388,19 @@ func (dsdlr DeletedSasDefinitionListResult) deletedSasDefinitionListResultPrepar
 
 // DeletedSasDefinitionListResultPage contains a page of DeletedSasDefinitionItem values.
 type DeletedSasDefinitionListResultPage struct {
-	fn    func(context.Context, DeletedSasDefinitionListResult) (DeletedSasDefinitionListResult, error)
+	fn    func(DeletedSasDefinitionListResult) (DeletedSasDefinitionListResult, error)
 	dsdlr DeletedSasDefinitionListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *DeletedSasDefinitionListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DeletedSasDefinitionListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.dsdlr)
+func (page *DeletedSasDefinitionListResultPage) Next() error {
+	next, err := page.fn(page.dsdlr)
 	if err != nil {
 		return err
 	}
 	page.dsdlr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *DeletedSasDefinitionListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1643,11 +1419,6 @@ func (page DeletedSasDefinitionListResultPage) Values() []DeletedSasDefinitionIt
 		return nil
 	}
 	return *page.dsdlr.Value
-}
-
-// Creates a new instance of the DeletedSasDefinitionListResultPage type.
-func NewDeletedSasDefinitionListResultPage(getNextPage func(context.Context, DeletedSasDefinitionListResult) (DeletedSasDefinitionListResult, error)) DeletedSasDefinitionListResultPage {
-	return DeletedSasDefinitionListResultPage{fn: getNextPage}
 }
 
 // DeletedSecretBundle a Deleted Secret consisting of its previous id, attributes and its tags, as well as
@@ -1777,37 +1548,20 @@ type DeletedSecretListResultIterator struct {
 	page DeletedSecretListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *DeletedSecretListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DeletedSecretListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *DeletedSecretListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *DeletedSecretListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1829,11 +1583,6 @@ func (iter DeletedSecretListResultIterator) Value() DeletedSecretItem {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the DeletedSecretListResultIterator type.
-func NewDeletedSecretListResultIterator(page DeletedSecretListResultPage) DeletedSecretListResultIterator {
-	return DeletedSecretListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (dslr DeletedSecretListResult) IsEmpty() bool {
 	return dslr.Value == nil || len(*dslr.Value) == 0
@@ -1841,11 +1590,11 @@ func (dslr DeletedSecretListResult) IsEmpty() bool {
 
 // deletedSecretListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (dslr DeletedSecretListResult) deletedSecretListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (dslr DeletedSecretListResult) deletedSecretListResultPreparer() (*http.Request, error) {
 	if dslr.NextLink == nil || len(to.String(dslr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(dslr.NextLink)))
@@ -1853,36 +1602,19 @@ func (dslr DeletedSecretListResult) deletedSecretListResultPreparer(ctx context.
 
 // DeletedSecretListResultPage contains a page of DeletedSecretItem values.
 type DeletedSecretListResultPage struct {
-	fn   func(context.Context, DeletedSecretListResult) (DeletedSecretListResult, error)
+	fn   func(DeletedSecretListResult) (DeletedSecretListResult, error)
 	dslr DeletedSecretListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *DeletedSecretListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DeletedSecretListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.dslr)
+func (page *DeletedSecretListResultPage) Next() error {
+	next, err := page.fn(page.dslr)
 	if err != nil {
 		return err
 	}
 	page.dslr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *DeletedSecretListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1901,11 +1633,6 @@ func (page DeletedSecretListResultPage) Values() []DeletedSecretItem {
 		return nil
 	}
 	return *page.dslr.Value
-}
-
-// Creates a new instance of the DeletedSecretListResultPage type.
-func NewDeletedSecretListResultPage(getNextPage func(context.Context, DeletedSecretListResult) (DeletedSecretListResult, error)) DeletedSecretListResultPage {
-	return DeletedSecretListResultPage{fn: getNextPage}
 }
 
 // DeletedStorageAccountItem the deleted storage account item containing metadata about the deleted storage
@@ -1954,8 +1681,8 @@ func (dsai DeletedStorageAccountItem) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// DeletedStorageBundle a deleted storage account bundle consisting of its previous id, attributes and its
-// tags, as well as information on when it will be purged.
+// DeletedStorageBundle a deleted storage account bundle consisting of its previous id, attributes and its tags, as
+// well as information on when it will be purged.
 type DeletedStorageBundle struct {
 	autorest.Response `json:"-"`
 	// RecoveryID - The url of the recovery object, used to identify and recover the deleted storage account.
@@ -2025,44 +1752,26 @@ type DeletedStorageListResult struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// DeletedStorageListResultIterator provides access to a complete listing of DeletedStorageAccountItem
-// values.
+// DeletedStorageListResultIterator provides access to a complete listing of DeletedStorageAccountItem values.
 type DeletedStorageListResultIterator struct {
 	i    int
 	page DeletedStorageListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *DeletedStorageListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DeletedStorageListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *DeletedStorageListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *DeletedStorageListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -2084,11 +1793,6 @@ func (iter DeletedStorageListResultIterator) Value() DeletedStorageAccountItem {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the DeletedStorageListResultIterator type.
-func NewDeletedStorageListResultIterator(page DeletedStorageListResultPage) DeletedStorageListResultIterator {
-	return DeletedStorageListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (dslr DeletedStorageListResult) IsEmpty() bool {
 	return dslr.Value == nil || len(*dslr.Value) == 0
@@ -2096,11 +1800,11 @@ func (dslr DeletedStorageListResult) IsEmpty() bool {
 
 // deletedStorageListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (dslr DeletedStorageListResult) deletedStorageListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (dslr DeletedStorageListResult) deletedStorageListResultPreparer() (*http.Request, error) {
 	if dslr.NextLink == nil || len(to.String(dslr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(dslr.NextLink)))
@@ -2108,36 +1812,19 @@ func (dslr DeletedStorageListResult) deletedStorageListResultPreparer(ctx contex
 
 // DeletedStorageListResultPage contains a page of DeletedStorageAccountItem values.
 type DeletedStorageListResultPage struct {
-	fn   func(context.Context, DeletedStorageListResult) (DeletedStorageListResult, error)
+	fn   func(DeletedStorageListResult) (DeletedStorageListResult, error)
 	dslr DeletedStorageListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *DeletedStorageListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DeletedStorageListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.dslr)
+func (page *DeletedStorageListResultPage) Next() error {
+	next, err := page.fn(page.dslr)
 	if err != nil {
 		return err
 	}
 	page.dslr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *DeletedStorageListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -2156,11 +1843,6 @@ func (page DeletedStorageListResultPage) Values() []DeletedStorageAccountItem {
 		return nil
 	}
 	return *page.dslr.Value
-}
-
-// Creates a new instance of the DeletedStorageListResultPage type.
-func NewDeletedStorageListResultPage(getNextPage func(context.Context, DeletedStorageListResult) (DeletedStorageListResult, error)) DeletedStorageListResultPage {
-	return DeletedStorageListResultPage{fn: getNextPage}
 }
 
 // Error the key vault server error.
@@ -2415,37 +2097,20 @@ type KeyListResultIterator struct {
 	page KeyListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *KeyListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/KeyListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *KeyListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *KeyListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -2467,11 +2132,6 @@ func (iter KeyListResultIterator) Value() KeyItem {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the KeyListResultIterator type.
-func NewKeyListResultIterator(page KeyListResultPage) KeyListResultIterator {
-	return KeyListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (klr KeyListResult) IsEmpty() bool {
 	return klr.Value == nil || len(*klr.Value) == 0
@@ -2479,11 +2139,11 @@ func (klr KeyListResult) IsEmpty() bool {
 
 // keyListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (klr KeyListResult) keyListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (klr KeyListResult) keyListResultPreparer() (*http.Request, error) {
 	if klr.NextLink == nil || len(to.String(klr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(klr.NextLink)))
@@ -2491,36 +2151,19 @@ func (klr KeyListResult) keyListResultPreparer(ctx context.Context) (*http.Reque
 
 // KeyListResultPage contains a page of KeyItem values.
 type KeyListResultPage struct {
-	fn  func(context.Context, KeyListResult) (KeyListResult, error)
+	fn  func(KeyListResult) (KeyListResult, error)
 	klr KeyListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *KeyListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/KeyListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.klr)
+func (page *KeyListResultPage) Next() error {
+	next, err := page.fn(page.klr)
 	if err != nil {
 		return err
 	}
 	page.klr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *KeyListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -2539,11 +2182,6 @@ func (page KeyListResultPage) Values() []KeyItem {
 		return nil
 	}
 	return *page.klr.Value
-}
-
-// Creates a new instance of the KeyListResultPage type.
-func NewKeyListResultPage(getNextPage func(context.Context, KeyListResult) (KeyListResult, error)) KeyListResultPage {
-	return KeyListResultPage{fn: getNextPage}
 }
 
 // KeyOperationResult the key operation result.
@@ -2632,8 +2270,7 @@ type KeyVerifyResult struct {
 	Value *bool `json:"value,omitempty"`
 }
 
-// LifetimeAction action and its trigger that will be performed by Key Vault over the lifetime of a
-// certificate.
+// LifetimeAction action and its trigger that will be performed by Key Vault over the lifetime of a certificate.
 type LifetimeAction struct {
 	// Trigger - The condition that will execute the action.
 	Trigger *Trigger `json:"trigger,omitempty"`
@@ -2667,8 +2304,7 @@ type SasDefinitionAttributes struct {
 	RecoveryLevel DeletionRecoveryLevel `json:"recoveryLevel,omitempty"`
 }
 
-// SasDefinitionBundle a SAS definition bundle consists of key vault SAS definition details plus its
-// attributes.
+// SasDefinitionBundle a SAS definition bundle consists of key vault SAS definition details plus its attributes.
 type SasDefinitionBundle struct {
 	autorest.Response `json:"-"`
 	// ID - The SAS definition id.
@@ -2784,7 +2420,7 @@ type SasDefinitionListResult struct {
 	autorest.Response `json:"-"`
 	// Value - A response message containing a list of SAS definitions along with a link to the next page of SAS definitions.
 	Value *[]SasDefinitionItem `json:"value,omitempty"`
-	// NextLink - The URL to get the next set of SAS definitions.
+	// NextLink - The URL to get the next set of SAS defintions.
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
@@ -2794,37 +2430,20 @@ type SasDefinitionListResultIterator struct {
 	page SasDefinitionListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *SasDefinitionListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SasDefinitionListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *SasDefinitionListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *SasDefinitionListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -2846,11 +2465,6 @@ func (iter SasDefinitionListResultIterator) Value() SasDefinitionItem {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the SasDefinitionListResultIterator type.
-func NewSasDefinitionListResultIterator(page SasDefinitionListResultPage) SasDefinitionListResultIterator {
-	return SasDefinitionListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (sdlr SasDefinitionListResult) IsEmpty() bool {
 	return sdlr.Value == nil || len(*sdlr.Value) == 0
@@ -2858,11 +2472,11 @@ func (sdlr SasDefinitionListResult) IsEmpty() bool {
 
 // sasDefinitionListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (sdlr SasDefinitionListResult) sasDefinitionListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (sdlr SasDefinitionListResult) sasDefinitionListResultPreparer() (*http.Request, error) {
 	if sdlr.NextLink == nil || len(to.String(sdlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(sdlr.NextLink)))
@@ -2870,36 +2484,19 @@ func (sdlr SasDefinitionListResult) sasDefinitionListResultPreparer(ctx context.
 
 // SasDefinitionListResultPage contains a page of SasDefinitionItem values.
 type SasDefinitionListResultPage struct {
-	fn   func(context.Context, SasDefinitionListResult) (SasDefinitionListResult, error)
+	fn   func(SasDefinitionListResult) (SasDefinitionListResult, error)
 	sdlr SasDefinitionListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *SasDefinitionListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SasDefinitionListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.sdlr)
+func (page *SasDefinitionListResultPage) Next() error {
+	next, err := page.fn(page.sdlr)
 	if err != nil {
 		return err
 	}
 	page.sdlr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *SasDefinitionListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -2918,11 +2515,6 @@ func (page SasDefinitionListResultPage) Values() []SasDefinitionItem {
 		return nil
 	}
 	return *page.sdlr.Value
-}
-
-// Creates a new instance of the SasDefinitionListResultPage type.
-func NewSasDefinitionListResultPage(getNextPage func(context.Context, SasDefinitionListResult) (SasDefinitionListResult, error)) SasDefinitionListResultPage {
-	return SasDefinitionListResultPage{fn: getNextPage}
 }
 
 // SasDefinitionUpdateParameters the SAS definition update parameters.
@@ -3072,37 +2664,20 @@ type SecretListResultIterator struct {
 	page SecretListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *SecretListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SecretListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *SecretListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *SecretListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -3124,11 +2699,6 @@ func (iter SecretListResultIterator) Value() SecretItem {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the SecretListResultIterator type.
-func NewSecretListResultIterator(page SecretListResultPage) SecretListResultIterator {
-	return SecretListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (slr SecretListResult) IsEmpty() bool {
 	return slr.Value == nil || len(*slr.Value) == 0
@@ -3136,11 +2706,11 @@ func (slr SecretListResult) IsEmpty() bool {
 
 // secretListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (slr SecretListResult) secretListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (slr SecretListResult) secretListResultPreparer() (*http.Request, error) {
 	if slr.NextLink == nil || len(to.String(slr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(slr.NextLink)))
@@ -3148,36 +2718,19 @@ func (slr SecretListResult) secretListResultPreparer(ctx context.Context) (*http
 
 // SecretListResultPage contains a page of SecretItem values.
 type SecretListResultPage struct {
-	fn  func(context.Context, SecretListResult) (SecretListResult, error)
+	fn  func(SecretListResult) (SecretListResult, error)
 	slr SecretListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *SecretListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SecretListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.slr)
+func (page *SecretListResultPage) Next() error {
+	next, err := page.fn(page.slr)
 	if err != nil {
 		return err
 	}
 	page.slr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *SecretListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -3196,11 +2749,6 @@ func (page SecretListResultPage) Values() []SecretItem {
 		return nil
 	}
 	return *page.slr.Value
-}
-
-// Creates a new instance of the SecretListResultPage type.
-func NewSecretListResultPage(getNextPage func(context.Context, SecretListResult) (SecretListResult, error)) SecretListResultPage {
-	return SecretListResultPage{fn: getNextPage}
 }
 
 // SecretProperties properties of the key backing a certificate.
@@ -3393,8 +2941,7 @@ func (saup StorageAccountUpdateParameters) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// StorageBundle a Storage account bundle consists of key vault storage account details plus its
-// attributes.
+// StorageBundle a Storage account bundle consists of key vault storage account details plus its attributes.
 type StorageBundle struct {
 	autorest.Response `json:"-"`
 	// ID - The storage account id.
@@ -3455,37 +3002,20 @@ type StorageListResultIterator struct {
 	page StorageListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *StorageListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/StorageListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *StorageListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *StorageListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -3507,11 +3037,6 @@ func (iter StorageListResultIterator) Value() StorageAccountItem {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the StorageListResultIterator type.
-func NewStorageListResultIterator(page StorageListResultPage) StorageListResultIterator {
-	return StorageListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (slr StorageListResult) IsEmpty() bool {
 	return slr.Value == nil || len(*slr.Value) == 0
@@ -3519,11 +3044,11 @@ func (slr StorageListResult) IsEmpty() bool {
 
 // storageListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (slr StorageListResult) storageListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (slr StorageListResult) storageListResultPreparer() (*http.Request, error) {
 	if slr.NextLink == nil || len(to.String(slr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(slr.NextLink)))
@@ -3531,36 +3056,19 @@ func (slr StorageListResult) storageListResultPreparer(ctx context.Context) (*ht
 
 // StorageListResultPage contains a page of StorageAccountItem values.
 type StorageListResultPage struct {
-	fn  func(context.Context, StorageListResult) (StorageListResult, error)
+	fn  func(StorageListResult) (StorageListResult, error)
 	slr StorageListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *StorageListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/StorageListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.slr)
+func (page *StorageListResultPage) Next() error {
+	next, err := page.fn(page.slr)
 	if err != nil {
 		return err
 	}
 	page.slr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *StorageListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -3579,11 +3087,6 @@ func (page StorageListResultPage) Values() []StorageAccountItem {
 		return nil
 	}
 	return *page.slr.Value
-}
-
-// Creates a new instance of the StorageListResultPage type.
-func NewStorageListResultPage(getNextPage func(context.Context, StorageListResult) (StorageListResult, error)) StorageListResultPage {
-	return StorageListResultPage{fn: getNextPage}
 }
 
 // StorageRestoreParameters the secret restore parameters.
@@ -3620,6 +3123,6 @@ type X509CertificateProperties struct {
 	SubjectAlternativeNames *SubjectAlternativeNames `json:"sans,omitempty"`
 	// KeyUsage - List of key usages.
 	KeyUsage *[]KeyUsageType `json:"key_usage,omitempty"`
-	// ValidityInMonths - The duration that the certificate is valid in months.
+	// ValidityInMonths - The duration that the ceritifcate is valid in months.
 	ValidityInMonths *int32 `json:"validity_months,omitempty"`
 }

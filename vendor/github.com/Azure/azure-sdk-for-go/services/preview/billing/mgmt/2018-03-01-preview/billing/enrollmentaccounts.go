@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,16 +43,6 @@ func NewEnrollmentAccountsClientWithBaseURI(baseURI string, subscriptionID strin
 // Parameters:
 // name - enrollment Account name.
 func (client EnrollmentAccountsClient) Get(ctx context.Context, name string) (result EnrollmentAccount, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EnrollmentAccountsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "billing.EnrollmentAccountsClient", "Get", nil, "Failure preparing request")
@@ -116,16 +105,6 @@ func (client EnrollmentAccountsClient) GetResponder(resp *http.Response) (result
 
 // List lists the enrollment accounts the caller has access to.
 func (client EnrollmentAccountsClient) List(ctx context.Context) (result EnrollmentAccountListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EnrollmentAccountsClient.List")
-		defer func() {
-			sc := -1
-			if result.ealr.Response.Response != nil {
-				sc = result.ealr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -184,8 +163,8 @@ func (client EnrollmentAccountsClient) ListResponder(resp *http.Response) (resul
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client EnrollmentAccountsClient) listNextResults(ctx context.Context, lastResults EnrollmentAccountListResult) (result EnrollmentAccountListResult, err error) {
-	req, err := lastResults.enrollmentAccountListResultPreparer(ctx)
+func (client EnrollmentAccountsClient) listNextResults(lastResults EnrollmentAccountListResult) (result EnrollmentAccountListResult, err error) {
+	req, err := lastResults.enrollmentAccountListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "billing.EnrollmentAccountsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -206,16 +185,6 @@ func (client EnrollmentAccountsClient) listNextResults(ctx context.Context, last
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client EnrollmentAccountsClient) ListComplete(ctx context.Context) (result EnrollmentAccountListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EnrollmentAccountsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }

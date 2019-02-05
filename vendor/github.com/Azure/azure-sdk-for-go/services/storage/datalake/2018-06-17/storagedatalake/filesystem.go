@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,16 +49,6 @@ func NewFilesystemClient(xMsVersion string, accountName string) FilesystemClient
 // xMsDate - specifies the Coordinated Universal Time (UTC) for the request.  This is required when using
 // shared key authorization.
 func (client FilesystemClient) Create(ctx context.Context, filesystem string, xMsProperties string, xMsClientRequestID string, timeout *int32, xMsDate string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/FilesystemClient.Create")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: xMsClientRequestID,
 			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
@@ -173,16 +162,6 @@ func (client FilesystemClient) CreateResponder(resp *http.Response) (result auto
 // xMsDate - specifies the Coordinated Universal Time (UTC) for the request.  This is required when using
 // shared key authorization.
 func (client FilesystemClient) Delete(ctx context.Context, filesystem string, ifModifiedSince string, ifUnmodifiedSince string, xMsClientRequestID string, timeout *int32, xMsDate string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/FilesystemClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: xMsClientRequestID,
 			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
@@ -289,16 +268,6 @@ func (client FilesystemClient) DeleteResponder(resp *http.Response) (result auto
 // xMsDate - specifies the Coordinated Universal Time (UTC) for the request.  This is required when using
 // shared key authorization.
 func (client FilesystemClient) GetProperties(ctx context.Context, filesystem string, xMsClientRequestID string, timeout *int32, xMsDate string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/FilesystemClient.GetProperties")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: xMsClientRequestID,
 			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
@@ -401,16 +370,6 @@ func (client FilesystemClient) GetPropertiesResponder(resp *http.Response) (resu
 // xMsDate - specifies the Coordinated Universal Time (UTC) for the request.  This is required when using
 // shared key authorization.
 func (client FilesystemClient) List(ctx context.Context, prefix string, continuation string, maxResults *int32, xMsClientRequestID string, timeout *int32, xMsDate string) (result FilesystemList, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/FilesystemClient.List")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
@@ -529,16 +488,6 @@ func (client FilesystemClient) ListResponder(resp *http.Response) (result Filesy
 // xMsDate - specifies the Coordinated Universal Time (UTC) for the request.  This is required when using
 // shared key authorization.
 func (client FilesystemClient) SetProperties(ctx context.Context, filesystem string, xMsProperties string, ifModifiedSince string, ifUnmodifiedSince string, xMsClientRequestID string, timeout *int32, xMsDate string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/FilesystemClient.SetProperties")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: xMsClientRequestID,
 			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},

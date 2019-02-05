@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -40,18 +39,8 @@ func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) Opera
 	return OperationsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
-// List lists all of the available REST API operations of the Microsoft.StorSimple provider
+// List lists all of the available REST API operations of the Microsoft.Storsimple provider
 func (client OperationsClient) List(ctx context.Context) (result AvailableProviderOperationListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OperationsClient.List")
-		defer func() {
-			sc := -1
-			if result.apol.Response.Response != nil {
-				sc = result.apol.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -110,8 +99,8 @@ func (client OperationsClient) ListResponder(resp *http.Response) (result Availa
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client OperationsClient) listNextResults(ctx context.Context, lastResults AvailableProviderOperationList) (result AvailableProviderOperationList, err error) {
-	req, err := lastResults.availableProviderOperationListPreparer(ctx)
+func (client OperationsClient) listNextResults(lastResults AvailableProviderOperationList) (result AvailableProviderOperationList, err error) {
+	req, err := lastResults.availableProviderOperationListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "storsimple.OperationsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -132,16 +121,6 @@ func (client OperationsClient) listNextResults(ctx context.Context, lastResults 
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client OperationsClient) ListComplete(ctx context.Context) (result AvailableProviderOperationListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OperationsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }

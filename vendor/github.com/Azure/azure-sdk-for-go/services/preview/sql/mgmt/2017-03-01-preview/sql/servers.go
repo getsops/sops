@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,16 +46,6 @@ func NewServersClientWithBaseURI(baseURI string, subscriptionID string) ServersC
 // Parameters:
 // parameters - the parameters to request for name availability.
 func (client ServersClient) CheckNameAvailability(ctx context.Context, parameters CheckNameAvailabilityRequest) (result CheckNameAvailabilityResponse, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.CheckNameAvailability")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Name", Name: validation.Null, Rule: true, Chain: nil},
@@ -133,16 +122,6 @@ func (client ServersClient) CheckNameAvailabilityResponder(resp *http.Response) 
 // serverName - the name of the server.
 // parameters - the requested server resource state.
 func (client ServersClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, parameters Server) (result ServersCreateOrUpdateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serverName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServersClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -190,6 +169,10 @@ func (client ServersClient) CreateOrUpdateSender(req *http.Request) (future Serv
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -213,16 +196,6 @@ func (client ServersClient) CreateOrUpdateResponder(resp *http.Response) (result
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server.
 func (client ServersClient) Delete(ctx context.Context, resourceGroupName string, serverName string) (result ServersDeleteFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServersClient", "Delete", nil, "Failure preparing request")
@@ -268,6 +241,10 @@ func (client ServersClient) DeleteSender(req *http.Request) (future ServersDelet
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -290,16 +267,6 @@ func (client ServersClient) DeleteResponder(resp *http.Response) (result autores
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server.
 func (client ServersClient) Get(ctx context.Context, resourceGroupName string, serverName string) (result Server, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServersClient", "Get", nil, "Failure preparing request")
@@ -364,16 +331,6 @@ func (client ServersClient) GetResponder(resp *http.Response) (result Server, er
 
 // List gets a list of all servers in the subscription.
 func (client ServersClient) List(ctx context.Context) (result ServerListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.List")
-		defer func() {
-			sc := -1
-			if result.slr.Response.Response != nil {
-				sc = result.slr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -436,8 +393,8 @@ func (client ServersClient) ListResponder(resp *http.Response) (result ServerLis
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ServersClient) listNextResults(ctx context.Context, lastResults ServerListResult) (result ServerListResult, err error) {
-	req, err := lastResults.serverListResultPreparer(ctx)
+func (client ServersClient) listNextResults(lastResults ServerListResult) (result ServerListResult, err error) {
+	req, err := lastResults.serverListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.ServersClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -458,16 +415,6 @@ func (client ServersClient) listNextResults(ctx context.Context, lastResults Ser
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServersClient) ListComplete(ctx context.Context) (result ServerListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -477,16 +424,6 @@ func (client ServersClient) ListComplete(ctx context.Context) (result ServerList
 // resourceGroupName - the name of the resource group that contains the resource. You can obtain this value
 // from the Azure Resource Manager API or the portal.
 func (client ServersClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result ServerListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.slr.Response.Response != nil {
-				sc = result.slr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -550,8 +487,8 @@ func (client ServersClient) ListByResourceGroupResponder(resp *http.Response) (r
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client ServersClient) listByResourceGroupNextResults(ctx context.Context, lastResults ServerListResult) (result ServerListResult, err error) {
-	req, err := lastResults.serverListResultPreparer(ctx)
+func (client ServersClient) listByResourceGroupNextResults(lastResults ServerListResult) (result ServerListResult, err error) {
+	req, err := lastResults.serverListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.ServersClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -572,16 +509,6 @@ func (client ServersClient) listByResourceGroupNextResults(ctx context.Context, 
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServersClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result ServerListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -593,16 +520,6 @@ func (client ServersClient) ListByResourceGroupComplete(ctx context.Context, res
 // serverName - the name of the server.
 // parameters - the requested server resource state.
 func (client ServersClient) Update(ctx context.Context, resourceGroupName string, serverName string, parameters ServerUpdate) (result ServersUpdateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, serverName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServersClient", "Update", nil, "Failure preparing request")
@@ -647,6 +564,10 @@ func (client ServersClient) UpdateSender(req *http.Request) (future ServersUpdat
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

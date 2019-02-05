@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,16 +44,6 @@ func NewFirewallRulesClientWithBaseURI(baseURI string, subscriptionID string) Fi
 // resourceGroupName - the name of the resource group.
 // cacheName - the name of the Redis cache.
 func (client FirewallRulesClient) List(ctx context.Context, resourceGroupName string, cacheName string) (result FirewallRuleListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/FirewallRulesClient.List")
-		defer func() {
-			sc := -1
-			if result.frlr.Response.Response != nil {
-				sc = result.frlr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, cacheName)
 	if err != nil {
@@ -119,8 +108,8 @@ func (client FirewallRulesClient) ListResponder(resp *http.Response) (result Fir
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client FirewallRulesClient) listNextResults(ctx context.Context, lastResults FirewallRuleListResult) (result FirewallRuleListResult, err error) {
-	req, err := lastResults.firewallRuleListResultPreparer(ctx)
+func (client FirewallRulesClient) listNextResults(lastResults FirewallRuleListResult) (result FirewallRuleListResult, err error) {
+	req, err := lastResults.firewallRuleListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "redis.FirewallRulesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -141,16 +130,6 @@ func (client FirewallRulesClient) listNextResults(ctx context.Context, lastResul
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client FirewallRulesClient) ListComplete(ctx context.Context, resourceGroupName string, cacheName string) (result FirewallRuleListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/FirewallRulesClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, resourceGroupName, cacheName)
 	return
 }

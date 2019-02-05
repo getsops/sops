@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,16 +45,6 @@ func NewReplicationRecoveryPlansClientWithBaseURI(baseURI string, subscriptionID
 // recoveryPlanName - recovery plan name.
 // input - recovery Plan creation input.
 func (client ReplicationRecoveryPlansClient) Create(ctx context.Context, recoveryPlanName string, input CreateRecoveryPlanInput) (result ReplicationRecoveryPlansCreateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryPlansClient.Create")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: input,
 			Constraints: []validation.Constraint{{Target: "input.Properties", Name: validation.Null, Rule: true,
@@ -114,6 +103,10 @@ func (client ReplicationRecoveryPlansClient) CreateSender(req *http.Request) (fu
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -135,16 +128,6 @@ func (client ReplicationRecoveryPlansClient) CreateResponder(resp *http.Response
 // Parameters:
 // recoveryPlanName - recovery plan name.
 func (client ReplicationRecoveryPlansClient) Delete(ctx context.Context, recoveryPlanName string) (result ReplicationRecoveryPlansDeleteFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryPlansClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, recoveryPlanName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationRecoveryPlansClient", "Delete", nil, "Failure preparing request")
@@ -191,6 +174,10 @@ func (client ReplicationRecoveryPlansClient) DeleteSender(req *http.Request) (fu
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -211,16 +198,6 @@ func (client ReplicationRecoveryPlansClient) DeleteResponder(resp *http.Response
 // Parameters:
 // recoveryPlanName - recovery plan name.
 func (client ReplicationRecoveryPlansClient) FailoverCommit(ctx context.Context, recoveryPlanName string) (result ReplicationRecoveryPlansFailoverCommitFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryPlansClient.FailoverCommit")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.FailoverCommitPreparer(ctx, recoveryPlanName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationRecoveryPlansClient", "FailoverCommit", nil, "Failure preparing request")
@@ -267,6 +244,10 @@ func (client ReplicationRecoveryPlansClient) FailoverCommitSender(req *http.Requ
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -288,16 +269,6 @@ func (client ReplicationRecoveryPlansClient) FailoverCommitResponder(resp *http.
 // Parameters:
 // recoveryPlanName - name of the recovery plan.
 func (client ReplicationRecoveryPlansClient) Get(ctx context.Context, recoveryPlanName string) (result RecoveryPlan, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryPlansClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, recoveryPlanName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationRecoveryPlansClient", "Get", nil, "Failure preparing request")
@@ -363,16 +334,6 @@ func (client ReplicationRecoveryPlansClient) GetResponder(resp *http.Response) (
 
 // List lists the recovery plans in the vault.
 func (client ReplicationRecoveryPlansClient) List(ctx context.Context) (result RecoveryPlanCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryPlansClient.List")
-		defer func() {
-			sc := -1
-			if result.RPCVar.Response.Response != nil {
-				sc = result.RPCVar.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -437,8 +398,8 @@ func (client ReplicationRecoveryPlansClient) ListResponder(resp *http.Response) 
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ReplicationRecoveryPlansClient) listNextResults(ctx context.Context, lastResults RecoveryPlanCollection) (result RecoveryPlanCollection, err error) {
-	req, err := lastResults.recoveryPlanCollectionPreparer(ctx)
+func (client ReplicationRecoveryPlansClient) listNextResults(lastResults RecoveryPlanCollection) (result RecoveryPlanCollection, err error) {
+	req, err := lastResults.recoveryPlanCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "siterecovery.ReplicationRecoveryPlansClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -459,16 +420,6 @@ func (client ReplicationRecoveryPlansClient) listNextResults(ctx context.Context
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReplicationRecoveryPlansClient) ListComplete(ctx context.Context) (result RecoveryPlanCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryPlansClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -478,16 +429,6 @@ func (client ReplicationRecoveryPlansClient) ListComplete(ctx context.Context) (
 // recoveryPlanName - recovery plan name.
 // input - failover input.
 func (client ReplicationRecoveryPlansClient) PlannedFailover(ctx context.Context, recoveryPlanName string, input RecoveryPlanPlannedFailoverInput) (result ReplicationRecoveryPlansPlannedFailoverFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryPlansClient.PlannedFailover")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: input,
 			Constraints: []validation.Constraint{{Target: "input.Properties", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -542,6 +483,10 @@ func (client ReplicationRecoveryPlansClient) PlannedFailoverSender(req *http.Req
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -563,16 +508,6 @@ func (client ReplicationRecoveryPlansClient) PlannedFailoverResponder(resp *http
 // Parameters:
 // recoveryPlanName - recovery plan name.
 func (client ReplicationRecoveryPlansClient) Reprotect(ctx context.Context, recoveryPlanName string) (result ReplicationRecoveryPlansReprotectFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryPlansClient.Reprotect")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ReprotectPreparer(ctx, recoveryPlanName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationRecoveryPlansClient", "Reprotect", nil, "Failure preparing request")
@@ -619,6 +554,10 @@ func (client ReplicationRecoveryPlansClient) ReprotectSender(req *http.Request) 
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -641,16 +580,6 @@ func (client ReplicationRecoveryPlansClient) ReprotectResponder(resp *http.Respo
 // recoveryPlanName - recovery plan name.
 // input - failover input.
 func (client ReplicationRecoveryPlansClient) TestFailover(ctx context.Context, recoveryPlanName string, input RecoveryPlanTestFailoverInput) (result ReplicationRecoveryPlansTestFailoverFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryPlansClient.TestFailover")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: input,
 			Constraints: []validation.Constraint{{Target: "input.Properties", Name: validation.Null, Rule: true,
@@ -706,6 +635,10 @@ func (client ReplicationRecoveryPlansClient) TestFailoverSender(req *http.Reques
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -728,16 +661,6 @@ func (client ReplicationRecoveryPlansClient) TestFailoverResponder(resp *http.Re
 // recoveryPlanName - recovery plan name.
 // input - test failover cleanup input.
 func (client ReplicationRecoveryPlansClient) TestFailoverCleanup(ctx context.Context, recoveryPlanName string, input RecoveryPlanTestFailoverCleanupInput) (result ReplicationRecoveryPlansTestFailoverCleanupFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryPlansClient.TestFailoverCleanup")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: input,
 			Constraints: []validation.Constraint{{Target: "input.Properties", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -792,6 +715,10 @@ func (client ReplicationRecoveryPlansClient) TestFailoverCleanupSender(req *http
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -814,16 +741,6 @@ func (client ReplicationRecoveryPlansClient) TestFailoverCleanupResponder(resp *
 // recoveryPlanName - recovery plan name.
 // input - failover input.
 func (client ReplicationRecoveryPlansClient) UnplannedFailover(ctx context.Context, recoveryPlanName string, input RecoveryPlanUnplannedFailoverInput) (result ReplicationRecoveryPlansUnplannedFailoverFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryPlansClient.UnplannedFailover")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: input,
 			Constraints: []validation.Constraint{{Target: "input.Properties", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -878,6 +795,10 @@ func (client ReplicationRecoveryPlansClient) UnplannedFailoverSender(req *http.R
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -900,16 +821,6 @@ func (client ReplicationRecoveryPlansClient) UnplannedFailoverResponder(resp *ht
 // recoveryPlanName - recovery plan name.
 // input - update recovery plan input
 func (client ReplicationRecoveryPlansClient) Update(ctx context.Context, recoveryPlanName string, input UpdateRecoveryPlanInput) (result ReplicationRecoveryPlansUpdateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryPlansClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.UpdatePreparer(ctx, recoveryPlanName, input)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationRecoveryPlansClient", "Update", nil, "Failure preparing request")
@@ -955,6 +866,10 @@ func (client ReplicationRecoveryPlansClient) UpdateSender(req *http.Request) (fu
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

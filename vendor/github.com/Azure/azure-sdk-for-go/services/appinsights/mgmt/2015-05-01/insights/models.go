@@ -18,17 +18,12 @@ package insights
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
-	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
-
-// The package's fully qualified name.
-const fqdn = "github.com/Azure/azure-sdk-for-go/services/appinsights/mgmt/2015-05-01/insights"
 
 // ApplicationType enumerates the values for application type.
 type ApplicationType string
@@ -279,7 +274,7 @@ type AnnotationsListResult struct {
 	Value *[]Annotation `json:"value,omitempty"`
 }
 
-// APIKeyRequest an Application Insights component API Key creation request definition.
+// APIKeyRequest an Application Insights component API Key createion request definition.
 type APIKeyRequest struct {
 	// Name - The name of the API Key.
 	Name *string `json:"name,omitempty"`
@@ -413,8 +408,8 @@ func (aic *ApplicationInsightsComponent) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ApplicationInsightsComponentAnalyticsItem properties that define an Analytics item that is associated to
-// an Application Insights component.
+// ApplicationInsightsComponentAnalyticsItem properties that define an Analytics item that is associated to an
+// Application Insights component.
 type ApplicationInsightsComponentAnalyticsItem struct {
 	autorest.Response `json:"-"`
 	// ID - Internally assigned unique id of the item definition.
@@ -436,18 +431,17 @@ type ApplicationInsightsComponentAnalyticsItem struct {
 	Properties   *ApplicationInsightsComponentAnalyticsItemProperties `json:"Properties,omitempty"`
 }
 
-// ApplicationInsightsComponentAnalyticsItemProperties a set of properties that can be defined in the
-// context of a specific item type. Each type may have its own properties.
+// ApplicationInsightsComponentAnalyticsItemProperties a set of properties that can be defined in the context of a
+// specific item type. Each type may have its own properties.
 type ApplicationInsightsComponentAnalyticsItemProperties struct {
 	// FunctionAlias - A function alias, used when the type of the item is Function
 	FunctionAlias *string `json:"functionAlias,omitempty"`
 }
 
-// ApplicationInsightsComponentAPIKey properties that define an API key of an Application Insights
-// Component.
+// ApplicationInsightsComponentAPIKey properties that define an API key of an Application Insights Component.
 type ApplicationInsightsComponentAPIKey struct {
 	autorest.Response `json:"-"`
-	// ID - The unique ID of the API key inside an Application Insights component. It is auto generated when the API key is created.
+	// ID - The unique ID of the API key inside an Applciation Insights component. It is auto generated when the API key is created.
 	ID *string `json:"id,omitempty"`
 	// APIKey - The API key value. It will be only return once when the API Key was created.
 	APIKey *string `json:"apiKey,omitempty"`
@@ -472,20 +466,20 @@ type ApplicationInsightsComponentAPIKeyListResult struct {
 // ApplicationInsightsComponentAvailableFeatures an Application Insights component available features.
 type ApplicationInsightsComponentAvailableFeatures struct {
 	autorest.Response `json:"-"`
-	// Result - A list of Application Insights component feature.
+	// Result - A list of Application Insigths component feature.
 	Result *[]ApplicationInsightsComponentFeature `json:"Result,omitempty"`
 }
 
 // ApplicationInsightsComponentBillingFeatures an Application Insights component billing features
 type ApplicationInsightsComponentBillingFeatures struct {
 	autorest.Response `json:"-"`
-	// DataVolumeCap - An Application Insights component daily data volume cap
+	// DataVolumeCap - An Application Insights component daily data volumne cap
 	DataVolumeCap *ApplicationInsightsComponentDataVolumeCap `json:"DataVolumeCap,omitempty"`
 	// CurrentBillingFeatures - Current enabled pricing plan. When the component is in the Enterprise plan, this will list both 'Basic' and 'Application Insights Enterprise'.
 	CurrentBillingFeatures *[]string `json:"CurrentBillingFeatures,omitempty"`
 }
 
-// ApplicationInsightsComponentDataVolumeCap an Application Insights component daily data volume cap
+// ApplicationInsightsComponentDataVolumeCap an Application Insights component daily data volumne cap
 type ApplicationInsightsComponentDataVolumeCap struct {
 	// Cap - Daily data volume cap in GB.
 	Cap *float64 `json:"Cap,omitempty"`
@@ -501,11 +495,10 @@ type ApplicationInsightsComponentDataVolumeCap struct {
 	MaxHistoryCap *float64 `json:"MaxHistoryCap,omitempty"`
 }
 
-// ApplicationInsightsComponentExportConfiguration properties that define a Continuous Export
-// configuration.
+// ApplicationInsightsComponentExportConfiguration properties that define a Continuous Export configuration.
 type ApplicationInsightsComponentExportConfiguration struct {
 	autorest.Response `json:"-"`
-	// ExportID - The unique ID of the export configuration inside an Application Insights component. It is auto generated when the Continuous Export configuration is created.
+	// ExportID - The unique ID of the export configuration inside an Applciation Insights component. It is auto generated when the Continuous Export configuration is created.
 	ExportID *string `json:"ExportId,omitempty"`
 	// InstrumentationKey - The instrumentation key of the Application Insights component.
 	InstrumentationKey *string `json:"InstrumentationKey,omitempty"`
@@ -545,8 +538,8 @@ type ApplicationInsightsComponentExportConfiguration struct {
 	ContainerName *string `json:"ContainerName,omitempty"`
 }
 
-// ApplicationInsightsComponentExportRequest an Application Insights component Continuous Export
-// configuration request definition.
+// ApplicationInsightsComponentExportRequest an Application Insights component Continuous Export configuration
+// request definition.
 type ApplicationInsightsComponentExportRequest struct {
 	// RecordTypes - The document types to be exported, as comma separated values. Allowed values include 'Requests', 'Event', 'Exceptions', 'Metrics', 'PageViews', 'PageViewPerformance', 'Rdd', 'PerformanceCounters', 'Availability', 'Messages'.
 	RecordTypes *string `json:"RecordTypes,omitempty"`
@@ -568,8 +561,8 @@ type ApplicationInsightsComponentExportRequest struct {
 	DestinationAccountID *string `json:"DestinationAccountId,omitempty"`
 }
 
-// ApplicationInsightsComponentFavorite properties that define a favorite that is associated to an
-// Application Insights component.
+// ApplicationInsightsComponentFavorite properties that define a favorite that is associated to an Application
+// Insights component.
 type ApplicationInsightsComponentFavorite struct {
 	autorest.Response `json:"-"`
 	// Name - The user-defined name of the favorite.
@@ -602,15 +595,15 @@ type ApplicationInsightsComponentFeature struct {
 	FeatureName *string `json:"FeatureName,omitempty"`
 	// MeterID - The meter id used for the feature.
 	MeterID *string `json:"MeterId,omitempty"`
-	// MeterRateFrequency - The meter rate for the feature's meter.
+	// MeterRateFrequency - The meter meter rate for the feature's meter.
 	MeterRateFrequency *string `json:"MeterRateFrequency,omitempty"`
 	// ResouceID - Reserved, not used now.
 	ResouceID *string `json:"ResouceId,omitempty"`
 	// IsHidden - Reserved, not used now.
 	IsHidden *bool `json:"IsHidden,omitempty"`
-	// Capabilities - A list of Application Insights component feature capability.
+	// Capabilities - A list of Application Insigths component feature capability.
 	Capabilities *[]ApplicationInsightsComponentFeatureCapability `json:"Capabilities,omitempty"`
-	// Title - Display name of the feature.
+	// Title - Desplay name of the feature.
 	Title *string `json:"Title,omitempty"`
 	// IsMainFeature - Whether can apply addon feature on to it.
 	IsMainFeature *bool `json:"IsMainFeature,omitempty"`
@@ -645,7 +638,7 @@ type ApplicationInsightsComponentFeatureCapabilities struct {
 	MultipleStepWebTest *bool `json:"MultipleStepWebTest,omitempty"`
 	// APIAccessLevel - Reserved, not used now.
 	APIAccessLevel *string `json:"ApiAccessLevel,omitempty"`
-	// TrackingType - The application insights component used tracking type.
+	// TrackingType - The applciation insights component used tracking type.
 	TrackingType *string `json:"TrackingType,omitempty"`
 	// DailyCap - Daily data volume cap in GB.
 	DailyCap *float64 `json:"DailyCap,omitempty"`
@@ -661,7 +654,7 @@ type ApplicationInsightsComponentFeatureCapability struct {
 	Name *string `json:"Name,omitempty"`
 	// Description - The description of the capability.
 	Description *string `json:"Description,omitempty"`
-	// Value - The value of the capability.
+	// Value - The vaule of the capability.
 	Value *string `json:"Value,omitempty"`
 	// Unit - The unit of the capability.
 	Unit *string `json:"Unit,omitempty"`
@@ -676,7 +669,7 @@ type ApplicationInsightsComponentListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of Application Insights component definitions.
 	Value *[]ApplicationInsightsComponent `json:"value,omitempty"`
-	// NextLink - The URI to get the next set of Application Insights component definitions if too many components where returned in the result set.
+	// NextLink - The URI to get the next set of Application Insights component defintions if too many components where returned in the result set.
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
@@ -687,37 +680,20 @@ type ApplicationInsightsComponentListResultIterator struct {
 	page ApplicationInsightsComponentListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ApplicationInsightsComponentListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationInsightsComponentListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *ApplicationInsightsComponentListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *ApplicationInsightsComponentListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -739,11 +715,6 @@ func (iter ApplicationInsightsComponentListResultIterator) Value() ApplicationIn
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the ApplicationInsightsComponentListResultIterator type.
-func NewApplicationInsightsComponentListResultIterator(page ApplicationInsightsComponentListResultPage) ApplicationInsightsComponentListResultIterator {
-	return ApplicationInsightsComponentListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (aiclr ApplicationInsightsComponentListResult) IsEmpty() bool {
 	return aiclr.Value == nil || len(*aiclr.Value) == 0
@@ -751,11 +722,11 @@ func (aiclr ApplicationInsightsComponentListResult) IsEmpty() bool {
 
 // applicationInsightsComponentListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (aiclr ApplicationInsightsComponentListResult) applicationInsightsComponentListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (aiclr ApplicationInsightsComponentListResult) applicationInsightsComponentListResultPreparer() (*http.Request, error) {
 	if aiclr.NextLink == nil || len(to.String(aiclr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(aiclr.NextLink)))
@@ -763,36 +734,19 @@ func (aiclr ApplicationInsightsComponentListResult) applicationInsightsComponent
 
 // ApplicationInsightsComponentListResultPage contains a page of ApplicationInsightsComponent values.
 type ApplicationInsightsComponentListResultPage struct {
-	fn    func(context.Context, ApplicationInsightsComponentListResult) (ApplicationInsightsComponentListResult, error)
+	fn    func(ApplicationInsightsComponentListResult) (ApplicationInsightsComponentListResult, error)
 	aiclr ApplicationInsightsComponentListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ApplicationInsightsComponentListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationInsightsComponentListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.aiclr)
+func (page *ApplicationInsightsComponentListResultPage) Next() error {
+	next, err := page.fn(page.aiclr)
 	if err != nil {
 		return err
 	}
 	page.aiclr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *ApplicationInsightsComponentListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -811,11 +765,6 @@ func (page ApplicationInsightsComponentListResultPage) Values() []ApplicationIns
 		return nil
 	}
 	return *page.aiclr.Value
-}
-
-// Creates a new instance of the ApplicationInsightsComponentListResultPage type.
-func NewApplicationInsightsComponentListResultPage(getNextPage func(context.Context, ApplicationInsightsComponentListResult) (ApplicationInsightsComponentListResult, error)) ApplicationInsightsComponentListResultPage {
-	return ApplicationInsightsComponentListResultPage{fn: getNextPage}
 }
 
 // ApplicationInsightsComponentProactiveDetectionConfiguration properties that define a ProactiveDetection
@@ -845,7 +794,7 @@ type ApplicationInsightsComponentProactiveDetectionConfigurationRuleDefinitions 
 	DisplayName *string `json:"DisplayName,omitempty"`
 	// Description - The rule description
 	Description *string `json:"Description,omitempty"`
-	// HelpURL - URL which displays additional info about the proactive detection rule
+	// HelpURL - URL which displays aditional info about the proactive detection rule
 	HelpURL *string `json:"HelpUrl,omitempty"`
 	// IsHidden - A flag indicating whether the rule is hidden (from the UI)
 	IsHidden *bool `json:"IsHidden,omitempty"`
@@ -857,8 +806,7 @@ type ApplicationInsightsComponentProactiveDetectionConfigurationRuleDefinitions 
 	SupportsEmailNotifications *bool `json:"SupportsEmailNotifications,omitempty"`
 }
 
-// ApplicationInsightsComponentProperties properties that define an Application Insights component
-// resource.
+// ApplicationInsightsComponentProperties properties that define an Application Insights component resource.
 type ApplicationInsightsComponentProperties struct {
 	// ApplicationID - The unique ID of your application. This field mirrors the 'Name' field and cannot be changed.
 	ApplicationID *string `json:"ApplicationId,omitempty"`
@@ -930,8 +878,6 @@ type ComponentPurgeBodyFilters struct {
 	Operator *string `json:"operator,omitempty"`
 	// Value - the value for the operator to function over. This can be a number (e.g., > 100), a string (timestamp >= '2017-09-01') or array of values.
 	Value interface{} `json:"value,omitempty"`
-	// Key - When filtering over custom dimensions, this key will be used as the name of the custom dimension.
-	Key *string `json:"key,omitempty"`
 }
 
 // ComponentPurgeResponse response containing operationId for a specific purge action.
@@ -993,8 +939,8 @@ type ErrorFieldContract struct {
 	Target *string `json:"target,omitempty"`
 }
 
-// ErrorResponse error response indicates Insights service is not able to process the incoming request. The
-// reason is provided in the error message.
+// ErrorResponse error reponse indicates Insights service is not able to process the incoming request. The reason
+// is provided in the error message.
 type ErrorResponse struct {
 	// Code - Error code.
 	Code *string `json:"code,omitempty"`
@@ -1068,8 +1014,8 @@ type OperationDisplay struct {
 	Operation *string `json:"operation,omitempty"`
 }
 
-// OperationListResult result of the request to list CDN operations. It contains a list of operations and a
-// URL link to get the next set of results.
+// OperationListResult result of the request to list CDN operations. It contains a list of operations and a URL
+// link to get the next set of results.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of CDN operations supported by the CDN resource provider.
@@ -1084,37 +1030,20 @@ type OperationListResultIterator struct {
 	page OperationListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OperationListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *OperationListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *OperationListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1136,11 +1065,6 @@ func (iter OperationListResultIterator) Value() Operation {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the OperationListResultIterator type.
-func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
-	return OperationListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (olr OperationListResult) IsEmpty() bool {
 	return olr.Value == nil || len(*olr.Value) == 0
@@ -1148,11 +1072,11 @@ func (olr OperationListResult) IsEmpty() bool {
 
 // operationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (olr OperationListResult) operationListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (olr OperationListResult) operationListResultPreparer() (*http.Request, error) {
 	if olr.NextLink == nil || len(to.String(olr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(olr.NextLink)))
@@ -1160,36 +1084,19 @@ func (olr OperationListResult) operationListResultPreparer(ctx context.Context) 
 
 // OperationListResultPage contains a page of Operation values.
 type OperationListResultPage struct {
-	fn  func(context.Context, OperationListResult) (OperationListResult, error)
+	fn  func(OperationListResult) (OperationListResult, error)
 	olr OperationListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OperationListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.olr)
+func (page *OperationListResultPage) Next() error {
+	next, err := page.fn(page.olr)
 	if err != nil {
 		return err
 	}
 	page.olr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *OperationListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1210,19 +1117,14 @@ func (page OperationListResultPage) Values() []Operation {
 	return *page.olr.Value
 }
 
-// Creates a new instance of the OperationListResultPage type.
-func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
-	return OperationListResultPage{fn: getNextPage}
-}
-
 // SetObject ...
 type SetObject struct {
 	autorest.Response `json:"-"`
 	Value             interface{} `json:"value,omitempty"`
 }
 
-// TagsResource a container holding only the Tags for a resource, allowing the user to update the tags on a
-// WebTest instance.
+// TagsResource a container holding only the Tags for a resource, allowing the user to update the tags on a WebTest
+// instance.
 type TagsResource struct {
 	// Tags - Resource tags
 	Tags map[string]*string `json:"tags"`
@@ -1361,8 +1263,8 @@ func (wt *WebTest) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// WebTestGeolocation geo-physical location to run a web test from. You must specify one or more locations
-// for the test to run from.
+// WebTestGeolocation geo-physical location to run a web test from. You must specify one or more locations for the
+// test to run from.
 type WebTestGeolocation struct {
 	// Location - Location ID for the webtest to run from.
 	Location *string `json:"Id,omitempty"`
@@ -1383,37 +1285,20 @@ type WebTestListResultIterator struct {
 	page WebTestListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *WebTestListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebTestListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *WebTestListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *WebTestListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1435,11 +1320,6 @@ func (iter WebTestListResultIterator) Value() WebTest {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the WebTestListResultIterator type.
-func NewWebTestListResultIterator(page WebTestListResultPage) WebTestListResultIterator {
-	return WebTestListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (wtlr WebTestListResult) IsEmpty() bool {
 	return wtlr.Value == nil || len(*wtlr.Value) == 0
@@ -1447,11 +1327,11 @@ func (wtlr WebTestListResult) IsEmpty() bool {
 
 // webTestListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (wtlr WebTestListResult) webTestListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (wtlr WebTestListResult) webTestListResultPreparer() (*http.Request, error) {
 	if wtlr.NextLink == nil || len(to.String(wtlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(wtlr.NextLink)))
@@ -1459,36 +1339,19 @@ func (wtlr WebTestListResult) webTestListResultPreparer(ctx context.Context) (*h
 
 // WebTestListResultPage contains a page of WebTest values.
 type WebTestListResultPage struct {
-	fn   func(context.Context, WebTestListResult) (WebTestListResult, error)
+	fn   func(WebTestListResult) (WebTestListResult, error)
 	wtlr WebTestListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *WebTestListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebTestListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.wtlr)
+func (page *WebTestListResultPage) Next() error {
+	next, err := page.fn(page.wtlr)
 	if err != nil {
 		return err
 	}
 	page.wtlr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *WebTestListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1507,11 +1370,6 @@ func (page WebTestListResultPage) Values() []WebTest {
 		return nil
 	}
 	return *page.wtlr.Value
-}
-
-// Creates a new instance of the WebTestListResultPage type.
-func NewWebTestListResultPage(getNextPage func(context.Context, WebTestListResult) (WebTestListResult, error)) WebTestListResultPage {
-	return WebTestListResultPage{fn: getNextPage}
 }
 
 // WebTestProperties metadata describing a web test for an Azure resource.
@@ -1816,7 +1674,7 @@ type WorkItemConfigurationsListResult struct {
 type WorkItemCreateConfiguration struct {
 	// ConnectorID - Unique connector id
 	ConnectorID *string `json:"ConnectorId,omitempty"`
-	// ConnectorDataConfiguration - Serialized JSON object for detailed properties
+	// ConnectorDataConfiguration - Serialized JSON object for detaile d properties
 	ConnectorDataConfiguration *string `json:"ConnectorDataConfiguration,omitempty"`
 	// ValidateOnly - Boolean indicating validate only
 	ValidateOnly *bool `json:"ValidateOnly,omitempty"`

@@ -18,17 +18,12 @@ package commitmentplans
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
-	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
-
-// The package's fully qualified name.
-const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/machinelearning/mgmt/2016-05-01-preview/commitmentplans"
 
 // ResourceSkuRestrictionsReasonCode enumerates the values for resource sku restrictions reason code.
 type ResourceSkuRestrictionsReasonCode string
@@ -97,8 +92,8 @@ type CatalogSku struct {
 	Restrictions *[]SkuRestrictions `json:"restrictions,omitempty"`
 }
 
-// CommitmentAssociation represents the association between a commitment plan and some other resource, such
-// as a Machine Learning web service.
+// CommitmentAssociation represents the association between a commitment plan and some other resource, such as a
+// Machine Learning web service.
 type CommitmentAssociation struct {
 	autorest.Response `json:"-"`
 	// Etag - An entity tag used to enforce optimistic concurrency.
@@ -153,44 +148,26 @@ type CommitmentAssociationListResult struct {
 	Value *[]CommitmentAssociation `json:"value,omitempty"`
 }
 
-// CommitmentAssociationListResultIterator provides access to a complete listing of CommitmentAssociation
-// values.
+// CommitmentAssociationListResultIterator provides access to a complete listing of CommitmentAssociation values.
 type CommitmentAssociationListResultIterator struct {
 	i    int
 	page CommitmentAssociationListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *CommitmentAssociationListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CommitmentAssociationListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *CommitmentAssociationListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *CommitmentAssociationListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -212,11 +189,6 @@ func (iter CommitmentAssociationListResultIterator) Value() CommitmentAssociatio
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the CommitmentAssociationListResultIterator type.
-func NewCommitmentAssociationListResultIterator(page CommitmentAssociationListResultPage) CommitmentAssociationListResultIterator {
-	return CommitmentAssociationListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (calr CommitmentAssociationListResult) IsEmpty() bool {
 	return calr.Value == nil || len(*calr.Value) == 0
@@ -224,11 +196,11 @@ func (calr CommitmentAssociationListResult) IsEmpty() bool {
 
 // commitmentAssociationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (calr CommitmentAssociationListResult) commitmentAssociationListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (calr CommitmentAssociationListResult) commitmentAssociationListResultPreparer() (*http.Request, error) {
 	if calr.NextLink == nil || len(to.String(calr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(calr.NextLink)))
@@ -236,36 +208,19 @@ func (calr CommitmentAssociationListResult) commitmentAssociationListResultPrepa
 
 // CommitmentAssociationListResultPage contains a page of CommitmentAssociation values.
 type CommitmentAssociationListResultPage struct {
-	fn   func(context.Context, CommitmentAssociationListResult) (CommitmentAssociationListResult, error)
+	fn   func(CommitmentAssociationListResult) (CommitmentAssociationListResult, error)
 	calr CommitmentAssociationListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *CommitmentAssociationListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CommitmentAssociationListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.calr)
+func (page *CommitmentAssociationListResultPage) Next() error {
+	next, err := page.fn(page.calr)
 	if err != nil {
 		return err
 	}
 	page.calr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *CommitmentAssociationListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -284,11 +239,6 @@ func (page CommitmentAssociationListResultPage) Values() []CommitmentAssociation
 		return nil
 	}
 	return *page.calr.Value
-}
-
-// Creates a new instance of the CommitmentAssociationListResultPage type.
-func NewCommitmentAssociationListResultPage(getNextPage func(context.Context, CommitmentAssociationListResult) (CommitmentAssociationListResult, error)) CommitmentAssociationListResultPage {
-	return CommitmentAssociationListResultPage{fn: getNextPage}
 }
 
 // CommitmentAssociationProperties properties of an Azure ML commitment association.
@@ -367,37 +317,20 @@ type ListResultIterator struct {
 	page ListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *ListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *ListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -419,11 +352,6 @@ func (iter ListResultIterator) Value() CommitmentPlan {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the ListResultIterator type.
-func NewListResultIterator(page ListResultPage) ListResultIterator {
-	return ListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (lr ListResult) IsEmpty() bool {
 	return lr.Value == nil || len(*lr.Value) == 0
@@ -431,11 +359,11 @@ func (lr ListResult) IsEmpty() bool {
 
 // listResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (lr ListResult) listResultPreparer(ctx context.Context) (*http.Request, error) {
+func (lr ListResult) listResultPreparer() (*http.Request, error) {
 	if lr.NextLink == nil || len(to.String(lr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(lr.NextLink)))
@@ -443,36 +371,19 @@ func (lr ListResult) listResultPreparer(ctx context.Context) (*http.Request, err
 
 // ListResultPage contains a page of CommitmentPlan values.
 type ListResultPage struct {
-	fn func(context.Context, ListResult) (ListResult, error)
+	fn func(ListResult) (ListResult, error)
 	lr ListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.lr)
+func (page *ListResultPage) Next() error {
+	next, err := page.fn(page.lr)
 	if err != nil {
 		return err
 	}
 	page.lr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *ListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -493,13 +404,7 @@ func (page ListResultPage) Values() []CommitmentPlan {
 	return *page.lr.Value
 }
 
-// Creates a new instance of the ListResultPage type.
-func NewListResultPage(getNextPage func(context.Context, ListResult) (ListResult, error)) ListResultPage {
-	return ListResultPage{fn: getNextPage}
-}
-
-// MoveCommitmentAssociationRequest specifies the destination Azure ML commitment plan for a move
-// operation.
+// MoveCommitmentAssociationRequest specifies the destination Azure ML commitment plan for a move operation.
 type MoveCommitmentAssociationRequest struct {
 	// DestinationPlanID - The ARM ID of the commitment plan to re-parent the commitment association to.
 	DestinationPlanID *string `json:"destinationPlanId,omitempty"`
@@ -598,37 +503,20 @@ type PlanUsageHistoryListResultIterator struct {
 	page PlanUsageHistoryListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *PlanUsageHistoryListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PlanUsageHistoryListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *PlanUsageHistoryListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *PlanUsageHistoryListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -650,11 +538,6 @@ func (iter PlanUsageHistoryListResultIterator) Value() PlanUsageHistory {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the PlanUsageHistoryListResultIterator type.
-func NewPlanUsageHistoryListResultIterator(page PlanUsageHistoryListResultPage) PlanUsageHistoryListResultIterator {
-	return PlanUsageHistoryListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (puhlr PlanUsageHistoryListResult) IsEmpty() bool {
 	return puhlr.Value == nil || len(*puhlr.Value) == 0
@@ -662,11 +545,11 @@ func (puhlr PlanUsageHistoryListResult) IsEmpty() bool {
 
 // planUsageHistoryListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (puhlr PlanUsageHistoryListResult) planUsageHistoryListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (puhlr PlanUsageHistoryListResult) planUsageHistoryListResultPreparer() (*http.Request, error) {
 	if puhlr.NextLink == nil || len(to.String(puhlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(puhlr.NextLink)))
@@ -674,36 +557,19 @@ func (puhlr PlanUsageHistoryListResult) planUsageHistoryListResultPreparer(ctx c
 
 // PlanUsageHistoryListResultPage contains a page of PlanUsageHistory values.
 type PlanUsageHistoryListResultPage struct {
-	fn    func(context.Context, PlanUsageHistoryListResult) (PlanUsageHistoryListResult, error)
+	fn    func(PlanUsageHistoryListResult) (PlanUsageHistoryListResult, error)
 	puhlr PlanUsageHistoryListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *PlanUsageHistoryListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PlanUsageHistoryListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.puhlr)
+func (page *PlanUsageHistoryListResultPage) Next() error {
+	next, err := page.fn(page.puhlr)
 	if err != nil {
 		return err
 	}
 	page.puhlr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *PlanUsageHistoryListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -722,11 +588,6 @@ func (page PlanUsageHistoryListResultPage) Values() []PlanUsageHistory {
 		return nil
 	}
 	return *page.puhlr.Value
-}
-
-// Creates a new instance of the PlanUsageHistoryListResultPage type.
-func NewPlanUsageHistoryListResultPage(getNextPage func(context.Context, PlanUsageHistoryListResult) (PlanUsageHistoryListResult, error)) PlanUsageHistoryListResultPage {
-	return PlanUsageHistoryListResultPage{fn: getNextPage}
 }
 
 // Properties properties of an Azure ML commitment plan.
@@ -834,7 +695,7 @@ type ResourceSku struct {
 	Tier *string `json:"tier,omitempty"`
 }
 
-// SkuCapability describes The SKU capabilities object.
+// SkuCapability describes The SKU capabilites object.
 type SkuCapability struct {
 	// Name - The capability name.
 	Name *string `json:"name,omitempty"`

@@ -23,9 +23,6 @@ import (
 	"github.com/Azure/go-autorest/autorest/date"
 )
 
-// The package's fully qualified name.
-const fqdn = "github.com/Azure/azure-sdk-for-go/services/migrate/mgmt/2018-02-02/migrate"
-
 // AssessmentSizingCriterion enumerates the values for assessment sizing criterion.
 type AssessmentSizingCriterion string
 
@@ -1349,7 +1346,7 @@ type AssessmentProperties struct {
 	MonthlyBandwidthCost *float64 `json:"monthlyBandwidthCost,omitempty"`
 	// MonthlyStorageCost - Monthly storage cost estimate for the machines that are part of this assessment as a group, for a 31-day month.
 	MonthlyStorageCost *float64 `json:"monthlyStorageCost,omitempty"`
-	// Status - Whether the assessment has been created and is valid. Possible values include: 'Created', 'Updated', 'Running', 'Completed', 'Invalid'
+	// Status - Wheter the assessment has been created and is valid. Possible values include: 'Created', 'Updated', 'Running', 'Completed', 'Invalid'
 	Status AssessmentStatus `json:"status,omitempty"`
 	// NumberOfMachines - Number of assessed machines part of this assessment.
 	NumberOfMachines *int32 `json:"numberOfMachines,omitempty"`
@@ -1797,9 +1794,7 @@ func (p Project) MarshalJSON() ([]byte, error) {
 	if p.Location != nil {
 		objectMap["location"] = p.Location
 	}
-	if p.Tags != nil {
-		objectMap["tags"] = p.Tags
-	}
+	objectMap["tags"] = p.Tags
 	if p.ProjectProperties != nil {
 		objectMap["properties"] = p.ProjectProperties
 	}

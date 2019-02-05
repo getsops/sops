@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,16 +43,6 @@ func NewTopLevelDomainsClientWithBaseURI(baseURI string, subscriptionID string) 
 // Parameters:
 // name - name of the top-level domain.
 func (client TopLevelDomainsClient) Get(ctx context.Context, name string) (result TopLevelDomain, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopLevelDomainsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.TopLevelDomainsClient", "Get", nil, "Failure preparing request")
@@ -117,16 +106,6 @@ func (client TopLevelDomainsClient) GetResponder(resp *http.Response) (result To
 
 // List get all top-level domains supported for registration.
 func (client TopLevelDomainsClient) List(ctx context.Context) (result TopLevelDomainCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopLevelDomainsClient.List")
-		defer func() {
-			sc := -1
-			if result.tldc.Response.Response != nil {
-				sc = result.tldc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -189,8 +168,8 @@ func (client TopLevelDomainsClient) ListResponder(resp *http.Response) (result T
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client TopLevelDomainsClient) listNextResults(ctx context.Context, lastResults TopLevelDomainCollection) (result TopLevelDomainCollection, err error) {
-	req, err := lastResults.topLevelDomainCollectionPreparer(ctx)
+func (client TopLevelDomainsClient) listNextResults(lastResults TopLevelDomainCollection) (result TopLevelDomainCollection, err error) {
+	req, err := lastResults.topLevelDomainCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.TopLevelDomainsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -211,16 +190,6 @@ func (client TopLevelDomainsClient) listNextResults(ctx context.Context, lastRes
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TopLevelDomainsClient) ListComplete(ctx context.Context) (result TopLevelDomainCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopLevelDomainsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -230,16 +199,6 @@ func (client TopLevelDomainsClient) ListComplete(ctx context.Context) (result To
 // name - name of the top-level domain.
 // agreementOption - domain agreement options.
 func (client TopLevelDomainsClient) ListAgreements(ctx context.Context, name string, agreementOption TopLevelDomainAgreementOption) (result TldLegalAgreementCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopLevelDomainsClient.ListAgreements")
-		defer func() {
-			sc := -1
-			if result.tlac.Response.Response != nil {
-				sc = result.tlac.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listAgreementsNextResults
 	req, err := client.ListAgreementsPreparer(ctx, name, agreementOption)
 	if err != nil {
@@ -305,8 +264,8 @@ func (client TopLevelDomainsClient) ListAgreementsResponder(resp *http.Response)
 }
 
 // listAgreementsNextResults retrieves the next set of results, if any.
-func (client TopLevelDomainsClient) listAgreementsNextResults(ctx context.Context, lastResults TldLegalAgreementCollection) (result TldLegalAgreementCollection, err error) {
-	req, err := lastResults.tldLegalAgreementCollectionPreparer(ctx)
+func (client TopLevelDomainsClient) listAgreementsNextResults(lastResults TldLegalAgreementCollection) (result TldLegalAgreementCollection, err error) {
+	req, err := lastResults.tldLegalAgreementCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.TopLevelDomainsClient", "listAgreementsNextResults", nil, "Failure preparing next results request")
 	}
@@ -327,16 +286,6 @@ func (client TopLevelDomainsClient) listAgreementsNextResults(ctx context.Contex
 
 // ListAgreementsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TopLevelDomainsClient) ListAgreementsComplete(ctx context.Context, name string, agreementOption TopLevelDomainAgreementOption) (result TldLegalAgreementCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopLevelDomainsClient.ListAgreements")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListAgreements(ctx, name, agreementOption)
 	return
 }

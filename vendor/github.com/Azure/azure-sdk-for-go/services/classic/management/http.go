@@ -21,7 +21,6 @@ import (
 	"crypto/tls"
 	"fmt"
 	"net/http"
-	"time"
 )
 
 const (
@@ -87,7 +86,12 @@ func (client client) sendAzureRequest(method, url, contentType string, data []by
 		return nil, fmt.Errorf(errParamNotSpecified, "url")
 	}
 
-	response, err := client.sendRequest(client.httpClient, url, method, contentType, data, 5)
+	httpClient, err := client.createHTTPClient()
+	if err != nil {
+		return nil, err
+	}
+
+	response, err := client.sendRequest(httpClient, url, method, contentType, data, 5)
 	if err != nil {
 		return nil, err
 	}
@@ -156,10 +160,6 @@ func (client client) sendRequest(httpClient *http.Client, url, requestType, cont
 			if azureErr != nil {
 				if numberOfRetries == 0 {
 					return nil, azureErr
-				}
-				if response.StatusCode == http.StatusServiceUnavailable || response.StatusCode == http.StatusTooManyRequests {
-					// Wait before retrying the operation
-					time.Sleep(client.config.OperationPollInterval)
 				}
 
 				return client.sendRequest(httpClient, url, requestType, contentType, data, numberOfRetries-1)

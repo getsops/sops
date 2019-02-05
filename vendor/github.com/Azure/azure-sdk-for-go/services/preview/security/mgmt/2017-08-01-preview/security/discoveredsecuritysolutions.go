@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,16 +46,6 @@ func NewDiscoveredSecuritySolutionsClientWithBaseURI(baseURI string, subscriptio
 // insensitive.
 // discoveredSecuritySolutionName - name of a discovered security solution.
 func (client DiscoveredSecuritySolutionsClient) Get(ctx context.Context, resourceGroupName string, discoveredSecuritySolutionName string) (result DiscoveredSecuritySolution, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DiscoveredSecuritySolutionsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -132,16 +121,6 @@ func (client DiscoveredSecuritySolutionsClient) GetResponder(resp *http.Response
 
 // List gets a list of discovered Security Solutions for the subscription.
 func (client DiscoveredSecuritySolutionsClient) List(ctx context.Context) (result DiscoveredSecuritySolutionListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DiscoveredSecuritySolutionsClient.List")
-		defer func() {
-			sc := -1
-			if result.dssl.Response.Response != nil {
-				sc = result.dssl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -210,8 +189,8 @@ func (client DiscoveredSecuritySolutionsClient) ListResponder(resp *http.Respons
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client DiscoveredSecuritySolutionsClient) listNextResults(ctx context.Context, lastResults DiscoveredSecuritySolutionList) (result DiscoveredSecuritySolutionList, err error) {
-	req, err := lastResults.discoveredSecuritySolutionListPreparer(ctx)
+func (client DiscoveredSecuritySolutionsClient) listNextResults(lastResults DiscoveredSecuritySolutionList) (result DiscoveredSecuritySolutionList, err error) {
+	req, err := lastResults.discoveredSecuritySolutionListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.DiscoveredSecuritySolutionsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -232,32 +211,12 @@ func (client DiscoveredSecuritySolutionsClient) listNextResults(ctx context.Cont
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DiscoveredSecuritySolutionsClient) ListComplete(ctx context.Context) (result DiscoveredSecuritySolutionListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DiscoveredSecuritySolutionsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }
 
 // ListByHomeRegion gets a list of discovered Security Solutions for the subscription and location.
 func (client DiscoveredSecuritySolutionsClient) ListByHomeRegion(ctx context.Context) (result DiscoveredSecuritySolutionListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DiscoveredSecuritySolutionsClient.ListByHomeRegion")
-		defer func() {
-			sc := -1
-			if result.dssl.Response.Response != nil {
-				sc = result.dssl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -327,8 +286,8 @@ func (client DiscoveredSecuritySolutionsClient) ListByHomeRegionResponder(resp *
 }
 
 // listByHomeRegionNextResults retrieves the next set of results, if any.
-func (client DiscoveredSecuritySolutionsClient) listByHomeRegionNextResults(ctx context.Context, lastResults DiscoveredSecuritySolutionList) (result DiscoveredSecuritySolutionList, err error) {
-	req, err := lastResults.discoveredSecuritySolutionListPreparer(ctx)
+func (client DiscoveredSecuritySolutionsClient) listByHomeRegionNextResults(lastResults DiscoveredSecuritySolutionList) (result DiscoveredSecuritySolutionList, err error) {
+	req, err := lastResults.discoveredSecuritySolutionListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.DiscoveredSecuritySolutionsClient", "listByHomeRegionNextResults", nil, "Failure preparing next results request")
 	}
@@ -349,16 +308,6 @@ func (client DiscoveredSecuritySolutionsClient) listByHomeRegionNextResults(ctx 
 
 // ListByHomeRegionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DiscoveredSecuritySolutionsClient) ListByHomeRegionComplete(ctx context.Context) (result DiscoveredSecuritySolutionListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DiscoveredSecuritySolutionsClient.ListByHomeRegion")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByHomeRegion(ctx)
 	return
 }

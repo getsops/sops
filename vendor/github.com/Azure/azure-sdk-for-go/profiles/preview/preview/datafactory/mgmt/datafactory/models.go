@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2018 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,16 +19,20 @@
 
 package datafactory
 
-import (
-	"context"
+import original "github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory"
 
-	original "github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory"
-)
+type ActivityRunsClient = original.ActivityRunsClient
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
+type BaseClient = original.BaseClient
+type DatasetsClient = original.DatasetsClient
+type FactoriesClient = original.FactoriesClient
+type IntegrationRuntimeNodesClient = original.IntegrationRuntimeNodesClient
+type IntegrationRuntimesClient = original.IntegrationRuntimesClient
+type LinkedServicesClient = original.LinkedServicesClient
 type AuthenticationType = original.AuthenticationType
 
 const (
@@ -158,16 +162,6 @@ const (
 	None    HDInsightActivityDebugInfoOption = original.None
 )
 
-type HTTPAuthenticationType = original.HTTPAuthenticationType
-
-const (
-	HTTPAuthenticationTypeAnonymous         HTTPAuthenticationType = original.HTTPAuthenticationTypeAnonymous
-	HTTPAuthenticationTypeBasic             HTTPAuthenticationType = original.HTTPAuthenticationTypeBasic
-	HTTPAuthenticationTypeClientCertificate HTTPAuthenticationType = original.HTTPAuthenticationTypeClientCertificate
-	HTTPAuthenticationTypeDigest            HTTPAuthenticationType = original.HTTPAuthenticationTypeDigest
-	HTTPAuthenticationTypeWindows           HTTPAuthenticationType = original.HTTPAuthenticationTypeWindows
-)
-
 type HiveAuthenticationType = original.HiveAuthenticationType
 
 const (
@@ -191,6 +185,16 @@ const (
 	Binary HiveThriftTransportProtocol = original.Binary
 	HTTP   HiveThriftTransportProtocol = original.HTTP
 	SASL   HiveThriftTransportProtocol = original.SASL
+)
+
+type HTTPAuthenticationType = original.HTTPAuthenticationType
+
+const (
+	HTTPAuthenticationTypeAnonymous         HTTPAuthenticationType = original.HTTPAuthenticationTypeAnonymous
+	HTTPAuthenticationTypeBasic             HTTPAuthenticationType = original.HTTPAuthenticationTypeBasic
+	HTTPAuthenticationTypeClientCertificate HTTPAuthenticationType = original.HTTPAuthenticationTypeClientCertificate
+	HTTPAuthenticationTypeDigest            HTTPAuthenticationType = original.HTTPAuthenticationTypeDigest
+	HTTPAuthenticationTypeWindows           HTTPAuthenticationType = original.HTTPAuthenticationTypeWindows
 )
 
 type ImpalaAuthenticationType = original.ImpalaAuthenticationType
@@ -382,13 +386,6 @@ const (
 	Year         RecurrenceFrequency = original.Year
 )
 
-type SSISExecutionRuntime = original.SSISExecutionRuntime
-
-const (
-	X64 SSISExecutionRuntime = original.X64
-	X86 SSISExecutionRuntime = original.X86
-)
-
 type SalesforceSinkWriteBehavior = original.SalesforceSinkWriteBehavior
 
 const (
@@ -466,6 +463,13 @@ const (
 	SparkThriftTransportProtocolBinary SparkThriftTransportProtocol = original.SparkThriftTransportProtocolBinary
 	SparkThriftTransportProtocolHTTP   SparkThriftTransportProtocol = original.SparkThriftTransportProtocolHTTP
 	SparkThriftTransportProtocolSASL   SparkThriftTransportProtocol = original.SparkThriftTransportProtocolSASL
+)
+
+type SSISExecutionRuntime = original.SSISExecutionRuntime
+
+const (
+	X64 SSISExecutionRuntime = original.X64
+	X86 SSISExecutionRuntime = original.X86
 )
 
 type StoredProcedureParameterType = original.StoredProcedureParameterType
@@ -829,11 +833,11 @@ const (
 	PUT    WebActivityMethod = original.PUT
 )
 
+type BasicActivity = original.BasicActivity
 type Activity = original.Activity
 type ActivityDependency = original.ActivityDependency
 type ActivityPolicy = original.ActivityPolicy
 type ActivityRun = original.ActivityRun
-type ActivityRunsClient = original.ActivityRunsClient
 type ActivityRunsListResponse = original.ActivityRunsListResponse
 type ActivityRunsListResponseIterator = original.ActivityRunsListResponseIterator
 type ActivityRunsListResponsePage = original.ActivityRunsListResponsePage
@@ -853,6 +857,8 @@ type AzureBatchLinkedService = original.AzureBatchLinkedService
 type AzureBatchLinkedServiceTypeProperties = original.AzureBatchLinkedServiceTypeProperties
 type AzureBlobDataset = original.AzureBlobDataset
 type AzureBlobDatasetTypeProperties = original.AzureBlobDatasetTypeProperties
+type AzureDatabricksLinkedService = original.AzureDatabricksLinkedService
+type AzureDatabricksLinkedServiceTypeProperties = original.AzureDatabricksLinkedServiceTypeProperties
 type AzureDataLakeAnalyticsLinkedService = original.AzureDataLakeAnalyticsLinkedService
 type AzureDataLakeAnalyticsLinkedServiceTypeProperties = original.AzureDataLakeAnalyticsLinkedServiceTypeProperties
 type AzureDataLakeStoreDataset = original.AzureDataLakeStoreDataset
@@ -861,8 +867,6 @@ type AzureDataLakeStoreLinkedService = original.AzureDataLakeStoreLinkedService
 type AzureDataLakeStoreLinkedServiceTypeProperties = original.AzureDataLakeStoreLinkedServiceTypeProperties
 type AzureDataLakeStoreSink = original.AzureDataLakeStoreSink
 type AzureDataLakeStoreSource = original.AzureDataLakeStoreSource
-type AzureDatabricksLinkedService = original.AzureDatabricksLinkedService
-type AzureDatabricksLinkedServiceTypeProperties = original.AzureDatabricksLinkedServiceTypeProperties
 type AzureKeyVaultLinkedService = original.AzureKeyVaultLinkedService
 type AzureKeyVaultLinkedServiceTypeProperties = original.AzureKeyVaultLinkedServiceTypeProperties
 type AzureKeyVaultSecretReference = original.AzureKeyVaultSecretReference
@@ -883,43 +887,25 @@ type AzurePostgreSQLLinkedServiceTypeProperties = original.AzurePostgreSQLLinked
 type AzurePostgreSQLSource = original.AzurePostgreSQLSource
 type AzurePostgreSQLTableDataset = original.AzurePostgreSQLTableDataset
 type AzureQueueSink = original.AzureQueueSink
-type AzureSQLDWLinkedService = original.AzureSQLDWLinkedService
-type AzureSQLDWLinkedServiceTypeProperties = original.AzureSQLDWLinkedServiceTypeProperties
-type AzureSQLDWTableDataset = original.AzureSQLDWTableDataset
-type AzureSQLDWTableDatasetTypeProperties = original.AzureSQLDWTableDatasetTypeProperties
-type AzureSQLDatabaseLinkedService = original.AzureSQLDatabaseLinkedService
-type AzureSQLDatabaseLinkedServiceTypeProperties = original.AzureSQLDatabaseLinkedServiceTypeProperties
-type AzureSQLTableDataset = original.AzureSQLTableDataset
-type AzureSQLTableDatasetTypeProperties = original.AzureSQLTableDatasetTypeProperties
 type AzureSearchIndexDataset = original.AzureSearchIndexDataset
 type AzureSearchIndexDatasetTypeProperties = original.AzureSearchIndexDatasetTypeProperties
 type AzureSearchIndexSink = original.AzureSearchIndexSink
 type AzureSearchLinkedService = original.AzureSearchLinkedService
 type AzureSearchLinkedServiceTypeProperties = original.AzureSearchLinkedServiceTypeProperties
+type AzureSQLDatabaseLinkedService = original.AzureSQLDatabaseLinkedService
+type AzureSQLDatabaseLinkedServiceTypeProperties = original.AzureSQLDatabaseLinkedServiceTypeProperties
+type AzureSQLDWLinkedService = original.AzureSQLDWLinkedService
+type AzureSQLDWLinkedServiceTypeProperties = original.AzureSQLDWLinkedServiceTypeProperties
+type AzureSQLDWTableDataset = original.AzureSQLDWTableDataset
+type AzureSQLDWTableDatasetTypeProperties = original.AzureSQLDWTableDatasetTypeProperties
+type AzureSQLTableDataset = original.AzureSQLTableDataset
+type AzureSQLTableDatasetTypeProperties = original.AzureSQLTableDatasetTypeProperties
 type AzureStorageLinkedService = original.AzureStorageLinkedService
 type AzureStorageLinkedServiceTypeProperties = original.AzureStorageLinkedServiceTypeProperties
 type AzureTableDataset = original.AzureTableDataset
 type AzureTableDatasetTypeProperties = original.AzureTableDatasetTypeProperties
 type AzureTableSink = original.AzureTableSink
 type AzureTableSource = original.AzureTableSource
-type BaseClient = original.BaseClient
-type BasicActivity = original.BasicActivity
-type BasicControlActivity = original.BasicControlActivity
-type BasicCopySink = original.BasicCopySink
-type BasicCopySource = original.BasicCopySource
-type BasicCopyTranslator = original.BasicCopyTranslator
-type BasicDataset = original.BasicDataset
-type BasicDatasetCompression = original.BasicDatasetCompression
-type BasicDatasetStorageFormat = original.BasicDatasetStorageFormat
-type BasicExecutionActivity = original.BasicExecutionActivity
-type BasicIntegrationRuntime = original.BasicIntegrationRuntime
-type BasicIntegrationRuntimeStatus = original.BasicIntegrationRuntimeStatus
-type BasicLinkedIntegrationRuntimeProperties = original.BasicLinkedIntegrationRuntimeProperties
-type BasicLinkedService = original.BasicLinkedService
-type BasicMultiplePipelineTrigger = original.BasicMultiplePipelineTrigger
-type BasicSecretBase = original.BasicSecretBase
-type BasicTrigger = original.BasicTrigger
-type BasicWebLinkedServiceTypeProperties = original.BasicWebLinkedServiceTypeProperties
 type BlobEventsTrigger = original.BlobEventsTrigger
 type BlobEventsTriggerTypeProperties = original.BlobEventsTriggerTypeProperties
 type BlobSink = original.BlobSink
@@ -935,11 +921,15 @@ type ConcurLinkedService = original.ConcurLinkedService
 type ConcurLinkedServiceTypeProperties = original.ConcurLinkedServiceTypeProperties
 type ConcurObjectDataset = original.ConcurObjectDataset
 type ConcurSource = original.ConcurSource
+type BasicControlActivity = original.BasicControlActivity
 type ControlActivity = original.ControlActivity
 type CopyActivity = original.CopyActivity
 type CopyActivityTypeProperties = original.CopyActivityTypeProperties
+type BasicCopySink = original.BasicCopySink
 type CopySink = original.CopySink
+type BasicCopySource = original.BasicCopySource
 type CopySource = original.CopySource
+type BasicCopyTranslator = original.BasicCopyTranslator
 type CopyTranslator = original.CopyTranslator
 type CosmosDbLinkedService = original.CosmosDbLinkedService
 type CosmosDbLinkedServiceTypeProperties = original.CosmosDbLinkedServiceTypeProperties
@@ -951,14 +941,16 @@ type CreateRunResponse = original.CreateRunResponse
 type CustomActivity = original.CustomActivity
 type CustomActivityReferenceObject = original.CustomActivityReferenceObject
 type CustomActivityTypeProperties = original.CustomActivityTypeProperties
-type CustomDataSourceLinkedService = original.CustomDataSourceLinkedService
 type CustomDataset = original.CustomDataset
-type DataLakeAnalyticsUSQLActivity = original.DataLakeAnalyticsUSQLActivity
-type DataLakeAnalyticsUSQLActivityTypeProperties = original.DataLakeAnalyticsUSQLActivityTypeProperties
+type CustomDataSourceLinkedService = original.CustomDataSourceLinkedService
 type DatabricksNotebookActivity = original.DatabricksNotebookActivity
 type DatabricksNotebookActivityTypeProperties = original.DatabricksNotebookActivityTypeProperties
+type DataLakeAnalyticsUSQLActivity = original.DataLakeAnalyticsUSQLActivity
+type DataLakeAnalyticsUSQLActivityTypeProperties = original.DataLakeAnalyticsUSQLActivityTypeProperties
+type BasicDataset = original.BasicDataset
 type Dataset = original.Dataset
 type DatasetBZip2Compression = original.DatasetBZip2Compression
+type BasicDatasetCompression = original.BasicDatasetCompression
 type DatasetCompression = original.DatasetCompression
 type DatasetDeflateCompression = original.DatasetDeflateCompression
 type DatasetGZipCompression = original.DatasetGZipCompression
@@ -967,9 +959,9 @@ type DatasetListResponseIterator = original.DatasetListResponseIterator
 type DatasetListResponsePage = original.DatasetListResponsePage
 type DatasetReference = original.DatasetReference
 type DatasetResource = original.DatasetResource
+type BasicDatasetStorageFormat = original.BasicDatasetStorageFormat
 type DatasetStorageFormat = original.DatasetStorageFormat
 type DatasetZipDeflateCompression = original.DatasetZipDeflateCompression
-type DatasetsClient = original.DatasetsClient
 type Db2LinkedService = original.Db2LinkedService
 type Db2LinkedServiceTypeProperties = original.Db2LinkedServiceTypeProperties
 type DistcpSettings = original.DistcpSettings
@@ -996,9 +988,9 @@ type ExecutePipelineActivity = original.ExecutePipelineActivity
 type ExecutePipelineActivityTypeProperties = original.ExecutePipelineActivityTypeProperties
 type ExecuteSSISPackageActivity = original.ExecuteSSISPackageActivity
 type ExecuteSSISPackageActivityTypeProperties = original.ExecuteSSISPackageActivityTypeProperties
+type BasicExecutionActivity = original.BasicExecutionActivity
 type ExecutionActivity = original.ExecutionActivity
 type Expression = original.Expression
-type FactoriesClient = original.FactoriesClient
 type Factory = original.Factory
 type FactoryIdentity = original.FactoryIdentity
 type FactoryListResponse = original.FactoryListResponse
@@ -1034,6 +1026,9 @@ type HBaseLinkedService = original.HBaseLinkedService
 type HBaseLinkedServiceTypeProperties = original.HBaseLinkedServiceTypeProperties
 type HBaseObjectDataset = original.HBaseObjectDataset
 type HBaseSource = original.HBaseSource
+type HdfsLinkedService = original.HdfsLinkedService
+type HdfsLinkedServiceTypeProperties = original.HdfsLinkedServiceTypeProperties
+type HdfsSource = original.HdfsSource
 type HDInsightHiveActivity = original.HDInsightHiveActivity
 type HDInsightHiveActivityTypeProperties = original.HDInsightHiveActivityTypeProperties
 type HDInsightLinkedService = original.HDInsightLinkedService
@@ -1048,18 +1043,15 @@ type HDInsightSparkActivity = original.HDInsightSparkActivity
 type HDInsightSparkActivityTypeProperties = original.HDInsightSparkActivityTypeProperties
 type HDInsightStreamingActivity = original.HDInsightStreamingActivity
 type HDInsightStreamingActivityTypeProperties = original.HDInsightStreamingActivityTypeProperties
+type HiveLinkedService = original.HiveLinkedService
+type HiveLinkedServiceTypeProperties = original.HiveLinkedServiceTypeProperties
+type HiveObjectDataset = original.HiveObjectDataset
+type HiveSource = original.HiveSource
 type HTTPDataset = original.HTTPDataset
 type HTTPDatasetTypeProperties = original.HTTPDatasetTypeProperties
 type HTTPLinkedService = original.HTTPLinkedService
 type HTTPLinkedServiceTypeProperties = original.HTTPLinkedServiceTypeProperties
 type HTTPSource = original.HTTPSource
-type HdfsLinkedService = original.HdfsLinkedService
-type HdfsLinkedServiceTypeProperties = original.HdfsLinkedServiceTypeProperties
-type HdfsSource = original.HdfsSource
-type HiveLinkedService = original.HiveLinkedService
-type HiveLinkedServiceTypeProperties = original.HiveLinkedServiceTypeProperties
-type HiveObjectDataset = original.HiveObjectDataset
-type HiveSource = original.HiveSource
 type HubspotLinkedService = original.HubspotLinkedService
 type HubspotLinkedServiceTypeProperties = original.HubspotLinkedServiceTypeProperties
 type HubspotObjectDataset = original.HubspotObjectDataset
@@ -1070,6 +1062,7 @@ type ImpalaLinkedService = original.ImpalaLinkedService
 type ImpalaLinkedServiceTypeProperties = original.ImpalaLinkedServiceTypeProperties
 type ImpalaObjectDataset = original.ImpalaObjectDataset
 type ImpalaSource = original.ImpalaSource
+type BasicIntegrationRuntime = original.BasicIntegrationRuntime
 type IntegrationRuntime = original.IntegrationRuntime
 type IntegrationRuntimeAuthKeys = original.IntegrationRuntimeAuthKeys
 type IntegrationRuntimeComputeProperties = original.IntegrationRuntimeComputeProperties
@@ -1081,37 +1074,37 @@ type IntegrationRuntimeListResponsePage = original.IntegrationRuntimeListRespons
 type IntegrationRuntimeMonitoringData = original.IntegrationRuntimeMonitoringData
 type IntegrationRuntimeNodeIPAddress = original.IntegrationRuntimeNodeIPAddress
 type IntegrationRuntimeNodeMonitoringData = original.IntegrationRuntimeNodeMonitoringData
-type IntegrationRuntimeNodesClient = original.IntegrationRuntimeNodesClient
 type IntegrationRuntimeReference = original.IntegrationRuntimeReference
 type IntegrationRuntimeRegenerateKeyParameters = original.IntegrationRuntimeRegenerateKeyParameters
 type IntegrationRuntimeRemoveNodeRequest = original.IntegrationRuntimeRemoveNodeRequest
 type IntegrationRuntimeResource = original.IntegrationRuntimeResource
 type IntegrationRuntimeSsisCatalogInfo = original.IntegrationRuntimeSsisCatalogInfo
 type IntegrationRuntimeSsisProperties = original.IntegrationRuntimeSsisProperties
+type IntegrationRuntimesStartFuture = original.IntegrationRuntimesStartFuture
+type IntegrationRuntimesStopFuture = original.IntegrationRuntimesStopFuture
+type BasicIntegrationRuntimeStatus = original.BasicIntegrationRuntimeStatus
 type IntegrationRuntimeStatus = original.IntegrationRuntimeStatus
 type IntegrationRuntimeStatusListResponse = original.IntegrationRuntimeStatusListResponse
 type IntegrationRuntimeStatusResponse = original.IntegrationRuntimeStatusResponse
 type IntegrationRuntimeVNetProperties = original.IntegrationRuntimeVNetProperties
-type IntegrationRuntimesClient = original.IntegrationRuntimesClient
-type IntegrationRuntimesStartFuture = original.IntegrationRuntimesStartFuture
-type IntegrationRuntimesStopFuture = original.IntegrationRuntimesStopFuture
-type JSONFormat = original.JSONFormat
 type JiraLinkedService = original.JiraLinkedService
 type JiraLinkedServiceTypeProperties = original.JiraLinkedServiceTypeProperties
 type JiraObjectDataset = original.JiraObjectDataset
 type JiraSource = original.JiraSource
+type JSONFormat = original.JSONFormat
 type LinkedIntegrationRuntime = original.LinkedIntegrationRuntime
 type LinkedIntegrationRuntimeKey = original.LinkedIntegrationRuntimeKey
+type BasicLinkedIntegrationRuntimeProperties = original.BasicLinkedIntegrationRuntimeProperties
 type LinkedIntegrationRuntimeProperties = original.LinkedIntegrationRuntimeProperties
 type LinkedIntegrationRuntimeRbac = original.LinkedIntegrationRuntimeRbac
 type LinkedIntegrationRuntimeTypeProperties = original.LinkedIntegrationRuntimeTypeProperties
+type BasicLinkedService = original.BasicLinkedService
 type LinkedService = original.LinkedService
 type LinkedServiceListResponse = original.LinkedServiceListResponse
 type LinkedServiceListResponseIterator = original.LinkedServiceListResponseIterator
 type LinkedServiceListResponsePage = original.LinkedServiceListResponsePage
 type LinkedServiceReference = original.LinkedServiceReference
 type LinkedServiceResource = original.LinkedServiceResource
-type LinkedServicesClient = original.LinkedServicesClient
 type LookupActivity = original.LookupActivity
 type LookupActivityTypeProperties = original.LookupActivityTypeProperties
 type MagentoLinkedService = original.MagentoLinkedService
@@ -1138,6 +1131,7 @@ type MongoDbCollectionDatasetTypeProperties = original.MongoDbCollectionDatasetT
 type MongoDbLinkedService = original.MongoDbLinkedService
 type MongoDbLinkedServiceTypeProperties = original.MongoDbLinkedServiceTypeProperties
 type MongoDbSource = original.MongoDbSource
+type BasicMultiplePipelineTrigger = original.BasicMultiplePipelineTrigger
 type MultiplePipelineTrigger = original.MultiplePipelineTrigger
 type MySQLLinkedService = original.MySQLLinkedService
 type MySQLLinkedServiceTypeProperties = original.MySQLLinkedServiceTypeProperties
@@ -1160,7 +1154,6 @@ type OperationMetricAvailability = original.OperationMetricAvailability
 type OperationMetricSpecification = original.OperationMetricSpecification
 type OperationProperties = original.OperationProperties
 type OperationServiceSpecification = original.OperationServiceSpecification
-type OperationsClient = original.OperationsClient
 type OracleLinkedService = original.OracleLinkedService
 type OracleLinkedServiceTypeProperties = original.OracleLinkedServiceTypeProperties
 type OracleSink = original.OracleSink
@@ -1190,8 +1183,6 @@ type PipelineRunInvokedBy = original.PipelineRunInvokedBy
 type PipelineRunQueryFilter = original.PipelineRunQueryFilter
 type PipelineRunQueryOrderBy = original.PipelineRunQueryOrderBy
 type PipelineRunQueryResponse = original.PipelineRunQueryResponse
-type PipelineRunsClient = original.PipelineRunsClient
-type PipelinesClient = original.PipelinesClient
 type PolybaseSettings = original.PolybaseSettings
 type PostgreSQLLinkedService = original.PostgreSQLLinkedService
 type PostgreSQLLinkedServiceTypeProperties = original.PostgreSQLLinkedServiceTypeProperties
@@ -1216,19 +1207,6 @@ type ResponsysLinkedServiceTypeProperties = original.ResponsysLinkedServiceTypeP
 type ResponsysObjectDataset = original.ResponsysObjectDataset
 type ResponsysSource = original.ResponsysSource
 type RetryPolicy = original.RetryPolicy
-type SQLDWSink = original.SQLDWSink
-type SQLDWSource = original.SQLDWSource
-type SQLServerLinkedService = original.SQLServerLinkedService
-type SQLServerLinkedServiceTypeProperties = original.SQLServerLinkedServiceTypeProperties
-type SQLServerStoredProcedureActivity = original.SQLServerStoredProcedureActivity
-type SQLServerStoredProcedureActivityTypeProperties = original.SQLServerStoredProcedureActivityTypeProperties
-type SQLServerTableDataset = original.SQLServerTableDataset
-type SQLServerTableDatasetTypeProperties = original.SQLServerTableDatasetTypeProperties
-type SQLSink = original.SQLSink
-type SQLSource = original.SQLSource
-type SSISExecutionParameter = original.SSISExecutionParameter
-type SSISPackageLocation = original.SSISPackageLocation
-type SSISPropertyOverride = original.SSISPropertyOverride
 type SalesforceLinkedService = original.SalesforceLinkedService
 type SalesforceLinkedServiceTypeProperties = original.SalesforceLinkedServiceTypeProperties
 type SalesforceMarketingCloudLinkedService = original.SalesforceMarketingCloudLinkedService
@@ -1257,6 +1235,7 @@ type SapHanaLinkedServiceProperties = original.SapHanaLinkedServiceProperties
 type ScheduleTrigger = original.ScheduleTrigger
 type ScheduleTriggerRecurrence = original.ScheduleTriggerRecurrence
 type ScheduleTriggerTypeProperties = original.ScheduleTriggerTypeProperties
+type BasicSecretBase = original.BasicSecretBase
 type SecretBase = original.SecretBase
 type SecureString = original.SecureString
 type SelfHostedIntegrationRuntime = original.SelfHostedIntegrationRuntime
@@ -1277,10 +1256,23 @@ type SparkLinkedService = original.SparkLinkedService
 type SparkLinkedServiceTypeProperties = original.SparkLinkedServiceTypeProperties
 type SparkObjectDataset = original.SparkObjectDataset
 type SparkSource = original.SparkSource
+type SQLDWSink = original.SQLDWSink
+type SQLDWSource = original.SQLDWSource
+type SQLServerLinkedService = original.SQLServerLinkedService
+type SQLServerLinkedServiceTypeProperties = original.SQLServerLinkedServiceTypeProperties
+type SQLServerStoredProcedureActivity = original.SQLServerStoredProcedureActivity
+type SQLServerStoredProcedureActivityTypeProperties = original.SQLServerStoredProcedureActivityTypeProperties
+type SQLServerTableDataset = original.SQLServerTableDataset
+type SQLServerTableDatasetTypeProperties = original.SQLServerTableDatasetTypeProperties
+type SQLSink = original.SQLSink
+type SQLSource = original.SQLSource
 type SquareLinkedService = original.SquareLinkedService
 type SquareLinkedServiceTypeProperties = original.SquareLinkedServiceTypeProperties
 type SquareObjectDataset = original.SquareObjectDataset
 type SquareSource = original.SquareSource
+type SSISExecutionParameter = original.SSISExecutionParameter
+type SSISPackageLocation = original.SSISPackageLocation
+type SSISPropertyOverride = original.SSISPropertyOverride
 type StagingSettings = original.StagingSettings
 type StoredProcedureParameter = original.StoredProcedureParameter
 type SubResource = original.SubResource
@@ -1290,6 +1282,7 @@ type TabularTranslator = original.TabularTranslator
 type TeradataLinkedService = original.TeradataLinkedService
 type TeradataLinkedServiceTypeProperties = original.TeradataLinkedServiceTypeProperties
 type TextFormat = original.TextFormat
+type BasicTrigger = original.BasicTrigger
 type Trigger = original.Trigger
 type TriggerListResponse = original.TriggerListResponse
 type TriggerListResponseIterator = original.TriggerListResponseIterator
@@ -1300,7 +1293,6 @@ type TriggerRun = original.TriggerRun
 type TriggerRunListResponse = original.TriggerRunListResponse
 type TriggerRunListResponseIterator = original.TriggerRunListResponseIterator
 type TriggerRunListResponsePage = original.TriggerRunListResponsePage
-type TriggersClient = original.TriggersClient
 type TriggersStartFuture = original.TriggersStartFuture
 type TriggersStopFuture = original.TriggersStopFuture
 type TumblingWindowTrigger = original.TumblingWindowTrigger
@@ -1322,6 +1314,7 @@ type WebAnonymousAuthentication = original.WebAnonymousAuthentication
 type WebBasicAuthentication = original.WebBasicAuthentication
 type WebClientCertificateAuthentication = original.WebClientCertificateAuthentication
 type WebLinkedService = original.WebLinkedService
+type BasicWebLinkedServiceTypeProperties = original.BasicWebLinkedServiceTypeProperties
 type WebLinkedServiceTypeProperties = original.WebLinkedServiceTypeProperties
 type WebSource = original.WebSource
 type WebTableDataset = original.WebTableDataset
@@ -1334,27 +1327,22 @@ type ZohoLinkedService = original.ZohoLinkedService
 type ZohoLinkedServiceTypeProperties = original.ZohoLinkedServiceTypeProperties
 type ZohoObjectDataset = original.ZohoObjectDataset
 type ZohoSource = original.ZohoSource
+type OperationsClient = original.OperationsClient
+type PipelineRunsClient = original.PipelineRunsClient
+type PipelinesClient = original.PipelinesClient
+type TriggersClient = original.TriggersClient
 
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
-}
 func NewActivityRunsClient(subscriptionID string) ActivityRunsClient {
 	return original.NewActivityRunsClient(subscriptionID)
 }
 func NewActivityRunsClientWithBaseURI(baseURI string, subscriptionID string) ActivityRunsClient {
 	return original.NewActivityRunsClientWithBaseURI(baseURI, subscriptionID)
 }
-func NewActivityRunsListResponseIterator(page ActivityRunsListResponsePage) ActivityRunsListResponseIterator {
-	return original.NewActivityRunsListResponseIterator(page)
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
 }
-func NewActivityRunsListResponsePage(getNextPage func(context.Context, ActivityRunsListResponse) (ActivityRunsListResponse, error)) ActivityRunsListResponsePage {
-	return original.NewActivityRunsListResponsePage(getNextPage)
-}
-func NewDatasetListResponseIterator(page DatasetListResponsePage) DatasetListResponseIterator {
-	return original.NewDatasetListResponseIterator(page)
-}
-func NewDatasetListResponsePage(getNextPage func(context.Context, DatasetListResponse) (DatasetListResponse, error)) DatasetListResponsePage {
-	return original.NewDatasetListResponsePage(getNextPage)
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewDatasetsClient(subscriptionID string) DatasetsClient {
 	return original.NewDatasetsClient(subscriptionID)
@@ -1368,18 +1356,6 @@ func NewFactoriesClient(subscriptionID string) FactoriesClient {
 func NewFactoriesClientWithBaseURI(baseURI string, subscriptionID string) FactoriesClient {
 	return original.NewFactoriesClientWithBaseURI(baseURI, subscriptionID)
 }
-func NewFactoryListResponseIterator(page FactoryListResponsePage) FactoryListResponseIterator {
-	return original.NewFactoryListResponseIterator(page)
-}
-func NewFactoryListResponsePage(getNextPage func(context.Context, FactoryListResponse) (FactoryListResponse, error)) FactoryListResponsePage {
-	return original.NewFactoryListResponsePage(getNextPage)
-}
-func NewIntegrationRuntimeListResponseIterator(page IntegrationRuntimeListResponsePage) IntegrationRuntimeListResponseIterator {
-	return original.NewIntegrationRuntimeListResponseIterator(page)
-}
-func NewIntegrationRuntimeListResponsePage(getNextPage func(context.Context, IntegrationRuntimeListResponse) (IntegrationRuntimeListResponse, error)) IntegrationRuntimeListResponsePage {
-	return original.NewIntegrationRuntimeListResponsePage(getNextPage)
-}
 func NewIntegrationRuntimeNodesClient(subscriptionID string) IntegrationRuntimeNodesClient {
 	return original.NewIntegrationRuntimeNodesClient(subscriptionID)
 }
@@ -1392,62 +1368,11 @@ func NewIntegrationRuntimesClient(subscriptionID string) IntegrationRuntimesClie
 func NewIntegrationRuntimesClientWithBaseURI(baseURI string, subscriptionID string) IntegrationRuntimesClient {
 	return original.NewIntegrationRuntimesClientWithBaseURI(baseURI, subscriptionID)
 }
-func NewLinkedServiceListResponseIterator(page LinkedServiceListResponsePage) LinkedServiceListResponseIterator {
-	return original.NewLinkedServiceListResponseIterator(page)
-}
-func NewLinkedServiceListResponsePage(getNextPage func(context.Context, LinkedServiceListResponse) (LinkedServiceListResponse, error)) LinkedServiceListResponsePage {
-	return original.NewLinkedServiceListResponsePage(getNextPage)
-}
 func NewLinkedServicesClient(subscriptionID string) LinkedServicesClient {
 	return original.NewLinkedServicesClient(subscriptionID)
 }
 func NewLinkedServicesClientWithBaseURI(baseURI string, subscriptionID string) LinkedServicesClient {
 	return original.NewLinkedServicesClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewPipelineListResponseIterator(page PipelineListResponsePage) PipelineListResponseIterator {
-	return original.NewPipelineListResponseIterator(page)
-}
-func NewPipelineListResponsePage(getNextPage func(context.Context, PipelineListResponse) (PipelineListResponse, error)) PipelineListResponsePage {
-	return original.NewPipelineListResponsePage(getNextPage)
-}
-func NewPipelineRunsClient(subscriptionID string) PipelineRunsClient {
-	return original.NewPipelineRunsClient(subscriptionID)
-}
-func NewPipelineRunsClientWithBaseURI(baseURI string, subscriptionID string) PipelineRunsClient {
-	return original.NewPipelineRunsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewPipelinesClient(subscriptionID string) PipelinesClient {
-	return original.NewPipelinesClient(subscriptionID)
-}
-func NewPipelinesClientWithBaseURI(baseURI string, subscriptionID string) PipelinesClient {
-	return original.NewPipelinesClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewTriggerListResponseIterator(page TriggerListResponsePage) TriggerListResponseIterator {
-	return original.NewTriggerListResponseIterator(page)
-}
-func NewTriggerListResponsePage(getNextPage func(context.Context, TriggerListResponse) (TriggerListResponse, error)) TriggerListResponsePage {
-	return original.NewTriggerListResponsePage(getNextPage)
-}
-func NewTriggerRunListResponseIterator(page TriggerRunListResponsePage) TriggerRunListResponseIterator {
-	return original.NewTriggerRunListResponseIterator(page)
-}
-func NewTriggerRunListResponsePage(getNextPage func(context.Context, TriggerRunListResponse) (TriggerRunListResponse, error)) TriggerRunListResponsePage {
-	return original.NewTriggerRunListResponsePage(getNextPage)
-}
-func NewTriggersClient(subscriptionID string) TriggersClient {
-	return original.NewTriggersClient(subscriptionID)
-}
-func NewTriggersClientWithBaseURI(baseURI string, subscriptionID string) TriggersClient {
-	return original.NewTriggersClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleAuthenticationTypeValues() []AuthenticationType {
 	return original.PossibleAuthenticationTypeValues()
@@ -1494,9 +1419,6 @@ func PossibleHBaseAuthenticationTypeValues() []HBaseAuthenticationType {
 func PossibleHDInsightActivityDebugInfoOptionValues() []HDInsightActivityDebugInfoOption {
 	return original.PossibleHDInsightActivityDebugInfoOptionValues()
 }
-func PossibleHTTPAuthenticationTypeValues() []HTTPAuthenticationType {
-	return original.PossibleHTTPAuthenticationTypeValues()
-}
 func PossibleHiveAuthenticationTypeValues() []HiveAuthenticationType {
 	return original.PossibleHiveAuthenticationTypeValues()
 }
@@ -1505,6 +1427,9 @@ func PossibleHiveServerTypeValues() []HiveServerType {
 }
 func PossibleHiveThriftTransportProtocolValues() []HiveThriftTransportProtocol {
 	return original.PossibleHiveThriftTransportProtocolValues()
+}
+func PossibleHTTPAuthenticationTypeValues() []HTTPAuthenticationType {
+	return original.PossibleHTTPAuthenticationTypeValues()
 }
 func PossibleImpalaAuthenticationTypeValues() []ImpalaAuthenticationType {
 	return original.PossibleImpalaAuthenticationTypeValues()
@@ -1560,11 +1485,11 @@ func PossiblePipelineRunQueryFilterOperandValues() []PipelineRunQueryFilterOpera
 func PossiblePipelineRunQueryFilterOperatorValues() []PipelineRunQueryFilterOperator {
 	return original.PossiblePipelineRunQueryFilterOperatorValues()
 }
-func PossiblePipelineRunQueryOrderByFieldValues() []PipelineRunQueryOrderByField {
-	return original.PossiblePipelineRunQueryOrderByFieldValues()
-}
 func PossiblePipelineRunQueryOrderValues() []PipelineRunQueryOrder {
 	return original.PossiblePipelineRunQueryOrderValues()
+}
+func PossiblePipelineRunQueryOrderByFieldValues() []PipelineRunQueryOrderByField {
+	return original.PossiblePipelineRunQueryOrderByFieldValues()
 }
 func PossiblePolybaseSettingsRejectTypeValues() []PolybaseSettingsRejectType {
 	return original.PossiblePolybaseSettingsRejectTypeValues()
@@ -1574,9 +1499,6 @@ func PossiblePrestoAuthenticationTypeValues() []PrestoAuthenticationType {
 }
 func PossibleRecurrenceFrequencyValues() []RecurrenceFrequency {
 	return original.PossibleRecurrenceFrequencyValues()
-}
-func PossibleSSISExecutionRuntimeValues() []SSISExecutionRuntime {
-	return original.PossibleSSISExecutionRuntimeValues()
 }
 func PossibleSalesforceSinkWriteBehaviorValues() []SalesforceSinkWriteBehavior {
 	return original.PossibleSalesforceSinkWriteBehaviorValues()
@@ -1608,6 +1530,9 @@ func PossibleSparkServerTypeValues() []SparkServerType {
 func PossibleSparkThriftTransportProtocolValues() []SparkThriftTransportProtocol {
 	return original.PossibleSparkThriftTransportProtocolValues()
 }
+func PossibleSSISExecutionRuntimeValues() []SSISExecutionRuntime {
+	return original.PossibleSSISExecutionRuntimeValues()
+}
 func PossibleStoredProcedureParameterTypeValues() []StoredProcedureParameterType {
 	return original.PossibleStoredProcedureParameterTypeValues()
 }
@@ -1626,6 +1551,9 @@ func PossibleTriggerRuntimeStateValues() []TriggerRuntimeState {
 func PossibleTumblingWindowFrequencyValues() []TumblingWindowFrequency {
 	return original.PossibleTumblingWindowFrequencyValues()
 }
+func PossibleTypeValues() []Type {
+	return original.PossibleTypeValues()
+}
 func PossibleTypeBasicActivityValues() []TypeBasicActivity {
 	return original.PossibleTypeBasicActivityValues()
 }
@@ -1638,20 +1566,20 @@ func PossibleTypeBasicCopySourceValues() []TypeBasicCopySource {
 func PossibleTypeBasicCopyTranslatorValues() []TypeBasicCopyTranslator {
 	return original.PossibleTypeBasicCopyTranslatorValues()
 }
+func PossibleTypeBasicDatasetValues() []TypeBasicDataset {
+	return original.PossibleTypeBasicDatasetValues()
+}
 func PossibleTypeBasicDatasetCompressionValues() []TypeBasicDatasetCompression {
 	return original.PossibleTypeBasicDatasetCompressionValues()
 }
 func PossibleTypeBasicDatasetStorageFormatValues() []TypeBasicDatasetStorageFormat {
 	return original.PossibleTypeBasicDatasetStorageFormatValues()
 }
-func PossibleTypeBasicDatasetValues() []TypeBasicDataset {
-	return original.PossibleTypeBasicDatasetValues()
+func PossibleTypeBasicIntegrationRuntimeValues() []TypeBasicIntegrationRuntime {
+	return original.PossibleTypeBasicIntegrationRuntimeValues()
 }
 func PossibleTypeBasicIntegrationRuntimeStatusValues() []TypeBasicIntegrationRuntimeStatus {
 	return original.PossibleTypeBasicIntegrationRuntimeStatusValues()
-}
-func PossibleTypeBasicIntegrationRuntimeValues() []TypeBasicIntegrationRuntime {
-	return original.PossibleTypeBasicIntegrationRuntimeValues()
 }
 func PossibleTypeBasicLinkedServiceValues() []TypeBasicLinkedService {
 	return original.PossibleTypeBasicLinkedServiceValues()
@@ -1659,11 +1587,32 @@ func PossibleTypeBasicLinkedServiceValues() []TypeBasicLinkedService {
 func PossibleTypeBasicTriggerValues() []TypeBasicTrigger {
 	return original.PossibleTypeBasicTriggerValues()
 }
-func PossibleTypeValues() []Type {
-	return original.PossibleTypeValues()
-}
 func PossibleWebActivityMethodValues() []WebActivityMethod {
 	return original.PossibleWebActivityMethodValues()
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewPipelineRunsClient(subscriptionID string) PipelineRunsClient {
+	return original.NewPipelineRunsClient(subscriptionID)
+}
+func NewPipelineRunsClientWithBaseURI(baseURI string, subscriptionID string) PipelineRunsClient {
+	return original.NewPipelineRunsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewPipelinesClient(subscriptionID string) PipelinesClient {
+	return original.NewPipelinesClient(subscriptionID)
+}
+func NewPipelinesClientWithBaseURI(baseURI string, subscriptionID string) PipelinesClient {
+	return original.NewPipelinesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewTriggersClient(subscriptionID string) TriggersClient {
+	return original.NewTriggersClient(subscriptionID)
+}
+func NewTriggersClientWithBaseURI(baseURI string, subscriptionID string) TriggersClient {
+	return original.NewTriggersClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

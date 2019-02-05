@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,16 +48,6 @@ func NewLiveOutputsClientWithBaseURI(baseURI string, subscriptionID string) Live
 // liveOutputName - the name of the Live Output.
 // parameters - live Output properties needed for creation.
 func (client LiveOutputsClient) Create(ctx context.Context, resourceGroupName string, accountName string, liveEventName string, liveOutputName string, parameters LiveOutput) (result LiveOutputsCreateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/LiveOutputsClient.Create")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: liveEventName,
 			Constraints: []validation.Constraint{{Target: "liveEventName", Name: validation.MaxLength, Rule: 32, Chain: nil},
@@ -125,6 +114,10 @@ func (client LiveOutputsClient) CreateSender(req *http.Request) (future LiveOutp
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -149,16 +142,6 @@ func (client LiveOutputsClient) CreateResponder(resp *http.Response) (result Liv
 // liveEventName - the name of the Live Event.
 // liveOutputName - the name of the Live Output.
 func (client LiveOutputsClient) Delete(ctx context.Context, resourceGroupName string, accountName string, liveEventName string, liveOutputName string) (result LiveOutputsDeleteFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/LiveOutputsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: liveEventName,
 			Constraints: []validation.Constraint{{Target: "liveEventName", Name: validation.MaxLength, Rule: 32, Chain: nil},
@@ -218,6 +201,10 @@ func (client LiveOutputsClient) DeleteSender(req *http.Request) (future LiveOutp
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -241,16 +228,6 @@ func (client LiveOutputsClient) DeleteResponder(resp *http.Response) (result aut
 // liveEventName - the name of the Live Event.
 // liveOutputName - the name of the Live Output.
 func (client LiveOutputsClient) Get(ctx context.Context, resourceGroupName string, accountName string, liveEventName string, liveOutputName string) (result LiveOutput, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/LiveOutputsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: liveEventName,
 			Constraints: []validation.Constraint{{Target: "liveEventName", Name: validation.MaxLength, Rule: 32, Chain: nil},
@@ -333,16 +310,6 @@ func (client LiveOutputsClient) GetResponder(resp *http.Response) (result LiveOu
 // accountName - the Media Services account name.
 // liveEventName - the name of the Live Event.
 func (client LiveOutputsClient) List(ctx context.Context, resourceGroupName string, accountName string, liveEventName string) (result LiveOutputListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/LiveOutputsClient.List")
-		defer func() {
-			sc := -1
-			if result.lolr.Response.Response != nil {
-				sc = result.lolr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: liveEventName,
 			Constraints: []validation.Constraint{{Target: "liveEventName", Name: validation.MaxLength, Rule: 32, Chain: nil},
@@ -416,8 +383,8 @@ func (client LiveOutputsClient) ListResponder(resp *http.Response) (result LiveO
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client LiveOutputsClient) listNextResults(ctx context.Context, lastResults LiveOutputListResult) (result LiveOutputListResult, err error) {
-	req, err := lastResults.liveOutputListResultPreparer(ctx)
+func (client LiveOutputsClient) listNextResults(lastResults LiveOutputListResult) (result LiveOutputListResult, err error) {
+	req, err := lastResults.liveOutputListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "media.LiveOutputsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -438,16 +405,6 @@ func (client LiveOutputsClient) listNextResults(ctx context.Context, lastResults
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client LiveOutputsClient) ListComplete(ctx context.Context, resourceGroupName string, accountName string, liveEventName string) (result LiveOutputListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/LiveOutputsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, resourceGroupName, accountName, liveEventName)
 	return
 }

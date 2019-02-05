@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewVolumeClientWithBaseURI(baseURI string, subscriptionID string) VolumeCli
 // volumeName - the identity of the volume.
 // volumeResourceDescription - description for creating a volume resource.
 func (client VolumeClient) Create(ctx context.Context, resourceGroupName string, volumeName string, volumeResourceDescription VolumeResourceDescription) (result VolumeResourceDescription, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/VolumeClient.Create")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: volumeResourceDescription,
 			Constraints: []validation.Constraint{{Target: "volumeResourceDescription.VolumeResourceProperties", Name: validation.Null, Rule: true,
@@ -139,16 +128,6 @@ func (client VolumeClient) CreateResponder(resp *http.Response) (result VolumeRe
 // resourceGroupName - azure resource group name
 // volumeName - the identity of the volume.
 func (client VolumeClient) Delete(ctx context.Context, resourceGroupName string, volumeName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/VolumeClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, volumeName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabricmesh.VolumeClient", "Delete", nil, "Failure preparing request")
@@ -216,16 +195,6 @@ func (client VolumeClient) DeleteResponder(resp *http.Response) (result autorest
 // resourceGroupName - azure resource group name
 // volumeName - the identity of the volume.
 func (client VolumeClient) Get(ctx context.Context, resourceGroupName string, volumeName string) (result VolumeResourceDescription, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/VolumeClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, volumeName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabricmesh.VolumeClient", "Get", nil, "Failure preparing request")
@@ -293,16 +262,6 @@ func (client VolumeClient) GetResponder(resp *http.Response) (result VolumeResou
 // Parameters:
 // resourceGroupName - azure resource group name
 func (client VolumeClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result VolumeResourceDescriptionListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/VolumeClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.vrdl.Response.Response != nil {
-				sc = result.vrdl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -366,8 +325,8 @@ func (client VolumeClient) ListByResourceGroupResponder(resp *http.Response) (re
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client VolumeClient) listByResourceGroupNextResults(ctx context.Context, lastResults VolumeResourceDescriptionList) (result VolumeResourceDescriptionList, err error) {
-	req, err := lastResults.volumeResourceDescriptionListPreparer(ctx)
+func (client VolumeClient) listByResourceGroupNextResults(lastResults VolumeResourceDescriptionList) (result VolumeResourceDescriptionList, err error) {
+	req, err := lastResults.volumeResourceDescriptionListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "servicefabricmesh.VolumeClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -388,16 +347,6 @@ func (client VolumeClient) listByResourceGroupNextResults(ctx context.Context, l
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client VolumeClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result VolumeResourceDescriptionListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/VolumeClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -405,16 +354,6 @@ func (client VolumeClient) ListByResourceGroupComplete(ctx context.Context, reso
 // ListBySubscription gets the information about all volume resources in a given subscription. The information includes
 // the volume description and other runtime information.
 func (client VolumeClient) ListBySubscription(ctx context.Context) (result VolumeResourceDescriptionListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/VolumeClient.ListBySubscription")
-		defer func() {
-			sc := -1
-			if result.vrdl.Response.Response != nil {
-				sc = result.vrdl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listBySubscriptionNextResults
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
@@ -477,8 +416,8 @@ func (client VolumeClient) ListBySubscriptionResponder(resp *http.Response) (res
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client VolumeClient) listBySubscriptionNextResults(ctx context.Context, lastResults VolumeResourceDescriptionList) (result VolumeResourceDescriptionList, err error) {
-	req, err := lastResults.volumeResourceDescriptionListPreparer(ctx)
+func (client VolumeClient) listBySubscriptionNextResults(lastResults VolumeResourceDescriptionList) (result VolumeResourceDescriptionList, err error) {
+	req, err := lastResults.volumeResourceDescriptionListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "servicefabricmesh.VolumeClient", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -499,16 +438,6 @@ func (client VolumeClient) listBySubscriptionNextResults(ctx context.Context, la
 
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client VolumeClient) ListBySubscriptionComplete(ctx context.Context) (result VolumeResourceDescriptionListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/VolumeClient.ListBySubscription")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListBySubscription(ctx)
 	return
 }

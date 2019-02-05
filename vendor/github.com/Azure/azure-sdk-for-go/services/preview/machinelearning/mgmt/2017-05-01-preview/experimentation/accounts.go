@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewAccountsClientWithBaseURI(baseURI string, subscriptionID string) Account
 // accountName - the name of the machine learning team account.
 // parameters - the parameters for creating or updating a machine learning team account.
 func (client AccountsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, parameters Account) (result Account, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -144,16 +133,6 @@ func (client AccountsClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // resourceGroupName - the name of the resource group to which the machine learning team account belongs.
 // accountName - the name of the machine learning team account.
 func (client AccountsClient) Delete(ctx context.Context, resourceGroupName string, accountName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -228,16 +207,6 @@ func (client AccountsClient) DeleteResponder(resp *http.Response) (result autore
 // resourceGroupName - the name of the resource group to which the machine learning team account belongs.
 // accountName - the name of the machine learning team account.
 func (client AccountsClient) Get(ctx context.Context, resourceGroupName string, accountName string) (result Account, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -310,16 +279,6 @@ func (client AccountsClient) GetResponder(resp *http.Response) (result Account, 
 
 // List lists all the available machine learning team accounts under the specified subscription.
 func (client AccountsClient) List(ctx context.Context) (result AccountListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.List")
-		defer func() {
-			sc := -1
-			if result.alr.Response.Response != nil {
-				sc = result.alr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -382,8 +341,8 @@ func (client AccountsClient) ListResponder(resp *http.Response) (result AccountL
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client AccountsClient) listNextResults(ctx context.Context, lastResults AccountListResult) (result AccountListResult, err error) {
-	req, err := lastResults.accountListResultPreparer(ctx)
+func (client AccountsClient) listNextResults(lastResults AccountListResult) (result AccountListResult, err error) {
+	req, err := lastResults.accountListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "experimentation.AccountsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -404,16 +363,6 @@ func (client AccountsClient) listNextResults(ctx context.Context, lastResults Ac
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AccountsClient) ListComplete(ctx context.Context) (result AccountListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -422,16 +371,6 @@ func (client AccountsClient) ListComplete(ctx context.Context) (result AccountLi
 // Parameters:
 // resourceGroupName - the name of the resource group to which the machine learning team account belongs.
 func (client AccountsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result AccountListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.alr.Response.Response != nil {
-				sc = result.alr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -495,8 +434,8 @@ func (client AccountsClient) ListByResourceGroupResponder(resp *http.Response) (
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client AccountsClient) listByResourceGroupNextResults(ctx context.Context, lastResults AccountListResult) (result AccountListResult, err error) {
-	req, err := lastResults.accountListResultPreparer(ctx)
+func (client AccountsClient) listByResourceGroupNextResults(lastResults AccountListResult) (result AccountListResult, err error) {
+	req, err := lastResults.accountListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "experimentation.AccountsClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -517,16 +456,6 @@ func (client AccountsClient) listByResourceGroupNextResults(ctx context.Context,
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AccountsClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result AccountListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -537,16 +466,6 @@ func (client AccountsClient) ListByResourceGroupComplete(ctx context.Context, re
 // accountName - the name of the machine learning team account.
 // parameters - the parameters for updating a machine learning team account.
 func (client AccountsClient) Update(ctx context.Context, resourceGroupName string, accountName string, parameters AccountUpdateParameters) (result Account, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},

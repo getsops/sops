@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewCustomImagesClientWithBaseURI(baseURI string, subscriptionID string) Cus
 // name - the name of the custom image.
 // customImage - a custom image.
 func (client CustomImagesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, labName string, name string, customImage CustomImage) (result CustomImagesCreateOrUpdateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomImagesClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: customImage,
 			Constraints: []validation.Constraint{{Target: "customImage.CustomImageProperties", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -112,6 +101,10 @@ func (client CustomImagesClient) CreateOrUpdateSender(req *http.Request) (future
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -135,16 +128,6 @@ func (client CustomImagesClient) CreateOrUpdateResponder(resp *http.Response) (r
 // labName - the name of the lab.
 // name - the name of the custom image.
 func (client CustomImagesClient) Delete(ctx context.Context, resourceGroupName string, labName string, name string) (result CustomImagesDeleteFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomImagesClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, labName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.CustomImagesClient", "Delete", nil, "Failure preparing request")
@@ -191,6 +174,10 @@ func (client CustomImagesClient) DeleteSender(req *http.Request) (future CustomI
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -214,16 +201,6 @@ func (client CustomImagesClient) DeleteResponder(resp *http.Response) (result au
 // name - the name of the custom image.
 // expand - specify the $expand query. Example: 'properties($select=vm)'
 func (client CustomImagesClient) Get(ctx context.Context, resourceGroupName string, labName string, name string, expand string) (result CustomImage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomImagesClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, labName, name, expand)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.CustomImagesClient", "Get", nil, "Failure preparing request")
@@ -299,16 +276,6 @@ func (client CustomImagesClient) GetResponder(resp *http.Response) (result Custo
 // top - the maximum number of resources to return from the operation.
 // orderby - the ordering expression for the results, using OData notation.
 func (client CustomImagesClient) List(ctx context.Context, resourceGroupName string, labName string, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationCustomImagePage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomImagesClient.List")
-		defer func() {
-			sc := -1
-			if result.rwcci.Response.Response != nil {
-				sc = result.rwcci.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, labName, expand, filter, top, orderby)
 	if err != nil {
@@ -385,8 +352,8 @@ func (client CustomImagesClient) ListResponder(resp *http.Response) (result Resp
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client CustomImagesClient) listNextResults(ctx context.Context, lastResults ResponseWithContinuationCustomImage) (result ResponseWithContinuationCustomImage, err error) {
-	req, err := lastResults.responseWithContinuationCustomImagePreparer(ctx)
+func (client CustomImagesClient) listNextResults(lastResults ResponseWithContinuationCustomImage) (result ResponseWithContinuationCustomImage, err error) {
+	req, err := lastResults.responseWithContinuationCustomImagePreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dtl.CustomImagesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -407,16 +374,6 @@ func (client CustomImagesClient) listNextResults(ctx context.Context, lastResult
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client CustomImagesClient) ListComplete(ctx context.Context, resourceGroupName string, labName string, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationCustomImageIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomImagesClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, resourceGroupName, labName, expand, filter, top, orderby)
 	return
 }

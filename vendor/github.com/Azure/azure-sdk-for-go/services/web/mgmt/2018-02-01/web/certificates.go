@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,16 +46,6 @@ func NewCertificatesClientWithBaseURI(baseURI string, subscriptionID string) Cer
 // name - name of the certificate.
 // certificateEnvelope - details of certificate, if it exists already.
 func (client CertificatesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, name string, certificateEnvelope Certificate) (result Certificate, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -137,16 +126,6 @@ func (client CertificatesClient) CreateOrUpdateResponder(resp *http.Response) (r
 // resourceGroupName - name of the resource group to which the resource belongs.
 // name - name of the certificate.
 func (client CertificatesClient) Delete(ctx context.Context, resourceGroupName string, name string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -221,16 +200,6 @@ func (client CertificatesClient) DeleteResponder(resp *http.Response) (result au
 // resourceGroupName - name of the resource group to which the resource belongs.
 // name - name of the certificate.
 func (client CertificatesClient) Get(ctx context.Context, resourceGroupName string, name string) (result Certificate, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -303,16 +272,6 @@ func (client CertificatesClient) GetResponder(resp *http.Response) (result Certi
 
 // List get all certificates for a subscription.
 func (client CertificatesClient) List(ctx context.Context) (result CertificateCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.List")
-		defer func() {
-			sc := -1
-			if result.cc.Response.Response != nil {
-				sc = result.cc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -375,8 +334,8 @@ func (client CertificatesClient) ListResponder(resp *http.Response) (result Cert
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client CertificatesClient) listNextResults(ctx context.Context, lastResults CertificateCollection) (result CertificateCollection, err error) {
-	req, err := lastResults.certificateCollectionPreparer(ctx)
+func (client CertificatesClient) listNextResults(lastResults CertificateCollection) (result CertificateCollection, err error) {
+	req, err := lastResults.certificateCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.CertificatesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -397,16 +356,6 @@ func (client CertificatesClient) listNextResults(ctx context.Context, lastResult
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client CertificatesClient) ListComplete(ctx context.Context) (result CertificateCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -415,16 +364,6 @@ func (client CertificatesClient) ListComplete(ctx context.Context) (result Certi
 // Parameters:
 // resourceGroupName - name of the resource group to which the resource belongs.
 func (client CertificatesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result CertificateCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.cc.Response.Response != nil {
-				sc = result.cc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -496,8 +435,8 @@ func (client CertificatesClient) ListByResourceGroupResponder(resp *http.Respons
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client CertificatesClient) listByResourceGroupNextResults(ctx context.Context, lastResults CertificateCollection) (result CertificateCollection, err error) {
-	req, err := lastResults.certificateCollectionPreparer(ctx)
+func (client CertificatesClient) listByResourceGroupNextResults(lastResults CertificateCollection) (result CertificateCollection, err error) {
+	req, err := lastResults.certificateCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.CertificatesClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -518,16 +457,6 @@ func (client CertificatesClient) listByResourceGroupNextResults(ctx context.Cont
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client CertificatesClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result CertificateCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -538,16 +467,6 @@ func (client CertificatesClient) ListByResourceGroupComplete(ctx context.Context
 // name - name of the certificate.
 // certificateEnvelope - details of certificate, if it exists already.
 func (client CertificatesClient) Update(ctx context.Context, resourceGroupName string, name string, certificateEnvelope CertificatePatchResource) (result Certificate, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

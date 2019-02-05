@@ -21,7 +21,6 @@ import (
 	"strings"
 
 	"github.com/Azure/go-autorest/autorest/adal"
-	"github.com/Azure/go-autorest/tracing"
 )
 
 const (
@@ -69,7 +68,7 @@ func NewAPIKeyAuthorizer(headers map[string]interface{}, queryParameters map[str
 	return &APIKeyAuthorizer{headers: headers, queryParameters: queryParameters}
 }
 
-// WithAuthorization returns a PrepareDecorator that adds an HTTP headers and Query Parameters.
+// WithAuthorization returns a PrepareDecorator that adds an HTTP headers and Query Paramaters
 func (aka *APIKeyAuthorizer) WithAuthorization() PrepareDecorator {
 	return func(p Preparer) Preparer {
 		return DecoratePreparer(p, WithHeaders(aka.headers), WithQueryParameters(aka.queryParameters))
@@ -148,7 +147,7 @@ type BearerAuthorizerCallback struct {
 // is invoked when the HTTP request is submitted.
 func NewBearerAuthorizerCallback(sender Sender, callback BearerAuthorizerCallbackFunc) *BearerAuthorizerCallback {
 	if sender == nil {
-		sender = &http.Client{Transport: tracing.Transport}
+		sender = &http.Client{}
 	}
 	return &BearerAuthorizerCallback{sender: sender, callback: callback}
 }

@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewIntegrationAccountSessionsClientWithBaseURI(baseURI string, subscription
 // sessionName - the integration account session name.
 // session - the integration account session.
 func (client IntegrationAccountSessionsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, integrationAccountName string, sessionName string, session IntegrationAccountSession) (result IntegrationAccountSession, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountSessionsClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: session,
 			Constraints: []validation.Constraint{{Target: "session.IntegrationAccountSessionProperties", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -135,16 +124,6 @@ func (client IntegrationAccountSessionsClient) CreateOrUpdateResponder(resp *htt
 // integrationAccountName - the integration account name.
 // sessionName - the integration account session name.
 func (client IntegrationAccountSessionsClient) Delete(ctx context.Context, resourceGroupName string, integrationAccountName string, sessionName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountSessionsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, integrationAccountName, sessionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.IntegrationAccountSessionsClient", "Delete", nil, "Failure preparing request")
@@ -213,16 +192,6 @@ func (client IntegrationAccountSessionsClient) DeleteResponder(resp *http.Respon
 // integrationAccountName - the integration account name.
 // sessionName - the integration account session name.
 func (client IntegrationAccountSessionsClient) Get(ctx context.Context, resourceGroupName string, integrationAccountName string, sessionName string) (result IntegrationAccountSession, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountSessionsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, integrationAccountName, sessionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.IntegrationAccountSessionsClient", "Get", nil, "Failure preparing request")
@@ -293,16 +262,6 @@ func (client IntegrationAccountSessionsClient) GetResponder(resp *http.Response)
 // top - the number of items to be included in the result.
 // filter - the filter to apply on the operation. Options for filters include: ChangedTime.
 func (client IntegrationAccountSessionsClient) List(ctx context.Context, resourceGroupName string, integrationAccountName string, top *int32, filter string) (result IntegrationAccountSessionListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountSessionsClient.List")
-		defer func() {
-			sc := -1
-			if result.iaslr.Response.Response != nil {
-				sc = result.iaslr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, integrationAccountName, top, filter)
 	if err != nil {
@@ -373,8 +332,8 @@ func (client IntegrationAccountSessionsClient) ListResponder(resp *http.Response
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client IntegrationAccountSessionsClient) listNextResults(ctx context.Context, lastResults IntegrationAccountSessionListResult) (result IntegrationAccountSessionListResult, err error) {
-	req, err := lastResults.integrationAccountSessionListResultPreparer(ctx)
+func (client IntegrationAccountSessionsClient) listNextResults(lastResults IntegrationAccountSessionListResult) (result IntegrationAccountSessionListResult, err error) {
+	req, err := lastResults.integrationAccountSessionListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "logic.IntegrationAccountSessionsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -395,16 +354,6 @@ func (client IntegrationAccountSessionsClient) listNextResults(ctx context.Conte
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client IntegrationAccountSessionsClient) ListComplete(ctx context.Context, resourceGroupName string, integrationAccountName string, top *int32, filter string) (result IntegrationAccountSessionListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountSessionsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, resourceGroupName, integrationAccountName, top, filter)
 	return
 }

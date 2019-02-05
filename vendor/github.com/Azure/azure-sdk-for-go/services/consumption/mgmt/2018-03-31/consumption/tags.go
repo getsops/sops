@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,16 +44,6 @@ func NewTagsClientWithBaseURI(baseURI string, subscriptionID string) TagsClient 
 // Parameters:
 // billingAccountID - billingAccount ID
 func (client TagsClient) Get(ctx context.Context, billingAccountID string) (result Tags, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, billingAccountID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "consumption.TagsClient", "Get", nil, "Failure preparing request")

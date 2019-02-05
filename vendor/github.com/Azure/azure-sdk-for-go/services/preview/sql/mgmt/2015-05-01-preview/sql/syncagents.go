@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,16 +49,6 @@ func NewSyncAgentsClientWithBaseURI(baseURI string, subscriptionID string) SyncA
 // syncAgentName - the name of the sync agent.
 // parameters - the requested sync agent resource state.
 func (client SyncAgentsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, syncAgentName string, parameters SyncAgent) (result SyncAgentsCreateOrUpdateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SyncAgentsClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serverName, syncAgentName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.SyncAgentsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -108,6 +97,10 @@ func (client SyncAgentsClient) CreateOrUpdateSender(req *http.Request) (future S
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -132,16 +125,6 @@ func (client SyncAgentsClient) CreateOrUpdateResponder(resp *http.Response) (res
 // serverName - the name of the server on which the sync agent is hosted.
 // syncAgentName - the name of the sync agent.
 func (client SyncAgentsClient) Delete(ctx context.Context, resourceGroupName string, serverName string, syncAgentName string) (result SyncAgentsDeleteFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SyncAgentsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, serverName, syncAgentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.SyncAgentsClient", "Delete", nil, "Failure preparing request")
@@ -188,6 +171,10 @@ func (client SyncAgentsClient) DeleteSender(req *http.Request) (future SyncAgent
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -211,16 +198,6 @@ func (client SyncAgentsClient) DeleteResponder(resp *http.Response) (result auto
 // serverName - the name of the server on which the sync agent is hosted.
 // syncAgentName - the name of the sync agent.
 func (client SyncAgentsClient) GenerateKey(ctx context.Context, resourceGroupName string, serverName string, syncAgentName string) (result SyncAgentKeyProperties, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SyncAgentsClient.GenerateKey")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GenerateKeyPreparer(ctx, resourceGroupName, serverName, syncAgentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.SyncAgentsClient", "GenerateKey", nil, "Failure preparing request")
@@ -291,16 +268,6 @@ func (client SyncAgentsClient) GenerateKeyResponder(resp *http.Response) (result
 // serverName - the name of the server on which the sync agent is hosted.
 // syncAgentName - the name of the sync agent.
 func (client SyncAgentsClient) Get(ctx context.Context, resourceGroupName string, serverName string, syncAgentName string) (result SyncAgent, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SyncAgentsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, syncAgentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.SyncAgentsClient", "Get", nil, "Failure preparing request")
@@ -370,16 +337,6 @@ func (client SyncAgentsClient) GetResponder(resp *http.Response) (result SyncAge
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server on which the sync agent is hosted.
 func (client SyncAgentsClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string) (result SyncAgentListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SyncAgentsClient.ListByServer")
-		defer func() {
-			sc := -1
-			if result.salr.Response.Response != nil {
-				sc = result.salr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByServerNextResults
 	req, err := client.ListByServerPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
@@ -444,8 +401,8 @@ func (client SyncAgentsClient) ListByServerResponder(resp *http.Response) (resul
 }
 
 // listByServerNextResults retrieves the next set of results, if any.
-func (client SyncAgentsClient) listByServerNextResults(ctx context.Context, lastResults SyncAgentListResult) (result SyncAgentListResult, err error) {
-	req, err := lastResults.syncAgentListResultPreparer(ctx)
+func (client SyncAgentsClient) listByServerNextResults(lastResults SyncAgentListResult) (result SyncAgentListResult, err error) {
+	req, err := lastResults.syncAgentListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.SyncAgentsClient", "listByServerNextResults", nil, "Failure preparing next results request")
 	}
@@ -466,16 +423,6 @@ func (client SyncAgentsClient) listByServerNextResults(ctx context.Context, last
 
 // ListByServerComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SyncAgentsClient) ListByServerComplete(ctx context.Context, resourceGroupName string, serverName string) (result SyncAgentListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SyncAgentsClient.ListByServer")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByServer(ctx, resourceGroupName, serverName)
 	return
 }
@@ -487,16 +434,6 @@ func (client SyncAgentsClient) ListByServerComplete(ctx context.Context, resourc
 // serverName - the name of the server on which the sync agent is hosted.
 // syncAgentName - the name of the sync agent.
 func (client SyncAgentsClient) ListLinkedDatabases(ctx context.Context, resourceGroupName string, serverName string, syncAgentName string) (result SyncAgentLinkedDatabaseListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SyncAgentsClient.ListLinkedDatabases")
-		defer func() {
-			sc := -1
-			if result.saldlr.Response.Response != nil {
-				sc = result.saldlr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listLinkedDatabasesNextResults
 	req, err := client.ListLinkedDatabasesPreparer(ctx, resourceGroupName, serverName, syncAgentName)
 	if err != nil {
@@ -562,8 +499,8 @@ func (client SyncAgentsClient) ListLinkedDatabasesResponder(resp *http.Response)
 }
 
 // listLinkedDatabasesNextResults retrieves the next set of results, if any.
-func (client SyncAgentsClient) listLinkedDatabasesNextResults(ctx context.Context, lastResults SyncAgentLinkedDatabaseListResult) (result SyncAgentLinkedDatabaseListResult, err error) {
-	req, err := lastResults.syncAgentLinkedDatabaseListResultPreparer(ctx)
+func (client SyncAgentsClient) listLinkedDatabasesNextResults(lastResults SyncAgentLinkedDatabaseListResult) (result SyncAgentLinkedDatabaseListResult, err error) {
+	req, err := lastResults.syncAgentLinkedDatabaseListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.SyncAgentsClient", "listLinkedDatabasesNextResults", nil, "Failure preparing next results request")
 	}
@@ -584,16 +521,6 @@ func (client SyncAgentsClient) listLinkedDatabasesNextResults(ctx context.Contex
 
 // ListLinkedDatabasesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SyncAgentsClient) ListLinkedDatabasesComplete(ctx context.Context, resourceGroupName string, serverName string, syncAgentName string) (result SyncAgentLinkedDatabaseListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SyncAgentsClient.ListLinkedDatabases")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListLinkedDatabases(ctx, resourceGroupName, serverName, syncAgentName)
 	return
 }

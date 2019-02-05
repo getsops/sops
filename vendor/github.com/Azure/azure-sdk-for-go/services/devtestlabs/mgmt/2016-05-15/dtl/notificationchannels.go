@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewNotificationChannelsClientWithBaseURI(baseURI string, subscriptionID str
 // name - the name of the notificationChannel.
 // notificationChannel - a notification.
 func (client NotificationChannelsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, labName string, name string, notificationChannel NotificationChannel) (result NotificationChannel, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/NotificationChannelsClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: notificationChannel,
 			Constraints: []validation.Constraint{{Target: "notificationChannel.NotificationChannelProperties", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -129,22 +118,12 @@ func (client NotificationChannelsClient) CreateOrUpdateResponder(resp *http.Resp
 	return
 }
 
-// Delete delete notification channel.
+// Delete delete notificationchannel.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // labName - the name of the lab.
 // name - the name of the notificationChannel.
 func (client NotificationChannelsClient) Delete(ctx context.Context, resourceGroupName string, labName string, name string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/NotificationChannelsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, labName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.NotificationChannelsClient", "Delete", nil, "Failure preparing request")
@@ -207,23 +186,13 @@ func (client NotificationChannelsClient) DeleteResponder(resp *http.Response) (r
 	return
 }
 
-// Get get notification channels.
+// Get get notificationchannel.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // labName - the name of the lab.
 // name - the name of the notificationChannel.
 // expand - specify the $expand query. Example: 'properties($select=webHookUrl)'
 func (client NotificationChannelsClient) Get(ctx context.Context, resourceGroupName string, labName string, name string, expand string) (result NotificationChannel, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/NotificationChannelsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, labName, name, expand)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.NotificationChannelsClient", "Get", nil, "Failure preparing request")
@@ -290,7 +259,7 @@ func (client NotificationChannelsClient) GetResponder(resp *http.Response) (resu
 	return
 }
 
-// List list notification channels in a given lab.
+// List list notificationchannels in a given lab.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // labName - the name of the lab.
@@ -299,16 +268,6 @@ func (client NotificationChannelsClient) GetResponder(resp *http.Response) (resu
 // top - the maximum number of resources to return from the operation.
 // orderby - the ordering expression for the results, using OData notation.
 func (client NotificationChannelsClient) List(ctx context.Context, resourceGroupName string, labName string, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationNotificationChannelPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/NotificationChannelsClient.List")
-		defer func() {
-			sc := -1
-			if result.rwcnc.Response.Response != nil {
-				sc = result.rwcnc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, labName, expand, filter, top, orderby)
 	if err != nil {
@@ -385,8 +344,8 @@ func (client NotificationChannelsClient) ListResponder(resp *http.Response) (res
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client NotificationChannelsClient) listNextResults(ctx context.Context, lastResults ResponseWithContinuationNotificationChannel) (result ResponseWithContinuationNotificationChannel, err error) {
-	req, err := lastResults.responseWithContinuationNotificationChannelPreparer(ctx)
+func (client NotificationChannelsClient) listNextResults(lastResults ResponseWithContinuationNotificationChannel) (result ResponseWithContinuationNotificationChannel, err error) {
+	req, err := lastResults.responseWithContinuationNotificationChannelPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dtl.NotificationChannelsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -407,16 +366,6 @@ func (client NotificationChannelsClient) listNextResults(ctx context.Context, la
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client NotificationChannelsClient) ListComplete(ctx context.Context, resourceGroupName string, labName string, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationNotificationChannelIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/NotificationChannelsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, resourceGroupName, labName, expand, filter, top, orderby)
 	return
 }
@@ -428,16 +377,6 @@ func (client NotificationChannelsClient) ListComplete(ctx context.Context, resou
 // name - the name of the notificationChannel.
 // notifyParameters - properties for generating a Notification.
 func (client NotificationChannelsClient) Notify(ctx context.Context, resourceGroupName string, labName string, name string, notifyParameters NotifyParameters) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/NotificationChannelsClient.Notify")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.NotifyPreparer(ctx, resourceGroupName, labName, name, notifyParameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.NotificationChannelsClient", "Notify", nil, "Failure preparing request")
@@ -502,23 +441,13 @@ func (client NotificationChannelsClient) NotifyResponder(resp *http.Response) (r
 	return
 }
 
-// Update modify properties of notification channels.
+// Update modify properties of notificationchannels.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // labName - the name of the lab.
 // name - the name of the notificationChannel.
 // notificationChannel - a notification.
 func (client NotificationChannelsClient) Update(ctx context.Context, resourceGroupName string, labName string, name string, notificationChannel NotificationChannelFragment) (result NotificationChannel, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/NotificationChannelsClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, labName, name, notificationChannel)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.NotificationChannelsClient", "Update", nil, "Failure preparing request")

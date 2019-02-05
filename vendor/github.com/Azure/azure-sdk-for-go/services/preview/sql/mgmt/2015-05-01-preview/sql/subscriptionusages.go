@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,16 +46,6 @@ func NewSubscriptionUsagesClientWithBaseURI(baseURI string, subscriptionID strin
 // locationName - the name of the region where the resource is located.
 // usageName - name of usage metric to return.
 func (client SubscriptionUsagesClient) Get(ctx context.Context, locationName string, usageName string) (result SubscriptionUsage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionUsagesClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, locationName, usageName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.SubscriptionUsagesClient", "Get", nil, "Failure preparing request")
@@ -123,16 +112,6 @@ func (client SubscriptionUsagesClient) GetResponder(resp *http.Response) (result
 // Parameters:
 // locationName - the name of the region where the resource is located.
 func (client SubscriptionUsagesClient) ListByLocation(ctx context.Context, locationName string) (result SubscriptionUsageListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionUsagesClient.ListByLocation")
-		defer func() {
-			sc := -1
-			if result.sulr.Response.Response != nil {
-				sc = result.sulr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByLocationNextResults
 	req, err := client.ListByLocationPreparer(ctx, locationName)
 	if err != nil {
@@ -196,8 +175,8 @@ func (client SubscriptionUsagesClient) ListByLocationResponder(resp *http.Respon
 }
 
 // listByLocationNextResults retrieves the next set of results, if any.
-func (client SubscriptionUsagesClient) listByLocationNextResults(ctx context.Context, lastResults SubscriptionUsageListResult) (result SubscriptionUsageListResult, err error) {
-	req, err := lastResults.subscriptionUsageListResultPreparer(ctx)
+func (client SubscriptionUsagesClient) listByLocationNextResults(lastResults SubscriptionUsageListResult) (result SubscriptionUsageListResult, err error) {
+	req, err := lastResults.subscriptionUsageListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.SubscriptionUsagesClient", "listByLocationNextResults", nil, "Failure preparing next results request")
 	}
@@ -218,16 +197,6 @@ func (client SubscriptionUsagesClient) listByLocationNextResults(ctx context.Con
 
 // ListByLocationComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SubscriptionUsagesClient) ListByLocationComplete(ctx context.Context, locationName string) (result SubscriptionUsageListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionUsagesClient.ListByLocation")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByLocation(ctx, locationName)
 	return
 }

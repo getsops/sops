@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewModuleClientWithBaseURI(baseURI string, subscriptionID string) ModuleCli
 // moduleName - the name of module.
 // parameters - the create or update parameters for module.
 func (client ModuleClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, automationAccountName string, moduleName string, parameters ModuleCreateOrUpdateParameters) (result Module, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ModuleClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -146,16 +135,6 @@ func (client ModuleClient) CreateOrUpdateResponder(resp *http.Response) (result 
 // automationAccountName - the name of the automation account.
 // moduleName - the module name.
 func (client ModuleClient) Delete(ctx context.Context, resourceGroupName string, automationAccountName string, moduleName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ModuleClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -232,16 +211,6 @@ func (client ModuleClient) DeleteResponder(resp *http.Response) (result autorest
 // automationAccountName - the name of the automation account.
 // moduleName - the module name.
 func (client ModuleClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string, moduleName string) (result Module, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ModuleClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -318,16 +287,6 @@ func (client ModuleClient) GetResponder(resp *http.Response) (result Module, err
 // resourceGroupName - name of an Azure Resource group.
 // automationAccountName - the name of the automation account.
 func (client ModuleClient) ListByAutomationAccount(ctx context.Context, resourceGroupName string, automationAccountName string) (result ModuleListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ModuleClient.ListByAutomationAccount")
-		defer func() {
-			sc := -1
-			if result.mlr.Response.Response != nil {
-				sc = result.mlr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -400,8 +359,8 @@ func (client ModuleClient) ListByAutomationAccountResponder(resp *http.Response)
 }
 
 // listByAutomationAccountNextResults retrieves the next set of results, if any.
-func (client ModuleClient) listByAutomationAccountNextResults(ctx context.Context, lastResults ModuleListResult) (result ModuleListResult, err error) {
-	req, err := lastResults.moduleListResultPreparer(ctx)
+func (client ModuleClient) listByAutomationAccountNextResults(lastResults ModuleListResult) (result ModuleListResult, err error) {
+	req, err := lastResults.moduleListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "automation.ModuleClient", "listByAutomationAccountNextResults", nil, "Failure preparing next results request")
 	}
@@ -422,16 +381,6 @@ func (client ModuleClient) listByAutomationAccountNextResults(ctx context.Contex
 
 // ListByAutomationAccountComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ModuleClient) ListByAutomationAccountComplete(ctx context.Context, resourceGroupName string, automationAccountName string) (result ModuleListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ModuleClient.ListByAutomationAccount")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByAutomationAccount(ctx, resourceGroupName, automationAccountName)
 	return
 }
@@ -443,16 +392,6 @@ func (client ModuleClient) ListByAutomationAccountComplete(ctx context.Context, 
 // moduleName - the name of module.
 // parameters - the update parameters for module.
 func (client ModuleClient) Update(ctx context.Context, resourceGroupName string, automationAccountName string, moduleName string, parameters ModuleUpdateParameters) (result Module, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ModuleClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

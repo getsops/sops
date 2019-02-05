@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -43,16 +42,6 @@ func NewOperationsClientWithBaseURI(baseURI string, subscriptionID uuid.UUID) Op
 
 // List lists all of the available IoTSpaces service REST API operations.
 func (client OperationsClient) List(ctx context.Context) (result OperationListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OperationsClient.List")
-		defer func() {
-			sc := -1
-			if result.olr.Response.Response != nil {
-				sc = result.olr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -111,8 +100,8 @@ func (client OperationsClient) ListResponder(resp *http.Response) (result Operat
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client OperationsClient) listNextResults(ctx context.Context, lastResults OperationListResult) (result OperationListResult, err error) {
-	req, err := lastResults.operationListResultPreparer(ctx)
+func (client OperationsClient) listNextResults(lastResults OperationListResult) (result OperationListResult, err error) {
+	req, err := lastResults.operationListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "iotspaces.OperationsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -133,16 +122,6 @@ func (client OperationsClient) listNextResults(ctx context.Context, lastResults 
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client OperationsClient) ListComplete(ctx context.Context) (result OperationListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OperationsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }

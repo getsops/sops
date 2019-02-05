@@ -19,6 +19,10 @@ import (
 	"net/url"
 )
 
+const (
+	activeDirectoryAPIVersion = "1.0"
+)
+
 // OAuthConfig represents the endpoints needed
 // in OAuth operations
 type OAuthConfig struct {
@@ -42,25 +46,11 @@ func validateStringParam(param, name string) error {
 
 // NewOAuthConfig returns an OAuthConfig with tenant specific urls
 func NewOAuthConfig(activeDirectoryEndpoint, tenantID string) (*OAuthConfig, error) {
-	apiVer := "1.0"
-	return NewOAuthConfigWithAPIVersion(activeDirectoryEndpoint, tenantID, &apiVer)
-}
-
-// NewOAuthConfigWithAPIVersion returns an OAuthConfig with tenant specific urls.
-// If apiVersion is not nil the "api-version" query parameter will be appended to the endpoint URLs with the specified value.
-func NewOAuthConfigWithAPIVersion(activeDirectoryEndpoint, tenantID string, apiVersion *string) (*OAuthConfig, error) {
 	if err := validateStringParam(activeDirectoryEndpoint, "activeDirectoryEndpoint"); err != nil {
 		return nil, err
 	}
-	api := ""
 	// it's legal for tenantID to be empty so don't validate it
-	if apiVersion != nil {
-		if err := validateStringParam(*apiVersion, "apiVersion"); err != nil {
-			return nil, err
-		}
-		api = fmt.Sprintf("?api-version=%s", *apiVersion)
-	}
-	const activeDirectoryEndpointTemplate = "%s/oauth2/%s%s"
+	const activeDirectoryEndpointTemplate = "%s/oauth2/%s?api-version=%s"
 	u, err := url.Parse(activeDirectoryEndpoint)
 	if err != nil {
 		return nil, err
@@ -69,15 +59,15 @@ func NewOAuthConfigWithAPIVersion(activeDirectoryEndpoint, tenantID string, apiV
 	if err != nil {
 		return nil, err
 	}
-	authorizeURL, err := u.Parse(fmt.Sprintf(activeDirectoryEndpointTemplate, tenantID, "authorize", api))
+	authorizeURL, err := u.Parse(fmt.Sprintf(activeDirectoryEndpointTemplate, tenantID, "authorize", activeDirectoryAPIVersion))
 	if err != nil {
 		return nil, err
 	}
-	tokenURL, err := u.Parse(fmt.Sprintf(activeDirectoryEndpointTemplate, tenantID, "token", api))
+	tokenURL, err := u.Parse(fmt.Sprintf(activeDirectoryEndpointTemplate, tenantID, "token", activeDirectoryAPIVersion))
 	if err != nil {
 		return nil, err
 	}
-	deviceCodeURL, err := u.Parse(fmt.Sprintf(activeDirectoryEndpointTemplate, tenantID, "devicecode", api))
+	deviceCodeURL, err := u.Parse(fmt.Sprintf(activeDirectoryEndpointTemplate, tenantID, "devicecode", activeDirectoryAPIVersion))
 	if err != nil {
 		return nil, err
 	}

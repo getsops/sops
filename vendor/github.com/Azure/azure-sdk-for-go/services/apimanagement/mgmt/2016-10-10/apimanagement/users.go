@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewUsersClientWithBaseURI(baseURI string, subscriptionID string) UsersClien
 // UID - user identifier. Must be unique in the current API Management service instance.
 // parameters - create or update parameters.
 func (client UsersClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, UID string, parameters UserCreateParameters) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/UsersClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -157,16 +146,6 @@ func (client UsersClient) CreateOrUpdateResponder(resp *http.Response) (result a
 // unconditionally apply the operation.
 // deleteSubscriptions - whether to delete user's subscription or not.
 func (client UsersClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, UID string, ifMatch string, deleteSubscriptions *bool) (result ErrorBodyContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/UsersClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -253,16 +232,6 @@ func (client UsersClient) DeleteResponder(resp *http.Response) (result ErrorBody
 // serviceName - the name of the API Management service.
 // UID - user identifier. Must be unique in the current API Management service instance.
 func (client UsersClient) GenerateSsoURL(ctx context.Context, resourceGroupName string, serviceName string, UID string) (result GenerateSsoURLResult, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/UsersClient.GenerateSsoURL")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -344,16 +313,6 @@ func (client UsersClient) GenerateSsoURLResponder(resp *http.Response) (result G
 // serviceName - the name of the API Management service.
 // UID - user identifier. Must be unique in the current API Management service instance.
 func (client UsersClient) Get(ctx context.Context, resourceGroupName string, serviceName string, UID string) (result UserContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/UsersClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -436,16 +395,6 @@ func (client UsersClient) GetResponder(resp *http.Response) (result UserContract
 // UID - user identifier. Must be unique in the current API Management service instance.
 // parameters - create Authorization Token parameters.
 func (client UsersClient) GetSharedAccessToken(ctx context.Context, resourceGroupName string, serviceName string, UID string, parameters UserTokenParameters) (result UserTokenResult, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/UsersClient.GetSharedAccessToken")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -541,16 +490,6 @@ func (client UsersClient) GetSharedAccessTokenResponder(resp *http.Response) (re
 // top - number of records to return.
 // skip - number of records to skip.
 func (client UsersClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result UserCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/UsersClient.ListByService")
-		defer func() {
-			sc := -1
-			if result.uc.Response.Response != nil {
-				sc = result.uc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -638,8 +577,8 @@ func (client UsersClient) ListByServiceResponder(resp *http.Response) (result Us
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client UsersClient) listByServiceNextResults(ctx context.Context, lastResults UserCollection) (result UserCollection, err error) {
-	req, err := lastResults.userCollectionPreparer(ctx)
+func (client UsersClient) listByServiceNextResults(lastResults UserCollection) (result UserCollection, err error) {
+	req, err := lastResults.userCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.UsersClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -660,16 +599,6 @@ func (client UsersClient) listByServiceNextResults(ctx context.Context, lastResu
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client UsersClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result UserCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/UsersClient.ListByService")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
@@ -683,16 +612,6 @@ func (client UsersClient) ListByServiceComplete(ctx context.Context, resourceGro
 // ifMatch - the entity state (Etag) version of the user to update. A value of "*" can be used for If-Match to
 // unconditionally apply the operation.
 func (client UsersClient) Update(ctx context.Context, resourceGroupName string, serviceName string, UID string, parameters UserUpdateParameters, ifMatch string) (result ErrorBodyContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/UsersClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},

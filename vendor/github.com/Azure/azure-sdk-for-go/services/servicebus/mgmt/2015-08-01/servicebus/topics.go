@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewTopicsClientWithBaseURI(baseURI string, subscriptionID string) TopicsCli
 // topicName - the topic name.
 // parameters - parameters supplied to create a topic resource.
 func (client TopicsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, parameters TopicCreateOrUpdateParameters) (result TopicResource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -146,16 +135,6 @@ func (client TopicsClient) CreateOrUpdateResponder(resp *http.Response) (result 
 // authorizationRuleName - the authorizationrule name.
 // parameters - the shared access authorization rule.
 func (client TopicsClient) CreateOrUpdateAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, authorizationRuleName string, parameters SharedAccessAuthorizationRuleCreateOrUpdateParameters) (result SharedAccessAuthorizationRuleResource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.CreateOrUpdateAuthorizationRule")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -247,16 +226,6 @@ func (client TopicsClient) CreateOrUpdateAuthorizationRuleResponder(resp *http.R
 // namespaceName - the namespace name
 // topicName - the topic name.
 func (client TopicsClient) Delete(ctx context.Context, resourceGroupName string, namespaceName string, topicName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -339,16 +308,6 @@ func (client TopicsClient) DeleteResponder(resp *http.Response) (result autorest
 // topicName - the topic name.
 // authorizationRuleName - the authorizationrule name.
 func (client TopicsClient) DeleteAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, authorizationRuleName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.DeleteAuthorizationRule")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -434,16 +393,6 @@ func (client TopicsClient) DeleteAuthorizationRuleResponder(resp *http.Response)
 // namespaceName - the namespace name
 // topicName - the topic name.
 func (client TopicsClient) Get(ctx context.Context, resourceGroupName string, namespaceName string, topicName string) (result TopicResource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -527,16 +476,6 @@ func (client TopicsClient) GetResponder(resp *http.Response) (result TopicResour
 // topicName - the topic name.
 // authorizationRuleName - the authorizationrule name.
 func (client TopicsClient) GetAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, authorizationRuleName string) (result SharedAccessAuthorizationRuleResource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.GetAuthorizationRule")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -622,16 +561,6 @@ func (client TopicsClient) GetAuthorizationRuleResponder(resp *http.Response) (r
 // resourceGroupName - name of the Resource group within the Azure subscription.
 // namespaceName - the namespace name
 func (client TopicsClient) ListAll(ctx context.Context, resourceGroupName string, namespaceName string) (result TopicListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.ListAll")
-		defer func() {
-			sc := -1
-			if result.tlr.Response.Response != nil {
-				sc = result.tlr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -706,8 +635,8 @@ func (client TopicsClient) ListAllResponder(resp *http.Response) (result TopicLi
 }
 
 // listAllNextResults retrieves the next set of results, if any.
-func (client TopicsClient) listAllNextResults(ctx context.Context, lastResults TopicListResult) (result TopicListResult, err error) {
-	req, err := lastResults.topicListResultPreparer(ctx)
+func (client TopicsClient) listAllNextResults(lastResults TopicListResult) (result TopicListResult, err error) {
+	req, err := lastResults.topicListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "servicebus.TopicsClient", "listAllNextResults", nil, "Failure preparing next results request")
 	}
@@ -728,16 +657,6 @@ func (client TopicsClient) listAllNextResults(ctx context.Context, lastResults T
 
 // ListAllComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TopicsClient) ListAllComplete(ctx context.Context, resourceGroupName string, namespaceName string) (result TopicListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.ListAll")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListAll(ctx, resourceGroupName, namespaceName)
 	return
 }
@@ -748,16 +667,6 @@ func (client TopicsClient) ListAllComplete(ctx context.Context, resourceGroupNam
 // namespaceName - the namespace name
 // topicName - the topic name.
 func (client TopicsClient) ListAuthorizationRules(ctx context.Context, resourceGroupName string, namespaceName string, topicName string) (result SharedAccessAuthorizationRuleListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.ListAuthorizationRules")
-		defer func() {
-			sc := -1
-			if result.saarlr.Response.Response != nil {
-				sc = result.saarlr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -836,8 +745,8 @@ func (client TopicsClient) ListAuthorizationRulesResponder(resp *http.Response) 
 }
 
 // listAuthorizationRulesNextResults retrieves the next set of results, if any.
-func (client TopicsClient) listAuthorizationRulesNextResults(ctx context.Context, lastResults SharedAccessAuthorizationRuleListResult) (result SharedAccessAuthorizationRuleListResult, err error) {
-	req, err := lastResults.sharedAccessAuthorizationRuleListResultPreparer(ctx)
+func (client TopicsClient) listAuthorizationRulesNextResults(lastResults SharedAccessAuthorizationRuleListResult) (result SharedAccessAuthorizationRuleListResult, err error) {
+	req, err := lastResults.sharedAccessAuthorizationRuleListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "servicebus.TopicsClient", "listAuthorizationRulesNextResults", nil, "Failure preparing next results request")
 	}
@@ -858,16 +767,6 @@ func (client TopicsClient) listAuthorizationRulesNextResults(ctx context.Context
 
 // ListAuthorizationRulesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TopicsClient) ListAuthorizationRulesComplete(ctx context.Context, resourceGroupName string, namespaceName string, topicName string) (result SharedAccessAuthorizationRuleListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.ListAuthorizationRules")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListAuthorizationRules(ctx, resourceGroupName, namespaceName, topicName)
 	return
 }
@@ -879,16 +778,6 @@ func (client TopicsClient) ListAuthorizationRulesComplete(ctx context.Context, r
 // topicName - the topic name.
 // authorizationRuleName - the authorizationrule name.
 func (client TopicsClient) ListKeys(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, authorizationRuleName string) (result ResourceListKeys, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.ListKeys")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -976,16 +865,6 @@ func (client TopicsClient) ListKeysResponder(resp *http.Response) (result Resour
 // topicName - the topic name.
 // authorizationRuleName - the authorizationrule name.
 func (client TopicsClient) PostAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, authorizationRuleName string) (result SharedAccessAuthorizationRuleResource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.PostAuthorizationRule")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1074,16 +953,6 @@ func (client TopicsClient) PostAuthorizationRuleResponder(resp *http.Response) (
 // authorizationRuleName - the authorizationrule name.
 // parameters - parameters supplied to regenerate the authorization rule.
 func (client TopicsClient) RegenerateKeys(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, authorizationRuleName string, parameters RegenerateKeysParameters) (result ResourceListKeys, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.RegenerateKeys")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

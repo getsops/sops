@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2018 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,16 +19,15 @@
 
 package experimentation
 
-import (
-	"context"
+import original "github.com/Azure/azure-sdk-for-go/services/preview/machinelearning/mgmt/2017-05-01-preview/experimentation"
 
-	original "github.com/Azure/azure-sdk-for-go/services/preview/machinelearning/mgmt/2017-05-01-preview/experimentation"
-)
+type AccountsClient = original.AccountsClient
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
+type BaseClient = original.BaseClient
 type ProvisioningState = original.ProvisioningState
 
 const (
@@ -46,13 +45,10 @@ type AccountListResultPage = original.AccountListResultPage
 type AccountProperties = original.AccountProperties
 type AccountPropertiesUpdateParameters = original.AccountPropertiesUpdateParameters
 type AccountUpdateParameters = original.AccountUpdateParameters
-type AccountsClient = original.AccountsClient
-type BaseClient = original.BaseClient
 type ErrorResponse = original.ErrorResponse
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
-type OperationsClient = original.OperationsClient
 type Project = original.Project
 type ProjectListResult = original.ProjectListResult
 type ProjectListResultIterator = original.ProjectListResultIterator
@@ -60,7 +56,6 @@ type ProjectListResultPage = original.ProjectListResultPage
 type ProjectProperties = original.ProjectProperties
 type ProjectPropertiesUpdateParameters = original.ProjectPropertiesUpdateParameters
 type ProjectUpdateParameters = original.ProjectUpdateParameters
-type ProjectsClient = original.ProjectsClient
 type Resource = original.Resource
 type StorageAccountProperties = original.StorageAccountProperties
 type Workspace = original.Workspace
@@ -70,22 +65,24 @@ type WorkspaceListResultPage = original.WorkspaceListResultPage
 type WorkspaceProperties = original.WorkspaceProperties
 type WorkspacePropertiesUpdateParameters = original.WorkspacePropertiesUpdateParameters
 type WorkspaceUpdateParameters = original.WorkspaceUpdateParameters
+type OperationsClient = original.OperationsClient
+type ProjectsClient = original.ProjectsClient
 type WorkspacesClient = original.WorkspacesClient
 
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
-}
-func NewAccountListResultIterator(page AccountListResultPage) AccountListResultIterator {
-	return original.NewAccountListResultIterator(page)
-}
-func NewAccountListResultPage(getNextPage func(context.Context, AccountListResult) (AccountListResult, error)) AccountListResultPage {
-	return original.NewAccountListResultPage(getNextPage)
-}
 func NewAccountsClient(subscriptionID string) AccountsClient {
 	return original.NewAccountsClient(subscriptionID)
 }
 func NewAccountsClientWithBaseURI(baseURI string, subscriptionID string) AccountsClient {
 	return original.NewAccountsClientWithBaseURI(baseURI, subscriptionID)
+}
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
+}
+func PossibleProvisioningStateValues() []ProvisioningState {
+	return original.PossibleProvisioningStateValues()
 }
 func NewOperationsClient(subscriptionID string) OperationsClient {
 	return original.NewOperationsClient(subscriptionID)
@@ -93,39 +90,21 @@ func NewOperationsClient(subscriptionID string) OperationsClient {
 func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
 	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
 }
-func NewProjectListResultIterator(page ProjectListResultPage) ProjectListResultIterator {
-	return original.NewProjectListResultIterator(page)
-}
-func NewProjectListResultPage(getNextPage func(context.Context, ProjectListResult) (ProjectListResult, error)) ProjectListResultPage {
-	return original.NewProjectListResultPage(getNextPage)
-}
 func NewProjectsClient(subscriptionID string) ProjectsClient {
 	return original.NewProjectsClient(subscriptionID)
 }
 func NewProjectsClientWithBaseURI(baseURI string, subscriptionID string) ProjectsClient {
 	return original.NewProjectsClientWithBaseURI(baseURI, subscriptionID)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func UserAgent() string {
+	return original.UserAgent() + " profiles/preview"
 }
-func NewWorkspaceListResultIterator(page WorkspaceListResultPage) WorkspaceListResultIterator {
-	return original.NewWorkspaceListResultIterator(page)
-}
-func NewWorkspaceListResultPage(getNextPage func(context.Context, WorkspaceListResult) (WorkspaceListResult, error)) WorkspaceListResultPage {
-	return original.NewWorkspaceListResultPage(getNextPage)
+func Version() string {
+	return original.Version()
 }
 func NewWorkspacesClient(subscriptionID string) WorkspacesClient {
 	return original.NewWorkspacesClient(subscriptionID)
 }
 func NewWorkspacesClientWithBaseURI(baseURI string, subscriptionID string) WorkspacesClient {
 	return original.NewWorkspacesClientWithBaseURI(baseURI, subscriptionID)
-}
-func PossibleProvisioningStateValues() []ProvisioningState {
-	return original.PossibleProvisioningStateValues()
-}
-func UserAgent() string {
-	return original.UserAgent() + " profiles/preview"
-}
-func Version() string {
-	return original.Version()
 }

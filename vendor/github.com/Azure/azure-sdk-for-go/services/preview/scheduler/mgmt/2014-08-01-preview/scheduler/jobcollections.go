@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,16 +45,6 @@ func NewJobCollectionsClientWithBaseURI(baseURI string, subscriptionID string) J
 // jobCollectionName - the job collection name.
 // jobCollection - the job collection definition.
 func (client JobCollectionsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, jobCollectionName string, jobCollection JobCollectionDefinition) (result JobCollectionDefinition, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobCollectionsClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, jobCollectionName, jobCollection)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "scheduler.JobCollectionsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -125,16 +114,6 @@ func (client JobCollectionsClient) CreateOrUpdateResponder(resp *http.Response) 
 // resourceGroupName - the resource group name.
 // jobCollectionName - the job collection name.
 func (client JobCollectionsClient) Delete(ctx context.Context, resourceGroupName string, jobCollectionName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobCollectionsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, jobCollectionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "scheduler.JobCollectionsClient", "Delete", nil, "Failure preparing request")
@@ -201,16 +180,6 @@ func (client JobCollectionsClient) DeleteResponder(resp *http.Response) (result 
 // resourceGroupName - the resource group name.
 // jobCollectionName - the job collection name.
 func (client JobCollectionsClient) Disable(ctx context.Context, resourceGroupName string, jobCollectionName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobCollectionsClient.Disable")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DisablePreparer(ctx, resourceGroupName, jobCollectionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "scheduler.JobCollectionsClient", "Disable", nil, "Failure preparing request")
@@ -277,16 +246,6 @@ func (client JobCollectionsClient) DisableResponder(resp *http.Response) (result
 // resourceGroupName - the resource group name.
 // jobCollectionName - the job collection name.
 func (client JobCollectionsClient) Enable(ctx context.Context, resourceGroupName string, jobCollectionName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobCollectionsClient.Enable")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.EnablePreparer(ctx, resourceGroupName, jobCollectionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "scheduler.JobCollectionsClient", "Enable", nil, "Failure preparing request")
@@ -353,16 +312,6 @@ func (client JobCollectionsClient) EnableResponder(resp *http.Response) (result 
 // resourceGroupName - the resource group name.
 // jobCollectionName - the job collection name.
 func (client JobCollectionsClient) Get(ctx context.Context, resourceGroupName string, jobCollectionName string) (result JobCollectionDefinition, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobCollectionsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, jobCollectionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "scheduler.JobCollectionsClient", "Get", nil, "Failure preparing request")
@@ -429,16 +378,6 @@ func (client JobCollectionsClient) GetResponder(resp *http.Response) (result Job
 // Parameters:
 // resourceGroupName - the resource group name.
 func (client JobCollectionsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result JobCollectionListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobCollectionsClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.jclr.Response.Response != nil {
-				sc = result.jclr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -502,8 +441,8 @@ func (client JobCollectionsClient) ListByResourceGroupResponder(resp *http.Respo
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client JobCollectionsClient) listByResourceGroupNextResults(ctx context.Context, lastResults JobCollectionListResult) (result JobCollectionListResult, err error) {
-	req, err := lastResults.jobCollectionListResultPreparer(ctx)
+func (client JobCollectionsClient) listByResourceGroupNextResults(lastResults JobCollectionListResult) (result JobCollectionListResult, err error) {
+	req, err := lastResults.jobCollectionListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "scheduler.JobCollectionsClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -524,32 +463,12 @@ func (client JobCollectionsClient) listByResourceGroupNextResults(ctx context.Co
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobCollectionsClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result JobCollectionListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobCollectionsClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
 
 // ListBySubscription gets all job collections under specified subscription.
 func (client JobCollectionsClient) ListBySubscription(ctx context.Context) (result JobCollectionListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobCollectionsClient.ListBySubscription")
-		defer func() {
-			sc := -1
-			if result.jclr.Response.Response != nil {
-				sc = result.jclr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listBySubscriptionNextResults
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
@@ -612,8 +531,8 @@ func (client JobCollectionsClient) ListBySubscriptionResponder(resp *http.Respon
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client JobCollectionsClient) listBySubscriptionNextResults(ctx context.Context, lastResults JobCollectionListResult) (result JobCollectionListResult, err error) {
-	req, err := lastResults.jobCollectionListResultPreparer(ctx)
+func (client JobCollectionsClient) listBySubscriptionNextResults(lastResults JobCollectionListResult) (result JobCollectionListResult, err error) {
+	req, err := lastResults.jobCollectionListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "scheduler.JobCollectionsClient", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -634,16 +553,6 @@ func (client JobCollectionsClient) listBySubscriptionNextResults(ctx context.Con
 
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobCollectionsClient) ListBySubscriptionComplete(ctx context.Context) (result JobCollectionListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobCollectionsClient.ListBySubscription")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListBySubscription(ctx)
 	return
 }
@@ -654,16 +563,6 @@ func (client JobCollectionsClient) ListBySubscriptionComplete(ctx context.Contex
 // jobCollectionName - the job collection name.
 // jobCollection - the job collection definition.
 func (client JobCollectionsClient) Patch(ctx context.Context, resourceGroupName string, jobCollectionName string, jobCollection JobCollectionDefinition) (result JobCollectionDefinition, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobCollectionsClient.Patch")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.PatchPreparer(ctx, resourceGroupName, jobCollectionName, jobCollection)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "scheduler.JobCollectionsClient", "Patch", nil, "Failure preparing request")

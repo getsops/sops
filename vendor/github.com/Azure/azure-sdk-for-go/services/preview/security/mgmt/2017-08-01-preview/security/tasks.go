@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,16 +46,6 @@ func NewTasksClientWithBaseURI(baseURI string, subscriptionID string, ascLocatio
 // insensitive.
 // taskName - name of the task object, will be a GUID
 func (client TasksClient) GetResourceGroupLevelTask(ctx context.Context, resourceGroupName string, taskName string) (result Task, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.GetResourceGroupLevelTask")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -134,16 +123,6 @@ func (client TasksClient) GetResourceGroupLevelTaskResponder(resp *http.Response
 // Parameters:
 // taskName - name of the task object, will be a GUID
 func (client TasksClient) GetSubscriptionLevelTask(ctx context.Context, taskName string) (result Task, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.GetSubscriptionLevelTask")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -216,16 +195,6 @@ func (client TasksClient) GetSubscriptionLevelTaskResponder(resp *http.Response)
 // Parameters:
 // filter - oData filter. Optional.
 func (client TasksClient) List(ctx context.Context, filter string) (result TaskListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.List")
-		defer func() {
-			sc := -1
-			if result.tl.Response.Response != nil {
-				sc = result.tl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -297,8 +266,8 @@ func (client TasksClient) ListResponder(resp *http.Response) (result TaskList, e
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client TasksClient) listNextResults(ctx context.Context, lastResults TaskList) (result TaskList, err error) {
-	req, err := lastResults.taskListPreparer(ctx)
+func (client TasksClient) listNextResults(lastResults TaskList) (result TaskList, err error) {
+	req, err := lastResults.taskListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.TasksClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -319,16 +288,6 @@ func (client TasksClient) listNextResults(ctx context.Context, lastResults TaskL
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TasksClient) ListComplete(ctx context.Context, filter string) (result TaskListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, filter)
 	return
 }
@@ -337,16 +296,6 @@ func (client TasksClient) ListComplete(ctx context.Context, filter string) (resu
 // Parameters:
 // filter - oData filter. Optional.
 func (client TasksClient) ListByHomeRegion(ctx context.Context, filter string) (result TaskListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.ListByHomeRegion")
-		defer func() {
-			sc := -1
-			if result.tl.Response.Response != nil {
-				sc = result.tl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -419,8 +368,8 @@ func (client TasksClient) ListByHomeRegionResponder(resp *http.Response) (result
 }
 
 // listByHomeRegionNextResults retrieves the next set of results, if any.
-func (client TasksClient) listByHomeRegionNextResults(ctx context.Context, lastResults TaskList) (result TaskList, err error) {
-	req, err := lastResults.taskListPreparer(ctx)
+func (client TasksClient) listByHomeRegionNextResults(lastResults TaskList) (result TaskList, err error) {
+	req, err := lastResults.taskListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.TasksClient", "listByHomeRegionNextResults", nil, "Failure preparing next results request")
 	}
@@ -441,16 +390,6 @@ func (client TasksClient) listByHomeRegionNextResults(ctx context.Context, lastR
 
 // ListByHomeRegionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TasksClient) ListByHomeRegionComplete(ctx context.Context, filter string) (result TaskListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.ListByHomeRegion")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByHomeRegion(ctx, filter)
 	return
 }
@@ -461,16 +400,6 @@ func (client TasksClient) ListByHomeRegionComplete(ctx context.Context, filter s
 // insensitive.
 // filter - oData filter. Optional.
 func (client TasksClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, filter string) (result TaskListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.tl.Response.Response != nil {
-				sc = result.tl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -548,8 +477,8 @@ func (client TasksClient) ListByResourceGroupResponder(resp *http.Response) (res
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client TasksClient) listByResourceGroupNextResults(ctx context.Context, lastResults TaskList) (result TaskList, err error) {
-	req, err := lastResults.taskListPreparer(ctx)
+func (client TasksClient) listByResourceGroupNextResults(lastResults TaskList) (result TaskList, err error) {
+	req, err := lastResults.taskListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.TasksClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -570,16 +499,6 @@ func (client TasksClient) listByResourceGroupNextResults(ctx context.Context, la
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TasksClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string, filter string) (result TaskListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName, filter)
 	return
 }
@@ -592,16 +511,6 @@ func (client TasksClient) ListByResourceGroupComplete(ctx context.Context, resou
 // taskName - name of the task object, will be a GUID
 // taskUpdateActionType - type of the action to do on the task
 func (client TasksClient) UpdateResourceGroupLevelTaskState(ctx context.Context, resourceGroupName string, taskName string, taskUpdateActionType string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.UpdateResourceGroupLevelTaskState")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -681,16 +590,6 @@ func (client TasksClient) UpdateResourceGroupLevelTaskStateResponder(resp *http.
 // taskName - name of the task object, will be a GUID
 // taskUpdateActionType - type of the action to do on the task
 func (client TasksClient) UpdateSubscriptionLevelTaskState(ctx context.Context, taskName string, taskUpdateActionType string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.UpdateSubscriptionLevelTaskState")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {

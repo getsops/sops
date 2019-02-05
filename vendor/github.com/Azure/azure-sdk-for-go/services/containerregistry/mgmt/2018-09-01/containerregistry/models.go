@@ -18,31 +18,13 @@ package containerregistry
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
-	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
-
-// The package's fully qualified name.
-const fqdn = "github.com/Azure/azure-sdk-for-go/services/containerregistry/mgmt/2018-09-01/containerregistry"
-
-// Action enumerates the values for action.
-type Action string
-
-const (
-	// Allow ...
-	Allow Action = "Allow"
-)
-
-// PossibleActionValues returns an array of possible values for the Action const type.
-func PossibleActionValues() []Action {
-	return []Action{Allow}
-}
 
 // Architecture enumerates the values for architecture.
 type Architecture string
@@ -89,21 +71,6 @@ const (
 // PossibleBaseImageTriggerTypeValues returns an array of possible values for the BaseImageTriggerType const type.
 func PossibleBaseImageTriggerTypeValues() []BaseImageTriggerType {
 	return []BaseImageTriggerType{All, Runtime}
-}
-
-// DefaultAction enumerates the values for default action.
-type DefaultAction string
-
-const (
-	// DefaultActionAllow ...
-	DefaultActionAllow DefaultAction = "Allow"
-	// DefaultActionDeny ...
-	DefaultActionDeny DefaultAction = "Deny"
-)
-
-// PossibleDefaultActionValues returns an array of possible values for the DefaultAction const type.
-func PossibleDefaultActionValues() []DefaultAction {
-	return []DefaultAction{DefaultActionAllow, DefaultActionDeny}
 }
 
 // ImportMode enumerates the values for import mode.
@@ -237,17 +204,13 @@ type RunType string
 const (
 	// AutoBuild ...
 	AutoBuild RunType = "AutoBuild"
-	// AutoRun ...
-	AutoRun RunType = "AutoRun"
 	// QuickBuild ...
 	QuickBuild RunType = "QuickBuild"
-	// QuickRun ...
-	QuickRun RunType = "QuickRun"
 )
 
 // PossibleRunTypeValues returns an array of possible values for the RunType const type.
 func PossibleRunTypeValues() []RunType {
-	return []RunType{AutoBuild, AutoRun, QuickBuild, QuickRun}
+	return []RunType{AutoBuild, QuickBuild}
 }
 
 // SkuName enumerates the values for sku name.
@@ -309,13 +272,11 @@ type SourceTriggerEvent string
 const (
 	// Commit ...
 	Commit SourceTriggerEvent = "commit"
-	// Pullrequest ...
-	Pullrequest SourceTriggerEvent = "pullrequest"
 )
 
 // PossibleSourceTriggerEventValues returns an array of possible values for the SourceTriggerEvent const type.
 func PossibleSourceTriggerEventValues() []SourceTriggerEvent {
-	return []SourceTriggerEvent{Commit, Pullrequest}
+	return []SourceTriggerEvent{Commit}
 }
 
 // TaskStatus enumerates the values for task status.
@@ -456,10 +417,6 @@ func PossibleVariantValues() []Variant {
 type WebhookAction string
 
 const (
-	// ChartDelete ...
-	ChartDelete WebhookAction = "chart_delete"
-	// ChartPush ...
-	ChartPush WebhookAction = "chart_push"
 	// Delete ...
 	Delete WebhookAction = "delete"
 	// Push ...
@@ -470,7 +427,7 @@ const (
 
 // PossibleWebhookActionValues returns an array of possible values for the WebhookAction const type.
 func PossibleWebhookActionValues() []WebhookAction {
-	return []WebhookAction{ChartDelete, ChartPush, Delete, Push, Quarantine}
+	return []WebhookAction{Delete, Push, Quarantine}
 }
 
 // WebhookStatus enumerates the values for webhook status.
@@ -488,8 +445,8 @@ func PossibleWebhookStatusValues() []WebhookStatus {
 	return []WebhookStatus{WebhookStatusDisabled, WebhookStatusEnabled}
 }
 
-// Actor the agent that initiated the event. For most situations, this could be from the authorization
-// context of the request.
+// Actor the agent that initiated the event. For most situations, this could be from the authorization context of
+// the request.
 type Actor struct {
 	// Name - The subject or username associated with the request context that generated the event.
 	Name *string `json:"name,omitempty"`
@@ -557,7 +514,7 @@ type BaseImageDependency struct {
 type BaseImageTrigger struct {
 	// BaseImageTriggerType - The type of the auto trigger for base image dependency updates. Possible values include: 'All', 'Runtime'
 	BaseImageTriggerType BaseImageTriggerType `json:"baseImageTriggerType,omitempty"`
-	// Status - The current status of trigger. Possible values include: 'TriggerStatusDisabled', 'TriggerStatusEnabled'
+	// Status - The current status of build trigger. Possible values include: 'TriggerStatusDisabled', 'TriggerStatusEnabled'
 	Status TriggerStatus `json:"status,omitempty"`
 	// Name - The name of the trigger.
 	Name *string `json:"name,omitempty"`
@@ -567,7 +524,7 @@ type BaseImageTrigger struct {
 type BaseImageTriggerUpdateParameters struct {
 	// BaseImageTriggerType - The type of the auto trigger for base image dependency updates. Possible values include: 'All', 'Runtime'
 	BaseImageTriggerType BaseImageTriggerType `json:"baseImageTriggerType,omitempty"`
-	// Status - The current status of trigger. Possible values include: 'TriggerStatusDisabled', 'TriggerStatusEnabled'
+	// Status - The current status of build trigger. Possible values include: 'TriggerStatusDisabled', 'TriggerStatusEnabled'
 	Status TriggerStatus `json:"status,omitempty"`
 	// Name - The name of the trigger.
 	Name *string `json:"name,omitempty"`
@@ -606,15 +563,15 @@ type DockerBuildRequest struct {
 	DockerFilePath *string `json:"dockerFilePath,omitempty"`
 	// Arguments - The collection of override arguments to be used when executing the run.
 	Arguments *[]Argument `json:"arguments,omitempty"`
-	// Timeout - Run timeout in seconds.
-	Timeout *int32 `json:"timeout,omitempty"`
-	// Platform - The platform properties against which the run has to happen.
-	Platform *PlatformProperties `json:"platform,omitempty"`
-	// AgentConfiguration - The machine configuration of the run agent.
-	AgentConfiguration *AgentProperties `json:"agentConfiguration,omitempty"`
-	// SourceLocation - The URL(absolute or relative) of the source context. It can be an URL to a tar or git repository.
-	// If it is relative URL, the relative path should be obtained from calling listBuildSourceUploadUrl API.
+	// SourceLocation - The URL(absolute or relative) of the source that needs to be built. For Docker build, it can be an URL to a tar or github repoistory as supported by Docker.
+	// If it is relative URL, the relative path should be obtained from calling getSourceUploadUrl API.
 	SourceLocation *string `json:"sourceLocation,omitempty"`
+	// Timeout - Build timeout in seconds.
+	Timeout *int32 `json:"timeout,omitempty"`
+	// Platform - The platform properties against which the build will happen.
+	Platform *PlatformProperties `json:"platform,omitempty"`
+	// AgentConfiguration - The machine configuration of the build agent.
+	AgentConfiguration *AgentProperties `json:"agentConfiguration,omitempty"`
 	// IsArchiveEnabled - The value that indicates whether archiving is enabled for the run or not.
 	IsArchiveEnabled *bool `json:"isArchiveEnabled,omitempty"`
 	// Type - Possible values include: 'TypeRunRequest', 'TypeDockerBuildRequest', 'TypeFileTaskRunRequest', 'TypeTaskRunRequest', 'TypeEncodedTaskRunRequest'
@@ -640,6 +597,9 @@ func (dbr DockerBuildRequest) MarshalJSON() ([]byte, error) {
 	if dbr.Arguments != nil {
 		objectMap["arguments"] = dbr.Arguments
 	}
+	if dbr.SourceLocation != nil {
+		objectMap["sourceLocation"] = dbr.SourceLocation
+	}
 	if dbr.Timeout != nil {
 		objectMap["timeout"] = dbr.Timeout
 	}
@@ -648,9 +608,6 @@ func (dbr DockerBuildRequest) MarshalJSON() ([]byte, error) {
 	}
 	if dbr.AgentConfiguration != nil {
 		objectMap["agentConfiguration"] = dbr.AgentConfiguration
-	}
-	if dbr.SourceLocation != nil {
-		objectMap["sourceLocation"] = dbr.SourceLocation
 	}
 	if dbr.IsArchiveEnabled != nil {
 		objectMap["isArchiveEnabled"] = dbr.IsArchiveEnabled
@@ -703,12 +660,11 @@ type DockerBuildStep struct {
 	DockerFilePath *string `json:"dockerFilePath,omitempty"`
 	// Arguments - The collection of override arguments to be used when executing this build step.
 	Arguments *[]Argument `json:"arguments,omitempty"`
+	// ContextPath - The URL(absolute or relative) of the source context for the build task.
+	// If it is relative, the context will be relative to the source repository URL of the build task.
+	ContextPath *string `json:"contextPath,omitempty"`
 	// BaseImageDependencies - List of base image dependencies for a step.
 	BaseImageDependencies *[]BaseImageDependency `json:"baseImageDependencies,omitempty"`
-	// ContextPath - The URL(absolute or relative) of the source context for the task step.
-	ContextPath *string `json:"contextPath,omitempty"`
-	// ContextAccessToken - The token (git PAT or SAS token of storage account blob) associated with the context for a step.
-	ContextAccessToken *string `json:"contextAccessToken,omitempty"`
 	// Type - Possible values include: 'TypeTaskStepProperties', 'TypeDocker', 'TypeFileTask', 'TypeEncodedTask'
 	Type TypeBasicTaskStepProperties `json:"type,omitempty"`
 }
@@ -732,14 +688,11 @@ func (dbs DockerBuildStep) MarshalJSON() ([]byte, error) {
 	if dbs.Arguments != nil {
 		objectMap["arguments"] = dbs.Arguments
 	}
-	if dbs.BaseImageDependencies != nil {
-		objectMap["baseImageDependencies"] = dbs.BaseImageDependencies
-	}
 	if dbs.ContextPath != nil {
 		objectMap["contextPath"] = dbs.ContextPath
 	}
-	if dbs.ContextAccessToken != nil {
-		objectMap["contextAccessToken"] = dbs.ContextAccessToken
+	if dbs.BaseImageDependencies != nil {
+		objectMap["baseImageDependencies"] = dbs.BaseImageDependencies
 	}
 	if dbs.Type != "" {
 		objectMap["type"] = dbs.Type
@@ -784,10 +737,9 @@ type DockerBuildStepUpdateParameters struct {
 	DockerFilePath *string `json:"dockerFilePath,omitempty"`
 	// Arguments - The collection of override arguments to be used when executing this build step.
 	Arguments *[]Argument `json:"arguments,omitempty"`
-	// ContextPath - The URL(absolute or relative) of the source context for the task step.
+	// ContextPath - The URL(absolute or relative) of the source context for the build task.
+	// If it is relative, the context will be relative to the source repository URL of the build task.
 	ContextPath *string `json:"contextPath,omitempty"`
-	// ContextAccessToken - The token (git PAT or SAS token of storage account blob) associated with the context for a step.
-	ContextAccessToken *string `json:"contextAccessToken,omitempty"`
 	// Type - Possible values include: 'TypeBasicTaskStepUpdateParametersTypeTaskStepUpdateParameters', 'TypeBasicTaskStepUpdateParametersTypeDocker', 'TypeBasicTaskStepUpdateParametersTypeFileTask', 'TypeBasicTaskStepUpdateParametersTypeEncodedTask'
 	Type TypeBasicTaskStepUpdateParameters `json:"type,omitempty"`
 }
@@ -813,9 +765,6 @@ func (dbsup DockerBuildStepUpdateParameters) MarshalJSON() ([]byte, error) {
 	}
 	if dbsup.ContextPath != nil {
 		objectMap["contextPath"] = dbsup.ContextPath
-	}
-	if dbsup.ContextAccessToken != nil {
-		objectMap["contextAccessToken"] = dbsup.ContextAccessToken
 	}
 	if dbsup.Type != "" {
 		objectMap["type"] = dbsup.Type
@@ -856,15 +805,12 @@ type EncodedTaskRunRequest struct {
 	EncodedValuesContent *string `json:"encodedValuesContent,omitempty"`
 	// Values - The collection of overridable values that can be passed when running a task.
 	Values *[]SetValue `json:"values,omitempty"`
-	// Timeout - Run timeout in seconds.
+	// Timeout - Build timeout in seconds.
 	Timeout *int32 `json:"timeout,omitempty"`
-	// Platform - The platform properties against which the run has to happen.
+	// Platform - The platform properties against which the build will happen.
 	Platform *PlatformProperties `json:"platform,omitempty"`
-	// AgentConfiguration - The machine configuration of the run agent.
+	// AgentConfiguration - The machine configuration of the build agent.
 	AgentConfiguration *AgentProperties `json:"agentConfiguration,omitempty"`
-	// SourceLocation - The URL(absolute or relative) of the source context. It can be an URL to a tar or git repository.
-	// If it is relative URL, the relative path should be obtained from calling listBuildSourceUploadUrl API.
-	SourceLocation *string `json:"sourceLocation,omitempty"`
 	// IsArchiveEnabled - The value that indicates whether archiving is enabled for the run or not.
 	IsArchiveEnabled *bool `json:"isArchiveEnabled,omitempty"`
 	// Type - Possible values include: 'TypeRunRequest', 'TypeDockerBuildRequest', 'TypeFileTaskRunRequest', 'TypeTaskRunRequest', 'TypeEncodedTaskRunRequest'
@@ -892,9 +838,6 @@ func (etrr EncodedTaskRunRequest) MarshalJSON() ([]byte, error) {
 	}
 	if etrr.AgentConfiguration != nil {
 		objectMap["agentConfiguration"] = etrr.AgentConfiguration
-	}
-	if etrr.SourceLocation != nil {
-		objectMap["sourceLocation"] = etrr.SourceLocation
 	}
 	if etrr.IsArchiveEnabled != nil {
 		objectMap["isArchiveEnabled"] = etrr.IsArchiveEnabled
@@ -945,10 +888,6 @@ type EncodedTaskStep struct {
 	Values *[]SetValue `json:"values,omitempty"`
 	// BaseImageDependencies - List of base image dependencies for a step.
 	BaseImageDependencies *[]BaseImageDependency `json:"baseImageDependencies,omitempty"`
-	// ContextPath - The URL(absolute or relative) of the source context for the task step.
-	ContextPath *string `json:"contextPath,omitempty"`
-	// ContextAccessToken - The token (git PAT or SAS token of storage account blob) associated with the context for a step.
-	ContextAccessToken *string `json:"contextAccessToken,omitempty"`
 	// Type - Possible values include: 'TypeTaskStepProperties', 'TypeDocker', 'TypeFileTask', 'TypeEncodedTask'
 	Type TypeBasicTaskStepProperties `json:"type,omitempty"`
 }
@@ -968,12 +907,6 @@ func (ets EncodedTaskStep) MarshalJSON() ([]byte, error) {
 	}
 	if ets.BaseImageDependencies != nil {
 		objectMap["baseImageDependencies"] = ets.BaseImageDependencies
-	}
-	if ets.ContextPath != nil {
-		objectMap["contextPath"] = ets.ContextPath
-	}
-	if ets.ContextAccessToken != nil {
-		objectMap["contextAccessToken"] = ets.ContextAccessToken
 	}
 	if ets.Type != "" {
 		objectMap["type"] = ets.Type
@@ -1014,10 +947,6 @@ type EncodedTaskStepUpdateParameters struct {
 	EncodedValuesContent *string `json:"encodedValuesContent,omitempty"`
 	// Values - The collection of overridable values that can be passed when running a task.
 	Values *[]SetValue `json:"values,omitempty"`
-	// ContextPath - The URL(absolute or relative) of the source context for the task step.
-	ContextPath *string `json:"contextPath,omitempty"`
-	// ContextAccessToken - The token (git PAT or SAS token of storage account blob) associated with the context for a step.
-	ContextAccessToken *string `json:"contextAccessToken,omitempty"`
 	// Type - Possible values include: 'TypeBasicTaskStepUpdateParametersTypeTaskStepUpdateParameters', 'TypeBasicTaskStepUpdateParametersTypeDocker', 'TypeBasicTaskStepUpdateParametersTypeFileTask', 'TypeBasicTaskStepUpdateParametersTypeEncodedTask'
 	Type TypeBasicTaskStepUpdateParameters `json:"type,omitempty"`
 }
@@ -1034,12 +963,6 @@ func (etsup EncodedTaskStepUpdateParameters) MarshalJSON() ([]byte, error) {
 	}
 	if etsup.Values != nil {
 		objectMap["values"] = etsup.Values
-	}
-	if etsup.ContextPath != nil {
-		objectMap["contextPath"] = etsup.ContextPath
-	}
-	if etsup.ContextAccessToken != nil {
-		objectMap["contextAccessToken"] = etsup.ContextAccessToken
 	}
 	if etsup.Type != "" {
 		objectMap["type"] = etsup.Type
@@ -1122,37 +1045,20 @@ type EventListResultIterator struct {
 	page EventListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *EventListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EventListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *EventListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *EventListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1174,11 +1080,6 @@ func (iter EventListResultIterator) Value() Event {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the EventListResultIterator type.
-func NewEventListResultIterator(page EventListResultPage) EventListResultIterator {
-	return EventListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (elr EventListResult) IsEmpty() bool {
 	return elr.Value == nil || len(*elr.Value) == 0
@@ -1186,11 +1087,11 @@ func (elr EventListResult) IsEmpty() bool {
 
 // eventListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (elr EventListResult) eventListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (elr EventListResult) eventListResultPreparer() (*http.Request, error) {
 	if elr.NextLink == nil || len(to.String(elr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(elr.NextLink)))
@@ -1198,36 +1099,19 @@ func (elr EventListResult) eventListResultPreparer(ctx context.Context) (*http.R
 
 // EventListResultPage contains a page of Event values.
 type EventListResultPage struct {
-	fn  func(context.Context, EventListResult) (EventListResult, error)
+	fn  func(EventListResult) (EventListResult, error)
 	elr EventListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *EventListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EventListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.elr)
+func (page *EventListResultPage) Next() error {
+	next, err := page.fn(page.elr)
 	if err != nil {
 		return err
 	}
 	page.elr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *EventListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1246,11 +1130,6 @@ func (page EventListResultPage) Values() []Event {
 		return nil
 	}
 	return *page.elr.Value
-}
-
-// Creates a new instance of the EventListResultPage type.
-func NewEventListResultPage(getNextPage func(context.Context, EventListResult) (EventListResult, error)) EventListResultPage {
-	return EventListResultPage{fn: getNextPage}
 }
 
 // EventRequestMessage the event request message sent to the service URI.
@@ -1331,15 +1210,15 @@ type FileTaskRunRequest struct {
 	ValuesFilePath *string `json:"valuesFilePath,omitempty"`
 	// Values - The collection of overridable values that can be passed when running a task.
 	Values *[]SetValue `json:"values,omitempty"`
-	// Timeout - Run timeout in seconds.
-	Timeout *int32 `json:"timeout,omitempty"`
-	// Platform - The platform properties against which the run has to happen.
-	Platform *PlatformProperties `json:"platform,omitempty"`
-	// AgentConfiguration - The machine configuration of the run agent.
-	AgentConfiguration *AgentProperties `json:"agentConfiguration,omitempty"`
-	// SourceLocation - The URL(absolute or relative) of the source context. It can be an URL to a tar or git repository.
-	// If it is relative URL, the relative path should be obtained from calling listBuildSourceUploadUrl API.
+	// SourceLocation - The URL(absolute or relative) of the source that needs to be built. For Docker build, it can be an URL to a tar or github repoistory as supported by Docker.
+	// If it is relative URL, the relative path should be obtained from calling getSourceUploadUrl API.
 	SourceLocation *string `json:"sourceLocation,omitempty"`
+	// Timeout - Build timeout in seconds.
+	Timeout *int32 `json:"timeout,omitempty"`
+	// Platform - The platform properties against which the build will happen.
+	Platform *PlatformProperties `json:"platform,omitempty"`
+	// AgentConfiguration - The machine configuration of the build agent.
+	AgentConfiguration *AgentProperties `json:"agentConfiguration,omitempty"`
 	// IsArchiveEnabled - The value that indicates whether archiving is enabled for the run or not.
 	IsArchiveEnabled *bool `json:"isArchiveEnabled,omitempty"`
 	// Type - Possible values include: 'TypeRunRequest', 'TypeDockerBuildRequest', 'TypeFileTaskRunRequest', 'TypeTaskRunRequest', 'TypeEncodedTaskRunRequest'
@@ -1359,6 +1238,9 @@ func (ftrr FileTaskRunRequest) MarshalJSON() ([]byte, error) {
 	if ftrr.Values != nil {
 		objectMap["values"] = ftrr.Values
 	}
+	if ftrr.SourceLocation != nil {
+		objectMap["sourceLocation"] = ftrr.SourceLocation
+	}
 	if ftrr.Timeout != nil {
 		objectMap["timeout"] = ftrr.Timeout
 	}
@@ -1367,9 +1249,6 @@ func (ftrr FileTaskRunRequest) MarshalJSON() ([]byte, error) {
 	}
 	if ftrr.AgentConfiguration != nil {
 		objectMap["agentConfiguration"] = ftrr.AgentConfiguration
-	}
-	if ftrr.SourceLocation != nil {
-		objectMap["sourceLocation"] = ftrr.SourceLocation
 	}
 	if ftrr.IsArchiveEnabled != nil {
 		objectMap["isArchiveEnabled"] = ftrr.IsArchiveEnabled
@@ -1418,12 +1297,11 @@ type FileTaskStep struct {
 	ValuesFilePath *string `json:"valuesFilePath,omitempty"`
 	// Values - The collection of overridable values that can be passed when running a task.
 	Values *[]SetValue `json:"values,omitempty"`
+	// ContextPath - The URL(absolute or relative) of the source context for the build task.
+	// If it is relative, the context will be relative to the source repository URL of the build task.
+	ContextPath *string `json:"contextPath,omitempty"`
 	// BaseImageDependencies - List of base image dependencies for a step.
 	BaseImageDependencies *[]BaseImageDependency `json:"baseImageDependencies,omitempty"`
-	// ContextPath - The URL(absolute or relative) of the source context for the task step.
-	ContextPath *string `json:"contextPath,omitempty"`
-	// ContextAccessToken - The token (git PAT or SAS token of storage account blob) associated with the context for a step.
-	ContextAccessToken *string `json:"contextAccessToken,omitempty"`
 	// Type - Possible values include: 'TypeTaskStepProperties', 'TypeDocker', 'TypeFileTask', 'TypeEncodedTask'
 	Type TypeBasicTaskStepProperties `json:"type,omitempty"`
 }
@@ -1441,14 +1319,11 @@ func (fts FileTaskStep) MarshalJSON() ([]byte, error) {
 	if fts.Values != nil {
 		objectMap["values"] = fts.Values
 	}
-	if fts.BaseImageDependencies != nil {
-		objectMap["baseImageDependencies"] = fts.BaseImageDependencies
-	}
 	if fts.ContextPath != nil {
 		objectMap["contextPath"] = fts.ContextPath
 	}
-	if fts.ContextAccessToken != nil {
-		objectMap["contextAccessToken"] = fts.ContextAccessToken
+	if fts.BaseImageDependencies != nil {
+		objectMap["baseImageDependencies"] = fts.BaseImageDependencies
 	}
 	if fts.Type != "" {
 		objectMap["type"] = fts.Type
@@ -1489,10 +1364,9 @@ type FileTaskStepUpdateParameters struct {
 	ValuesFilePath *string `json:"valuesFilePath,omitempty"`
 	// Values - The collection of overridable values that can be passed when running a task.
 	Values *[]SetValue `json:"values,omitempty"`
-	// ContextPath - The URL(absolute or relative) of the source context for the task step.
+	// ContextPath - The URL(absolute or relative) of the source context for the build task.
+	// If it is relative, the context will be relative to the source repository URL of the build task.
 	ContextPath *string `json:"contextPath,omitempty"`
-	// ContextAccessToken - The token (git PAT or SAS token of storage account blob) associated with the context for a step.
-	ContextAccessToken *string `json:"contextAccessToken,omitempty"`
 	// Type - Possible values include: 'TypeBasicTaskStepUpdateParametersTypeTaskStepUpdateParameters', 'TypeBasicTaskStepUpdateParametersTypeDocker', 'TypeBasicTaskStepUpdateParametersTypeFileTask', 'TypeBasicTaskStepUpdateParametersTypeEncodedTask'
 	Type TypeBasicTaskStepUpdateParameters `json:"type,omitempty"`
 }
@@ -1512,9 +1386,6 @@ func (ftsup FileTaskStepUpdateParameters) MarshalJSON() ([]byte, error) {
 	}
 	if ftsup.ContextPath != nil {
 		objectMap["contextPath"] = ftsup.ContextPath
-	}
-	if ftsup.ContextAccessToken != nil {
-		objectMap["contextAccessToken"] = ftsup.ContextAccessToken
 	}
 	if ftsup.Type != "" {
 		objectMap["type"] = ftsup.Type
@@ -1585,41 +1456,13 @@ type ImportImageParameters struct {
 type ImportSource struct {
 	// ResourceID - The resource identifier of the source Azure Container Registry.
 	ResourceID *string `json:"resourceId,omitempty"`
-	// RegistryURI - The address of the source registry (e.g. 'mcr.microsoft.com').
+	// RegistryURI - The address of the source registry.
 	RegistryURI *string `json:"registryUri,omitempty"`
-	// Credentials - Credentials used when importing from a registry uri.
-	Credentials *ImportSourceCredentials `json:"credentials,omitempty"`
 	// SourceImage - Repository name of the source image.
 	// Specify an image by repository ('hello-world'). This will use the 'latest' tag.
 	// Specify an image by tag ('hello-world:latest').
 	// Specify an image by sha256-based manifest digest ('hello-world@sha256:abc123').
 	SourceImage *string `json:"sourceImage,omitempty"`
-}
-
-// ImportSourceCredentials ...
-type ImportSourceCredentials struct {
-	// Username - The username to authenticate with the source registry.
-	Username *string `json:"username,omitempty"`
-	// Password - The password used to authenticate with the source registry.
-	Password *string `json:"password,omitempty"`
-}
-
-// IPRule IP rule with specific IP or IP range in CIDR format.
-type IPRule struct {
-	// Action - The action of IP ACL rule. Possible values include: 'Allow'
-	Action Action `json:"action,omitempty"`
-	// IPAddressOrRange - Specifies the IP or IP range in CIDR format. Only IPV4 address is allowed.
-	IPAddressOrRange *string `json:"value,omitempty"`
-}
-
-// NetworkRuleSet the network rule set for a container registry.
-type NetworkRuleSet struct {
-	// DefaultAction - The default action of allow or deny when no other rules match. Possible values include: 'DefaultActionAllow', 'DefaultActionDeny'
-	DefaultAction DefaultAction `json:"defaultAction,omitempty"`
-	// VirtualNetworkRules - The virtual network rules.
-	VirtualNetworkRules *[]VirtualNetworkRule `json:"virtualNetworkRules,omitempty"`
-	// IPRules - The IP ACL rules.
-	IPRules *[]IPRule `json:"ipRules,omitempty"`
 }
 
 // OperationDefinition the definition of a container registry operation.
@@ -1730,37 +1573,20 @@ type OperationListResultIterator struct {
 	page OperationListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OperationListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *OperationListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *OperationListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1782,11 +1608,6 @@ func (iter OperationListResultIterator) Value() OperationDefinition {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the OperationListResultIterator type.
-func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
-	return OperationListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (olr OperationListResult) IsEmpty() bool {
 	return olr.Value == nil || len(*olr.Value) == 0
@@ -1794,11 +1615,11 @@ func (olr OperationListResult) IsEmpty() bool {
 
 // operationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (olr OperationListResult) operationListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (olr OperationListResult) operationListResultPreparer() (*http.Request, error) {
 	if olr.NextLink == nil || len(to.String(olr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(olr.NextLink)))
@@ -1806,36 +1627,19 @@ func (olr OperationListResult) operationListResultPreparer(ctx context.Context) 
 
 // OperationListResultPage contains a page of OperationDefinition values.
 type OperationListResultPage struct {
-	fn  func(context.Context, OperationListResult) (OperationListResult, error)
+	fn  func(OperationListResult) (OperationListResult, error)
 	olr OperationListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OperationListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.olr)
+func (page *OperationListResultPage) Next() error {
+	next, err := page.fn(page.olr)
 	if err != nil {
 		return err
 	}
 	page.olr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *OperationListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1854,11 +1658,6 @@ func (page OperationListResultPage) Values() []OperationDefinition {
 		return nil
 	}
 	return *page.olr.Value
-}
-
-// Creates a new instance of the OperationListResultPage type.
-func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
-	return OperationListResultPage{fn: getNextPage}
 }
 
 // OperationMetricSpecificationDefinition the definition of Azure Monitoring metric.
@@ -1932,8 +1731,7 @@ type RegenerateCredentialParameters struct {
 	Name PasswordName `json:"name,omitempty"`
 }
 
-// RegistriesCreateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// RegistriesCreateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type RegistriesCreateFuture struct {
 	azure.Future
 }
@@ -1961,8 +1759,7 @@ func (future *RegistriesCreateFuture) Result(client RegistriesClient) (r Registr
 	return
 }
 
-// RegistriesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// RegistriesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type RegistriesDeleteFuture struct {
 	azure.Future
 }
@@ -2036,8 +1833,7 @@ func (future *RegistriesScheduleRunFuture) Result(client RegistriesClient) (r Ru
 	return
 }
 
-// RegistriesUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// RegistriesUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type RegistriesUpdateFuture struct {
 	azure.Future
 }
@@ -2065,8 +1861,8 @@ func (future *RegistriesUpdateFuture) Result(client RegistriesClient) (r Registr
 	return
 }
 
-// RegistriesUpdatePoliciesFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// RegistriesUpdatePoliciesFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type RegistriesUpdatePoliciesFuture struct {
 	azure.Future
 }
@@ -2099,8 +1895,6 @@ type Registry struct {
 	autorest.Response `json:"-"`
 	// Sku - The SKU of the container registry.
 	Sku *Sku `json:"sku,omitempty"`
-	// Identity - The identity of the container registry.
-	Identity *RegistryIdentity `json:"identity,omitempty"`
 	// RegistryProperties - The properties of the container registry.
 	*RegistryProperties `json:"properties,omitempty"`
 	// ID - The resource ID.
@@ -2120,9 +1914,6 @@ func (r Registry) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if r.Sku != nil {
 		objectMap["sku"] = r.Sku
-	}
-	if r.Identity != nil {
-		objectMap["identity"] = r.Identity
 	}
 	if r.RegistryProperties != nil {
 		objectMap["properties"] = r.RegistryProperties
@@ -2162,15 +1953,6 @@ func (r *Registry) UnmarshalJSON(body []byte) error {
 					return err
 				}
 				r.Sku = &sku
-			}
-		case "identity":
-			if v != nil {
-				var identity RegistryIdentity
-				err = json.Unmarshal(*v, &identity)
-				if err != nil {
-					return err
-				}
-				r.Identity = &identity
 			}
 		case "properties":
 			if v != nil {
@@ -2232,16 +2014,6 @@ func (r *Registry) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// RegistryIdentity the identity of the container registry.
-type RegistryIdentity struct {
-	// Type - The type of identity used for the registry.
-	Type *string `json:"type,omitempty"`
-	// PrincipalID - The principal ID of registry identity.
-	PrincipalID *string `json:"principalId,omitempty"`
-	// TenantID - The tenant ID associated with the registry.
-	TenantID *string `json:"tenantId,omitempty"`
-}
-
 // RegistryListCredentialsResult the response from the ListCredentials operation.
 type RegistryListCredentialsResult struct {
 	autorest.Response `json:"-"`
@@ -2266,37 +2038,20 @@ type RegistryListResultIterator struct {
 	page RegistryListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *RegistryListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RegistryListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *RegistryListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *RegistryListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -2318,11 +2073,6 @@ func (iter RegistryListResultIterator) Value() Registry {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the RegistryListResultIterator type.
-func NewRegistryListResultIterator(page RegistryListResultPage) RegistryListResultIterator {
-	return RegistryListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (rlr RegistryListResult) IsEmpty() bool {
 	return rlr.Value == nil || len(*rlr.Value) == 0
@@ -2330,11 +2080,11 @@ func (rlr RegistryListResult) IsEmpty() bool {
 
 // registryListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rlr RegistryListResult) registryListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (rlr RegistryListResult) registryListResultPreparer() (*http.Request, error) {
 	if rlr.NextLink == nil || len(to.String(rlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rlr.NextLink)))
@@ -2342,36 +2092,19 @@ func (rlr RegistryListResult) registryListResultPreparer(ctx context.Context) (*
 
 // RegistryListResultPage contains a page of Registry values.
 type RegistryListResultPage struct {
-	fn  func(context.Context, RegistryListResult) (RegistryListResult, error)
+	fn  func(RegistryListResult) (RegistryListResult, error)
 	rlr RegistryListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *RegistryListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RegistryListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.rlr)
+func (page *RegistryListResultPage) Next() error {
+	next, err := page.fn(page.rlr)
 	if err != nil {
 		return err
 	}
 	page.rlr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *RegistryListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -2390,11 +2123,6 @@ func (page RegistryListResultPage) Values() []Registry {
 		return nil
 	}
 	return *page.rlr.Value
-}
-
-// Creates a new instance of the RegistryListResultPage type.
-func NewRegistryListResultPage(getNextPage func(context.Context, RegistryListResult) (RegistryListResult, error)) RegistryListResultPage {
-	return RegistryListResultPage{fn: getNextPage}
 }
 
 // RegistryNameCheckRequest a request to check whether a container registry name is available.
@@ -2447,8 +2175,6 @@ type RegistryProperties struct {
 	AdminUserEnabled *bool `json:"adminUserEnabled,omitempty"`
 	// StorageAccount - The properties of the storage account for the container registry. Only applicable to Classic SKU.
 	StorageAccount *StorageAccountProperties `json:"storageAccount,omitempty"`
-	// NetworkRuleSet - The network rule set for a container registry.
-	NetworkRuleSet *NetworkRuleSet `json:"networkRuleSet,omitempty"`
 }
 
 // RegistryPropertiesUpdateParameters the parameters for updating the properties of a container registry.
@@ -2457,8 +2183,6 @@ type RegistryPropertiesUpdateParameters struct {
 	AdminUserEnabled *bool `json:"adminUserEnabled,omitempty"`
 	// StorageAccount - The parameters of a storage account for the container registry. Only applicable to Classic SKU. If specified, the storage account must be in the same physical location as the container registry.
 	StorageAccount *StorageAccountProperties `json:"storageAccount,omitempty"`
-	// NetworkRuleSet - The network rule set for a container registry.
-	NetworkRuleSet *NetworkRuleSet `json:"networkRuleSet,omitempty"`
 }
 
 // RegistryUpdateParameters the parameters for updating a container registry.
@@ -2467,8 +2191,6 @@ type RegistryUpdateParameters struct {
 	Tags map[string]*string `json:"tags"`
 	// Sku - The SKU of the container registry.
 	Sku *Sku `json:"sku,omitempty"`
-	// Identity - The identity of the container registry.
-	Identity *RegistryIdentity `json:"identity,omitempty"`
 	// RegistryPropertiesUpdateParameters - The properties that the container registry will be updated with.
 	*RegistryPropertiesUpdateParameters `json:"properties,omitempty"`
 }
@@ -2481,9 +2203,6 @@ func (rup RegistryUpdateParameters) MarshalJSON() ([]byte, error) {
 	}
 	if rup.Sku != nil {
 		objectMap["sku"] = rup.Sku
-	}
-	if rup.Identity != nil {
-		objectMap["identity"] = rup.Identity
 	}
 	if rup.RegistryPropertiesUpdateParameters != nil {
 		objectMap["properties"] = rup.RegistryPropertiesUpdateParameters
@@ -2517,15 +2236,6 @@ func (rup *RegistryUpdateParameters) UnmarshalJSON(body []byte) error {
 					return err
 				}
 				rup.Sku = &sku
-			}
-		case "identity":
-			if v != nil {
-				var identity RegistryIdentity
-				err = json.Unmarshal(*v, &identity)
-				if err != nil {
-					return err
-				}
-				rup.Identity = &identity
 			}
 		case "properties":
 			if v != nil {
@@ -2686,37 +2396,20 @@ type ReplicationListResultIterator struct {
 	page ReplicationListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ReplicationListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *ReplicationListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *ReplicationListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -2738,11 +2431,6 @@ func (iter ReplicationListResultIterator) Value() Replication {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the ReplicationListResultIterator type.
-func NewReplicationListResultIterator(page ReplicationListResultPage) ReplicationListResultIterator {
-	return ReplicationListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (rlr ReplicationListResult) IsEmpty() bool {
 	return rlr.Value == nil || len(*rlr.Value) == 0
@@ -2750,11 +2438,11 @@ func (rlr ReplicationListResult) IsEmpty() bool {
 
 // replicationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rlr ReplicationListResult) replicationListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (rlr ReplicationListResult) replicationListResultPreparer() (*http.Request, error) {
 	if rlr.NextLink == nil || len(to.String(rlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rlr.NextLink)))
@@ -2762,36 +2450,19 @@ func (rlr ReplicationListResult) replicationListResultPreparer(ctx context.Conte
 
 // ReplicationListResultPage contains a page of Replication values.
 type ReplicationListResultPage struct {
-	fn  func(context.Context, ReplicationListResult) (ReplicationListResult, error)
+	fn  func(ReplicationListResult) (ReplicationListResult, error)
 	rlr ReplicationListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ReplicationListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.rlr)
+func (page *ReplicationListResultPage) Next() error {
+	next, err := page.fn(page.rlr)
 	if err != nil {
 		return err
 	}
 	page.rlr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *ReplicationListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -2812,11 +2483,6 @@ func (page ReplicationListResultPage) Values() []Replication {
 	return *page.rlr.Value
 }
 
-// Creates a new instance of the ReplicationListResultPage type.
-func NewReplicationListResultPage(getNextPage func(context.Context, ReplicationListResult) (ReplicationListResult, error)) ReplicationListResultPage {
-	return ReplicationListResultPage{fn: getNextPage}
-}
-
 // ReplicationProperties the properties of a replication.
 type ReplicationProperties struct {
 	// ProvisioningState - The provisioning state of the replication at the time the operation was called. Possible values include: 'Creating', 'Updating', 'Deleting', 'Succeeded', 'Failed', 'Canceled'
@@ -2825,8 +2491,7 @@ type ReplicationProperties struct {
 	Status *Status `json:"status,omitempty"`
 }
 
-// ReplicationsCreateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationsCreateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type ReplicationsCreateFuture struct {
 	azure.Future
 }
@@ -2854,8 +2519,7 @@ func (future *ReplicationsCreateFuture) Result(client ReplicationsClient) (r Rep
 	return
 }
 
-// ReplicationsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type ReplicationsDeleteFuture struct {
 	azure.Future
 }
@@ -2877,8 +2541,7 @@ func (future *ReplicationsDeleteFuture) Result(client ReplicationsClient) (ar au
 	return
 }
 
-// ReplicationsUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationsUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type ReplicationsUpdateFuture struct {
 	azure.Future
 }
@@ -3056,7 +2719,7 @@ func (r *Run) UnmarshalJSON(body []byte) error {
 type RunFilter struct {
 	// RunID - The unique identifier for the run.
 	RunID *string `json:"runId,omitempty"`
-	// RunType - The type of run. Possible values include: 'QuickBuild', 'QuickRun', 'AutoBuild', 'AutoRun'
+	// RunType - The type of run. Possible values include: 'QuickBuild', 'AutoBuild'
 	RunType RunType `json:"runType,omitempty"`
 	// Status - The current status of the run. Possible values include: 'RunStatusQueued', 'RunStatusStarted', 'RunStatusRunning', 'RunStatusSucceeded', 'RunStatusFailed', 'RunStatusCanceled', 'RunStatusError', 'RunStatusTimeout'
 	Status RunStatus `json:"status,omitempty"`
@@ -3095,37 +2758,20 @@ type RunListResultIterator struct {
 	page RunListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *RunListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RunListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *RunListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *RunListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -3147,11 +2793,6 @@ func (iter RunListResultIterator) Value() Run {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the RunListResultIterator type.
-func NewRunListResultIterator(page RunListResultPage) RunListResultIterator {
-	return RunListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (rlr RunListResult) IsEmpty() bool {
 	return rlr.Value == nil || len(*rlr.Value) == 0
@@ -3159,11 +2800,11 @@ func (rlr RunListResult) IsEmpty() bool {
 
 // runListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rlr RunListResult) runListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (rlr RunListResult) runListResultPreparer() (*http.Request, error) {
 	if rlr.NextLink == nil || len(to.String(rlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rlr.NextLink)))
@@ -3171,36 +2812,19 @@ func (rlr RunListResult) runListResultPreparer(ctx context.Context) (*http.Reque
 
 // RunListResultPage contains a page of Run values.
 type RunListResultPage struct {
-	fn  func(context.Context, RunListResult) (RunListResult, error)
+	fn  func(RunListResult) (RunListResult, error)
 	rlr RunListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *RunListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RunListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.rlr)
+func (page *RunListResultPage) Next() error {
+	next, err := page.fn(page.rlr)
 	if err != nil {
 		return err
 	}
 	page.rlr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *RunListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -3221,11 +2845,6 @@ func (page RunListResultPage) Values() []Run {
 	return *page.rlr.Value
 }
 
-// Creates a new instance of the RunListResultPage type.
-func NewRunListResultPage(getNextPage func(context.Context, RunListResult) (RunListResult, error)) RunListResultPage {
-	return RunListResultPage{fn: getNextPage}
-}
-
 // RunProperties the properties for a run.
 type RunProperties struct {
 	// RunID - The unique identifier for the run.
@@ -3234,7 +2853,7 @@ type RunProperties struct {
 	Status RunStatus `json:"status,omitempty"`
 	// LastUpdatedTime - The last updated time for the run.
 	LastUpdatedTime *date.Time `json:"lastUpdatedTime,omitempty"`
-	// RunType - The type of run. Possible values include: 'QuickBuild', 'QuickRun', 'AutoBuild', 'AutoRun'
+	// RunType - The type of run. Possible values include: 'QuickBuild', 'AutoBuild'
 	RunType RunType `json:"runType,omitempty"`
 	// CreateTime - The time the run was scheduled.
 	CreateTime *date.Time `json:"createTime,omitempty"`
@@ -3242,11 +2861,11 @@ type RunProperties struct {
 	StartTime *date.Time `json:"startTime,omitempty"`
 	// FinishTime - The time the run finished.
 	FinishTime *date.Time `json:"finishTime,omitempty"`
-	// OutputImages - The list of all images that were generated from the run. This is applicable if the run generates base image dependencies.
+	// OutputImages - The list of all images that were generated from the run. This is applicable if the run is of type Build.
 	OutputImages *[]ImageDescriptor `json:"outputImages,omitempty"`
 	// Task - The task against which run was scheduled.
 	Task *string `json:"task,omitempty"`
-	// ImageUpdateTrigger - The image update trigger that caused the run. This is applicable if the task has base image trigger configured.
+	// ImageUpdateTrigger - The image update trigger that caused the run. This is applicable if the task is of build type.
 	ImageUpdateTrigger *ImageUpdateTrigger `json:"imageUpdateTrigger,omitempty"`
 	// SourceTrigger - The source trigger that caused the run.
 	SourceTrigger *SourceTriggerDescriptor `json:"sourceTrigger,omitempty"`
@@ -3443,8 +3062,8 @@ type Sku struct {
 	Tier SkuTier `json:"tier,omitempty"`
 }
 
-// Source the registry node that generated the event. Put differently, while the actor initiates the event,
-// the source generates it.
+// Source the registry node that generated the event. Put differently, while the actor initiates the event, the
+// source generates it.
 type Source struct {
 	// Addr - The IP or hostname and the port of the registry node that generated the event. Generally, this will be resolved by os.Hostname() along with the running port.
 	Addr *string `json:"addr,omitempty"`
@@ -3456,7 +3075,7 @@ type Source struct {
 type SourceProperties struct {
 	// SourceControlType - The type of source control service. Possible values include: 'Github', 'VisualStudioTeamService'
 	SourceControlType SourceControlType `json:"sourceControlType,omitempty"`
-	// RepositoryURL - The full URL to the source code repository
+	// RepositoryURL - The full URL to the source code respository
 	RepositoryURL *string `json:"repositoryUrl,omitempty"`
 	// Branch - The branch name of the source code.
 	Branch *string `json:"branch,omitempty"`
@@ -3471,7 +3090,7 @@ type SourceTrigger struct {
 	SourceRepository *SourceProperties `json:"sourceRepository,omitempty"`
 	// SourceTriggerEvents - The source event corresponding to the trigger.
 	SourceTriggerEvents *[]SourceTriggerEvent `json:"sourceTriggerEvents,omitempty"`
-	// Status - The current status of trigger. Possible values include: 'TriggerStatusDisabled', 'TriggerStatusEnabled'
+	// Status - The current status of build trigger. Possible values include: 'TriggerStatusDisabled', 'TriggerStatusEnabled'
 	Status TriggerStatus `json:"status,omitempty"`
 	// Name - The name of the trigger.
 	Name *string `json:"name,omitempty"`
@@ -3501,7 +3120,7 @@ type SourceTriggerUpdateParameters struct {
 	SourceRepository *SourceUpdateParameters `json:"sourceRepository,omitempty"`
 	// SourceTriggerEvents - The source event corresponding to the trigger.
 	SourceTriggerEvents *[]SourceTriggerEvent `json:"sourceTriggerEvents,omitempty"`
-	// Status - The current status of trigger. Possible values include: 'TriggerStatusDisabled', 'TriggerStatusEnabled'
+	// Status - The current status of build trigger. Possible values include: 'TriggerStatusDisabled', 'TriggerStatusEnabled'
 	Status TriggerStatus `json:"status,omitempty"`
 	// Name - The name of the trigger.
 	Name *string `json:"name,omitempty"`
@@ -3511,7 +3130,7 @@ type SourceTriggerUpdateParameters struct {
 type SourceUpdateParameters struct {
 	// SourceControlType - The type of source control service. Possible values include: 'Github', 'VisualStudioTeamService'
 	SourceControlType SourceControlType `json:"sourceControlType,omitempty"`
-	// RepositoryURL - The full URL to the source code repository
+	// RepositoryURL - The full URL to the source code respository
 	RepositoryURL *string `json:"repositoryUrl,omitempty"`
 	// Branch - The branch name of the source code.
 	Branch *string `json:"branch,omitempty"`
@@ -3539,8 +3158,8 @@ type Status struct {
 	Timestamp *date.Time `json:"timestamp,omitempty"`
 }
 
-// StorageAccountProperties the properties of a storage account for a container registry. Only applicable
-// to Classic SKU.
+// StorageAccountProperties the properties of a storage account for a container registry. Only applicable to
+// Classic SKU.
 type StorageAccountProperties struct {
 	// ID - The resource ID of the storage account.
 	ID *string `json:"id,omitempty"`
@@ -3565,7 +3184,7 @@ type Target struct {
 }
 
 // Task the task that has the ARM resource and task properties.
-// The task will have all information to schedule a run against it.
+// The  task will have all information to schedule a run against it.
 type Task struct {
 	autorest.Response `json:"-"`
 	// TaskProperties - The properties of a task.
@@ -3690,37 +3309,20 @@ type TaskListResultIterator struct {
 	page TaskListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *TaskListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TaskListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *TaskListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *TaskListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -3742,11 +3344,6 @@ func (iter TaskListResultIterator) Value() Task {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the TaskListResultIterator type.
-func NewTaskListResultIterator(page TaskListResultPage) TaskListResultIterator {
-	return TaskListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (tlr TaskListResult) IsEmpty() bool {
 	return tlr.Value == nil || len(*tlr.Value) == 0
@@ -3754,11 +3351,11 @@ func (tlr TaskListResult) IsEmpty() bool {
 
 // taskListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (tlr TaskListResult) taskListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (tlr TaskListResult) taskListResultPreparer() (*http.Request, error) {
 	if tlr.NextLink == nil || len(to.String(tlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(tlr.NextLink)))
@@ -3766,36 +3363,19 @@ func (tlr TaskListResult) taskListResultPreparer(ctx context.Context) (*http.Req
 
 // TaskListResultPage contains a page of Task values.
 type TaskListResultPage struct {
-	fn  func(context.Context, TaskListResult) (TaskListResult, error)
+	fn  func(TaskListResult) (TaskListResult, error)
 	tlr TaskListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *TaskListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TaskListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.tlr)
+func (page *TaskListResultPage) Next() error {
+	next, err := page.fn(page.tlr)
 	if err != nil {
 		return err
 	}
 	page.tlr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *TaskListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -3814,11 +3394,6 @@ func (page TaskListResultPage) Values() []Task {
 		return nil
 	}
 	return *page.tlr.Value
-}
-
-// Creates a new instance of the TaskListResultPage type.
-func NewTaskListResultPage(getNextPage func(context.Context, TaskListResult) (TaskListResult, error)) TaskListResultPage {
-	return TaskListResultPage{fn: getNextPage}
 }
 
 // TaskProperties the properties of a task.
@@ -4134,10 +3709,6 @@ type BasicTaskStepProperties interface {
 type TaskStepProperties struct {
 	// BaseImageDependencies - List of base image dependencies for a step.
 	BaseImageDependencies *[]BaseImageDependency `json:"baseImageDependencies,omitempty"`
-	// ContextPath - The URL(absolute or relative) of the source context for the task step.
-	ContextPath *string `json:"contextPath,omitempty"`
-	// ContextAccessToken - The token (git PAT or SAS token of storage account blob) associated with the context for a step.
-	ContextAccessToken *string `json:"contextAccessToken,omitempty"`
 	// Type - Possible values include: 'TypeTaskStepProperties', 'TypeDocker', 'TypeFileTask', 'TypeEncodedTask'
 	Type TypeBasicTaskStepProperties `json:"type,omitempty"`
 }
@@ -4194,12 +3765,6 @@ func (tsp TaskStepProperties) MarshalJSON() ([]byte, error) {
 	if tsp.BaseImageDependencies != nil {
 		objectMap["baseImageDependencies"] = tsp.BaseImageDependencies
 	}
-	if tsp.ContextPath != nil {
-		objectMap["contextPath"] = tsp.ContextPath
-	}
-	if tsp.ContextAccessToken != nil {
-		objectMap["contextAccessToken"] = tsp.ContextAccessToken
-	}
 	if tsp.Type != "" {
 		objectMap["type"] = tsp.Type
 	}
@@ -4241,10 +3806,6 @@ type BasicTaskStepUpdateParameters interface {
 
 // TaskStepUpdateParameters base properties for updating any task step.
 type TaskStepUpdateParameters struct {
-	// ContextPath - The URL(absolute or relative) of the source context for the task step.
-	ContextPath *string `json:"contextPath,omitempty"`
-	// ContextAccessToken - The token (git PAT or SAS token of storage account blob) associated with the context for a step.
-	ContextAccessToken *string `json:"contextAccessToken,omitempty"`
 	// Type - Possible values include: 'TypeBasicTaskStepUpdateParametersTypeTaskStepUpdateParameters', 'TypeBasicTaskStepUpdateParametersTypeDocker', 'TypeBasicTaskStepUpdateParametersTypeFileTask', 'TypeBasicTaskStepUpdateParametersTypeEncodedTask'
 	Type TypeBasicTaskStepUpdateParameters `json:"type,omitempty"`
 }
@@ -4298,12 +3859,6 @@ func unmarshalBasicTaskStepUpdateParametersArray(body []byte) ([]BasicTaskStepUp
 func (tsup TaskStepUpdateParameters) MarshalJSON() ([]byte, error) {
 	tsup.Type = TypeBasicTaskStepUpdateParametersTypeTaskStepUpdateParameters
 	objectMap := make(map[string]interface{})
-	if tsup.ContextPath != nil {
-		objectMap["contextPath"] = tsup.ContextPath
-	}
-	if tsup.ContextAccessToken != nil {
-		objectMap["contextAccessToken"] = tsup.ContextAccessToken
-	}
 	if tsup.Type != "" {
 		objectMap["type"] = tsup.Type
 	}
@@ -4416,7 +3971,7 @@ func (tup *TaskUpdateParameters) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// TriggerProperties the properties of a trigger.
+// TriggerProperties the properties of a build trigger.
 type TriggerProperties struct {
 	// SourceTriggers - The collection of triggers based on source code repository.
 	SourceTriggers *[]SourceTrigger `json:"sourceTriggers,omitempty"`
@@ -4424,7 +3979,7 @@ type TriggerProperties struct {
 	BaseImageTrigger *BaseImageTrigger `json:"baseImageTrigger,omitempty"`
 }
 
-// TriggerUpdateParameters the properties for updating triggers.
+// TriggerUpdateParameters the properties for updating build triggers.
 type TriggerUpdateParameters struct {
 	// SourceTriggers - The collection of triggers based on source code repository.
 	SourceTriggers *[]SourceTriggerUpdateParameters `json:"sourceTriggers,omitempty"`
@@ -4438,14 +3993,6 @@ type TrustPolicy struct {
 	Type TrustPolicyType `json:"type,omitempty"`
 	// Status - The value that indicates whether the policy is enabled or not. Possible values include: 'Enabled', 'Disabled'
 	Status PolicyStatus `json:"status,omitempty"`
-}
-
-// VirtualNetworkRule virtual network rule.
-type VirtualNetworkRule struct {
-	// Action - The action of virtual network rule. Possible values include: 'Allow'
-	Action Action `json:"action,omitempty"`
-	// VirtualNetworkResourceID - Resource ID of a subnet, for example: /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}/subnets/{subnetName}.
-	VirtualNetworkResourceID *string `json:"id,omitempty"`
 }
 
 // Webhook an object that represents a webhook for a container registry.
@@ -4640,37 +4187,20 @@ type WebhookListResultIterator struct {
 	page WebhookListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *WebhookListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhookListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *WebhookListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *WebhookListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -4692,11 +4222,6 @@ func (iter WebhookListResultIterator) Value() Webhook {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the WebhookListResultIterator type.
-func NewWebhookListResultIterator(page WebhookListResultPage) WebhookListResultIterator {
-	return WebhookListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (wlr WebhookListResult) IsEmpty() bool {
 	return wlr.Value == nil || len(*wlr.Value) == 0
@@ -4704,11 +4229,11 @@ func (wlr WebhookListResult) IsEmpty() bool {
 
 // webhookListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (wlr WebhookListResult) webhookListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (wlr WebhookListResult) webhookListResultPreparer() (*http.Request, error) {
 	if wlr.NextLink == nil || len(to.String(wlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(wlr.NextLink)))
@@ -4716,36 +4241,19 @@ func (wlr WebhookListResult) webhookListResultPreparer(ctx context.Context) (*ht
 
 // WebhookListResultPage contains a page of Webhook values.
 type WebhookListResultPage struct {
-	fn  func(context.Context, WebhookListResult) (WebhookListResult, error)
+	fn  func(WebhookListResult) (WebhookListResult, error)
 	wlr WebhookListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *WebhookListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhookListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.wlr)
+func (page *WebhookListResultPage) Next() error {
+	next, err := page.fn(page.wlr)
 	if err != nil {
 		return err
 	}
 	page.wlr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *WebhookListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -4764,11 +4272,6 @@ func (page WebhookListResultPage) Values() []Webhook {
 		return nil
 	}
 	return *page.wlr.Value
-}
-
-// Creates a new instance of the WebhookListResultPage type.
-func NewWebhookListResultPage(getNextPage func(context.Context, WebhookListResult) (WebhookListResult, error)) WebhookListResultPage {
-	return WebhookListResultPage{fn: getNextPage}
 }
 
 // WebhookProperties the properties of a webhook.
@@ -4853,8 +4356,7 @@ func (wpup WebhookPropertiesUpdateParameters) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// WebhooksCreateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// WebhooksCreateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type WebhooksCreateFuture struct {
 	azure.Future
 }
@@ -4882,8 +4384,7 @@ func (future *WebhooksCreateFuture) Result(client WebhooksClient) (w Webhook, er
 	return
 }
 
-// WebhooksDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// WebhooksDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type WebhooksDeleteFuture struct {
 	azure.Future
 }
@@ -4905,8 +4406,7 @@ func (future *WebhooksDeleteFuture) Result(client WebhooksClient) (ar autorest.R
 	return
 }
 
-// WebhooksUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// WebhooksUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type WebhooksUpdateFuture struct {
 	azure.Future
 }

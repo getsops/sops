@@ -21,8 +21,6 @@ import (
 	"net/http"
 	"strconv"
 	"time"
-
-	"github.com/Azure/go-autorest/tracing"
 )
 
 // Sender is the interface that wraps the Do method to send HTTP requests.
@@ -40,7 +38,7 @@ func (sf SenderFunc) Do(r *http.Request) (*http.Response, error) {
 	return sf(r)
 }
 
-// SendDecorator takes and possibly decorates, by wrapping, a Sender. Decorators may affect the
+// SendDecorator takes and possibily decorates, by wrapping, a Sender. Decorators may affect the
 // http.Request and pass it along or, first, pass the http.Request along then react to the
 // http.Response result.
 type SendDecorator func(Sender) Sender
@@ -70,7 +68,7 @@ func DecorateSender(s Sender, decorators ...SendDecorator) Sender {
 //
 // Send will not poll or retry requests.
 func Send(r *http.Request, decorators ...SendDecorator) (*http.Response, error) {
-	return SendWithSender(&http.Client{Transport: tracing.Transport}, r, decorators...)
+	return SendWithSender(&http.Client{}, r, decorators...)
 }
 
 // SendWithSender sends the passed http.Request, through the provided Sender, returning the
@@ -218,7 +216,8 @@ func DoRetryForStatusCodes(attempts int, backoff time.Duration, codes ...int) Se
 		return SenderFunc(func(r *http.Request) (resp *http.Response, err error) {
 			rr := NewRetriableRequest(r)
 			// Increment to add the first call (attempts denotes number of retries)
-			for attempt := 0; attempt < attempts+1; {
+			attempts++
+			for attempt := 0; attempt < attempts; {
 				err = rr.Prepare()
 				if err != nil {
 					return resp, err
@@ -235,7 +234,7 @@ func DoRetryForStatusCodes(attempts int, backoff time.Duration, codes ...int) Se
 				}
 				delayed := DelayWithRetryAfter(resp, r.Context().Done())
 				if !delayed && !DelayForBackoff(backoff, attempt, r.Context().Done()) {
-					return resp, r.Context().Err()
+					return nil, r.Context().Err()
 				}
 				// don't count a 429 against the number of attempts
 				// so that we continue to retry until it succeeds

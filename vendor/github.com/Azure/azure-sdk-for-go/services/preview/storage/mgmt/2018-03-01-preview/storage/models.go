@@ -25,9 +25,6 @@ import (
 	"net/http"
 )
 
-// The package's fully qualified name.
-const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/storage/mgmt/2018-03-01-preview/storage"
-
 // AccessTier enumerates the values for access tier.
 type AccessTier string
 
@@ -628,8 +625,7 @@ func (a *Account) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// AccountCheckNameAvailabilityParameters the parameters used to check the availability of the storage
-// account name.
+// AccountCheckNameAvailabilityParameters the parameters used to check the availabity of the storage account name.
 type AccountCheckNameAvailabilityParameters struct {
 	// Name - The storage account name.
 	Name *string `json:"name,omitempty"`
@@ -926,7 +922,7 @@ type AccountPropertiesUpdateParameters struct {
 
 // AccountRegenerateKeyParameters the parameters used to regenerate the storage account key.
 type AccountRegenerateKeyParameters struct {
-	// KeyName - The name of storage keys that want to be regenerated, possible values are key1, key2.
+	// KeyName - The name of storage keys that want to be regenerated, possible vaules are key1, key2.
 	KeyName *string `json:"keyName,omitempty"`
 }
 
@@ -950,8 +946,7 @@ type AccountSasParameters struct {
 	KeyToSign *string `json:"keyToSign,omitempty"`
 }
 
-// AccountsCreateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// AccountsCreateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type AccountsCreateFuture struct {
 	azure.Future
 }
@@ -979,8 +974,7 @@ func (future *AccountsCreateFuture) Result(client AccountsClient) (a Account, er
 	return
 }
 
-// AccountUpdateParameters the parameters that can be provided when updating the storage account
-// properties.
+// AccountUpdateParameters the parameters that can be provided when updating the storage account properties.
 type AccountUpdateParameters struct {
 	// Sku - Gets or sets the SKU name. Note that the SKU name cannot be updated to Standard_ZRS or Premium_LRS, nor can accounts of those sku names be updated to any other value.
 	Sku *Sku `json:"sku,omitempty"`
@@ -1262,7 +1256,7 @@ type CustomDomain struct {
 	UseSubDomain *bool `json:"useSubDomain,omitempty"`
 }
 
-// Dimension dimension of blobs, possibly be blob type or access tier.
+// Dimension dimension of blobs, possiblly be blob type or access tier.
 type Dimension struct {
 	// Name - Display name of dimension.
 	Name *string `json:"name,omitempty"`
@@ -1300,8 +1294,7 @@ type EncryptionServices struct {
 	Queue *EncryptionService `json:"queue,omitempty"`
 }
 
-// Endpoints the URIs that are used to perform a retrieval of a public blob, queue, table, web or dfs
-// object.
+// Endpoints the URIs that are used to perform a retrieval of a public blob, queue, table, web or dfs object.
 type Endpoints struct {
 	// Blob - Gets the blob endpoint.
 	Blob *string `json:"blob,omitempty"`
@@ -1327,8 +1320,8 @@ type Identity struct {
 	Type *string `json:"type,omitempty"`
 }
 
-// ImmutabilityPolicy the ImmutabilityPolicy property of a blob container, including Id, resource name,
-// resource type, Etag.
+// ImmutabilityPolicy the ImmutabilityPolicy property of a blob container, including Id, resource name, resource
+// type, Etag.
 type ImmutabilityPolicy struct {
 	autorest.Response `json:"-"`
 	// ImmutabilityPolicyProperty - The properties of an ImmutabilityPolicy of a blob container.
@@ -1646,20 +1639,19 @@ type ListContainerItems struct {
 // ListServiceSasResponse the List service SAS credentials operation response.
 type ListServiceSasResponse struct {
 	autorest.Response `json:"-"`
-	// ServiceSasToken - List service SAS credentials of specific resource.
+	// ServiceSasToken - List service SAS credentials of speicific resource.
 	ServiceSasToken *string `json:"serviceSasToken,omitempty"`
 }
 
-// ManagementPoliciesRules the Storage Account ManagementPolicies Rules, in JSON format. See more details
-// in: https://docs.microsoft.com/en-us/azure/storage/common/storage-lifecycle-managment-concepts.
+// ManagementPoliciesRules the Storage Account ManagementPolicies Rules, in JSON format. See more details in:
+// https://docs.microsoft.com/en-us/azure/storage/common/storage-lifecycle-managment-concepts.
 type ManagementPoliciesRules struct {
 	// Policy - The Storage Account ManagementPolicies Rules, in JSON format. See more details in: https://docs.microsoft.com/en-us/azure/storage/common/storage-lifecycle-managment-concepts.
 	Policy interface{} `json:"policy,omitempty"`
 }
 
-// ManagementPoliciesRulesSetParameter the Storage Account ManagementPolicies Rules, in JSON format. See
-// more details in:
-// https://docs.microsoft.com/en-us/azure/storage/common/storage-lifecycle-managment-concepts.
+// ManagementPoliciesRulesSetParameter the Storage Account ManagementPolicies Rules, in JSON format. See more
+// details in: https://docs.microsoft.com/en-us/azure/storage/common/storage-lifecycle-managment-concepts.
 type ManagementPoliciesRulesSetParameter struct {
 	// ManagementPoliciesRules - The Storage Account ManagementPolicies Rules, in JSON format. See more details in: https://docs.microsoft.com/en-us/azure/storage/common/storage-lifecycle-managment-concepts.
 	*ManagementPoliciesRules `json:"properties,omitempty"`
@@ -1825,8 +1817,8 @@ type OperationDisplay struct {
 	Description *string `json:"description,omitempty"`
 }
 
-// OperationListResult result of the request to list Storage operations. It contains a list of operations
-// and a URL link to get the next set of results.
+// OperationListResult result of the request to list Storage operations. It contains a list of operations and a URL
+// link to get the next set of results.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of Storage operations supported by the Storage resource provider.
@@ -1870,7 +1862,7 @@ type Restriction struct {
 	ReasonCode ReasonCode `json:"reasonCode,omitempty"`
 }
 
-// ServiceSasParameters the parameters to list service SAS credentials of a specific resource.
+// ServiceSasParameters the parameters to list service SAS credentials of a speicific resource.
 type ServiceSasParameters struct {
 	// CanonicalizedResource - The canonical path to the signed resource.
 	CanonicalizedResource *string `json:"canonicalizedResource,omitempty"`
@@ -1934,8 +1926,8 @@ type Sku struct {
 	Restrictions *[]Restriction `json:"restrictions,omitempty"`
 }
 
-// SKUCapability the capability information in the specified sku, including file encryption, network acls,
-// change notification, etc.
+// SKUCapability the capability information in the specified sku, including file encryption, network acls, change
+// notification, etc.
 type SKUCapability struct {
 	// Name - The name of capability, The capability information in the specified sku, including file encryption, network acls, change notification, etc.
 	Name *string `json:"name,omitempty"`

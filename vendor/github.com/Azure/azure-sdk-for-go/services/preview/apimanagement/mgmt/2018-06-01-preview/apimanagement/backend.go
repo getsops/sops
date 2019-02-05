@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,16 +48,6 @@ func NewBackendClientWithBaseURI(baseURI string, subscriptionID string) BackendC
 // parameters - create parameters.
 // ifMatch - eTag of the Entity. Not required when creating an entity, but required when updating an entity.
 func (client BackendClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, backendid string, parameters BackendContract, ifMatch string) (result BackendContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/BackendClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -155,16 +144,6 @@ func (client BackendClient) CreateOrUpdateResponder(resp *http.Response) (result
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client BackendClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, backendid string, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/BackendClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -246,16 +225,6 @@ func (client BackendClient) DeleteResponder(resp *http.Response) (result autores
 // serviceName - the name of the API Management service.
 // backendid - identifier of the Backend entity. Must be unique in the current API Management service instance.
 func (client BackendClient) Get(ctx context.Context, resourceGroupName string, serviceName string, backendid string) (result BackendContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/BackendClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -337,16 +306,6 @@ func (client BackendClient) GetResponder(resp *http.Response) (result BackendCon
 // serviceName - the name of the API Management service.
 // backendid - identifier of the Backend entity. Must be unique in the current API Management service instance.
 func (client BackendClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, backendid string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/BackendClient.GetEntityTag")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -432,16 +391,6 @@ func (client BackendClient) GetEntityTagResponder(resp *http.Response) (result a
 // top - number of records to return.
 // skip - number of records to skip.
 func (client BackendClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result BackendCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/BackendClient.ListByService")
-		defer func() {
-			sc := -1
-			if result.bc.Response.Response != nil {
-				sc = result.bc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -529,8 +478,8 @@ func (client BackendClient) ListByServiceResponder(resp *http.Response) (result 
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client BackendClient) listByServiceNextResults(ctx context.Context, lastResults BackendCollection) (result BackendCollection, err error) {
-	req, err := lastResults.backendCollectionPreparer(ctx)
+func (client BackendClient) listByServiceNextResults(lastResults BackendCollection) (result BackendCollection, err error) {
+	req, err := lastResults.backendCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.BackendClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -551,16 +500,6 @@ func (client BackendClient) listByServiceNextResults(ctx context.Context, lastRe
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client BackendClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result BackendCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/BackendClient.ListByService")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
@@ -573,16 +512,6 @@ func (client BackendClient) ListByServiceComplete(ctx context.Context, resourceG
 // backendid - identifier of the Backend entity. Must be unique in the current API Management service instance.
 // parameters - reconnect request parameters.
 func (client BackendClient) Reconnect(ctx context.Context, resourceGroupName string, serviceName string, backendid string, parameters *BackendReconnectContract) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/BackendClient.Reconnect")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -671,16 +600,6 @@ func (client BackendClient) ReconnectResponder(resp *http.Response) (result auto
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client BackendClient) Update(ctx context.Context, resourceGroupName string, serviceName string, backendid string, parameters BackendUpdateParameters, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/BackendClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},

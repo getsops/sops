@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,16 +49,6 @@ func NewEndpointsClientWithBaseURI(baseURI string, subscriptionID string) Endpoi
 // endpointName - name of the endpoint under the profile which is unique globally.
 // endpoint - endpoint properties
 func (client EndpointsClient) Create(ctx context.Context, resourceGroupName string, profileName string, endpointName string, endpoint Endpoint) (result EndpointsCreateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.Create")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -119,6 +108,10 @@ func (client EndpointsClient) CreateSender(req *http.Request) (future EndpointsC
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -143,16 +136,6 @@ func (client EndpointsClient) CreateResponder(resp *http.Response) (result Endpo
 // profileName - name of the CDN profile which is unique within the resource group.
 // endpointName - name of the endpoint under the profile which is unique globally.
 func (client EndpointsClient) Delete(ctx context.Context, resourceGroupName string, profileName string, endpointName string) (result EndpointsDeleteFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -207,6 +190,10 @@ func (client EndpointsClient) DeleteSender(req *http.Request) (future EndpointsD
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -230,16 +217,6 @@ func (client EndpointsClient) DeleteResponder(resp *http.Response) (result autor
 // profileName - name of the CDN profile which is unique within the resource group.
 // endpointName - name of the endpoint under the profile which is unique globally.
 func (client EndpointsClient) Get(ctx context.Context, resourceGroupName string, profileName string, endpointName string) (result Endpoint, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -316,16 +293,6 @@ func (client EndpointsClient) GetResponder(resp *http.Response) (result Endpoint
 // resourceGroupName - name of the Resource group within the Azure subscription.
 // profileName - name of the CDN profile which is unique within the resource group.
 func (client EndpointsClient) ListByProfile(ctx context.Context, resourceGroupName string, profileName string) (result EndpointListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.ListByProfile")
-		defer func() {
-			sc := -1
-			if result.elr.Response.Response != nil {
-				sc = result.elr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -398,8 +365,8 @@ func (client EndpointsClient) ListByProfileResponder(resp *http.Response) (resul
 }
 
 // listByProfileNextResults retrieves the next set of results, if any.
-func (client EndpointsClient) listByProfileNextResults(ctx context.Context, lastResults EndpointListResult) (result EndpointListResult, err error) {
-	req, err := lastResults.endpointListResultPreparer(ctx)
+func (client EndpointsClient) listByProfileNextResults(lastResults EndpointListResult) (result EndpointListResult, err error) {
+	req, err := lastResults.endpointListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "cdn.EndpointsClient", "listByProfileNextResults", nil, "Failure preparing next results request")
 	}
@@ -420,16 +387,6 @@ func (client EndpointsClient) listByProfileNextResults(ctx context.Context, last
 
 // ListByProfileComplete enumerates all values, automatically crossing page boundaries as required.
 func (client EndpointsClient) ListByProfileComplete(ctx context.Context, resourceGroupName string, profileName string) (result EndpointListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.ListByProfile")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByProfile(ctx, resourceGroupName, profileName)
 	return
 }
@@ -440,16 +397,6 @@ func (client EndpointsClient) ListByProfileComplete(ctx context.Context, resourc
 // profileName - name of the CDN profile which is unique within the resource group.
 // endpointName - name of the endpoint under the profile which is unique globally.
 func (client EndpointsClient) ListResourceUsage(ctx context.Context, resourceGroupName string, profileName string, endpointName string) (result ResourceUsageListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.ListResourceUsage")
-		defer func() {
-			sc := -1
-			if result.rulr.Response.Response != nil {
-				sc = result.rulr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -523,8 +470,8 @@ func (client EndpointsClient) ListResourceUsageResponder(resp *http.Response) (r
 }
 
 // listResourceUsageNextResults retrieves the next set of results, if any.
-func (client EndpointsClient) listResourceUsageNextResults(ctx context.Context, lastResults ResourceUsageListResult) (result ResourceUsageListResult, err error) {
-	req, err := lastResults.resourceUsageListResultPreparer(ctx)
+func (client EndpointsClient) listResourceUsageNextResults(lastResults ResourceUsageListResult) (result ResourceUsageListResult, err error) {
+	req, err := lastResults.resourceUsageListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "cdn.EndpointsClient", "listResourceUsageNextResults", nil, "Failure preparing next results request")
 	}
@@ -545,16 +492,6 @@ func (client EndpointsClient) listResourceUsageNextResults(ctx context.Context, 
 
 // ListResourceUsageComplete enumerates all values, automatically crossing page boundaries as required.
 func (client EndpointsClient) ListResourceUsageComplete(ctx context.Context, resourceGroupName string, profileName string, endpointName string) (result ResourceUsageListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.ListResourceUsage")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListResourceUsage(ctx, resourceGroupName, profileName, endpointName)
 	return
 }
@@ -565,18 +502,8 @@ func (client EndpointsClient) ListResourceUsageComplete(ctx context.Context, res
 // profileName - name of the CDN profile which is unique within the resource group.
 // endpointName - name of the endpoint under the profile which is unique globally.
 // contentFilePaths - the path to the content to be loaded. Path should be a full URL, e.g.
-// ‘/pictures/city.png' which loads a single file
+// ‘/pictires/city.png' which loads a single file
 func (client EndpointsClient) LoadContent(ctx context.Context, resourceGroupName string, profileName string, endpointName string, contentFilePaths LoadParameters) (result EndpointsLoadContentFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.LoadContent")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -635,6 +562,10 @@ func (client EndpointsClient) LoadContentSender(req *http.Request) (future Endpo
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -660,16 +591,6 @@ func (client EndpointsClient) LoadContentResponder(resp *http.Response) (result 
 // which removes a single file, or a directory with a wildcard, e.g. '/pictures/*' which removes all folders
 // and files in the directory.
 func (client EndpointsClient) PurgeContent(ctx context.Context, resourceGroupName string, profileName string, endpointName string, contentFilePaths PurgeParameters) (result EndpointsPurgeContentFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.PurgeContent")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -728,6 +649,10 @@ func (client EndpointsClient) PurgeContentSender(req *http.Request) (future Endp
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -750,16 +675,6 @@ func (client EndpointsClient) PurgeContentResponder(resp *http.Response) (result
 // profileName - name of the CDN profile which is unique within the resource group.
 // endpointName - name of the endpoint under the profile which is unique globally.
 func (client EndpointsClient) Start(ctx context.Context, resourceGroupName string, profileName string, endpointName string) (result EndpointsStartFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.Start")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -814,6 +729,10 @@ func (client EndpointsClient) StartSender(req *http.Request) (future EndpointsSt
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -837,16 +756,6 @@ func (client EndpointsClient) StartResponder(resp *http.Response) (result Endpoi
 // profileName - name of the CDN profile which is unique within the resource group.
 // endpointName - name of the endpoint under the profile which is unique globally.
 func (client EndpointsClient) Stop(ctx context.Context, resourceGroupName string, profileName string, endpointName string) (result EndpointsStopFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.Stop")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -901,6 +810,10 @@ func (client EndpointsClient) StopSender(req *http.Request) (future EndpointsSto
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -927,16 +840,6 @@ func (client EndpointsClient) StopResponder(resp *http.Response) (result Endpoin
 // endpointName - name of the endpoint under the profile which is unique globally.
 // endpointUpdateProperties - endpoint update properties
 func (client EndpointsClient) Update(ctx context.Context, resourceGroupName string, profileName string, endpointName string, endpointUpdateProperties EndpointUpdateParameters) (result EndpointsUpdateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -993,6 +896,10 @@ func (client EndpointsClient) UpdateSender(req *http.Request) (future EndpointsU
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -1017,16 +924,6 @@ func (client EndpointsClient) UpdateResponder(resp *http.Response) (result Endpo
 // endpointName - name of the endpoint under the profile which is unique globally.
 // customDomainProperties - custom domain to be validated.
 func (client EndpointsClient) ValidateCustomDomain(ctx context.Context, resourceGroupName string, profileName string, endpointName string, customDomainProperties ValidateCustomDomainInput) (result ValidateCustomDomainOutput, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.ValidateCustomDomain")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

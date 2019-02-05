@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -43,16 +42,6 @@ func NewCertificateRegistrationProviderClientWithBaseURI(baseURI string, subscri
 
 // ListOperations implements Csm operations Api to exposes the list of available Csm Apis under the resource provider
 func (client CertificateRegistrationProviderClient) ListOperations(ctx context.Context) (result CsmOperationCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateRegistrationProviderClient.ListOperations")
-		defer func() {
-			sc := -1
-			if result.coc.Response.Response != nil {
-				sc = result.coc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listOperationsNextResults
 	req, err := client.ListOperationsPreparer(ctx)
 	if err != nil {
@@ -111,8 +100,8 @@ func (client CertificateRegistrationProviderClient) ListOperationsResponder(resp
 }
 
 // listOperationsNextResults retrieves the next set of results, if any.
-func (client CertificateRegistrationProviderClient) listOperationsNextResults(ctx context.Context, lastResults CsmOperationCollection) (result CsmOperationCollection, err error) {
-	req, err := lastResults.csmOperationCollectionPreparer(ctx)
+func (client CertificateRegistrationProviderClient) listOperationsNextResults(lastResults CsmOperationCollection) (result CsmOperationCollection, err error) {
+	req, err := lastResults.csmOperationCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.CertificateRegistrationProviderClient", "listOperationsNextResults", nil, "Failure preparing next results request")
 	}
@@ -133,16 +122,6 @@ func (client CertificateRegistrationProviderClient) listOperationsNextResults(ct
 
 // ListOperationsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client CertificateRegistrationProviderClient) ListOperationsComplete(ctx context.Context) (result CsmOperationCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateRegistrationProviderClient.ListOperations")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListOperations(ctx)
 	return
 }

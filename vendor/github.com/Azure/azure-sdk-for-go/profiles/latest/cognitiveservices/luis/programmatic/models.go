@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2018 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,6 +21,11 @@ package programmatic
 
 import original "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v2.0/luis/programmatic"
 
+type AppsClient = original.AppsClient
+type BaseClient = original.BaseClient
+type ExamplesClient = original.ExamplesClient
+type FeaturesClient = original.FeaturesClient
+type ModelClient = original.ModelClient
 type AzureRegions = original.AzureRegions
 
 const (
@@ -231,13 +236,11 @@ const (
 type ApplicationCreateObject = original.ApplicationCreateObject
 type ApplicationInfoResponse = original.ApplicationInfoResponse
 type ApplicationPublishObject = original.ApplicationPublishObject
-type ApplicationSettingUpdateObject = original.ApplicationSettingUpdateObject
 type ApplicationSettings = original.ApplicationSettings
+type ApplicationSettingUpdateObject = original.ApplicationSettingUpdateObject
 type ApplicationUpdateObject = original.ApplicationUpdateObject
-type AppsClient = original.AppsClient
 type AvailableCulture = original.AvailableCulture
 type AvailablePrebuiltEntityModel = original.AvailablePrebuiltEntityModel
-type BaseClient = original.BaseClient
 type BatchLabelExample = original.BatchLabelExample
 type ChildEntity = original.ChildEntity
 type ClosedList = original.ClosedList
@@ -263,12 +266,10 @@ type EntityRoleCreateObject = original.EntityRoleCreateObject
 type EntityRoleUpdateObject = original.EntityRoleUpdateObject
 type ErrorResponse = original.ErrorResponse
 type ExampleLabelObject = original.ExampleLabelObject
-type ExamplesClient = original.ExamplesClient
 type ExplicitListItem = original.ExplicitListItem
 type ExplicitListItemCreateObject = original.ExplicitListItemCreateObject
 type ExplicitListItemUpdateObject = original.ExplicitListItemUpdateObject
 type FeatureInfoObject = original.FeatureInfoObject
-type FeaturesClient = original.FeaturesClient
 type FeaturesResponseObject = original.FeaturesResponseObject
 type HierarchicalChildEntity = original.HierarchicalChildEntity
 type HierarchicalChildModelCreateObject = original.HierarchicalChildModelCreateObject
@@ -284,8 +285,8 @@ type JSONEntity = original.JSONEntity
 type JSONModelFeature = original.JSONModelFeature
 type JSONRegexFeature = original.JSONRegexFeature
 type JSONUtterance = original.JSONUtterance
-type LabelExampleResponse = original.LabelExampleResponse
 type LabeledUtterance = original.LabeledUtterance
+type LabelExampleResponse = original.LabelExampleResponse
 type ListApplicationInfoResponse = original.ListApplicationInfoResponse
 type ListAvailableCulture = original.ListAvailableCulture
 type ListAvailablePrebuiltEntityModel = original.ListAvailablePrebuiltEntityModel
@@ -313,7 +314,6 @@ type ListString = original.ListString
 type ListUUID = original.ListUUID
 type ListVersionInfo = original.ListVersionInfo
 type LuisApp = original.LuisApp
-type ModelClient = original.ModelClient
 type ModelCreateObject = original.ModelCreateObject
 type ModelInfo = original.ModelInfo
 type ModelInfoResponse = original.ModelInfoResponse
@@ -326,7 +326,6 @@ type PatternAny = original.PatternAny
 type PatternAnyEntityExtractor = original.PatternAnyEntityExtractor
 type PatternAnyModelCreateObject = original.PatternAnyModelCreateObject
 type PatternAnyModelUpdateObject = original.PatternAnyModelUpdateObject
-type PatternClient = original.PatternClient
 type PatternCreateObject = original.PatternCreateObject
 type PatternFeatureInfo = original.PatternFeatureInfo
 type PatternRule = original.PatternRule
@@ -334,10 +333,9 @@ type PatternRuleCreateObject = original.PatternRuleCreateObject
 type PatternRuleInfo = original.PatternRuleInfo
 type PatternRuleUpdateObject = original.PatternRuleUpdateObject
 type PatternUpdateObject = original.PatternUpdateObject
-type PermissionsClient = original.PermissionsClient
 type PersonalAssistantsResponse = original.PersonalAssistantsResponse
-type PhraseListFeatureInfo = original.PhraseListFeatureInfo
 type PhraselistCreateObject = original.PhraselistCreateObject
+type PhraseListFeatureInfo = original.PhraseListFeatureInfo
 type PhraselistUpdateObject = original.PhraselistUpdateObject
 type PrebuiltDomain = original.PrebuiltDomain
 type PrebuiltDomainCreateBaseObject = original.PrebuiltDomainCreateBaseObject
@@ -358,20 +356,25 @@ type String = original.String
 type SubClosedList = original.SubClosedList
 type SubClosedListResponse = original.SubClosedListResponse
 type TaskUpdateObject = original.TaskUpdateObject
-type TrainClient = original.TrainClient
-type UUID = original.UUID
 type UserAccessList = original.UserAccessList
 type UserCollaborator = original.UserCollaborator
+type UUID = original.UUID
 type VersionInfo = original.VersionInfo
-type VersionsClient = original.VersionsClient
 type WordListBaseUpdateObject = original.WordListBaseUpdateObject
 type WordListObject = original.WordListObject
+type PatternClient = original.PatternClient
+type PermissionsClient = original.PermissionsClient
+type TrainClient = original.TrainClient
+type VersionsClient = original.VersionsClient
 
+func NewAppsClient(azureRegion AzureRegions) AppsClient {
+	return original.NewAppsClient(azureRegion)
+}
 func New(azureRegion AzureRegions) BaseClient {
 	return original.New(azureRegion)
 }
-func NewAppsClient(azureRegion AzureRegions) AppsClient {
-	return original.NewAppsClient(azureRegion)
+func NewWithoutDefaults(azureRegion AzureRegions) BaseClient {
+	return original.NewWithoutDefaults(azureRegion)
 }
 func NewExamplesClient(azureRegion AzureRegions) ExamplesClient {
 	return original.NewExamplesClient(azureRegion)
@@ -382,32 +385,20 @@ func NewFeaturesClient(azureRegion AzureRegions) FeaturesClient {
 func NewModelClient(azureRegion AzureRegions) ModelClient {
 	return original.NewModelClient(azureRegion)
 }
-func NewPatternClient(azureRegion AzureRegions) PatternClient {
-	return original.NewPatternClient(azureRegion)
-}
-func NewPermissionsClient(azureRegion AzureRegions) PermissionsClient {
-	return original.NewPermissionsClient(azureRegion)
-}
-func NewTrainClient(azureRegion AzureRegions) TrainClient {
-	return original.NewTrainClient(azureRegion)
-}
-func NewVersionsClient(azureRegion AzureRegions) VersionsClient {
-	return original.NewVersionsClient(azureRegion)
-}
-func NewWithoutDefaults(azureRegion AzureRegions) BaseClient {
-	return original.NewWithoutDefaults(azureRegion)
-}
 func PossibleAzureRegionsValues() []AzureRegions {
 	return original.PossibleAzureRegionsValues()
 }
 func PossibleOperationStatusTypeValues() []OperationStatusType {
 	return original.PossibleOperationStatusTypeValues()
 }
-func PossibleReadableType10Values() []ReadableType10 {
-	return original.PossibleReadableType10Values()
+func PossibleReadableTypeValues() []ReadableType {
+	return original.PossibleReadableTypeValues()
 }
 func PossibleReadableType1Values() []ReadableType1 {
 	return original.PossibleReadableType1Values()
+}
+func PossibleReadableType10Values() []ReadableType10 {
+	return original.PossibleReadableType10Values()
 }
 func PossibleReadableType2Values() []ReadableType2 {
 	return original.PossibleReadableType2Values()
@@ -433,21 +424,30 @@ func PossibleReadableType8Values() []ReadableType8 {
 func PossibleReadableType9Values() []ReadableType9 {
 	return original.PossibleReadableType9Values()
 }
-func PossibleReadableTypeValues() []ReadableType {
-	return original.PossibleReadableTypeValues()
+func PossibleStatusValues() []Status {
+	return original.PossibleStatusValues()
 }
 func PossibleStatus1Values() []Status1 {
 	return original.PossibleStatus1Values()
 }
-func PossibleStatusValues() []Status {
-	return original.PossibleStatusValues()
-}
 func PossibleTrainingStatusValues() []TrainingStatus {
 	return original.PossibleTrainingStatusValues()
+}
+func NewPatternClient(azureRegion AzureRegions) PatternClient {
+	return original.NewPatternClient(azureRegion)
+}
+func NewPermissionsClient(azureRegion AzureRegions) PermissionsClient {
+	return original.NewPermissionsClient(azureRegion)
+}
+func NewTrainClient(azureRegion AzureRegions) TrainClient {
+	return original.NewTrainClient(azureRegion)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/latest"
 }
 func Version() string {
 	return original.Version()
+}
+func NewVersionsClient(azureRegion AzureRegions) VersionsClient {
+	return original.NewVersionsClient(azureRegion)
 }

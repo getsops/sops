@@ -24,25 +24,21 @@ import (
 	"net/http"
 )
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ClusterPackagesClient is the client for the ClusterPackages methods of the Servicefabric service.
 type ClusterPackagesClient struct {
 	BaseClient
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewClusterPackagesClient creates an instance of the ClusterPackagesClient client.
 func NewClusterPackagesClient(timeout *int32) ClusterPackagesClient {
 	return NewClusterPackagesClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewClusterPackagesClientWithBaseURI creates an instance of the ClusterPackagesClient client.
 func NewClusterPackagesClientWithBaseURI(baseURI string, timeout *int32) ClusterPackagesClient {
 	return ClusterPackagesClient{NewWithBaseURI(baseURI, timeout)}
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Register register cluster packages
 // Parameters:
 // registerClusterPackage - the package of the register cluster
@@ -68,7 +64,6 @@ func (client ClusterPackagesClient) Register(ctx context.Context, registerCluste
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RegisterPreparer prepares the Register request.
 func (client ClusterPackagesClient) RegisterPreparer(ctx context.Context, registerClusterPackage RegisterClusterPackage) (*http.Request, error) {
 	const APIVersion = "1.0.0"
@@ -89,7 +84,6 @@ func (client ClusterPackagesClient) RegisterPreparer(ctx context.Context, regist
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RegisterSender sends the Register request. The method will close the
 // http.Response Body if it receives an error.
 func (client ClusterPackagesClient) RegisterSender(req *http.Request) (*http.Response, error) {
@@ -97,7 +91,6 @@ func (client ClusterPackagesClient) RegisterSender(req *http.Request) (*http.Res
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // RegisterResponder handles the response to the Register request. The method always
 // closes the http.Response Body.
 func (client ClusterPackagesClient) RegisterResponder(resp *http.Response) (result String, err error) {
@@ -111,7 +104,6 @@ func (client ClusterPackagesClient) RegisterResponder(resp *http.Response) (resu
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Unregister unregister cluster packages
 // Parameters:
 // unregisterClusterPackage - the package of the unregister cluster
@@ -137,7 +129,6 @@ func (client ClusterPackagesClient) Unregister(ctx context.Context, unregisterCl
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnregisterPreparer prepares the Unregister request.
 func (client ClusterPackagesClient) UnregisterPreparer(ctx context.Context, unregisterClusterPackage UnregisterClusterPackage) (*http.Request, error) {
 	const APIVersion = "1.0.0"
@@ -158,7 +149,6 @@ func (client ClusterPackagesClient) UnregisterPreparer(ctx context.Context, unre
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnregisterSender sends the Unregister request. The method will close the
 // http.Response Body if it receives an error.
 func (client ClusterPackagesClient) UnregisterSender(req *http.Request) (*http.Response, error) {
@@ -166,7 +156,6 @@ func (client ClusterPackagesClient) UnregisterSender(req *http.Request) (*http.R
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // UnregisterResponder handles the response to the Unregister request. The method always
 // closes the http.Response Body.
 func (client ClusterPackagesClient) UnregisterResponder(resp *http.Response) (result String, err error) {

@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,16 +46,6 @@ func NewGlobalSchedulesClientWithBaseURI(baseURI string, subscriptionID string) 
 // name - the name of the schedule.
 // schedule - a schedule.
 func (client GlobalSchedulesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, name string, schedule Schedule) (result Schedule, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GlobalSchedulesClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: schedule,
 			Constraints: []validation.Constraint{{Target: "schedule.ScheduleProperties", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -132,16 +121,6 @@ func (client GlobalSchedulesClient) CreateOrUpdateResponder(resp *http.Response)
 // resourceGroupName - the name of the resource group.
 // name - the name of the schedule.
 func (client GlobalSchedulesClient) Delete(ctx context.Context, resourceGroupName string, name string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GlobalSchedulesClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.GlobalSchedulesClient", "Delete", nil, "Failure preparing request")
@@ -208,16 +187,6 @@ func (client GlobalSchedulesClient) DeleteResponder(resp *http.Response) (result
 // resourceGroupName - the name of the resource group.
 // name - the name of the schedule.
 func (client GlobalSchedulesClient) Execute(ctx context.Context, resourceGroupName string, name string) (result GlobalSchedulesExecuteFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GlobalSchedulesClient.Execute")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ExecutePreparer(ctx, resourceGroupName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.GlobalSchedulesClient", "Execute", nil, "Failure preparing request")
@@ -263,6 +232,10 @@ func (client GlobalSchedulesClient) ExecuteSender(req *http.Request) (future Glo
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -285,16 +258,6 @@ func (client GlobalSchedulesClient) ExecuteResponder(resp *http.Response) (resul
 // name - the name of the schedule.
 // expand - specify the $expand query. Example: 'properties($select=status)'
 func (client GlobalSchedulesClient) Get(ctx context.Context, resourceGroupName string, name string, expand string) (result Schedule, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GlobalSchedulesClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, name, expand)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.GlobalSchedulesClient", "Get", nil, "Failure preparing request")
@@ -368,16 +331,6 @@ func (client GlobalSchedulesClient) GetResponder(resp *http.Response) (result Sc
 // top - the maximum number of resources to return from the operation.
 // orderby - the ordering expression for the results, using OData notation.
 func (client GlobalSchedulesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationSchedulePage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GlobalSchedulesClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.rwcs.Response.Response != nil {
-				sc = result.rwcs.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName, expand, filter, top, orderby)
 	if err != nil {
@@ -453,8 +406,8 @@ func (client GlobalSchedulesClient) ListByResourceGroupResponder(resp *http.Resp
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client GlobalSchedulesClient) listByResourceGroupNextResults(ctx context.Context, lastResults ResponseWithContinuationSchedule) (result ResponseWithContinuationSchedule, err error) {
-	req, err := lastResults.responseWithContinuationSchedulePreparer(ctx)
+func (client GlobalSchedulesClient) listByResourceGroupNextResults(lastResults ResponseWithContinuationSchedule) (result ResponseWithContinuationSchedule, err error) {
+	req, err := lastResults.responseWithContinuationSchedulePreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dtl.GlobalSchedulesClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -475,16 +428,6 @@ func (client GlobalSchedulesClient) listByResourceGroupNextResults(ctx context.C
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client GlobalSchedulesClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationScheduleIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GlobalSchedulesClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName, expand, filter, top, orderby)
 	return
 }
@@ -496,16 +439,6 @@ func (client GlobalSchedulesClient) ListByResourceGroupComplete(ctx context.Cont
 // top - the maximum number of resources to return from the operation.
 // orderby - the ordering expression for the results, using OData notation.
 func (client GlobalSchedulesClient) ListBySubscription(ctx context.Context, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationSchedulePage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GlobalSchedulesClient.ListBySubscription")
-		defer func() {
-			sc := -1
-			if result.rwcs.Response.Response != nil {
-				sc = result.rwcs.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listBySubscriptionNextResults
 	req, err := client.ListBySubscriptionPreparer(ctx, expand, filter, top, orderby)
 	if err != nil {
@@ -580,8 +513,8 @@ func (client GlobalSchedulesClient) ListBySubscriptionResponder(resp *http.Respo
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client GlobalSchedulesClient) listBySubscriptionNextResults(ctx context.Context, lastResults ResponseWithContinuationSchedule) (result ResponseWithContinuationSchedule, err error) {
-	req, err := lastResults.responseWithContinuationSchedulePreparer(ctx)
+func (client GlobalSchedulesClient) listBySubscriptionNextResults(lastResults ResponseWithContinuationSchedule) (result ResponseWithContinuationSchedule, err error) {
+	req, err := lastResults.responseWithContinuationSchedulePreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dtl.GlobalSchedulesClient", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -602,16 +535,6 @@ func (client GlobalSchedulesClient) listBySubscriptionNextResults(ctx context.Co
 
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client GlobalSchedulesClient) ListBySubscriptionComplete(ctx context.Context, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationScheduleIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GlobalSchedulesClient.ListBySubscription")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListBySubscription(ctx, expand, filter, top, orderby)
 	return
 }
@@ -622,16 +545,6 @@ func (client GlobalSchedulesClient) ListBySubscriptionComplete(ctx context.Conte
 // name - the name of the schedule.
 // retargetScheduleProperties - properties for retargeting a virtual machine schedule.
 func (client GlobalSchedulesClient) Retarget(ctx context.Context, resourceGroupName string, name string, retargetScheduleProperties RetargetScheduleProperties) (result GlobalSchedulesRetargetFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GlobalSchedulesClient.Retarget")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.RetargetPreparer(ctx, resourceGroupName, name, retargetScheduleProperties)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.GlobalSchedulesClient", "Retarget", nil, "Failure preparing request")
@@ -679,6 +592,10 @@ func (client GlobalSchedulesClient) RetargetSender(req *http.Request) (future Gl
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -701,16 +618,6 @@ func (client GlobalSchedulesClient) RetargetResponder(resp *http.Response) (resu
 // name - the name of the schedule.
 // schedule - a schedule.
 func (client GlobalSchedulesClient) Update(ctx context.Context, resourceGroupName string, name string, schedule ScheduleFragment) (result Schedule, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GlobalSchedulesClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, name, schedule)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.GlobalSchedulesClient", "Update", nil, "Failure preparing request")

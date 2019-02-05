@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewEnginesClientWithBaseURI(baseURI string, subscriptionID string) EnginesC
 // filter - oData filter options.
 // skipToken - skipToken Filter.
 func (client EnginesClient) Get(ctx context.Context, vaultName string, resourceGroupName string, backupEngineName string, filter string, skipToken string) (result EngineBaseResource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EnginesClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, vaultName, resourceGroupName, backupEngineName, filter, skipToken)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.EnginesClient", "Get", nil, "Failure preparing request")
@@ -134,16 +123,6 @@ func (client EnginesClient) GetResponder(resp *http.Response) (result EngineBase
 // filter - oData filter options.
 // skipToken - skipToken Filter.
 func (client EnginesClient) List(ctx context.Context, vaultName string, resourceGroupName string, filter string, skipToken string) (result EngineBaseResourceListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EnginesClient.List")
-		defer func() {
-			sc := -1
-			if result.ebrl.Response.Response != nil {
-				sc = result.ebrl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, vaultName, resourceGroupName, filter, skipToken)
 	if err != nil {
@@ -214,8 +193,8 @@ func (client EnginesClient) ListResponder(resp *http.Response) (result EngineBas
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client EnginesClient) listNextResults(ctx context.Context, lastResults EngineBaseResourceList) (result EngineBaseResourceList, err error) {
-	req, err := lastResults.engineBaseResourceListPreparer(ctx)
+func (client EnginesClient) listNextResults(lastResults EngineBaseResourceList) (result EngineBaseResourceList, err error) {
+	req, err := lastResults.engineBaseResourceListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "backup.EnginesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -236,16 +215,6 @@ func (client EnginesClient) listNextResults(ctx context.Context, lastResults Eng
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client EnginesClient) ListComplete(ctx context.Context, vaultName string, resourceGroupName string, filter string, skipToken string) (result EngineBaseResourceListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EnginesClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, vaultName, resourceGroupName, filter, skipToken)
 	return
 }

@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -41,23 +40,13 @@ func NewConnectionTypeClientWithBaseURI(baseURI string, subscriptionID string) C
 	return ConnectionTypeClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
-// CreateOrUpdate create a connection type.
+// CreateOrUpdate create a connectiontype.
 // Parameters:
 // resourceGroupName - name of an Azure Resource group.
 // automationAccountName - the name of the automation account.
-// connectionTypeName - the parameters supplied to the create or update connection type operation.
-// parameters - the parameters supplied to the create or update connection type operation.
+// connectionTypeName - the parameters supplied to the create or update connectiontype operation.
+// parameters - the parameters supplied to the create or update connectiontype operation.
 func (client ConnectionTypeClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, automationAccountName string, connectionTypeName string, parameters ConnectionTypeCreateOrUpdateParameters) (result ConnectionType, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ConnectionTypeClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -135,22 +124,12 @@ func (client ConnectionTypeClient) CreateOrUpdateResponder(resp *http.Response) 
 	return
 }
 
-// Delete delete the connection type.
+// Delete delete the connectiontype.
 // Parameters:
 // resourceGroupName - name of an Azure Resource group.
 // automationAccountName - the name of the automation account.
-// connectionTypeName - the name of connection type.
+// connectionTypeName - the name of connectiontype.
 func (client ConnectionTypeClient) Delete(ctx context.Context, resourceGroupName string, automationAccountName string, connectionTypeName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ConnectionTypeClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -221,22 +200,12 @@ func (client ConnectionTypeClient) DeleteResponder(resp *http.Response) (result 
 	return
 }
 
-// Get retrieve the connection type identified by connection type name.
+// Get retrieve the connectiontype identified by connectiontype name.
 // Parameters:
 // resourceGroupName - name of an Azure Resource group.
 // automationAccountName - the name of the automation account.
-// connectionTypeName - the name of connection type.
+// connectionTypeName - the name of connectiontype.
 func (client ConnectionTypeClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string, connectionTypeName string) (result ConnectionType, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ConnectionTypeClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -308,21 +277,11 @@ func (client ConnectionTypeClient) GetResponder(resp *http.Response) (result Con
 	return
 }
 
-// ListByAutomationAccount retrieve a list of connection types.
+// ListByAutomationAccount retrieve a list of connectiontypes.
 // Parameters:
 // resourceGroupName - name of an Azure Resource group.
 // automationAccountName - the name of the automation account.
 func (client ConnectionTypeClient) ListByAutomationAccount(ctx context.Context, resourceGroupName string, automationAccountName string) (result ConnectionTypeListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ConnectionTypeClient.ListByAutomationAccount")
-		defer func() {
-			sc := -1
-			if result.ctlr.Response.Response != nil {
-				sc = result.ctlr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -395,8 +354,8 @@ func (client ConnectionTypeClient) ListByAutomationAccountResponder(resp *http.R
 }
 
 // listByAutomationAccountNextResults retrieves the next set of results, if any.
-func (client ConnectionTypeClient) listByAutomationAccountNextResults(ctx context.Context, lastResults ConnectionTypeListResult) (result ConnectionTypeListResult, err error) {
-	req, err := lastResults.connectionTypeListResultPreparer(ctx)
+func (client ConnectionTypeClient) listByAutomationAccountNextResults(lastResults ConnectionTypeListResult) (result ConnectionTypeListResult, err error) {
+	req, err := lastResults.connectionTypeListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "automation.ConnectionTypeClient", "listByAutomationAccountNextResults", nil, "Failure preparing next results request")
 	}
@@ -417,16 +376,6 @@ func (client ConnectionTypeClient) listByAutomationAccountNextResults(ctx contex
 
 // ListByAutomationAccountComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ConnectionTypeClient) ListByAutomationAccountComplete(ctx context.Context, resourceGroupName string, automationAccountName string) (result ConnectionTypeListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ConnectionTypeClient.ListByAutomationAccount")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByAutomationAccount(ctx, resourceGroupName, automationAccountName)
 	return
 }

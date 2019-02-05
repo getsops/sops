@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2018 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,16 +19,15 @@
 
 package account
 
-import (
-	"context"
+import original "github.com/Azure/azure-sdk-for-go/services/preview/datalake/store/mgmt/2015-10-01-preview/account"
 
-	original "github.com/Azure/azure-sdk-for-go/services/preview/datalake/store/mgmt/2015-10-01-preview/account"
-)
+type Client = original.Client
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
+type BaseClient = original.BaseClient
 type DataLakeStoreAccountState = original.DataLakeStoreAccountState
 
 const (
@@ -86,8 +85,6 @@ const (
 )
 
 type AzureAsyncOperationResult = original.AzureAsyncOperationResult
-type BaseClient = original.BaseClient
-type Client = original.Client
 type CreateFuture = original.CreateFuture
 type DataLakeStoreAccount = original.DataLakeStoreAccount
 type DataLakeStoreAccountListResult = original.DataLakeStoreAccountListResult
@@ -108,26 +105,14 @@ type InnerError = original.InnerError
 type KeyVaultMetaInfo = original.KeyVaultMetaInfo
 type UpdateFuture = original.UpdateFuture
 
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
-}
 func NewClient(subscriptionID string) Client {
 	return original.NewClient(subscriptionID)
 }
 func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
 	return original.NewClientWithBaseURI(baseURI, subscriptionID)
 }
-func NewDataLakeStoreAccountListResultIterator(page DataLakeStoreAccountListResultPage) DataLakeStoreAccountListResultIterator {
-	return original.NewDataLakeStoreAccountListResultIterator(page)
-}
-func NewDataLakeStoreAccountListResultPage(getNextPage func(context.Context, DataLakeStoreAccountListResult) (DataLakeStoreAccountListResult, error)) DataLakeStoreAccountListResultPage {
-	return original.NewDataLakeStoreAccountListResultPage(getNextPage)
-}
-func NewDataLakeStoreFirewallRuleListResultIterator(page DataLakeStoreFirewallRuleListResultPage) DataLakeStoreFirewallRuleListResultIterator {
-	return original.NewDataLakeStoreFirewallRuleListResultIterator(page)
-}
-func NewDataLakeStoreFirewallRuleListResultPage(getNextPage func(context.Context, DataLakeStoreFirewallRuleListResult) (DataLakeStoreFirewallRuleListResult, error)) DataLakeStoreFirewallRuleListResultPage {
-	return original.NewDataLakeStoreFirewallRuleListResultPage(getNextPage)
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
 }
 func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 	return original.NewWithBaseURI(baseURI, subscriptionID)

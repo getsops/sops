@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"io"
 	"net/http"
 )
@@ -48,16 +47,6 @@ func NewRunbookDraftClientWithBaseURI(baseURI string, subscriptionID string) Run
 // automationAccountName - the name of the automation account.
 // runbookName - the runbook name.
 func (client RunbookDraftClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string, runbookName string) (result RunbookDraft, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RunbookDraftClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -135,16 +124,6 @@ func (client RunbookDraftClient) GetResponder(resp *http.Response) (result Runbo
 // automationAccountName - the name of the automation account.
 // runbookName - the runbook name.
 func (client RunbookDraftClient) GetContent(ctx context.Context, resourceGroupName string, automationAccountName string, runbookName string) (result ReadCloser, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RunbookDraftClient.GetContent")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -221,16 +200,6 @@ func (client RunbookDraftClient) GetContentResponder(resp *http.Response) (resul
 // automationAccountName - the name of the automation account.
 // runbookName - the parameters supplied to the publish runbook operation.
 func (client RunbookDraftClient) Publish(ctx context.Context, resourceGroupName string, automationAccountName string, runbookName string) (result RunbookDraftPublishFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RunbookDraftClient.Publish")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -285,6 +254,10 @@ func (client RunbookDraftClient) PublishSender(req *http.Request) (future Runboo
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -308,16 +281,6 @@ func (client RunbookDraftClient) PublishResponder(resp *http.Response) (result a
 // runbookName - the runbook name.
 // runbookContent - the runbook draft content.
 func (client RunbookDraftClient) ReplaceContent(ctx context.Context, resourceGroupName string, automationAccountName string, runbookName string, runbookContent io.ReadCloser) (result RunbookDraftReplaceContentFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RunbookDraftClient.ReplaceContent")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -374,6 +337,10 @@ func (client RunbookDraftClient) ReplaceContentSender(req *http.Request) (future
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -397,16 +364,6 @@ func (client RunbookDraftClient) ReplaceContentResponder(resp *http.Response) (r
 // automationAccountName - the name of the automation account.
 // runbookName - the runbook name.
 func (client RunbookDraftClient) UndoEdit(ctx context.Context, resourceGroupName string, automationAccountName string, runbookName string) (result RunbookDraftUndoEditResult, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RunbookDraftClient.UndoEdit")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,7 +47,7 @@ func NewUsageDetailsClientWithBaseURI(baseURI string, subscriptionID string) Usa
 // scope - the scope of the usage details. The scope can be '/subscriptions/{subscriptionId}' for a
 // subscription, or
 // '/subscriptions/{subscriptionId}/providers/Microsoft.Billing/billingPeriods/{billingPeriodName}' for a
-// billing period.
+// billing perdiod.
 // expand - may be used to expand the properties/additionalProperties or properties/meterDetails within a list
 // of usage details. By default, these fields are not included when listing usage details.
 // filter - may be used to filter usageDetails by properties/usageEnd (Utc time), properties/usageStart (Utc
@@ -59,16 +58,6 @@ func NewUsageDetailsClientWithBaseURI(baseURI string, subscriptionID string) Usa
 // specifies a starting point to use for subsequent calls.
 // top - may be used to limit the number of results to the most recent N usageDetails.
 func (client UsageDetailsClient) List(ctx context.Context, scope string, expand string, filter string, skiptoken string, top *int32) (result UsageDetailsListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/UsageDetailsClient.List")
-		defer func() {
-			sc := -1
-			if result.udlr.Response.Response != nil {
-				sc = result.udlr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -152,8 +141,8 @@ func (client UsageDetailsClient) ListResponder(resp *http.Response) (result Usag
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client UsageDetailsClient) listNextResults(ctx context.Context, lastResults UsageDetailsListResult) (result UsageDetailsListResult, err error) {
-	req, err := lastResults.usageDetailsListResultPreparer(ctx)
+func (client UsageDetailsClient) listNextResults(lastResults UsageDetailsListResult) (result UsageDetailsListResult, err error) {
+	req, err := lastResults.usageDetailsListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "consumption.UsageDetailsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -174,16 +163,6 @@ func (client UsageDetailsClient) listNextResults(ctx context.Context, lastResult
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client UsageDetailsClient) ListComplete(ctx context.Context, scope string, expand string, filter string, skiptoken string, top *int32) (result UsageDetailsListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/UsageDetailsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, scope, expand, filter, skiptoken, top)
 	return
 }

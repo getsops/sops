@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -67,16 +66,6 @@ func NewMetricsClientWithBaseURI(baseURI string) MetricsClient {
 // filter - an expression used to filter the results.  This value should be a valid OData filter expression
 // where the keys of each clause should be applicable dimensions for the metric you are retrieving.
 func (client MetricsClient) Get(ctx context.Context, appID string, metricID MetricID, timespan string, interval *string, aggregation []MetricsAggregation, segment []MetricsSegment, top *int32, orderby string, filter string) (result MetricsResult, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/MetricsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: aggregation,
 			Constraints: []validation.Constraint{{Target: "aggregation", Name: validation.Null, Rule: false,
@@ -171,16 +160,6 @@ func (client MetricsClient) GetResponder(resp *http.Response) (result MetricsRes
 // appID - ID of the application. This is Application ID from the API Access settings blade in the Azure
 // portal.
 func (client MetricsClient) GetMetadata(ctx context.Context, appID string) (result SetObject, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/MetricsClient.GetMetadata")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetMetadataPreparer(ctx, appID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.MetricsClient", "GetMetadata", nil, "Failure preparing request")
@@ -241,16 +220,6 @@ func (client MetricsClient) GetMetadataResponder(resp *http.Response) (result Se
 // portal.
 // body - the batched metrics query.
 func (client MetricsClient) GetMultiple(ctx context.Context, appID string, body []MetricsPostBodySchema) (result ListMetricsResultsItem, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/MetricsClient.GetMultiple")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: body,
 			Constraints: []validation.Constraint{{Target: "body", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {

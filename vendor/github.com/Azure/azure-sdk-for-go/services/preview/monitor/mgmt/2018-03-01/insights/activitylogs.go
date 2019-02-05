@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -60,16 +59,6 @@ func NewActivityLogsClientWithBaseURI(baseURI string, subscriptionID string) Act
 // *operationId*, *operationName*, *properties*, *resourceGroupName*, *resourceProviderName*, *resourceId*,
 // *status*, *submissionTimestamp*, *subStatus*, *subscriptionId*
 func (client ActivityLogsClient) List(ctx context.Context, filter string, selectParameter string) (result EventDataCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ActivityLogsClient.List")
-		defer func() {
-			sc := -1
-			if result.edc.Response.Response != nil {
-				sc = result.edc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, filter, selectParameter)
 	if err != nil {
@@ -138,8 +127,8 @@ func (client ActivityLogsClient) ListResponder(resp *http.Response) (result Even
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ActivityLogsClient) listNextResults(ctx context.Context, lastResults EventDataCollection) (result EventDataCollection, err error) {
-	req, err := lastResults.eventDataCollectionPreparer(ctx)
+func (client ActivityLogsClient) listNextResults(lastResults EventDataCollection) (result EventDataCollection, err error) {
+	req, err := lastResults.eventDataCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "insights.ActivityLogsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -160,16 +149,6 @@ func (client ActivityLogsClient) listNextResults(ctx context.Context, lastResult
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ActivityLogsClient) ListComplete(ctx context.Context, filter string, selectParameter string) (result EventDataCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ActivityLogsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, filter, selectParameter)
 	return
 }

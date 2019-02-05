@@ -22,45 +22,30 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // SignInSettingsClient is the apiManagement Client
 type SignInSettingsClient struct {
 	BaseClient
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewSignInSettingsClient creates an instance of the SignInSettingsClient client.
 func NewSignInSettingsClient(subscriptionID string) SignInSettingsClient {
 	return NewSignInSettingsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewSignInSettingsClientWithBaseURI creates an instance of the SignInSettingsClient client.
 func NewSignInSettingsClientWithBaseURI(baseURI string, subscriptionID string) SignInSettingsClient {
 	return SignInSettingsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdate create or Update Sign-In settings.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // parameters - create or update parameters.
 func (client SignInSettingsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, parameters PortalSigninSettings) (result PortalSigninSettings, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SignInSettingsClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -90,7 +75,6 @@ func (client SignInSettingsClient) CreateOrUpdate(ctx context.Context, resourceG
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
 func (client SignInSettingsClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, parameters PortalSigninSettings) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -114,7 +98,6 @@ func (client SignInSettingsClient) CreateOrUpdatePreparer(ctx context.Context, r
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client SignInSettingsClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
@@ -122,7 +105,6 @@ func (client SignInSettingsClient) CreateOrUpdateSender(req *http.Request) (*htt
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
 // closes the http.Response Body.
 func (client SignInSettingsClient) CreateOrUpdateResponder(resp *http.Response) (result PortalSigninSettings, err error) {
@@ -136,22 +118,11 @@ func (client SignInSettingsClient) CreateOrUpdateResponder(resp *http.Response) 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Get get Sign-In settings.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client SignInSettingsClient) Get(ctx context.Context, resourceGroupName string, serviceName string) (result PortalSigninSettings, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SignInSettingsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -181,7 +152,6 @@ func (client SignInSettingsClient) Get(ctx context.Context, resourceGroupName st
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetPreparer prepares the Get request.
 func (client SignInSettingsClient) GetPreparer(ctx context.Context, resourceGroupName string, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -203,7 +173,6 @@ func (client SignInSettingsClient) GetPreparer(ctx context.Context, resourceGrou
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client SignInSettingsClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -211,7 +180,6 @@ func (client SignInSettingsClient) GetSender(req *http.Request) (*http.Response,
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client SignInSettingsClient) GetResponder(resp *http.Response) (result PortalSigninSettings, err error) {
@@ -225,22 +193,11 @@ func (client SignInSettingsClient) GetResponder(resp *http.Response) (result Por
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTag gets the entity state (Etag) version of the SignInSettings.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client SignInSettingsClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SignInSettingsClient.GetEntityTag")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -270,7 +227,6 @@ func (client SignInSettingsClient) GetEntityTag(ctx context.Context, resourceGro
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagPreparer prepares the GetEntityTag request.
 func (client SignInSettingsClient) GetEntityTagPreparer(ctx context.Context, resourceGroupName string, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -292,7 +248,6 @@ func (client SignInSettingsClient) GetEntityTagPreparer(ctx context.Context, res
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagSender sends the GetEntityTag request. The method will close the
 // http.Response Body if it receives an error.
 func (client SignInSettingsClient) GetEntityTagSender(req *http.Request) (*http.Response, error) {
@@ -300,7 +255,6 @@ func (client SignInSettingsClient) GetEntityTagSender(req *http.Request) (*http.
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetEntityTagResponder handles the response to the GetEntityTag request. The method always
 // closes the http.Response Body.
 func (client SignInSettingsClient) GetEntityTagResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -313,7 +267,6 @@ func (client SignInSettingsClient) GetEntityTagResponder(resp *http.Response) (r
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Update update Sign-In settings.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -322,16 +275,6 @@ func (client SignInSettingsClient) GetEntityTagResponder(resp *http.Response) (r
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client SignInSettingsClient) Update(ctx context.Context, resourceGroupName string, serviceName string, parameters PortalSigninSettings, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SignInSettingsClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -361,7 +304,6 @@ func (client SignInSettingsClient) Update(ctx context.Context, resourceGroupName
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdatePreparer prepares the Update request.
 func (client SignInSettingsClient) UpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, parameters PortalSigninSettings, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -386,7 +328,6 @@ func (client SignInSettingsClient) UpdatePreparer(ctx context.Context, resourceG
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client SignInSettingsClient) UpdateSender(req *http.Request) (*http.Response, error) {
@@ -394,7 +335,6 @@ func (client SignInSettingsClient) UpdateSender(req *http.Request) (*http.Respon
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateResponder handles the response to the Update request. The method always
 // closes the http.Response Body.
 func (client SignInSettingsClient) UpdateResponder(resp *http.Response) (result autorest.Response, err error) {

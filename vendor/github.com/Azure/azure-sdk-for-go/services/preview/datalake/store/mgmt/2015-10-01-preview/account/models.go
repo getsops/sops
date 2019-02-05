@@ -18,19 +18,14 @@ package account
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
-	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
-	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
-
-// The package's fully qualified name.
-const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/datalake/store/mgmt/2015-10-01-preview/account"
 
 // DataLakeStoreAccountState enumerates the values for data lake store account state.
 type DataLakeStoreAccountState string
@@ -152,13 +147,13 @@ func PossibleOperationStatusValues() []OperationStatus {
 }
 
 // AzureAsyncOperationResult the response body contains the status of the specified asynchronous operation,
-// indicating whether it has succeeded, is in progress, or has failed. Note that this status is distinct
-// from the HTTP status code returned for the Get Operation Status operation itself. If the asynchronous
-// operation succeeded, the response body includes the HTTP status code for the successful request. If the
-// asynchronous operation failed, the response body includes the HTTP status code for the failed request
-// and error information regarding the failure.
+// indicating whether it has succeeded, is in progress, or has failed. Note that this status is distinct from the
+// HTTP status code returned for the Get Operation Status operation itself. If the asynchronous operation
+// succeeded, the response body includes the HTTP status code for the successful request. If the asynchronous
+// operation failed, the response body includes the HTTP status code for the failed request and error information
+// regarding the failure.
 type AzureAsyncOperationResult struct {
-	// Status - the status of the AzureAsyncOperation. Possible values include: 'OperationStatusInProgress', 'OperationStatusSucceeded', 'OperationStatusFailed'
+	// Status - the status of the AzureAsuncOperation. Possible values include: 'OperationStatusInProgress', 'OperationStatusSucceeded', 'OperationStatusFailed'
 	Status OperationStatus `json:"status,omitempty"`
 	Error  *Error          `json:"error,omitempty"`
 }
@@ -248,44 +243,26 @@ type DataLakeStoreAccountListResult struct {
 	Count *int64 `json:"count,omitempty"`
 }
 
-// DataLakeStoreAccountListResultIterator provides access to a complete listing of DataLakeStoreAccount
-// values.
+// DataLakeStoreAccountListResultIterator provides access to a complete listing of DataLakeStoreAccount values.
 type DataLakeStoreAccountListResultIterator struct {
 	i    int
 	page DataLakeStoreAccountListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *DataLakeStoreAccountListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DataLakeStoreAccountListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *DataLakeStoreAccountListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *DataLakeStoreAccountListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -307,11 +284,6 @@ func (iter DataLakeStoreAccountListResultIterator) Value() DataLakeStoreAccount 
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the DataLakeStoreAccountListResultIterator type.
-func NewDataLakeStoreAccountListResultIterator(page DataLakeStoreAccountListResultPage) DataLakeStoreAccountListResultIterator {
-	return DataLakeStoreAccountListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (dlsalr DataLakeStoreAccountListResult) IsEmpty() bool {
 	return dlsalr.Value == nil || len(*dlsalr.Value) == 0
@@ -319,11 +291,11 @@ func (dlsalr DataLakeStoreAccountListResult) IsEmpty() bool {
 
 // dataLakeStoreAccountListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (dlsalr DataLakeStoreAccountListResult) dataLakeStoreAccountListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (dlsalr DataLakeStoreAccountListResult) dataLakeStoreAccountListResultPreparer() (*http.Request, error) {
 	if dlsalr.NextLink == nil || len(to.String(dlsalr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(dlsalr.NextLink)))
@@ -331,36 +303,19 @@ func (dlsalr DataLakeStoreAccountListResult) dataLakeStoreAccountListResultPrepa
 
 // DataLakeStoreAccountListResultPage contains a page of DataLakeStoreAccount values.
 type DataLakeStoreAccountListResultPage struct {
-	fn     func(context.Context, DataLakeStoreAccountListResult) (DataLakeStoreAccountListResult, error)
+	fn     func(DataLakeStoreAccountListResult) (DataLakeStoreAccountListResult, error)
 	dlsalr DataLakeStoreAccountListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *DataLakeStoreAccountListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DataLakeStoreAccountListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.dlsalr)
+func (page *DataLakeStoreAccountListResultPage) Next() error {
+	next, err := page.fn(page.dlsalr)
 	if err != nil {
 		return err
 	}
 	page.dlsalr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *DataLakeStoreAccountListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -379,11 +334,6 @@ func (page DataLakeStoreAccountListResultPage) Values() []DataLakeStoreAccount {
 		return nil
 	}
 	return *page.dlsalr.Value
-}
-
-// Creates a new instance of the DataLakeStoreAccountListResultPage type.
-func NewDataLakeStoreAccountListResultPage(getNextPage func(context.Context, DataLakeStoreAccountListResult) (DataLakeStoreAccountListResult, error)) DataLakeStoreAccountListResultPage {
-	return DataLakeStoreAccountListResultPage{fn: getNextPage}
 }
 
 // DataLakeStoreAccountProperties data Lake Store account properties information
@@ -419,44 +369,26 @@ type DataLakeStoreFirewallRuleListResult struct {
 	Count *int64 `json:"count,omitempty"`
 }
 
-// DataLakeStoreFirewallRuleListResultIterator provides access to a complete listing of FirewallRule
-// values.
+// DataLakeStoreFirewallRuleListResultIterator provides access to a complete listing of FirewallRule values.
 type DataLakeStoreFirewallRuleListResultIterator struct {
 	i    int
 	page DataLakeStoreFirewallRuleListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *DataLakeStoreFirewallRuleListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DataLakeStoreFirewallRuleListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *DataLakeStoreFirewallRuleListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *DataLakeStoreFirewallRuleListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -478,11 +410,6 @@ func (iter DataLakeStoreFirewallRuleListResultIterator) Value() FirewallRule {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the DataLakeStoreFirewallRuleListResultIterator type.
-func NewDataLakeStoreFirewallRuleListResultIterator(page DataLakeStoreFirewallRuleListResultPage) DataLakeStoreFirewallRuleListResultIterator {
-	return DataLakeStoreFirewallRuleListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (dlsfrlr DataLakeStoreFirewallRuleListResult) IsEmpty() bool {
 	return dlsfrlr.Value == nil || len(*dlsfrlr.Value) == 0
@@ -490,11 +417,11 @@ func (dlsfrlr DataLakeStoreFirewallRuleListResult) IsEmpty() bool {
 
 // dataLakeStoreFirewallRuleListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (dlsfrlr DataLakeStoreFirewallRuleListResult) dataLakeStoreFirewallRuleListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (dlsfrlr DataLakeStoreFirewallRuleListResult) dataLakeStoreFirewallRuleListResultPreparer() (*http.Request, error) {
 	if dlsfrlr.NextLink == nil || len(to.String(dlsfrlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(dlsfrlr.NextLink)))
@@ -502,36 +429,19 @@ func (dlsfrlr DataLakeStoreFirewallRuleListResult) dataLakeStoreFirewallRuleList
 
 // DataLakeStoreFirewallRuleListResultPage contains a page of FirewallRule values.
 type DataLakeStoreFirewallRuleListResultPage struct {
-	fn      func(context.Context, DataLakeStoreFirewallRuleListResult) (DataLakeStoreFirewallRuleListResult, error)
+	fn      func(DataLakeStoreFirewallRuleListResult) (DataLakeStoreFirewallRuleListResult, error)
 	dlsfrlr DataLakeStoreFirewallRuleListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *DataLakeStoreFirewallRuleListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DataLakeStoreFirewallRuleListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.dlsfrlr)
+func (page *DataLakeStoreFirewallRuleListResultPage) Next() error {
+	next, err := page.fn(page.dlsfrlr)
 	if err != nil {
 		return err
 	}
 	page.dlsfrlr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *DataLakeStoreFirewallRuleListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -550,11 +460,6 @@ func (page DataLakeStoreFirewallRuleListResultPage) Values() []FirewallRule {
 		return nil
 	}
 	return *page.dlsfrlr.Value
-}
-
-// Creates a new instance of the DataLakeStoreFirewallRuleListResultPage type.
-func NewDataLakeStoreFirewallRuleListResultPage(getNextPage func(context.Context, DataLakeStoreFirewallRuleListResult) (DataLakeStoreFirewallRuleListResult, error)) DataLakeStoreFirewallRuleListResultPage {
-	return DataLakeStoreFirewallRuleListResultPage{fn: getNextPage}
 }
 
 // DeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.

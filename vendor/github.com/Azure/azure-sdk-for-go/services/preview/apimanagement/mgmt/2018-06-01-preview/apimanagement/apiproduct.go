@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -52,16 +51,6 @@ func NewAPIProductClientWithBaseURI(baseURI string, subscriptionID string) APIPr
 // top - number of records to return.
 // skip - number of records to skip.
 func (client APIProductClient) ListByApis(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result ProductCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIProductClient.ListByApis")
-		defer func() {
-			sc := -1
-			if result.pc.Response.Response != nil {
-				sc = result.pc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -154,8 +143,8 @@ func (client APIProductClient) ListByApisResponder(resp *http.Response) (result 
 }
 
 // listByApisNextResults retrieves the next set of results, if any.
-func (client APIProductClient) listByApisNextResults(ctx context.Context, lastResults ProductCollection) (result ProductCollection, err error) {
-	req, err := lastResults.productCollectionPreparer(ctx)
+func (client APIProductClient) listByApisNextResults(lastResults ProductCollection) (result ProductCollection, err error) {
+	req, err := lastResults.productCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.APIProductClient", "listByApisNextResults", nil, "Failure preparing next results request")
 	}
@@ -176,16 +165,6 @@ func (client APIProductClient) listByApisNextResults(ctx context.Context, lastRe
 
 // ListByApisComplete enumerates all values, automatically crossing page boundaries as required.
 func (client APIProductClient) ListByApisComplete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result ProductCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIProductClient.ListByApis")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByApis(ctx, resourceGroupName, serviceName, apiid, filter, top, skip)
 	return
 }

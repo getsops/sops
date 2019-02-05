@@ -24,9 +24,6 @@ import (
 	"net/http"
 )
 
-// The package's fully qualified name.
-const fqdn = "github.com/Azure/azure-sdk-for-go/services/eventgrid/mgmt/2018-01-01/eventgrid"
-
 // EndpointType enumerates the values for endpoint type.
 type EndpointType string
 
@@ -128,8 +125,7 @@ func PossibleTopicTypeProvisioningStateValues() []TopicTypeProvisioningState {
 	return []TopicTypeProvisioningState{TopicTypeProvisioningStateCanceled, TopicTypeProvisioningStateCreating, TopicTypeProvisioningStateDeleting, TopicTypeProvisioningStateFailed, TopicTypeProvisioningStateSucceeded, TopicTypeProvisioningStateUpdating}
 }
 
-// EventHubEventSubscriptionDestination information about the event hub destination for an event
-// subscription
+// EventHubEventSubscriptionDestination information about the event hub destination for an event subscription
 type EventHubEventSubscriptionDestination struct {
 	// EventHubEventSubscriptionDestinationProperties - Event Hub Properties of the event subscription destination
 	*EventHubEventSubscriptionDestinationProperties `json:"properties,omitempty"`
@@ -501,8 +497,8 @@ func (future *EventSubscriptionsCreateOrUpdateFuture) Result(client EventSubscri
 	return
 }
 
-// EventSubscriptionsDeleteFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// EventSubscriptionsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type EventSubscriptionsDeleteFuture struct {
 	azure.Future
 }
@@ -531,8 +527,8 @@ type EventSubscriptionsListResult struct {
 	Value *[]EventSubscription `json:"value,omitempty"`
 }
 
-// EventSubscriptionsUpdateFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// EventSubscriptionsUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type EventSubscriptionsUpdateFuture struct {
 	azure.Future
 }
@@ -868,14 +864,13 @@ type TopicProperties struct {
 	Endpoint *string `json:"endpoint,omitempty"`
 }
 
-// TopicRegenerateKeyRequest topic regenerate share access key request
+// TopicRegenerateKeyRequest topic regenerate share access key key request
 type TopicRegenerateKeyRequest struct {
 	// KeyName - Key name to regenerate key1 or key2
 	KeyName *string `json:"keyName,omitempty"`
 }
 
-// TopicsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// TopicsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type TopicsCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -1198,8 +1193,8 @@ func (whesd *WebHookEventSubscriptionDestination) UnmarshalJSON(body []byte) err
 	return nil
 }
 
-// WebHookEventSubscriptionDestinationProperties information about the webhook destination properties for
-// an event subscription.
+// WebHookEventSubscriptionDestinationProperties information about the webhook destination properties for an event
+// subscription.
 type WebHookEventSubscriptionDestinationProperties struct {
 	// EndpointURL - The URL that represents the endpoint of the destination of an event subscription.
 	EndpointURL *string `json:"endpointUrl,omitempty"`

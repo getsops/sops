@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,16 +46,6 @@ func NewAgentRegistrationInformationClientWithBaseURI(baseURI string, subscripti
 // resourceGroupName - name of an Azure Resource group.
 // automationAccountName - the name of the automation account.
 func (client AgentRegistrationInformationClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string) (result AgentRegistration, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AgentRegistrationInformationClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -133,16 +122,6 @@ func (client AgentRegistrationInformationClient) GetResponder(resp *http.Respons
 // automationAccountName - the name of the automation account.
 // parameters - the name of the agent registration key to be regenerated
 func (client AgentRegistrationInformationClient) RegenerateKey(ctx context.Context, resourceGroupName string, automationAccountName string, parameters AgentRegistrationRegenerateKeyParameter) (result AgentRegistration, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AgentRegistrationInformationClient.RegenerateKey")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

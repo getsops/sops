@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,16 +48,6 @@ func NewConsumerGroupsClientWithBaseURI(baseURI string, subscriptionID string) C
 // consumerGroupName - the consumer group name
 // parameters - parameters supplied to create or update a consumer group resource.
 func (client ConsumerGroupsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, namespaceName string, eventHubName string, consumerGroupName string, parameters ConsumerGroup) (result ConsumerGroup, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ConsumerGroupsClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -147,16 +136,6 @@ func (client ConsumerGroupsClient) CreateOrUpdateResponder(resp *http.Response) 
 // eventHubName - the Event Hub name
 // consumerGroupName - the consumer group name
 func (client ConsumerGroupsClient) Delete(ctx context.Context, resourceGroupName string, namespaceName string, eventHubName string, consumerGroupName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ConsumerGroupsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -242,16 +221,6 @@ func (client ConsumerGroupsClient) DeleteResponder(resp *http.Response) (result 
 // eventHubName - the Event Hub name
 // consumerGroupName - the consumer group name
 func (client ConsumerGroupsClient) Get(ctx context.Context, resourceGroupName string, namespaceName string, eventHubName string, consumerGroupName string) (result ConsumerGroup, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ConsumerGroupsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -342,16 +311,6 @@ func (client ConsumerGroupsClient) GetResponder(resp *http.Response) (result Con
 // starting point to use for subsequent calls.
 // top - may be used to limit the number of results to the most recent N usageDetails.
 func (client ConsumerGroupsClient) ListByEventHub(ctx context.Context, resourceGroupName string, namespaceName string, eventHubName string, skip *int32, top *int32) (result ConsumerGroupListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ConsumerGroupsClient.ListByEventHub")
-		defer func() {
-			sc := -1
-			if result.cglr.Response.Response != nil {
-				sc = result.cglr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -445,8 +404,8 @@ func (client ConsumerGroupsClient) ListByEventHubResponder(resp *http.Response) 
 }
 
 // listByEventHubNextResults retrieves the next set of results, if any.
-func (client ConsumerGroupsClient) listByEventHubNextResults(ctx context.Context, lastResults ConsumerGroupListResult) (result ConsumerGroupListResult, err error) {
-	req, err := lastResults.consumerGroupListResultPreparer(ctx)
+func (client ConsumerGroupsClient) listByEventHubNextResults(lastResults ConsumerGroupListResult) (result ConsumerGroupListResult, err error) {
+	req, err := lastResults.consumerGroupListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "eventhub.ConsumerGroupsClient", "listByEventHubNextResults", nil, "Failure preparing next results request")
 	}
@@ -467,16 +426,6 @@ func (client ConsumerGroupsClient) listByEventHubNextResults(ctx context.Context
 
 // ListByEventHubComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ConsumerGroupsClient) ListByEventHubComplete(ctx context.Context, resourceGroupName string, namespaceName string, eventHubName string, skip *int32, top *int32) (result ConsumerGroupListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ConsumerGroupsClient.ListByEventHub")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByEventHub(ctx, resourceGroupName, namespaceName, eventHubName, skip, top)
 	return
 }

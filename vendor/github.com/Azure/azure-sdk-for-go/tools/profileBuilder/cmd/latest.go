@@ -20,15 +20,18 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"path/filepath"
+	"path"
 
 	"github.com/Azure/azure-sdk-for-go/tools/profileBuilder/model"
+	"github.com/marstr/randname"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 const (
 	previewLongName    = "preview"
 	previewShortName   = "p"
+	previewDefault     = false
 	previewDescription = "Include preview API Versions."
 )
 
@@ -37,6 +40,10 @@ const (
 	rootShortName   = "r"
 	rootDescription = "The location of the API Version folders which should be considered for `latest`."
 )
+
+var rootDefault = model.DefaultInputRoot()
+
+var latestFlags = viper.New()
 
 // latestCmd represents the latest command
 var latestCmd = &cobra.Command{
@@ -49,47 +56,62 @@ By default, this command ignores API versions that are in preview.`,
 	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		logWriter := ioutil.Discard
-		if verboseFlag {
+		if viper.GetBool("verbose") {
 			logWriter = os.Stdout
 		}
 
 		outputLog := log.New(logWriter, "[STATUS] ", 0)
 		errLog := log.New(os.Stderr, "[ERROR] ", 0)
 
-		if !filepath.IsAbs(outputRootDir) {
-			abs, err := filepath.Abs(outputRootDir)
-			if err != nil {
-				errLog.Fatalf("failed to convert to absolute path: %v", err)
-			}
-			outputRootDir = abs
+		packageStrategy := model.LatestStrategy{
+			Root:          latestFlags.GetString(rootLongName),
+			Predicate:     model.IgnorePreview,
+			VerboseOutput: outputLog,
 		}
-		outputLog.Printf("Output-Location set to: %s", outputRootDir)
 
-		includePreview, err := cmd.Flags().GetBool(previewLongName)
-		if err != nil {
-			errLog.Fatalf("failed to get preview flag: %v", err)
-		}
-		if includePreview {
+		if latestFlags.GetBool(previewLongName) {
+			packageStrategy.Predicate = model.AcceptAll
 			outputLog.Println("Using preview versions.")
 		}
 
-		if clearOutputFlag {
-			if err := model.DeleteChildDirs(outputRootDir); err != nil {
-				errLog.Fatalf("Unable to clear output-folder: %v", err)
+		deleteLoc := path.Join(latestFlags.GetString(outputLocationLongName), latestFlags.GetString(nameLongName))
+		if viper.GetBool("clear-output") {
+			if err := model.DeleteChildDirs(deleteLoc); err != nil {
+				errLog.Print("Fatal! Unable to clear output-folder:", err)
+				return
 			}
 		}
-		rootDir, err := cmd.Flags().GetString(rootLongName)
-		if err != nil {
-			errLog.Fatalf("failed to get root dir: %v", err)
-		}
-		listDef, err := model.GetLatestPackages(rootDir, includePreview, outputLog)
-		model.BuildProfile(listDef, profileName, outputRootDir, outputLog, errLog)
+
+		model.BuildProfile(
+			packageStrategy,
+			latestFlags.GetString(nameLongName),
+			latestFlags.GetString(outputLocationLongName),
+			outputLog,
+			errLog)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(latestCmd)
-	latestCmd.Flags().BoolP(previewLongName, previewShortName, false, previewDescription)
-	latestCmd.Flags().StringP(rootLongName, rootShortName, "", rootDescription)
-	latestCmd.MarkFlagRequired(rootLongName)
+
+	// Here you will define your flags and configuration settings.
+
+	// Cobra supports Persistent Flags which will work for this command
+	// and all subcommands, e.g.:
+	// latestCmd.PersistentFlags().String("foo", "", "A help for foo")
+
+	// Cobra supports local flags which will only run when this command
+	// is called directly, e.g.:
+	// latestCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
+	latestCmd.Flags().BoolP(previewLongName, previewShortName, previewDefault, previewDescription)
+
+	latestCmd.Flags().StringP(outputLocationLongName, outputLocationShortName, outputLocationDefault, outputLocationDescription)
+
+	latestCmd.Flags().StringP(nameLongName, nameShortName, nameDefault, nameDescription)
+
+	latestCmd.Flags().StringP(rootLongName, rootShortName, rootDefault, rootDescription)
+
+	latestFlags.BindPFlags(latestCmd.Flags())
+	latestFlags.SetDefault(nameLongName, randname.Generate())
 }

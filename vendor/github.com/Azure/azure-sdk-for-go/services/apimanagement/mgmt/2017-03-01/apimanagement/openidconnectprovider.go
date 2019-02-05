@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewOpenIDConnectProviderClientWithBaseURI(baseURI string, subscriptionID st
 // opid - identifier of the OpenID Connect Provider.
 // parameters - create parameters.
 func (client OpenIDConnectProviderClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, opid string, parameters OpenidConnectProviderContract) (result OpenidConnectProviderContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OpenIDConnectProviderClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -149,16 +138,6 @@ func (client OpenIDConnectProviderClient) CreateOrUpdateResponder(resp *http.Res
 // ifMatch - the entity state (Etag) version of the OpenID Connect Provider to delete. A value of "*" can be
 // used for If-Match to unconditionally apply the operation.
 func (client OpenIDConnectProviderClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, opid string, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OpenIDConnectProviderClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -239,16 +218,6 @@ func (client OpenIDConnectProviderClient) DeleteResponder(resp *http.Response) (
 // serviceName - the name of the API Management service.
 // opid - identifier of the OpenID Connect Provider.
 func (client OpenIDConnectProviderClient) Get(ctx context.Context, resourceGroupName string, serviceName string, opid string) (result OpenidConnectProviderContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OpenIDConnectProviderClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -329,16 +298,6 @@ func (client OpenIDConnectProviderClient) GetResponder(resp *http.Response) (res
 // serviceName - the name of the API Management service.
 // opid - identifier of the OpenID Connect Provider.
 func (client OpenIDConnectProviderClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, opid string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OpenIDConnectProviderClient.GetEntityTag")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -423,16 +382,6 @@ func (client OpenIDConnectProviderClient) GetEntityTagResponder(resp *http.Respo
 // top - number of records to return.
 // skip - number of records to skip.
 func (client OpenIDConnectProviderClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result OpenIDConnectProviderCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OpenIDConnectProviderClient.ListByService")
-		defer func() {
-			sc := -1
-			if result.oicpc.Response.Response != nil {
-				sc = result.oicpc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -520,8 +469,8 @@ func (client OpenIDConnectProviderClient) ListByServiceResponder(resp *http.Resp
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client OpenIDConnectProviderClient) listByServiceNextResults(ctx context.Context, lastResults OpenIDConnectProviderCollection) (result OpenIDConnectProviderCollection, err error) {
-	req, err := lastResults.openIDConnectProviderCollectionPreparer(ctx)
+func (client OpenIDConnectProviderClient) listByServiceNextResults(lastResults OpenIDConnectProviderCollection) (result OpenIDConnectProviderCollection, err error) {
+	req, err := lastResults.openIDConnectProviderCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.OpenIDConnectProviderClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -542,16 +491,6 @@ func (client OpenIDConnectProviderClient) listByServiceNextResults(ctx context.C
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client OpenIDConnectProviderClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result OpenIDConnectProviderCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OpenIDConnectProviderClient.ListByService")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
@@ -565,16 +504,6 @@ func (client OpenIDConnectProviderClient) ListByServiceComplete(ctx context.Cont
 // ifMatch - the entity state (Etag) version of the OpenID Connect Provider to update. A value of "*" can be
 // used for If-Match to unconditionally apply the operation.
 func (client OpenIDConnectProviderClient) Update(ctx context.Context, resourceGroupName string, serviceName string, opid string, parameters OpenidConnectProviderUpdateContract, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OpenIDConnectProviderClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},

@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,16 +44,6 @@ func NewStatusClientWithBaseURI(baseURI string, subscriptionID string) StatusCli
 // azureRegion - azure region to hit Api
 // parameters - container Backup Status Request
 func (client StatusClient) Get(ctx context.Context, azureRegion string, parameters StatusRequest) (result StatusResponse, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/StatusClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, azureRegion, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.StatusClient", "Get", nil, "Failure preparing request")

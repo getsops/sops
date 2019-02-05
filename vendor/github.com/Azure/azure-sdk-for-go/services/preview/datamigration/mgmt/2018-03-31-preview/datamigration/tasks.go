@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewTasksClientWithBaseURI(baseURI string, subscriptionID string) TasksClien
 // projectName - name of the project
 // taskName - name of the Task
 func (client TasksClient) Cancel(ctx context.Context, groupName string, serviceName string, projectName string, taskName string) (result ProjectTask, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.Cancel")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.CancelPreparer(ctx, groupName, serviceName, projectName, taskName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.TasksClient", "Cancel", nil, "Failure preparing request")
@@ -124,7 +113,7 @@ func (client TasksClient) CancelResponder(resp *http.Response) (result ProjectTa
 
 // CreateOrUpdate the tasks resource is a nested, proxy-only resource representing work performed by a DMS instance.
 // The PUT method creates a new task or updates an existing one, although since tasks have no mutable custom
-// properties, there is little reason to update an existing one.
+// properties, there is little reason to update an exising one.
 // Parameters:
 // parameters - information about the task
 // groupName - name of the resource group
@@ -132,16 +121,6 @@ func (client TasksClient) CancelResponder(resp *http.Response) (result ProjectTa
 // projectName - name of the project
 // taskName - name of the Task
 func (client TasksClient) CreateOrUpdate(ctx context.Context, parameters ProjectTask, groupName string, serviceName string, projectName string, taskName string) (result ProjectTask, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.CreateOrUpdatePreparer(ctx, parameters, groupName, serviceName, projectName, taskName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.TasksClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -217,16 +196,6 @@ func (client TasksClient) CreateOrUpdateResponder(resp *http.Response) (result P
 // taskName - name of the Task
 // deleteRunningTasks - delete the resource even if it contains running tasks
 func (client TasksClient) Delete(ctx context.Context, groupName string, serviceName string, projectName string, taskName string, deleteRunningTasks *bool) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, groupName, serviceName, projectName, taskName, deleteRunningTasks)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.TasksClient", "Delete", nil, "Failure preparing request")
@@ -302,16 +271,6 @@ func (client TasksClient) DeleteResponder(resp *http.Response) (result autorest.
 // taskName - name of the Task
 // expand - expand the response
 func (client TasksClient) Get(ctx context.Context, groupName string, serviceName string, projectName string, taskName string, expand string) (result ProjectTask, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, groupName, serviceName, projectName, taskName, expand)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.TasksClient", "Get", nil, "Failure preparing request")
@@ -388,16 +347,6 @@ func (client TasksClient) GetResponder(resp *http.Response) (result ProjectTask,
 // projectName - name of the project
 // taskType - filter tasks by task type
 func (client TasksClient) List(ctx context.Context, groupName string, serviceName string, projectName string, taskType string) (result TaskListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.List")
-		defer func() {
-			sc := -1
-			if result.tl.Response.Response != nil {
-				sc = result.tl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, groupName, serviceName, projectName, taskType)
 	if err != nil {
@@ -466,8 +415,8 @@ func (client TasksClient) ListResponder(resp *http.Response) (result TaskList, e
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client TasksClient) listNextResults(ctx context.Context, lastResults TaskList) (result TaskList, err error) {
-	req, err := lastResults.taskListPreparer(ctx)
+func (client TasksClient) listNextResults(lastResults TaskList) (result TaskList, err error) {
+	req, err := lastResults.taskListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "datamigration.TasksClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -488,16 +437,6 @@ func (client TasksClient) listNextResults(ctx context.Context, lastResults TaskL
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TasksClient) ListComplete(ctx context.Context, groupName string, serviceName string, projectName string, taskType string) (result TaskListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, groupName, serviceName, projectName, taskType)
 	return
 }
@@ -511,16 +450,6 @@ func (client TasksClient) ListComplete(ctx context.Context, groupName string, se
 // projectName - name of the project
 // taskName - name of the Task
 func (client TasksClient) Update(ctx context.Context, parameters ProjectTask, groupName string, serviceName string, projectName string, taskName string) (result ProjectTask, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TasksClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.UpdatePreparer(ctx, parameters, groupName, serviceName, projectName, taskName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.TasksClient", "Update", nil, "Failure preparing request")

@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,16 +43,6 @@ func NewContainerGroupUsageClientWithBaseURI(baseURI string, subscriptionID stri
 // Parameters:
 // location - the identifier for the physical azure location.
 func (client ContainerGroupUsageClient) List(ctx context.Context, location string) (result UsageListResult, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ContainerGroupUsageClient.List")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ListPreparer(ctx, location)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "containerinstance.ContainerGroupUsageClient", "List", nil, "Failure preparing request")

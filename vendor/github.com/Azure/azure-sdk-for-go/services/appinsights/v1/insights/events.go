@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -51,16 +50,6 @@ func NewEventsClientWithBaseURI(baseURI string) EventsClient {
 // timespan - optional. The timespan over which to retrieve events. This is an ISO8601 time period value.  This
 // timespan is applied in addition to any that are specified in the Odata expression.
 func (client EventsClient) Get(ctx context.Context, appID string, eventType EventType, eventID string, timespan string) (result EventsResults, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EventsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, appID, eventType, eventID, timespan)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.EventsClient", "Get", nil, "Failure preparing request")
@@ -143,16 +132,6 @@ func (client EventsClient) GetResponder(resp *http.Response) (result EventsResul
 // count - request a count of matching items included with the returned events
 // apply - an expression used for aggregation over returned events
 func (client EventsClient) GetByType(ctx context.Context, appID string, eventType EventType, timespan string, filter string, search string, orderby string, selectParameter string, skip *int32, top *int32, formatParameter string, count *bool, apply string) (result EventsResults, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EventsClient.GetByType")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetByTypePreparer(ctx, appID, eventType, timespan, filter, search, orderby, selectParameter, skip, top, formatParameter, count, apply)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.EventsClient", "GetByType", nil, "Failure preparing request")
@@ -246,16 +225,6 @@ func (client EventsClient) GetByTypeResponder(resp *http.Response) (result Event
 // appID - ID of the application. This is Application ID from the API Access settings blade in the Azure
 // portal.
 func (client EventsClient) GetOdataMetadata(ctx context.Context, appID string) (result SetObject, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EventsClient.GetOdataMetadata")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetOdataMetadataPreparer(ctx, appID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.EventsClient", "GetOdataMetadata", nil, "Failure preparing request")

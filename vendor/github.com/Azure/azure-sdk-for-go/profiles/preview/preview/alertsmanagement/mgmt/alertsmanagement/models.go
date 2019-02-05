@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2018 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,31 +21,19 @@ package alertsmanagement
 
 import original "github.com/Azure/azure-sdk-for-go/services/preview/alertsmanagement/mgmt/2018-05-05-preview/alertsmanagement"
 
+type AlertsClient = original.AlertsClient
+
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type APIVersion = original.APIVersion
-
-const (
-	TwoZeroOneEightHyphenMinusZeroFiveHyphenMinusZeroFiveHyphenMinuspreview     APIVersion = original.TwoZeroOneEightHyphenMinusZeroFiveHyphenMinusZeroFiveHyphenMinuspreview
-	TwoZeroOneSevenHyphenMinusOneOneHyphenMinusOneFiveHyphenMinusprivatepreview APIVersion = original.TwoZeroOneSevenHyphenMinusOneOneHyphenMinusOneFiveHyphenMinusprivatepreview
-)
-
+type BaseClient = original.BaseClient
 type AlertModificationEvent = original.AlertModificationEvent
 
 const (
 	AlertCreated           AlertModificationEvent = original.AlertCreated
 	MonitorConditionChange AlertModificationEvent = original.MonitorConditionChange
 	StateChange            AlertModificationEvent = original.StateChange
-)
-
-type AlertState = original.AlertState
-
-const (
-	AlertStateAcknowledged AlertState = original.AlertStateAcknowledged
-	AlertStateClosed       AlertState = original.AlertStateClosed
-	AlertStateNew          AlertState = original.AlertStateNew
 )
 
 type AlertsSortByFields = original.AlertsSortByFields
@@ -61,6 +49,21 @@ const (
 	AlertsSortByFieldsTargetResourceGroup  AlertsSortByFields = original.AlertsSortByFieldsTargetResourceGroup
 	AlertsSortByFieldsTargetResourceName   AlertsSortByFields = original.AlertsSortByFieldsTargetResourceName
 	AlertsSortByFieldsTargetResourceType   AlertsSortByFields = original.AlertsSortByFieldsTargetResourceType
+)
+
+type AlertState = original.AlertState
+
+const (
+	AlertStateAcknowledged AlertState = original.AlertStateAcknowledged
+	AlertStateClosed       AlertState = original.AlertStateClosed
+	AlertStateNew          AlertState = original.AlertStateNew
+)
+
+type APIVersion = original.APIVersion
+
+const (
+	TwoZeroOneEightHyphenMinusZeroFiveHyphenMinusZeroFiveHyphenMinuspreview     APIVersion = original.TwoZeroOneEightHyphenMinusZeroFiveHyphenMinusZeroFiveHyphenMinuspreview
+	TwoZeroOneSevenHyphenMinusOneOneHyphenMinusOneFiveHyphenMinusprivatepreview APIVersion = original.TwoZeroOneSevenHyphenMinusOneOneHyphenMinusOneFiveHyphenMinusprivatepreview
 )
 
 type MonitorCondition = original.MonitorCondition
@@ -148,7 +151,6 @@ type AlertModification = original.AlertModification
 type AlertModificationItem = original.AlertModificationItem
 type AlertModificationProperties = original.AlertModificationProperties
 type AlertProperties = original.AlertProperties
-type AlertsClient = original.AlertsClient
 type AlertsList = original.AlertsList
 type AlertsListIterator = original.AlertsListIterator
 type AlertsListPage = original.AlertsListPage
@@ -172,12 +174,10 @@ type AlertsSummaryPropertiesSummaryBySeveritySev2 = original.AlertsSummaryProper
 type AlertsSummaryPropertiesSummaryBySeveritySev3 = original.AlertsSummaryPropertiesSummaryBySeveritySev3
 type AlertsSummaryPropertiesSummaryBySeveritySev4 = original.AlertsSummaryPropertiesSummaryBySeveritySev4
 type AlertsSummaryPropertiesSummaryByState = original.AlertsSummaryPropertiesSummaryByState
-type BaseClient = original.BaseClient
 type ErrorResponse = original.ErrorResponse
 type ErrorResponseBody = original.ErrorResponseBody
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
-type OperationsClient = original.OperationsClient
 type OperationsList = original.OperationsList
 type OperationsListIterator = original.OperationsListIterator
 type OperationsListPage = original.OperationsListPage
@@ -188,44 +188,33 @@ type SmartGroupModification = original.SmartGroupModification
 type SmartGroupModificationItem = original.SmartGroupModificationItem
 type SmartGroupModificationProperties = original.SmartGroupModificationProperties
 type SmartGroupProperties = original.SmartGroupProperties
-type SmartGroupsClient = original.SmartGroupsClient
 type SmartGroupsList = original.SmartGroupsList
+type OperationsClient = original.OperationsClient
+type SmartGroupsClient = original.SmartGroupsClient
 
-func New(subscriptionID string, monitorService1 MonitorService) BaseClient {
-	return original.New(subscriptionID, monitorService1)
-}
 func NewAlertsClient(subscriptionID string, monitorService1 MonitorService) AlertsClient {
 	return original.NewAlertsClient(subscriptionID, monitorService1)
 }
 func NewAlertsClientWithBaseURI(baseURI string, subscriptionID string, monitorService1 MonitorService) AlertsClient {
 	return original.NewAlertsClientWithBaseURI(baseURI, subscriptionID, monitorService1)
 }
-func NewOperationsClient(subscriptionID string, monitorService1 MonitorService) OperationsClient {
-	return original.NewOperationsClient(subscriptionID, monitorService1)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string, monitorService1 MonitorService) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID, monitorService1)
-}
-func NewSmartGroupsClient(subscriptionID string, monitorService1 MonitorService) SmartGroupsClient {
-	return original.NewSmartGroupsClient(subscriptionID, monitorService1)
-}
-func NewSmartGroupsClientWithBaseURI(baseURI string, subscriptionID string, monitorService1 MonitorService) SmartGroupsClient {
-	return original.NewSmartGroupsClientWithBaseURI(baseURI, subscriptionID, monitorService1)
+func New(subscriptionID string, monitorService1 MonitorService) BaseClient {
+	return original.New(subscriptionID, monitorService1)
 }
 func NewWithBaseURI(baseURI string, subscriptionID string, monitorService1 MonitorService) BaseClient {
 	return original.NewWithBaseURI(baseURI, subscriptionID, monitorService1)
 }
-func PossibleAPIVersionValues() []APIVersion {
-	return original.PossibleAPIVersionValues()
-}
 func PossibleAlertModificationEventValues() []AlertModificationEvent {
 	return original.PossibleAlertModificationEventValues()
+}
+func PossibleAlertsSortByFieldsValues() []AlertsSortByFields {
+	return original.PossibleAlertsSortByFieldsValues()
 }
 func PossibleAlertStateValues() []AlertState {
 	return original.PossibleAlertStateValues()
 }
-func PossibleAlertsSortByFieldsValues() []AlertsSortByFields {
-	return original.PossibleAlertsSortByFieldsValues()
+func PossibleAPIVersionValues() []APIVersion {
+	return original.PossibleAPIVersionValues()
 }
 func PossibleMonitorConditionValues() []MonitorCondition {
 	return original.PossibleMonitorConditionValues()
@@ -250,6 +239,18 @@ func PossibleStateValues() []State {
 }
 func PossibleTimeRangeValues() []TimeRange {
 	return original.PossibleTimeRangeValues()
+}
+func NewOperationsClient(subscriptionID string, monitorService1 MonitorService) OperationsClient {
+	return original.NewOperationsClient(subscriptionID, monitorService1)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string, monitorService1 MonitorService) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID, monitorService1)
+}
+func NewSmartGroupsClient(subscriptionID string, monitorService1 MonitorService) SmartGroupsClient {
+	return original.NewSmartGroupsClient(subscriptionID, monitorService1)
+}
+func NewSmartGroupsClientWithBaseURI(baseURI string, subscriptionID string, monitorService1 MonitorService) SmartGroupsClient {
+	return original.NewSmartGroupsClientWithBaseURI(baseURI, subscriptionID, monitorService1)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

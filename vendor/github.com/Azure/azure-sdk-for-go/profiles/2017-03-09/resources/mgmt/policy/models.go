@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2018 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,10 +21,14 @@ package policy
 
 import original "github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2015-10-01-preview/policy"
 
+type AssignmentsClient = original.AssignmentsClient
+
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
+type BaseClient = original.BaseClient
+type DefinitionsClient = original.DefinitionsClient
 type Type = original.Type
 
 const (
@@ -38,32 +42,29 @@ type AssignmentListResult = original.AssignmentListResult
 type AssignmentListResultIterator = original.AssignmentListResultIterator
 type AssignmentListResultPage = original.AssignmentListResultPage
 type AssignmentProperties = original.AssignmentProperties
-type AssignmentsClient = original.AssignmentsClient
-type BaseClient = original.BaseClient
 type Definition = original.Definition
 type DefinitionListResult = original.DefinitionListResult
 type DefinitionListResultIterator = original.DefinitionListResultIterator
 type DefinitionListResultPage = original.DefinitionListResultPage
 type DefinitionProperties = original.DefinitionProperties
-type DefinitionsClient = original.DefinitionsClient
 
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
-}
 func NewAssignmentsClient(subscriptionID string) AssignmentsClient {
 	return original.NewAssignmentsClient(subscriptionID)
 }
 func NewAssignmentsClientWithBaseURI(baseURI string, subscriptionID string) AssignmentsClient {
 	return original.NewAssignmentsClientWithBaseURI(baseURI, subscriptionID)
 }
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
+}
 func NewDefinitionsClient(subscriptionID string) DefinitionsClient {
 	return original.NewDefinitionsClient(subscriptionID)
 }
 func NewDefinitionsClientWithBaseURI(baseURI string, subscriptionID string) DefinitionsClient {
 	return original.NewDefinitionsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleTypeValues() []Type {
 	return original.PossibleTypeValues()

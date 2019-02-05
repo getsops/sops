@@ -18,17 +18,12 @@ package containerservice
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
-	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/to"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
-
-// The package's fully qualified name.
-const fqdn = "github.com/Azure/azure-sdk-for-go/services/containerservice/mgmt/2017-07-01/containerservice"
 
 // OrchestratorTypes enumerates the values for orchestrator types.
 type OrchestratorTypes string
@@ -452,13 +447,13 @@ type AgentPoolProfile struct {
 	OsDiskSizeGB *int32 `json:"osDiskSizeGB,omitempty"`
 	// DNSPrefix - DNS prefix to be used to create the FQDN for the agent pool.
 	DNSPrefix *string `json:"dnsPrefix,omitempty"`
-	// Fqdn - FQDN for the agent pool.
+	// Fqdn - FDQN for the agent pool.
 	Fqdn *string `json:"fqdn,omitempty"`
 	// Ports - Ports number array used to expose on this agent pool. The default opened ports are different based on your choice of orchestrator.
 	Ports *[]int32 `json:"ports,omitempty"`
 	// StorageProfile - Storage profile specifies what kind of storage used. Choose from StorageAccount and ManagedDisks. Leave it empty, we will choose for you based on the orchestrator choice. Possible values include: 'StorageAccount', 'ManagedDisks'
 	StorageProfile StorageProfileTypes `json:"storageProfile,omitempty"`
-	// VnetSubnetID - VNet SubnetID specifies the VNet's subnet identifier.
+	// VnetSubnetID - VNet SubnetID specifies the vnet's subnet identifier.
 	VnetSubnetID *string `json:"vnetSubnetID,omitempty"`
 	// OsType - OsType to be used to specify os type. Choose from Linux and Windows. Default to Linux. Possible values include: 'Linux', 'Windows'
 	OsType OSType `json:"osType,omitempty"`
@@ -603,8 +598,8 @@ func (future *ContainerServicesCreateOrUpdateFutureType) Result(client Container
 	return
 }
 
-// ContainerServicesDeleteFutureType an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ContainerServicesDeleteFutureType an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ContainerServicesDeleteFutureType struct {
 	azure.Future
 }
@@ -671,37 +666,20 @@ type ListResultIterator struct {
 	page ListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *ListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *ListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -723,11 +701,6 @@ func (iter ListResultIterator) Value() ContainerService {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the ListResultIterator type.
-func NewListResultIterator(page ListResultPage) ListResultIterator {
-	return ListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (lr ListResult) IsEmpty() bool {
 	return lr.Value == nil || len(*lr.Value) == 0
@@ -735,11 +708,11 @@ func (lr ListResult) IsEmpty() bool {
 
 // listResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (lr ListResult) listResultPreparer(ctx context.Context) (*http.Request, error) {
+func (lr ListResult) listResultPreparer() (*http.Request, error) {
 	if lr.NextLink == nil || len(to.String(lr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(lr.NextLink)))
@@ -747,36 +720,19 @@ func (lr ListResult) listResultPreparer(ctx context.Context) (*http.Request, err
 
 // ListResultPage contains a page of ContainerService values.
 type ListResultPage struct {
-	fn func(context.Context, ListResult) (ListResult, error)
+	fn func(ListResult) (ListResult, error)
 	lr ListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.lr)
+func (page *ListResultPage) Next() error {
+	next, err := page.fn(page.lr)
 	if err != nil {
 		return err
 	}
 	page.lr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *ListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -797,11 +753,6 @@ func (page ListResultPage) Values() []ContainerService {
 	return *page.lr.Value
 }
 
-// Creates a new instance of the ListResultPage type.
-func NewListResultPage(getNextPage func(context.Context, ListResult) (ListResult, error)) ListResultPage {
-	return ListResultPage{fn: getNextPage}
-}
-
 // MasterProfile profile for the container service master.
 type MasterProfile struct {
 	// Count - Number of masters (VMs) in the container service cluster. Allowed values are 1, 3, and 5. The default value is 1.
@@ -812,13 +763,13 @@ type MasterProfile struct {
 	VMSize VMSizeTypes `json:"vmSize,omitempty"`
 	// OsDiskSizeGB - OS Disk Size in GB to be used to specify the disk size for every machine in this master/agent pool. If you specify 0, it will apply the default osDisk size according to the vmSize specified.
 	OsDiskSizeGB *int32 `json:"osDiskSizeGB,omitempty"`
-	// VnetSubnetID - VNet SubnetID specifies the VNet's subnet identifier.
+	// VnetSubnetID - VNet SubnetID specifies the vnet's subnet identifier.
 	VnetSubnetID *string `json:"vnetSubnetID,omitempty"`
 	// FirstConsecutiveStaticIP - FirstConsecutiveStaticIP used to specify the first static ip of masters.
 	FirstConsecutiveStaticIP *string `json:"firstConsecutiveStaticIP,omitempty"`
 	// StorageProfile - Storage profile specifies what kind of storage used. Choose from StorageAccount and ManagedDisks. Leave it empty, we will choose for you based on the orchestrator choice. Possible values include: 'StorageAccount', 'ManagedDisks'
 	StorageProfile StorageProfileTypes `json:"storageProfile,omitempty"`
-	// Fqdn - FQDN for the master pool.
+	// Fqdn - FDQN for the master pool.
 	Fqdn *string `json:"fqdn,omitempty"`
 }
 
@@ -887,8 +838,8 @@ func (r Resource) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// ServicePrincipalProfile information about a service principal identity for the cluster to use for
-// manipulating Azure APIs. Either secret or keyVaultSecretRef must be specified.
+// ServicePrincipalProfile information about a service principal identity for the cluster to use for manipulating
+// Azure APIs. Either secret or keyVaultSecretRef must be specified.
 type ServicePrincipalProfile struct {
 	// ClientID - The ID for the service principal.
 	ClientID *string `json:"clientId,omitempty"`

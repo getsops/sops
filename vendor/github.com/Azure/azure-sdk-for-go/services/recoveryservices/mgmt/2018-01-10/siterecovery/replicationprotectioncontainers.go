@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewReplicationProtectionContainersClientWithBaseURI(baseURI string, subscri
 // protectionContainerName - unique protection container ARM name.
 // creationInput - creation input.
 func (client ReplicationProtectionContainersClient) Create(ctx context.Context, fabricName string, protectionContainerName string, creationInput CreateProtectionContainerInput) (result ReplicationProtectionContainersCreateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationProtectionContainersClient.Create")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.CreatePreparer(ctx, fabricName, protectionContainerName, creationInput)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationProtectionContainersClient", "Create", nil, "Failure preparing request")
@@ -107,6 +96,10 @@ func (client ReplicationProtectionContainersClient) CreateSender(req *http.Reque
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -129,16 +122,6 @@ func (client ReplicationProtectionContainersClient) CreateResponder(resp *http.R
 // fabricName - unique fabric ARM name.
 // protectionContainerName - unique protection container ARM name.
 func (client ReplicationProtectionContainersClient) Delete(ctx context.Context, fabricName string, protectionContainerName string) (result ReplicationProtectionContainersDeleteFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationProtectionContainersClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, fabricName, protectionContainerName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationProtectionContainersClient", "Delete", nil, "Failure preparing request")
@@ -186,6 +169,10 @@ func (client ReplicationProtectionContainersClient) DeleteSender(req *http.Reque
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -208,16 +195,6 @@ func (client ReplicationProtectionContainersClient) DeleteResponder(resp *http.R
 // protectionContainerName - the name of the protection container.
 // discoverProtectableItemRequest - the request object to add a protectable item.
 func (client ReplicationProtectionContainersClient) DiscoverProtectableItem(ctx context.Context, fabricName string, protectionContainerName string, discoverProtectableItemRequest DiscoverProtectableItemRequest) (result ReplicationProtectionContainersDiscoverProtectableItemFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationProtectionContainersClient.DiscoverProtectableItem")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DiscoverProtectableItemPreparer(ctx, fabricName, protectionContainerName, discoverProtectableItemRequest)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationProtectionContainersClient", "DiscoverProtectableItem", nil, "Failure preparing request")
@@ -267,6 +244,10 @@ func (client ReplicationProtectionContainersClient) DiscoverProtectableItemSende
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -289,16 +270,6 @@ func (client ReplicationProtectionContainersClient) DiscoverProtectableItemRespo
 // fabricName - fabric name.
 // protectionContainerName - protection container name.
 func (client ReplicationProtectionContainersClient) Get(ctx context.Context, fabricName string, protectionContainerName string) (result ProtectionContainer, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationProtectionContainersClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, fabricName, protectionContainerName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationProtectionContainersClient", "Get", nil, "Failure preparing request")
@@ -365,16 +336,6 @@ func (client ReplicationProtectionContainersClient) GetResponder(resp *http.Resp
 
 // List lists the protection containers in a vault.
 func (client ReplicationProtectionContainersClient) List(ctx context.Context) (result ProtectionContainerCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationProtectionContainersClient.List")
-		defer func() {
-			sc := -1
-			if result.pcc.Response.Response != nil {
-				sc = result.pcc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -439,8 +400,8 @@ func (client ReplicationProtectionContainersClient) ListResponder(resp *http.Res
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ReplicationProtectionContainersClient) listNextResults(ctx context.Context, lastResults ProtectionContainerCollection) (result ProtectionContainerCollection, err error) {
-	req, err := lastResults.protectionContainerCollectionPreparer(ctx)
+func (client ReplicationProtectionContainersClient) listNextResults(lastResults ProtectionContainerCollection) (result ProtectionContainerCollection, err error) {
+	req, err := lastResults.protectionContainerCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "siterecovery.ReplicationProtectionContainersClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -461,16 +422,6 @@ func (client ReplicationProtectionContainersClient) listNextResults(ctx context.
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReplicationProtectionContainersClient) ListComplete(ctx context.Context) (result ProtectionContainerCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationProtectionContainersClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -479,16 +430,6 @@ func (client ReplicationProtectionContainersClient) ListComplete(ctx context.Con
 // Parameters:
 // fabricName - fabric name.
 func (client ReplicationProtectionContainersClient) ListByReplicationFabrics(ctx context.Context, fabricName string) (result ProtectionContainerCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationProtectionContainersClient.ListByReplicationFabrics")
-		defer func() {
-			sc := -1
-			if result.pcc.Response.Response != nil {
-				sc = result.pcc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByReplicationFabricsNextResults
 	req, err := client.ListByReplicationFabricsPreparer(ctx, fabricName)
 	if err != nil {
@@ -554,8 +495,8 @@ func (client ReplicationProtectionContainersClient) ListByReplicationFabricsResp
 }
 
 // listByReplicationFabricsNextResults retrieves the next set of results, if any.
-func (client ReplicationProtectionContainersClient) listByReplicationFabricsNextResults(ctx context.Context, lastResults ProtectionContainerCollection) (result ProtectionContainerCollection, err error) {
-	req, err := lastResults.protectionContainerCollectionPreparer(ctx)
+func (client ReplicationProtectionContainersClient) listByReplicationFabricsNextResults(lastResults ProtectionContainerCollection) (result ProtectionContainerCollection, err error) {
+	req, err := lastResults.protectionContainerCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "siterecovery.ReplicationProtectionContainersClient", "listByReplicationFabricsNextResults", nil, "Failure preparing next results request")
 	}
@@ -576,16 +517,6 @@ func (client ReplicationProtectionContainersClient) listByReplicationFabricsNext
 
 // ListByReplicationFabricsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReplicationProtectionContainersClient) ListByReplicationFabricsComplete(ctx context.Context, fabricName string) (result ProtectionContainerCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationProtectionContainersClient.ListByReplicationFabrics")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByReplicationFabrics(ctx, fabricName)
 	return
 }
@@ -597,16 +528,6 @@ func (client ReplicationProtectionContainersClient) ListByReplicationFabricsComp
 // protectionContainerName - protection container name.
 // switchInput - switch protection input.
 func (client ReplicationProtectionContainersClient) SwitchProtection(ctx context.Context, fabricName string, protectionContainerName string, switchInput SwitchProtectionInput) (result ReplicationProtectionContainersSwitchProtectionFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationProtectionContainersClient.SwitchProtection")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.SwitchProtectionPreparer(ctx, fabricName, protectionContainerName, switchInput)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationProtectionContainersClient", "SwitchProtection", nil, "Failure preparing request")
@@ -653,6 +574,10 @@ func (client ReplicationProtectionContainersClient) SwitchProtectionSender(req *
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

@@ -18,17 +18,12 @@ package containerregistry
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
-	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
-
-// The package's fully qualified name.
-const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/containerregistry/mgmt/2016-06-27-preview/containerregistry"
 
 // Registry an object that represents a container registry.
 type Registry struct {
@@ -140,8 +135,7 @@ func (r *Registry) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// RegistryCredentials the result of a request to get the administrator login credentials for a container
-// registry.
+// RegistryCredentials the result of a request to get the administrator login credentials for a container registry.
 type RegistryCredentials struct {
 	autorest.Response `json:"-"`
 	// Username - The administrator username.
@@ -165,37 +159,20 @@ type RegistryListResultIterator struct {
 	page RegistryListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *RegistryListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RegistryListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *RegistryListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *RegistryListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -217,11 +194,6 @@ func (iter RegistryListResultIterator) Value() Registry {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the RegistryListResultIterator type.
-func NewRegistryListResultIterator(page RegistryListResultPage) RegistryListResultIterator {
-	return RegistryListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (rlr RegistryListResult) IsEmpty() bool {
 	return rlr.Value == nil || len(*rlr.Value) == 0
@@ -229,11 +201,11 @@ func (rlr RegistryListResult) IsEmpty() bool {
 
 // registryListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rlr RegistryListResult) registryListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (rlr RegistryListResult) registryListResultPreparer() (*http.Request, error) {
 	if rlr.NextLink == nil || len(to.String(rlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rlr.NextLink)))
@@ -241,36 +213,19 @@ func (rlr RegistryListResult) registryListResultPreparer(ctx context.Context) (*
 
 // RegistryListResultPage contains a page of Registry values.
 type RegistryListResultPage struct {
-	fn  func(context.Context, RegistryListResult) (RegistryListResult, error)
+	fn  func(RegistryListResult) (RegistryListResult, error)
 	rlr RegistryListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *RegistryListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RegistryListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.rlr)
+func (page *RegistryListResultPage) Next() error {
+	next, err := page.fn(page.rlr)
 	if err != nil {
 		return err
 	}
 	page.rlr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *RegistryListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -289,11 +244,6 @@ func (page RegistryListResultPage) Values() []Registry {
 		return nil
 	}
 	return *page.rlr.Value
-}
-
-// Creates a new instance of the RegistryListResultPage type.
-func NewRegistryListResultPage(getNextPage func(context.Context, RegistryListResult) (RegistryListResult, error)) RegistryListResultPage {
-	return RegistryListResultPage{fn: getNextPage}
 }
 
 // RegistryNameCheckRequest a request to check whether the container registry name is available.

@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,16 +46,6 @@ func NewHubVirtualNetworkConnectionsClientWithBaseURI(baseURI string, subscripti
 // virtualHubName - the name of the VirtualHub.
 // connectionName - the name of the vpn connection.
 func (client HubVirtualNetworkConnectionsClient) Get(ctx context.Context, resourceGroupName string, virtualHubName string, connectionName string) (result HubVirtualNetworkConnection, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/HubVirtualNetworkConnectionsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, virtualHubName, connectionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.HubVirtualNetworkConnectionsClient", "Get", nil, "Failure preparing request")
@@ -125,16 +114,6 @@ func (client HubVirtualNetworkConnectionsClient) GetResponder(resp *http.Respons
 // resourceGroupName - the resource group name of the VirtualHub.
 // virtualHubName - the name of the VirtualHub.
 func (client HubVirtualNetworkConnectionsClient) List(ctx context.Context, resourceGroupName string, virtualHubName string) (result ListHubVirtualNetworkConnectionsResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/HubVirtualNetworkConnectionsClient.List")
-		defer func() {
-			sc := -1
-			if result.lhvncr.Response.Response != nil {
-				sc = result.lhvncr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, virtualHubName)
 	if err != nil {
@@ -199,8 +178,8 @@ func (client HubVirtualNetworkConnectionsClient) ListResponder(resp *http.Respon
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client HubVirtualNetworkConnectionsClient) listNextResults(ctx context.Context, lastResults ListHubVirtualNetworkConnectionsResult) (result ListHubVirtualNetworkConnectionsResult, err error) {
-	req, err := lastResults.listHubVirtualNetworkConnectionsResultPreparer(ctx)
+func (client HubVirtualNetworkConnectionsClient) listNextResults(lastResults ListHubVirtualNetworkConnectionsResult) (result ListHubVirtualNetworkConnectionsResult, err error) {
+	req, err := lastResults.listHubVirtualNetworkConnectionsResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "network.HubVirtualNetworkConnectionsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -221,16 +200,6 @@ func (client HubVirtualNetworkConnectionsClient) listNextResults(ctx context.Con
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client HubVirtualNetworkConnectionsClient) ListComplete(ctx context.Context, resourceGroupName string, virtualHubName string) (result ListHubVirtualNetworkConnectionsResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/HubVirtualNetworkConnectionsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, resourceGroupName, virtualHubName)
 	return
 }

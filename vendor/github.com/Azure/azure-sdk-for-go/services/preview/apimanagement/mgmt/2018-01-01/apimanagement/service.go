@@ -22,29 +22,24 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ServiceClient is the apiManagement Client
 type ServiceClient struct {
 	BaseClient
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewServiceClient creates an instance of the ServiceClient client.
 func NewServiceClient(subscriptionID string) ServiceClient {
 	return NewServiceClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // NewServiceClientWithBaseURI creates an instance of the ServiceClient client.
 func NewServiceClientWithBaseURI(baseURI string, subscriptionID string) ServiceClient {
 	return ServiceClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ApplyNetworkConfigurationUpdates updates the Microsoft.ApiManagement resource running in the Virtual network to pick
 // the updated network settings.
 // Parameters:
@@ -54,16 +49,6 @@ func NewServiceClientWithBaseURI(baseURI string, subscriptionID string) ServiceC
 // all the regions in which the Api Management service is deployed will be updated sequentially without
 // incurring downtime in the region.
 func (client ServiceClient) ApplyNetworkConfigurationUpdates(ctx context.Context, resourceGroupName string, serviceName string, parameters *ServiceApplyNetworkConfigurationParameters) (result ServiceApplyNetworkConfigurationUpdatesFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.ApplyNetworkConfigurationUpdates")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -87,7 +72,6 @@ func (client ServiceClient) ApplyNetworkConfigurationUpdates(ctx context.Context
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ApplyNetworkConfigurationUpdatesPreparer prepares the ApplyNetworkConfigurationUpdates request.
 func (client ServiceClient) ApplyNetworkConfigurationUpdatesPreparer(ctx context.Context, resourceGroupName string, serviceName string, parameters *ServiceApplyNetworkConfigurationParameters) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -114,7 +98,6 @@ func (client ServiceClient) ApplyNetworkConfigurationUpdatesPreparer(ctx context
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ApplyNetworkConfigurationUpdatesSender sends the ApplyNetworkConfigurationUpdates request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceClient) ApplyNetworkConfigurationUpdatesSender(req *http.Request) (future ServiceApplyNetworkConfigurationUpdatesFuture, err error) {
@@ -124,11 +107,14 @@ func (client ServiceClient) ApplyNetworkConfigurationUpdatesSender(req *http.Req
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ApplyNetworkConfigurationUpdatesResponder handles the response to the ApplyNetworkConfigurationUpdates request. The method always
 // closes the http.Response Body.
 func (client ServiceClient) ApplyNetworkConfigurationUpdatesResponder(resp *http.Response) (result ServiceResource, err error) {
@@ -142,7 +128,6 @@ func (client ServiceClient) ApplyNetworkConfigurationUpdatesResponder(resp *http
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Backup creates a backup of the API Management service to the given Azure Storage Account. This is long running
 // operation and could take several minutes to complete.
 // Parameters:
@@ -150,16 +135,6 @@ func (client ServiceClient) ApplyNetworkConfigurationUpdatesResponder(resp *http
 // serviceName - the name of the API Management service.
 // parameters - parameters supplied to the ApiManagementService_Backup operation.
 func (client ServiceClient) Backup(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceBackupRestoreParameters) (result ServiceBackupFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.Backup")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -188,7 +163,6 @@ func (client ServiceClient) Backup(ctx context.Context, resourceGroupName string
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // BackupPreparer prepares the Backup request.
 func (client ServiceClient) BackupPreparer(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceBackupRestoreParameters) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -212,7 +186,6 @@ func (client ServiceClient) BackupPreparer(ctx context.Context, resourceGroupNam
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // BackupSender sends the Backup request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceClient) BackupSender(req *http.Request) (future ServiceBackupFuture, err error) {
@@ -222,11 +195,14 @@ func (client ServiceClient) BackupSender(req *http.Request) (future ServiceBacku
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // BackupResponder handles the response to the Backup request. The method always
 // closes the http.Response Body.
 func (client ServiceClient) BackupResponder(resp *http.Response) (result ServiceResource, err error) {
@@ -240,21 +216,10 @@ func (client ServiceClient) BackupResponder(resp *http.Response) (result Service
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CheckNameAvailability checks availability and correctness of a name for an API Management service.
 // Parameters:
 // parameters - parameters supplied to the CheckNameAvailability operation.
 func (client ServiceClient) CheckNameAvailability(ctx context.Context, parameters ServiceCheckNameAvailabilityParameters) (result ServiceNameAvailabilityResult, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.CheckNameAvailability")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Name", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -282,7 +247,6 @@ func (client ServiceClient) CheckNameAvailability(ctx context.Context, parameter
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CheckNameAvailabilityPreparer prepares the CheckNameAvailability request.
 func (client ServiceClient) CheckNameAvailabilityPreparer(ctx context.Context, parameters ServiceCheckNameAvailabilityParameters) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -304,7 +268,6 @@ func (client ServiceClient) CheckNameAvailabilityPreparer(ctx context.Context, p
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CheckNameAvailabilitySender sends the CheckNameAvailability request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceClient) CheckNameAvailabilitySender(req *http.Request) (*http.Response, error) {
@@ -312,7 +275,6 @@ func (client ServiceClient) CheckNameAvailabilitySender(req *http.Request) (*htt
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CheckNameAvailabilityResponder handles the response to the CheckNameAvailability request. The method always
 // closes the http.Response Body.
 func (client ServiceClient) CheckNameAvailabilityResponder(resp *http.Response) (result ServiceNameAvailabilityResult, err error) {
@@ -326,7 +288,6 @@ func (client ServiceClient) CheckNameAvailabilityResponder(resp *http.Response) 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdate creates or updates an API Management service. This is long running operation and could take several
 // minutes to complete.
 // Parameters:
@@ -334,16 +295,6 @@ func (client ServiceClient) CheckNameAvailabilityResponder(resp *http.Response) 
 // serviceName - the name of the API Management service.
 // parameters - parameters supplied to the CreateOrUpdate API Management service operation.
 func (client ServiceClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceResource) (result ServiceCreateOrUpdateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -378,7 +329,6 @@ func (client ServiceClient) CreateOrUpdate(ctx context.Context, resourceGroupNam
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
 func (client ServiceClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceResource) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -402,7 +352,6 @@ func (client ServiceClient) CreateOrUpdatePreparer(ctx context.Context, resource
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceClient) CreateOrUpdateSender(req *http.Request) (future ServiceCreateOrUpdateFuture, err error) {
@@ -412,11 +361,14 @@ func (client ServiceClient) CreateOrUpdateSender(req *http.Request) (future Serv
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
 // closes the http.Response Body.
 func (client ServiceClient) CreateOrUpdateResponder(resp *http.Response) (result ServiceResource, err error) {
@@ -430,22 +382,11 @@ func (client ServiceClient) CreateOrUpdateResponder(resp *http.Response) (result
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Delete deletes an existing API Management service.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client ServiceClient) Delete(ctx context.Context, resourceGroupName string, serviceName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -475,7 +416,6 @@ func (client ServiceClient) Delete(ctx context.Context, resourceGroupName string
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeletePreparer prepares the Delete request.
 func (client ServiceClient) DeletePreparer(ctx context.Context, resourceGroupName string, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -497,7 +437,6 @@ func (client ServiceClient) DeletePreparer(ctx context.Context, resourceGroupNam
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceClient) DeleteSender(req *http.Request) (*http.Response, error) {
@@ -505,7 +444,6 @@ func (client ServiceClient) DeleteSender(req *http.Request) (*http.Response, err
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // DeleteResponder handles the response to the Delete request. The method always
 // closes the http.Response Body.
 func (client ServiceClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -518,22 +456,11 @@ func (client ServiceClient) DeleteResponder(resp *http.Response) (result autores
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Get gets an API Management service resource description.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client ServiceClient) Get(ctx context.Context, resourceGroupName string, serviceName string) (result ServiceResource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -563,7 +490,6 @@ func (client ServiceClient) Get(ctx context.Context, resourceGroupName string, s
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetPreparer prepares the Get request.
 func (client ServiceClient) GetPreparer(ctx context.Context, resourceGroupName string, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -585,7 +511,6 @@ func (client ServiceClient) GetPreparer(ctx context.Context, resourceGroupName s
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -593,7 +518,6 @@ func (client ServiceClient) GetSender(req *http.Request) (*http.Response, error)
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client ServiceClient) GetResponder(resp *http.Response) (result ServiceResource, err error) {
@@ -607,22 +531,11 @@ func (client ServiceClient) GetResponder(resp *http.Response) (result ServiceRes
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetSsoToken gets the Single-Sign-On token for the API Management Service which is valid for 5 Minutes.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client ServiceClient) GetSsoToken(ctx context.Context, resourceGroupName string, serviceName string) (result ServiceGetSsoTokenResult, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.GetSsoToken")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -652,7 +565,6 @@ func (client ServiceClient) GetSsoToken(ctx context.Context, resourceGroupName s
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetSsoTokenPreparer prepares the GetSsoToken request.
 func (client ServiceClient) GetSsoTokenPreparer(ctx context.Context, resourceGroupName string, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -674,7 +586,6 @@ func (client ServiceClient) GetSsoTokenPreparer(ctx context.Context, resourceGro
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetSsoTokenSender sends the GetSsoToken request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceClient) GetSsoTokenSender(req *http.Request) (*http.Response, error) {
@@ -682,7 +593,6 @@ func (client ServiceClient) GetSsoTokenSender(req *http.Request) (*http.Response
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // GetSsoTokenResponder handles the response to the GetSsoToken request. The method always
 // closes the http.Response Body.
 func (client ServiceClient) GetSsoTokenResponder(resp *http.Response) (result ServiceGetSsoTokenResult, err error) {
@@ -696,19 +606,8 @@ func (client ServiceClient) GetSsoTokenResponder(resp *http.Response) (result Se
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // List lists all API Management services within an Azure subscription.
 func (client ServiceClient) List(ctx context.Context) (result ServiceListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.List")
-		defer func() {
-			sc := -1
-			if result.slr.Response.Response != nil {
-				sc = result.slr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -731,7 +630,6 @@ func (client ServiceClient) List(ctx context.Context) (result ServiceListResultP
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListPreparer prepares the List request.
 func (client ServiceClient) ListPreparer(ctx context.Context) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -751,7 +649,6 @@ func (client ServiceClient) ListPreparer(ctx context.Context) (*http.Request, er
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceClient) ListSender(req *http.Request) (*http.Response, error) {
@@ -759,7 +656,6 @@ func (client ServiceClient) ListSender(req *http.Request) (*http.Response, error
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListResponder handles the response to the List request. The method always
 // closes the http.Response Body.
 func (client ServiceClient) ListResponder(resp *http.Response) (result ServiceListResult, err error) {
@@ -774,8 +670,8 @@ func (client ServiceClient) ListResponder(resp *http.Response) (result ServiceLi
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ServiceClient) listNextResults(ctx context.Context, lastResults ServiceListResult) (result ServiceListResult, err error) {
-	req, err := lastResults.serviceListResultPreparer(ctx)
+func (client ServiceClient) listNextResults(lastResults ServiceListResult) (result ServiceListResult, err error) {
+	req, err := lastResults.serviceListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ServiceClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -794,38 +690,16 @@ func (client ServiceClient) listNextResults(ctx context.Context, lastResults Ser
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServiceClient) ListComplete(ctx context.Context) (result ServiceListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByResourceGroup list all API Management services within a resource group.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 func (client ServiceClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result ServiceListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.slr.Response.Response != nil {
-				sc = result.slr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -848,7 +722,6 @@ func (client ServiceClient) ListByResourceGroup(ctx context.Context, resourceGro
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByResourceGroupPreparer prepares the ListByResourceGroup request.
 func (client ServiceClient) ListByResourceGroupPreparer(ctx context.Context, resourceGroupName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -869,7 +742,6 @@ func (client ServiceClient) ListByResourceGroupPreparer(ctx context.Context, res
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
@@ -877,7 +749,6 @@ func (client ServiceClient) ListByResourceGroupSender(req *http.Request) (*http.
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
 // closes the http.Response Body.
 func (client ServiceClient) ListByResourceGroupResponder(resp *http.Response) (result ServiceListResult, err error) {
@@ -892,8 +763,8 @@ func (client ServiceClient) ListByResourceGroupResponder(resp *http.Response) (r
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client ServiceClient) listByResourceGroupNextResults(ctx context.Context, lastResults ServiceListResult) (result ServiceListResult, err error) {
-	req, err := lastResults.serviceListResultPreparer(ctx)
+func (client ServiceClient) listByResourceGroupNextResults(lastResults ServiceListResult) (result ServiceListResult, err error) {
+	req, err := lastResults.serviceListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ServiceClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -912,24 +783,12 @@ func (client ServiceClient) listByResourceGroupNextResults(ctx context.Context, 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServiceClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result ServiceListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Restore restores a backup of an API Management service created using the ApiManagementService_Backup operation on
 // the current service. This is a long running operation and could take several minutes to complete.
 // Parameters:
@@ -937,16 +796,6 @@ func (client ServiceClient) ListByResourceGroupComplete(ctx context.Context, res
 // serviceName - the name of the API Management service.
 // parameters - parameters supplied to the Restore API Management service from backup operation.
 func (client ServiceClient) Restore(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceBackupRestoreParameters) (result ServiceRestoreFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.Restore")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -975,7 +824,6 @@ func (client ServiceClient) Restore(ctx context.Context, resourceGroupName strin
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // RestorePreparer prepares the Restore request.
 func (client ServiceClient) RestorePreparer(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceBackupRestoreParameters) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -999,7 +847,6 @@ func (client ServiceClient) RestorePreparer(ctx context.Context, resourceGroupNa
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // RestoreSender sends the Restore request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceClient) RestoreSender(req *http.Request) (future ServiceRestoreFuture, err error) {
@@ -1009,11 +856,14 @@ func (client ServiceClient) RestoreSender(req *http.Request) (future ServiceRest
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // RestoreResponder handles the response to the Restore request. The method always
 // closes the http.Response Body.
 func (client ServiceClient) RestoreResponder(resp *http.Response) (result ServiceResource, err error) {
@@ -1027,23 +877,12 @@ func (client ServiceClient) RestoreResponder(resp *http.Response) (result Servic
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // Update updates an existing API Management service.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // parameters - parameters supplied to the CreateOrUpdate API Management service operation.
 func (client ServiceClient) Update(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceUpdateParameters) (result ServiceUpdateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1067,7 +906,6 @@ func (client ServiceClient) Update(ctx context.Context, resourceGroupName string
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdatePreparer prepares the Update request.
 func (client ServiceClient) UpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceUpdateParameters) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1091,7 +929,6 @@ func (client ServiceClient) UpdatePreparer(ctx context.Context, resourceGroupNam
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceClient) UpdateSender(req *http.Request) (future ServiceUpdateFuture, err error) {
@@ -1101,11 +938,14 @@ func (client ServiceClient) UpdateSender(req *http.Request) (future ServiceUpdat
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateResponder handles the response to the Update request. The method always
 // closes the http.Response Body.
 func (client ServiceClient) UpdateResponder(resp *http.Response) (result ServiceResource, err error) {
@@ -1119,7 +959,6 @@ func (client ServiceClient) UpdateResponder(resp *http.Response) (result Service
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateHostname creates, updates, or deletes the custom hostnames for an API Management service. The custom hostname
 // can be applied to the Proxy and Portal endpoint. This is a long running operation and could take several minutes to
 // complete. This operation will be deprecated in the next version update.
@@ -1128,16 +967,6 @@ func (client ServiceClient) UpdateResponder(resp *http.Response) (result Service
 // serviceName - the name of the API Management service.
 // parameters - parameters supplied to the UpdateHostname operation.
 func (client ServiceClient) UpdateHostname(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceUpdateHostnameParameters) (result ServiceUpdateHostnameFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.UpdateHostname")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1161,7 +990,6 @@ func (client ServiceClient) UpdateHostname(ctx context.Context, resourceGroupNam
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateHostnamePreparer prepares the UpdateHostname request.
 func (client ServiceClient) UpdateHostnamePreparer(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceUpdateHostnameParameters) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1185,7 +1013,6 @@ func (client ServiceClient) UpdateHostnamePreparer(ctx context.Context, resource
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateHostnameSender sends the UpdateHostname request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceClient) UpdateHostnameSender(req *http.Request) (future ServiceUpdateHostnameFuture, err error) {
@@ -1195,11 +1022,14 @@ func (client ServiceClient) UpdateHostnameSender(req *http.Request) (future Serv
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UpdateHostnameResponder handles the response to the UpdateHostname request. The method always
 // closes the http.Response Body.
 func (client ServiceClient) UpdateHostnameResponder(resp *http.Response) (result ServiceResource, err error) {
@@ -1213,7 +1043,6 @@ func (client ServiceClient) UpdateHostnameResponder(resp *http.Response) (result
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UploadCertificate upload Custom Domain SSL certificate for an API Management service. This operation will be
 // deprecated in future releases.
 // Parameters:
@@ -1221,16 +1050,6 @@ func (client ServiceClient) UpdateHostnameResponder(resp *http.Response) (result
 // serviceName - the name of the API Management service.
 // parameters - parameters supplied to the Upload SSL certificate for an API Management service operation.
 func (client ServiceClient) UploadCertificate(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceUploadCertificateParameters) (result CertificateInformation, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.UploadCertificate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1263,7 +1082,6 @@ func (client ServiceClient) UploadCertificate(ctx context.Context, resourceGroup
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UploadCertificatePreparer prepares the UploadCertificate request.
 func (client ServiceClient) UploadCertificatePreparer(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceUploadCertificateParameters) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -1287,7 +1105,6 @@ func (client ServiceClient) UploadCertificatePreparer(ctx context.Context, resou
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UploadCertificateSender sends the UploadCertificate request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceClient) UploadCertificateSender(req *http.Request) (*http.Response, error) {
@@ -1295,7 +1112,6 @@ func (client ServiceClient) UploadCertificateSender(req *http.Request) (*http.Re
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement instead.
 // UploadCertificateResponder handles the response to the UploadCertificate request. The method always
 // closes the http.Response Body.
 func (client ServiceClient) UploadCertificateResponder(resp *http.Response) (result CertificateInformation, err error) {

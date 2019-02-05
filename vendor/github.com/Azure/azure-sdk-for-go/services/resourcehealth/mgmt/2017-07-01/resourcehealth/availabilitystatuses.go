@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -51,16 +50,6 @@ func NewAvailabilityStatusesClientWithBaseURI(baseURI string, subscriptionID str
 // https://docs.microsoft.com/en-us/rest/api/apimanagement/apis?redirectedfrom=MSDN
 // expand - setting $expand=recommendedactions in url query expands the recommendedactions in the response.
 func (client AvailabilityStatusesClient) GetByResource(ctx context.Context, resourceURI string, filter string, expand string) (result AvailabilityStatus, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AvailabilityStatusesClient.GetByResource")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetByResourcePreparer(ctx, resourceURI, filter, expand)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "resourcehealth.AvailabilityStatusesClient", "GetByResource", nil, "Failure preparing request")
@@ -139,16 +128,6 @@ func (client AvailabilityStatusesClient) GetByResourceResponder(resp *http.Respo
 // https://docs.microsoft.com/en-us/rest/api/apimanagement/apis?redirectedfrom=MSDN
 // expand - setting $expand=recommendedactions in url query expands the recommendedactions in the response.
 func (client AvailabilityStatusesClient) List(ctx context.Context, resourceURI string, filter string, expand string) (result AvailabilityStatusListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AvailabilityStatusesClient.List")
-		defer func() {
-			sc := -1
-			if result.aslr.Response.Response != nil {
-				sc = result.aslr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceURI, filter, expand)
 	if err != nil {
@@ -217,8 +196,8 @@ func (client AvailabilityStatusesClient) ListResponder(resp *http.Response) (res
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client AvailabilityStatusesClient) listNextResults(ctx context.Context, lastResults AvailabilityStatusListResult) (result AvailabilityStatusListResult, err error) {
-	req, err := lastResults.availabilityStatusListResultPreparer(ctx)
+func (client AvailabilityStatusesClient) listNextResults(lastResults AvailabilityStatusListResult) (result AvailabilityStatusListResult, err error) {
+	req, err := lastResults.availabilityStatusListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "resourcehealth.AvailabilityStatusesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -239,16 +218,6 @@ func (client AvailabilityStatusesClient) listNextResults(ctx context.Context, la
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AvailabilityStatusesClient) ListComplete(ctx context.Context, resourceURI string, filter string, expand string) (result AvailabilityStatusListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AvailabilityStatusesClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, resourceURI, filter, expand)
 	return
 }
@@ -261,16 +230,6 @@ func (client AvailabilityStatusesClient) ListComplete(ctx context.Context, resou
 // https://docs.microsoft.com/en-us/rest/api/apimanagement/apis?redirectedfrom=MSDN
 // expand - setting $expand=recommendedactions in url query expands the recommendedactions in the response.
 func (client AvailabilityStatusesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, filter string, expand string) (result AvailabilityStatusListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AvailabilityStatusesClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.aslr.Response.Response != nil {
-				sc = result.aslr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName, filter, expand)
 	if err != nil {
@@ -340,8 +299,8 @@ func (client AvailabilityStatusesClient) ListByResourceGroupResponder(resp *http
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client AvailabilityStatusesClient) listByResourceGroupNextResults(ctx context.Context, lastResults AvailabilityStatusListResult) (result AvailabilityStatusListResult, err error) {
-	req, err := lastResults.availabilityStatusListResultPreparer(ctx)
+func (client AvailabilityStatusesClient) listByResourceGroupNextResults(lastResults AvailabilityStatusListResult) (result AvailabilityStatusListResult, err error) {
+	req, err := lastResults.availabilityStatusListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "resourcehealth.AvailabilityStatusesClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -362,16 +321,6 @@ func (client AvailabilityStatusesClient) listByResourceGroupNextResults(ctx cont
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AvailabilityStatusesClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string, filter string, expand string) (result AvailabilityStatusListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AvailabilityStatusesClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName, filter, expand)
 	return
 }
@@ -383,16 +332,6 @@ func (client AvailabilityStatusesClient) ListByResourceGroupComplete(ctx context
 // https://docs.microsoft.com/en-us/rest/api/apimanagement/apis?redirectedfrom=MSDN
 // expand - setting $expand=recommendedactions in url query expands the recommendedactions in the response.
 func (client AvailabilityStatusesClient) ListBySubscriptionID(ctx context.Context, filter string, expand string) (result AvailabilityStatusListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AvailabilityStatusesClient.ListBySubscriptionID")
-		defer func() {
-			sc := -1
-			if result.aslr.Response.Response != nil {
-				sc = result.aslr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listBySubscriptionIDNextResults
 	req, err := client.ListBySubscriptionIDPreparer(ctx, filter, expand)
 	if err != nil {
@@ -461,8 +400,8 @@ func (client AvailabilityStatusesClient) ListBySubscriptionIDResponder(resp *htt
 }
 
 // listBySubscriptionIDNextResults retrieves the next set of results, if any.
-func (client AvailabilityStatusesClient) listBySubscriptionIDNextResults(ctx context.Context, lastResults AvailabilityStatusListResult) (result AvailabilityStatusListResult, err error) {
-	req, err := lastResults.availabilityStatusListResultPreparer(ctx)
+func (client AvailabilityStatusesClient) listBySubscriptionIDNextResults(lastResults AvailabilityStatusListResult) (result AvailabilityStatusListResult, err error) {
+	req, err := lastResults.availabilityStatusListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "resourcehealth.AvailabilityStatusesClient", "listBySubscriptionIDNextResults", nil, "Failure preparing next results request")
 	}
@@ -483,16 +422,6 @@ func (client AvailabilityStatusesClient) listBySubscriptionIDNextResults(ctx con
 
 // ListBySubscriptionIDComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AvailabilityStatusesClient) ListBySubscriptionIDComplete(ctx context.Context, filter string, expand string) (result AvailabilityStatusListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AvailabilityStatusesClient.ListBySubscriptionID")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListBySubscriptionID(ctx, filter, expand)
 	return
 }

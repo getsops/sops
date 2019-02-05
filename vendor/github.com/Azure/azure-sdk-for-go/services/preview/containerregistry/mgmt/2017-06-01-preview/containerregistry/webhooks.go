@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewWebhooksClientWithBaseURI(baseURI string, subscriptionID string) Webhook
 // webhookName - the name of the webhook.
 // webhookCreateParameters - the parameters for creating a webhook.
 func (client WebhooksClient) Create(ctx context.Context, resourceGroupName string, registryName string, webhookName string, webhookCreateParameters WebhookCreateParameters) (result WebhooksCreateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhooksClient.Create")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -124,6 +113,10 @@ func (client WebhooksClient) CreateSender(req *http.Request) (future WebhooksCre
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -147,16 +140,6 @@ func (client WebhooksClient) CreateResponder(resp *http.Response) (result Webhoo
 // registryName - the name of the container registry.
 // webhookName - the name of the webhook.
 func (client WebhooksClient) Delete(ctx context.Context, resourceGroupName string, registryName string, webhookName string) (result WebhooksDeleteFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhooksClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -215,6 +198,10 @@ func (client WebhooksClient) DeleteSender(req *http.Request) (future WebhooksDel
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -237,16 +224,6 @@ func (client WebhooksClient) DeleteResponder(resp *http.Response) (result autore
 // registryName - the name of the container registry.
 // webhookName - the name of the webhook.
 func (client WebhooksClient) Get(ctx context.Context, resourceGroupName string, registryName string, webhookName string) (result Webhook, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhooksClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -328,16 +305,6 @@ func (client WebhooksClient) GetResponder(resp *http.Response) (result Webhook, 
 // registryName - the name of the container registry.
 // webhookName - the name of the webhook.
 func (client WebhooksClient) GetCallbackConfig(ctx context.Context, resourceGroupName string, registryName string, webhookName string) (result CallbackConfig, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhooksClient.GetCallbackConfig")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -418,16 +385,6 @@ func (client WebhooksClient) GetCallbackConfigResponder(resp *http.Response) (re
 // resourceGroupName - the name of the resource group to which the container registry belongs.
 // registryName - the name of the container registry.
 func (client WebhooksClient) List(ctx context.Context, resourceGroupName string, registryName string) (result WebhookListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhooksClient.List")
-		defer func() {
-			sc := -1
-			if result.wlr.Response.Response != nil {
-				sc = result.wlr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -500,8 +457,8 @@ func (client WebhooksClient) ListResponder(resp *http.Response) (result WebhookL
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client WebhooksClient) listNextResults(ctx context.Context, lastResults WebhookListResult) (result WebhookListResult, err error) {
-	req, err := lastResults.webhookListResultPreparer(ctx)
+func (client WebhooksClient) listNextResults(lastResults WebhookListResult) (result WebhookListResult, err error) {
+	req, err := lastResults.webhookListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "containerregistry.WebhooksClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -522,16 +479,6 @@ func (client WebhooksClient) listNextResults(ctx context.Context, lastResults We
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WebhooksClient) ListComplete(ctx context.Context, resourceGroupName string, registryName string) (result WebhookListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhooksClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, resourceGroupName, registryName)
 	return
 }
@@ -542,16 +489,6 @@ func (client WebhooksClient) ListComplete(ctx context.Context, resourceGroupName
 // registryName - the name of the container registry.
 // webhookName - the name of the webhook.
 func (client WebhooksClient) ListEvents(ctx context.Context, resourceGroupName string, registryName string, webhookName string) (result EventListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhooksClient.ListEvents")
-		defer func() {
-			sc := -1
-			if result.elr.Response.Response != nil {
-				sc = result.elr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -629,8 +566,8 @@ func (client WebhooksClient) ListEventsResponder(resp *http.Response) (result Ev
 }
 
 // listEventsNextResults retrieves the next set of results, if any.
-func (client WebhooksClient) listEventsNextResults(ctx context.Context, lastResults EventListResult) (result EventListResult, err error) {
-	req, err := lastResults.eventListResultPreparer(ctx)
+func (client WebhooksClient) listEventsNextResults(lastResults EventListResult) (result EventListResult, err error) {
+	req, err := lastResults.eventListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "containerregistry.WebhooksClient", "listEventsNextResults", nil, "Failure preparing next results request")
 	}
@@ -651,16 +588,6 @@ func (client WebhooksClient) listEventsNextResults(ctx context.Context, lastResu
 
 // ListEventsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WebhooksClient) ListEventsComplete(ctx context.Context, resourceGroupName string, registryName string, webhookName string) (result EventListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhooksClient.ListEvents")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListEvents(ctx, resourceGroupName, registryName, webhookName)
 	return
 }
@@ -671,16 +598,6 @@ func (client WebhooksClient) ListEventsComplete(ctx context.Context, resourceGro
 // registryName - the name of the container registry.
 // webhookName - the name of the webhook.
 func (client WebhooksClient) Ping(ctx context.Context, resourceGroupName string, registryName string, webhookName string) (result EventInfo, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhooksClient.Ping")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -763,16 +680,6 @@ func (client WebhooksClient) PingResponder(resp *http.Response) (result EventInf
 // webhookName - the name of the webhook.
 // webhookUpdateParameters - the parameters for updating a webhook.
 func (client WebhooksClient) Update(ctx context.Context, resourceGroupName string, registryName string, webhookName string, webhookUpdateParameters WebhookUpdateParameters) (result WebhooksUpdateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhooksClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -830,6 +737,10 @@ func (client WebhooksClient) UpdateSender(req *http.Request) (future WebhooksUpd
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
 	if err != nil {
 		return
 	}

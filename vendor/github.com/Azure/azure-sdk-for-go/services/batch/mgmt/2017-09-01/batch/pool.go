@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -52,16 +51,6 @@ func NewPoolClientWithBaseURI(baseURI string, subscriptionID string) PoolClient 
 // ifNoneMatch - set to '*' to allow a new pool to be created, but to prevent updating an existing pool. Other
 // values will be ignored.
 func (client PoolClient) Create(ctx context.Context, resourceGroupName string, accountName string, poolName string, parameters Pool, ifMatch string, ifNoneMatch string) (result PoolCreateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PoolClient.Create")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 24, Chain: nil},
@@ -156,6 +145,10 @@ func (client PoolClient) CreateSender(req *http.Request) (future PoolCreateFutur
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -179,16 +172,6 @@ func (client PoolClient) CreateResponder(resp *http.Response) (result Pool, err 
 // accountName - the name of the Batch account.
 // poolName - the pool name. This must be unique within the account.
 func (client PoolClient) Delete(ctx context.Context, resourceGroupName string, accountName string, poolName string) (result PoolDeleteFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PoolClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 24, Chain: nil},
@@ -247,6 +230,10 @@ func (client PoolClient) DeleteSender(req *http.Request) (future PoolDeleteFutur
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -269,16 +256,6 @@ func (client PoolClient) DeleteResponder(resp *http.Response) (result autorest.R
 // accountName - the name of the Batch account.
 // poolName - the pool name. This must be unique within the account.
 func (client PoolClient) DisableAutoScale(ctx context.Context, resourceGroupName string, accountName string, poolName string) (result Pool, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PoolClient.DisableAutoScale")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 24, Chain: nil},
@@ -360,16 +337,6 @@ func (client PoolClient) DisableAutoScaleResponder(resp *http.Response) (result 
 // accountName - the name of the Batch account.
 // poolName - the pool name. This must be unique within the account.
 func (client PoolClient) Get(ctx context.Context, resourceGroupName string, accountName string, poolName string) (result Pool, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PoolClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 24, Chain: nil},
@@ -466,16 +433,6 @@ func (client PoolClient) GetResponder(resp *http.Response) (result Pool, err err
 // properties/scaleSettings/autoScale
 // properties/scaleSettings/fixedScale
 func (client PoolClient) ListByBatchAccount(ctx context.Context, resourceGroupName string, accountName string, maxresults *int32, selectParameter string, filter string) (result ListPoolsResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PoolClient.ListByBatchAccount")
-		defer func() {
-			sc := -1
-			if result.lpr.Response.Response != nil {
-				sc = result.lpr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 24, Chain: nil},
@@ -557,8 +514,8 @@ func (client PoolClient) ListByBatchAccountResponder(resp *http.Response) (resul
 }
 
 // listByBatchAccountNextResults retrieves the next set of results, if any.
-func (client PoolClient) listByBatchAccountNextResults(ctx context.Context, lastResults ListPoolsResult) (result ListPoolsResult, err error) {
-	req, err := lastResults.listPoolsResultPreparer(ctx)
+func (client PoolClient) listByBatchAccountNextResults(lastResults ListPoolsResult) (result ListPoolsResult, err error) {
+	req, err := lastResults.listPoolsResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "batch.PoolClient", "listByBatchAccountNextResults", nil, "Failure preparing next results request")
 	}
@@ -579,16 +536,6 @@ func (client PoolClient) listByBatchAccountNextResults(ctx context.Context, last
 
 // ListByBatchAccountComplete enumerates all values, automatically crossing page boundaries as required.
 func (client PoolClient) ListByBatchAccountComplete(ctx context.Context, resourceGroupName string, accountName string, maxresults *int32, selectParameter string, filter string) (result ListPoolsResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PoolClient.ListByBatchAccount")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByBatchAccount(ctx, resourceGroupName, accountName, maxresults, selectParameter, filter)
 	return
 }
@@ -603,16 +550,6 @@ func (client PoolClient) ListByBatchAccountComplete(ctx context.Context, resourc
 // accountName - the name of the Batch account.
 // poolName - the pool name. This must be unique within the account.
 func (client PoolClient) StopResize(ctx context.Context, resourceGroupName string, accountName string, poolName string) (result Pool, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PoolClient.StopResize")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 24, Chain: nil},
@@ -698,16 +635,6 @@ func (client PoolClient) StopResizeResponder(resp *http.Response) (result Pool, 
 // ifMatch - the entity state (ETag) version of the pool to update. This value can be omitted or set to "*" to
 // apply the operation unconditionally.
 func (client PoolClient) Update(ctx context.Context, resourceGroupName string, accountName string, poolName string, parameters Pool, ifMatch string) (result Pool, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PoolClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 24, Chain: nil},

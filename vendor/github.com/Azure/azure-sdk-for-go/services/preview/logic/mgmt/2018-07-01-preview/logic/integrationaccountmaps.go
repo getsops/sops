@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewIntegrationAccountMapsClientWithBaseURI(baseURI string, subscriptionID s
 // mapName - the integration account map name.
 // mapParameter - the integration account map.
 func (client IntegrationAccountMapsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, integrationAccountName string, mapName string, mapParameter IntegrationAccountMap) (result IntegrationAccountMap, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountMapsClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: mapParameter,
 			Constraints: []validation.Constraint{{Target: "mapParameter.IntegrationAccountMapProperties", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -135,16 +124,6 @@ func (client IntegrationAccountMapsClient) CreateOrUpdateResponder(resp *http.Re
 // integrationAccountName - the integration account name.
 // mapName - the integration account map name.
 func (client IntegrationAccountMapsClient) Delete(ctx context.Context, resourceGroupName string, integrationAccountName string, mapName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountMapsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, integrationAccountName, mapName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.IntegrationAccountMapsClient", "Delete", nil, "Failure preparing request")
@@ -213,16 +192,6 @@ func (client IntegrationAccountMapsClient) DeleteResponder(resp *http.Response) 
 // integrationAccountName - the integration account name.
 // mapName - the integration account map name.
 func (client IntegrationAccountMapsClient) Get(ctx context.Context, resourceGroupName string, integrationAccountName string, mapName string) (result IntegrationAccountMap, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountMapsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, integrationAccountName, mapName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.IntegrationAccountMapsClient", "Get", nil, "Failure preparing request")
@@ -293,16 +262,6 @@ func (client IntegrationAccountMapsClient) GetResponder(resp *http.Response) (re
 // top - the number of items to be included in the result.
 // filter - the filter to apply on the operation. Options for filters include: MapType.
 func (client IntegrationAccountMapsClient) List(ctx context.Context, resourceGroupName string, integrationAccountName string, top *int32, filter string) (result IntegrationAccountMapListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountMapsClient.List")
-		defer func() {
-			sc := -1
-			if result.iamlr.Response.Response != nil {
-				sc = result.iamlr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, integrationAccountName, top, filter)
 	if err != nil {
@@ -373,8 +332,8 @@ func (client IntegrationAccountMapsClient) ListResponder(resp *http.Response) (r
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client IntegrationAccountMapsClient) listNextResults(ctx context.Context, lastResults IntegrationAccountMapListResult) (result IntegrationAccountMapListResult, err error) {
-	req, err := lastResults.integrationAccountMapListResultPreparer(ctx)
+func (client IntegrationAccountMapsClient) listNextResults(lastResults IntegrationAccountMapListResult) (result IntegrationAccountMapListResult, err error) {
+	req, err := lastResults.integrationAccountMapListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "logic.IntegrationAccountMapsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -395,16 +354,6 @@ func (client IntegrationAccountMapsClient) listNextResults(ctx context.Context, 
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client IntegrationAccountMapsClient) ListComplete(ctx context.Context, resourceGroupName string, integrationAccountName string, top *int32, filter string) (result IntegrationAccountMapListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountMapsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, resourceGroupName, integrationAccountName, top, filter)
 	return
 }
@@ -415,16 +364,6 @@ func (client IntegrationAccountMapsClient) ListComplete(ctx context.Context, res
 // integrationAccountName - the integration account name.
 // mapName - the integration account map name.
 func (client IntegrationAccountMapsClient) ListContentCallbackURL(ctx context.Context, resourceGroupName string, integrationAccountName string, mapName string, listContentCallbackURL GetCallbackURLParameters) (result WorkflowTriggerCallbackURL, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountMapsClient.ListContentCallbackURL")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ListContentCallbackURLPreparer(ctx, resourceGroupName, integrationAccountName, mapName, listContentCallbackURL)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.IntegrationAccountMapsClient", "ListContentCallbackURL", nil, "Failure preparing request")

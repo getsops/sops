@@ -24,25 +24,21 @@ import (
 	"net/http"
 )
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ReplicaHealthsClient is the client for the ReplicaHealths methods of the Servicefabric service.
 type ReplicaHealthsClient struct {
 	BaseClient
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewReplicaHealthsClient creates an instance of the ReplicaHealthsClient client.
 func NewReplicaHealthsClient(timeout *int32) ReplicaHealthsClient {
 	return NewReplicaHealthsClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewReplicaHealthsClientWithBaseURI creates an instance of the ReplicaHealthsClient client.
 func NewReplicaHealthsClientWithBaseURI(baseURI string, timeout *int32) ReplicaHealthsClient {
 	return ReplicaHealthsClient{NewWithBaseURI(baseURI, timeout)}
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get replica healths
 // Parameters:
 // partitionID - the id of the partition
@@ -70,7 +66,6 @@ func (client ReplicaHealthsClient) Get(ctx context.Context, partitionID string, 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client ReplicaHealthsClient) GetPreparer(ctx context.Context, partitionID string, replicaID string, eventsHealthStateFilter string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -97,7 +92,6 @@ func (client ReplicaHealthsClient) GetPreparer(ctx context.Context, partitionID 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReplicaHealthsClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -105,7 +99,6 @@ func (client ReplicaHealthsClient) GetSender(req *http.Request) (*http.Response,
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client ReplicaHealthsClient) GetResponder(resp *http.Response) (result ReplicaHealth, err error) {
@@ -119,7 +112,6 @@ func (client ReplicaHealthsClient) GetResponder(resp *http.Response) (result Rep
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Send send replica healths
 // Parameters:
 // partitionID - the id of the partition
@@ -147,7 +139,6 @@ func (client ReplicaHealthsClient) Send(ctx context.Context, partitionID string,
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SendPreparer prepares the Send request.
 func (client ReplicaHealthsClient) SendPreparer(ctx context.Context, partitionID string, replicaID string, replicaHealthReport ReplicaHealthReport) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -173,7 +164,6 @@ func (client ReplicaHealthsClient) SendPreparer(ctx context.Context, partitionID
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SendSender sends the Send request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReplicaHealthsClient) SendSender(req *http.Request) (*http.Response, error) {
@@ -181,7 +171,6 @@ func (client ReplicaHealthsClient) SendSender(req *http.Request) (*http.Response
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // SendResponder handles the response to the Send request. The method always
 // closes the http.Response Body.
 func (client ReplicaHealthsClient) SendResponder(resp *http.Response) (result String, err error) {

@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2018 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,16 +19,15 @@
 
 package account
 
-import (
-	"context"
+import original "github.com/Azure/azure-sdk-for-go/services/preview/datalake/analytics/mgmt/2015-10-01-preview/account"
 
-	original "github.com/Azure/azure-sdk-for-go/services/preview/datalake/analytics/mgmt/2015-10-01-preview/account"
-)
+type Client = original.Client
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
+type BaseClient = original.BaseClient
 type DataLakeAnalyticsAccountState = original.DataLakeAnalyticsAccountState
 
 const (
@@ -61,10 +60,8 @@ const (
 type AddDataLakeStoreParameters = original.AddDataLakeStoreParameters
 type AddStorageAccountParameters = original.AddStorageAccountParameters
 type AzureAsyncOperationResult = original.AzureAsyncOperationResult
-type BaseClient = original.BaseClient
 type BlobContainer = original.BlobContainer
 type BlobContainerProperties = original.BlobContainerProperties
-type Client = original.Client
 type CreateFuture = original.CreateFuture
 type DataLakeAnalyticsAccount = original.DataLakeAnalyticsAccount
 type DataLakeAnalyticsAccountListDataLakeStoreResult = original.DataLakeAnalyticsAccountListDataLakeStoreResult
@@ -94,44 +91,14 @@ type StorageAccountInfo = original.StorageAccountInfo
 type StorageAccountProperties = original.StorageAccountProperties
 type UpdateFuture = original.UpdateFuture
 
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
-}
 func NewClient(subscriptionID string) Client {
 	return original.NewClient(subscriptionID)
 }
 func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
 	return original.NewClientWithBaseURI(baseURI, subscriptionID)
 }
-func NewDataLakeAnalyticsAccountListDataLakeStoreResultIterator(page DataLakeAnalyticsAccountListDataLakeStoreResultPage) DataLakeAnalyticsAccountListDataLakeStoreResultIterator {
-	return original.NewDataLakeAnalyticsAccountListDataLakeStoreResultIterator(page)
-}
-func NewDataLakeAnalyticsAccountListDataLakeStoreResultPage(getNextPage func(context.Context, DataLakeAnalyticsAccountListDataLakeStoreResult) (DataLakeAnalyticsAccountListDataLakeStoreResult, error)) DataLakeAnalyticsAccountListDataLakeStoreResultPage {
-	return original.NewDataLakeAnalyticsAccountListDataLakeStoreResultPage(getNextPage)
-}
-func NewDataLakeAnalyticsAccountListResultIterator(page DataLakeAnalyticsAccountListResultPage) DataLakeAnalyticsAccountListResultIterator {
-	return original.NewDataLakeAnalyticsAccountListResultIterator(page)
-}
-func NewDataLakeAnalyticsAccountListResultPage(getNextPage func(context.Context, DataLakeAnalyticsAccountListResult) (DataLakeAnalyticsAccountListResult, error)) DataLakeAnalyticsAccountListResultPage {
-	return original.NewDataLakeAnalyticsAccountListResultPage(getNextPage)
-}
-func NewDataLakeAnalyticsAccountListStorageAccountsResultIterator(page DataLakeAnalyticsAccountListStorageAccountsResultPage) DataLakeAnalyticsAccountListStorageAccountsResultIterator {
-	return original.NewDataLakeAnalyticsAccountListStorageAccountsResultIterator(page)
-}
-func NewDataLakeAnalyticsAccountListStorageAccountsResultPage(getNextPage func(context.Context, DataLakeAnalyticsAccountListStorageAccountsResult) (DataLakeAnalyticsAccountListStorageAccountsResult, error)) DataLakeAnalyticsAccountListStorageAccountsResultPage {
-	return original.NewDataLakeAnalyticsAccountListStorageAccountsResultPage(getNextPage)
-}
-func NewListBlobContainersResultIterator(page ListBlobContainersResultPage) ListBlobContainersResultIterator {
-	return original.NewListBlobContainersResultIterator(page)
-}
-func NewListBlobContainersResultPage(getNextPage func(context.Context, ListBlobContainersResult) (ListBlobContainersResult, error)) ListBlobContainersResultPage {
-	return original.NewListBlobContainersResultPage(getNextPage)
-}
-func NewListSasTokensResultIterator(page ListSasTokensResultPage) ListSasTokensResultIterator {
-	return original.NewListSasTokensResultIterator(page)
-}
-func NewListSasTokensResultPage(getNextPage func(context.Context, ListSasTokensResult) (ListSasTokensResult, error)) ListSasTokensResultPage {
-	return original.NewListSasTokensResultPage(getNextPage)
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
 }
 func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 	return original.NewWithBaseURI(baseURI, subscriptionID)

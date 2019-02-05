@@ -26,25 +26,25 @@ import (
 )
 
 const (
-	// DefaultEndpoint is the default value for endpoint
-	DefaultEndpoint = "https://api.cognitive.microsoft.com"
+	// DefaultBaseURI is the default URI used for the service Customsearch
+	DefaultBaseURI = "https://api.cognitive.microsoft.com/bingcustomsearch/v7.0"
 )
 
 // BaseClient is the base client for Customsearch.
 type BaseClient struct {
 	autorest.Client
-	Endpoint string
+	BaseURI string
 }
 
 // New creates an instance of the BaseClient client.
 func New() BaseClient {
-	return NewWithoutDefaults(DefaultEndpoint)
+	return NewWithBaseURI(DefaultBaseURI)
 }
 
-// NewWithoutDefaults creates an instance of the BaseClient client.
-func NewWithoutDefaults(endpoint string) BaseClient {
+// NewWithBaseURI creates an instance of the BaseClient client.
+func NewWithBaseURI(baseURI string) BaseClient {
 	return BaseClient{
-		Client:   autorest.NewClientWithUserAgent(UserAgent()),
-		Endpoint: endpoint,
+		Client:  autorest.NewClientWithUserAgent(UserAgent()),
+		BaseURI: baseURI,
 	}
 }

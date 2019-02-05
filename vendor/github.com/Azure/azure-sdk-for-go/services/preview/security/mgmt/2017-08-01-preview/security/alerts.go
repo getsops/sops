@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,16 +46,6 @@ func NewAlertsClientWithBaseURI(baseURI string, subscriptionID string, ascLocati
 // resourceGroupName - the name of the resource group within the user's subscription. The name is case
 // insensitive.
 func (client AlertsClient) GetResourceGroupLevelAlerts(ctx context.Context, alertName string, resourceGroupName string) (result Alert, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.GetResourceGroupLevelAlerts")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -134,16 +123,6 @@ func (client AlertsClient) GetResourceGroupLevelAlertsResponder(resp *http.Respo
 // Parameters:
 // alertName - name of the alert object
 func (client AlertsClient) GetSubscriptionLevelAlert(ctx context.Context, alertName string) (result Alert, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.GetSubscriptionLevelAlert")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -218,16 +197,6 @@ func (client AlertsClient) GetSubscriptionLevelAlertResponder(resp *http.Respons
 // selectParameter - oData select. Optional.
 // expand - oData expand. Optional.
 func (client AlertsClient) List(ctx context.Context, filter string, selectParameter string, expand string) (result AlertListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.List")
-		defer func() {
-			sc := -1
-			if result.al.Response.Response != nil {
-				sc = result.al.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -305,8 +274,8 @@ func (client AlertsClient) ListResponder(resp *http.Response) (result AlertList,
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client AlertsClient) listNextResults(ctx context.Context, lastResults AlertList) (result AlertList, err error) {
-	req, err := lastResults.alertListPreparer(ctx)
+func (client AlertsClient) listNextResults(lastResults AlertList) (result AlertList, err error) {
+	req, err := lastResults.alertListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.AlertsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -327,21 +296,11 @@ func (client AlertsClient) listNextResults(ctx context.Context, lastResults Aler
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AlertsClient) ListComplete(ctx context.Context, filter string, selectParameter string, expand string) (result AlertListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, filter, selectParameter, expand)
 	return
 }
 
-// ListByResourceGroup list all the alerts that are associated with the resource group
+// ListByResourceGroup list all the alerts alerts that are associated with the resource group
 // Parameters:
 // resourceGroupName - the name of the resource group within the user's subscription. The name is case
 // insensitive.
@@ -349,16 +308,6 @@ func (client AlertsClient) ListComplete(ctx context.Context, filter string, sele
 // selectParameter - oData select. Optional.
 // expand - oData expand. Optional.
 func (client AlertsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, filter string, selectParameter string, expand string) (result AlertListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.al.Response.Response != nil {
-				sc = result.al.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -441,8 +390,8 @@ func (client AlertsClient) ListByResourceGroupResponder(resp *http.Response) (re
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client AlertsClient) listByResourceGroupNextResults(ctx context.Context, lastResults AlertList) (result AlertList, err error) {
-	req, err := lastResults.alertListPreparer(ctx)
+func (client AlertsClient) listByResourceGroupNextResults(lastResults AlertList) (result AlertList, err error) {
+	req, err := lastResults.alertListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.AlertsClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -463,16 +412,6 @@ func (client AlertsClient) listByResourceGroupNextResults(ctx context.Context, l
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AlertsClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string, filter string, selectParameter string, expand string) (result AlertListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName, filter, selectParameter, expand)
 	return
 }
@@ -486,16 +425,6 @@ func (client AlertsClient) ListByResourceGroupComplete(ctx context.Context, reso
 // selectParameter - oData select. Optional.
 // expand - oData expand. Optional.
 func (client AlertsClient) ListResourceGroupLevelAlertsByRegion(ctx context.Context, resourceGroupName string, filter string, selectParameter string, expand string) (result AlertListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.ListResourceGroupLevelAlertsByRegion")
-		defer func() {
-			sc := -1
-			if result.al.Response.Response != nil {
-				sc = result.al.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -579,8 +508,8 @@ func (client AlertsClient) ListResourceGroupLevelAlertsByRegionResponder(resp *h
 }
 
 // listResourceGroupLevelAlertsByRegionNextResults retrieves the next set of results, if any.
-func (client AlertsClient) listResourceGroupLevelAlertsByRegionNextResults(ctx context.Context, lastResults AlertList) (result AlertList, err error) {
-	req, err := lastResults.alertListPreparer(ctx)
+func (client AlertsClient) listResourceGroupLevelAlertsByRegionNextResults(lastResults AlertList) (result AlertList, err error) {
+	req, err := lastResults.alertListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.AlertsClient", "listResourceGroupLevelAlertsByRegionNextResults", nil, "Failure preparing next results request")
 	}
@@ -601,16 +530,6 @@ func (client AlertsClient) listResourceGroupLevelAlertsByRegionNextResults(ctx c
 
 // ListResourceGroupLevelAlertsByRegionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AlertsClient) ListResourceGroupLevelAlertsByRegionComplete(ctx context.Context, resourceGroupName string, filter string, selectParameter string, expand string) (result AlertListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.ListResourceGroupLevelAlertsByRegion")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListResourceGroupLevelAlertsByRegion(ctx, resourceGroupName, filter, selectParameter, expand)
 	return
 }
@@ -622,16 +541,6 @@ func (client AlertsClient) ListResourceGroupLevelAlertsByRegionComplete(ctx cont
 // selectParameter - oData select. Optional.
 // expand - oData expand. Optional.
 func (client AlertsClient) ListSubscriptionLevelAlertsByRegion(ctx context.Context, filter string, selectParameter string, expand string) (result AlertListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.ListSubscriptionLevelAlertsByRegion")
-		defer func() {
-			sc := -1
-			if result.al.Response.Response != nil {
-				sc = result.al.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -710,8 +619,8 @@ func (client AlertsClient) ListSubscriptionLevelAlertsByRegionResponder(resp *ht
 }
 
 // listSubscriptionLevelAlertsByRegionNextResults retrieves the next set of results, if any.
-func (client AlertsClient) listSubscriptionLevelAlertsByRegionNextResults(ctx context.Context, lastResults AlertList) (result AlertList, err error) {
-	req, err := lastResults.alertListPreparer(ctx)
+func (client AlertsClient) listSubscriptionLevelAlertsByRegionNextResults(lastResults AlertList) (result AlertList, err error) {
+	req, err := lastResults.alertListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.AlertsClient", "listSubscriptionLevelAlertsByRegionNextResults", nil, "Failure preparing next results request")
 	}
@@ -732,16 +641,6 @@ func (client AlertsClient) listSubscriptionLevelAlertsByRegionNextResults(ctx co
 
 // ListSubscriptionLevelAlertsByRegionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AlertsClient) ListSubscriptionLevelAlertsByRegionComplete(ctx context.Context, filter string, selectParameter string, expand string) (result AlertListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.ListSubscriptionLevelAlertsByRegion")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListSubscriptionLevelAlertsByRegion(ctx, filter, selectParameter, expand)
 	return
 }
@@ -753,16 +652,6 @@ func (client AlertsClient) ListSubscriptionLevelAlertsByRegionComplete(ctx conte
 // resourceGroupName - the name of the resource group within the user's subscription. The name is case
 // insensitive.
 func (client AlertsClient) UpdateResourceGroupLevelAlertState(ctx context.Context, alertName string, alertUpdateActionType string, resourceGroupName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.UpdateResourceGroupLevelAlertState")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -841,16 +730,6 @@ func (client AlertsClient) UpdateResourceGroupLevelAlertStateResponder(resp *htt
 // alertName - name of the alert object
 // alertUpdateActionType - type of the action to do on the alert
 func (client AlertsClient) UpdateSubscriptionLevelAlertState(ctx context.Context, alertName string, alertUpdateActionType string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.UpdateSubscriptionLevelAlertState")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {

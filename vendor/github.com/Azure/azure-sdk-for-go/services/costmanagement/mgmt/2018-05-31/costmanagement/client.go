@@ -25,7 +25,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -60,16 +59,6 @@ func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 // billingAccountID - billingAccount ID
 // parameters - parameters supplied to the CreateOrUpdate Report Config operation.
 func (client BaseClient) QueryBillingAccount(ctx context.Context, billingAccountID string, parameters ReportConfigDefinition) (result QueryResult, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.QueryBillingAccount")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Type", Name: validation.Null, Rule: true, Chain: nil},
@@ -170,16 +159,6 @@ func (client BaseClient) QueryBillingAccountResponder(resp *http.Response) (resu
 // resourceGroupName - azure Resource Group Name.
 // parameters - parameters supplied to the CreateOrUpdate Report Config operation.
 func (client BaseClient) QueryResourceGroup(ctx context.Context, resourceGroupName string, parameters ReportConfigDefinition) (result QueryResult, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.QueryResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Type", Name: validation.Null, Rule: true, Chain: nil},
@@ -280,16 +259,6 @@ func (client BaseClient) QueryResourceGroupResponder(resp *http.Response) (resul
 // Parameters:
 // parameters - parameters supplied to the CreateOrUpdate Report Config operation.
 func (client BaseClient) QuerySubscription(ctx context.Context, parameters ReportConfigDefinition) (result QueryResult, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.QuerySubscription")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Type", Name: validation.Null, Rule: true, Chain: nil},

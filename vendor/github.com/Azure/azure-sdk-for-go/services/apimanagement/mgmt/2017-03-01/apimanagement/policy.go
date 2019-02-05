@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,16 +46,6 @@ func NewPolicyClientWithBaseURI(baseURI string, subscriptionID string) PolicyCli
 // serviceName - the name of the API Management service.
 // parameters - the policy contents to apply.
 func (client PolicyClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, parameters PolicyContract) (result PolicyContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -140,16 +129,6 @@ func (client PolicyClient) CreateOrUpdateResponder(resp *http.Response) (result 
 // ifMatch - the entity state (Etag) version of the policy to be deleted. A value of "*" can be used for
 // If-Match to unconditionally apply the operation.
 func (client PolicyClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -226,16 +205,6 @@ func (client PolicyClient) DeleteResponder(resp *http.Response) (result autorest
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client PolicyClient) Get(ctx context.Context, resourceGroupName string, serviceName string) (result PolicyContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -313,16 +282,6 @@ func (client PolicyClient) GetResponder(resp *http.Response) (result PolicyContr
 // serviceName - the name of the API Management service.
 // scope - policy scope.
 func (client PolicyClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, scope PolicyScopeContract) (result PolicyCollection, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyClient.ListByService")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},

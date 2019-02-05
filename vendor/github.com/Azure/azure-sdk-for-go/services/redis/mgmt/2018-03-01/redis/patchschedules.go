@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,16 +46,6 @@ func NewPatchSchedulesClientWithBaseURI(baseURI string, subscriptionID string) P
 // name - the name of the Redis cache.
 // parameters - parameters to set the patching schedule for Redis cache.
 func (client PatchSchedulesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, name string, parameters PatchSchedule) (result PatchSchedule, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PatchSchedulesClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.ScheduleEntries", Name: validation.Null, Rule: true,
@@ -134,16 +123,6 @@ func (client PatchSchedulesClient) CreateOrUpdateResponder(resp *http.Response) 
 // resourceGroupName - the name of the resource group.
 // name - the name of the redis cache.
 func (client PatchSchedulesClient) Delete(ctx context.Context, resourceGroupName string, name string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PatchSchedulesClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "redis.PatchSchedulesClient", "Delete", nil, "Failure preparing request")
@@ -211,16 +190,6 @@ func (client PatchSchedulesClient) DeleteResponder(resp *http.Response) (result 
 // resourceGroupName - the name of the resource group.
 // name - the name of the redis cache.
 func (client PatchSchedulesClient) Get(ctx context.Context, resourceGroupName string, name string) (result PatchSchedule, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PatchSchedulesClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "redis.PatchSchedulesClient", "Get", nil, "Failure preparing request")
@@ -289,16 +258,6 @@ func (client PatchSchedulesClient) GetResponder(resp *http.Response) (result Pat
 // resourceGroupName - the name of the resource group.
 // cacheName - the name of the Redis cache.
 func (client PatchSchedulesClient) ListByRedisResource(ctx context.Context, resourceGroupName string, cacheName string) (result PatchScheduleListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PatchSchedulesClient.ListByRedisResource")
-		defer func() {
-			sc := -1
-			if result.pslr.Response.Response != nil {
-				sc = result.pslr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByRedisResourceNextResults
 	req, err := client.ListByRedisResourcePreparer(ctx, resourceGroupName, cacheName)
 	if err != nil {
@@ -363,8 +322,8 @@ func (client PatchSchedulesClient) ListByRedisResourceResponder(resp *http.Respo
 }
 
 // listByRedisResourceNextResults retrieves the next set of results, if any.
-func (client PatchSchedulesClient) listByRedisResourceNextResults(ctx context.Context, lastResults PatchScheduleListResult) (result PatchScheduleListResult, err error) {
-	req, err := lastResults.patchScheduleListResultPreparer(ctx)
+func (client PatchSchedulesClient) listByRedisResourceNextResults(lastResults PatchScheduleListResult) (result PatchScheduleListResult, err error) {
+	req, err := lastResults.patchScheduleListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "redis.PatchSchedulesClient", "listByRedisResourceNextResults", nil, "Failure preparing next results request")
 	}
@@ -385,16 +344,6 @@ func (client PatchSchedulesClient) listByRedisResourceNextResults(ctx context.Co
 
 // ListByRedisResourceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client PatchSchedulesClient) ListByRedisResourceComplete(ctx context.Context, resourceGroupName string, cacheName string) (result PatchScheduleListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PatchSchedulesClient.ListByRedisResource")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByRedisResource(ctx, resourceGroupName, cacheName)
 	return
 }

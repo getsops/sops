@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -42,16 +41,6 @@ func NewProviderOperationsClientWithBaseURI(baseURI string, subscriptionID strin
 
 // List result of the request to list REST API operations
 func (client ProviderOperationsClient) List(ctx context.Context) (result ProviderOperationResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ProviderOperationsClient.List")
-		defer func() {
-			sc := -1
-			if result.por.Response.Response != nil {
-				sc = result.por.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -110,8 +99,8 @@ func (client ProviderOperationsClient) ListResponder(resp *http.Response) (resul
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ProviderOperationsClient) listNextResults(ctx context.Context, lastResults ProviderOperationResult) (result ProviderOperationResult, err error) {
-	req, err := lastResults.providerOperationResultPreparer(ctx)
+func (client ProviderOperationsClient) listNextResults(lastResults ProviderOperationResult) (result ProviderOperationResult, err error) {
+	req, err := lastResults.providerOperationResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dtl.ProviderOperationsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -132,16 +121,6 @@ func (client ProviderOperationsClient) listNextResults(ctx context.Context, last
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ProviderOperationsClient) ListComplete(ctx context.Context) (result ProviderOperationResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ProviderOperationsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }

@@ -22,11 +22,10 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
-// AlertsClient is the REST APIs for Azure Active Directory Connect Health
+// AlertsClient is the REST APIs for Azure Active Drectory Connect Health
 type AlertsClient struct {
 	BaseClient
 }
@@ -49,16 +48,6 @@ func NewAlertsClientWithBaseURI(baseURI string) AlertsClient {
 // from - the start date to query for.
 // toParameter - the end date till when to query for.
 func (client AlertsClient) ListAddsAlerts(ctx context.Context, serviceName string, filter string, state string, from *date.Time, toParameter *date.Time) (result AlertsPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.ListAddsAlerts")
-		defer func() {
-			sc := -1
-			if result.a.Response.Response != nil {
-				sc = result.a.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listAddsAlertsNextResults
 	req, err := client.ListAddsAlertsPreparer(ctx, serviceName, filter, state, from, toParameter)
 	if err != nil {
@@ -133,8 +122,8 @@ func (client AlertsClient) ListAddsAlertsResponder(resp *http.Response) (result 
 }
 
 // listAddsAlertsNextResults retrieves the next set of results, if any.
-func (client AlertsClient) listAddsAlertsNextResults(ctx context.Context, lastResults Alerts) (result Alerts, err error) {
-	req, err := lastResults.alertsPreparer(ctx)
+func (client AlertsClient) listAddsAlertsNextResults(lastResults Alerts) (result Alerts, err error) {
+	req, err := lastResults.alertsPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "adhybridhealthservice.AlertsClient", "listAddsAlertsNextResults", nil, "Failure preparing next results request")
 	}
@@ -155,16 +144,6 @@ func (client AlertsClient) listAddsAlertsNextResults(ctx context.Context, lastRe
 
 // ListAddsAlertsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AlertsClient) ListAddsAlertsComplete(ctx context.Context, serviceName string, filter string, state string, from *date.Time, toParameter *date.Time) (result AlertsIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.ListAddsAlerts")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListAddsAlerts(ctx, serviceName, filter, state, from, toParameter)
 	return
 }

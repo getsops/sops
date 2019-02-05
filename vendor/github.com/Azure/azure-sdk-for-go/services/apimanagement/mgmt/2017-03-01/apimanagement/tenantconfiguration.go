@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewTenantConfigurationClientWithBaseURI(baseURI string, subscriptionID stri
 // serviceName - the name of the API Management service.
 // parameters - deploy Configuration parameters.
 func (client TenantConfigurationClient) Deploy(ctx context.Context, resourceGroupName string, serviceName string, parameters DeployConfigurationParameters) (result TenantConfigurationDeployFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TenantConfigurationClient.Deploy")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -116,6 +105,10 @@ func (client TenantConfigurationClient) DeploySender(req *http.Request) (future 
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -139,16 +132,6 @@ func (client TenantConfigurationClient) DeployResponder(resp *http.Response) (re
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client TenantConfigurationClient) GetSyncState(ctx context.Context, resourceGroupName string, serviceName string) (result TenantConfigurationSyncStateContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TenantConfigurationClient.GetSyncState")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -227,16 +210,6 @@ func (client TenantConfigurationClient) GetSyncStateResponder(resp *http.Respons
 // serviceName - the name of the API Management service.
 // parameters - save Configuration parameters.
 func (client TenantConfigurationClient) Save(ctx context.Context, resourceGroupName string, serviceName string, parameters SaveConfigurationParameter) (result TenantConfigurationSaveFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TenantConfigurationClient.Save")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -295,6 +268,10 @@ func (client TenantConfigurationClient) SaveSender(req *http.Request) (future Te
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -319,16 +296,6 @@ func (client TenantConfigurationClient) SaveResponder(resp *http.Response) (resu
 // serviceName - the name of the API Management service.
 // parameters - validate Configuration parameters.
 func (client TenantConfigurationClient) Validate(ctx context.Context, resourceGroupName string, serviceName string, parameters DeployConfigurationParameters) (result TenantConfigurationValidateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TenantConfigurationClient.Validate")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -384,6 +351,10 @@ func (client TenantConfigurationClient) ValidateSender(req *http.Request) (futur
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,16 +46,6 @@ func NewCustomerSubscriptionsClientWithBaseURI(baseURI string, subscriptionID st
 // customerSubscriptionName - name of the product.
 // customerCreationParameters - parameters use to create a customer subscription.
 func (client CustomerSubscriptionsClient) Create(ctx context.Context, resourceGroup string, registrationName string, customerSubscriptionName string, customerCreationParameters CustomerSubscription) (result CustomerSubscription, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomerSubscriptionsClient.Create")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.CreatePreparer(ctx, resourceGroup, registrationName, customerSubscriptionName, customerCreationParameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "azurestack.CustomerSubscriptionsClient", "Create", nil, "Failure preparing request")
@@ -128,16 +117,6 @@ func (client CustomerSubscriptionsClient) CreateResponder(resp *http.Response) (
 // registrationName - name of the Azure Stack registration.
 // customerSubscriptionName - name of the product.
 func (client CustomerSubscriptionsClient) Delete(ctx context.Context, resourceGroup string, registrationName string, customerSubscriptionName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomerSubscriptionsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroup, registrationName, customerSubscriptionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "azurestack.CustomerSubscriptionsClient", "Delete", nil, "Failure preparing request")
@@ -206,16 +185,6 @@ func (client CustomerSubscriptionsClient) DeleteResponder(resp *http.Response) (
 // registrationName - name of the Azure Stack registration.
 // customerSubscriptionName - name of the product.
 func (client CustomerSubscriptionsClient) Get(ctx context.Context, resourceGroup string, registrationName string, customerSubscriptionName string) (result CustomerSubscription, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomerSubscriptionsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroup, registrationName, customerSubscriptionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "azurestack.CustomerSubscriptionsClient", "Get", nil, "Failure preparing request")
@@ -284,16 +253,6 @@ func (client CustomerSubscriptionsClient) GetResponder(resp *http.Response) (res
 // resourceGroup - name of the resource group.
 // registrationName - name of the Azure Stack registration.
 func (client CustomerSubscriptionsClient) List(ctx context.Context, resourceGroup string, registrationName string) (result CustomerSubscriptionListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomerSubscriptionsClient.List")
-		defer func() {
-			sc := -1
-			if result.csl.Response.Response != nil {
-				sc = result.csl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroup, registrationName)
 	if err != nil {
@@ -358,8 +317,8 @@ func (client CustomerSubscriptionsClient) ListResponder(resp *http.Response) (re
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client CustomerSubscriptionsClient) listNextResults(ctx context.Context, lastResults CustomerSubscriptionList) (result CustomerSubscriptionList, err error) {
-	req, err := lastResults.customerSubscriptionListPreparer(ctx)
+func (client CustomerSubscriptionsClient) listNextResults(lastResults CustomerSubscriptionList) (result CustomerSubscriptionList, err error) {
+	req, err := lastResults.customerSubscriptionListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "azurestack.CustomerSubscriptionsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -380,16 +339,6 @@ func (client CustomerSubscriptionsClient) listNextResults(ctx context.Context, l
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client CustomerSubscriptionsClient) ListComplete(ctx context.Context, resourceGroup string, registrationName string) (result CustomerSubscriptionListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CustomerSubscriptionsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx, resourceGroup, registrationName)
 	return
 }

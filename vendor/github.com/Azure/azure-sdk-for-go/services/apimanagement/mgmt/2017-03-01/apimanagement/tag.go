@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,16 +49,6 @@ func NewTagClientWithBaseURI(baseURI string, subscriptionID string) TagClient {
 // ifMatch - the entity state (Etag) version of the Tag to update. A value of "*" can be used for If-Match to
 // unconditionally apply the operation.
 func (client TagClient) AssignToAPI(ctx context.Context, resourceGroupName string, serviceName string, apiid string, tagID string, ifMatch string) (result TagContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.AssignToAPI")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -155,16 +144,6 @@ func (client TagClient) AssignToAPIResponder(resp *http.Response) (result TagCon
 // ifMatch - the entity state (Etag) version of the Tag to update. A value of "*" can be used for If-Match to
 // unconditionally apply the operation.
 func (client TagClient) AssignToOperation(ctx context.Context, resourceGroupName string, serviceName string, apiid string, operationID string, tagID string, ifMatch string) (result TagContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.AssignToOperation")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -263,16 +242,6 @@ func (client TagClient) AssignToOperationResponder(resp *http.Response) (result 
 // ifMatch - the entity state (Etag) version of the Tag to update. A value of "*" can be used for If-Match to
 // unconditionally apply the operation.
 func (client TagClient) AssignToProduct(ctx context.Context, resourceGroupName string, serviceName string, productID string, tagID string, ifMatch string) (result TagContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.AssignToProduct")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -364,16 +333,6 @@ func (client TagClient) AssignToProductResponder(resp *http.Response) (result Ta
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 // parameters - create parameters.
 func (client TagClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, tagID string, parameters TagCreateUpdateParameters) (result TagContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -466,16 +425,6 @@ func (client TagClient) CreateOrUpdateResponder(resp *http.Response) (result Tag
 // ifMatch - eTag of the Tag Entity. ETag should match the current entity state from the header response of the
 // GET request or it should be * for unconditional update.
 func (client TagClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, tagID string, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -560,16 +509,6 @@ func (client TagClient) DeleteResponder(resp *http.Response) (result autorest.Re
 // ifMatch - the entity state (Etag) version of the Api schema to update. A value of "*" can be used for
 // If-Match to unconditionally apply the operation.
 func (client TagClient) DetachFromAPI(ctx context.Context, resourceGroupName string, serviceName string, apiid string, tagID string, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.DetachFromAPI")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -661,16 +600,6 @@ func (client TagClient) DetachFromAPIResponder(resp *http.Response) (result auto
 // ifMatch - the entity state (Etag) version of the Api schema to update. A value of "*" can be used for
 // If-Match to unconditionally apply the operation.
 func (client TagClient) DetachFromOperation(ctx context.Context, resourceGroupName string, serviceName string, apiid string, operationID string, tagID string, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.DetachFromOperation")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -765,16 +694,6 @@ func (client TagClient) DetachFromOperationResponder(resp *http.Response) (resul
 // ifMatch - the entity state (Etag) version of the Api schema to update. A value of "*" can be used for
 // If-Match to unconditionally apply the operation.
 func (client TagClient) DetachFromProduct(ctx context.Context, resourceGroupName string, serviceName string, productID string, tagID string, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.DetachFromProduct")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -861,16 +780,6 @@ func (client TagClient) DetachFromProductResponder(resp *http.Response) (result 
 // serviceName - the name of the API Management service.
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 func (client TagClient) Get(ctx context.Context, resourceGroupName string, serviceName string, tagID string) (result TagContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -953,16 +862,6 @@ func (client TagClient) GetResponder(resp *http.Response) (result TagContract, e
 // apiid - API identifier. Must be unique in the current API Management service instance.
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 func (client TagClient) GetByAPI(ctx context.Context, resourceGroupName string, serviceName string, apiid string, tagID string) (result TagContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.GetByAPI")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1052,16 +951,6 @@ func (client TagClient) GetByAPIResponder(resp *http.Response) (result TagContra
 // instance.
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 func (client TagClient) GetByOperation(ctx context.Context, resourceGroupName string, serviceName string, apiid string, operationID string, tagID string) (result TagContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.GetByOperation")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1154,16 +1043,6 @@ func (client TagClient) GetByOperationResponder(resp *http.Response) (result Tag
 // productID - product identifier. Must be unique in the current API Management service instance.
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 func (client TagClient) GetByProduct(ctx context.Context, resourceGroupName string, serviceName string, productID string, tagID string) (result TagContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.GetByProduct")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1250,16 +1129,6 @@ func (client TagClient) GetByProductResponder(resp *http.Response) (result TagCo
 // serviceName - the name of the API Management service.
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 func (client TagClient) GetEntityState(ctx context.Context, resourceGroupName string, serviceName string, tagID string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.GetEntityState")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1341,16 +1210,6 @@ func (client TagClient) GetEntityStateResponder(resp *http.Response) (result aut
 // apiid - API identifier. Must be unique in the current API Management service instance.
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 func (client TagClient) GetEntityStateByAPI(ctx context.Context, resourceGroupName string, serviceName string, apiid string, tagID string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.GetEntityStateByAPI")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1439,16 +1298,6 @@ func (client TagClient) GetEntityStateByAPIResponder(resp *http.Response) (resul
 // instance.
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 func (client TagClient) GetEntityStateByOperation(ctx context.Context, resourceGroupName string, serviceName string, apiid string, operationID string, tagID string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.GetEntityStateByOperation")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1540,16 +1389,6 @@ func (client TagClient) GetEntityStateByOperationResponder(resp *http.Response) 
 // productID - product identifier. Must be unique in the current API Management service instance.
 // tagID - tag identifier. Must be unique in the current API Management service instance.
 func (client TagClient) GetEntityStateByProduct(ctx context.Context, resourceGroupName string, serviceName string, productID string, tagID string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.GetEntityStateByProduct")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1641,16 +1480,6 @@ func (client TagClient) GetEntityStateByProductResponder(resp *http.Response) (r
 // top - number of records to return.
 // skip - number of records to skip.
 func (client TagClient) ListByAPI(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result TagCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.ListByAPI")
-		defer func() {
-			sc := -1
-			if result.tc.Response.Response != nil {
-				sc = result.tc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1743,8 +1572,8 @@ func (client TagClient) ListByAPIResponder(resp *http.Response) (result TagColle
 }
 
 // listByAPINextResults retrieves the next set of results, if any.
-func (client TagClient) listByAPINextResults(ctx context.Context, lastResults TagCollection) (result TagCollection, err error) {
-	req, err := lastResults.tagCollectionPreparer(ctx)
+func (client TagClient) listByAPINextResults(lastResults TagCollection) (result TagCollection, err error) {
+	req, err := lastResults.tagCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.TagClient", "listByAPINextResults", nil, "Failure preparing next results request")
 	}
@@ -1765,16 +1594,6 @@ func (client TagClient) listByAPINextResults(ctx context.Context, lastResults Ta
 
 // ListByAPIComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TagClient) ListByAPIComplete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result TagCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.ListByAPI")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByAPI(ctx, resourceGroupName, serviceName, apiid, filter, top, skip)
 	return
 }
@@ -1796,16 +1615,6 @@ func (client TagClient) ListByAPIComplete(ctx context.Context, resourceGroupName
 // top - number of records to return.
 // skip - number of records to skip.
 func (client TagClient) ListByOperation(ctx context.Context, resourceGroupName string, serviceName string, apiid string, operationID string, filter string, top *int32, skip *int32) (result TagCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.ListByOperation")
-		defer func() {
-			sc := -1
-			if result.tc.Response.Response != nil {
-				sc = result.tc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1903,8 +1712,8 @@ func (client TagClient) ListByOperationResponder(resp *http.Response) (result Ta
 }
 
 // listByOperationNextResults retrieves the next set of results, if any.
-func (client TagClient) listByOperationNextResults(ctx context.Context, lastResults TagCollection) (result TagCollection, err error) {
-	req, err := lastResults.tagCollectionPreparer(ctx)
+func (client TagClient) listByOperationNextResults(lastResults TagCollection) (result TagCollection, err error) {
+	req, err := lastResults.tagCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.TagClient", "listByOperationNextResults", nil, "Failure preparing next results request")
 	}
@@ -1925,16 +1734,6 @@ func (client TagClient) listByOperationNextResults(ctx context.Context, lastResu
 
 // ListByOperationComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TagClient) ListByOperationComplete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, operationID string, filter string, top *int32, skip *int32) (result TagCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.ListByOperation")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByOperation(ctx, resourceGroupName, serviceName, apiid, operationID, filter, top, skip)
 	return
 }
@@ -1951,16 +1750,6 @@ func (client TagClient) ListByOperationComplete(ctx context.Context, resourceGro
 // top - number of records to return.
 // skip - number of records to skip.
 func (client TagClient) ListByProduct(ctx context.Context, resourceGroupName string, serviceName string, productID string, filter string, top *int32, skip *int32) (result TagCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.ListByProduct")
-		defer func() {
-			sc := -1
-			if result.tc.Response.Response != nil {
-				sc = result.tc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -2053,8 +1842,8 @@ func (client TagClient) ListByProductResponder(resp *http.Response) (result TagC
 }
 
 // listByProductNextResults retrieves the next set of results, if any.
-func (client TagClient) listByProductNextResults(ctx context.Context, lastResults TagCollection) (result TagCollection, err error) {
-	req, err := lastResults.tagCollectionPreparer(ctx)
+func (client TagClient) listByProductNextResults(lastResults TagCollection) (result TagCollection, err error) {
+	req, err := lastResults.tagCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.TagClient", "listByProductNextResults", nil, "Failure preparing next results request")
 	}
@@ -2075,16 +1864,6 @@ func (client TagClient) listByProductNextResults(ctx context.Context, lastResult
 
 // ListByProductComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TagClient) ListByProductComplete(ctx context.Context, resourceGroupName string, serviceName string, productID string, filter string, top *int32, skip *int32) (result TagCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.ListByProduct")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByProduct(ctx, resourceGroupName, serviceName, productID, filter, top, skip)
 	return
 }
@@ -2100,16 +1879,6 @@ func (client TagClient) ListByProductComplete(ctx context.Context, resourceGroup
 // top - number of records to return.
 // skip - number of records to skip.
 func (client TagClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result TagCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.ListByService")
-		defer func() {
-			sc := -1
-			if result.tc.Response.Response != nil {
-				sc = result.tc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -2197,8 +1966,8 @@ func (client TagClient) ListByServiceResponder(resp *http.Response) (result TagC
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client TagClient) listByServiceNextResults(ctx context.Context, lastResults TagCollection) (result TagCollection, err error) {
-	req, err := lastResults.tagCollectionPreparer(ctx)
+func (client TagClient) listByServiceNextResults(lastResults TagCollection) (result TagCollection, err error) {
+	req, err := lastResults.tagCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.TagClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -2219,16 +1988,6 @@ func (client TagClient) listByServiceNextResults(ctx context.Context, lastResult
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TagClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result TagCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.ListByService")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
@@ -2242,16 +2001,6 @@ func (client TagClient) ListByServiceComplete(ctx context.Context, resourceGroup
 // ifMatch - eTag of the Tag Entity. ETag should match the current entity state from the header response of the
 // GET request or it should be * for unconditional update.
 func (client TagClient) Update(ctx context.Context, resourceGroupName string, serviceName string, tagID string, parameters TagCreateUpdateParameters, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},

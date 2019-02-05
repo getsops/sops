@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -43,16 +42,6 @@ func NewClient() Client {
 // secretName - the name of the secret.
 // parameters - the parameters required to create the secret (name and password)
 func (client Client) CreateSecret(ctx context.Context, accountName string, databaseName string, secretName string, parameters DataLakeAnalyticsCatalogSecretCreateOrUpdateParameters) (result USQLSecret, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.CreateSecret")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Password", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -132,16 +121,6 @@ func (client Client) CreateSecretResponder(resp *http.Response) (result USQLSecr
 // accountName - the Azure Data Lake Analytics account to execute catalog operations on.
 // databaseName - the name of the database containing the secret.
 func (client Client) DeleteAllSecrets(ctx context.Context, accountName string, databaseName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.DeleteAllSecrets")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeleteAllSecretsPreparer(ctx, accountName, databaseName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "catalog.Client", "DeleteAllSecrets", nil, "Failure preparing request")
@@ -212,16 +191,6 @@ func (client Client) DeleteAllSecretsResponder(resp *http.Response) (result auto
 // databaseName - the name of the database containing the secret.
 // secretName - the name of the secret to delete
 func (client Client) DeleteSecret(ctx context.Context, accountName string, databaseName string, secretName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.DeleteSecret")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeleteSecretPreparer(ctx, accountName, databaseName, secretName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "catalog.Client", "DeleteSecret", nil, "Failure preparing request")
@@ -293,16 +262,6 @@ func (client Client) DeleteSecretResponder(resp *http.Response) (result autorest
 // databaseName - the name of the database containing the assembly.
 // assemblyName - the name of the assembly.
 func (client Client) GetAssembly(ctx context.Context, accountName string, databaseName string, assemblyName string) (result USQLAssembly, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetAssembly")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetAssemblyPreparer(ctx, accountName, databaseName, assemblyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "catalog.Client", "GetAssembly", nil, "Failure preparing request")
@@ -375,16 +334,6 @@ func (client Client) GetAssemblyResponder(resp *http.Response) (result USQLAssem
 // databaseName - the name of the database containing the schema.
 // credentialName - the name of the credential.
 func (client Client) GetCredential(ctx context.Context, accountName string, databaseName string, credentialName string) (result USQLCredential, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetCredential")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetCredentialPreparer(ctx, accountName, databaseName, credentialName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "catalog.Client", "GetCredential", nil, "Failure preparing request")
@@ -456,16 +405,6 @@ func (client Client) GetCredentialResponder(resp *http.Response) (result USQLCre
 // accountName - the Azure Data Lake Analytics account to execute catalog operations on.
 // databaseName - the name of the database.
 func (client Client) GetDatabase(ctx context.Context, accountName string, databaseName string) (result USQLDatabase, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetDatabase")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetDatabasePreparer(ctx, accountName, databaseName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "catalog.Client", "GetDatabase", nil, "Failure preparing request")
@@ -537,16 +476,6 @@ func (client Client) GetDatabaseResponder(resp *http.Response) (result USQLDatab
 // databaseName - the name of the database containing the external data source.
 // externalDataSourceName - the name of the external data source.
 func (client Client) GetExternalDataSource(ctx context.Context, accountName string, databaseName string, externalDataSourceName string) (result USQLExternalDataSource, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetExternalDataSource")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetExternalDataSourcePreparer(ctx, accountName, databaseName, externalDataSourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "catalog.Client", "GetExternalDataSource", nil, "Failure preparing request")
@@ -620,16 +549,6 @@ func (client Client) GetExternalDataSourceResponder(resp *http.Response) (result
 // schemaName - the name of the schema containing the procedure.
 // procedureName - the name of the procedure.
 func (client Client) GetProcedure(ctx context.Context, accountName string, databaseName string, schemaName string, procedureName string) (result USQLProcedure, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetProcedure")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetProcedurePreparer(ctx, accountName, databaseName, schemaName, procedureName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "catalog.Client", "GetProcedure", nil, "Failure preparing request")
@@ -703,16 +622,6 @@ func (client Client) GetProcedureResponder(resp *http.Response) (result USQLProc
 // databaseName - the name of the database containing the schema.
 // schemaName - the name of the schema.
 func (client Client) GetSchema(ctx context.Context, accountName string, databaseName string, schemaName string) (result USQLSchema, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetSchema")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetSchemaPreparer(ctx, accountName, databaseName, schemaName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "catalog.Client", "GetSchema", nil, "Failure preparing request")
@@ -785,16 +694,6 @@ func (client Client) GetSchemaResponder(resp *http.Response) (result USQLSchema,
 // databaseName - the name of the database containing the secret.
 // secretName - the name of the secret to get
 func (client Client) GetSecret(ctx context.Context, accountName string, databaseName string, secretName string) (result USQLSecret, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetSecret")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetSecretPreparer(ctx, accountName, databaseName, secretName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "catalog.Client", "GetSecret", nil, "Failure preparing request")
@@ -868,16 +767,6 @@ func (client Client) GetSecretResponder(resp *http.Response) (result USQLSecret,
 // schemaName - the name of the schema containing the table.
 // tableName - the name of the table.
 func (client Client) GetTable(ctx context.Context, accountName string, databaseName string, schemaName string, tableName string) (result USQLTable, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetTable")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetTablePreparer(ctx, accountName, databaseName, schemaName, tableName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "catalog.Client", "GetTable", nil, "Failure preparing request")
@@ -953,16 +842,6 @@ func (client Client) GetTableResponder(resp *http.Response) (result USQLTable, e
 // tableName - the name of the table containing the partition.
 // partitionName - the name of the table partition.
 func (client Client) GetTablePartition(ctx context.Context, accountName string, databaseName string, schemaName string, tableName string, partitionName string) (result USQLTablePartition, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetTablePartition")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetTablePartitionPreparer(ctx, accountName, databaseName, schemaName, tableName, partitionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "catalog.Client", "GetTablePartition", nil, "Failure preparing request")
@@ -1039,16 +918,6 @@ func (client Client) GetTablePartitionResponder(resp *http.Response) (result USQ
 // tableName - the name of the table containing the statistics.
 // statisticsName - the name of the table statistics.
 func (client Client) GetTableStatistic(ctx context.Context, accountName string, databaseName string, schemaName string, tableName string, statisticsName string) (result USQLTableStatistics, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetTableStatistic")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetTableStatisticPreparer(ctx, accountName, databaseName, schemaName, tableName, statisticsName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "catalog.Client", "GetTableStatistic", nil, "Failure preparing request")
@@ -1124,16 +993,6 @@ func (client Client) GetTableStatisticResponder(resp *http.Response) (result USQ
 // schemaName - the name of the schema containing the table type.
 // tableTypeName - the name of the table type to retrieve.
 func (client Client) GetTableType(ctx context.Context, accountName string, databaseName string, schemaName string, tableTypeName string) (result USQLTableType, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetTableType")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetTableTypePreparer(ctx, accountName, databaseName, schemaName, tableTypeName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "catalog.Client", "GetTableType", nil, "Failure preparing request")
@@ -1208,16 +1067,6 @@ func (client Client) GetTableTypeResponder(resp *http.Response) (result USQLTabl
 // schemaName - the name of the schema containing the table valued function.
 // tableValuedFunctionName - the name of the tableValuedFunction.
 func (client Client) GetTableValuedFunction(ctx context.Context, accountName string, databaseName string, schemaName string, tableValuedFunctionName string) (result USQLTableValuedFunction, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetTableValuedFunction")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetTableValuedFunctionPreparer(ctx, accountName, databaseName, schemaName, tableValuedFunctionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "catalog.Client", "GetTableValuedFunction", nil, "Failure preparing request")
@@ -1292,16 +1141,6 @@ func (client Client) GetTableValuedFunctionResponder(resp *http.Response) (resul
 // schemaName - the name of the schema containing the view.
 // viewName - the name of the view.
 func (client Client) GetView(ctx context.Context, accountName string, databaseName string, schemaName string, viewName string) (result USQLView, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetView")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetViewPreparer(ctx, accountName, databaseName, schemaName, viewName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "catalog.Client", "GetView", nil, "Failure preparing request")
@@ -1386,16 +1225,6 @@ func (client Client) GetViewResponder(resp *http.Response) (result USQLView, err
 // count - the Boolean value of true or false to request a count of the matching resources included with the
 // resources in the response, e.g. Categories?$count=true. Optional.
 func (client Client) ListAssemblies(ctx context.Context, accountName string, databaseName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLAssemblyListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListAssemblies")
-		defer func() {
-			sc := -1
-			if result.ual.Response.Response != nil {
-				sc = result.ual.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listAssembliesNextResults
 	req, err := client.ListAssembliesPreparer(ctx, accountName, databaseName, filter, top, skip, expand, selectParameter, orderby, count)
 	if err != nil {
@@ -1484,8 +1313,8 @@ func (client Client) ListAssembliesResponder(resp *http.Response) (result USQLAs
 }
 
 // listAssembliesNextResults retrieves the next set of results, if any.
-func (client Client) listAssembliesNextResults(ctx context.Context, lastResults USQLAssemblyList) (result USQLAssemblyList, err error) {
-	req, err := lastResults.uSQLAssemblyListPreparer(ctx)
+func (client Client) listAssembliesNextResults(lastResults USQLAssemblyList) (result USQLAssemblyList, err error) {
+	req, err := lastResults.uSQLAssemblyListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "catalog.Client", "listAssembliesNextResults", nil, "Failure preparing next results request")
 	}
@@ -1506,16 +1335,6 @@ func (client Client) listAssembliesNextResults(ctx context.Context, lastResults 
 
 // ListAssembliesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListAssembliesComplete(ctx context.Context, accountName string, databaseName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLAssemblyListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListAssemblies")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListAssemblies(ctx, accountName, databaseName, filter, top, skip, expand, selectParameter, orderby, count)
 	return
 }
@@ -1537,16 +1356,6 @@ func (client Client) ListAssembliesComplete(ctx context.Context, accountName str
 // count - the Boolean value of true or false to request a count of the matching resources included with the
 // resources in the response, e.g. Categories?$count=true. Optional.
 func (client Client) ListCredentials(ctx context.Context, accountName string, databaseName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLCredentialListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListCredentials")
-		defer func() {
-			sc := -1
-			if result.ucl.Response.Response != nil {
-				sc = result.ucl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listCredentialsNextResults
 	req, err := client.ListCredentialsPreparer(ctx, accountName, databaseName, filter, top, skip, expand, selectParameter, orderby, count)
 	if err != nil {
@@ -1635,8 +1444,8 @@ func (client Client) ListCredentialsResponder(resp *http.Response) (result USQLC
 }
 
 // listCredentialsNextResults retrieves the next set of results, if any.
-func (client Client) listCredentialsNextResults(ctx context.Context, lastResults USQLCredentialList) (result USQLCredentialList, err error) {
-	req, err := lastResults.uSQLCredentialListPreparer(ctx)
+func (client Client) listCredentialsNextResults(lastResults USQLCredentialList) (result USQLCredentialList, err error) {
+	req, err := lastResults.uSQLCredentialListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "catalog.Client", "listCredentialsNextResults", nil, "Failure preparing next results request")
 	}
@@ -1657,16 +1466,6 @@ func (client Client) listCredentialsNextResults(ctx context.Context, lastResults
 
 // ListCredentialsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListCredentialsComplete(ctx context.Context, accountName string, databaseName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLCredentialListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListCredentials")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListCredentials(ctx, accountName, databaseName, filter, top, skip, expand, selectParameter, orderby, count)
 	return
 }
@@ -1687,16 +1486,6 @@ func (client Client) ListCredentialsComplete(ctx context.Context, accountName st
 // count - the Boolean value of true or false to request a count of the matching resources included with the
 // resources in the response, e.g. Categories?$count=true. Optional.
 func (client Client) ListDatabases(ctx context.Context, accountName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLDatabaseListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListDatabases")
-		defer func() {
-			sc := -1
-			if result.udl.Response.Response != nil {
-				sc = result.udl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listDatabasesNextResults
 	req, err := client.ListDatabasesPreparer(ctx, accountName, filter, top, skip, expand, selectParameter, orderby, count)
 	if err != nil {
@@ -1781,8 +1570,8 @@ func (client Client) ListDatabasesResponder(resp *http.Response) (result USQLDat
 }
 
 // listDatabasesNextResults retrieves the next set of results, if any.
-func (client Client) listDatabasesNextResults(ctx context.Context, lastResults USQLDatabaseList) (result USQLDatabaseList, err error) {
-	req, err := lastResults.uSQLDatabaseListPreparer(ctx)
+func (client Client) listDatabasesNextResults(lastResults USQLDatabaseList) (result USQLDatabaseList, err error) {
+	req, err := lastResults.uSQLDatabaseListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "catalog.Client", "listDatabasesNextResults", nil, "Failure preparing next results request")
 	}
@@ -1803,16 +1592,6 @@ func (client Client) listDatabasesNextResults(ctx context.Context, lastResults U
 
 // ListDatabasesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListDatabasesComplete(ctx context.Context, accountName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLDatabaseListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListDatabases")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListDatabases(ctx, accountName, filter, top, skip, expand, selectParameter, orderby, count)
 	return
 }
@@ -1834,16 +1613,6 @@ func (client Client) ListDatabasesComplete(ctx context.Context, accountName stri
 // count - the Boolean value of true or false to request a count of the matching resources included with the
 // resources in the response, e.g. Categories?$count=true. Optional.
 func (client Client) ListExternalDataSources(ctx context.Context, accountName string, databaseName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLExternalDataSourceListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListExternalDataSources")
-		defer func() {
-			sc := -1
-			if result.uedsl.Response.Response != nil {
-				sc = result.uedsl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listExternalDataSourcesNextResults
 	req, err := client.ListExternalDataSourcesPreparer(ctx, accountName, databaseName, filter, top, skip, expand, selectParameter, orderby, count)
 	if err != nil {
@@ -1932,8 +1701,8 @@ func (client Client) ListExternalDataSourcesResponder(resp *http.Response) (resu
 }
 
 // listExternalDataSourcesNextResults retrieves the next set of results, if any.
-func (client Client) listExternalDataSourcesNextResults(ctx context.Context, lastResults USQLExternalDataSourceList) (result USQLExternalDataSourceList, err error) {
-	req, err := lastResults.uSQLExternalDataSourceListPreparer(ctx)
+func (client Client) listExternalDataSourcesNextResults(lastResults USQLExternalDataSourceList) (result USQLExternalDataSourceList, err error) {
+	req, err := lastResults.uSQLExternalDataSourceListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "catalog.Client", "listExternalDataSourcesNextResults", nil, "Failure preparing next results request")
 	}
@@ -1954,16 +1723,6 @@ func (client Client) listExternalDataSourcesNextResults(ctx context.Context, las
 
 // ListExternalDataSourcesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListExternalDataSourcesComplete(ctx context.Context, accountName string, databaseName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLExternalDataSourceListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListExternalDataSources")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListExternalDataSources(ctx, accountName, databaseName, filter, top, skip, expand, selectParameter, orderby, count)
 	return
 }
@@ -1986,16 +1745,6 @@ func (client Client) ListExternalDataSourcesComplete(ctx context.Context, accoun
 // count - the Boolean value of true or false to request a count of the matching resources included with the
 // resources in the response, e.g. Categories?$count=true. Optional.
 func (client Client) ListProcedures(ctx context.Context, accountName string, databaseName string, schemaName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLProcedureListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListProcedures")
-		defer func() {
-			sc := -1
-			if result.upl.Response.Response != nil {
-				sc = result.upl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listProceduresNextResults
 	req, err := client.ListProceduresPreparer(ctx, accountName, databaseName, schemaName, filter, top, skip, expand, selectParameter, orderby, count)
 	if err != nil {
@@ -2085,8 +1834,8 @@ func (client Client) ListProceduresResponder(resp *http.Response) (result USQLPr
 }
 
 // listProceduresNextResults retrieves the next set of results, if any.
-func (client Client) listProceduresNextResults(ctx context.Context, lastResults USQLProcedureList) (result USQLProcedureList, err error) {
-	req, err := lastResults.uSQLProcedureListPreparer(ctx)
+func (client Client) listProceduresNextResults(lastResults USQLProcedureList) (result USQLProcedureList, err error) {
+	req, err := lastResults.uSQLProcedureListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "catalog.Client", "listProceduresNextResults", nil, "Failure preparing next results request")
 	}
@@ -2107,16 +1856,6 @@ func (client Client) listProceduresNextResults(ctx context.Context, lastResults 
 
 // ListProceduresComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListProceduresComplete(ctx context.Context, accountName string, databaseName string, schemaName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLProcedureListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListProcedures")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListProcedures(ctx, accountName, databaseName, schemaName, filter, top, skip, expand, selectParameter, orderby, count)
 	return
 }
@@ -2138,16 +1877,6 @@ func (client Client) ListProceduresComplete(ctx context.Context, accountName str
 // count - the Boolean value of true or false to request a count of the matching resources included with the
 // resources in the response, e.g. Categories?$count=true. Optional.
 func (client Client) ListSchemas(ctx context.Context, accountName string, databaseName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLSchemaListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListSchemas")
-		defer func() {
-			sc := -1
-			if result.usl.Response.Response != nil {
-				sc = result.usl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listSchemasNextResults
 	req, err := client.ListSchemasPreparer(ctx, accountName, databaseName, filter, top, skip, expand, selectParameter, orderby, count)
 	if err != nil {
@@ -2236,8 +1965,8 @@ func (client Client) ListSchemasResponder(resp *http.Response) (result USQLSchem
 }
 
 // listSchemasNextResults retrieves the next set of results, if any.
-func (client Client) listSchemasNextResults(ctx context.Context, lastResults USQLSchemaList) (result USQLSchemaList, err error) {
-	req, err := lastResults.uSQLSchemaListPreparer(ctx)
+func (client Client) listSchemasNextResults(lastResults USQLSchemaList) (result USQLSchemaList, err error) {
+	req, err := lastResults.uSQLSchemaListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "catalog.Client", "listSchemasNextResults", nil, "Failure preparing next results request")
 	}
@@ -2258,16 +1987,6 @@ func (client Client) listSchemasNextResults(ctx context.Context, lastResults USQ
 
 // ListSchemasComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListSchemasComplete(ctx context.Context, accountName string, databaseName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLSchemaListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListSchemas")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListSchemas(ctx, accountName, databaseName, filter, top, skip, expand, selectParameter, orderby, count)
 	return
 }
@@ -2291,16 +2010,6 @@ func (client Client) ListSchemasComplete(ctx context.Context, accountName string
 // count - the Boolean value of true or false to request a count of the matching resources included with the
 // resources in the response, e.g. Categories?$count=true. Optional.
 func (client Client) ListTablePartitions(ctx context.Context, accountName string, databaseName string, schemaName string, tableName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLTablePartitionListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListTablePartitions")
-		defer func() {
-			sc := -1
-			if result.utpl.Response.Response != nil {
-				sc = result.utpl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listTablePartitionsNextResults
 	req, err := client.ListTablePartitionsPreparer(ctx, accountName, databaseName, schemaName, tableName, filter, top, skip, expand, selectParameter, orderby, count)
 	if err != nil {
@@ -2391,8 +2100,8 @@ func (client Client) ListTablePartitionsResponder(resp *http.Response) (result U
 }
 
 // listTablePartitionsNextResults retrieves the next set of results, if any.
-func (client Client) listTablePartitionsNextResults(ctx context.Context, lastResults USQLTablePartitionList) (result USQLTablePartitionList, err error) {
-	req, err := lastResults.uSQLTablePartitionListPreparer(ctx)
+func (client Client) listTablePartitionsNextResults(lastResults USQLTablePartitionList) (result USQLTablePartitionList, err error) {
+	req, err := lastResults.uSQLTablePartitionListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "catalog.Client", "listTablePartitionsNextResults", nil, "Failure preparing next results request")
 	}
@@ -2413,16 +2122,6 @@ func (client Client) listTablePartitionsNextResults(ctx context.Context, lastRes
 
 // ListTablePartitionsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListTablePartitionsComplete(ctx context.Context, accountName string, databaseName string, schemaName string, tableName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLTablePartitionListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListTablePartitions")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListTablePartitions(ctx, accountName, databaseName, schemaName, tableName, filter, top, skip, expand, selectParameter, orderby, count)
 	return
 }
@@ -2445,16 +2144,6 @@ func (client Client) ListTablePartitionsComplete(ctx context.Context, accountNam
 // count - the Boolean value of true or false to request a count of the matching resources included with the
 // resources in the response, e.g. Categories?$count=true. Optional.
 func (client Client) ListTables(ctx context.Context, accountName string, databaseName string, schemaName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLTableListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListTables")
-		defer func() {
-			sc := -1
-			if result.utl.Response.Response != nil {
-				sc = result.utl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listTablesNextResults
 	req, err := client.ListTablesPreparer(ctx, accountName, databaseName, schemaName, filter, top, skip, expand, selectParameter, orderby, count)
 	if err != nil {
@@ -2544,8 +2233,8 @@ func (client Client) ListTablesResponder(resp *http.Response) (result USQLTableL
 }
 
 // listTablesNextResults retrieves the next set of results, if any.
-func (client Client) listTablesNextResults(ctx context.Context, lastResults USQLTableList) (result USQLTableList, err error) {
-	req, err := lastResults.uSQLTableListPreparer(ctx)
+func (client Client) listTablesNextResults(lastResults USQLTableList) (result USQLTableList, err error) {
+	req, err := lastResults.uSQLTableListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "catalog.Client", "listTablesNextResults", nil, "Failure preparing next results request")
 	}
@@ -2566,16 +2255,6 @@ func (client Client) listTablesNextResults(ctx context.Context, lastResults USQL
 
 // ListTablesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListTablesComplete(ctx context.Context, accountName string, databaseName string, schemaName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLTableListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListTables")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListTables(ctx, accountName, databaseName, schemaName, filter, top, skip, expand, selectParameter, orderby, count)
 	return
 }
@@ -2599,16 +2278,6 @@ func (client Client) ListTablesComplete(ctx context.Context, accountName string,
 // count - the Boolean value of true or false to request a count of the matching resources included with the
 // resources in the response, e.g. Categories?$count=true. Optional.
 func (client Client) ListTableStatistics(ctx context.Context, accountName string, databaseName string, schemaName string, tableName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLTableStatisticsListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListTableStatistics")
-		defer func() {
-			sc := -1
-			if result.utsl.Response.Response != nil {
-				sc = result.utsl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listTableStatisticsNextResults
 	req, err := client.ListTableStatisticsPreparer(ctx, accountName, databaseName, schemaName, tableName, filter, top, skip, expand, selectParameter, orderby, count)
 	if err != nil {
@@ -2699,8 +2368,8 @@ func (client Client) ListTableStatisticsResponder(resp *http.Response) (result U
 }
 
 // listTableStatisticsNextResults retrieves the next set of results, if any.
-func (client Client) listTableStatisticsNextResults(ctx context.Context, lastResults USQLTableStatisticsList) (result USQLTableStatisticsList, err error) {
-	req, err := lastResults.uSQLTableStatisticsListPreparer(ctx)
+func (client Client) listTableStatisticsNextResults(lastResults USQLTableStatisticsList) (result USQLTableStatisticsList, err error) {
+	req, err := lastResults.uSQLTableStatisticsListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "catalog.Client", "listTableStatisticsNextResults", nil, "Failure preparing next results request")
 	}
@@ -2721,16 +2390,6 @@ func (client Client) listTableStatisticsNextResults(ctx context.Context, lastRes
 
 // ListTableStatisticsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListTableStatisticsComplete(ctx context.Context, accountName string, databaseName string, schemaName string, tableName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLTableStatisticsListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListTableStatistics")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListTableStatistics(ctx, accountName, databaseName, schemaName, tableName, filter, top, skip, expand, selectParameter, orderby, count)
 	return
 }
@@ -2753,16 +2412,6 @@ func (client Client) ListTableStatisticsComplete(ctx context.Context, accountNam
 // count - the Boolean value of true or false to request a count of the matching resources included with the
 // resources in the response, e.g. Categories?$count=true. Optional.
 func (client Client) ListTableTypes(ctx context.Context, accountName string, databaseName string, schemaName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLTableTypeListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListTableTypes")
-		defer func() {
-			sc := -1
-			if result.uttl.Response.Response != nil {
-				sc = result.uttl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listTableTypesNextResults
 	req, err := client.ListTableTypesPreparer(ctx, accountName, databaseName, schemaName, filter, top, skip, expand, selectParameter, orderby, count)
 	if err != nil {
@@ -2852,8 +2501,8 @@ func (client Client) ListTableTypesResponder(resp *http.Response) (result USQLTa
 }
 
 // listTableTypesNextResults retrieves the next set of results, if any.
-func (client Client) listTableTypesNextResults(ctx context.Context, lastResults USQLTableTypeList) (result USQLTableTypeList, err error) {
-	req, err := lastResults.uSQLTableTypeListPreparer(ctx)
+func (client Client) listTableTypesNextResults(lastResults USQLTableTypeList) (result USQLTableTypeList, err error) {
+	req, err := lastResults.uSQLTableTypeListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "catalog.Client", "listTableTypesNextResults", nil, "Failure preparing next results request")
 	}
@@ -2874,16 +2523,6 @@ func (client Client) listTableTypesNextResults(ctx context.Context, lastResults 
 
 // ListTableTypesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListTableTypesComplete(ctx context.Context, accountName string, databaseName string, schemaName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLTableTypeListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListTableTypes")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListTableTypes(ctx, accountName, databaseName, schemaName, filter, top, skip, expand, selectParameter, orderby, count)
 	return
 }
@@ -2906,16 +2545,6 @@ func (client Client) ListTableTypesComplete(ctx context.Context, accountName str
 // count - the Boolean value of true or false to request a count of the matching resources included with the
 // resources in the response, e.g. Categories?$count=true. Optional.
 func (client Client) ListTableValuedFunctions(ctx context.Context, accountName string, databaseName string, schemaName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLTableValuedFunctionListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListTableValuedFunctions")
-		defer func() {
-			sc := -1
-			if result.utvfl.Response.Response != nil {
-				sc = result.utvfl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listTableValuedFunctionsNextResults
 	req, err := client.ListTableValuedFunctionsPreparer(ctx, accountName, databaseName, schemaName, filter, top, skip, expand, selectParameter, orderby, count)
 	if err != nil {
@@ -3005,8 +2634,8 @@ func (client Client) ListTableValuedFunctionsResponder(resp *http.Response) (res
 }
 
 // listTableValuedFunctionsNextResults retrieves the next set of results, if any.
-func (client Client) listTableValuedFunctionsNextResults(ctx context.Context, lastResults USQLTableValuedFunctionList) (result USQLTableValuedFunctionList, err error) {
-	req, err := lastResults.uSQLTableValuedFunctionListPreparer(ctx)
+func (client Client) listTableValuedFunctionsNextResults(lastResults USQLTableValuedFunctionList) (result USQLTableValuedFunctionList, err error) {
+	req, err := lastResults.uSQLTableValuedFunctionListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "catalog.Client", "listTableValuedFunctionsNextResults", nil, "Failure preparing next results request")
 	}
@@ -3027,16 +2656,6 @@ func (client Client) listTableValuedFunctionsNextResults(ctx context.Context, la
 
 // ListTableValuedFunctionsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListTableValuedFunctionsComplete(ctx context.Context, accountName string, databaseName string, schemaName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLTableValuedFunctionListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListTableValuedFunctions")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListTableValuedFunctions(ctx, accountName, databaseName, schemaName, filter, top, skip, expand, selectParameter, orderby, count)
 	return
 }
@@ -3059,16 +2678,6 @@ func (client Client) ListTableValuedFunctionsComplete(ctx context.Context, accou
 // count - the Boolean value of true or false to request a count of the matching resources included with the
 // resources in the response, e.g. Categories?$count=true. Optional.
 func (client Client) ListTypes(ctx context.Context, accountName string, databaseName string, schemaName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLTypeListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListTypes")
-		defer func() {
-			sc := -1
-			if result.utl.Response.Response != nil {
-				sc = result.utl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listTypesNextResults
 	req, err := client.ListTypesPreparer(ctx, accountName, databaseName, schemaName, filter, top, skip, expand, selectParameter, orderby, count)
 	if err != nil {
@@ -3158,8 +2767,8 @@ func (client Client) ListTypesResponder(resp *http.Response) (result USQLTypeLis
 }
 
 // listTypesNextResults retrieves the next set of results, if any.
-func (client Client) listTypesNextResults(ctx context.Context, lastResults USQLTypeList) (result USQLTypeList, err error) {
-	req, err := lastResults.uSQLTypeListPreparer(ctx)
+func (client Client) listTypesNextResults(lastResults USQLTypeList) (result USQLTypeList, err error) {
+	req, err := lastResults.uSQLTypeListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "catalog.Client", "listTypesNextResults", nil, "Failure preparing next results request")
 	}
@@ -3180,16 +2789,6 @@ func (client Client) listTypesNextResults(ctx context.Context, lastResults USQLT
 
 // ListTypesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListTypesComplete(ctx context.Context, accountName string, databaseName string, schemaName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLTypeListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListTypes")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListTypes(ctx, accountName, databaseName, schemaName, filter, top, skip, expand, selectParameter, orderby, count)
 	return
 }
@@ -3212,16 +2811,6 @@ func (client Client) ListTypesComplete(ctx context.Context, accountName string, 
 // count - the Boolean value of true or false to request a count of the matching resources included with the
 // resources in the response, e.g. Categories?$count=true. Optional.
 func (client Client) ListViews(ctx context.Context, accountName string, databaseName string, schemaName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLViewListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListViews")
-		defer func() {
-			sc := -1
-			if result.uvl.Response.Response != nil {
-				sc = result.uvl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listViewsNextResults
 	req, err := client.ListViewsPreparer(ctx, accountName, databaseName, schemaName, filter, top, skip, expand, selectParameter, orderby, count)
 	if err != nil {
@@ -3311,8 +2900,8 @@ func (client Client) ListViewsResponder(resp *http.Response) (result USQLViewLis
 }
 
 // listViewsNextResults retrieves the next set of results, if any.
-func (client Client) listViewsNextResults(ctx context.Context, lastResults USQLViewList) (result USQLViewList, err error) {
-	req, err := lastResults.uSQLViewListPreparer(ctx)
+func (client Client) listViewsNextResults(lastResults USQLViewList) (result USQLViewList, err error) {
+	req, err := lastResults.uSQLViewListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "catalog.Client", "listViewsNextResults", nil, "Failure preparing next results request")
 	}
@@ -3333,16 +2922,6 @@ func (client Client) listViewsNextResults(ctx context.Context, lastResults USQLV
 
 // ListViewsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListViewsComplete(ctx context.Context, accountName string, databaseName string, schemaName string, filter string, top *int32, skip *int32, expand string, selectParameter string, orderby string, count *bool) (result USQLViewListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListViews")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListViews(ctx, accountName, databaseName, schemaName, filter, top, skip, expand, selectParameter, orderby, count)
 	return
 }
@@ -3354,16 +2933,6 @@ func (client Client) ListViewsComplete(ctx context.Context, accountName string, 
 // secretName - the name of the secret.
 // parameters - the parameters required to modify the secret (name and password)
 func (client Client) UpdateSecret(ctx context.Context, accountName string, databaseName string, secretName string, parameters DataLakeAnalyticsCatalogSecretCreateOrUpdateParameters) (result USQLSecret, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.UpdateSecret")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.UpdateSecretPreparer(ctx, accountName, databaseName, secretName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "catalog.Client", "UpdateSecret", nil, "Failure preparing request")

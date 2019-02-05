@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewStorageAccountsClientWithBaseURI(baseURI string, subscriptionID string) 
 // storageAccountName - the name of the Azure Storage account to add
 // parameters - the parameters containing the access key and optional suffix for the Azure Storage Account.
 func (client StorageAccountsClient) Add(ctx context.Context, resourceGroupName string, accountName string, storageAccountName string, parameters AddStorageAccountParameters) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/StorageAccountsClient.Add")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.AddStorageAccountProperties", Name: validation.Null, Rule: true,
@@ -135,16 +124,6 @@ func (client StorageAccountsClient) AddResponder(resp *http.Response) (result au
 // accountName - the name of the Data Lake Analytics account.
 // storageAccountName - the name of the Azure Storage account to remove
 func (client StorageAccountsClient) Delete(ctx context.Context, resourceGroupName string, accountName string, storageAccountName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/StorageAccountsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, accountName, storageAccountName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "account.StorageAccountsClient", "Delete", nil, "Failure preparing request")
@@ -213,16 +192,6 @@ func (client StorageAccountsClient) DeleteResponder(resp *http.Response) (result
 // accountName - the name of the Data Lake Analytics account.
 // storageAccountName - the name of the Azure Storage account for which to retrieve the details.
 func (client StorageAccountsClient) Get(ctx context.Context, resourceGroupName string, accountName string, storageAccountName string) (result StorageAccountInformation, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/StorageAccountsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, accountName, storageAccountName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "account.StorageAccountsClient", "Get", nil, "Failure preparing request")
@@ -294,16 +263,6 @@ func (client StorageAccountsClient) GetResponder(resp *http.Response) (result St
 // storageAccountName - the name of the Azure storage account from which to retrieve the blob container.
 // containerName - the name of the Azure storage container to retrieve
 func (client StorageAccountsClient) GetStorageContainer(ctx context.Context, resourceGroupName string, accountName string, storageAccountName string, containerName string) (result StorageContainer, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/StorageAccountsClient.GetStorageContainer")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetStorageContainerPreparer(ctx, resourceGroupName, accountName, storageAccountName, containerName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "account.StorageAccountsClient", "GetStorageContainer", nil, "Failure preparing request")
@@ -384,16 +343,6 @@ func (client StorageAccountsClient) GetStorageContainerResponder(resp *http.Resp
 // count - the Boolean value of true or false to request a count of the matching resources included with the
 // resources in the response, e.g. Categories?$count=true. Optional.
 func (client StorageAccountsClient) ListByAccount(ctx context.Context, resourceGroupName string, accountName string, filter string, top *int32, skip *int32, selectParameter string, orderby string, count *bool) (result StorageAccountInformationListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/StorageAccountsClient.ListByAccount")
-		defer func() {
-			sc := -1
-			if result.sailr.Response.Response != nil {
-				sc = result.sailr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -486,8 +435,8 @@ func (client StorageAccountsClient) ListByAccountResponder(resp *http.Response) 
 }
 
 // listByAccountNextResults retrieves the next set of results, if any.
-func (client StorageAccountsClient) listByAccountNextResults(ctx context.Context, lastResults StorageAccountInformationListResult) (result StorageAccountInformationListResult, err error) {
-	req, err := lastResults.storageAccountInformationListResultPreparer(ctx)
+func (client StorageAccountsClient) listByAccountNextResults(lastResults StorageAccountInformationListResult) (result StorageAccountInformationListResult, err error) {
+	req, err := lastResults.storageAccountInformationListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "account.StorageAccountsClient", "listByAccountNextResults", nil, "Failure preparing next results request")
 	}
@@ -508,16 +457,6 @@ func (client StorageAccountsClient) listByAccountNextResults(ctx context.Context
 
 // ListByAccountComplete enumerates all values, automatically crossing page boundaries as required.
 func (client StorageAccountsClient) ListByAccountComplete(ctx context.Context, resourceGroupName string, accountName string, filter string, top *int32, skip *int32, selectParameter string, orderby string, count *bool) (result StorageAccountInformationListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/StorageAccountsClient.ListByAccount")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByAccount(ctx, resourceGroupName, accountName, filter, top, skip, selectParameter, orderby, count)
 	return
 }
@@ -530,16 +469,6 @@ func (client StorageAccountsClient) ListByAccountComplete(ctx context.Context, r
 // storageAccountName - the name of the Azure storage account for which the SAS token is being requested.
 // containerName - the name of the Azure storage container for which the SAS token is being requested.
 func (client StorageAccountsClient) ListSasTokens(ctx context.Context, resourceGroupName string, accountName string, storageAccountName string, containerName string) (result SasTokenInformationListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/StorageAccountsClient.ListSasTokens")
-		defer func() {
-			sc := -1
-			if result.stilr.Response.Response != nil {
-				sc = result.stilr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listSasTokensNextResults
 	req, err := client.ListSasTokensPreparer(ctx, resourceGroupName, accountName, storageAccountName, containerName)
 	if err != nil {
@@ -606,8 +535,8 @@ func (client StorageAccountsClient) ListSasTokensResponder(resp *http.Response) 
 }
 
 // listSasTokensNextResults retrieves the next set of results, if any.
-func (client StorageAccountsClient) listSasTokensNextResults(ctx context.Context, lastResults SasTokenInformationListResult) (result SasTokenInformationListResult, err error) {
-	req, err := lastResults.sasTokenInformationListResultPreparer(ctx)
+func (client StorageAccountsClient) listSasTokensNextResults(lastResults SasTokenInformationListResult) (result SasTokenInformationListResult, err error) {
+	req, err := lastResults.sasTokenInformationListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "account.StorageAccountsClient", "listSasTokensNextResults", nil, "Failure preparing next results request")
 	}
@@ -628,16 +557,6 @@ func (client StorageAccountsClient) listSasTokensNextResults(ctx context.Context
 
 // ListSasTokensComplete enumerates all values, automatically crossing page boundaries as required.
 func (client StorageAccountsClient) ListSasTokensComplete(ctx context.Context, resourceGroupName string, accountName string, storageAccountName string, containerName string) (result SasTokenInformationListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/StorageAccountsClient.ListSasTokens")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListSasTokens(ctx, resourceGroupName, accountName, storageAccountName, containerName)
 	return
 }
@@ -649,16 +568,6 @@ func (client StorageAccountsClient) ListSasTokensComplete(ctx context.Context, r
 // accountName - the name of the Data Lake Analytics account.
 // storageAccountName - the name of the Azure storage account from which to list blob containers.
 func (client StorageAccountsClient) ListStorageContainers(ctx context.Context, resourceGroupName string, accountName string, storageAccountName string) (result StorageContainerListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/StorageAccountsClient.ListStorageContainers")
-		defer func() {
-			sc := -1
-			if result.sclr.Response.Response != nil {
-				sc = result.sclr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listStorageContainersNextResults
 	req, err := client.ListStorageContainersPreparer(ctx, resourceGroupName, accountName, storageAccountName)
 	if err != nil {
@@ -724,8 +633,8 @@ func (client StorageAccountsClient) ListStorageContainersResponder(resp *http.Re
 }
 
 // listStorageContainersNextResults retrieves the next set of results, if any.
-func (client StorageAccountsClient) listStorageContainersNextResults(ctx context.Context, lastResults StorageContainerListResult) (result StorageContainerListResult, err error) {
-	req, err := lastResults.storageContainerListResultPreparer(ctx)
+func (client StorageAccountsClient) listStorageContainersNextResults(lastResults StorageContainerListResult) (result StorageContainerListResult, err error) {
+	req, err := lastResults.storageContainerListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "account.StorageAccountsClient", "listStorageContainersNextResults", nil, "Failure preparing next results request")
 	}
@@ -746,16 +655,6 @@ func (client StorageAccountsClient) listStorageContainersNextResults(ctx context
 
 // ListStorageContainersComplete enumerates all values, automatically crossing page boundaries as required.
 func (client StorageAccountsClient) ListStorageContainersComplete(ctx context.Context, resourceGroupName string, accountName string, storageAccountName string) (result StorageContainerListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/StorageAccountsClient.ListStorageContainers")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListStorageContainers(ctx, resourceGroupName, accountName, storageAccountName)
 	return
 }
@@ -769,16 +668,6 @@ func (client StorageAccountsClient) ListStorageContainersComplete(ctx context.Co
 // parameters - the parameters containing the access key and suffix to update the storage account with, if any.
 // Passing nothing results in no change.
 func (client StorageAccountsClient) Update(ctx context.Context, resourceGroupName string, accountName string, storageAccountName string, parameters *UpdateStorageAccountParameters) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/StorageAccountsClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, accountName, storageAccountName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "account.StorageAccountsClient", "Update", nil, "Failure preparing request")

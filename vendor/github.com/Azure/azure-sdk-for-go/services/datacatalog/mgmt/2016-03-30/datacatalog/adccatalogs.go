@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,16 +49,6 @@ func NewADCCatalogsClientWithBaseURI(baseURI string, subscriptionID string, cata
 // insensitive.
 // properties - properties supplied to the Create or Update a data catalog.
 func (client ADCCatalogsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, properties ADCCatalog) (result ADCCatalog, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ADCCatalogsClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -137,16 +126,6 @@ func (client ADCCatalogsClient) CreateOrUpdateResponder(resp *http.Response) (re
 // resourceGroupName - the name of the resource group within the user's subscription. The name is case
 // insensitive.
 func (client ADCCatalogsClient) Delete(ctx context.Context, resourceGroupName string) (result ADCCatalogsDeleteFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ADCCatalogsClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -200,6 +179,10 @@ func (client ADCCatalogsClient) DeleteSender(req *http.Request) (future ADCCatal
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -221,16 +204,6 @@ func (client ADCCatalogsClient) DeleteResponder(resp *http.Response) (result aut
 // resourceGroupName - the name of the resource group within the user's subscription. The name is case
 // insensitive.
 func (client ADCCatalogsClient) Get(ctx context.Context, resourceGroupName string) (result ADCCatalog, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ADCCatalogsClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -307,16 +280,6 @@ func (client ADCCatalogsClient) GetResponder(resp *http.Response) (result ADCCat
 // resourceGroupName - the name of the resource group within the user's subscription. The name is case
 // insensitive.
 func (client ADCCatalogsClient) ListtByResourceGroup(ctx context.Context, resourceGroupName string) (result ADCCatalogsListResult, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ADCCatalogsClient.ListtByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -393,16 +356,6 @@ func (client ADCCatalogsClient) ListtByResourceGroupResponder(resp *http.Respons
 // insensitive.
 // properties - properties supplied to the Update a data catalog.
 func (client ADCCatalogsClient) Update(ctx context.Context, resourceGroupName string, properties ADCCatalog) (result ADCCatalog, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ADCCatalogsClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

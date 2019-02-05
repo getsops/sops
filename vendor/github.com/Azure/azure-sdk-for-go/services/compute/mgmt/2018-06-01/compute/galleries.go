@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -40,23 +39,12 @@ func NewGalleriesClientWithBaseURI(baseURI string, subscriptionID string) Galler
 	return GalleriesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
-// CreateOrUpdate create or update a Shared Image Gallery.
+// CreateOrUpdate create or update a gallery.
 // Parameters:
 // resourceGroupName - the name of the resource group.
-// galleryName - the name of the Shared Image Gallery. The allowed characters are alphabets and numbers with
-// dots and periods allowed in the middle. The maximum length is 80 characters.
-// gallery - parameters supplied to the create or update Shared Image Gallery operation.
+// galleryName - the name of the gallery.
+// gallery - parameters supplied to the create or update gallery operation.
 func (client GalleriesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, galleryName string, gallery Gallery) (result GalleriesCreateOrUpdateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GalleriesClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, galleryName, gallery)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "compute.GalleriesClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -104,6 +92,10 @@ func (client GalleriesClient) CreateOrUpdateSender(req *http.Request) (future Ga
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -121,21 +113,11 @@ func (client GalleriesClient) CreateOrUpdateResponder(resp *http.Response) (resu
 	return
 }
 
-// Delete delete a Shared Image Gallery.
+// Delete delete a gallery.
 // Parameters:
 // resourceGroupName - the name of the resource group.
-// galleryName - the name of the Shared Image Gallery to be deleted.
+// galleryName - the name of the gallery.
 func (client GalleriesClient) Delete(ctx context.Context, resourceGroupName string, galleryName string) (result GalleriesDeleteFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GalleriesClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, galleryName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "compute.GalleriesClient", "Delete", nil, "Failure preparing request")
@@ -181,6 +163,10 @@ func (client GalleriesClient) DeleteSender(req *http.Request) (future GalleriesD
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -197,21 +183,11 @@ func (client GalleriesClient) DeleteResponder(resp *http.Response) (result autor
 	return
 }
 
-// Get retrieves information about a Shared Image Gallery.
+// Get retrieves information about a gallery.
 // Parameters:
 // resourceGroupName - the name of the resource group.
-// galleryName - the name of the Shared Image Gallery.
+// galleryName - the name of the gallery.
 func (client GalleriesClient) Get(ctx context.Context, resourceGroupName string, galleryName string) (result Gallery, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GalleriesClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, galleryName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "compute.GalleriesClient", "Get", nil, "Failure preparing request")
@@ -276,16 +252,6 @@ func (client GalleriesClient) GetResponder(resp *http.Response) (result Gallery,
 
 // List list galleries under a subscription.
 func (client GalleriesClient) List(ctx context.Context) (result GalleryListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GalleriesClient.List")
-		defer func() {
-			sc := -1
-			if result.gl.Response.Response != nil {
-				sc = result.gl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -348,8 +314,8 @@ func (client GalleriesClient) ListResponder(resp *http.Response) (result Gallery
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client GalleriesClient) listNextResults(ctx context.Context, lastResults GalleryList) (result GalleryList, err error) {
-	req, err := lastResults.galleryListPreparer(ctx)
+func (client GalleriesClient) listNextResults(lastResults GalleryList) (result GalleryList, err error) {
+	req, err := lastResults.galleryListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "compute.GalleriesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -370,16 +336,6 @@ func (client GalleriesClient) listNextResults(ctx context.Context, lastResults G
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client GalleriesClient) ListComplete(ctx context.Context) (result GalleryListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GalleriesClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -388,16 +344,6 @@ func (client GalleriesClient) ListComplete(ctx context.Context) (result GalleryL
 // Parameters:
 // resourceGroupName - the name of the resource group.
 func (client GalleriesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result GalleryListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GalleriesClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.gl.Response.Response != nil {
-				sc = result.gl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -461,8 +407,8 @@ func (client GalleriesClient) ListByResourceGroupResponder(resp *http.Response) 
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client GalleriesClient) listByResourceGroupNextResults(ctx context.Context, lastResults GalleryList) (result GalleryList, err error) {
-	req, err := lastResults.galleryListPreparer(ctx)
+func (client GalleriesClient) listByResourceGroupNextResults(lastResults GalleryList) (result GalleryList, err error) {
+	req, err := lastResults.galleryListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "compute.GalleriesClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -483,16 +429,6 @@ func (client GalleriesClient) listByResourceGroupNextResults(ctx context.Context
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client GalleriesClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result GalleryListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GalleriesClient.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }

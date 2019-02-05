@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,16 +43,6 @@ func NewLocationsClientWithBaseURI(baseURI string, subscriptionID string) Locati
 // Parameters:
 // location - the location.
 func (client LocationsClient) GetCapabilities(ctx context.Context, location string) (result CapabilitiesResult, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/LocationsClient.GetCapabilities")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetCapabilitiesPreparer(ctx, location)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "hdinsight.LocationsClient", "GetCapabilities", nil, "Failure preparing request")
@@ -119,16 +108,6 @@ func (client LocationsClient) GetCapabilitiesResponder(resp *http.Response) (res
 // Parameters:
 // location - the location.
 func (client LocationsClient) ListUsages(ctx context.Context, location string) (result UsagesListResult, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/LocationsClient.ListUsages")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ListUsagesPreparer(ctx, location)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "hdinsight.LocationsClient", "ListUsages", nil, "Failure preparing request")

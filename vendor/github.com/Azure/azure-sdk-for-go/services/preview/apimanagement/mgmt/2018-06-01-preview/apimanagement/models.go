@@ -18,19 +18,14 @@ package apimanagement
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
-	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
-	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
-
-// The package's fully qualified name.
-const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/apimanagement/mgmt/2018-06-01-preview/apimanagement"
 
 // AlwaysLog enumerates the values for always log.
 type AlwaysLog string
@@ -136,22 +131,6 @@ func PossibleBearerTokenSendingMethodValues() []BearerTokenSendingMethod {
 	return []BearerTokenSendingMethod{AuthorizationHeader, Query}
 }
 
-// BearerTokenSendingMethods enumerates the values for bearer token sending methods.
-type BearerTokenSendingMethods string
-
-const (
-	// BearerTokenSendingMethodsAuthorizationHeader Access token will be transmitted in the Authorization
-	// header using Bearer schema
-	BearerTokenSendingMethodsAuthorizationHeader BearerTokenSendingMethods = "authorizationHeader"
-	// BearerTokenSendingMethodsQuery Access token will be transmitted as query parameters.
-	BearerTokenSendingMethodsQuery BearerTokenSendingMethods = "query"
-)
-
-// PossibleBearerTokenSendingMethodsValues returns an array of possible values for the BearerTokenSendingMethods const type.
-func PossibleBearerTokenSendingMethodsValues() []BearerTokenSendingMethods {
-	return []BearerTokenSendingMethods{BearerTokenSendingMethodsAuthorizationHeader, BearerTokenSendingMethodsQuery}
-}
-
 // ClientAuthenticationMethod enumerates the values for client authentication method.
 type ClientAuthenticationMethod string
 
@@ -203,12 +182,6 @@ func PossibleConnectivityStatusTypeValues() []ConnectivityStatusType {
 type ContentFormat string
 
 const (
-	// Openapi The contents are inline and Content Type is a OpenApi 3.0 Document in YAML format.
-	Openapi ContentFormat = "openapi"
-	// Openapijson The contents are inline and Content Type is a OpenApi 3.0 Document in JSON format.
-	Openapijson ContentFormat = "openapi+json"
-	// OpenapiLink The Open Api 3.0 document is hosted on a publicly accessible internet address.
-	OpenapiLink ContentFormat = "openapi-link"
 	// SwaggerJSON The contents are inline and Content Type is a OpenApi 2.0 Document.
 	SwaggerJSON ContentFormat = "swagger-json"
 	// SwaggerLinkJSON The Open Api 2.0 document is hosted on a publicly accessible internet address.
@@ -225,15 +198,13 @@ const (
 
 // PossibleContentFormatValues returns an array of possible values for the ContentFormat const type.
 func PossibleContentFormatValues() []ContentFormat {
-	return []ContentFormat{Openapi, Openapijson, OpenapiLink, SwaggerJSON, SwaggerLinkJSON, WadlLinkJSON, WadlXML, Wsdl, WsdlLink}
+	return []ContentFormat{SwaggerJSON, SwaggerLinkJSON, WadlLinkJSON, WadlXML, Wsdl, WsdlLink}
 }
 
 // ExportFormat enumerates the values for export format.
 type ExportFormat string
 
 const (
-	// ExportFormatOpenAPI3 Export the Api Definition in OpenApi Specification 3.0 to Storage Blob.
-	ExportFormatOpenAPI3 ExportFormat = "openapi-link"
 	// ExportFormatSwagger Export the Api Definition in OpenApi Specification 2.0 format to the Storage Blob.
 	ExportFormatSwagger ExportFormat = "swagger-link"
 	// ExportFormatWadl Export the Api Definition in WADL Schema to Storage Blob.
@@ -245,7 +216,7 @@ const (
 
 // PossibleExportFormatValues returns an array of possible values for the ExportFormat const type.
 func PossibleExportFormatValues() []ExportFormat {
-	return []ExportFormat{ExportFormatOpenAPI3, ExportFormatSwagger, ExportFormatWadl, ExportFormatWsdl}
+	return []ExportFormat{ExportFormatSwagger, ExportFormatWadl, ExportFormatWsdl}
 }
 
 // GrantType enumerates the values for grant type.
@@ -478,23 +449,6 @@ func PossibleProtocolValues() []Protocol {
 	return []Protocol{ProtocolHTTP, ProtocolHTTPS}
 }
 
-// ResourceSkuCapacityScaleType enumerates the values for resource sku capacity scale type.
-type ResourceSkuCapacityScaleType string
-
-const (
-	// Automatic Supported scale type automatic.
-	Automatic ResourceSkuCapacityScaleType = "automatic"
-	// Manual Supported scale type manual.
-	Manual ResourceSkuCapacityScaleType = "manual"
-	// None Scaling not supported.
-	None ResourceSkuCapacityScaleType = "none"
-)
-
-// PossibleResourceSkuCapacityScaleTypeValues returns an array of possible values for the ResourceSkuCapacityScaleType const type.
-func PossibleResourceSkuCapacityScaleTypeValues() []ResourceSkuCapacityScaleType {
-	return []ResourceSkuCapacityScaleType{Automatic, Manual, None}
-}
-
 // SamplingType enumerates the values for sampling type.
 type SamplingType string
 
@@ -514,8 +468,6 @@ type SkuType string
 const (
 	// SkuTypeBasic Basic SKU of Api Management.
 	SkuTypeBasic SkuType = "Basic"
-	// SkuTypeConsumption Consumption SKU of Api Management.
-	SkuTypeConsumption SkuType = "Consumption"
 	// SkuTypeDeveloper Developer SKU of Api Management.
 	SkuTypeDeveloper SkuType = "Developer"
 	// SkuTypePremium Premium SKU of Api Management.
@@ -526,7 +478,7 @@ const (
 
 // PossibleSkuTypeValues returns an array of possible values for the SkuType const type.
 func PossibleSkuTypeValues() []SkuType {
-	return []SkuType{SkuTypeBasic, SkuTypeConsumption, SkuTypeDeveloper, SkuTypePremium, SkuTypeStandard}
+	return []SkuType{SkuTypeBasic, SkuTypeDeveloper, SkuTypePremium, SkuTypeStandard}
 }
 
 // SoapAPIType enumerates the values for soap api type.
@@ -726,8 +678,7 @@ type AccessInformationContract struct {
 	Enabled *bool `json:"enabled,omitempty"`
 }
 
-// AccessInformationUpdateParameters tenant access information update parameters of the API Management
-// service.
+// AccessInformationUpdateParameters tenant access information update parameters of the API Management service.
 type AccessInformationUpdateParameters struct {
 	// Enabled - Tenant access information of the API Management service.
 	Enabled *bool `json:"enabled,omitempty"`
@@ -764,37 +715,20 @@ type APICollectionIterator struct {
 	page APICollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *APICollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APICollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *APICollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *APICollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -816,11 +750,6 @@ func (iter APICollectionIterator) Value() APIContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the APICollectionIterator type.
-func NewAPICollectionIterator(page APICollectionPage) APICollectionIterator {
-	return APICollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (ac APICollection) IsEmpty() bool {
 	return ac.Value == nil || len(*ac.Value) == 0
@@ -828,11 +757,11 @@ func (ac APICollection) IsEmpty() bool {
 
 // aPICollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ac APICollection) aPICollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (ac APICollection) aPICollectionPreparer() (*http.Request, error) {
 	if ac.NextLink == nil || len(to.String(ac.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ac.NextLink)))
@@ -840,36 +769,19 @@ func (ac APICollection) aPICollectionPreparer(ctx context.Context) (*http.Reques
 
 // APICollectionPage contains a page of APIContract values.
 type APICollectionPage struct {
-	fn func(context.Context, APICollection) (APICollection, error)
+	fn func(APICollection) (APICollection, error)
 	ac APICollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *APICollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APICollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.ac)
+func (page *APICollectionPage) Next() error {
+	next, err := page.fn(page.ac)
 	if err != nil {
 		return err
 	}
 	page.ac = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *APICollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -888,11 +800,6 @@ func (page APICollectionPage) Values() []APIContract {
 		return nil
 	}
 	return *page.ac.Value
-}
-
-// Creates a new instance of the APICollectionPage type.
-func NewAPICollectionPage(getNextPage func(context.Context, APICollection) (APICollection, error)) APICollectionPage {
-	return APICollectionPage{fn: getNextPage}
 }
 
 // APIContract API details.
@@ -1010,8 +917,6 @@ type APIContractProperties struct {
 	APIVersionDescription *string `json:"apiVersionDescription,omitempty"`
 	// APIVersionSetID - A resource identifier for the related ApiVersionSet.
 	APIVersionSetID *string `json:"apiVersionSetId,omitempty"`
-	// SubscriptionRequired - Specifies whether an API or Product subscription is required for accessing the API.
-	SubscriptionRequired *bool `json:"subscriptionRequired,omitempty"`
 }
 
 // APIContractUpdateProperties API update contract properties.
@@ -1046,8 +951,6 @@ type APIContractUpdateProperties struct {
 	APIVersionDescription *string `json:"apiVersionDescription,omitempty"`
 	// APIVersionSetID - A resource identifier for the related ApiVersionSet.
 	APIVersionSetID *string `json:"apiVersionSetId,omitempty"`
-	// SubscriptionRequired - Specifies whether an API or Product subscription is required for accessing the API.
-	SubscriptionRequired *bool `json:"subscriptionRequired,omitempty"`
 }
 
 // APICreateOrUpdateParameter API Create or Update Parameters.
@@ -1093,7 +996,7 @@ func (acoup *APICreateOrUpdateParameter) UnmarshalJSON(body []byte) error {
 type APICreateOrUpdateProperties struct {
 	// ContentValue - Content value when Importing an API.
 	ContentValue *string `json:"contentValue,omitempty"`
-	// ContentFormat - Format of the Content in which the API is getting imported. Possible values include: 'WadlXML', 'WadlLinkJSON', 'SwaggerJSON', 'SwaggerLinkJSON', 'Wsdl', 'WsdlLink', 'Openapi', 'Openapijson', 'OpenapiLink'
+	// ContentFormat - Format of the Content in which the API is getting imported. Possible values include: 'WadlXML', 'WadlLinkJSON', 'SwaggerJSON', 'SwaggerLinkJSON', 'Wsdl', 'WsdlLink'
 	ContentFormat ContentFormat `json:"contentFormat,omitempty"`
 	// WsdlSelector - Criteria to limit import of WSDL to a subset of the document.
 	WsdlSelector *APICreateOrUpdatePropertiesWsdlSelector `json:"wsdlSelector,omitempty"`
@@ -1132,8 +1035,6 @@ type APICreateOrUpdateProperties struct {
 	APIVersionDescription *string `json:"apiVersionDescription,omitempty"`
 	// APIVersionSetID - A resource identifier for the related ApiVersionSet.
 	APIVersionSetID *string `json:"apiVersionSetId,omitempty"`
-	// SubscriptionRequired - Specifies whether an API or Product subscription is required for accessing the API.
-	SubscriptionRequired *bool `json:"subscriptionRequired,omitempty"`
 }
 
 // APICreateOrUpdatePropertiesWsdlSelector criteria to limit import of WSDL to a subset of the document.
@@ -1168,8 +1069,6 @@ type APIEntityBaseContract struct {
 	APIVersionDescription *string `json:"apiVersionDescription,omitempty"`
 	// APIVersionSetID - A resource identifier for the related ApiVersionSet.
 	APIVersionSetID *string `json:"apiVersionSetId,omitempty"`
-	// SubscriptionRequired - Specifies whether an API or Product subscription is required for accessing the API.
-	SubscriptionRequired *bool `json:"subscriptionRequired,omitempty"`
 }
 
 // APIExportResult API Export result Blob Uri.
@@ -1224,37 +1123,20 @@ type APIReleaseCollectionIterator struct {
 	page APIReleaseCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *APIReleaseCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIReleaseCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *APIReleaseCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *APIReleaseCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1276,11 +1158,6 @@ func (iter APIReleaseCollectionIterator) Value() APIReleaseContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the APIReleaseCollectionIterator type.
-func NewAPIReleaseCollectionIterator(page APIReleaseCollectionPage) APIReleaseCollectionIterator {
-	return APIReleaseCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (arc APIReleaseCollection) IsEmpty() bool {
 	return arc.Value == nil || len(*arc.Value) == 0
@@ -1288,11 +1165,11 @@ func (arc APIReleaseCollection) IsEmpty() bool {
 
 // aPIReleaseCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (arc APIReleaseCollection) aPIReleaseCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (arc APIReleaseCollection) aPIReleaseCollectionPreparer() (*http.Request, error) {
 	if arc.NextLink == nil || len(to.String(arc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(arc.NextLink)))
@@ -1300,36 +1177,19 @@ func (arc APIReleaseCollection) aPIReleaseCollectionPreparer(ctx context.Context
 
 // APIReleaseCollectionPage contains a page of APIReleaseContract values.
 type APIReleaseCollectionPage struct {
-	fn  func(context.Context, APIReleaseCollection) (APIReleaseCollection, error)
+	fn  func(APIReleaseCollection) (APIReleaseCollection, error)
 	arc APIReleaseCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *APIReleaseCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIReleaseCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.arc)
+func (page *APIReleaseCollectionPage) Next() error {
+	next, err := page.fn(page.arc)
 	if err != nil {
 		return err
 	}
 	page.arc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *APIReleaseCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1348,11 +1208,6 @@ func (page APIReleaseCollectionPage) Values() []APIReleaseContract {
 		return nil
 	}
 	return *page.arc.Value
-}
-
-// Creates a new instance of the APIReleaseCollectionPage type.
-func NewAPIReleaseCollectionPage(getNextPage func(context.Context, APIReleaseCollection) (APIReleaseCollection, error)) APIReleaseCollectionPage {
-	return APIReleaseCollectionPage{fn: getNextPage}
 }
 
 // APIReleaseContract api Release details.
@@ -1464,37 +1319,20 @@ type APIRevisionCollectionIterator struct {
 	page APIRevisionCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *APIRevisionCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIRevisionCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *APIRevisionCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *APIRevisionCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1516,11 +1354,6 @@ func (iter APIRevisionCollectionIterator) Value() APIRevisionContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the APIRevisionCollectionIterator type.
-func NewAPIRevisionCollectionIterator(page APIRevisionCollectionPage) APIRevisionCollectionIterator {
-	return APIRevisionCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (arc APIRevisionCollection) IsEmpty() bool {
 	return arc.Value == nil || len(*arc.Value) == 0
@@ -1528,11 +1361,11 @@ func (arc APIRevisionCollection) IsEmpty() bool {
 
 // aPIRevisionCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (arc APIRevisionCollection) aPIRevisionCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (arc APIRevisionCollection) aPIRevisionCollectionPreparer() (*http.Request, error) {
 	if arc.NextLink == nil || len(to.String(arc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(arc.NextLink)))
@@ -1540,36 +1373,19 @@ func (arc APIRevisionCollection) aPIRevisionCollectionPreparer(ctx context.Conte
 
 // APIRevisionCollectionPage contains a page of APIRevisionContract values.
 type APIRevisionCollectionPage struct {
-	fn  func(context.Context, APIRevisionCollection) (APIRevisionCollection, error)
+	fn  func(APIRevisionCollection) (APIRevisionCollection, error)
 	arc APIRevisionCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *APIRevisionCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIRevisionCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.arc)
+func (page *APIRevisionCollectionPage) Next() error {
+	next, err := page.fn(page.arc)
 	if err != nil {
 		return err
 	}
 	page.arc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *APIRevisionCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1588,11 +1404,6 @@ func (page APIRevisionCollectionPage) Values() []APIRevisionContract {
 		return nil
 	}
 	return *page.arc.Value
-}
-
-// Creates a new instance of the APIRevisionCollectionPage type.
-func NewAPIRevisionCollectionPage(getNextPage func(context.Context, APIRevisionCollection) (APIRevisionCollection, error)) APIRevisionCollectionPage {
-	return APIRevisionCollectionPage{fn: getNextPage}
 }
 
 // APIRevisionContract summary of revision metadata.
@@ -1615,8 +1426,7 @@ type APIRevisionContract struct {
 	IsCurrent *bool `json:"isCurrent,omitempty"`
 }
 
-// APIRevisionInfoContract object used to create an API Revision or Version based on an existing API
-// Revision
+// APIRevisionInfoContract object used to create an API Revision or Version based on an existing API Revision
 type APIRevisionInfoContract struct {
 	// SourceAPIID - Resource identifier of API to be used to create the revision from.
 	SourceAPIID *string `json:"sourceApiId,omitempty"`
@@ -1662,8 +1472,6 @@ type APITagResourceContractProperties struct {
 	APIVersionDescription *string `json:"apiVersionDescription,omitempty"`
 	// APIVersionSetID - A resource identifier for the related ApiVersionSet.
 	APIVersionSetID *string `json:"apiVersionSetId,omitempty"`
-	// SubscriptionRequired - Specifies whether an API or Product subscription is required for accessing the API.
-	SubscriptionRequired *bool `json:"subscriptionRequired,omitempty"`
 }
 
 // APIUpdateContract API update contract details.
@@ -1720,37 +1528,20 @@ type APIVersionSetCollectionIterator struct {
 	page APIVersionSetCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *APIVersionSetCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIVersionSetCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *APIVersionSetCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *APIVersionSetCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1772,11 +1563,6 @@ func (iter APIVersionSetCollectionIterator) Value() APIVersionSetContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the APIVersionSetCollectionIterator type.
-func NewAPIVersionSetCollectionIterator(page APIVersionSetCollectionPage) APIVersionSetCollectionIterator {
-	return APIVersionSetCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (avsc APIVersionSetCollection) IsEmpty() bool {
 	return avsc.Value == nil || len(*avsc.Value) == 0
@@ -1784,11 +1570,11 @@ func (avsc APIVersionSetCollection) IsEmpty() bool {
 
 // aPIVersionSetCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (avsc APIVersionSetCollection) aPIVersionSetCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (avsc APIVersionSetCollection) aPIVersionSetCollectionPreparer() (*http.Request, error) {
 	if avsc.NextLink == nil || len(to.String(avsc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(avsc.NextLink)))
@@ -1796,36 +1582,19 @@ func (avsc APIVersionSetCollection) aPIVersionSetCollectionPreparer(ctx context.
 
 // APIVersionSetCollectionPage contains a page of APIVersionSetContract values.
 type APIVersionSetCollectionPage struct {
-	fn   func(context.Context, APIVersionSetCollection) (APIVersionSetCollection, error)
+	fn   func(APIVersionSetCollection) (APIVersionSetCollection, error)
 	avsc APIVersionSetCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *APIVersionSetCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIVersionSetCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.avsc)
+func (page *APIVersionSetCollectionPage) Next() error {
+	next, err := page.fn(page.avsc)
 	if err != nil {
 		return err
 	}
 	page.avsc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *APIVersionSetCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1844,11 +1613,6 @@ func (page APIVersionSetCollectionPage) Values() []APIVersionSetContract {
 		return nil
 	}
 	return *page.avsc.Value
-}
-
-// Creates a new instance of the APIVersionSetCollectionPage type.
-func NewAPIVersionSetCollectionPage(getNextPage func(context.Context, APIVersionSetCollection) (APIVersionSetCollection, error)) APIVersionSetCollectionPage {
-	return APIVersionSetCollectionPage{fn: getNextPage}
 }
 
 // APIVersionSetContract api Version Set Contract details.
@@ -1933,8 +1697,8 @@ func (avsc *APIVersionSetContract) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// APIVersionSetContractDetails an API Version Set contains the common configuration for a set of API
-// Versions relating
+// APIVersionSetContractDetails an API Version Set contains the common configuration for a set of API Versions
+// relating
 type APIVersionSetContractDetails struct {
 	// ID - Identifier for existing API Version Set. Omit this value to create a new Version Set.
 	ID *string `json:"id,omitempty"`
@@ -2029,10 +1793,6 @@ type APIVersionSetUpdateParametersProperties struct {
 type AuthenticationSettingsContract struct {
 	// OAuth2 - OAuth2 Authentication settings
 	OAuth2 *OAuth2AuthenticationSettingsContract `json:"oAuth2,omitempty"`
-	// Openid - OpenID Connect Authentication Settings
-	Openid *OpenIDAuthenticationSettingsContract `json:"openid,omitempty"`
-	// SubscriptionKeyRequired - Specifies whether subscription key is required during call to this API, true - API is included into closed products only, false - API is included into open products alone, null - there is a mix of products.
-	SubscriptionKeyRequired *bool `json:"subscriptionKeyRequired,omitempty"`
 }
 
 // AuthorizationServerCollection paged OAuth2 Authorization Servers list representation.
@@ -2046,44 +1806,27 @@ type AuthorizationServerCollection struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// AuthorizationServerCollectionIterator provides access to a complete listing of
-// AuthorizationServerContract values.
+// AuthorizationServerCollectionIterator provides access to a complete listing of AuthorizationServerContract
+// values.
 type AuthorizationServerCollectionIterator struct {
 	i    int
 	page AuthorizationServerCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *AuthorizationServerCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationServerCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *AuthorizationServerCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *AuthorizationServerCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -2105,11 +1848,6 @@ func (iter AuthorizationServerCollectionIterator) Value() AuthorizationServerCon
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the AuthorizationServerCollectionIterator type.
-func NewAuthorizationServerCollectionIterator(page AuthorizationServerCollectionPage) AuthorizationServerCollectionIterator {
-	return AuthorizationServerCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (asc AuthorizationServerCollection) IsEmpty() bool {
 	return asc.Value == nil || len(*asc.Value) == 0
@@ -2117,11 +1855,11 @@ func (asc AuthorizationServerCollection) IsEmpty() bool {
 
 // authorizationServerCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (asc AuthorizationServerCollection) authorizationServerCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (asc AuthorizationServerCollection) authorizationServerCollectionPreparer() (*http.Request, error) {
 	if asc.NextLink == nil || len(to.String(asc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(asc.NextLink)))
@@ -2129,36 +1867,19 @@ func (asc AuthorizationServerCollection) authorizationServerCollectionPreparer(c
 
 // AuthorizationServerCollectionPage contains a page of AuthorizationServerContract values.
 type AuthorizationServerCollectionPage struct {
-	fn  func(context.Context, AuthorizationServerCollection) (AuthorizationServerCollection, error)
+	fn  func(AuthorizationServerCollection) (AuthorizationServerCollection, error)
 	asc AuthorizationServerCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *AuthorizationServerCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationServerCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.asc)
+func (page *AuthorizationServerCollectionPage) Next() error {
+	next, err := page.fn(page.asc)
 	if err != nil {
 		return err
 	}
 	page.asc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *AuthorizationServerCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -2177,11 +1898,6 @@ func (page AuthorizationServerCollectionPage) Values() []AuthorizationServerCont
 		return nil
 	}
 	return *page.asc.Value
-}
-
-// Creates a new instance of the AuthorizationServerCollectionPage type.
-func NewAuthorizationServerCollectionPage(getNextPage func(context.Context, AuthorizationServerCollection) (AuthorizationServerCollection, error)) AuthorizationServerCollectionPage {
-	return AuthorizationServerCollectionPage{fn: getNextPage}
 }
 
 // AuthorizationServerContract external OAuth authorization server settings.
@@ -2409,8 +2125,7 @@ func (asuc *AuthorizationServerUpdateContract) UnmarshalJSON(body []byte) error 
 	return nil
 }
 
-// AuthorizationServerUpdateContractProperties external OAuth authorization server Update settings
-// contract.
+// AuthorizationServerUpdateContractProperties external OAuth authorization server Update settings contract.
 type AuthorizationServerUpdateContractProperties struct {
 	// DisplayName - User-friendly authorization server name.
 	DisplayName *string `json:"displayName,omitempty"`
@@ -2487,37 +2202,20 @@ type BackendCollectionIterator struct {
 	page BackendCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *BackendCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/BackendCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *BackendCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *BackendCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -2539,11 +2237,6 @@ func (iter BackendCollectionIterator) Value() BackendContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the BackendCollectionIterator type.
-func NewBackendCollectionIterator(page BackendCollectionPage) BackendCollectionIterator {
-	return BackendCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (bc BackendCollection) IsEmpty() bool {
 	return bc.Value == nil || len(*bc.Value) == 0
@@ -2551,11 +2244,11 @@ func (bc BackendCollection) IsEmpty() bool {
 
 // backendCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (bc BackendCollection) backendCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (bc BackendCollection) backendCollectionPreparer() (*http.Request, error) {
 	if bc.NextLink == nil || len(to.String(bc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(bc.NextLink)))
@@ -2563,36 +2256,19 @@ func (bc BackendCollection) backendCollectionPreparer(ctx context.Context) (*htt
 
 // BackendCollectionPage contains a page of BackendContract values.
 type BackendCollectionPage struct {
-	fn func(context.Context, BackendCollection) (BackendCollection, error)
+	fn func(BackendCollection) (BackendCollection, error)
 	bc BackendCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *BackendCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/BackendCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.bc)
+func (page *BackendCollectionPage) Next() error {
+	next, err := page.fn(page.bc)
 	if err != nil {
 		return err
 	}
 	page.bc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *BackendCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -2611,11 +2287,6 @@ func (page BackendCollectionPage) Values() []BackendContract {
 		return nil
 	}
 	return *page.bc.Value
-}
-
-// Creates a new instance of the BackendCollectionPage type.
-func NewBackendCollectionPage(getNextPage func(context.Context, BackendCollection) (BackendCollection, error)) BackendCollectionPage {
-	return BackendCollectionPage{fn: getNextPage}
 }
 
 // BackendContract backend details.
@@ -2851,7 +2522,7 @@ func (brc *BackendReconnectContract) UnmarshalJSON(body []byte) error {
 
 // BackendReconnectProperties properties to control reconnect requests.
 type BackendReconnectProperties struct {
-	// After - Duration in ISO8601 format after which reconnect will be initiated. Minimum duration of the Reconnect is PT2M.
+	// After - Duration in ISO8601 format after which reconnect will be initiated. Minimum duration of the Reconect is PT2M.
 	After *string `json:"after,omitempty"`
 }
 
@@ -2859,7 +2530,7 @@ type BackendReconnectProperties struct {
 type BackendServiceFabricClusterProperties struct {
 	// ClientCertificatethumbprint - The client certificate thumbprint for the management endpoint.
 	ClientCertificatethumbprint *string `json:"clientCertificatethumbprint,omitempty"`
-	// MaxPartitionResolutionRetries - Maximum number of retries while attempting resolve the partition.
+	// MaxPartitionResolutionRetries - Maximum number of retries while attempting resolve the parition.
 	MaxPartitionResolutionRetries *int32 `json:"maxPartitionResolutionRetries,omitempty"`
 	// ManagementEndpoints - The cluster management endpoint.
 	ManagementEndpoints *[]string `json:"managementEndpoints,omitempty"`
@@ -2959,37 +2630,20 @@ type CertificateCollectionIterator struct {
 	page CertificateCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *CertificateCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *CertificateCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *CertificateCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -3011,11 +2665,6 @@ func (iter CertificateCollectionIterator) Value() CertificateContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the CertificateCollectionIterator type.
-func NewCertificateCollectionIterator(page CertificateCollectionPage) CertificateCollectionIterator {
-	return CertificateCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (cc CertificateCollection) IsEmpty() bool {
 	return cc.Value == nil || len(*cc.Value) == 0
@@ -3023,11 +2672,11 @@ func (cc CertificateCollection) IsEmpty() bool {
 
 // certificateCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (cc CertificateCollection) certificateCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (cc CertificateCollection) certificateCollectionPreparer() (*http.Request, error) {
 	if cc.NextLink == nil || len(to.String(cc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(cc.NextLink)))
@@ -3035,36 +2684,19 @@ func (cc CertificateCollection) certificateCollectionPreparer(ctx context.Contex
 
 // CertificateCollectionPage contains a page of CertificateContract values.
 type CertificateCollectionPage struct {
-	fn func(context.Context, CertificateCollection) (CertificateCollection, error)
+	fn func(CertificateCollection) (CertificateCollection, error)
 	cc CertificateCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *CertificateCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.cc)
+func (page *CertificateCollectionPage) Next() error {
+	next, err := page.fn(page.cc)
 	if err != nil {
 		return err
 	}
 	page.cc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *CertificateCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -3085,11 +2717,6 @@ func (page CertificateCollectionPage) Values() []CertificateContract {
 	return *page.cc.Value
 }
 
-// Creates a new instance of the CertificateCollectionPage type.
-func NewCertificateCollectionPage(getNextPage func(context.Context, CertificateCollection) (CertificateCollection, error)) CertificateCollectionPage {
-	return CertificateCollectionPage{fn: getNextPage}
-}
-
 // CertificateConfiguration certificate configuration which consist of non-trusted intermediates and root
 // certificates.
 type CertificateConfiguration struct {
@@ -3097,7 +2724,7 @@ type CertificateConfiguration struct {
 	EncodedCertificate *string `json:"encodedCertificate,omitempty"`
 	// CertificatePassword - Certificate Password.
 	CertificatePassword *string `json:"certificatePassword,omitempty"`
-	// StoreName - The System.Security.Cryptography.x509certificates.StoreName certificate store location. Only Root and CertificateAuthority are valid locations. Possible values include: 'CertificateAuthority', 'Root'
+	// StoreName - The System.Security.Cryptography.x509certificates.Storename certificate store location. Only Root and CertificateAuthority are valid locations. Possible values include: 'CertificateAuthority', 'Root'
 	StoreName StoreName `json:"storeName,omitempty"`
 	// Certificate - Certificate information.
 	Certificate *CertificateInformation `json:"certificate,omitempty"`
@@ -3267,13 +2894,6 @@ type ConnectivityStatusContract struct {
 	LastStatusChange *date.Time `json:"lastStatusChange,omitempty"`
 }
 
-// CurrentUserIdentity ...
-type CurrentUserIdentity struct {
-	autorest.Response `json:"-"`
-	// ID - API Management service user id.
-	ID *string `json:"id,omitempty"`
-}
-
 // DeployConfigurationParameters parameters supplied to the Deploy Configuration operation.
 type DeployConfigurationParameters struct {
 	// Branch - The name of the Git branch from which the configuration is to be deployed to the configuration database.
@@ -3297,37 +2917,20 @@ type DiagnosticCollectionIterator struct {
 	page DiagnosticCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *DiagnosticCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *DiagnosticCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *DiagnosticCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -3349,11 +2952,6 @@ func (iter DiagnosticCollectionIterator) Value() DiagnosticContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the DiagnosticCollectionIterator type.
-func NewDiagnosticCollectionIterator(page DiagnosticCollectionPage) DiagnosticCollectionIterator {
-	return DiagnosticCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (dc DiagnosticCollection) IsEmpty() bool {
 	return dc.Value == nil || len(*dc.Value) == 0
@@ -3361,11 +2959,11 @@ func (dc DiagnosticCollection) IsEmpty() bool {
 
 // diagnosticCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (dc DiagnosticCollection) diagnosticCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (dc DiagnosticCollection) diagnosticCollectionPreparer() (*http.Request, error) {
 	if dc.NextLink == nil || len(to.String(dc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(dc.NextLink)))
@@ -3373,36 +2971,19 @@ func (dc DiagnosticCollection) diagnosticCollectionPreparer(ctx context.Context)
 
 // DiagnosticCollectionPage contains a page of DiagnosticContract values.
 type DiagnosticCollectionPage struct {
-	fn func(context.Context, DiagnosticCollection) (DiagnosticCollection, error)
+	fn func(DiagnosticCollection) (DiagnosticCollection, error)
 	dc DiagnosticCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *DiagnosticCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.dc)
+func (page *DiagnosticCollectionPage) Next() error {
+	next, err := page.fn(page.dc)
 	if err != nil {
 		return err
 	}
 	page.dc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *DiagnosticCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -3421,11 +3002,6 @@ func (page DiagnosticCollectionPage) Values() []DiagnosticContract {
 		return nil
 	}
 	return *page.dc.Value
-}
-
-// Creates a new instance of the DiagnosticCollectionPage type.
-func NewDiagnosticCollectionPage(getNextPage func(context.Context, DiagnosticCollection) (DiagnosticCollection, error)) DiagnosticCollectionPage {
-	return DiagnosticCollectionPage{fn: getNextPage}
 }
 
 // DiagnosticContract diagnostic details.
@@ -3518,12 +3094,10 @@ type DiagnosticContractProperties struct {
 	LoggerID *string `json:"loggerId,omitempty"`
 	// Sampling - Sampling settings for Diagnostic.
 	Sampling *SamplingSettings `json:"sampling,omitempty"`
-	// Frontend - Diagnostic settings for incoming/outgoing HTTP messages to the Gateway.
+	// Frontend - Diagnostic settings for incoming/outcoming HTTP messages to the Gateway.
 	Frontend *PipelineDiagnosticSettings `json:"frontend,omitempty"`
-	// Backend - Diagnostic settings for incoming/outgoing HTTP messages to the Backend
+	// Backend - Diagnostic settings for incoming/outcoming HTTP messages to the Backend
 	Backend *PipelineDiagnosticSettings `json:"backend,omitempty"`
-	// EnableHTTPCorrelationHeaders - Whether to process Correlation Headers coming to Api Management Service. Only applicable to Application Insights diagnostics. Default is true.
-	EnableHTTPCorrelationHeaders *bool `json:"enableHttpCorrelationHeaders,omitempty"`
 }
 
 // EmailTemplateCollection paged email template list representation.
@@ -3541,37 +3115,20 @@ type EmailTemplateCollectionIterator struct {
 	page EmailTemplateCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *EmailTemplateCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EmailTemplateCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *EmailTemplateCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *EmailTemplateCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -3593,11 +3150,6 @@ func (iter EmailTemplateCollectionIterator) Value() EmailTemplateContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the EmailTemplateCollectionIterator type.
-func NewEmailTemplateCollectionIterator(page EmailTemplateCollectionPage) EmailTemplateCollectionIterator {
-	return EmailTemplateCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (etc EmailTemplateCollection) IsEmpty() bool {
 	return etc.Value == nil || len(*etc.Value) == 0
@@ -3605,11 +3157,11 @@ func (etc EmailTemplateCollection) IsEmpty() bool {
 
 // emailTemplateCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (etc EmailTemplateCollection) emailTemplateCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (etc EmailTemplateCollection) emailTemplateCollectionPreparer() (*http.Request, error) {
 	if etc.NextLink == nil || len(to.String(etc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(etc.NextLink)))
@@ -3617,36 +3169,19 @@ func (etc EmailTemplateCollection) emailTemplateCollectionPreparer(ctx context.C
 
 // EmailTemplateCollectionPage contains a page of EmailTemplateContract values.
 type EmailTemplateCollectionPage struct {
-	fn  func(context.Context, EmailTemplateCollection) (EmailTemplateCollection, error)
+	fn  func(EmailTemplateCollection) (EmailTemplateCollection, error)
 	etc EmailTemplateCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *EmailTemplateCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EmailTemplateCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.etc)
+func (page *EmailTemplateCollectionPage) Next() error {
+	next, err := page.fn(page.etc)
 	if err != nil {
 		return err
 	}
 	page.etc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *EmailTemplateCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -3665,11 +3200,6 @@ func (page EmailTemplateCollectionPage) Values() []EmailTemplateContract {
 		return nil
 	}
 	return *page.etc.Value
-}
-
-// Creates a new instance of the EmailTemplateCollectionPage type.
-func NewEmailTemplateCollectionPage(getNextPage func(context.Context, EmailTemplateCollection) (EmailTemplateCollection, error)) EmailTemplateCollectionPage {
-	return EmailTemplateCollectionPage{fn: getNextPage}
 }
 
 // EmailTemplateContract email Template details.
@@ -3914,37 +3444,20 @@ type GroupCollectionIterator struct {
 	page GroupCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *GroupCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GroupCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *GroupCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *GroupCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -3966,11 +3479,6 @@ func (iter GroupCollectionIterator) Value() GroupContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the GroupCollectionIterator type.
-func NewGroupCollectionIterator(page GroupCollectionPage) GroupCollectionIterator {
-	return GroupCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (gc GroupCollection) IsEmpty() bool {
 	return gc.Value == nil || len(*gc.Value) == 0
@@ -3978,11 +3486,11 @@ func (gc GroupCollection) IsEmpty() bool {
 
 // groupCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (gc GroupCollection) groupCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (gc GroupCollection) groupCollectionPreparer() (*http.Request, error) {
 	if gc.NextLink == nil || len(to.String(gc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(gc.NextLink)))
@@ -3990,36 +3498,19 @@ func (gc GroupCollection) groupCollectionPreparer(ctx context.Context) (*http.Re
 
 // GroupCollectionPage contains a page of GroupContract values.
 type GroupCollectionPage struct {
-	fn func(context.Context, GroupCollection) (GroupCollection, error)
+	fn func(GroupCollection) (GroupCollection, error)
 	gc GroupCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *GroupCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/GroupCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.gc)
+func (page *GroupCollectionPage) Next() error {
+	next, err := page.fn(page.gc)
 	if err != nil {
 		return err
 	}
 	page.gc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *GroupCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -4038,11 +3529,6 @@ func (page GroupCollectionPage) Values() []GroupContract {
 		return nil
 	}
 	return *page.gc.Value
-}
-
-// Creates a new instance of the GroupCollectionPage type.
-func NewGroupCollectionPage(getNextPage func(context.Context, GroupCollection) (GroupCollection, error)) GroupCollectionPage {
-	return GroupCollectionPage{fn: getNextPage}
 }
 
 // GroupContract contract details.
@@ -4379,9 +3865,9 @@ func (ipc *IdentityProviderContract) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// IdentityProviderContractProperties the external Identity Providers like Facebook, Google, Microsoft,
-// Twitter or Azure Active Directory which can be used to enable access to the API Management service
-// developer portal for all users.
+// IdentityProviderContractProperties the external Identity Providers like Facebook, Google, Microsoft, Twitter or
+// Azure Active Directory which can be used to enable access to the API Management service developer portal for all
+// users.
 type IdentityProviderContractProperties struct {
 	// ClientID - Client Id of the Application in the external Identity Provider. It is App ID for Facebook login, Client ID for Google login, App ID for Microsoft.
 	ClientID *string `json:"clientId,omitempty"`
@@ -4416,37 +3902,20 @@ type IdentityProviderListIterator struct {
 	page IdentityProviderListPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *IdentityProviderListIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderListIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *IdentityProviderListIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *IdentityProviderListIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -4468,11 +3937,6 @@ func (iter IdentityProviderListIterator) Value() IdentityProviderContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the IdentityProviderListIterator type.
-func NewIdentityProviderListIterator(page IdentityProviderListPage) IdentityProviderListIterator {
-	return IdentityProviderListIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (ipl IdentityProviderList) IsEmpty() bool {
 	return ipl.Value == nil || len(*ipl.Value) == 0
@@ -4480,11 +3944,11 @@ func (ipl IdentityProviderList) IsEmpty() bool {
 
 // identityProviderListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ipl IdentityProviderList) identityProviderListPreparer(ctx context.Context) (*http.Request, error) {
+func (ipl IdentityProviderList) identityProviderListPreparer() (*http.Request, error) {
 	if ipl.NextLink == nil || len(to.String(ipl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ipl.NextLink)))
@@ -4492,36 +3956,19 @@ func (ipl IdentityProviderList) identityProviderListPreparer(ctx context.Context
 
 // IdentityProviderListPage contains a page of IdentityProviderContract values.
 type IdentityProviderListPage struct {
-	fn  func(context.Context, IdentityProviderList) (IdentityProviderList, error)
+	fn  func(IdentityProviderList) (IdentityProviderList, error)
 	ipl IdentityProviderList
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *IdentityProviderListPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderListPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.ipl)
+func (page *IdentityProviderListPage) Next() error {
+	next, err := page.fn(page.ipl)
 	if err != nil {
 		return err
 	}
 	page.ipl = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *IdentityProviderListPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -4540,11 +3987,6 @@ func (page IdentityProviderListPage) Values() []IdentityProviderContract {
 		return nil
 	}
 	return *page.ipl.Value
-}
-
-// Creates a new instance of the IdentityProviderListPage type.
-func NewIdentityProviderListPage(getNextPage func(context.Context, IdentityProviderList) (IdentityProviderList, error)) IdentityProviderListPage {
-	return IdentityProviderListPage{fn: getNextPage}
 }
 
 // IdentityProviderUpdateParameters parameters supplied to update Identity Provider
@@ -4615,44 +4057,26 @@ type IssueAttachmentCollection struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// IssueAttachmentCollectionIterator provides access to a complete listing of IssueAttachmentContract
-// values.
+// IssueAttachmentCollectionIterator provides access to a complete listing of IssueAttachmentContract values.
 type IssueAttachmentCollectionIterator struct {
 	i    int
 	page IssueAttachmentCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *IssueAttachmentCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IssueAttachmentCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *IssueAttachmentCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *IssueAttachmentCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -4674,11 +4098,6 @@ func (iter IssueAttachmentCollectionIterator) Value() IssueAttachmentContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the IssueAttachmentCollectionIterator type.
-func NewIssueAttachmentCollectionIterator(page IssueAttachmentCollectionPage) IssueAttachmentCollectionIterator {
-	return IssueAttachmentCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (iac IssueAttachmentCollection) IsEmpty() bool {
 	return iac.Value == nil || len(*iac.Value) == 0
@@ -4686,11 +4105,11 @@ func (iac IssueAttachmentCollection) IsEmpty() bool {
 
 // issueAttachmentCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (iac IssueAttachmentCollection) issueAttachmentCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (iac IssueAttachmentCollection) issueAttachmentCollectionPreparer() (*http.Request, error) {
 	if iac.NextLink == nil || len(to.String(iac.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(iac.NextLink)))
@@ -4698,36 +4117,19 @@ func (iac IssueAttachmentCollection) issueAttachmentCollectionPreparer(ctx conte
 
 // IssueAttachmentCollectionPage contains a page of IssueAttachmentContract values.
 type IssueAttachmentCollectionPage struct {
-	fn  func(context.Context, IssueAttachmentCollection) (IssueAttachmentCollection, error)
+	fn  func(IssueAttachmentCollection) (IssueAttachmentCollection, error)
 	iac IssueAttachmentCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *IssueAttachmentCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IssueAttachmentCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.iac)
+func (page *IssueAttachmentCollectionPage) Next() error {
+	next, err := page.fn(page.iac)
 	if err != nil {
 		return err
 	}
 	page.iac = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *IssueAttachmentCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -4746,11 +4148,6 @@ func (page IssueAttachmentCollectionPage) Values() []IssueAttachmentContract {
 		return nil
 	}
 	return *page.iac.Value
-}
-
-// Creates a new instance of the IssueAttachmentCollectionPage type.
-func NewIssueAttachmentCollectionPage(getNextPage func(context.Context, IssueAttachmentCollection) (IssueAttachmentCollection, error)) IssueAttachmentCollectionPage {
-	return IssueAttachmentCollectionPage{fn: getNextPage}
 }
 
 // IssueAttachmentContract issue Attachment Contract details.
@@ -4860,37 +4257,20 @@ type IssueCollectionIterator struct {
 	page IssueCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *IssueCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IssueCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *IssueCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *IssueCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -4912,11 +4292,6 @@ func (iter IssueCollectionIterator) Value() IssueContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the IssueCollectionIterator type.
-func NewIssueCollectionIterator(page IssueCollectionPage) IssueCollectionIterator {
-	return IssueCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (ic IssueCollection) IsEmpty() bool {
 	return ic.Value == nil || len(*ic.Value) == 0
@@ -4924,11 +4299,11 @@ func (ic IssueCollection) IsEmpty() bool {
 
 // issueCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ic IssueCollection) issueCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (ic IssueCollection) issueCollectionPreparer() (*http.Request, error) {
 	if ic.NextLink == nil || len(to.String(ic.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ic.NextLink)))
@@ -4936,36 +4311,19 @@ func (ic IssueCollection) issueCollectionPreparer(ctx context.Context) (*http.Re
 
 // IssueCollectionPage contains a page of IssueContract values.
 type IssueCollectionPage struct {
-	fn func(context.Context, IssueCollection) (IssueCollection, error)
+	fn func(IssueCollection) (IssueCollection, error)
 	ic IssueCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *IssueCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IssueCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.ic)
+func (page *IssueCollectionPage) Next() error {
+	next, err := page.fn(page.ic)
 	if err != nil {
 		return err
 	}
 	page.ic = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *IssueCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -4986,11 +4344,6 @@ func (page IssueCollectionPage) Values() []IssueContract {
 	return *page.ic.Value
 }
 
-// Creates a new instance of the IssueCollectionPage type.
-func NewIssueCollectionPage(getNextPage func(context.Context, IssueCollection) (IssueCollection, error)) IssueCollectionPage {
-	return IssueCollectionPage{fn: getNextPage}
-}
-
 // IssueCommentCollection paged Issue Comment list representation.
 type IssueCommentCollection struct {
 	autorest.Response `json:"-"`
@@ -5006,37 +4359,20 @@ type IssueCommentCollectionIterator struct {
 	page IssueCommentCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *IssueCommentCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IssueCommentCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *IssueCommentCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *IssueCommentCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -5058,11 +4394,6 @@ func (iter IssueCommentCollectionIterator) Value() IssueCommentContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the IssueCommentCollectionIterator type.
-func NewIssueCommentCollectionIterator(page IssueCommentCollectionPage) IssueCommentCollectionIterator {
-	return IssueCommentCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (icc IssueCommentCollection) IsEmpty() bool {
 	return icc.Value == nil || len(*icc.Value) == 0
@@ -5070,11 +4401,11 @@ func (icc IssueCommentCollection) IsEmpty() bool {
 
 // issueCommentCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (icc IssueCommentCollection) issueCommentCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (icc IssueCommentCollection) issueCommentCollectionPreparer() (*http.Request, error) {
 	if icc.NextLink == nil || len(to.String(icc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(icc.NextLink)))
@@ -5082,36 +4413,19 @@ func (icc IssueCommentCollection) issueCommentCollectionPreparer(ctx context.Con
 
 // IssueCommentCollectionPage contains a page of IssueCommentContract values.
 type IssueCommentCollectionPage struct {
-	fn  func(context.Context, IssueCommentCollection) (IssueCommentCollection, error)
+	fn  func(IssueCommentCollection) (IssueCommentCollection, error)
 	icc IssueCommentCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *IssueCommentCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/IssueCommentCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.icc)
+func (page *IssueCommentCollectionPage) Next() error {
+	next, err := page.fn(page.icc)
 	if err != nil {
 		return err
 	}
 	page.icc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *IssueCommentCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -5130,11 +4444,6 @@ func (page IssueCommentCollectionPage) Values() []IssueCommentContract {
 		return nil
 	}
 	return *page.icc.Value
-}
-
-// Creates a new instance of the IssueCommentCollectionPage type.
-func NewIssueCommentCollectionPage(getNextPage func(context.Context, IssueCommentCollection) (IssueCommentCollection, error)) IssueCommentCollectionPage {
-	return IssueCommentCollectionPage{fn: getNextPage}
 }
 
 // IssueCommentContract issue Comment Contract details.
@@ -5311,83 +4620,18 @@ func (ic *IssueContract) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// IssueContractBaseProperties issue contract Base Properties.
-type IssueContractBaseProperties struct {
-	// CreatedDate - Date and time when the issue was created.
-	CreatedDate *date.Time `json:"createdDate,omitempty"`
-	// State - Status of the issue. Possible values include: 'Proposed', 'Open', 'Removed', 'Resolved', 'Closed'
-	State State `json:"state,omitempty"`
-	// APIID - A resource identifier for the API the issue was created for.
-	APIID *string `json:"apiId,omitempty"`
-}
-
 // IssueContractProperties issue contract Properties.
 type IssueContractProperties struct {
 	// Title - The issue title.
 	Title *string `json:"title,omitempty"`
 	// Description - Text describing the issue.
 	Description *string `json:"description,omitempty"`
-	// UserID - A resource identifier for the user created the issue.
-	UserID *string `json:"userId,omitempty"`
 	// CreatedDate - Date and time when the issue was created.
 	CreatedDate *date.Time `json:"createdDate,omitempty"`
 	// State - Status of the issue. Possible values include: 'Proposed', 'Open', 'Removed', 'Resolved', 'Closed'
 	State State `json:"state,omitempty"`
-	// APIID - A resource identifier for the API the issue was created for.
-	APIID *string `json:"apiId,omitempty"`
-}
-
-// IssueUpdateContract issue update Parameters.
-type IssueUpdateContract struct {
-	// IssueUpdateContractProperties - Issue entity Update contract properties.
-	*IssueUpdateContractProperties `json:"properties,omitempty"`
-}
-
-// MarshalJSON is the custom marshaler for IssueUpdateContract.
-func (iuc IssueUpdateContract) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	if iuc.IssueUpdateContractProperties != nil {
-		objectMap["properties"] = iuc.IssueUpdateContractProperties
-	}
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON is the custom unmarshaler for IssueUpdateContract struct.
-func (iuc *IssueUpdateContract) UnmarshalJSON(body []byte) error {
-	var m map[string]*json.RawMessage
-	err := json.Unmarshal(body, &m)
-	if err != nil {
-		return err
-	}
-	for k, v := range m {
-		switch k {
-		case "properties":
-			if v != nil {
-				var issueUpdateContractProperties IssueUpdateContractProperties
-				err = json.Unmarshal(*v, &issueUpdateContractProperties)
-				if err != nil {
-					return err
-				}
-				iuc.IssueUpdateContractProperties = &issueUpdateContractProperties
-			}
-		}
-	}
-
-	return nil
-}
-
-// IssueUpdateContractProperties issue contract Update Properties.
-type IssueUpdateContractProperties struct {
-	// Title - The issue title.
-	Title *string `json:"title,omitempty"`
-	// Description - Text describing the issue.
-	Description *string `json:"description,omitempty"`
 	// UserID - A resource identifier for the user created the issue.
 	UserID *string `json:"userId,omitempty"`
-	// CreatedDate - Date and time when the issue was created.
-	CreatedDate *date.Time `json:"createdDate,omitempty"`
-	// State - Status of the issue. Possible values include: 'Proposed', 'Open', 'Removed', 'Resolved', 'Closed'
-	State State `json:"state,omitempty"`
 	// APIID - A resource identifier for the API the issue was created for.
 	APIID *string `json:"apiId,omitempty"`
 }
@@ -5415,37 +4659,20 @@ type LoggerCollectionIterator struct {
 	page LoggerCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *LoggerCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/LoggerCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *LoggerCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *LoggerCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -5467,11 +4694,6 @@ func (iter LoggerCollectionIterator) Value() LoggerContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the LoggerCollectionIterator type.
-func NewLoggerCollectionIterator(page LoggerCollectionPage) LoggerCollectionIterator {
-	return LoggerCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (lc LoggerCollection) IsEmpty() bool {
 	return lc.Value == nil || len(*lc.Value) == 0
@@ -5479,11 +4701,11 @@ func (lc LoggerCollection) IsEmpty() bool {
 
 // loggerCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (lc LoggerCollection) loggerCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (lc LoggerCollection) loggerCollectionPreparer() (*http.Request, error) {
 	if lc.NextLink == nil || len(to.String(lc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(lc.NextLink)))
@@ -5491,36 +4713,19 @@ func (lc LoggerCollection) loggerCollectionPreparer(ctx context.Context) (*http.
 
 // LoggerCollectionPage contains a page of LoggerContract values.
 type LoggerCollectionPage struct {
-	fn func(context.Context, LoggerCollection) (LoggerCollection, error)
+	fn func(LoggerCollection) (LoggerCollection, error)
 	lc LoggerCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *LoggerCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/LoggerCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.lc)
+func (page *LoggerCollectionPage) Next() error {
+	next, err := page.fn(page.lc)
 	if err != nil {
 		return err
 	}
 	page.lc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *LoggerCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -5539,11 +4744,6 @@ func (page LoggerCollectionPage) Values() []LoggerContract {
 		return nil
 	}
 	return *page.lc.Value
-}
-
-// Creates a new instance of the LoggerCollectionPage type.
-func NewLoggerCollectionPage(getNextPage func(context.Context, LoggerCollection) (LoggerCollection, error)) LoggerCollectionPage {
-	return LoggerCollectionPage{fn: getNextPage}
 }
 
 // LoggerContract logger details.
@@ -5628,9 +4828,8 @@ func (lc *LoggerContract) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// LoggerContractProperties the Logger entity in API Management represents an event sink that you can use
-// to log API Management events. Currently the Logger entity supports logging API Management events to
-// Azure Event Hubs.
+// LoggerContractProperties the Logger entity in API Management represents an event sink that you can use to log
+// API Management events. Currently the Logger entity supports logging API Management events to Azure Event Hubs.
 type LoggerContractProperties struct {
 	// LoggerType - Logger type. Possible values include: 'AzureEventHub', 'ApplicationInsights'
 	LoggerType LoggerType `json:"loggerType,omitempty"`
@@ -5767,37 +4966,20 @@ type NotificationCollectionIterator struct {
 	page NotificationCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *NotificationCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/NotificationCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *NotificationCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *NotificationCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -5819,11 +5001,6 @@ func (iter NotificationCollectionIterator) Value() NotificationContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the NotificationCollectionIterator type.
-func NewNotificationCollectionIterator(page NotificationCollectionPage) NotificationCollectionIterator {
-	return NotificationCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (nc NotificationCollection) IsEmpty() bool {
 	return nc.Value == nil || len(*nc.Value) == 0
@@ -5831,11 +5008,11 @@ func (nc NotificationCollection) IsEmpty() bool {
 
 // notificationCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (nc NotificationCollection) notificationCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (nc NotificationCollection) notificationCollectionPreparer() (*http.Request, error) {
 	if nc.NextLink == nil || len(to.String(nc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(nc.NextLink)))
@@ -5843,36 +5020,19 @@ func (nc NotificationCollection) notificationCollectionPreparer(ctx context.Cont
 
 // NotificationCollectionPage contains a page of NotificationContract values.
 type NotificationCollectionPage struct {
-	fn func(context.Context, NotificationCollection) (NotificationCollection, error)
+	fn func(NotificationCollection) (NotificationCollection, error)
 	nc NotificationCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *NotificationCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/NotificationCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.nc)
+func (page *NotificationCollectionPage) Next() error {
+	next, err := page.fn(page.nc)
 	if err != nil {
 		return err
 	}
 	page.nc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *NotificationCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -5891,11 +5051,6 @@ func (page NotificationCollectionPage) Values() []NotificationContract {
 		return nil
 	}
 	return *page.nc.Value
-}
-
-// Creates a new instance of the NotificationCollectionPage type.
-func NewNotificationCollectionPage(getNextPage func(context.Context, NotificationCollection) (NotificationCollection, error)) NotificationCollectionPage {
-	return NotificationCollectionPage{fn: getNextPage}
 }
 
 // NotificationContract notification details.
@@ -5998,14 +5153,6 @@ type OAuth2AuthenticationSettingsContract struct {
 	Scope *string `json:"scope,omitempty"`
 }
 
-// OpenIDAuthenticationSettingsContract API OAuth2 Authentication settings details.
-type OpenIDAuthenticationSettingsContract struct {
-	// OpenidProviderID - OAuth authorization server identifier.
-	OpenidProviderID *string `json:"openidProviderId,omitempty"`
-	// BearerTokenSendingMethods - How to send token to the server.
-	BearerTokenSendingMethods *[]BearerTokenSendingMethods `json:"bearerTokenSendingMethods,omitempty"`
-}
-
 // OpenIDConnectProviderCollection paged OpenIdProviders list representation.
 type OpenIDConnectProviderCollection struct {
 	autorest.Response `json:"-"`
@@ -6015,44 +5162,27 @@ type OpenIDConnectProviderCollection struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// OpenIDConnectProviderCollectionIterator provides access to a complete listing of
-// OpenidConnectProviderContract values.
+// OpenIDConnectProviderCollectionIterator provides access to a complete listing of OpenidConnectProviderContract
+// values.
 type OpenIDConnectProviderCollectionIterator struct {
 	i    int
 	page OpenIDConnectProviderCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OpenIDConnectProviderCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OpenIDConnectProviderCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *OpenIDConnectProviderCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *OpenIDConnectProviderCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -6074,11 +5204,6 @@ func (iter OpenIDConnectProviderCollectionIterator) Value() OpenidConnectProvide
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the OpenIDConnectProviderCollectionIterator type.
-func NewOpenIDConnectProviderCollectionIterator(page OpenIDConnectProviderCollectionPage) OpenIDConnectProviderCollectionIterator {
-	return OpenIDConnectProviderCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (oicpc OpenIDConnectProviderCollection) IsEmpty() bool {
 	return oicpc.Value == nil || len(*oicpc.Value) == 0
@@ -6086,11 +5211,11 @@ func (oicpc OpenIDConnectProviderCollection) IsEmpty() bool {
 
 // openIDConnectProviderCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (oicpc OpenIDConnectProviderCollection) openIDConnectProviderCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (oicpc OpenIDConnectProviderCollection) openIDConnectProviderCollectionPreparer() (*http.Request, error) {
 	if oicpc.NextLink == nil || len(to.String(oicpc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(oicpc.NextLink)))
@@ -6098,36 +5223,19 @@ func (oicpc OpenIDConnectProviderCollection) openIDConnectProviderCollectionPrep
 
 // OpenIDConnectProviderCollectionPage contains a page of OpenidConnectProviderContract values.
 type OpenIDConnectProviderCollectionPage struct {
-	fn    func(context.Context, OpenIDConnectProviderCollection) (OpenIDConnectProviderCollection, error)
+	fn    func(OpenIDConnectProviderCollection) (OpenIDConnectProviderCollection, error)
 	oicpc OpenIDConnectProviderCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OpenIDConnectProviderCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OpenIDConnectProviderCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.oicpc)
+func (page *OpenIDConnectProviderCollectionPage) Next() error {
+	next, err := page.fn(page.oicpc)
 	if err != nil {
 		return err
 	}
 	page.oicpc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *OpenIDConnectProviderCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -6146,11 +5254,6 @@ func (page OpenIDConnectProviderCollectionPage) Values() []OpenidConnectProvider
 		return nil
 	}
 	return *page.oicpc.Value
-}
-
-// Creates a new instance of the OpenIDConnectProviderCollectionPage type.
-func NewOpenIDConnectProviderCollectionPage(getNextPage func(context.Context, OpenIDConnectProviderCollection) (OpenIDConnectProviderCollection, error)) OpenIDConnectProviderCollectionPage {
-	return OpenIDConnectProviderCollectionPage{fn: getNextPage}
 }
 
 // OpenidConnectProviderContract openId Connect Provider details.
@@ -6330,37 +5433,20 @@ type OperationCollectionIterator struct {
 	page OperationCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OperationCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OperationCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *OperationCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *OperationCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -6382,11 +5468,6 @@ func (iter OperationCollectionIterator) Value() OperationContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the OperationCollectionIterator type.
-func NewOperationCollectionIterator(page OperationCollectionPage) OperationCollectionIterator {
-	return OperationCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (oc OperationCollection) IsEmpty() bool {
 	return oc.Value == nil || len(*oc.Value) == 0
@@ -6394,11 +5475,11 @@ func (oc OperationCollection) IsEmpty() bool {
 
 // operationCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (oc OperationCollection) operationCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (oc OperationCollection) operationCollectionPreparer() (*http.Request, error) {
 	if oc.NextLink == nil || len(to.String(oc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(oc.NextLink)))
@@ -6406,36 +5487,19 @@ func (oc OperationCollection) operationCollectionPreparer(ctx context.Context) (
 
 // OperationCollectionPage contains a page of OperationContract values.
 type OperationCollectionPage struct {
-	fn func(context.Context, OperationCollection) (OperationCollection, error)
+	fn func(OperationCollection) (OperationCollection, error)
 	oc OperationCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OperationCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OperationCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.oc)
+func (page *OperationCollectionPage) Next() error {
+	next, err := page.fn(page.oc)
 	if err != nil {
 		return err
 	}
 	page.oc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *OperationCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -6454,11 +5518,6 @@ func (page OperationCollectionPage) Values() []OperationContract {
 		return nil
 	}
 	return *page.oc.Value
-}
-
-// Creates a new instance of the OperationCollectionPage type.
-func NewOperationCollectionPage(getNextPage func(context.Context, OperationCollection) (OperationCollection, error)) OperationCollectionPage {
-	return OperationCollectionPage{fn: getNextPage}
 }
 
 // OperationContract api Operation details.
@@ -6589,8 +5648,8 @@ type OperationEntityBaseContract struct {
 	Policies *string `json:"policies,omitempty"`
 }
 
-// OperationListResult result of the request to list REST API operations. It contains a list of operations
-// and a URL nextLink to get the next set of results.
+// OperationListResult result of the request to list REST API operations. It contains a list of operations and a
+// URL nextLink to get the next set of results.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of operations supported by the resource provider.
@@ -6605,37 +5664,20 @@ type OperationListResultIterator struct {
 	page OperationListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OperationListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *OperationListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *OperationListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -6657,11 +5699,6 @@ func (iter OperationListResultIterator) Value() Operation {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the OperationListResultIterator type.
-func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
-	return OperationListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (olr OperationListResult) IsEmpty() bool {
 	return olr.Value == nil || len(*olr.Value) == 0
@@ -6669,11 +5706,11 @@ func (olr OperationListResult) IsEmpty() bool {
 
 // operationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (olr OperationListResult) operationListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (olr OperationListResult) operationListResultPreparer() (*http.Request, error) {
 	if olr.NextLink == nil || len(to.String(olr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(olr.NextLink)))
@@ -6681,36 +5718,19 @@ func (olr OperationListResult) operationListResultPreparer(ctx context.Context) 
 
 // OperationListResultPage contains a page of Operation values.
 type OperationListResultPage struct {
-	fn  func(context.Context, OperationListResult) (OperationListResult, error)
+	fn  func(OperationListResult) (OperationListResult, error)
 	olr OperationListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OperationListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.olr)
+func (page *OperationListResultPage) Next() error {
+	next, err := page.fn(page.olr)
 	if err != nil {
 		return err
 	}
 	page.olr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *OperationListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -6729,11 +5749,6 @@ func (page OperationListResultPage) Values() []Operation {
 		return nil
 	}
 	return *page.olr.Value
-}
-
-// Creates a new instance of the OperationListResultPage type.
-func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
-	return OperationListResultPage{fn: getNextPage}
 }
 
 // OperationResultContract operation Result.
@@ -6860,7 +5875,7 @@ type ParameterContract struct {
 	Values *[]string `json:"values,omitempty"`
 }
 
-// PipelineDiagnosticSettings diagnostic settings for incoming/outgoing HTTP messages to the Gateway.
+// PipelineDiagnosticSettings diagnostic settings for incoming/outcoming HTTP messages to the Gateway.
 type PipelineDiagnosticSettings struct {
 	// Request - Diagnostic settings for request.
 	Request *HTTPMessageDiagnostic `json:"request,omitempty"`
@@ -7273,37 +6288,20 @@ type ProductCollectionIterator struct {
 	page ProductCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ProductCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ProductCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *ProductCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *ProductCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -7325,11 +6323,6 @@ func (iter ProductCollectionIterator) Value() ProductContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the ProductCollectionIterator type.
-func NewProductCollectionIterator(page ProductCollectionPage) ProductCollectionIterator {
-	return ProductCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (pc ProductCollection) IsEmpty() bool {
 	return pc.Value == nil || len(*pc.Value) == 0
@@ -7337,11 +6330,11 @@ func (pc ProductCollection) IsEmpty() bool {
 
 // productCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (pc ProductCollection) productCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (pc ProductCollection) productCollectionPreparer() (*http.Request, error) {
 	if pc.NextLink == nil || len(to.String(pc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(pc.NextLink)))
@@ -7349,36 +6342,19 @@ func (pc ProductCollection) productCollectionPreparer(ctx context.Context) (*htt
 
 // ProductCollectionPage contains a page of ProductContract values.
 type ProductCollectionPage struct {
-	fn func(context.Context, ProductCollection) (ProductCollection, error)
+	fn func(ProductCollection) (ProductCollection, error)
 	pc ProductCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ProductCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ProductCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.pc)
+func (page *ProductCollectionPage) Next() error {
+	next, err := page.fn(page.pc)
 	if err != nil {
 		return err
 	}
 	page.pc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *ProductCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -7397,11 +6373,6 @@ func (page ProductCollectionPage) Values() []ProductContract {
 		return nil
 	}
 	return *page.pc.Value
-}
-
-// Creates a new instance of the ProductCollectionPage type.
-func NewProductCollectionPage(getNextPage func(context.Context, ProductCollection) (ProductCollection, error)) ProductCollectionPage {
-	return ProductCollectionPage{fn: getNextPage}
 }
 
 // ProductContract product details.
@@ -7612,37 +6583,20 @@ type PropertyCollectionIterator struct {
 	page PropertyCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *PropertyCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PropertyCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *PropertyCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *PropertyCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -7664,11 +6618,6 @@ func (iter PropertyCollectionIterator) Value() PropertyContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the PropertyCollectionIterator type.
-func NewPropertyCollectionIterator(page PropertyCollectionPage) PropertyCollectionIterator {
-	return PropertyCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (pc PropertyCollection) IsEmpty() bool {
 	return pc.Value == nil || len(*pc.Value) == 0
@@ -7676,11 +6625,11 @@ func (pc PropertyCollection) IsEmpty() bool {
 
 // propertyCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (pc PropertyCollection) propertyCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (pc PropertyCollection) propertyCollectionPreparer() (*http.Request, error) {
 	if pc.NextLink == nil || len(to.String(pc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(pc.NextLink)))
@@ -7688,36 +6637,19 @@ func (pc PropertyCollection) propertyCollectionPreparer(ctx context.Context) (*h
 
 // PropertyCollectionPage contains a page of PropertyContract values.
 type PropertyCollectionPage struct {
-	fn func(context.Context, PropertyCollection) (PropertyCollection, error)
+	fn func(PropertyCollection) (PropertyCollection, error)
 	pc PropertyCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *PropertyCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/PropertyCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.pc)
+func (page *PropertyCollectionPage) Next() error {
+	next, err := page.fn(page.pc)
 	if err != nil {
 		return err
 	}
 	page.pc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *PropertyCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -7736,11 +6668,6 @@ func (page PropertyCollectionPage) Values() []PropertyContract {
 		return nil
 	}
 	return *page.pc.Value
-}
-
-// Creates a new instance of the PropertyCollectionPage type.
-func NewPropertyCollectionPage(getNextPage func(context.Context, PropertyCollection) (PropertyCollection, error)) PropertyCollectionPage {
-	return PropertyCollectionPage{fn: getNextPage}
 }
 
 // PropertyContract property details.
@@ -8198,37 +7125,20 @@ type RegionListResultIterator struct {
 	page RegionListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *RegionListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RegionListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *RegionListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *RegionListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -8250,11 +7160,6 @@ func (iter RegionListResultIterator) Value() RegionContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the RegionListResultIterator type.
-func NewRegionListResultIterator(page RegionListResultPage) RegionListResultIterator {
-	return RegionListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (rlr RegionListResult) IsEmpty() bool {
 	return rlr.Value == nil || len(*rlr.Value) == 0
@@ -8262,11 +7167,11 @@ func (rlr RegionListResult) IsEmpty() bool {
 
 // regionListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rlr RegionListResult) regionListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (rlr RegionListResult) regionListResultPreparer() (*http.Request, error) {
 	if rlr.NextLink == nil || len(to.String(rlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rlr.NextLink)))
@@ -8274,36 +7179,19 @@ func (rlr RegionListResult) regionListResultPreparer(ctx context.Context) (*http
 
 // RegionListResultPage contains a page of RegionContract values.
 type RegionListResultPage struct {
-	fn  func(context.Context, RegionListResult) (RegionListResult, error)
+	fn  func(RegionListResult) (RegionListResult, error)
 	rlr RegionListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *RegionListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RegionListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.rlr)
+func (page *RegionListResultPage) Next() error {
+	next, err := page.fn(page.rlr)
 	if err != nil {
 		return err
 	}
 	page.rlr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *RegionListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -8322,11 +7210,6 @@ func (page RegionListResultPage) Values() []RegionContract {
 		return nil
 	}
 	return *page.rlr.Value
-}
-
-// Creates a new instance of the RegionListResultPage type.
-func NewRegionListResultPage(getNextPage func(context.Context, RegionListResult) (RegionListResult, error)) RegionListResultPage {
-	return RegionListResultPage{fn: getNextPage}
 }
 
 // RegistrationDelegationSettingsProperties user registration delegation settings properties.
@@ -8352,37 +7235,20 @@ type ReportCollectionIterator struct {
 	page ReportCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ReportCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReportCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *ReportCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *ReportCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -8404,11 +7270,6 @@ func (iter ReportCollectionIterator) Value() ReportRecordContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the ReportCollectionIterator type.
-func NewReportCollectionIterator(page ReportCollectionPage) ReportCollectionIterator {
-	return ReportCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (rc ReportCollection) IsEmpty() bool {
 	return rc.Value == nil || len(*rc.Value) == 0
@@ -8416,11 +7277,11 @@ func (rc ReportCollection) IsEmpty() bool {
 
 // reportCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rc ReportCollection) reportCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (rc ReportCollection) reportCollectionPreparer() (*http.Request, error) {
 	if rc.NextLink == nil || len(to.String(rc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rc.NextLink)))
@@ -8428,36 +7289,19 @@ func (rc ReportCollection) reportCollectionPreparer(ctx context.Context) (*http.
 
 // ReportCollectionPage contains a page of ReportRecordContract values.
 type ReportCollectionPage struct {
-	fn func(context.Context, ReportCollection) (ReportCollection, error)
+	fn func(ReportCollection) (ReportCollection, error)
 	rc ReportCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ReportCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ReportCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.rc)
+func (page *ReportCollectionPage) Next() error {
+	next, err := page.fn(page.rc)
 	if err != nil {
 		return err
 	}
 	page.rc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *ReportCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -8478,18 +7322,13 @@ func (page ReportCollectionPage) Values() []ReportRecordContract {
 	return *page.rc.Value
 }
 
-// Creates a new instance of the ReportCollectionPage type.
-func NewReportCollectionPage(getNextPage func(context.Context, ReportCollection) (ReportCollection, error)) ReportCollectionPage {
-	return ReportCollectionPage{fn: getNextPage}
-}
-
 // ReportRecordContract report data.
 type ReportRecordContract struct {
 	// Name - Name depending on report endpoint specifies product, API, operation or developer name.
 	Name *string `json:"name,omitempty"`
 	// Timestamp - Start of aggregation period. The date conforms to the following format: `yyyy-MM-ddTHH:mm:ssZ` as specified by the ISO 8601 standard.
 	Timestamp *date.Time `json:"timestamp,omitempty"`
-	// Interval - Length of aggregation period.  Interval must be multiple of 15 minutes and may not be zero. The value should be in ISO 8601 format (http://en.wikipedia.org/wiki/ISO_8601#Durations).
+	// Interval - Length of agregation period.  Interval must be multiple of 15 minutes and may not be zero. The value should be in ISO 8601 format (http://en.wikipedia.org/wiki/ISO_8601#Durations).
 	Interval *string `json:"interval,omitempty"`
 	// Country - Country to which this record data is related.
 	Country *string `json:"country,omitempty"`
@@ -8509,9 +7348,9 @@ type ReportRecordContract struct {
 	APIRegion *string `json:"apiRegion,omitempty"`
 	// SubscriptionID - Subscription identifier path. /subscriptions/{subscriptionId}
 	SubscriptionID *string `json:"subscriptionId,omitempty"`
-	// CallCountSuccess - Number of successful calls. This includes calls returning HttpStatusCode <= 301 and HttpStatusCode.NotModified and HttpStatusCode.TemporaryRedirect
+	// CallCountSuccess - Number of succesful calls. This includes calls returning HttpStatusCode <= 301 and HttpStatusCode.NotModified and HttpStatusCode.TemporaryRedirect
 	CallCountSuccess *int32 `json:"callCountSuccess,omitempty"`
-	// CallCountBlocked - Number of calls blocked due to invalid credentials. This includes calls returning HttpStatusCode.Unauthorized and HttpStatusCode.Forbidden and HttpStatusCode.TooManyRequests
+	// CallCountBlocked - Number of calls blocked due to invalid credentials. This includes calls returning HttpStatusCode.Unauthorize and HttpStatusCode.Forbidden and HttpStatusCode.TooManyRequests
 	CallCountBlocked *int32 `json:"callCountBlocked,omitempty"`
 	// CallCountFailed - Number of calls failed due to proxy or backend errors. This includes calls returning HttpStatusCode.BadRequest(400) and any Code between HttpStatusCode.InternalServerError (500) and 600
 	CallCountFailed *int32 `json:"callCountFailed,omitempty"`
@@ -8598,7 +7437,7 @@ type RequestReportRecordContract struct {
 	ResponseSize *int32 `json:"responseSize,omitempty"`
 	// Timestamp - The date and time when this request was received by the gateway in ISO 8601 format.
 	Timestamp *date.Time `json:"timestamp,omitempty"`
-	// Cache - Specifies if response cache was involved in generating the response. If the value is none, the cache was not used. If the value is hit, cached response was returned. If the value is miss, the cache was used but lookup resulted in a miss and request was fulfilled by the backend.
+	// Cache - Specifies if response cache was involved in generating the response. If the value is none, the cache was not used. If the value is hit, cached response was returned. If the value is miss, the cache was used but lookup resulted in a miss and request was fullfilled by the backend.
 	Cache *string `json:"cache,omitempty"`
 	// APITime - The total time it took to process this request.
 	APITime *float64 `json:"apiTime,omitempty"`
@@ -8622,180 +7461,6 @@ type Resource struct {
 	Name *string `json:"name,omitempty"`
 	// Type - Resource type for API Management resource.
 	Type *string `json:"type,omitempty"`
-}
-
-// ResourceSku describes an available API Management SKU.
-type ResourceSku struct {
-	// Name - Name of the Sku. Possible values include: 'SkuTypeDeveloper', 'SkuTypeStandard', 'SkuTypePremium', 'SkuTypeBasic', 'SkuTypeConsumption'
-	Name SkuType `json:"name,omitempty"`
-}
-
-// ResourceSkuCapacity describes scaling information of a SKU.
-type ResourceSkuCapacity struct {
-	// Minimum - The minimum capacity.
-	Minimum *int32 `json:"minimum,omitempty"`
-	// Maximum - The maximum capacity that can be set.
-	Maximum *int32 `json:"maximum,omitempty"`
-	// Default - The default capacity.
-	Default *int32 `json:"default,omitempty"`
-	// ScaleType - The scale type applicable to the sku. Possible values include: 'Automatic', 'Manual', 'None'
-	ScaleType ResourceSkuCapacityScaleType `json:"scaleType,omitempty"`
-}
-
-// ResourceSkuResult describes an available API Management service SKU.
-type ResourceSkuResult struct {
-	// ResourceType - The type of resource the SKU applies to.
-	ResourceType *string `json:"resourceType,omitempty"`
-	// Sku - Specifies API Management SKU.
-	Sku *ResourceSku `json:"sku,omitempty"`
-	// Capacity - Specifies the number of API Management units.
-	Capacity *ResourceSkuCapacity `json:"capacity,omitempty"`
-}
-
-// ResourceSkuResults the API Management service SKUs operation response.
-type ResourceSkuResults struct {
-	autorest.Response `json:"-"`
-	// Value - The list of skus available for the service.
-	Value *[]ResourceSkuResult `json:"value,omitempty"`
-	// NextLink - The uri to fetch the next page of API Management service Skus.
-	NextLink *string `json:"nextLink,omitempty"`
-}
-
-// ResourceSkuResultsIterator provides access to a complete listing of ResourceSkuResult values.
-type ResourceSkuResultsIterator struct {
-	i    int
-	page ResourceSkuResultsPage
-}
-
-// NextWithContext advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-func (iter *ResourceSkuResultsIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceSkuResultsIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	iter.i++
-	if iter.i < len(iter.page.Values()) {
-		return nil
-	}
-	err = iter.page.NextWithContext(ctx)
-	if err != nil {
-		iter.i--
-		return err
-	}
-	iter.i = 0
-	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *ResourceSkuResultsIterator) Next() error {
-	return iter.NextWithContext(context.Background())
-}
-
-// NotDone returns true if the enumeration should be started or is not yet complete.
-func (iter ResourceSkuResultsIterator) NotDone() bool {
-	return iter.page.NotDone() && iter.i < len(iter.page.Values())
-}
-
-// Response returns the raw server response from the last page request.
-func (iter ResourceSkuResultsIterator) Response() ResourceSkuResults {
-	return iter.page.Response()
-}
-
-// Value returns the current value or a zero-initialized value if the
-// iterator has advanced beyond the end of the collection.
-func (iter ResourceSkuResultsIterator) Value() ResourceSkuResult {
-	if !iter.page.NotDone() {
-		return ResourceSkuResult{}
-	}
-	return iter.page.Values()[iter.i]
-}
-
-// Creates a new instance of the ResourceSkuResultsIterator type.
-func NewResourceSkuResultsIterator(page ResourceSkuResultsPage) ResourceSkuResultsIterator {
-	return ResourceSkuResultsIterator{page: page}
-}
-
-// IsEmpty returns true if the ListResult contains no values.
-func (rsr ResourceSkuResults) IsEmpty() bool {
-	return rsr.Value == nil || len(*rsr.Value) == 0
-}
-
-// resourceSkuResultsPreparer prepares a request to retrieve the next set of results.
-// It returns nil if no more results exist.
-func (rsr ResourceSkuResults) resourceSkuResultsPreparer(ctx context.Context) (*http.Request, error) {
-	if rsr.NextLink == nil || len(to.String(rsr.NextLink)) < 1 {
-		return nil, nil
-	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
-		autorest.AsJSON(),
-		autorest.AsGet(),
-		autorest.WithBaseURL(to.String(rsr.NextLink)))
-}
-
-// ResourceSkuResultsPage contains a page of ResourceSkuResult values.
-type ResourceSkuResultsPage struct {
-	fn  func(context.Context, ResourceSkuResults) (ResourceSkuResults, error)
-	rsr ResourceSkuResults
-}
-
-// NextWithContext advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-func (page *ResourceSkuResultsPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceSkuResultsPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.rsr)
-	if err != nil {
-		return err
-	}
-	page.rsr = next
-	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *ResourceSkuResultsPage) Next() error {
-	return page.NextWithContext(context.Background())
-}
-
-// NotDone returns true if the page enumeration should be started or is not yet complete.
-func (page ResourceSkuResultsPage) NotDone() bool {
-	return !page.rsr.IsEmpty()
-}
-
-// Response returns the raw server response from the last page request.
-func (page ResourceSkuResultsPage) Response() ResourceSkuResults {
-	return page.rsr
-}
-
-// Values returns the slice of values for the current page or nil if there are no values.
-func (page ResourceSkuResultsPage) Values() []ResourceSkuResult {
-	if page.rsr.IsEmpty() {
-		return nil
-	}
-	return *page.rsr.Value
-}
-
-// Creates a new instance of the ResourceSkuResultsPage type.
-func NewResourceSkuResultsPage(getNextPage func(context.Context, ResourceSkuResults) (ResourceSkuResults, error)) ResourceSkuResultsPage {
-	return ResourceSkuResultsPage{fn: getNextPage}
 }
 
 // ResponseContract operation response details.
@@ -8841,37 +7506,20 @@ type SchemaCollectionIterator struct {
 	page SchemaCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *SchemaCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SchemaCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *SchemaCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *SchemaCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -8893,11 +7541,6 @@ func (iter SchemaCollectionIterator) Value() SchemaContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the SchemaCollectionIterator type.
-func NewSchemaCollectionIterator(page SchemaCollectionPage) SchemaCollectionIterator {
-	return SchemaCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (sc SchemaCollection) IsEmpty() bool {
 	return sc.Value == nil || len(*sc.Value) == 0
@@ -8905,11 +7548,11 @@ func (sc SchemaCollection) IsEmpty() bool {
 
 // schemaCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (sc SchemaCollection) schemaCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (sc SchemaCollection) schemaCollectionPreparer() (*http.Request, error) {
 	if sc.NextLink == nil || len(to.String(sc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(sc.NextLink)))
@@ -8917,36 +7560,19 @@ func (sc SchemaCollection) schemaCollectionPreparer(ctx context.Context) (*http.
 
 // SchemaCollectionPage contains a page of SchemaContract values.
 type SchemaCollectionPage struct {
-	fn func(context.Context, SchemaCollection) (SchemaCollection, error)
+	fn func(SchemaCollection) (SchemaCollection, error)
 	sc SchemaCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *SchemaCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SchemaCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.sc)
+func (page *SchemaCollectionPage) Next() error {
+	next, err := page.fn(page.sc)
 	if err != nil {
 		return err
 	}
 	page.sc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *SchemaCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -8965,11 +7591,6 @@ func (page SchemaCollectionPage) Values() []SchemaContract {
 		return nil
 	}
 	return *page.sc.Value
-}
-
-// Creates a new instance of the SchemaCollectionPage type.
-func NewSchemaCollectionPage(getNextPage func(context.Context, SchemaCollection) (SchemaCollection, error)) SchemaCollectionPage {
-	return SchemaCollectionPage{fn: getNextPage}
 }
 
 // SchemaContract schema Contract details.
@@ -9113,15 +7734,14 @@ type SchemaDocumentProperties struct {
 	Value *string `json:"value,omitempty"`
 }
 
-// ServiceApplyNetworkConfigurationParameters parameter supplied to the Apply Network configuration
-// operation.
+// ServiceApplyNetworkConfigurationParameters parameter supplied to the Apply Network configuration operation.
 type ServiceApplyNetworkConfigurationParameters struct {
 	// Location - Location of the Api Management service to update for a multi-region service. For a service deployed in a single region, this parameter is not required.
 	Location *string `json:"location,omitempty"`
 }
 
-// ServiceApplyNetworkConfigurationUpdatesFuture an abstraction for monitoring and retrieving the results
-// of a long-running operation.
+// ServiceApplyNetworkConfigurationUpdatesFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ServiceApplyNetworkConfigurationUpdatesFuture struct {
 	azure.Future
 }
@@ -9149,8 +7769,7 @@ func (future *ServiceApplyNetworkConfigurationUpdatesFuture) Result(client Servi
 	return
 }
 
-// ServiceBackupFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ServiceBackupFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type ServiceBackupFuture struct {
 	azure.Future
 }
@@ -9178,8 +7797,7 @@ func (future *ServiceBackupFuture) Result(client ServiceClient) (sr ServiceResou
 	return
 }
 
-// ServiceBackupRestoreParameters parameters supplied to the Backup/Restore of an API Management service
-// operation.
+// ServiceBackupRestoreParameters parameters supplied to the Backup/Restore of an API Management service operation.
 type ServiceBackupRestoreParameters struct {
 	// StorageAccount - Azure Cloud Storage account (used to place/retrieve the backup) name.
 	StorageAccount *string `json:"storageAccount,omitempty"`
@@ -9225,7 +7843,7 @@ type ServiceBaseProperties struct {
 	CustomProperties map[string]*string `json:"customProperties"`
 	// Certificates - List of Certificates that need to be installed in the API Management service. Max supported certificates that can be installed is 10.
 	Certificates *[]CertificateConfiguration `json:"certificates,omitempty"`
-	// VirtualNetworkType - The type of VPN in which API Management service needs to be configured in. None (Default Value) means the API Management service is not part of any Virtual Network, External means the API Management deployment is set up inside a Virtual Network having an Internet Facing Endpoint, and Internal means that API Management deployment is setup inside a Virtual Network having an Intranet Facing Endpoint only. Possible values include: 'VirtualNetworkTypeNone', 'VirtualNetworkTypeExternal', 'VirtualNetworkTypeInternal'
+	// VirtualNetworkType - The type of VPN in which API Managemet service needs to be configured in. None (Default Value) means the API Management service is not part of any Virtual Network, External means the API Management deployment is set up inside a Virtual Network having an Internet Facing Endpoint, and Internal means that API Management deployment is setup inside a Virtual Network having an Intranet Facing Endpoint only. Possible values include: 'VirtualNetworkTypeNone', 'VirtualNetworkTypeExternal', 'VirtualNetworkTypeInternal'
 	VirtualNetworkType VirtualNetworkType `json:"virtualNetworkType,omitempty"`
 }
 
@@ -9353,37 +7971,20 @@ type ServiceListResultIterator struct {
 	page ServiceListResultPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ServiceListResultIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceListResultIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *ServiceListResultIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *ServiceListResultIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -9405,11 +8006,6 @@ func (iter ServiceListResultIterator) Value() ServiceResource {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the ServiceListResultIterator type.
-func NewServiceListResultIterator(page ServiceListResultPage) ServiceListResultIterator {
-	return ServiceListResultIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (slr ServiceListResult) IsEmpty() bool {
 	return slr.Value == nil || len(*slr.Value) == 0
@@ -9417,11 +8013,11 @@ func (slr ServiceListResult) IsEmpty() bool {
 
 // serviceListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (slr ServiceListResult) serviceListResultPreparer(ctx context.Context) (*http.Request, error) {
+func (slr ServiceListResult) serviceListResultPreparer() (*http.Request, error) {
 	if slr.NextLink == nil || len(to.String(slr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(slr.NextLink)))
@@ -9429,36 +8025,19 @@ func (slr ServiceListResult) serviceListResultPreparer(ctx context.Context) (*ht
 
 // ServiceListResultPage contains a page of ServiceResource values.
 type ServiceListResultPage struct {
-	fn  func(context.Context, ServiceListResult) (ServiceListResult, error)
+	fn  func(ServiceListResult) (ServiceListResult, error)
 	slr ServiceListResult
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ServiceListResultPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceListResultPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.slr)
+func (page *ServiceListResultPage) Next() error {
+	next, err := page.fn(page.slr)
 	if err != nil {
 		return err
 	}
 	page.slr = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *ServiceListResultPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -9477,11 +8056,6 @@ func (page ServiceListResultPage) Values() []ServiceResource {
 		return nil
 	}
 	return *page.slr.Value
-}
-
-// Creates a new instance of the ServiceListResultPage type.
-func NewServiceListResultPage(getNextPage func(context.Context, ServiceListResult) (ServiceListResult, error)) ServiceListResultPage {
-	return ServiceListResultPage{fn: getNextPage}
 }
 
 // ServiceNameAvailabilityResult response of the CheckNameAvailability operation.
@@ -9533,7 +8107,7 @@ type ServiceProperties struct {
 	CustomProperties map[string]*string `json:"customProperties"`
 	// Certificates - List of Certificates that need to be installed in the API Management service. Max supported certificates that can be installed is 10.
 	Certificates *[]CertificateConfiguration `json:"certificates,omitempty"`
-	// VirtualNetworkType - The type of VPN in which API Management service needs to be configured in. None (Default Value) means the API Management service is not part of any Virtual Network, External means the API Management deployment is set up inside a Virtual Network having an Internet Facing Endpoint, and Internal means that API Management deployment is setup inside a Virtual Network having an Intranet Facing Endpoint only. Possible values include: 'VirtualNetworkTypeNone', 'VirtualNetworkTypeExternal', 'VirtualNetworkTypeInternal'
+	// VirtualNetworkType - The type of VPN in which API Managemet service needs to be configured in. None (Default Value) means the API Management service is not part of any Virtual Network, External means the API Management deployment is set up inside a Virtual Network having an Internet Facing Endpoint, and Internal means that API Management deployment is setup inside a Virtual Network having an Intranet Facing Endpoint only. Possible values include: 'VirtualNetworkTypeNone', 'VirtualNetworkTypeExternal', 'VirtualNetworkTypeInternal'
 	VirtualNetworkType VirtualNetworkType `json:"virtualNetworkType,omitempty"`
 }
 
@@ -9752,8 +8326,7 @@ func (sr *ServiceResource) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ServiceRestoreFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ServiceRestoreFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type ServiceRestoreFuture struct {
 	azure.Future
 }
@@ -9783,14 +8356,13 @@ func (future *ServiceRestoreFuture) Result(client ServiceClient) (sr ServiceReso
 
 // ServiceSkuProperties API Management service resource SKU properties.
 type ServiceSkuProperties struct {
-	// Name - Name of the Sku. Possible values include: 'SkuTypeDeveloper', 'SkuTypeStandard', 'SkuTypePremium', 'SkuTypeBasic', 'SkuTypeConsumption'
+	// Name - Name of the Sku. Possible values include: 'SkuTypeDeveloper', 'SkuTypeStandard', 'SkuTypePremium', 'SkuTypeBasic'
 	Name SkuType `json:"name,omitempty"`
 	// Capacity - Capacity of the SKU (number of deployed units of the SKU). The default value is 1.
 	Capacity *int32 `json:"capacity,omitempty"`
 }
 
-// ServiceUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ServiceUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type ServiceUpdateFuture struct {
 	azure.Future
 }
@@ -10030,7 +8602,7 @@ type ServiceUpdateProperties struct {
 	CustomProperties map[string]*string `json:"customProperties"`
 	// Certificates - List of Certificates that need to be installed in the API Management service. Max supported certificates that can be installed is 10.
 	Certificates *[]CertificateConfiguration `json:"certificates,omitempty"`
-	// VirtualNetworkType - The type of VPN in which API Management service needs to be configured in. None (Default Value) means the API Management service is not part of any Virtual Network, External means the API Management deployment is set up inside a Virtual Network having an Internet Facing Endpoint, and Internal means that API Management deployment is setup inside a Virtual Network having an Intranet Facing Endpoint only. Possible values include: 'VirtualNetworkTypeNone', 'VirtualNetworkTypeExternal', 'VirtualNetworkTypeInternal'
+	// VirtualNetworkType - The type of VPN in which API Managemet service needs to be configured in. None (Default Value) means the API Management service is not part of any Virtual Network, External means the API Management deployment is set up inside a Virtual Network having an Internet Facing Endpoint, and Internal means that API Management deployment is setup inside a Virtual Network having an Intranet Facing Endpoint only. Possible values include: 'VirtualNetworkTypeNone', 'VirtualNetworkTypeExternal', 'VirtualNetworkTypeInternal'
 	VirtualNetworkType VirtualNetworkType `json:"virtualNetworkType,omitempty"`
 }
 
@@ -10097,8 +8669,8 @@ func (sup ServiceUpdateProperties) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// ServiceUploadCertificateParameters parameters supplied to the Upload SSL certificate for an API
-// Management service operation.
+// ServiceUploadCertificateParameters parameters supplied to the Upload SSL certificate for an API Management
+// service operation.
 type ServiceUploadCertificateParameters struct {
 	// Type - Hostname type. Possible values include: 'Proxy', 'Portal', 'Management', 'Scm'
 	Type HostnameType `json:"type,omitempty"`
@@ -10123,37 +8695,20 @@ type SubscriptionCollectionIterator struct {
 	page SubscriptionCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *SubscriptionCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *SubscriptionCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *SubscriptionCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -10175,11 +8730,6 @@ func (iter SubscriptionCollectionIterator) Value() SubscriptionContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the SubscriptionCollectionIterator type.
-func NewSubscriptionCollectionIterator(page SubscriptionCollectionPage) SubscriptionCollectionIterator {
-	return SubscriptionCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (sc SubscriptionCollection) IsEmpty() bool {
 	return sc.Value == nil || len(*sc.Value) == 0
@@ -10187,11 +8737,11 @@ func (sc SubscriptionCollection) IsEmpty() bool {
 
 // subscriptionCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (sc SubscriptionCollection) subscriptionCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (sc SubscriptionCollection) subscriptionCollectionPreparer() (*http.Request, error) {
 	if sc.NextLink == nil || len(to.String(sc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(sc.NextLink)))
@@ -10199,36 +8749,19 @@ func (sc SubscriptionCollection) subscriptionCollectionPreparer(ctx context.Cont
 
 // SubscriptionCollectionPage contains a page of SubscriptionContract values.
 type SubscriptionCollectionPage struct {
-	fn func(context.Context, SubscriptionCollection) (SubscriptionCollection, error)
+	fn func(SubscriptionCollection) (SubscriptionCollection, error)
 	sc SubscriptionCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *SubscriptionCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.sc)
+func (page *SubscriptionCollectionPage) Next() error {
+	next, err := page.fn(page.sc)
 	if err != nil {
 		return err
 	}
 	page.sc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *SubscriptionCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -10247,11 +8780,6 @@ func (page SubscriptionCollectionPage) Values() []SubscriptionContract {
 		return nil
 	}
 	return *page.sc.Value
-}
-
-// Creates a new instance of the SubscriptionCollectionPage type.
-func NewSubscriptionCollectionPage(getNextPage func(context.Context, SubscriptionCollection) (SubscriptionCollection, error)) SubscriptionCollectionPage {
-	return SubscriptionCollectionPage{fn: getNextPage}
 }
 
 // SubscriptionContract subscription details.
@@ -10338,10 +8866,10 @@ func (sc *SubscriptionContract) UnmarshalJSON(body []byte) error {
 
 // SubscriptionContractProperties subscription details.
 type SubscriptionContractProperties struct {
-	// OwnerID - The user resource identifier of the subscription owner. The value is a valid relative URL in the format of /users/{uid} where {uid} is a user identifier.
-	OwnerID *string `json:"ownerId,omitempty"`
-	// Scope - Scope like /products/{productId} or /apis or /apis/{apiId}.
-	Scope *string `json:"scope,omitempty"`
+	// UserID - The user resource identifier of the subscription owner. The value is a valid relative URL in the format of /users/{uid} where {uid} is a user identifier.
+	UserID *string `json:"userId,omitempty"`
+	// ProductID - The product resource identifier of the subscribed product. The value is a valid relative URL in the format of /products/{productId} where {productId} is a product identifier.
+	ProductID *string `json:"productId,omitempty"`
 	// DisplayName - The name of the subscription, or null if the subscription has no name.
 	DisplayName *string `json:"displayName,omitempty"`
 	// State - Subscription state. Possible states are * active – the subscription is active, * suspended – the subscription is blocked, and the subscriber cannot call any APIs of the product, * submitted – the subscription request has been made by the developer, but has not yet been approved or rejected, * rejected – the subscription request has been denied by an administrator, * cancelled – the subscription has been cancelled by the developer or administrator, * expired – the subscription reached its expiration date and was deactivated. Possible values include: 'Suspended', 'Active', 'Expired', 'Submitted', 'Rejected', 'Cancelled'
@@ -10362,16 +8890,14 @@ type SubscriptionContractProperties struct {
 	SecondaryKey *string `json:"secondaryKey,omitempty"`
 	// StateComment - Optional subscription comment added by an administrator.
 	StateComment *string `json:"stateComment,omitempty"`
-	// AllowTracing - Determines whether tracing is enabled
-	AllowTracing *bool `json:"allowTracing,omitempty"`
 }
 
 // SubscriptionCreateParameterProperties parameters supplied to the Create subscription operation.
 type SubscriptionCreateParameterProperties struct {
-	// OwnerID - User (user id path) for whom subscription is being created in form /users/{uid}
-	OwnerID *string `json:"ownerId,omitempty"`
-	// Scope - Scope like /products/{productId} or /apis or /apis/{apiId}.
-	Scope *string `json:"scope,omitempty"`
+	// UserID - User (user id path) for whom subscription is being created in form /users/{uid}
+	UserID *string `json:"userId,omitempty"`
+	// ProductID - Product (product id path) for which subscription is being created in form /products/{productid}
+	ProductID *string `json:"productId,omitempty"`
 	// DisplayName - Subscription name.
 	DisplayName *string `json:"displayName,omitempty"`
 	// PrimaryKey - Primary subscription key. If not specified during request key will be generated automatically.
@@ -10380,8 +8906,6 @@ type SubscriptionCreateParameterProperties struct {
 	SecondaryKey *string `json:"secondaryKey,omitempty"`
 	// State - Initial subscription state. If no value is specified, subscription is created with Submitted state. Possible states are * active – the subscription is active, * suspended – the subscription is blocked, and the subscriber cannot call any APIs of the product, * submitted – the subscription request has been made by the developer, but has not yet been approved or rejected, * rejected – the subscription request has been denied by an administrator, * cancelled – the subscription has been cancelled by the developer or administrator, * expired – the subscription reached its expiration date and was deactivated. Possible values include: 'Suspended', 'Active', 'Expired', 'Submitted', 'Rejected', 'Cancelled'
 	State SubscriptionState `json:"state,omitempty"`
-	// AllowTracing - Determines whether tracing can be enabled
-	AllowTracing *bool `json:"allowTracing,omitempty"`
 }
 
 // SubscriptionCreateParameters subscription create details.
@@ -10439,10 +8963,10 @@ type SubscriptionsDelegationSettingsProperties struct {
 
 // SubscriptionUpdateParameterProperties parameters supplied to the Update subscription operation.
 type SubscriptionUpdateParameterProperties struct {
-	// OwnerID - User identifier path: /users/{uid}
-	OwnerID *string `json:"ownerId,omitempty"`
-	// Scope - Scope like /products/{productId} or /apis or /apis/{apiId}
-	Scope *string `json:"scope,omitempty"`
+	// UserID - User identifier path: /users/{uid}
+	UserID *string `json:"userId,omitempty"`
+	// ProductID - Product identifier path: /products/{productId}
+	ProductID *string `json:"productId,omitempty"`
 	// ExpirationDate - Subscription expiration date. The setting is for audit purposes only and the subscription is not automatically expired. The subscription lifecycle can be managed by using the `state` property. The date conforms to the following format: `yyyy-MM-ddTHH:mm:ssZ` as specified by the ISO 8601 standard.
 	ExpirationDate *date.Time `json:"expirationDate,omitempty"`
 	// DisplayName - Subscription name.
@@ -10455,8 +8979,6 @@ type SubscriptionUpdateParameterProperties struct {
 	State SubscriptionState `json:"state,omitempty"`
 	// StateComment - Comments describing subscription state change by the administrator.
 	StateComment *string `json:"stateComment,omitempty"`
-	// AllowTracing - Determines whether tracing can be enabled
-	AllowTracing *bool `json:"allowTracing,omitempty"`
 }
 
 // SubscriptionUpdateParameters subscription update details.
@@ -10513,37 +9035,20 @@ type TagCollectionIterator struct {
 	page TagCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *TagCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *TagCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *TagCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -10565,11 +9070,6 @@ func (iter TagCollectionIterator) Value() TagContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the TagCollectionIterator type.
-func NewTagCollectionIterator(page TagCollectionPage) TagCollectionIterator {
-	return TagCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (tc TagCollection) IsEmpty() bool {
 	return tc.Value == nil || len(*tc.Value) == 0
@@ -10577,11 +9077,11 @@ func (tc TagCollection) IsEmpty() bool {
 
 // tagCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (tc TagCollection) tagCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (tc TagCollection) tagCollectionPreparer() (*http.Request, error) {
 	if tc.NextLink == nil || len(to.String(tc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(tc.NextLink)))
@@ -10589,36 +9089,19 @@ func (tc TagCollection) tagCollectionPreparer(ctx context.Context) (*http.Reques
 
 // TagCollectionPage contains a page of TagContract values.
 type TagCollectionPage struct {
-	fn func(context.Context, TagCollection) (TagCollection, error)
+	fn func(TagCollection) (TagCollection, error)
 	tc TagCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *TagCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.tc)
+func (page *TagCollectionPage) Next() error {
+	next, err := page.fn(page.tc)
 	if err != nil {
 		return err
 	}
 	page.tc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *TagCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -10637,11 +9120,6 @@ func (page TagCollectionPage) Values() []TagContract {
 		return nil
 	}
 	return *page.tc.Value
-}
-
-// Creates a new instance of the TagCollectionPage type.
-func NewTagCollectionPage(getNextPage func(context.Context, TagCollection) (TagCollection, error)) TagCollectionPage {
-	return TagCollectionPage{fn: getNextPage}
 }
 
 // TagContract tag Contract details.
@@ -10796,37 +9274,20 @@ type TagDescriptionCollectionIterator struct {
 	page TagDescriptionCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *TagDescriptionCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagDescriptionCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *TagDescriptionCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *TagDescriptionCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -10848,11 +9309,6 @@ func (iter TagDescriptionCollectionIterator) Value() TagDescriptionContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the TagDescriptionCollectionIterator type.
-func NewTagDescriptionCollectionIterator(page TagDescriptionCollectionPage) TagDescriptionCollectionIterator {
-	return TagDescriptionCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (tdc TagDescriptionCollection) IsEmpty() bool {
 	return tdc.Value == nil || len(*tdc.Value) == 0
@@ -10860,11 +9316,11 @@ func (tdc TagDescriptionCollection) IsEmpty() bool {
 
 // tagDescriptionCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (tdc TagDescriptionCollection) tagDescriptionCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (tdc TagDescriptionCollection) tagDescriptionCollectionPreparer() (*http.Request, error) {
 	if tdc.NextLink == nil || len(to.String(tdc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(tdc.NextLink)))
@@ -10872,36 +9328,19 @@ func (tdc TagDescriptionCollection) tagDescriptionCollectionPreparer(ctx context
 
 // TagDescriptionCollectionPage contains a page of TagDescriptionContract values.
 type TagDescriptionCollectionPage struct {
-	fn  func(context.Context, TagDescriptionCollection) (TagDescriptionCollection, error)
+	fn  func(TagDescriptionCollection) (TagDescriptionCollection, error)
 	tdc TagDescriptionCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *TagDescriptionCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagDescriptionCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.tdc)
+func (page *TagDescriptionCollectionPage) Next() error {
+	next, err := page.fn(page.tdc)
 	if err != nil {
 		return err
 	}
 	page.tdc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *TagDescriptionCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -10920,11 +9359,6 @@ func (page TagDescriptionCollectionPage) Values() []TagDescriptionContract {
 		return nil
 	}
 	return *page.tdc.Value
-}
-
-// Creates a new instance of the TagDescriptionCollectionPage type.
-func NewTagDescriptionCollectionPage(getNextPage func(context.Context, TagDescriptionCollection) (TagDescriptionCollection, error)) TagDescriptionCollectionPage {
-	return TagDescriptionCollectionPage{fn: getNextPage}
 }
 
 // TagDescriptionContract contract details.
@@ -11077,37 +9511,20 @@ type TagResourceCollectionIterator struct {
 	page TagResourceCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *TagResourceCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagResourceCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *TagResourceCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *TagResourceCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -11129,11 +9546,6 @@ func (iter TagResourceCollectionIterator) Value() TagResourceContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the TagResourceCollectionIterator type.
-func NewTagResourceCollectionIterator(page TagResourceCollectionPage) TagResourceCollectionIterator {
-	return TagResourceCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (trc TagResourceCollection) IsEmpty() bool {
 	return trc.Value == nil || len(*trc.Value) == 0
@@ -11141,11 +9553,11 @@ func (trc TagResourceCollection) IsEmpty() bool {
 
 // tagResourceCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (trc TagResourceCollection) tagResourceCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (trc TagResourceCollection) tagResourceCollectionPreparer() (*http.Request, error) {
 	if trc.NextLink == nil || len(to.String(trc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(trc.NextLink)))
@@ -11153,36 +9565,19 @@ func (trc TagResourceCollection) tagResourceCollectionPreparer(ctx context.Conte
 
 // TagResourceCollectionPage contains a page of TagResourceContract values.
 type TagResourceCollectionPage struct {
-	fn  func(context.Context, TagResourceCollection) (TagResourceCollection, error)
+	fn  func(TagResourceCollection) (TagResourceCollection, error)
 	trc TagResourceCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *TagResourceCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TagResourceCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.trc)
+func (page *TagResourceCollectionPage) Next() error {
+	next, err := page.fn(page.trc)
 	if err != nil {
 		return err
 	}
 	page.trc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *TagResourceCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -11201,11 +9596,6 @@ func (page TagResourceCollectionPage) Values() []TagResourceContract {
 		return nil
 	}
 	return *page.trc.Value
-}
-
-// Creates a new instance of the TagResourceCollectionPage type.
-func NewTagResourceCollectionPage(getNextPage func(context.Context, TagResourceCollection) (TagResourceCollection, error)) TagResourceCollectionPage {
-	return TagResourceCollectionPage{fn: getNextPage}
 }
 
 // TagResourceContract tagResource contract properties.
@@ -11228,8 +9618,8 @@ type TagTagResourceContractProperties struct {
 	Name *string `json:"name,omitempty"`
 }
 
-// TenantConfigurationDeployFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// TenantConfigurationDeployFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type TenantConfigurationDeployFuture struct {
 	azure.Future
 }
@@ -11305,8 +9695,8 @@ type TenantConfigurationSyncStateContract struct {
 	ConfigurationChangeDate *date.Time `json:"configurationChangeDate,omitempty"`
 }
 
-// TenantConfigurationValidateFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// TenantConfigurationValidateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type TenantConfigurationValidateFuture struct {
 	azure.Future
 }
@@ -11367,37 +9757,20 @@ type UserCollectionIterator struct {
 	page UserCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *UserCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/UserCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *UserCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *UserCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -11419,11 +9792,6 @@ func (iter UserCollectionIterator) Value() UserContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the UserCollectionIterator type.
-func NewUserCollectionIterator(page UserCollectionPage) UserCollectionIterator {
-	return UserCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (uc UserCollection) IsEmpty() bool {
 	return uc.Value == nil || len(*uc.Value) == 0
@@ -11431,11 +9799,11 @@ func (uc UserCollection) IsEmpty() bool {
 
 // userCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (uc UserCollection) userCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (uc UserCollection) userCollectionPreparer() (*http.Request, error) {
 	if uc.NextLink == nil || len(to.String(uc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(uc.NextLink)))
@@ -11443,36 +9811,19 @@ func (uc UserCollection) userCollectionPreparer(ctx context.Context) (*http.Requ
 
 // UserCollectionPage contains a page of UserContract values.
 type UserCollectionPage struct {
-	fn func(context.Context, UserCollection) (UserCollection, error)
+	fn func(UserCollection) (UserCollection, error)
 	uc UserCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *UserCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/UserCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.uc)
+func (page *UserCollectionPage) Next() error {
+	next, err := page.fn(page.uc)
 	if err != nil {
 		return err
 	}
 	page.uc = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *UserCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -11491,11 +9842,6 @@ func (page UserCollectionPage) Values() []UserContract {
 		return nil
 	}
 	return *page.uc.Value
-}
-
-// Creates a new instance of the UserCollectionPage type.
-func NewUserCollectionPage(getNextPage func(context.Context, UserCollection) (UserCollection, error)) UserCollectionPage {
-	return UserCollectionPage{fn: getNextPage}
 }
 
 // UserContract user details.
@@ -11686,37 +10032,20 @@ type UserIdentityCollectionIterator struct {
 	page UserIdentityCollectionPage
 }
 
-// NextWithContext advances to the next value.  If there was an error making
+// Next advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *UserIdentityCollectionIterator) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/UserIdentityCollectionIterator.NextWithContext")
-		defer func() {
-			sc := -1
-			if iter.Response().Response.Response != nil {
-				sc = iter.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
+func (iter *UserIdentityCollectionIterator) Next() error {
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err = iter.page.NextWithContext(ctx)
+	err := iter.page.Next()
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (iter *UserIdentityCollectionIterator) Next() error {
-	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -11738,11 +10067,6 @@ func (iter UserIdentityCollectionIterator) Value() UserIdentityContract {
 	return iter.page.Values()[iter.i]
 }
 
-// Creates a new instance of the UserIdentityCollectionIterator type.
-func NewUserIdentityCollectionIterator(page UserIdentityCollectionPage) UserIdentityCollectionIterator {
-	return UserIdentityCollectionIterator{page: page}
-}
-
 // IsEmpty returns true if the ListResult contains no values.
 func (uic UserIdentityCollection) IsEmpty() bool {
 	return uic.Value == nil || len(*uic.Value) == 0
@@ -11750,11 +10074,11 @@ func (uic UserIdentityCollection) IsEmpty() bool {
 
 // userIdentityCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (uic UserIdentityCollection) userIdentityCollectionPreparer(ctx context.Context) (*http.Request, error) {
+func (uic UserIdentityCollection) userIdentityCollectionPreparer() (*http.Request, error) {
 	if uic.NextLink == nil || len(to.String(uic.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+	return autorest.Prepare(&http.Request{},
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(uic.NextLink)))
@@ -11762,36 +10086,19 @@ func (uic UserIdentityCollection) userIdentityCollectionPreparer(ctx context.Con
 
 // UserIdentityCollectionPage contains a page of UserIdentityContract values.
 type UserIdentityCollectionPage struct {
-	fn  func(context.Context, UserIdentityCollection) (UserIdentityCollection, error)
+	fn  func(UserIdentityCollection) (UserIdentityCollection, error)
 	uic UserIdentityCollection
 }
 
-// NextWithContext advances to the next page of values.  If there was an error making
+// Next advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *UserIdentityCollectionPage) NextWithContext(ctx context.Context) (err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/UserIdentityCollectionPage.NextWithContext")
-		defer func() {
-			sc := -1
-			if page.Response().Response.Response != nil {
-				sc = page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	next, err := page.fn(ctx, page.uic)
+func (page *UserIdentityCollectionPage) Next() error {
+	next, err := page.fn(page.uic)
 	if err != nil {
 		return err
 	}
 	page.uic = next
 	return nil
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-// Deprecated: Use NextWithContext() instead.
-func (page *UserIdentityCollectionPage) Next() error {
-	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -11810,11 +10117,6 @@ func (page UserIdentityCollectionPage) Values() []UserIdentityContract {
 		return nil
 	}
 	return *page.uic.Value
-}
-
-// Creates a new instance of the UserIdentityCollectionPage type.
-func NewUserIdentityCollectionPage(getNextPage func(context.Context, UserIdentityCollection) (UserIdentityCollection, error)) UserIdentityCollectionPage {
-	return UserIdentityCollectionPage{fn: getNextPage}
 }
 
 // UserIdentityContract user identity details.
@@ -11897,8 +10199,7 @@ type UserUpdateParametersProperties struct {
 	Identities *[]UserIdentityContract `json:"identities,omitempty"`
 }
 
-// VirtualNetworkConfiguration configuration of a virtual network to which API Management service is
-// deployed.
+// VirtualNetworkConfiguration configuration of a virtual network to which API Management service is deployed.
 type VirtualNetworkConfiguration struct {
 	// Vnetid - The virtual network ID. This is typically a GUID. Expect a null GUID by default.
 	Vnetid *string `json:"vnetid,omitempty"`

@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,16 +47,6 @@ func NewWebhookClientWithBaseURI(baseURI string, subscriptionID string) WebhookC
 // webhookName - the webhook name.
 // parameters - the create or update parameters for webhook.
 func (client WebhookClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, automationAccountName string, webhookName string, parameters WebhookCreateOrUpdateParameters) (result Webhook, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhookClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -140,16 +129,6 @@ func (client WebhookClient) CreateOrUpdateResponder(resp *http.Response) (result
 // automationAccountName - the name of the automation account.
 // webhookName - the webhook name.
 func (client WebhookClient) Delete(ctx context.Context, resourceGroupName string, automationAccountName string, webhookName string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhookClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -225,16 +204,6 @@ func (client WebhookClient) DeleteResponder(resp *http.Response) (result autores
 // resourceGroupName - name of an Azure Resource group.
 // automationAccountName - the name of the automation account.
 func (client WebhookClient) GenerateURI(ctx context.Context, resourceGroupName string, automationAccountName string) (result String, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhookClient.GenerateURI")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -311,16 +280,6 @@ func (client WebhookClient) GenerateURIResponder(resp *http.Response) (result St
 // automationAccountName - the name of the automation account.
 // webhookName - the webhook name.
 func (client WebhookClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string, webhookName string) (result Webhook, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhookClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -398,16 +357,6 @@ func (client WebhookClient) GetResponder(resp *http.Response) (result Webhook, e
 // automationAccountName - the name of the automation account.
 // filter - the filter to apply on the operation.
 func (client WebhookClient) ListByAutomationAccount(ctx context.Context, resourceGroupName string, automationAccountName string, filter string) (result WebhookListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhookClient.ListByAutomationAccount")
-		defer func() {
-			sc := -1
-			if result.wlr.Response.Response != nil {
-				sc = result.wlr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -483,8 +432,8 @@ func (client WebhookClient) ListByAutomationAccountResponder(resp *http.Response
 }
 
 // listByAutomationAccountNextResults retrieves the next set of results, if any.
-func (client WebhookClient) listByAutomationAccountNextResults(ctx context.Context, lastResults WebhookListResult) (result WebhookListResult, err error) {
-	req, err := lastResults.webhookListResultPreparer(ctx)
+func (client WebhookClient) listByAutomationAccountNextResults(lastResults WebhookListResult) (result WebhookListResult, err error) {
+	req, err := lastResults.webhookListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "automation.WebhookClient", "listByAutomationAccountNextResults", nil, "Failure preparing next results request")
 	}
@@ -505,16 +454,6 @@ func (client WebhookClient) listByAutomationAccountNextResults(ctx context.Conte
 
 // ListByAutomationAccountComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WebhookClient) ListByAutomationAccountComplete(ctx context.Context, resourceGroupName string, automationAccountName string, filter string) (result WebhookListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhookClient.ListByAutomationAccount")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByAutomationAccount(ctx, resourceGroupName, automationAccountName, filter)
 	return
 }
@@ -526,16 +465,6 @@ func (client WebhookClient) ListByAutomationAccountComplete(ctx context.Context,
 // webhookName - the webhook name.
 // parameters - the update parameters for webhook.
 func (client WebhookClient) Update(ctx context.Context, resourceGroupName string, automationAccountName string, webhookName string, parameters WebhookUpdateParameters) (result Webhook, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/WebhookClient.Update")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

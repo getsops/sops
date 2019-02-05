@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -49,16 +48,6 @@ func NewJobClientWithBaseURI(baseURI string, subscriptionID string) JobClient {
 // jobID - the job id.
 // parameters - the parameters supplied to the create job operation.
 func (client JobClient) Create(ctx context.Context, resourceGroupName string, automationAccountName string, jobID uuid.UUID, parameters JobCreateParameters) (result Job, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobClient.Create")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -141,16 +130,6 @@ func (client JobClient) CreateResponder(resp *http.Response) (result Job, err er
 // automationAccountName - the name of the automation account.
 // jobID - the job id.
 func (client JobClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string, jobID uuid.UUID) (result Job, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -228,16 +207,6 @@ func (client JobClient) GetResponder(resp *http.Response) (result Job, err error
 // automationAccountName - the name of the automation account.
 // jobID - the job id.
 func (client JobClient) GetOutput(ctx context.Context, resourceGroupName string, automationAccountName string, jobID string) (result ReadCloser, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobClient.GetOutput")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -314,16 +283,6 @@ func (client JobClient) GetOutputResponder(resp *http.Response) (result ReadClos
 // automationAccountName - the name of the automation account.
 // jobID - the job id.
 func (client JobClient) GetRunbookContent(ctx context.Context, resourceGroupName string, automationAccountName string, jobID string) (result ReadCloser, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobClient.GetRunbookContent")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -400,16 +359,6 @@ func (client JobClient) GetRunbookContentResponder(resp *http.Response) (result 
 // automationAccountName - the name of the automation account.
 // filter - the filter to apply on the operation.
 func (client JobClient) ListByAutomationAccount(ctx context.Context, resourceGroupName string, automationAccountName string, filter string) (result JobListResultPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobClient.ListByAutomationAccount")
-		defer func() {
-			sc := -1
-			if result.jlr.Response.Response != nil {
-				sc = result.jlr.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -485,8 +434,8 @@ func (client JobClient) ListByAutomationAccountResponder(resp *http.Response) (r
 }
 
 // listByAutomationAccountNextResults retrieves the next set of results, if any.
-func (client JobClient) listByAutomationAccountNextResults(ctx context.Context, lastResults JobListResult) (result JobListResult, err error) {
-	req, err := lastResults.jobListResultPreparer(ctx)
+func (client JobClient) listByAutomationAccountNextResults(lastResults JobListResult) (result JobListResult, err error) {
+	req, err := lastResults.jobListResultPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "automation.JobClient", "listByAutomationAccountNextResults", nil, "Failure preparing next results request")
 	}
@@ -507,16 +456,6 @@ func (client JobClient) listByAutomationAccountNextResults(ctx context.Context, 
 
 // ListByAutomationAccountComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobClient) ListByAutomationAccountComplete(ctx context.Context, resourceGroupName string, automationAccountName string, filter string) (result JobListResultIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobClient.ListByAutomationAccount")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByAutomationAccount(ctx, resourceGroupName, automationAccountName, filter)
 	return
 }
@@ -527,16 +466,6 @@ func (client JobClient) ListByAutomationAccountComplete(ctx context.Context, res
 // automationAccountName - the name of the automation account.
 // jobID - the job id.
 func (client JobClient) Resume(ctx context.Context, resourceGroupName string, automationAccountName string, jobID uuid.UUID) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobClient.Resume")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -613,16 +542,6 @@ func (client JobClient) ResumeResponder(resp *http.Response) (result autorest.Re
 // automationAccountName - the name of the automation account.
 // jobID - the job id.
 func (client JobClient) Stop(ctx context.Context, resourceGroupName string, automationAccountName string, jobID uuid.UUID) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobClient.Stop")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -699,16 +618,6 @@ func (client JobClient) StopResponder(resp *http.Response) (result autorest.Resp
 // automationAccountName - the name of the automation account.
 // jobID - the job id.
 func (client JobClient) Suspend(ctx context.Context, resourceGroupName string, automationAccountName string, jobID uuid.UUID) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/JobClient.Suspend")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

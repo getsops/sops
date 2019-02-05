@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2018 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,16 +19,14 @@
 
 package locks
 
-import (
-	"context"
-
-	original "github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2015-01-01/locks"
-)
+import original "github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2015-01-01/locks"
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
+type BaseClient = original.BaseClient
+type ManagementLocksClient = original.ManagementLocksClient
 type LockLevel = original.LockLevel
 
 const (
@@ -37,31 +35,23 @@ const (
 	ReadOnly     LockLevel = original.ReadOnly
 )
 
-type BaseClient = original.BaseClient
 type ManagementLockListResult = original.ManagementLockListResult
 type ManagementLockListResultIterator = original.ManagementLockListResultIterator
 type ManagementLockListResultPage = original.ManagementLockListResultPage
 type ManagementLockObject = original.ManagementLockObject
 type ManagementLockProperties = original.ManagementLockProperties
-type ManagementLocksClient = original.ManagementLocksClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
 }
-func NewManagementLockListResultIterator(page ManagementLockListResultPage) ManagementLockListResultIterator {
-	return original.NewManagementLockListResultIterator(page)
-}
-func NewManagementLockListResultPage(getNextPage func(context.Context, ManagementLockListResult) (ManagementLockListResult, error)) ManagementLockListResultPage {
-	return original.NewManagementLockListResultPage(getNextPage)
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewManagementLocksClient(subscriptionID string) ManagementLocksClient {
 	return original.NewManagementLocksClient(subscriptionID)
 }
 func NewManagementLocksClientWithBaseURI(baseURI string, subscriptionID string) ManagementLocksClient {
 	return original.NewManagementLocksClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleLockLevelValues() []LockLevel {
 	return original.PossibleLockLevelValues()

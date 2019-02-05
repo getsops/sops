@@ -21,7 +21,6 @@ package management
 import (
 	"errors"
 	"fmt"
-	"net/http"
 	"runtime"
 	"time"
 
@@ -45,7 +44,6 @@ const (
 type client struct {
 	publishSettings publishSettings
 	config          ClientConfig
-	httpClient      *http.Client
 }
 
 // Client is the base Azure Service Management API client instance that
@@ -156,16 +154,10 @@ func makeClient(subscriptionID string, managementCert []byte, config ClientConfi
 		config.UserAgent = DefaultUserAgent
 	}
 
-	clientObj := client{
+	return client{
 		publishSettings: publishSettings,
 		config:          config,
-	}
-	var err error
-	clientObj.httpClient, err = clientObj.createHTTPClient()
-	if err != nil {
-		return nil, err
-	}
-	return clientObj, nil
+	}, nil
 }
 
 func userAgent() string {

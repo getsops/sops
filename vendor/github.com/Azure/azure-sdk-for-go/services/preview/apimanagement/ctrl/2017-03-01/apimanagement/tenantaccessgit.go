@@ -21,7 +21,6 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -40,16 +39,6 @@ func NewTenantAccessGitClient() TenantAccessGitClient {
 // apimBaseURL - the management endpoint of the API Management service, for example
 // https://myapimservice.management.azure-api.net.
 func (client TenantAccessGitClient) Get(ctx context.Context, apimBaseURL string) (result AccessInformationContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TenantAccessGitClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, apimBaseURL)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.TenantAccessGitClient", "Get", nil, "Failure preparing request")
@@ -119,16 +108,6 @@ func (client TenantAccessGitClient) GetResponder(resp *http.Response) (result Ac
 // apimBaseURL - the management endpoint of the API Management service, for example
 // https://myapimservice.management.azure-api.net.
 func (client TenantAccessGitClient) RegeneratePrimaryKey(ctx context.Context, apimBaseURL string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TenantAccessGitClient.RegeneratePrimaryKey")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.RegeneratePrimaryKeyPreparer(ctx, apimBaseURL)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.TenantAccessGitClient", "RegeneratePrimaryKey", nil, "Failure preparing request")
@@ -197,16 +176,6 @@ func (client TenantAccessGitClient) RegeneratePrimaryKeyResponder(resp *http.Res
 // apimBaseURL - the management endpoint of the API Management service, for example
 // https://myapimservice.management.azure-api.net.
 func (client TenantAccessGitClient) RegenerateSecondaryKey(ctx context.Context, apimBaseURL string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/TenantAccessGitClient.RegenerateSecondaryKey")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.RegenerateSecondaryKeyPreparer(ctx, apimBaseURL)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.TenantAccessGitClient", "RegenerateSecondaryKey", nil, "Failure preparing request")

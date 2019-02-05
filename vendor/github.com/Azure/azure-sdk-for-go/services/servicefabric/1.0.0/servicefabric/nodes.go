@@ -24,25 +24,21 @@ import (
 	"net/http"
 )
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NodesClient is the client for the Nodes methods of the Servicefabric service.
 type NodesClient struct {
 	BaseClient
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewNodesClient creates an instance of the NodesClient client.
 func NewNodesClient(timeout *int32) NodesClient {
 	return NewNodesClientWithBaseURI(DefaultBaseURI, timeout)
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // NewNodesClientWithBaseURI creates an instance of the NodesClient client.
 func NewNodesClientWithBaseURI(baseURI string, timeout *int32) NodesClient {
 	return NodesClient{NewWithBaseURI(baseURI, timeout)}
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Disable disable nodes
 // Parameters:
 // nodeName - the name of the node
@@ -69,7 +65,6 @@ func (client NodesClient) Disable(ctx context.Context, nodeName string, disableN
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DisablePreparer prepares the Disable request.
 func (client NodesClient) DisablePreparer(ctx context.Context, nodeName string, disableNode DisableNode) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -94,7 +89,6 @@ func (client NodesClient) DisablePreparer(ctx context.Context, nodeName string, 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DisableSender sends the Disable request. The method will close the
 // http.Response Body if it receives an error.
 func (client NodesClient) DisableSender(req *http.Request) (*http.Response, error) {
@@ -102,7 +96,6 @@ func (client NodesClient) DisableSender(req *http.Request) (*http.Response, erro
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // DisableResponder handles the response to the Disable request. The method always
 // closes the http.Response Body.
 func (client NodesClient) DisableResponder(resp *http.Response) (result String, err error) {
@@ -116,7 +109,6 @@ func (client NodesClient) DisableResponder(resp *http.Response) (result String, 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Enable enable nodes
 // Parameters:
 // nodeName - the name of the node
@@ -142,7 +134,6 @@ func (client NodesClient) Enable(ctx context.Context, nodeName string) (result S
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // EnablePreparer prepares the Enable request.
 func (client NodesClient) EnablePreparer(ctx context.Context, nodeName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -165,7 +156,6 @@ func (client NodesClient) EnablePreparer(ctx context.Context, nodeName string) (
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // EnableSender sends the Enable request. The method will close the
 // http.Response Body if it receives an error.
 func (client NodesClient) EnableSender(req *http.Request) (*http.Response, error) {
@@ -173,7 +163,6 @@ func (client NodesClient) EnableSender(req *http.Request) (*http.Response, error
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // EnableResponder handles the response to the Enable request. The method always
 // closes the http.Response Body.
 func (client NodesClient) EnableResponder(resp *http.Response) (result String, err error) {
@@ -187,7 +176,6 @@ func (client NodesClient) EnableResponder(resp *http.Response) (result String, e
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // Get get nodes
 // Parameters:
 // nodeName - the name of the node
@@ -213,7 +201,6 @@ func (client NodesClient) Get(ctx context.Context, nodeName string) (result Node
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetPreparer prepares the Get request.
 func (client NodesClient) GetPreparer(ctx context.Context, nodeName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -236,7 +223,6 @@ func (client NodesClient) GetPreparer(ctx context.Context, nodeName string) (*ht
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client NodesClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -244,7 +230,6 @@ func (client NodesClient) GetSender(req *http.Request) (*http.Response, error) {
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client NodesClient) GetResponder(resp *http.Response) (result Node, err error) {
@@ -258,7 +243,6 @@ func (client NodesClient) GetResponder(resp *http.Response) (result Node, err er
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // List list nodes
 // Parameters:
 // continuationToken - the token of the continuation
@@ -284,7 +268,6 @@ func (client NodesClient) List(ctx context.Context, continuationToken string) (r
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListPreparer prepares the List request.
 func (client NodesClient) ListPreparer(ctx context.Context, continuationToken string) (*http.Request, error) {
 	const APIVersion = "1.0.0"
@@ -306,7 +289,6 @@ func (client NodesClient) ListPreparer(ctx context.Context, continuationToken st
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client NodesClient) ListSender(req *http.Request) (*http.Response, error) {
@@ -314,7 +296,6 @@ func (client NodesClient) ListSender(req *http.Request) (*http.Response, error) 
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/servicefabric/6.2/servicefabric instead
 // ListResponder handles the response to the List request. The method always
 // closes the http.Response Body.
 func (client NodesClient) ListResponder(resp *http.Response) (result NodeList, err error) {

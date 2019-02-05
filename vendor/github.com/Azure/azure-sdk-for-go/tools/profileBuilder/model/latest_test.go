@@ -14,13 +14,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package model
+package model_test
 
 import (
+	"path/filepath"
 	"testing"
+
+	"github.com/Azure/azure-sdk-for-go/tools/profileBuilder/model"
+	"github.com/marstr/collection"
 )
 
-func Test_versionLE(t *testing.T) {
+func Test_VersionLE(t *testing.T) {
 	const dateWithAlpha, dateWithBeta = "2016-02-01-alpha", "2016-02-01-beta"
 	const semVer1dot2, semVer1dot3 = "2018-03-03-1.2", "2018-03-03-1.3"
 	const dateAlone = "2016-12-07"
@@ -45,13 +49,11 @@ func Test_versionLE(t *testing.T) {
 		{"5.6", "1.0.0", false},
 		{"5.6", "6.0", true},
 		{"6.0", "5.6", false},
-		{"1", "2", true},
-		{"3", "2", false},
 	}
 
 	for _, tc := range testCases {
 		t.Run("", func(t *testing.T) {
-			if got, err := versionLE(tc.left, tc.right); err != nil {
+			if got, err := model.VersionLE(tc.left, tc.right); err != nil {
 				t.Error(err)
 			} else if got != tc.want {
 				t.Logf("\n Left: %s\nRight: %s", tc.left, tc.right)
@@ -59,5 +61,16 @@ func Test_versionLE(t *testing.T) {
 				t.Fail()
 			}
 		})
+	}
+}
+
+func BenchmarkLatestStrategy_Enumerate(b *testing.B) {
+	subject := model.LatestStrategy{
+		Root: filepath.Join("..", "..", "service"),
+	}
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		b.Logf("Enumerated %d packages", collection.CountAll(subject))
 	}
 }

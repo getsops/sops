@@ -19,25 +19,30 @@ package model
 import (
 	"io/ioutil"
 	"os"
-	"path/filepath"
+	"path"
+	"strings"
 )
 
-// DeleteChildDirs deletes all child directories in the specified directory.
-func DeleteChildDirs(dir string) error {
-	children, err := ioutil.ReadDir(dir)
+// DeleteChildDirs deletes all child directories of the directory specified by
+// `path`.
+// If it fails to delete a child, it halts execution and returns an err immediately.
+func DeleteChildDirs(dir string) (err error) {
+	var children []os.FileInfo
+
+	children, err = ioutil.ReadDir(dir)
 	if err != nil {
-		return err
+		return
 	}
 
 	for _, child := range children {
 		if child.IsDir() {
-			childPath := filepath.Join(dir, child.Name())
+			childPath := strings.Replace(path.Join(dir, child.Name()), `\`, `/`, -1)
 			err = os.RemoveAll(childPath)
 			if err != nil {
-				return err
+				return
 			}
 		}
 	}
 
-	return nil
+	return
 }

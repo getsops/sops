@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -52,16 +51,6 @@ func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
 // webServiceName - the name of the web service.
 // createOrUpdatePayload - the payload that is used to create or update the web service.
 func (client Client) CreateOrUpdate(ctx context.Context, resourceGroupName string, webServiceName string, createOrUpdatePayload WebService) (result CreateOrUpdateFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: createOrUpdatePayload,
 			Constraints: []validation.Constraint{{Target: "createOrUpdatePayload.Properties", Name: validation.Null, Rule: true,
@@ -136,6 +125,10 @@ func (client Client) CreateOrUpdateSender(req *http.Request) (future CreateOrUpd
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -162,16 +155,6 @@ func (client Client) CreateOrUpdateResponder(resp *http.Response) (result WebSer
 // webServiceName - the name of the web service.
 // region - the region for which encrypted credential parameters are created.
 func (client Client) CreateRegionalProperties(ctx context.Context, resourceGroupName string, webServiceName string, region string) (result CreateRegionalPropertiesFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.CreateRegionalProperties")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.CreateRegionalPropertiesPreparer(ctx, resourceGroupName, webServiceName, region)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "webservices.Client", "CreateRegionalProperties", nil, "Failure preparing request")
@@ -218,6 +201,10 @@ func (client Client) CreateRegionalPropertiesSender(req *http.Request) (future C
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -242,16 +229,6 @@ func (client Client) CreateRegionalPropertiesResponder(resp *http.Response) (res
 // webServiceName - the name of the web service.
 // region - the region for which encrypted credential parameters are valid.
 func (client Client) Get(ctx context.Context, resourceGroupName string, webServiceName string, region string) (result WebService, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, webServiceName, region)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "webservices.Client", "Get", nil, "Failure preparing request")
@@ -322,16 +299,6 @@ func (client Client) GetResponder(resp *http.Response) (result WebService, err e
 // resourceGroupName - name of the resource group in which the web service is located.
 // skiptoken - continuation token for pagination.
 func (client Client) ListByResourceGroup(ctx context.Context, resourceGroupName string, skiptoken string) (result PaginatedWebServicesListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.pwsl.Response.Response != nil {
-				sc = result.pwsl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName, skiptoken)
 	if err != nil {
@@ -398,8 +365,8 @@ func (client Client) ListByResourceGroupResponder(resp *http.Response) (result P
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client Client) listByResourceGroupNextResults(ctx context.Context, lastResults PaginatedWebServicesList) (result PaginatedWebServicesList, err error) {
-	req, err := lastResults.paginatedWebServicesListPreparer(ctx)
+func (client Client) listByResourceGroupNextResults(lastResults PaginatedWebServicesList) (result PaginatedWebServicesList, err error) {
+	req, err := lastResults.paginatedWebServicesListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "webservices.Client", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -420,16 +387,6 @@ func (client Client) listByResourceGroupNextResults(ctx context.Context, lastRes
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string, skiptoken string) (result PaginatedWebServicesListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListByResourceGroup")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName, skiptoken)
 	return
 }
@@ -438,16 +395,6 @@ func (client Client) ListByResourceGroupComplete(ctx context.Context, resourceGr
 // Parameters:
 // skiptoken - continuation token for pagination.
 func (client Client) ListBySubscriptionID(ctx context.Context, skiptoken string) (result PaginatedWebServicesListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListBySubscriptionID")
-		defer func() {
-			sc := -1
-			if result.pwsl.Response.Response != nil {
-				sc = result.pwsl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.fn = client.listBySubscriptionIDNextResults
 	req, err := client.ListBySubscriptionIDPreparer(ctx, skiptoken)
 	if err != nil {
@@ -513,8 +460,8 @@ func (client Client) ListBySubscriptionIDResponder(resp *http.Response) (result 
 }
 
 // listBySubscriptionIDNextResults retrieves the next set of results, if any.
-func (client Client) listBySubscriptionIDNextResults(ctx context.Context, lastResults PaginatedWebServicesList) (result PaginatedWebServicesList, err error) {
-	req, err := lastResults.paginatedWebServicesListPreparer(ctx)
+func (client Client) listBySubscriptionIDNextResults(lastResults PaginatedWebServicesList) (result PaginatedWebServicesList, err error) {
+	req, err := lastResults.paginatedWebServicesListPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "webservices.Client", "listBySubscriptionIDNextResults", nil, "Failure preparing next results request")
 	}
@@ -535,16 +482,6 @@ func (client Client) listBySubscriptionIDNextResults(ctx context.Context, lastRe
 
 // ListBySubscriptionIDComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListBySubscriptionIDComplete(ctx context.Context, skiptoken string) (result PaginatedWebServicesListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListBySubscriptionID")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListBySubscriptionID(ctx, skiptoken)
 	return
 }
@@ -554,16 +491,6 @@ func (client Client) ListBySubscriptionIDComplete(ctx context.Context, skiptoken
 // resourceGroupName - name of the resource group in which the web service is located.
 // webServiceName - the name of the web service.
 func (client Client) ListKeys(ctx context.Context, resourceGroupName string, webServiceName string) (result Keys, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListKeys")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.ListKeysPreparer(ctx, resourceGroupName, webServiceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "webservices.Client", "ListKeys", nil, "Failure preparing request")
@@ -633,16 +560,6 @@ func (client Client) ListKeysResponder(resp *http.Response) (result Keys, err er
 // webServiceName - the name of the web service.
 // patchPayload - the payload to use to patch the web service.
 func (client Client) Patch(ctx context.Context, resourceGroupName string, webServiceName string, patchPayload WebService) (result PatchFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Patch")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.PatchPreparer(ctx, resourceGroupName, webServiceName, patchPayload)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "webservices.Client", "Patch", nil, "Failure preparing request")
@@ -690,6 +607,10 @@ func (client Client) PatchSender(req *http.Request) (future PatchFuture, err err
 	if err != nil {
 		return
 	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK))
+	if err != nil {
+		return
+	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -712,16 +633,6 @@ func (client Client) PatchResponder(resp *http.Response) (result WebService, err
 // resourceGroupName - name of the resource group in which the web service is located.
 // webServiceName - the name of the web service.
 func (client Client) Remove(ctx context.Context, resourceGroupName string, webServiceName string) (result RemoveFuture, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Remove")
-		defer func() {
-			sc := -1
-			if result.Response() != nil {
-				sc = result.Response().StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	req, err := client.RemovePreparer(ctx, resourceGroupName, webServiceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "webservices.Client", "Remove", nil, "Failure preparing request")
@@ -764,6 +675,10 @@ func (client Client) RemoveSender(req *http.Request) (future RemoveFuture, err e
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
 	if err != nil {
 		return
 	}

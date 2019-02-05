@@ -24,25 +24,21 @@ import (
 	"net/http"
 )
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // ZonesClient is the the DNS Management Client.
 type ZonesClient struct {
 	BaseClient
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // NewZonesClient creates an instance of the ZonesClient client.
 func NewZonesClient(subscriptionID string) ZonesClient {
 	return NewZonesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // NewZonesClientWithBaseURI creates an instance of the ZonesClient client.
 func NewZonesClientWithBaseURI(baseURI string, subscriptionID string) ZonesClient {
 	return ZonesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // CreateOrUpdate creates or updates a DNS zone. Does not modify DNS records within the zone.
 //
 // resourceGroupName is the name of the resource group. zoneName is the name of the DNS zone (without a terminating
@@ -72,7 +68,6 @@ func (client ZonesClient) CreateOrUpdate(ctx context.Context, resourceGroupName 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
 func (client ZonesClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, zoneName string, parameters Zone, ifMatch string, ifNoneMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -104,7 +99,6 @@ func (client ZonesClient) CreateOrUpdatePreparer(ctx context.Context, resourceGr
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client ZonesClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
@@ -112,7 +106,6 @@ func (client ZonesClient) CreateOrUpdateSender(req *http.Request) (*http.Respons
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
 // closes the http.Response Body.
 func (client ZonesClient) CreateOrUpdateResponder(resp *http.Response) (result Zone, err error) {
@@ -126,7 +119,6 @@ func (client ZonesClient) CreateOrUpdateResponder(resp *http.Response) (result Z
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // Delete deletes a DNS zone. WARNING: All DNS records in the zone will also be deleted. This operation cannot be
 // undone.
 //
@@ -149,7 +141,6 @@ func (client ZonesClient) Delete(ctx context.Context, resourceGroupName string, 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // DeletePreparer prepares the Delete request.
 func (client ZonesClient) DeletePreparer(ctx context.Context, resourceGroupName string, zoneName string, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -175,7 +166,6 @@ func (client ZonesClient) DeletePreparer(ctx context.Context, resourceGroupName 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client ZonesClient) DeleteSender(req *http.Request) (future ZonesDeleteFuture, err error) {
@@ -191,7 +181,6 @@ func (client ZonesClient) DeleteSender(req *http.Request) (future ZonesDeleteFut
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // DeleteResponder handles the response to the Delete request. The method always
 // closes the http.Response Body.
 func (client ZonesClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
@@ -204,7 +193,6 @@ func (client ZonesClient) DeleteResponder(resp *http.Response) (result autorest.
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // Get gets a DNS zone. Retrieves the zone properties, but not the record sets within the zone.
 //
 // resourceGroupName is the name of the resource group. zoneName is the name of the DNS zone (without a terminating
@@ -231,7 +219,6 @@ func (client ZonesClient) Get(ctx context.Context, resourceGroupName string, zon
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // GetPreparer prepares the Get request.
 func (client ZonesClient) GetPreparer(ctx context.Context, resourceGroupName string, zoneName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -253,7 +240,6 @@ func (client ZonesClient) GetPreparer(ctx context.Context, resourceGroupName str
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ZonesClient) GetSender(req *http.Request) (*http.Response, error) {
@@ -261,7 +247,6 @@ func (client ZonesClient) GetSender(req *http.Request) (*http.Response, error) {
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
 func (client ZonesClient) GetResponder(resp *http.Response) (result Zone, err error) {
@@ -275,7 +260,6 @@ func (client ZonesClient) GetResponder(resp *http.Response) (result Zone, err er
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // List lists the DNS zones in all resource groups in a subscription.
 //
 // top is the maximum number of DNS zones to return. If not specified, returns up to 100 zones.
@@ -302,7 +286,6 @@ func (client ZonesClient) List(ctx context.Context, top *int32) (result ZoneList
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // ListPreparer prepares the List request.
 func (client ZonesClient) ListPreparer(ctx context.Context, top *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -325,7 +308,6 @@ func (client ZonesClient) ListPreparer(ctx context.Context, top *int32) (*http.R
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client ZonesClient) ListSender(req *http.Request) (*http.Response, error) {
@@ -333,7 +315,6 @@ func (client ZonesClient) ListSender(req *http.Request) (*http.Response, error) 
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // ListResponder handles the response to the List request. The method always
 // closes the http.Response Body.
 func (client ZonesClient) ListResponder(resp *http.Response) (result ZoneListResult, err error) {
@@ -368,14 +349,12 @@ func (client ZonesClient) listNextResults(lastResults ZoneListResult) (result Zo
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ZonesClient) ListComplete(ctx context.Context, top *int32) (result ZoneListResultIterator, err error) {
 	result.page, err = client.List(ctx, top)
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // ListByResourceGroup lists the DNS zones within a resource group.
 //
 // resourceGroupName is the name of the resource group. top is the maximum number of record sets to return. If not
@@ -403,7 +382,6 @@ func (client ZonesClient) ListByResourceGroup(ctx context.Context, resourceGroup
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // ListByResourceGroupPreparer prepares the ListByResourceGroup request.
 func (client ZonesClient) ListByResourceGroupPreparer(ctx context.Context, resourceGroupName string, top *int32) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -427,7 +405,6 @@ func (client ZonesClient) ListByResourceGroupPreparer(ctx context.Context, resou
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client ZonesClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
@@ -435,7 +412,6 @@ func (client ZonesClient) ListByResourceGroupSender(req *http.Request) (*http.Re
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
 // closes the http.Response Body.
 func (client ZonesClient) ListByResourceGroupResponder(resp *http.Response) (result ZoneListResult, err error) {
@@ -470,14 +446,12 @@ func (client ZonesClient) listByResourceGroupNextResults(lastResults ZoneListRes
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ZonesClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string, top *int32) (result ZoneListResultIterator, err error) {
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName, top)
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // Update updates a DNS zone. Does not modify DNS records within the zone.
 //
 // resourceGroupName is the name of the resource group. zoneName is the name of the DNS zone (without a terminating
@@ -506,7 +480,6 @@ func (client ZonesClient) Update(ctx context.Context, resourceGroupName string, 
 	return
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // UpdatePreparer prepares the Update request.
 func (client ZonesClient) UpdatePreparer(ctx context.Context, resourceGroupName string, zoneName string, parameters ZoneUpdate, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
@@ -534,7 +507,6 @@ func (client ZonesClient) UpdatePreparer(ctx context.Context, resourceGroupName 
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client ZonesClient) UpdateSender(req *http.Request) (*http.Response, error) {
@@ -542,7 +514,6 @@ func (client ZonesClient) UpdateSender(req *http.Request) (*http.Response, error
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// Deprecated: Please use package github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns instead
 // UpdateResponder handles the response to the Update request. The method always
 // closes the http.Response Body.
 func (client ZonesClient) UpdateResponder(resp *http.Response) (result Zone, err error) {

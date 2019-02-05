@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2018 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
+type BaseClient = original.BaseClient
 type AppliedScopeType = original.AppliedScopeType
 
 const (
@@ -133,9 +134,7 @@ const (
 type AppliedReservationList = original.AppliedReservationList
 type AppliedReservations = original.AppliedReservations
 type AppliedReservationsProperties = original.AppliedReservationsProperties
-type BaseClient = original.BaseClient
 type Catalog = original.Catalog
-type Client = original.Client
 type Error = original.Error
 type ExtendedErrorInfo = original.ExtendedErrorInfo
 type ExtendedStatusInfo = original.ExtendedStatusInfo
@@ -147,13 +146,11 @@ type ListResponse = original.ListResponse
 type MergeProperties = original.MergeProperties
 type MergePropertiesType = original.MergePropertiesType
 type MergeRequest = original.MergeRequest
-type OperationClient = original.OperationClient
 type OperationDisplay = original.OperationDisplay
 type OperationList = original.OperationList
 type OperationListIterator = original.OperationListIterator
 type OperationListPage = original.OperationListPage
 type OperationResponse = original.OperationResponse
-type OrderClient = original.OrderClient
 type OrderList = original.OrderList
 type OrderListIterator = original.OrderListIterator
 type OrderListPage = original.OrderListPage
@@ -172,27 +169,12 @@ type SplitFuture = original.SplitFuture
 type SplitProperties = original.SplitProperties
 type SplitPropertiesType = original.SplitPropertiesType
 type SplitRequest = original.SplitRequest
+type OperationClient = original.OperationClient
+type OrderClient = original.OrderClient
+type Client = original.Client
 
 func New() BaseClient {
 	return original.New()
-}
-func NewClient() Client {
-	return original.NewClient()
-}
-func NewClientWithBaseURI(baseURI string) Client {
-	return original.NewClientWithBaseURI(baseURI)
-}
-func NewOperationClient() OperationClient {
-	return original.NewOperationClient()
-}
-func NewOperationClientWithBaseURI(baseURI string) OperationClient {
-	return original.NewOperationClientWithBaseURI(baseURI)
-}
-func NewOrderClient() OrderClient {
-	return original.NewOrderClient()
-}
-func NewOrderClientWithBaseURI(baseURI string) OrderClient {
-	return original.NewOrderClientWithBaseURI(baseURI)
 }
 func NewWithBaseURI(baseURI string) BaseClient {
 	return original.NewWithBaseURI(baseURI)
@@ -214,6 +196,24 @@ func PossibleReservedResourceTypeValues() []ReservedResourceType {
 }
 func PossibleStatusCodeValues() []StatusCode {
 	return original.PossibleStatusCodeValues()
+}
+func NewOperationClient() OperationClient {
+	return original.NewOperationClient()
+}
+func NewOperationClientWithBaseURI(baseURI string) OperationClient {
+	return original.NewOperationClientWithBaseURI(baseURI)
+}
+func NewOrderClient() OrderClient {
+	return original.NewOrderClient()
+}
+func NewOrderClientWithBaseURI(baseURI string) OrderClient {
+	return original.NewOrderClientWithBaseURI(baseURI)
+}
+func NewClient() Client {
+	return original.NewClient()
+}
+func NewClientWithBaseURI(baseURI string) Client {
+	return original.NewClientWithBaseURI(baseURI)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

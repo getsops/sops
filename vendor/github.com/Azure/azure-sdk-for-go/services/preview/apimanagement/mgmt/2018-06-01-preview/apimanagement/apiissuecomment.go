@@ -22,7 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
-	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -52,16 +51,6 @@ func NewAPIIssueCommentClientWithBaseURI(baseURI string, subscriptionID string) 
 // ifMatch - eTag of the Issue Entity. ETag should match the current entity state from the header response of
 // the GET request or it should be * for unconditional update.
 func (client APIIssueCommentClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, commentID string, parameters IssueCommentContract, ifMatch string) (result IssueCommentContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueCommentClient.CreateOrUpdate")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -168,16 +157,6 @@ func (client APIIssueCommentClient) CreateOrUpdateResponder(resp *http.Response)
 // ifMatch - eTag of the Issue Entity. ETag should match the current entity state from the header response of
 // the GET request or it should be * for unconditional update.
 func (client APIIssueCommentClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, commentID string, ifMatch string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueCommentClient.Delete")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -271,16 +250,6 @@ func (client APIIssueCommentClient) DeleteResponder(resp *http.Response) (result
 // issueID - issue identifier. Must be unique in the current API Management service instance.
 // commentID - comment identifier within an Issue. Must be unique in the current Issue.
 func (client APIIssueCommentClient) Get(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, commentID string) (result IssueCommentContract, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueCommentClient.Get")
-		defer func() {
-			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -374,16 +343,6 @@ func (client APIIssueCommentClient) GetResponder(resp *http.Response) (result Is
 // issueID - issue identifier. Must be unique in the current API Management service instance.
 // commentID - comment identifier within an Issue. Must be unique in the current Issue.
 func (client APIIssueCommentClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, commentID string) (result autorest.Response, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueCommentClient.GetEntityTag")
-		defer func() {
-			sc := -1
-			if result.Response != nil {
-				sc = result.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -468,7 +427,7 @@ func (client APIIssueCommentClient) GetEntityTagResponder(resp *http.Response) (
 	return
 }
 
-// ListByService lists all comments for the Issue associated with the specified API.
+// ListByService lists all comments for the Issue assosiated with the specified API.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
@@ -481,16 +440,6 @@ func (client APIIssueCommentClient) GetEntityTagResponder(resp *http.Response) (
 // top - number of records to return.
 // skip - number of records to skip.
 func (client APIIssueCommentClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, filter string, top *int32, skip *int32) (result IssueCommentCollectionPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueCommentClient.ListByService")
-		defer func() {
-			sc := -1
-			if result.icc.Response.Response != nil {
-				sc = result.icc.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -588,8 +537,8 @@ func (client APIIssueCommentClient) ListByServiceResponder(resp *http.Response) 
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client APIIssueCommentClient) listByServiceNextResults(ctx context.Context, lastResults IssueCommentCollection) (result IssueCommentCollection, err error) {
-	req, err := lastResults.issueCommentCollectionPreparer(ctx)
+func (client APIIssueCommentClient) listByServiceNextResults(lastResults IssueCommentCollection) (result IssueCommentCollection, err error) {
+	req, err := lastResults.issueCommentCollectionPreparer()
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.APIIssueCommentClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -610,16 +559,6 @@ func (client APIIssueCommentClient) listByServiceNextResults(ctx context.Context
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client APIIssueCommentClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, filter string, top *int32, skip *int32) (result IssueCommentCollectionIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueCommentClient.ListByService")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, apiid, issueID, filter, top, skip)
 	return
 }
